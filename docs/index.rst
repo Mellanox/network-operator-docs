@@ -27,7 +27,7 @@
    Getting Started with Kubernetes <getting-started-kubernetes.rst>
    Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
    Customization Options and CRDs <customizations/customization.rst>
-   Life Cycle Management <life-cycle-managment.rst>
+   Life Cycle Management <life-cycle-management.rst>
    Advanced Configurations <advanced-configurations.rst>
 
 
