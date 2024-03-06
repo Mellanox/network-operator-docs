@@ -114,6 +114,32 @@
              
   <section id="device-plugin">
 <h1>Device Plugin<a class="headerlink" href="#device-plugin" title="Permalink to this headline"></a></h1>
+<p>Kubernetes provides a device plugin framework that can be used to advertise system hardware resources to the Kubelet.
+More information about the device plugin framework can be found at <a class="reference external" href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/">https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/</a>.</p>
+<p>This document presents configuration with the following device plugins:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Device Plugin</p></th>
+<th class="head"><p>Project</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SR-IOV network device plugin</p></td>
+<td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin">https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>RDMA shared device plugin</p></td>
+<td><p><a class="reference external" href="https://github.com/Mellanox/k8s-rdma-shared-dev-plugin">https://github.com/Mellanox/k8s-rdma-shared-dev-plugin</a></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>SR-IOV network device plugin - A device plugin for discovering and advertising the SR-IOV virtual functions (VFs) that are available on a Kubernetes host.</p></li>
+<li><p>RDMA shared device plugin - device plugin for sharing RDMA devices between PODs on the same host.</p></li>
+</ul>
 </section>
 
 
@@ -125,7 +151,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 05, 2024.
+      <span class="lastupdated">Last updated on Mar 06, 2024.
       </span></p>
   </div>
 
