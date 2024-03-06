@@ -1,0 +1,14 @@
+name: "Build"
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: generate-html
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build
+        run: ./repo.sh docs
