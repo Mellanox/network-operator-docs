@@ -20,3 +20,21 @@
 *************
 Device Plugin
 *************
+
+Kubernetes provides a device plugin framework that can be used to advertise system hardware resources to the Kubelet.
+More information about the device plugin framework can be found at https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/.
+
+This document presents configuration with the following device plugins:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Device Plugin
+     - Project
+   * - SR-IOV network device plugin
+     - https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin
+   * - RDMA shared device plugin
+     - https://github.com/Mellanox/k8s-rdma-shared-dev-plugin
+
+- SR-IOV network device plugin - A device plugin for discovering and advertising the SR-IOV virtual functions (VFs) that are available on a Kubernetes host.
+- RDMA shared device plugin - device plugin for sharing RDMA devices between PODs on the same host.
