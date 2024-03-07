@@ -12,3 +12,8 @@ jobs:
         uses: actions/checkout@v4
       - name: build
         run: ./repo.sh docs
+      - name: 'upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-html
+          path: _build/docs/nvidia_network_operator
