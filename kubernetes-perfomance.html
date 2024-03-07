@@ -113,6 +113,36 @@
              
   <section id="kubernetes-performance-tuning">
 <h1>Kubernetes Performance Tuning<a class="headerlink" href="#kubernetes-performance-tuning" title="Permalink to this headline"></a></h1>
+<p>This section provides a configuration example for Kubernetes performance tuning for SR-IOV.</p>
+<p>The machine in this example includes the following CPUs:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">numactl</span><span class="w"> </span><span class="o">--</span><span class="n">hardware</span><span class="w"></span>
+<span class="nl">available</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">nodes</span><span class="w"> </span><span class="p">(</span><span class="mi">0-1</span><span class="p">)</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">cpus</span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="mi">14</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="mi">17</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">size</span><span class="o">:</span><span class="w"> </span><span class="mi">31990</span><span class="w"> </span><span class="n">MB</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="n">free</span><span class="o">:</span><span class="w"> </span><span class="mi">25314</span><span class="w"> </span><span class="n">MB</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">cpus</span><span class="o">:</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="mi">18</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="mi">21</span><span class="w"> </span><span class="mi">22</span><span class="w"> </span><span class="mi">23</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">size</span><span class="o">:</span><span class="w"> </span><span class="mi">32237</span><span class="w"> </span><span class="n">MB</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">free</span><span class="o">:</span><span class="w"> </span><span class="mi">27135</span><span class="w"> </span><span class="n">MB</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="n">distances</span><span class="o">:</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">21</span><span class="w"></span>
+<span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="mi">21</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
+</pre></div>
+</div>
+<p>3 CPUs are reserved on NUMA, and 1 for the system and for Kubernetes. Edit <cite>/var/lib/kubelet/config.yaml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cpuManagerPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">static</span><span class="w"></span>
+<span class="nt">reservedSystemCPUs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6-8</span><span class="w"></span>
+<span class="nt">topologyManagerPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">single-numa-node</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Using <cite>isolcpus</cite> kernel boot command-line isolates the CPUs from the kernel scheduler. This will ensure that a user-space process will not be scheduled by the kernel. In this example, CPUs 0-5 and 9-23 are isolated.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">isolcpus</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In case of changes in the <cite>reservedSystemCPUs</cite> or in the <cite>cpuManagerPolicy</cite> the <cite>/var/lib/kubelet/cpu_manager_state</cite> should be deleted, and the <cite>kubelet</cite> should be restarted.</p>
+</div>
 </section>
 
 
