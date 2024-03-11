@@ -20,3 +20,32 @@
 ****
 CRDs
 ****
+
+.. contents::
+   :depth: 2
+   :local:
+   :backlinks: none
+
+====================
+NicClusterPolicy CRD
+====================
+
+To change ``NicClusterPolicy`` CRD object manually without helm you need to change ``nic-cluster-policy`` CR like a regular Kubernetes resource. For more information on NicClusterPolicy custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#nicclusterpolicy-crd>`__.
+
+==================
+MacVlanNetwork CRD
+==================
+
+For more information on `MacVlanNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#macvlannetwork-crd>`__.
+
+=====================
+HostDeviceNetwork CRD
+=====================
+
+For more information on `HostDeviceNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#hostdevicenetwork-crd>`__.
+
+================
+IPoIBNetwork CRD
+================
+
+For more information on `IPoIBNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#ipoibnetwork-crd>`__.
