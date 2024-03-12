@@ -35,7 +35,7 @@ Below is a list of well known cluster network CNI providers:
    * - Calico
      - https://github.com/projectcalico/calico
    * - Flannel
-     - https://github.com/coreos/flannel
+     - https://github.com/flannel-io/flannel
    * - Canal
      - https://github.com/projectcalico/canal
    * - ovn-kubernetes

@@ -43,7 +43,7 @@ Kubernetes Prerequisites
 Install kubernetes Version 1.18, or newer. You may use the following references to Install Kubernetes with deployment tools:
 
 - `Bootstrapping clusters with kubeadm <https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/>`_
-- `Installing Kubernetes with Kubespray <https://kubernetes.io/docs/setup/production-environment/tools/kubespray/>`_
+- `Installing Kubernetes with Kubespray <https://kubespray.io/>`_
 
 It is recommended to use Kubernetes Version 1.18 with the following features enabled. This will ensure the best NUMA alignment between the NIC PCI and the CPU, and better utilize SR-IOV performance:
 
@@ -96,7 +96,7 @@ RoCE Namespace Aware
 Prior to Kernel Version 5.3.0, all RDMA devices were visible in all network namespaces.
 Kernel Version 5.3.0 or NVIDIA OFED Version 4.7 introduce network namespace isolation of RDMA devices.
 When the RDMA system is set to exclusive, this feature ensures that the RDMA device is bound to a particular net namespace and visible only to it.
-To learn how to enable RoCE Namespace Aware by using RDMA CNI, see `here <https://github.com/Mellanox/rdma-cni/blob/v1.0.0/README.md>`_.
+To learn how to enable RoCE Namespace Aware by using RDMA CNI, see `here <https://github.com/k8snetworkplumbingwg/rdma-cni/blob/v1.0.0/README.md>`_.
 
 1. Set the RDMA system to "exclusive". This should be done on the host preparation stage:
 
@@ -286,7 +286,7 @@ To enable OVN Kubernetes CNI with ConnectX, see `OVN Kubernetes CNI with OVS off
 Antrea
 ------
 
-For Antrea CNI configuration instructions, see `Antrea CNI with OVS Offload <https://github.com/vmware-tanzu/antrea/blob/v0.10.0/docs/ovs-offload.md>`_.
+For Antrea CNI configuration instructions, see `Antrea CNI with OVS Offload <https://github.com/antrea-io/antrea/blob/v0.10.0/docs/ovs-offload.md>`_.
 
 ================
 RoCE Shared Mode
@@ -301,7 +301,7 @@ Kubernetes Prerequisite
 Install Kubernetes Version 1.16 or above. You may use the following references when installing Kubernetes with deployment tools:
 
 - `Bootstrapping Clusters with Kubeadm <https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/>`_
-- `Installing Kubernetes with Kubespray <https://kubernetes.io/docs/setup/production-environment/tools/kubespray/>`_
+- `Installing Kubernetes with Kubespray <https://kubespray.io/>`_
 
 ----------------------------------
 Deploying the Shared Device Plugin
@@ -329,7 +329,7 @@ Create the `rdma-shared.yaml` configMap for the shared device plugin:
    kubectl create -f rdma-shared.yaml
    kubectl create -f https://raw.githubusercontent.com/Mellanox/k8s-rdma-shared-dev-plugin/master/images/k8s-rdma-shared-dev-plugin-ds.yaml
 
-For advanced macvlan CNI configuration see following `instructions <https://github.com/containernetworking/plugins/tree/master/plugins/main/macvlan>`_.
+For advanced macvlan CNI configuration see following `instructions <https://github.com/containernetworking/plugins/tree/main/plugins/main/macvlan>`_.
 
 Supported IPAM (IP Address Management) operations:
 
