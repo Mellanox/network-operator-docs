@@ -153,7 +153,7 @@
 <p>Install kubernetes Version 1.18, or newer. You may use the following references to Install Kubernetes with deployment tools:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">Bootstrapping clusters with kubeadm</a></p></li>
-<li><p><a class="reference external" href="https://kubernetes.io/docs/setup/production-environment/tools/kubespray/">Installing Kubernetes with Kubespray</a></p></li>
+<li><p><a class="reference external" href="https://kubespray.io/">Installing Kubernetes with Kubespray</a></p></li>
 </ul>
 <p>It is recommended to use Kubernetes Version 1.18 with the following features enabled. This will ensure the best NUMA alignment between the NIC PCI and the CPU, and better utilize SR-IOV performance:</p>
 <ul class="simple">
@@ -204,7 +204,7 @@ To enable SR-IOV virtual functions in legacy mode, follow the instructions detai
 <p>Prior to Kernel Version 5.3.0, all RDMA devices were visible in all network namespaces.
 Kernel Version 5.3.0 or NVIDIA OFED Version 4.7 introduce network namespace isolation of RDMA devices.
 When the RDMA system is set to exclusive, this feature ensures that the RDMA device is bound to a particular net namespace and visible only to it.
-To learn how to enable RoCE Namespace Aware by using RDMA CNI, see <a class="reference external" href="https://github.com/Mellanox/rdma-cni/blob/v1.0.0/README.md">here</a>.</p>
+To learn how to enable RoCE Namespace Aware by using RDMA CNI, see <a class="reference external" href="https://github.com/k8snetworkplumbingwg/rdma-cni/blob/v1.0.0/README.md">here</a>.</p>
 <ol class="arabic simple">
 <li><p>Set the RDMA system to “exclusive”. This should be done on the host preparation stage:</p></li>
 </ol>
@@ -365,7 +365,7 @@ Due to kernel limitation, NVIDIA NICs require pre-allocate MACs for all VFs in t
 </section>
 <section id="antrea">
 <h3>Antrea<a class="headerlink" href="#antrea" title="Permalink to this headline"></a></h3>
-<p>For Antrea CNI configuration instructions, see <a class="reference external" href="https://github.com/vmware-tanzu/antrea/blob/v0.10.0/docs/ovs-offload.md">Antrea CNI with OVS Offload</a>.</p>
+<p>For Antrea CNI configuration instructions, see <a class="reference external" href="https://github.com/antrea-io/antrea/blob/v0.10.0/docs/ovs-offload.md">Antrea CNI with OVS Offload</a>.</p>
 </section>
 </section>
 <section id="roce-shared-mode">
@@ -376,7 +376,7 @@ Due to kernel limitation, NVIDIA NICs require pre-allocate MACs for all VFs in t
 <p>Install Kubernetes Version 1.16 or above. You may use the following references when installing Kubernetes with deployment tools:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/">Bootstrapping Clusters with Kubeadm</a></p></li>
-<li><p><a class="reference external" href="https://kubernetes.io/docs/setup/production-environment/tools/kubespray/">Installing Kubernetes with Kubespray</a></p></li>
+<li><p><a class="reference external" href="https://kubespray.io/">Installing Kubernetes with Kubespray</a></p></li>
 </ul>
 </section>
 <section id="deploying-the-shared-device-plugin">
@@ -400,7 +400,7 @@ Due to kernel limitation, NVIDIA NICs require pre-allocate MACs for all VFs in t
 kubectl create -f https://raw.githubusercontent.com/Mellanox/k8s-rdma-shared-dev-plugin/master/images/k8s-rdma-shared-dev-plugin-ds.yaml
 </pre></div>
 </div>
-<p>For advanced macvlan CNI configuration see following <a class="reference external" href="https://github.com/containernetworking/plugins/tree/master/plugins/main/macvlan">instructions</a>.</p>
+<p>For advanced macvlan CNI configuration see following <a class="reference external" href="https://github.com/containernetworking/plugins/tree/main/plugins/main/macvlan">instructions</a>.</p>
 <p>Supported IPAM (IP Address Management) operations:</p>
 <ul class="simple">
 <li><p>host-local</p></li>
@@ -421,7 +421,7 @@ kubectl create -f https://raw.githubusercontent.com/Mellanox/k8s-rdma-shared-dev
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 11, 2024.
+      <span class="lastupdated">Last updated on Mar 12, 2024.
       </span></p>
   </div>
 
