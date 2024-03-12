@@ -815,7 +815,7 @@ NVIDIA IPAM Plugin
 
 
 .. warning::
-   Supported X.509 certificate management system should be available in the cluster to enable the validation webhook. Currently, the supported systems are `certmanager <https://cert-manager.io/>`_ and `Openshift certificate management <https://docs.openshift.com/container-platform/4.13/security/certificates/service-serving-certificate.html>`_.
+   Supported X.509 certificate management system should be available in the cluster to enable the validation webhook. Currently, the supported systems are `certmanager <https://cert-manager.io/>`_ and `Openshift certificate management <https://docs.openshift.com/container-platform/latest/security/certificates/service-serving-certificate.html>`_.
 
 ============================
 NVIDIA NIC Feature Discovery
