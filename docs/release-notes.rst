@@ -51,7 +51,7 @@ Changes and New Features
        | - Added support for NIC Feature Discovery (driver version discovery).
        | - Added CDI support for SR-IOV Network Device Plugin and RDMA Shared Device Plugin for network device persistency.
        | - Added support for NVIDIA BlueField-3 NIC mode.
-       | - Added High-Availability and Leader election support for NV-IPAM.
+       | - Added HighAvailability and Leader election support for NV-IPAM.
        | - Added systemd mode support for SR-IOV Network Operator and MOFED container to optimize cluster/node startup time.
    * - 23.7.0
      - | - Added support for OpenShift Container Platform 4.13.
