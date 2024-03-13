@@ -83,7 +83,7 @@ Prerequisites
      - Notes
    * - Kubernetes
      - >=1.24 and <=1.27
-     -  -
+     -
    * - Helm
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
