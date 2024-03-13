@@ -26,9 +26,9 @@ Platform Support
    :local:
    :backlinks: none
 
-*******************
+===================
 System Requirements
-*******************
+===================
 
 * NVIDIA RDMA-capable network adapters:
    * NVIDIA ConnectX NICs
@@ -44,9 +44,9 @@ System Requirements
     * RHEL: v9.2, v9.1, v8.8, v8.6
 * Container runtime: containerd, CRI-O
 
-***********************
+=======================
 Tested Network Adapters
-***********************
+=======================
 The following network adapters have been tested with the Network Operator:
 
 * ConnectX-6 Dx
@@ -54,9 +54,9 @@ The following network adapters have been tested with the Network Operator:
 * BlueField-2 NIC Mode
 * BlueField-3 NIC Mode
 
-*****************************
+=============================
 Supported ARM Based Platforms
-*****************************
+=============================
 The following ARM based systems has been tested with Network Operator:
 
 .. list-table::
@@ -71,9 +71,9 @@ The following ARM based systems has been tested with Network Operator:
      - Ubuntu 22.04 (ARM64)
      - Tech Preview (RoCE only, without GPUDirect RDMA)
 
-*************
+=============
 Prerequisites
-*************
+=============
 
 .. list-table::
    :header-rows: 1
@@ -88,9 +88,10 @@ Prerequisites
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
 
-******************
+==================
 Component Versions
-******************
+==================
+
 The following component versions are deployed by the Network Operator:
 
 
