@@ -14,3 +14,4 @@
 .. |sriovnetop-sriov-cni-image-tag| replace:: v2.7.0
 .. |sriovnetop-ib-sriov-cni-image-tag| replace:: v1.0.3
 .. |sriovnetop-sriov-device-plugin-image-tag| replace:: v3.6.2
+.. |node-feature-discovery-version| replace:: v0.13.2
