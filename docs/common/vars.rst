@@ -15,3 +15,5 @@
 .. |sriovnetop-ib-sriov-cni-image-tag| replace:: v1.0.3
 .. |sriovnetop-sriov-device-plugin-image-tag| replace:: v3.6.2
 .. |node-feature-discovery-version| replace:: v0.13.2
+.. |helm-chart-version| replace:: v24.1.0
+.. |network-operator-version| replace:: 24.1.0
