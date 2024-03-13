@@ -105,28 +105,28 @@ The following component versions are deployed by the Network Operator:
      - Optionally deployed. May already be present in the cluster with proper configuration.
    * - NVIDIA MLNX_OFED driver container
      - |mofed-version|
-     - -
+     -
    * - k8s-rdma-shared-device-plugin
      - |k8s-rdma-shared-dev-plugin-version|
-     - -
+     -
    * - sriov-network-device-plugin
      - |sriov-device-plugin-version|
-     - -
+     -
    * - containernetworking CNI plugins
      - |cni-plugins-version|
-     - -
+     -
    * - whereabouts CNI
      - |whereabouts-version|
-     - -
+     -
    * - multus CNI
      - |multus-version|
-     - -
+     -
    * - IPoIB CNI
      - |ipoib-cni-version|
-     - -
+     -
    * - IB Kubernetes
      - |ib-kubernetes-version|
-     - -
+     -
    * - NV IPAM Plugin
      - |nvidia-ipam-version|
-     - -
+     -
