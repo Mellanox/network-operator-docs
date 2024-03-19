@@ -134,6 +134,22 @@ General Parameters
      - True
      - Enable the use of Driver ToolKit to compile OFED drivers (OpenShift only)
 
+------------------------------
+ImagePullSecrets customization
+------------------------------
+
+To provide `imagePullSecrets`` object references, you need to specify them using a following structure:
+
+.. code-block:: bash
+
+   imagePullSecrets:
+     - image-pull-secret1
+     - image-pull-secret2
+
+==========
+NFD labels
+==========
+
 The NFD labels required by the Network Operator and GPU Operator:
 
 .. list-table::
@@ -297,7 +313,7 @@ MLNX_OFED Driver
      - MLNX_OFED readiness probe interval
    * - ofedDriver.upgradePolicy.autoUpgrade
      - Bool
-     - false
+     - true
      - A global switch for the automatic upgrade feature. If set to false, all other options are ignored.
    * - ofedDriver.upgradePolicy.maxParallelUpgrades
      - Int
@@ -313,7 +329,7 @@ MLNX_OFED Driver
      - Options for node drain (``kubectl drain``) before driver reload, if auto upgrade is enabled.
    * - ofedDriver.upgradePolicy.drain.force
      - Bool
-     - false
+     - true
      - Use force drain of pods
    * - ofedDriver.upgradePolicy.drain.podSelector
      - String
@@ -339,6 +355,10 @@ MLNX_OFED Driver
      - List
      - Not set
      - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ and limits for the ``mofed-container``
+   * - ofedDriver.forcePrecompiled
+     - Bool
+     - false
+     - Fail Mellanox OFED deployment if precompiled OFED driver container image does not exists
 
 ======================================
 MLNX_OFED Driver Environment Variables
@@ -450,10 +470,12 @@ These configurations consist of a list of RDMA resources, each with a name and a
       vendors: [15b3]
       deviceIDs: [1017]
       ifNames: [enp5s0f0]
+      rdmaHcaMax: 63
     - name: rdma_shared_device_b
       vendors: [15b3]
       deviceIDs: [1017]
-      ifNames: [enp4s0f0, enp4s0f1]
+      ifNames: [ib0, ib1]
+      rdmaHcaMax: 63
 
 ============================
 SR-IOV Network Device Plugin
@@ -850,6 +872,43 @@ NVIDIA NIC Feature Discovery
      - List
      - Not set
      - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ for the ``nic-feature-discovery`` container
+
+======================
+DOCA Telemetry Service
+======================
+`DOCA Telemetry Service <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry>`_ exports metrics from NVIDIA NICs on K8s Nodes.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Type
+     - Default
+     - Description
+   * - docaTelemetryService.deploy
+     - Bool
+     - false
+     - Deploy DOCA Telemetry Service
+   * - docaTelemetryService.image
+     - String
+     - doca_telemetry
+     - DOCA Telemetry Service image name
+   * - docaTelemetryService.repository
+     - String
+     - nvcr.io/nvidia/doca
+     - DOCA Telemetry Service image repository
+   * - docaTelemetryService.version
+     - String
+     - |doca-telemetry-version|
+     - DOCA Telemetry Service image version
+   * - docaTelemetryService.containerResources
+     - List
+     - Not set
+     - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ for the ``doca-telemetry-service`` container
+
+=======================
+Helm customization file
+=======================
 
 .. warning::
    Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.

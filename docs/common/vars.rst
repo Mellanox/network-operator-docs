@@ -17,3 +17,4 @@
 .. |node-feature-discovery-version| replace:: v0.13.2
 .. |helm-chart-version| replace:: v24.1.0
 .. |network-operator-version| replace:: 24.1.0
+.. |doca-telemetry-version| replace:: 1.16.5-doca2.6.0-host
