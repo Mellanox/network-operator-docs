@@ -247,7 +247,10 @@ Network Operator deployment with:
       cniPlugins:
         deploy: true
       ipamPlugin:
-        deploy: true
+        deploy: false
+    
+    nvIpam:
+      deploy: true
 
 To create an NV-IPAM IPPool, apply:
 
