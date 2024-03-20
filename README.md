@@ -28,3 +28,7 @@ To check external links, run:
 ```
 
 Note that some links with anchors are reported as broken though they are working correctly.
+
+## Version update
+
+In order to update the doc version, update components versions in `docs/common/vars.rst` and release version in `repo.toml` under `[repo_docs]`.
