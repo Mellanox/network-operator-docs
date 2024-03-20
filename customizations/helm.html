@@ -123,24 +123,31 @@
 can find those below.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><p><a class="reference internal" href="#general-parameters" id="id16">General Parameters</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator" id="id17">SR-IOV Network Operator</a></p></li>
-<li><p><a class="reference internal" href="#container-resources" id="id18">Container Resources</a></p></li>
-<li><p><a class="reference internal" href="#mlnx-ofed-driver" id="id19">MLNX_OFED Driver</a></p></li>
-<li><p><a class="reference internal" href="#mlnx-ofed-driver-environment-variables" id="id20">MLNX_OFED Driver Environment Variables</a></p></li>
-<li><p><a class="reference internal" href="#rdma-shared-device-plugin" id="id21">RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#rdma-device-plugin-resource-configurations" id="id22">RDMA Device Plugin Resource Configurations</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-device-plugin" id="id23">SR-IOV Network Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-device-plugin-resource-configuration" id="id24">SR-IOV Network Device Plugin Resource Configuration</a></p></li>
-<li><p><a class="reference internal" href="#ib-kubernetes" id="id25">IB Kubernetes</a></p></li>
-<li><p><a class="reference internal" href="#ufm-secret" id="id26">UFM Secret</a></p></li>
-<li><p><a class="reference internal" href="#secondary-network" id="id27">Secondary Network</a></p></li>
-<li><p><a class="reference internal" href="#cni-plugin" id="id28">CNI Plugin</a></p></li>
-<li><p><a class="reference internal" href="#id7" id="id29">Multus CNI</a></p></li>
-<li><p><a class="reference internal" href="#id9" id="id30">IPoIB CNI</a></p></li>
-<li><p><a class="reference internal" href="#ipam-cni-plugin" id="id31">IPAM CNI Plugin</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-ipam-plugin" id="id32">NVIDIA IPAM Plugin</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-nic-feature-discovery" id="id33">NVIDIA NIC Feature Discovery</a></p></li>
+<li><p><a class="reference internal" href="#general-parameters" id="id18">General Parameters</a></p>
+<ul>
+<li><p><a class="reference internal" href="#imagepullsecrets-customization" id="id19">ImagePullSecrets customization</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nfd-labels" id="id20">NFD labels</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator" id="id21">SR-IOV Network Operator</a></p></li>
+<li><p><a class="reference internal" href="#container-resources" id="id22">Container Resources</a></p></li>
+<li><p><a class="reference internal" href="#mlnx-ofed-driver" id="id23">MLNX_OFED Driver</a></p></li>
+<li><p><a class="reference internal" href="#mlnx-ofed-driver-environment-variables" id="id24">MLNX_OFED Driver Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#rdma-shared-device-plugin" id="id25">RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#rdma-device-plugin-resource-configurations" id="id26">RDMA Device Plugin Resource Configurations</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-device-plugin" id="id27">SR-IOV Network Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-device-plugin-resource-configuration" id="id28">SR-IOV Network Device Plugin Resource Configuration</a></p></li>
+<li><p><a class="reference internal" href="#ib-kubernetes" id="id29">IB Kubernetes</a></p></li>
+<li><p><a class="reference internal" href="#ufm-secret" id="id30">UFM Secret</a></p></li>
+<li><p><a class="reference internal" href="#secondary-network" id="id31">Secondary Network</a></p></li>
+<li><p><a class="reference internal" href="#cni-plugin" id="id32">CNI Plugin</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id33">Multus CNI</a></p></li>
+<li><p><a class="reference internal" href="#id9" id="id34">IPoIB CNI</a></p></li>
+<li><p><a class="reference internal" href="#ipam-cni-plugin" id="id35">IPAM CNI Plugin</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-ipam-plugin" id="id36">NVIDIA IPAM Plugin</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-nic-feature-discovery" id="id37">NVIDIA NIC Feature Discovery</a></p></li>
+<li><p><a class="reference internal" href="#doca-telemetry-service" id="id38">DOCA Telemetry Service</a></p></li>
+<li><p><a class="reference internal" href="#helm-customization-file" id="id39">Helm customization file</a></p></li>
 </ul>
 </div>
 <section id="general-parameters">
@@ -296,6 +303,18 @@ can find those below.</p>
 </tr>
 </tbody>
 </table>
+<section id="imagepullsecrets-customization">
+<h3>ImagePullSecrets customization<a class="headerlink" href="#imagepullsecrets-customization" title="Permalink to this headline"></a></h3>
+<p>To provide <cite>imagePullSecrets`</cite> object references, you need to specify them using a following structure:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>imagePullSecrets:
+  - image-pull-secret1
+  - image-pull-secret2
+</pre></div>
+</div>
+</section>
+</section>
+<section id="nfd-labels">
+<h2>NFD labels<a class="headerlink" href="#nfd-labels" title="Permalink to this headline"></a></h2>
 <p>The NFD labels required by the Network Operator and GPU Operator:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -502,7 +521,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.upgradePolicy.autoUpgrade</p></td>
 <td><p>Bool</p></td>
-<td><p>false</p></td>
+<td><p>true</p></td>
 <td><p>A global switch for the automatic upgrade feature. If set to false, all other options are ignored.</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.upgradePolicy.maxParallelUpgrades</p></td>
@@ -522,7 +541,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.force</p></td>
 <td><p>Bool</p></td>
-<td><p>false</p></td>
+<td><p>true</p></td>
 <td><p>Use force drain of pods</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.podSelector</p></td>
@@ -554,6 +573,11 @@ can find those below.</p>
 <td><p>List</p></td>
 <td><p>Not set</p></td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> and limits for the <code class="docutils literal notranslate"><span class="pre">mofed-container</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.forcePrecompiled</p></td>
+<td><p>Bool</p></td>
+<td><p>false</p></td>
+<td><p>Fail Mellanox OFED deployment if precompiled OFED driver container image does not exists</p></td>
 </tr>
 </tbody>
 </table>
@@ -697,10 +721,12 @@ can find those below.</p>
 <span class="w">  </span><span class="nt">vendors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15b3</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">  </span><span class="nt">deviceIDs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1017</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">enp5s0f0</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaHcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_b</span><span class="w"></span>
 <span class="w">  </span><span class="nt">vendors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15b3</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">  </span><span class="nt">deviceIDs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1017</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">enp4s0f0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">enp4s0f1</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ib0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ib1</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaHcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -1224,6 +1250,55 @@ can find those below.</p>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="doca-telemetry-service">
+<h2>DOCA Telemetry Service<a class="headerlink" href="#doca-telemetry-service" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry">DOCA Telemetry Service</a> exports metrics from NVIDIA NICs on K8s Nodes.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>docaTelemetryService.deploy</p></td>
+<td><p>Bool</p></td>
+<td><p>false</p></td>
+<td><p>Deploy DOCA Telemetry Service</p></td>
+</tr>
+<tr class="row-odd"><td><p>docaTelemetryService.image</p></td>
+<td><p>String</p></td>
+<td><p>doca_telemetry</p></td>
+<td><p>DOCA Telemetry Service image name</p></td>
+</tr>
+<tr class="row-even"><td><p>docaTelemetryService.repository</p></td>
+<td><p>String</p></td>
+<td><p>nvcr.io/nvidia/doca</p></td>
+<td><p>DOCA Telemetry Service image repository</p></td>
+</tr>
+<tr class="row-odd"><td><p>docaTelemetryService.version</p></td>
+<td><p>String</p></td>
+<td><p>1.16.5-doca2.6.0-host</p></td>
+<td><p>DOCA Telemetry Service image version</p></td>
+</tr>
+<tr class="row-even"><td><p>docaTelemetryService.containerResources</p></td>
+<td><p>List</p></td>
+<td><p>Not set</p></td>
+<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">doca-telemetry-service</span></code> container</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="helm-customization-file">
+<h2>Helm customization file<a class="headerlink" href="#helm-customization-file" title="Permalink to this headline"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.</p>
