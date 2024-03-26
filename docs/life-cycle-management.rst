@@ -44,7 +44,7 @@ Get the NicClusterPolicy status:
 
 .. code-block:: bash
 
-   kubectl get -n network-operator nicclusterpolicies.mellanox.com nic-cluster-policy -o yaml
+   kubectl get -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy -o yaml
 
 .. code-block:: bash
 
@@ -390,13 +390,13 @@ Uninstall the Network Operator:
 
 .. code-block:: bash
 
-  helm uninstall network-operator -n network-operator
+  helm uninstall network-operator -n nvidia-network-operator
 
 You should now see all the pods being deleted:
 
 .. code-block:: bash
 
-  kubectl get pods -n network-operator
+  kubectl get pods -n nvidia-network-operator
 
 Make sure that the CRDs created during the operator installation have been removed:
 
