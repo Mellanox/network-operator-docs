@@ -170,7 +170,7 @@
 <section id="status-field-example-of-a-nicclusterpolicy-instance">
 <h3>Status Field Example of a NICClusterPolicy Instance<a class="headerlink" href="#status-field-example-of-a-nicclusterpolicy-instance" title="Permalink to this headline"></a></h3>
 <p>Get the NicClusterPolicy status:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get -n network-operator nicclusterpolicies.mellanox.com nic-cluster-policy -o yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy -o yaml
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>status:
@@ -494,11 +494,11 @@ If following the restart the pod still fails, change the MLNX_OFED version in th
 <section id="uninstalling-network-operator-on-a-vanilla-kubernetes-cluster">
 <h3>Uninstalling Network Operator on a Vanilla Kubernetes Cluster<a class="headerlink" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" title="Permalink to this headline"></a></h3>
 <p>Uninstall the Network Operator:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm uninstall network-operator -n network-operator
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm uninstall network-operator -n nvidia-network-operator
 </pre></div>
 </div>
 <p>You should now see all the pods being deleted:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get pods -n network-operator
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get pods -n nvidia-network-operator
 </pre></div>
 </div>
 <p>Make sure that the CRDs created during the operator installation have been removed:</p>
@@ -574,7 +574,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 20, 2024.
+      <span class="lastupdated">Last updated on Mar 26, 2024.
       </span></p>
   </div>
 
