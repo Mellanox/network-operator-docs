@@ -39,7 +39,7 @@ System Requirements
         * BlueField-3 SuperNIC (NIC mode)
 * NVIDIA GPU Operator Version 23.9.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)
 * Operating Systems:
-    * Ubuntu: v22.04, v20.04
+    * Ubuntu: v22.04, v22.04 Real-time, v22.04 ARM, v20.04
     * OpenShift Container Platform (OCP): v 4.14, v4.13, v4.12
     * RHEL: v9.2, v9.1, v8.8, v8.6
 * Container runtime: containerd, CRI-O
@@ -82,7 +82,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.24 and <=1.27
+     - >=1.24 and <=1.28
      -
    * - Helm
      - v3.5+
