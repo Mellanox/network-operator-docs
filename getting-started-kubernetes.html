@@ -130,12 +130,16 @@
 <li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id13">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
 <li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id14">Network Operator Deployment for GPUDirect Workloads</a></p></li>
 <li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id15">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id16">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id17">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id18">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id19">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id20">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id21">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id16">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p>
+<ul>
+<li><p><a class="reference internal" href="#upgrade-from-nvidia-network-operator-v24-1-0" id="id17">Upgrade from NVIDIA Network Operator v24.1.0</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id18">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id19">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id20">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id21">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id22">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
 </ul>
 </li>
 </ul>
@@ -893,18 +897,77 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <h3>SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV<a class="headerlink" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" title="Permalink to this headline"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This is a Tech Preview feature, which is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
+<p>This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
 </div>
-<p>To apply SriovNetworkNodePolicy on several nodes in parallel, specify the <code class="docutils literal notranslate"><span class="pre">maxParallelConfiguration</span></code> option in the SriovOperatorConfig CRD:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;maxParallelNodeConfiguration&quot;: 0 } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+<p>To apply SR-IOV configuration on several nodes in parallel, create a <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> CR and specify the maximum number or percentage of nodes that can be unavailable at the same time:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-number.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;20&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some-label</span><span class="w"></span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">        </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">val-2</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other-label</span><span class="w"></span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-percent.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some-label</span><span class="w"></span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">        </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">val-2</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">other-label</span><span class="w"></span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<section id="upgrade-from-nvidia-network-operator-v24-1-0">
+<h4>Upgrade from NVIDIA Network Operator v24.1.0<a class="headerlink" href="#upgrade-from-nvidia-network-operator-v24-1-0" title="Permalink to this headline"></a></h4>
+<p>To upgrade SR-IOV Network operator you need to create <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> CR with the number of nodes to be configured in a parallel as we did in <cite>SriovOperatorConfig`</cite> in previous releases.</p>
+<p>E.g.: old method to configure nodes in a parallel:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default –patch ‘{ “spec”: { “maxParallelNodeConfiguration”: 5 } }’ –type=’merge’</p>
+</div></blockquote>
+<p>New  method to configure nodes in a parallel:</p>
+<p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-new.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-role.kubernetes.io/master</span><span class="w"></span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">operator</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Exists</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov">
 <h3>SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV<a class="headerlink" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" title="Permalink to this headline"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This is a Tech Preview feature, which is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
+<p>This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
 </div>
 <p>To apply SriovNetworkNodePolicy on several nodes in parallel, specify the <code class="docutils literal notranslate"><span class="pre">featureGates</span></code> option in the SriovOperatorConfig CRD:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;parallelNicConfig&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
@@ -1285,7 +1348,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 01, 2024.
+      <span class="lastupdated">Last updated on Apr 02, 2024.
       </span></p>
   </div>
 
