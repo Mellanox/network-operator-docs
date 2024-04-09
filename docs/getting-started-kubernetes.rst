@@ -865,7 +865,7 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
 
 .. code-block:: yaml
 
-    apiVersion: v1
+    apiVersion: sriovnetwork.openshift.io/v1
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
@@ -886,7 +886,7 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
 
 .. code-block:: yaml
 
-    apiVersion: v1
+    apiVersion: sriovnetwork.openshift.io/v1
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
@@ -921,7 +921,7 @@ New  method to configure nodes in a parallel:
 
 .. code-block:: yaml
 
-    apiVersion: v1
+    apiVersion: sriovnetwork.openshift.io/v1
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
