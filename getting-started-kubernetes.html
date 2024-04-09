@@ -901,7 +901,7 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 </div>
 <p>To apply SR-IOV configuration on several nodes in parallel, create a <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> CR and specify the maximum number or percentage of nodes that can be unavailable at the same time:</p>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-number.yaml</span></code></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
@@ -920,7 +920,7 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-percent.yaml</span></code></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
@@ -948,7 +948,7 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 </div></blockquote>
 <p>New  method to configure nodes in a parallel:</p>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-new.yaml</span></code></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkPoolConfig</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool-1</span><span class="w"></span>
@@ -1348,7 +1348,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 02, 2024.
+      <span class="lastupdated">Last updated on Apr 09, 2024.
       </span></p>
   </div>
 
