@@ -22,7 +22,7 @@ Getting Started with Kubernetes
 *******************************
 
 .. contents:: On this page
-   :depth: 4
+   :depth: 3
    :local:
    :backlinks: none
 
@@ -903,9 +903,9 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
           - key: other-label
             operator: "Exists"
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Upgrade from NVIDIA Network Operator v24.1.0
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To upgrade SR-IOV Network operator you need to create ``SriovNetworkPoolConfig`` CR with the number of nodes to be configured in a parallel as we did in `SriovOperatorConfig`` in previous releases.
 
@@ -1344,3 +1344,275 @@ Network Operator deployment with:
        - name: hugepage
          emptyDir:
            medium: HugePages
+
+----------------------------------------------------
+Network Operator Deployment and OpenvSwitch offload
+----------------------------------------------------
+
+.. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
+
+.. warning:: This mode of operation is not compatible with OFED container.
+
+.. warning:: Tech Preview feature.
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Network Operator Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Deploy network-operator by Helm with sriov-network-operator and nv-ipam.
+
+
+``values.yaml``
+
+.. code-block:: yaml
+
+    sriovNetworkOperator:
+      enabled: true
+    deployCR: true
+    nvIpam:
+      deploy: true
+
+
+Enable ``manageSoftwareBridges`` featureGate for sriov-network-operator
+
+.. code-block:: bash
+
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "featureGates": { "manageSoftwareBridges": true  } } }' --type='merge'
+    
+Create IPPool object for nv-ipam
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: pool1
+      namespace: network-operator
+    spec:
+      subnet: 192.168.0.0/16
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
+      nodeSelector:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/worker
+              operator: Exists
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prerequisites for Worker Nodes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Supported operating systems:
+
+* Ubuntu 22.04
+
+OpenvSwitch from the ``NVIDIA DOCA for Host`` package with ``doca-all`` or ``doca-networking`` profile should be installed on each worker node.
+
+Check NVIDIA DOCA `Official installation guide <https://docs.nvidia.com/doca/sdk/nvidia+doca+installation+guide+for+linux/index.html>`_
+for details. 
+
+Supported OpenvSwitch dataplanes:
+
+* OVS-kernel
+
+* OVS-doca
+
+Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload/>`_ document to know about differences.
+
+^^^^^^^^^^^
+OVS-kernel
+^^^^^^^^^^^
+
+*These steps are for OVS-kernel data plane, to use OVS-doca follow instructions from the relevant section.*
+
+"""""""""""""""""""""
+Prepare Worker Nodes
+"""""""""""""""""""""
+
+Configure Open_vSwitch
+
+.. code-block:: bash
+
+    ovs-vsctl set Open_vSwitch . other_config:hw-offload=true
+
+Restart Open_vSwitch
+
+.. code-block:: bash
+
+    systemctl restart openvswitch-switch.service
+
+
+"""""""""""""""""""""""""""""""""""""
+Sriov Network Operator Configuration
+"""""""""""""""""""""""""""""""""""""
+
+Create SriovNetworkNodePolicy for selected NIC
+
+.. code-block:: yaml
+
+    kind: SriovNetworkNodePolicy
+    metadata:
+      name: ovs-switchdev
+      namespace: network-operator
+    spec:
+      eSwitchMode: switchdev
+      mtu: 1500
+      nicSelector:
+        deviceID: 101d
+        vendor: 15b3
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      numVfs: 4
+      resourceName: switchdev
+      bridge:
+        ovs: {}
+
+Create OVSNetwork CR
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: OVSNetwork
+    metadata:
+      name: ovs
+      namespace: network-operator
+    spec:
+      networkNamespace: default
+      ipam: |
+        {
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
+      resourceName: switchdev
+
+
+^^^^^^^^^^^
+OVS-doca
+^^^^^^^^^^^
+
+*These steps are for OVS-doca data plane, to use OVS-kernel follow instructions from the relevant section.*
+
+"""""""""""""""""""""
+Prepare Worker Nodes
+"""""""""""""""""""""
+
+Configure hugepages
+
+.. code-block:: bash
+
+    mkdir -p /hugepages
+    mount -t hugetlbfs hugetlbfs /hugepages
+    echo 4096 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+
+*Note: for multi CPU system hugepages should be created for each NUMA node: node0, node1, ...*
+
+Configure system to create hugepages on boot
+
+.. code-block:: bash
+
+    echo "vm.nr_hugepages=8192" > /etc/sysctl.d/99-hugepages.conf
+
+*Note: this example is for a server with two CPU*
+
+
+Configure Open_vSwitch
+
+.. code-block:: bash
+
+    ovs-vsctl --no-wait set Open_vSwitch . other_config:doca-init=true
+    ovs-vsctl set Open_vSwitch . other_config:hw-offload=true
+
+Restart Open_vSwitch
+
+.. code-block:: bash
+
+    systemctl restart openvswitch-switch.service
+
+"""""""""""""""""""""""""""""""""""""
+Sriov Network Operator Configuration
+"""""""""""""""""""""""""""""""""""""
+
+Create SriovNetworkNodePolicy for selected NIC
+
+.. code-block:: yaml
+
+    kind: SriovNetworkNodePolicy
+    metadata:
+      name: ovs-switchdev
+      namespace: network-operator
+    spec:
+      eSwitchMode: switchdev
+      mtu: 1500
+      nicSelector:
+        deviceID: 101d
+        vendor: 15b3
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      numVfs: 4
+      resourceName: switchdev
+      bridge:
+        ovs:
+          bridge:
+            datapathType: netdev
+          uplink:
+            interface:
+              type: dpdk
+
+
+Create OVSNetwork CR
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: OVSNetwork
+    metadata:
+      name: ovs
+      namespace: network-operator
+    spec:
+      networkNamespace: default
+      ipam: |
+        {
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
+      resourceName: switchdev
+      interfaceType: dpdk
+
+^^^^^^^^^^^^^^
+Test Workload
+^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ovs-offload
+      labels:
+        app: ovs-offload
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: ovs-offload
+      template:
+        metadata:
+          labels:
+            app: ovs-offload
+          annotations:
+            k8s.v1.cni.cncf.io/networks: ovs
+        spec:
+          containers:
+          - name: ovs-offload-container
+            command: ["/bin/bash", "-c"]
+            args:
+            - |
+              while true; do sleep 1000; done
+            image: mellanox/rping-test
+            resources:
+              requests:
+                nvidia.com/switchdev: 1
+              limits:
+                nvidia.com/switchdev: 1
