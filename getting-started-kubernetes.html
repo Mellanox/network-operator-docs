@@ -941,11 +941,10 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <section id="upgrade-from-nvidia-network-operator-v24-1-0">
 <h4>Upgrade from NVIDIA Network Operator v24.1.0<a class="headerlink" href="#upgrade-from-nvidia-network-operator-v24-1-0" title="Permalink to this headline"></a></h4>
 <p>To upgrade SR-IOV Network operator you need to create <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> CR with the number of nodes to be configured in a parallel as we did in <cite>SriovOperatorConfig`</cite> in previous releases.</p>
-<p>E.g.: old method to configure nodes in a parallel:
-.. code-block:: bash</p>
-<blockquote>
-<div><p>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default –patch ‘{ “spec”: { “maxParallelNodeConfiguration”: 5 } }’ –type=’merge’</p>
-</div></blockquote>
+<p>E.g.: old method to configure nodes in a parallel:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;maxParallelNodeConfiguration&quot;: 5 } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+</pre></div>
+</div>
 <p>New  method to configure nodes in a parallel:</p>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-network-pool-config-new.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -1348,7 +1347,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 10, 2024.
+      <span class="lastupdated">Last updated on May 02, 2024.
       </span></p>
   </div>
 
