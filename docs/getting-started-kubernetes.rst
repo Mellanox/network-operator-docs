@@ -910,6 +910,7 @@ Upgrade from NVIDIA Network Operator v24.1.0
 To upgrade SR-IOV Network operator you need to create ``SriovNetworkPoolConfig`` CR with the number of nodes to be configured in a parallel as we did in `SriovOperatorConfig`` in previous releases.
 
 E.g.: old method to configure nodes in a parallel:
+
 .. code-block:: bash
 
     kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "maxParallelNodeConfiguration": 5 } }' --type='merge'
