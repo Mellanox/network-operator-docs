@@ -1419,7 +1419,7 @@ Supported OpenvSwitch dataplanes:
 
 * OVS-doca
 
-Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload/>`_ document to know about differences.
+Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload+(ovs+in+doca)/index.html>`_ document to know about differences.
 
 ^^^^^^^^^^^
 OVS-kernel
