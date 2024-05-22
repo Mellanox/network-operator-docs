@@ -36,6 +36,12 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.4.0
+     - | - Added support for SR-IOV Network Operator deployment in switchdev SR-IOV mode with OVS CNI - OFED on host (not Container).
+       | - Expose telemetry and metrics using DOCA telemetry.
+       | - Add support for network namespace isolation of RDMA devices with RDMA CNI.
+       | - Optimized DOCA driver time compilation after node reboot.
+       | - Added support for precompiled DOCA drivers for Ubuntu 22.04.
    * - 24.1.0
      - | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview.
        | - Added support for CNI bin directory configuration.
