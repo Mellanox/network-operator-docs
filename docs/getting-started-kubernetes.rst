@@ -1174,7 +1174,7 @@ Wait for MLNX_OFED to install and apply the following CRs:
 .. code-block:: yaml
 
     apiVersion: "k8s.cni.cncf.io/v1"
-    kind: SriovIBNetwork
+    kind: NetworkAttachmentDefinition
     metadata:
       name: ib-sriov-network
       annotations:
