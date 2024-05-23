@@ -1465,6 +1465,8 @@ Create SriovNetworkNodePolicy for selected NIC
       nodeSelector:
         node-role.kubernetes.io/worker: ""
       numVfs: 4
+      isRdma: true
+      linkType: ETH
       resourceName: switchdev
       bridge:
         ovs: {}
@@ -1551,6 +1553,8 @@ Create SriovNetworkNodePolicy for selected NIC
       nodeSelector:
         node-role.kubernetes.io/worker: ""
       numVfs: 4
+      isRdma: true
+      linkType: ETH
       resourceName: switchdev
       bridge:
         ovs:
@@ -1611,8 +1615,21 @@ Test Workload
             - |
               while true; do sleep 1000; done
             image: mellanox/rping-test
+            securityContext:
+              capabilities:
+                add: ["IPC_LOCK"]
             resources:
               requests:
                 nvidia.com/switchdev: 1
               limits:
                 nvidia.com/switchdev: 1
+
+^^^^^^^^^^^^^^^^^^^
+Troubleshooting OVS
+^^^^^^^^^^^^^^^^^^^
+
+For OVS hardware offload verification and troubleshooting steps, please refer to the following DOCA documentation:
+
+* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
+
+* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
