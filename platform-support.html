@@ -117,87 +117,15 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#system-requirements" id="id1">System Requirements</a></p></li>
-<li><p><a class="reference internal" href="#tested-network-adapters" id="id2">Tested Network Adapters</a></p></li>
-<li><p><a class="reference internal" href="#supported-arm-based-platforms" id="id3">Supported ARM Based Platforms</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#component-versions" id="id5">Component Versions</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-component-matrix" id="id2">Network Operator Component Matrix</a></p></li>
+<li><p><a class="reference internal" href="#system-requirements" id="id3">System Requirements</a></p></li>
+<li><p><a class="reference internal" href="#tested-network-adapters" id="id4">Tested Network Adapters</a></p></li>
+<li><p><a class="reference internal" href="#supported-arm-based-platforms" id="id5">Supported ARM Based Platforms</a></p></li>
+<li><p><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms" id="id6">Supported Operating Systems and Kubernetes Platforms</a></p></li>
+<li><p><a class="reference internal" href="#supported-container-runtimes" id="id7">Supported Container Runtimes</a></p></li>
 </ul>
 </div>
-<section id="system-requirements">
-<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline"></a></h2>
-<ul class="simple">
-<li><dl class="simple">
-<dt>NVIDIA RDMA-capable network adapters:</dt><dd><ul>
-<li><dl class="simple">
-<dt>NVIDIA ConnectX NICs</dt><dd><ul>
-<li><p>ConnectX-5 or newer</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>NVIDIA BlueField Network Platforms</dt><dd><ul>
-<li><p>BlueField-2 DPU (NIC mode)</p></li>
-<li><p>BlueField-3 DPU (NIC mode)</p></li>
-<li><p>BlueField-3 SuperNIC (NIC mode)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>NVIDIA GPU Operator Version 23.9.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)</p></li>
-<li><dl class="simple">
-<dt>Operating Systems:</dt><dd><ul>
-<li><p>Ubuntu: v22.04, v22.04 Real-time, v22.04 ARM, v20.04</p></li>
-<li><p>OpenShift Container Platform (OCP): v 4.14, v4.13, v4.12</p></li>
-<li><p>RHEL: v9.2, v9.1, v8.8, v8.6</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>Container runtime: containerd, CRI-O</p></li>
-</ul>
-</section>
-<section id="tested-network-adapters">
-<h2>Tested Network Adapters<a class="headerlink" href="#tested-network-adapters" title="Permalink to this headline"></a></h2>
-<p>The following network adapters have been tested with the Network Operator:</p>
-<ul class="simple">
-<li><p>ConnectX-6 Dx</p></li>
-<li><p>ConnectX-7</p></li>
-<li><p>BlueField-2 NIC Mode</p></li>
-<li><p>BlueField-3 NIC Mode</p></li>
-</ul>
-</section>
-<section id="supported-arm-based-platforms">
-<h2>Supported ARM Based Platforms<a class="headerlink" href="#supported-arm-based-platforms" title="Permalink to this headline"></a></h2>
-<p>The following ARM based systems has been tested with Network Operator:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>System</p></th>
-<th class="head"><p>Network Adapters</p></th>
-<th class="head"><p>OS</p></th>
-<th class="head"><p>Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>NVIDIA IGX Orin</p></td>
-<td><p>ConnectX-7</p></td>
-<td><p>Ubuntu 22.04 (ARM64)</p></td>
-<td><p>Tech Preview (RoCE only, without GPUDirect RDMA)</p></td>
-</tr>
-</tbody>
-</table>
-</section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
 <table class="docutils align-default">
@@ -214,7 +142,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Kubernetes</p></td>
-<td><p>&gt;=1.24 and &lt;=1.28</p></td>
+<td><p>&gt;=1.27 and &lt;=1.29</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>Helm</p></td>
@@ -224,8 +152,8 @@
 </tbody>
 </table>
 </section>
-<section id="component-versions">
-<h2>Component Versions<a class="headerlink" href="#component-versions" title="Permalink to this headline"></a></h2>
+<section id="network-operator-component-matrix">
+<h2>Network Operator Component Matrix<a class="headerlink" href="#network-operator-component-matrix" title="Permalink to this headline"></a></h2>
 <p>The following component versions are deployed by the Network Operator:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -279,6 +207,177 @@
 <tr class="row-odd"><td><p>NV IPAM Plugin</p></td>
 <td><p>v0.1.2</p></td>
 <td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>NVIDIA RDMA-capable network adapters:</dt><dd><ul>
+<li><dl class="simple">
+<dt>NVIDIA ConnectX NICs</dt><dd><ul>
+<li><p>ConnectX-5 or newer</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>NVIDIA BlueField Network Platforms</dt><dd><ul>
+<li><p>BlueField-2 DPU (NIC mode)</p></li>
+<li><p>BlueField-3 DPU (NIC mode)</p></li>
+<li><p>BlueField-3 SuperNIC (NIC mode)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>NVIDIA GPU Operator Version 24.3.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)</p></li>
+</ul>
+</section>
+<section id="tested-network-adapters">
+<h2>Tested Network Adapters<a class="headerlink" href="#tested-network-adapters" title="Permalink to this headline"></a></h2>
+<p>The following network adapters have been tested with the Network Operator:</p>
+<ul class="simple">
+<li><p>ConnectX-6 Dx</p></li>
+<li><p>ConnectX-7</p></li>
+<li><p>BlueField-2 NIC Mode</p></li>
+<li><p>BlueField-3 NIC Mode</p></li>
+</ul>
+</section>
+<section id="supported-arm-based-platforms">
+<h2>Supported ARM Based Platforms<a class="headerlink" href="#supported-arm-based-platforms" title="Permalink to this headline"></a></h2>
+<p>The following ARM based systems has been tested with Network Operator:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>System</p></th>
+<th class="head"><p>Network Adapters</p></th>
+<th class="head"><p>OS</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NVIDIA IGX Orin</p></td>
+<td><p>ConnectX-7</p></td>
+<td><p>Ubuntu 22.04 (ARM64)</p></td>
+<td><p>GA (RoCE only, without GPUDirect RDMA)</p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA Grace ARM Server</p></td>
+<td><p>ConnectX-7</p></td>
+<td><p>Ubuntu 22.04 (ARM64)</p></td>
+<td><p>Tech Preview</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="supported-operating-systems-and-kubernetes-platforms">
+<h2>Supported Operating Systems and Kubernetes Platforms<a class="headerlink" href="#supported-operating-systems-and-kubernetes-platforms" title="Permalink to this headline"></a></h2>
+<p>NVIDIA Network Operator has been validated in the following scenarios:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operating System</p></th>
+<th class="head"><p>Kubernetes</p></th>
+<th class="head"><p>Red Hat OpenShift</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu 24.04 LTS</p></td>
+<td><p>1.27-1.29</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Ubuntu 22.04 LTS</p></td>
+<td><p>1.27-1.29</p></td>
+<td></td>
+<td><p>RT kernels support</p></td>
+</tr>
+<tr class="row-even"><td><p>Ubuntu 20.04 LTS</p></td>
+<td><p>1.27-1.29</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Red Hat Core OS</p></td>
+<td></td>
+<td><p>4.12-4.15</p></td>
+<td><p>RT kernels support</p></td>
+</tr>
+<tr class="row-even"><td><p>Red Hat Enterprise Linux 9.2, 9.0</p></td>
+<td><p>1.27-1.29</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Red Hat Enterprise Linux 8.8, 8.6</p></td>
+<td><p>1.27-1.29</p></td>
+<td></td>
+<td><p>RT kernels support</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="supported-container-runtimes">
+<h2>Supported Container Runtimes<a class="headerlink" href="#supported-container-runtimes" title="Permalink to this headline"></a></h2>
+<p>NVIDIA Network Operator has been validated in the following scenarios:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operating System</p></th>
+<th class="head"><p>Containerd</p></th>
+<th class="head"><p>CRI-O</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu 24.04 LTS</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Ubuntu 22.04 LTS</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Ubuntu 20.04 LTS</p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Red Hat Core OS</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Red Hat Enterprise Linux 9</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>For containerd support DOCA/MOFED drivers must be pre-installed on host</p></td>
+</tr>
+<tr class="row-odd"><td><p>Red Hat Enterprise Linux 8</p></td>
+<td><p>Yes</p></td>
+<td><p>Yes</p></td>
+<td><p>For containerd support DOCA/MOFED drivers must be pre-installed on host</p></td>
 </tr>
 </tbody>
 </table>
