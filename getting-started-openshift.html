@@ -323,7 +323,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.01-0.3.3.1.3
+    version: 24.04-0.6.6.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -336,7 +336,7 @@ spec:
   sriovDevicePlugin:
       image: sriov-network-device-plugin
       repository: ghcr.io/k8snetworkplumbingwg
-      version: 7e7f979087286ee950bd5ebc89d8bbb6723fc625
+      version: e6ead1e8f76a407783430ee2666b403db2d76f64
       config: |
         {
           &quot;resourceList&quot;: [
@@ -415,7 +415,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.01-0.3.3.1.3
+    version: 24.04-0.6.6.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -506,7 +506,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.01-0.3.3.1.3
+    version: 24.04-0.6.6.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -531,7 +531,7 @@ spec:
       }
     image: k8s-rdma-shared-dev-plugin
     repository: nvcr.io/nvidia/cloud-native
-    version: v1.3.2</pre>
+    version: 1.4.0</pre>
 <p>The <cite>macvlan-net-ocp.yaml</cite> configuration file for such a deployment in an OpenShift Platform:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MacvlanNetwork</span><span class="w"></span>
