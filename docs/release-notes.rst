@@ -176,8 +176,6 @@ Known Limitations
 
    * - Version
      - Description
-   * - All
-     - | - MOFED container builds and loads the driver on every MOFED Pod startup to support the current OS kernel.
    * - 23.10.0
      - | - IPoIB sub-interface creation does not work on RHEL 8.8 and RHEL 9.2 due to the kernel limitations in these distributions. This means that IPoIBNetwork cannot be used with these operating systems.
    * - 23.4.0
