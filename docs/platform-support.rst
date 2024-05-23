@@ -43,9 +43,10 @@ Prerequisites
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
 
-==================
+
+=================================
 Network Operator Component Matrix
-==================
+=================================
 
 The following component versions are deployed by the Network Operator:
 
@@ -131,9 +132,9 @@ The following ARM based systems has been tested with Network Operator:
      - Ubuntu 22.04 (ARM64)
      - Tech Preview
 
-=============================
+====================================================
 Supported Operating Systems and Kubernetes Platforms
-=============================
+====================================================
 NVIDIA Network Operator has been validated in the following scenarios:
 
 .. list-table::
