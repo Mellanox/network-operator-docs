@@ -147,6 +147,7 @@
 <li><p><a class="reference internal" href="#ovs-kernel" id="id28">OVS-kernel</a></p></li>
 <li><p><a class="reference internal" href="#ovs-doca" id="id29">OVS-doca</a></p></li>
 <li><p><a class="reference internal" href="#test-workload" id="id30">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id31">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
 </ul>
@@ -1437,6 +1438,8 @@ for details.</p>
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">node-role.kubernetes.io/worker</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ETH</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switchdev</span><span class="w"></span>
 <span class="w">  </span><span class="nt">bridge</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">ovs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
@@ -1503,6 +1506,8 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">node-role.kubernetes.io/worker</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ETH</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">switchdev</span><span class="w"></span>
 <span class="w">  </span><span class="nt">bridge</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">ovs</span><span class="p">:</span><span class="w"></span>
@@ -1559,6 +1564,9 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">          </span><span class="no">while true; do sleep 1000; done</span><span class="w"></span>
 <span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox/rping-test</span><span class="w"></span>
+<span class="w">        </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">nvidia.com/switchdev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
@@ -1566,6 +1574,14 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 <span class="w">            </span><span class="nt">nvidia.com/switchdev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 </pre></div>
 </div>
+</section>
+<section id="troubleshooting-ovs">
+<h4>Troubleshooting OVS<a class="headerlink" href="#troubleshooting-ovs" title="Permalink to this headline"></a></h4>
+<p>For OVS hardware offload verification and troubleshooting steps, please refer to the following DOCA documentation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html">OVS-Kernel Hardware Offloads</a></p></li>
+<li><p><a class="reference external" href="https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html">OVS-DOCA Hardware Offloads</a></p></li>
+</ul>
 </section>
 </section>
 </section>
