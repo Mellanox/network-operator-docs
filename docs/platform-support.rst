@@ -26,51 +26,6 @@ Platform Support
    :local:
    :backlinks: none
 
-===================
-System Requirements
-===================
-
-* NVIDIA RDMA-capable network adapters:
-   * NVIDIA ConnectX NICs
-        * ConnectX-5 or newer
-   * NVIDIA BlueField Network Platforms
-        * BlueField-2 DPU (NIC mode)
-        * BlueField-3 DPU (NIC mode)
-        * BlueField-3 SuperNIC (NIC mode)
-* NVIDIA GPU Operator Version 23.9.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)
-* Operating Systems:
-    * Ubuntu: v22.04, v22.04 Real-time, v22.04 ARM, v20.04
-    * OpenShift Container Platform (OCP): v 4.14, v4.13, v4.12
-    * RHEL: v9.2, v9.1, v8.8, v8.6
-* Container runtime: containerd, CRI-O
-
-=======================
-Tested Network Adapters
-=======================
-The following network adapters have been tested with the Network Operator:
-
-* ConnectX-6 Dx
-* ConnectX-7
-* BlueField-2 NIC Mode
-* BlueField-3 NIC Mode
-
-=============================
-Supported ARM Based Platforms
-=============================
-The following ARM based systems has been tested with Network Operator:
-
-.. list-table::
-   :header-rows: 1
-
-   * - System
-     - Network Adapters
-     - OS
-     - Notes
-   * - NVIDIA IGX Orin
-     - ConnectX-7
-     - Ubuntu 22.04 (ARM64)
-     - Tech Preview (RoCE only, without GPUDirect RDMA)
-
 =============
 Prerequisites
 =============
@@ -82,14 +37,14 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.24 and <=1.28
+     - >=1.27 and <=1.29
      -
    * - Helm
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
 
 ==================
-Component Versions
+Network Operator Component Matrix
 ==================
 
 The following component versions are deployed by the Network Operator:
@@ -131,3 +86,123 @@ The following component versions are deployed by the Network Operator:
    * - NV IPAM Plugin
      - |nvidia-ipam-version|
      -
+
+===================
+System Requirements
+===================
+
+* NVIDIA RDMA-capable network adapters:
+   * NVIDIA ConnectX NICs
+        * ConnectX-5 or newer
+   * NVIDIA BlueField Network Platforms
+        * BlueField-2 DPU (NIC mode)
+        * BlueField-3 DPU (NIC mode)
+        * BlueField-3 SuperNIC (NIC mode)
+* NVIDIA GPU Operator Version 24.3.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)
+
+=======================
+Tested Network Adapters
+=======================
+The following network adapters have been tested with the Network Operator:
+
+* ConnectX-6 Dx
+* ConnectX-7
+* BlueField-2 NIC Mode
+* BlueField-3 NIC Mode
+
+=============================
+Supported ARM Based Platforms
+=============================
+The following ARM based systems has been tested with Network Operator:
+
+.. list-table::
+   :header-rows: 1
+
+   * - System
+     - Network Adapters
+     - OS
+     - Notes
+   * - NVIDIA IGX Orin
+     - ConnectX-7
+     - Ubuntu 22.04 (ARM64)
+     - GA (RoCE only, without GPUDirect RDMA)
+   * - NVIDIA Grace ARM Server
+     - ConnectX-7
+     - Ubuntu 22.04 (ARM64)
+     - Tech Preview
+
+=============================
+Supported Operating Systems and Kubernetes Platforms
+=============================
+NVIDIA Network Operator has been validated in the following scenarios:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Operating System
+     - Kubernetes
+     - Red Hat OpenShift
+     - Notes
+   * - Ubuntu 24.04 LTS
+     - 1.27-1.29
+     - 
+     - 
+   * - Ubuntu 22.04 LTS
+     - 1.27-1.29
+     - 
+     - RT kernels support
+   * - Ubuntu 20.04 LTS
+     - 1.27-1.29
+     - 
+     - 
+   * - Red Hat Core OS
+     - 
+     - 4.12-4.15
+     - RT kernels support
+   * - Red Hat Enterprise Linux 9.2, 9.0
+     - 1.27-1.29
+     - 
+     - 
+   * - Red Hat Enterprise Linux 8.8, 8.6
+     - 1.27-1.29
+     - 
+     - RT kernels support
+
+
+=============================
+Supported Container Runtimes
+=============================
+NVIDIA Network Operator has been validated in the following scenarios:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Operating System
+     - Containerd
+     - CRI-O
+     - Notes
+   * - Ubuntu 24.04 LTS
+     - Yes
+     - No
+     - 
+   * - Ubuntu 22.04 LTS
+     - Yes
+     - No
+     - 
+   * - Ubuntu 20.04 LTS
+     - Yes
+     - No
+     - 
+   * - Red Hat Core OS
+     - No
+     - Yes
+     - 
+   * - Red Hat Enterprise Linux 9
+     - Yes
+     - Yes
+     - For containerd support DOCA/MOFED drivers must be pre-installed on host
+   * - Red Hat Enterprise Linux 8
+     - Yes
+     - Yes
+     - For containerd support DOCA/MOFED drivers must be pre-installed on host
+
