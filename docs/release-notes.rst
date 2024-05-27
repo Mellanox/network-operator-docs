@@ -42,6 +42,7 @@ Changes and New Features
        | - Add support for network namespace isolation of RDMA devices with RDMA CNI.
        | - Optimized DOCA driver time compilation after node reboot.
        | - Added support for precompiled DOCA drivers for Ubuntu 22.04.
+       | - Drop Ubuntu 20.04 support.
    * - 24.1.0
      - | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview.
        | - Added support for CNI bin directory configuration.
