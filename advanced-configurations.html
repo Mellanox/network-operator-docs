@@ -243,14 +243,24 @@ To allow Network Operator to work with a local registry, users can specify local
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="nl">ubuntu</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">headers</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">modules</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
-<span class="nl">rhcos</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="n">pkg</span><span class="o">-</span><span class="n">config</span><span class="w"></span>
+<span class="n">rhel</span><span class="p">,</span><span class="w"> </span><span class="n">rhcos</span><span class="o">:</span><span class="w"></span>
 <span class="w">   </span><span class="n">kernel</span><span class="o">-</span><span class="n">headers</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">kernel</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">kernel</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">createrepo</span><span class="w"></span>
 <span class="w">   </span><span class="n">elfutils</span><span class="o">-</span><span class="n">libelf</span><span class="o">-</span><span class="n">devel</span><span class="w"></span>
 <span class="w">   </span><span class="n">kernel</span><span class="o">-</span><span class="n">rpm</span><span class="o">-</span><span class="n">macros</span><span class="w"></span>
-<span class="w">   </span><span class="n">numactl</span><span class="o">-</span><span class="n">libs</span><span class="w"></span>
+<span class="w">   </span><span class="n">umactl</span><span class="o">-</span><span class="n">libs</span><span class="w"></span>
+<span class="w">   </span><span class="n">lsof</span><span class="w"></span>
+<span class="w">   </span><span class="n">pm</span><span class="o">-</span><span class="n">build</span><span class="w"></span>
+<span class="w">   </span><span class="n">patch</span><span class="w"></span>
+<span class="w">   </span><span class="n">hostname</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For RT kernels following packages should be available:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="o">-</span><span class="n">rt</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+<span class="n">kernel</span><span class="o">-</span><span class="n">rt</span><span class="o">-</span><span class="n">modules</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>For Ubuntu, these packages can be found at <a class="reference external" href="http://archive.ubuntu.com/">archive.ubuntu.com</a>, and be used as the mirror that must be replicated locally for your cluster. By using apt-mirror or apt-get download, you can create a full or a partial mirror to your repository server.</p>
@@ -360,7 +370,7 @@ To allow Network Operator to work with a local registry, users can specify local
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on May 23, 2024.
+      <span class="lastupdated">Last updated on May 29, 2024.
       </span></p>
   </div>
 
