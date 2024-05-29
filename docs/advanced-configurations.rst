@@ -163,14 +163,26 @@ The OFED driver container deployed as part of the Network Operator requires cert
    ubuntu:
       linux-headers-${KERNEL_VERSION}
       linux-modules-${KERNEL_VERSION}
-   rhcos:
+      pkg-config
+   rhel, rhcos:
       kernel-headers-${KERNEL_VERSION}
       kernel-devel-${KERNEL_VERSION}
       kernel-core-${KERNEL_VERSION}
       createrepo
       elfutils-libelf-devel
       kernel-rpm-macros
-      numactl-libs
+      umactl-libs
+      lsof
+      pm-build
+      patch
+      hostname
+
+For RT kernels following packages should be available:
+
+.. code-block::
+
+    kernel-rt-devel-${KERNEL_VERSION}
+    kernel-rt-modules-${KERNEL_VERSION}
 
 
 For Ubuntu, these packages can be found at `archive.ubuntu.com <http://archive.ubuntu.com/>`_, and be used as the mirror that must be replicated locally for your cluster. By using apt-mirror or apt-get download, you can create a full or a partial mirror to your repository server.
