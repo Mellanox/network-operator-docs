@@ -152,6 +152,10 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - 1.27-1.29
      - 
      - RT kernels support
+   * - Ubuntu 20.04 LTS
+     - 1.27-1.29
+     - 
+     - 
    * - Red Hat Core OS
      - 
      - 4.12-4.15
@@ -183,6 +187,10 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - No
      - 
    * - Ubuntu 22.04 LTS
+     - Yes
+     - No
+     - 
+   * - Ubuntu 20.04 LTS
      - Yes
      - No
      - 
