@@ -37,11 +37,15 @@ Changes and New Features
    * - Version
      - Description
    * - 24.4.0
-     - | - Added support for SR-IOV Network Operator deployment in switchdev SR-IOV mode with OVS CNI - OFED on host (not Container).
-       | - Expose telemetry and metrics using DOCA telemetry.
-       | - Add support for network namespace isolation of RDMA devices with RDMA CNI.
-       | - Optimized DOCA driver time compilation after node reboot.
-       | - Added support for precompiled DOCA drivers for Ubuntu 22.04.
+     - | - Added support for OpenShift Container Platform v4.15.
+       | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) as a GA feature.
+       | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA Grace) as a Tech Preview feature.
+       | - Added support for Precompiled DOCA Driver containers for Ubuntu 22.04.
+       | - Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI as a Tech Preview feature.
+       | - Added support for DOCA Telemetry Service (DTS) integration to expose network telemetry and NIC metrics in K8s.
+       | - Added support for network namespace isolation of RDMA devices with RDMA CNI
+       | - Added support for RHEL and OpenShift deployments with Real-time kernels.
+       | - Enhanced DOCA Driver container deployment and significantly reduced compilation time after node reboots.
        | - Drop Ubuntu 20.04 support.
    * - 24.1.0
      - | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview.
