@@ -30,33 +30,4 @@
    Life Cycle Management <life-cycle-management.rst>
    Advanced Configurations <advanced-configurations.rst>
 
-
-.. toctree::
-   :caption: Multi-network POD
-   :titlesonly:
-   :hidden:
-
-   Multi-network POD <multi-network-pod.rst>
-
-.. toctree::
-   :caption: Device Plugin
-   :titlesonly:
-   :hidden:
-
-   Device Plugin <device-plugin.rst>
-
-.. toctree::
-   :caption: K8s on Bare Metal - Ethernet
-   :titlesonly:
-   :hidden:
-
-   K8s on Bare Metal - Ethernet <k8s-baremetal-ethernet.rst>
-
-.. toctree::
-   :caption: Kubernetes Performance Tuning
-   :titlesonly:
-   :hidden:
-
-   Kubernetes Performance Tuning <kubernetes-perfomance.rst>
-
 .. include:: overview.rst
