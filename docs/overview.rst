@@ -17,9 +17,9 @@
 .. headings # #, * *, =, -, ^, "
 
 
-*********************************
-About the NVIDIA Network Operator
-*********************************
+********************************
+NVIDIA Network Operator Overview
+********************************
 
 
 The NVIDIA Network Operator simplifies the provisioning and management of NVIDIA networking resources in a Kubernetes cluster.
