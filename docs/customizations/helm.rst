@@ -179,27 +179,27 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - String
      - nvidia.com
      -
-   * - sriov-network-operator.operator.images.operator
+   * - sriov-network-operator.images.operator
      - String
      - nvcr.io/nvidia/mellanox/sriov-network-operator:|sriovnetop-image-tag|
      -
-   * - sriov-network-operator.operator.images.sriovConfigDaemon
+   * - sriov-network-operator.images.sriovConfigDaemon
      - String
      - nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:|sriovnetop-image-tag|
      -
-   * - sriov-network-operator.operator.images.sriovCni
+   * - sriov-network-operator.images.sriovCni
      - String
      - ghcr.io/k8snetworkplumbingwg/sriov-cni:|sriovnetop-sriov-cni-image-tag|
      - For ARM-based deployments, it is recommended to use the ``ghcr.io/k8snetworkplumbingwg/sriov-cni:latest-arm64`` image
-   * - sriov-network-operator.operator.images.ibSriovCni
+   * - sriov-network-operator.images.ibSriovCni
      - String
      - ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:|sriovnetop-ib-sriov-cni-image-tag|
      - For ARM-based deployments, it is recommended to use the ``ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:latest-arm64`` image
-   * - sriov-network-operator.operator.images.sriovDevicePlugin
+   * - sriov-network-operator.images.sriovDevicePlugin
      - String
      - ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:|sriovnetop-sriov-device-plugin-image-tag|
      - For ARM-based deployments, it is recommended to use the ``ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64`` image
-   * - sriov-network-operator.operator.images.webhook
+   * - sriov-network-operator.images.webhook
      - String
      - nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:|sriovnetop-image-tag|
      -
