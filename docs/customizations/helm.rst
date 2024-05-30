@@ -47,7 +47,7 @@ General Parameters
      - Deploy with admission controller
    * - operator.admissionController.useCertManager
      - Bool
-     - False
+     - True
      - Use cert-manager for generating self-signed certificate
    * - operator.admissionController.certificate.tlsCrt
      - String
