@@ -15,11 +15,11 @@
   limitations under the License.
 
 .. headings # #, * *, =, -, ^, "
+.. include:: ./common/vars.rst
 
-
-********************************
-NVIDIA Network Operator Overview
-********************************
+********************************************
+NVIDIA Network Operator |helm-chart-version|
+********************************************
 
 
 The NVIDIA Network Operator simplifies the provisioning and management of NVIDIA networking resources in a Kubernetes cluster.
