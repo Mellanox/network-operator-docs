@@ -38,8 +38,9 @@ Changes and New Features
      - Description
    * - 24.4.0
      - | - Added support for OpenShift Container Platform v4.15.
-       | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) as a GA feature.
-       | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA Grace) as a Tech Preview feature.
+       | - Added support for Ubuntu 22.04.
+       | - Added support for NVIDIA Grace based ARM platforms with Ubuntu 22.04 and Upstream K8s as a Tech Preview feature.
+       | - Added support for NVIDIA IGX Orin based ARM platforms with Ubuntu 22.04 and Upstream K8s as a GA feature.
        | - Added support for Precompiled DOCA Driver containers for Ubuntu 22.04.
        | - Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI as a Tech Preview feature.
        | - Added support for DOCA Telemetry Service (DTS) integration to expose network telemetry and NIC metrics in K8s.
