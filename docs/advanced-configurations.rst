@@ -304,3 +304,123 @@ If self-signed certificates are used for an HTTPS based internal repository, a C
      deploy: true
      certConfg:
        name: cert-config
+
+=========================================================
+Precompiled Container Build Instructions for DOCA Drivers
+=========================================================
+
+-------------
+Prerequisites
+-------------
+
+Before you begin, ensure that you have the following prerequisites:
+
+~~~~~~
+Common
+~~~~~~
+
+- Docker (Ubuntu) / Podman (RH) installed on your build system.
+- Web access to NVIDIA NIC drivers sources. Latest NIC drivers published at `NIC drivers download center <https://network.nvidia.com/products/infiniband-drivers/linux/mlnx_ofed/>`_, for example: `https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz <https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz>`_
+
+
+~~~~
+RHEL
+~~~~
+
+- Active subscription and login credentials for `registry.redhat.io <https://registry.redhat.io>`_. To build RHEL based container from official repository, you need to log in to `registry.redhat.io <https://registry.redhat.io>`_, run the following command:
+
+.. code-block:: bash
+
+   podman login registry.redhat.io --username=${RH_USERNAME} --password=${RH_PASSWORD}
+
+Replace `RH_USERNAME` and `RH_PASSWORD` with your Red Hat account username and password.
+
+-------------------
+Dockerfile Overview
+-------------------
+
+To build the precompiled container, the Dockerfile is constructed in a multistage fashion.
+This approach is used to optimize the resulting container image size and reduce the number of dependencies included in the final image.
+
+The Dockerfile consists of the following stages:
+
+1. **Base Image Update**: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.
+
+2. **Download Driver Sources**: This stage downloads the Mellanox OFED driver sources to the specified path. It prepares the necessary files for the driver build process.
+
+3. **Build Driver**: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.
+
+4. **Install precompiled driver**: Finally, the precompiled driver is installed on clean container. This stage sets up the environment to run the NVIDIA NIC drivers on the target system.
+
+
+---------------------------------
+Common mandatory build parameters
+---------------------------------
+
+Before building the container, you need to provide following parameters as `build-arg` for container build:
+
+1. `D_OS`: The Linux distribution (e.g., ubuntu22.04 / rhel9.2)
+2. `D_ARCH`: Compiled Architecture
+3. `D_BASE_IMAGE`: Base container image
+4. `D_KERNEL_VER`: The target kernel version (e.g., 5.15.0-25-generic / 5.14.0-284.32.1.el9_2.x86_64)
+5. `D_OFED_VERSION`: NVIDIA NIC drivers version (e.g., 24.01-0.3.3.1)
+
+**NOTE:** Check desired NVIDIA NIC drivers sources[^1] availability for designated container OS, only versions available on download page can be utilized
+
+------------------------------
+RHEL-specific build parameters
+------------------------------
+
+1. `D_BASE_IMAGE`: DriverToolKit container image
+
+**NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.
+
+2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
+
+For more details regarding DTK please read `official documentation <https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload>`_.
+
+**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **driver_ver-container_ver-kernel_ver-os-arch**. For example: 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64
+
+~~~~~~~~~~~~
+RHEL example
+~~~~~~~~~~~~
+
+To build RHEL-based image please use provided :download:`Dockerfile <files/RHEL_Dockerfile>`:
+
+.. code-block:: bash
+
+   podman build \
+    --build-arg D_OS=rhel9.2 \
+    --build-arg D_ARCH=x86_64 \
+    --build-arg D_KERNEL_VER=5.14.0-284.32.1.el9_2.x86_64 \
+    --build-arg D_OFED_VERSION=24.01-0.3.3.1 \
+    --build-arg D_BASE_IMAGE="registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream" \
+    --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:latest \
+    --tag 24.04-0.6.6.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 \
+    -f RHEL_Dockerfile \
+    --target precompiled .
+
+~~~~~~~~~~~~~~
+Ubuntu example
+~~~~~~~~~~~~~~
+
+To build RHEL-based image please use provided :download:`Dockerfile <files/Ubuntu_Dockerfile>`:.
+
+.. code-block:: bash
+
+   docker build \
+    --build-arg D_OS=ubuntu22.04 \
+    --build-arg D_ARCH=x86_64 \
+    --build-arg D_BASE_IMAGE=ubuntu:24.04 \
+    --build-arg D_KERNEL_VER=5.15.0-25-generic \
+    --build-arg D_OFED_VERSION=24.01-0.3.3.1 \
+    --tag 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64 \
+    -f Ubuntu_Dockerfile \
+    --target precompiled .
+
+**NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
+
+**NOTE:** Entrypoint script :download:`download <files/entrypoint.sh>`
+**NOTE:** Driver build script :download:`download <files/dtk_nic_driver_build.sh>`
+
+.. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.
