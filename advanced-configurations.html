@@ -99,20 +99,28 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#network-operator-deployment-with-admission-controller" id="id1">Network Operator Deployment with Admission Controller</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-pod-security-admission" id="id2">Network Operator Deployment with Pod Security Admission</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-in-a-proxy-environment" id="id3">Network Operator Deployment in a Proxy Environment</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-admission-controller" id="id3">Network Operator Deployment with Admission Controller</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-pod-security-admission" id="id4">Network Operator Deployment with Pod Security Admission</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-in-a-proxy-environment" id="id5">Network Operator Deployment in a Proxy Environment</a></p>
 <ul>
-<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#http-proxy-configuration-for-openshift" id="id5">HTTP Proxy Configuration for Openshift</a></p></li>
-<li><p><a class="reference internal" href="#http-proxy-configuration" id="id6">HTTP Proxy Configuration</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id6">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#http-proxy-configuration-for-openshift" id="id7">HTTP Proxy Configuration for Openshift</a></p></li>
+<li><p><a class="reference internal" href="#http-proxy-configuration" id="id8">HTTP Proxy Configuration</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-deployment-in-an-air-gapped-environment" id="id7">Network Operator Deployment in an Air-gapped Environment</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-in-an-air-gapped-environment" id="id9">Network Operator Deployment in an Air-gapped Environment</a></p>
 <ul>
-<li><p><a class="reference internal" href="#local-image-registry" id="id8">Local Image Registry</a></p></li>
-<li><p><a class="reference internal" href="#pulling-and-pushing-container-images-to-a-local-registry" id="id9">Pulling and Pushing Container Images to a Local Registry</a></p></li>
-<li><p><a class="reference internal" href="#local-package-repository" id="id10">Local Package Repository</a></p></li>
+<li><p><a class="reference internal" href="#local-image-registry" id="id10">Local Image Registry</a></p></li>
+<li><p><a class="reference internal" href="#pulling-and-pushing-container-images-to-a-local-registry" id="id11">Pulling and Pushing Container Images to a Local Registry</a></p></li>
+<li><p><a class="reference internal" href="#local-package-repository" id="id12">Local Package Repository</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-doca-drivers" id="id13">Precompiled Container Build Instructions for DOCA Drivers</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id14">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id15">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id16">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhel-specific-build-parameters" id="id17">RHEL-specific build parameters</a></p></li>
 </ul>
 </li>
 </ul>
@@ -339,6 +347,104 @@ To allow Network Operator to work with a local registry, users can specify local
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-config</span><span class="w"></span>
 </pre></div>
 </div>
+</section>
+</section>
+<section id="precompiled-container-build-instructions-for-doca-drivers">
+<h2>Precompiled Container Build Instructions for DOCA Drivers<a class="headerlink" href="#precompiled-container-build-instructions-for-doca-drivers" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>Prerequisites<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<p>Before you begin, ensure that you have the following prerequisites:</p>
+<section id="common">
+<h4>Common<a class="headerlink" href="#common" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Docker (Ubuntu) / Podman (RH) installed on your build system.</p></li>
+<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers published at <a class="reference external" href="https://network.nvidia.com/products/infiniband-drivers/linux/mlnx_ofed/">NIC drivers download center</a>, for example: <a class="reference external" href="https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz">https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz</a></p></li>
+</ul>
+</section>
+<section id="rhel">
+<h4>RHEL<a class="headerlink" href="#rhel" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Active subscription and login credentials for <a class="reference external" href="https://registry.redhat.io">registry.redhat.io</a>. To build RHEL based container from official repository, you need to log in to <a class="reference external" href="https://registry.redhat.io">registry.redhat.io</a>, run the following command:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman login registry.redhat.io --username<span class="o">=</span><span class="si">${</span><span class="nv">RH_USERNAME</span><span class="si">}</span> --password<span class="o">=</span><span class="si">${</span><span class="nv">RH_PASSWORD</span><span class="si">}</span>
+</pre></div>
+</div>
+<p>Replace <cite>RH_USERNAME</cite> and <cite>RH_PASSWORD</cite> with your Red Hat account username and password.</p>
+</section>
+</section>
+<section id="dockerfile-overview">
+<h3>Dockerfile Overview<a class="headerlink" href="#dockerfile-overview" title="Permalink to this headline"></a></h3>
+<p>To build the precompiled container, the Dockerfile is constructed in a multistage fashion.
+This approach is used to optimize the resulting container image size and reduce the number of dependencies included in the final image.</p>
+<p>The Dockerfile consists of the following stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Base Image Update</strong>: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.</p></li>
+<li><p><strong>Download Driver Sources</strong>: This stage downloads the Mellanox OFED driver sources to the specified path. It prepares the necessary files for the driver build process.</p></li>
+<li><p><strong>Build Driver</strong>: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.</p></li>
+<li><p><strong>Install precompiled driver</strong>: Finally, the precompiled driver is installed on clean container. This stage sets up the environment to run the NVIDIA NIC drivers on the target system.</p></li>
+</ol>
+</section>
+<section id="common-mandatory-build-parameters">
+<h3>Common mandatory build parameters<a class="headerlink" href="#common-mandatory-build-parameters" title="Permalink to this headline"></a></h3>
+<p>Before building the container, you need to provide following parameters as <cite>build-arg</cite> for container build:</p>
+<ol class="arabic simple">
+<li><p><cite>D_OS</cite>: The Linux distribution (e.g., ubuntu22.04 / rhel9.2)</p></li>
+<li><p><cite>D_ARCH</cite>: Compiled Architecture</p></li>
+<li><p><cite>D_BASE_IMAGE</cite>: Base container image</p></li>
+<li><p><cite>D_KERNEL_VER</cite>: The target kernel version (e.g., 5.15.0-25-generic / 5.14.0-284.32.1.el9_2.x86_64)</p></li>
+<li><p><cite>D_OFED_VERSION</cite>: NVIDIA NIC drivers version (e.g., 24.01-0.3.3.1)</p></li>
+</ol>
+<p><strong>NOTE:</strong> Check desired NVIDIA NIC drivers sources[^1] availability for designated container OS, only versions available on download page can be utilized</p>
+</section>
+<section id="rhel-specific-build-parameters">
+<h3>RHEL-specific build parameters<a class="headerlink" href="#rhel-specific-build-parameters" title="Permalink to this headline"></a></h3>
+<ol class="arabic simple">
+<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</p></li>
+</ol>
+<p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.</p>
+<ol class="arabic simple" start="2">
+<li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
+</ol>
+<p>For more details regarding DTK please read <a class="reference external" href="https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload">official documentation</a>.</p>
+<p><strong>NOTE:</strong> For proper Network Operator functionality container tag name must be in following pattern: <strong>driver_ver-container_ver-kernel_ver-os-arch</strong>. For example: 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64</p>
+<section id="rhel-example">
+<h4>RHEL example<a class="headerlink" href="#rhel-example" title="Permalink to this headline"></a></h4>
+<p>To build RHEL-based image please use provided <a class="reference download internal" download="" href="_downloads/a603146394632e94d8dcfba46d30e2c2/RHEL_Dockerfile"><code class="xref download docutils literal notranslate"><span class="pre">Dockerfile</span></code></a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhel9.2 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-284.32.1.el9_2.x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.01-0.3.3.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream&quot;</span> <span class="se">\</span>
+ --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:latest <span class="se">\</span>
+ --tag <span class="m">24</span>.04-0.6.6.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 <span class="se">\</span>
+ -f RHEL_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
+</section>
+<section id="ubuntu-example">
+<h4>Ubuntu example<a class="headerlink" href="#ubuntu-example" title="Permalink to this headline"></a></h4>
+<p>To build RHEL-based image please use provided <a class="reference download internal" download="" href="_downloads/0deb975d4bc3acb406e6d3c5b1a2f389/Ubuntu_Dockerfile"><code class="xref download docutils literal notranslate"><span class="pre">Dockerfile</span></code></a>:.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>ubuntu22.04 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>ubuntu:24.04 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.15.0-25-generic <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.01-0.3.3.1 <span class="se">\</span>
+ --tag <span class="m">24</span>.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64 <span class="se">\</span>
+ -f Ubuntu_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
+<p><strong>NOTE:</strong> Entrypoint script <a class="reference download internal" download="" href="_downloads/46bd948566ee03504c6421cadd8047fa/entrypoint.sh"><code class="xref download docutils literal notranslate"><span class="pre">download</span></code></a>
+<strong>NOTE:</strong> Driver build script <a class="reference download internal" download="" href="_downloads/10d5db7fcd98952a3e7d647e51a0fe33/dtk_nic_driver_build.sh"><code class="xref download docutils literal notranslate"><span class="pre">download</span></code></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modification of <cite>D_OFED_SRC_DOWNLOAD_PATH</cite> must be tighdly coupled with corresponding update to entrypoint.sh script.</p>
+</div>
+</section>
 </section>
 </section>
 </section>
