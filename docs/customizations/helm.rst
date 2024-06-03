@@ -198,7 +198,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
    * - sriov-network-operator.images.sriovDevicePlugin
      - String
      - ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:|sriovnetop-sriov-device-plugin-image-tag|
-     - For ARM-based deployments, it is recommended to use the ``ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64`` image
+     - For ARM-based deployments, it is recommended to use the ``ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-arm64`` image
    * - sriov-network-operator.images.webhook
      - String
      - nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:|sriovnetop-image-tag|
