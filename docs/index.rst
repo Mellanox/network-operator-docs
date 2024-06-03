@@ -21,9 +21,8 @@
    :titlesonly:
    :hidden:
 
-   About the Operator <overview.rst>
-   Platform Support <platform-support.rst>
    Release Notes <release-notes.rst>
+   Platform Support <platform-support.rst>
    Getting Started with Kubernetes <getting-started-kubernetes.rst>
    Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
    Customization Options and CRDs <customizations/customization.rst>
