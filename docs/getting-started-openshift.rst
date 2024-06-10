@@ -108,7 +108,7 @@ If you are planning to use SR-IOV, follow these `instructions <https://docs.open
 .. warning::
    The SR-IOV resources created will have the `openshift.io` prefix.
 
-For the default SriovOperatorConfig CR to work with the MLNX_OFED container, please run this command to update the following values:
+For the default SriovOperatorConfig CR to work with the NVIDIA DOCA Driver container, please run this command to update the following values:
 
 .. code-block:: bash
 
@@ -318,7 +318,7 @@ The `pod.yaml` configuration file for such a deployment:
      restartPolicy: OnFailure
      containers:
      - image: <rdma image>
-       name: mofed-test-ctr
+       name: doca-test-ctr
        securityContext:
          capabilities:
            add: [ "IPC_LOCK" ]

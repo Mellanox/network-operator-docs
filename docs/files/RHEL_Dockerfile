@@ -86,7 +86,7 @@ ARG D_KERNEL_VER
 ARG OFED_SRC_LOCAL_DIR
 
 RUN set -x && \
-# MOFED installation requirements
+# NVIDIA DOCA Driver installation requirements
     dnf install -y autoconf gcc make rpm-build
 
 # Build driver
@@ -123,7 +123,7 @@ RUN set -x && \
     ./mlnx-tools-*.rpm
 
 RUN set -x && \
-# MOFED functional requirements
+# NVIDIA DOCA Driver functional requirements
     dnf install -y pciutils hostname udev ethtool \
 # Container functional requirements
     jq iproute kmod procps-ng udev
