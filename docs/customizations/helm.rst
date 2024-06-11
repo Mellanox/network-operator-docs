@@ -769,7 +769,7 @@ IPAM CNI Plugin
      - Description
    * - secondaryNetwork.ipamPlugin.deploy
      - Bool
-     - true
+     - false
      - Deploy IPAM CNI Plugin Secondary Network
    * - secondaryNetwork.ipamPlugin.image
      - String
@@ -807,7 +807,7 @@ NVIDIA IPAM Plugin
      - Description
    * - nvIpam.deploy
      - Bool
-     - false
+     - true
      - Deploy NVIDIA IPAM Plugin
    * - nvIpam.image
      - String
