@@ -101,36 +101,37 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#network-operator-deployment-guide" id="id6">Network Operator Deployment Guide</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-on-vanilla-kubernetes-cluster" id="id7">Network Operator Deployment on Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#deployment-examples" id="id8">Deployment Examples</a></p>
+<li><p><a class="reference internal" href="#prerequisites" id="id7">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-on-vanilla-kubernetes-cluster" id="id8">Network Operator Deployment on Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#deployment-examples" id="id9">Deployment Examples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin" id="id9">Network Operator Deployment with RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" id="id10">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network" id="id11">Network Operator Deployment with a Secondary Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam" id="id12">Network Operator Deployment with NVIDIA-IPAM</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id13">Network Operator Deployment with a Host Device Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id14">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id15">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id16">Network Operator Deployment for GPUDirect Workloads</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id17">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id18">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin" id="id10">Network Operator Deployment with RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" id="id11">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network" id="id12">Network Operator Deployment with a Secondary Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam" id="id13">Network Operator Deployment with NVIDIA-IPAM</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id14">Network Operator Deployment with a Host Device Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id15">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id16">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id17">Network Operator Deployment for GPUDirect Workloads</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id18">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id19">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p>
 <ul>
-<li><p><a class="reference internal" href="#upgrade-from-nvidia-network-operator-v24-1-0" id="id19">Upgrade from NVIDIA Network Operator v24.1.0</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-from-nvidia-network-operator-v24-1-0" id="id20">Upgrade from NVIDIA Network Operator v24.1.0</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id20">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id21">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id22">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id23">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id24">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload" id="id25">Network Operator Deployment and OpenvSwitch offload</a></p>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id21">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id22">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id23">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id24">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id25">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload" id="id26">Network Operator Deployment and OpenvSwitch offload</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-configuration" id="id26">Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id27">Prerequisites for Worker Nodes</a></p></li>
-<li><p><a class="reference internal" href="#ovs-kernel" id="id28">OVS-kernel</a></p></li>
-<li><p><a class="reference internal" href="#ovs-doca" id="id29">OVS-doca</a></p></li>
-<li><p><a class="reference internal" href="#test-workload" id="id30">Test Workload</a></p></li>
-<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id31">Troubleshooting OVS</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-configuration" id="id27">Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id28">Prerequisites for Worker Nodes</a></p></li>
+<li><p><a class="reference internal" href="#ovs-kernel" id="id29">OVS-kernel</a></p></li>
+<li><p><a class="reference internal" href="#ovs-doca" id="id30">OVS-doca</a></p></li>
+<li><p><a class="reference internal" href="#test-workload" id="id31">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id32">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
 </ul>
@@ -150,6 +151,42 @@
 <li><p>Kubernetes device plugins to provide hardware resources required for an accelerated network</p></li>
 <li><p>Kubernetes secondary network components for network intensive workloads</p></li>
 </ul>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ol class="arabic">
+<li><p>You have the <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span></code> CLIs available on a client machine.</p>
+<p>You can run the following commands to install the Helm CLI:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> chmod <span class="m">700</span> get_helm.sh <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> ./get_helm.sh
+</pre></div>
+</div>
+</li>
+<li><p>Nodes must be configured with a container engine such CRI-O or containerd.</p></li>
+<li><p>If your cluster uses Pod Security Admission (PSA) to restrict the behavior of pods,
+label the namespace for the Operator to set the enforcement policy to privileged:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl create ns network-operator
+<span class="gp">$ </span>kubectl label --overwrite ns network-operator pod-security.kubernetes.io/enforce<span class="o">=</span>privileged
+</pre></div>
+</div>
+</li>
+<li><p>Node Feature Discovery (NFD) is a dependency for the Operator on each node.
+By default, NFD master and worker are automatically deployed by the Operator.
+If NFD is already running in the cluster, then you must disable deploying NFD when you install the Operator.
+by setting <code class="docutils literal notranslate"><span class="pre">nfd.enabled=false</span></code> Helm value</p>
+<p>One way to determine if NFD is already running in the cluster is to check for a NFD label on your nodes:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl get nodes -o json <span class="p">|</span> jq <span class="s1">&#39;.items[].metadata.labels | keys | any(startswith(&quot;feature.node.kubernetes.io&quot;))&#39;</span>
+</pre></div>
+</div>
+<p>If the command output is <code class="docutils literal notranslate"><span class="pre">true</span></code>, then NFD is already running in the cluster.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NFD needs to support NodeFeatureRules API or it should be configured to expose the needed NIC labels.
+Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will have the correct configurations for both Operators.</p>
+</div>
+</li>
+</ol>
 </section>
 <section id="network-operator-deployment-on-vanilla-kubernetes-cluster">
 <h2>Network Operator Deployment on Vanilla Kubernetes Cluster<a class="headerlink" href="#network-operator-deployment-on-vanilla-kubernetes-cluster" title="Permalink to this headline"></a></h2>
@@ -1579,7 +1616,7 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 03, 2024.
+      <span class="lastupdated">Last updated on Jun 27, 2024.
       </span></p>
   </div>
 
