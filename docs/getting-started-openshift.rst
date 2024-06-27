@@ -44,6 +44,7 @@ Node Feature Discovery
 ----------------------
 
 To enable Node Feature Discovery, please follow the official `guide <https://docs.openshift.com/container-platform/latest/hardware_enablement/psap-node-feature-discovery-operator.html>`_.
+A single instance of Node Feature Discovery is expected to be used in the cluster.
 
 
 An example of Node Feature Discovery configuration:

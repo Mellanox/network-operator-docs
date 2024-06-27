@@ -43,6 +43,47 @@ The goal of the Network Operator is to manage the networking related components,
 * Kubernetes device plugins to provide hardware resources required for an accelerated network
 * Kubernetes secondary network components for network intensive workloads
 
+=============
+Prerequisites
+=============
+
+#. You have the ``kubectl`` and ``helm`` CLIs available on a client machine.
+
+   You can run the following commands to install the Helm CLI:
+
+   .. code-block:: console
+
+      $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
+          && chmod 700 get_helm.sh \
+          && ./get_helm.sh
+
+#. Nodes must be configured with a container engine such CRI-O or containerd.
+
+#. If your cluster uses Pod Security Admission (PSA) to restrict the behavior of pods,
+   label the namespace for the Operator to set the enforcement policy to privileged:
+
+   .. code-block:: console
+
+      $ kubectl create ns network-operator
+      $ kubectl label --overwrite ns network-operator pod-security.kubernetes.io/enforce=privileged
+
+#. Node Feature Discovery (NFD) is a dependency for the Operator on each node.
+   By default, NFD master and worker are automatically deployed by the Operator.
+   If NFD is already running in the cluster, then you must disable deploying NFD when you install the Operator.
+   by setting ``nfd.enabled=false`` Helm value
+
+   One way to determine if NFD is already running in the cluster is to check for a NFD label on your nodes:
+
+   .. code-block:: console
+
+      $ kubectl get nodes -o json | jq '.items[].metadata.labels | keys | any(startswith("feature.node.kubernetes.io"))'
+
+   If the command output is ``true``, then NFD is already running in the cluster.
+
+   .. note::
+      NFD needs to support NodeFeatureRules API or it should be configured to expose the needed NIC labels.
+      Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will have the correct configurations for both Operators.
+
 =========================================================
 Network Operator Deployment on Vanilla Kubernetes Cluster
 =========================================================
