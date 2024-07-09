@@ -367,16 +367,16 @@ Troubleshooting
      - Required Action
    * - The node is in upgrade-failed state.
      - * Drain the node manually by running kubectl drain <node name> --ignore-daemonsets.
-       * Delete the MLNX_OFED pod on the node manually, by running the following command: ``kubectl delete pod -n `kubectl get pods --A --field-selector spec.nodeName=<node name> -l nvidia.com/ofed-driver --no-headers | awk '{print $1 " "$2}'```.
+       * Delete the NVIDIA DOCA Driver pod on the node manually, by running the following command: ``kubectl delete pod -n `kubectl get pods --A --field-selector spec.nodeName=<node name> -l nvidia.com/ofed-driver --no-headers | awk '{print $1 " "$2}'```.
 
        **NOTE:** If the "Safe driver loading" feature is enabled, you may also need to remove the ``nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load`` annotation from the node object to unblock the loading of the driver
        ``kubectl annotate node <node_name> nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load-``
 
        * Wait for the node to complete the upgrade.
 
-   * - The updated MLNX_OFED pod failed to start/ a new version of MLNX_OFED cannot be installed on the node.
+   * - The updated NVIDIA DOCA Driver pod failed to start/ a new version of NVIDIA DOCA Driver cannot be installed on the node.
      - Manually delete the pod by using ``kubectl delete -n <Network Operator Namespace> <pod name>``.
-       If following the restart the pod still fails, change the MLNX_OFED version in the NicClusterPolicy to the previous version or to another working version.
+       If following the restart the pod still fails, change the NVIDIA DOCA Driver version in the NicClusterPolicy to the previous version or to another working version.
 
 =================================
 Uninstalling the Network Operator

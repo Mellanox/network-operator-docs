@@ -224,9 +224,9 @@ For example:
         memory: "300Mi"
 
 
-================
-MLNX_OFED Driver
-================
+===================
+ NVIDIA DOCA Driver
+===================
 
 .. list-table::
    :header-rows: 1
@@ -238,19 +238,19 @@ MLNX_OFED Driver
    * - ofedDriver.deploy
      - Bool
      - false
-     - Deploy the MLNX_OFED driver container
+     - Deploy the  NVIDIA DOCA Driver driver container
    * - ofedDriver.repository
      - String
      - nvcr.io/nvidia/mellanox
-     - MLNX_OFED driver image repository
+     - NVIDIA DOCA Driver image repository
    * - ofedDriver.image
      - String
      - doca-driver
-     - MLNX_OFED driver image name
+     - NVIDIA DOCA Driver image name
    * - ofedDriver.version
      - String
      - |mofed-version|
-     - MLNX_OFED driver version
+     - NVIDIA DOCA Driver version
    * - ofedDriver.initContainer.enable
      - Bool
      - true
@@ -282,7 +282,7 @@ MLNX_OFED Driver
    * - ofedDriver.imagePullSecrets
      - List
      - []
-     - An optional list of references to secrets to use for pulling any of the MLNX_OFED driver images
+     - An optional list of references to secrets to use for pulling any of the NVIDIA DOCA Driver images
    * - ofedDriver.env
      - List
      - []
@@ -290,27 +290,27 @@ MLNX_OFED Driver
    * - ofedDriver.startupProbe.initialDelaySeconds
      - Int
      - 10
-     - MLNX_OFED startup probe initial delay
+     - NVIDIA DOCA Driver startup probe initial delay
    * - ofedDriver.startupProbe.periodSeconds
      - Int
      - 20
-     - MLNX_OFED startup probe interval
+     - NVIDIA DOCA Driver startup probe interval
    * - ofedDriver.livenessProbe.initialDelaySeconds
      - Int
      - 30
-     - MLNX_OFED liveness probe initial delay
+     - NVIDIA DOCA Driver liveness probe initial delay
    * - ofedDriver.livenessProbe.periodSeconds
      - Int
      - 30
-     - MLNX_OFED liveness probe interval
+     - NVIDIA DOCA Driver liveness probe interval
    * - ofedDriver.readinessProbe.initialDelaySeconds
      - Int
      - 10
-     - MLNX_OFED readiness probe initial delay
+     - NVIDIA DOCA Driver readiness probe initial delay
    * - ofedDriver.readinessProbe.periodSeconds
      - Int
      - 30
-     - MLNX_OFED readiness probe interval
+     - NVIDIA DOCA Driver readiness probe interval
    * - ofedDriver.upgradePolicy.autoUpgrade
      - Bool
      - true
@@ -360,11 +360,11 @@ MLNX_OFED Driver
      - false
      - Fail Mellanox OFED deployment if precompiled OFED driver container image does not exists
 
-======================================
-MLNX_OFED Driver Environment Variables
-======================================
+===============================================
+NVIDIA DOCA Driver Driver Environment Variables
+===============================================
 
-The following are special environment variables supported by the MLNX_OFED container to configure its behavior:
+The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:
 
 .. list-table::
    :header-rows: 1
@@ -378,7 +378,7 @@ The following are special environment variables supported by the MLNX_OFED conta
      - Create an udev rule to preserve "old-style" path based netdev names e.g enp3s0f0
    * - UNLOAD_STORAGE_MODULES
      - "false"
-     - | Unload host storage modules prior to loading MLNX_OFED modules:
+     - | Unload host storage modules prior to loading NVIDIA DOCA Driver modules:
        |    * ib_isert
        |    * nvme_rdma
        |    * nvmet_rdma
@@ -387,12 +387,12 @@ The following are special environment variables supported by the MLNX_OFED conta
        |    * ib_srpt
    * - ENABLE_NFSRDMA
      - "false"
-     - Enable loading of NFS related storage modules from a MLNX_OFED container
+     - Enable loading of NFS related storage modules from a NVIDIA DOCA Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "true"
      - Restore host drivers when a container
 
-In addition, it is possible to specify any environment variables to be exposed to the MLNX_OFED container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
+In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
 
 .. warning::
    CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).

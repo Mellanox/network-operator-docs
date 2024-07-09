@@ -60,7 +60,7 @@ The following component versions are deployed by the Network Operator:
    * - Node Feature Discovery
      - |node-feature-discovery-version|
      - Optionally deployed. May already be present in the cluster with proper configuration.
-   * - NVIDIA MLNX_OFED driver container
+   * -  NVIDIA DOCA Driver container
      - |mofed-version|
      -
    * - k8s-rdma-shared-device-plugin

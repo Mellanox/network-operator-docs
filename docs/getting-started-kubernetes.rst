@@ -622,7 +622,7 @@ Network Operator Deployment for GPUDirect Workloads
 
 GPUDirect requires the following:
 
-* MLNX_OFED v5.5-1.0.3.2 or newer
+* NVIDIA DOCA Driver v5.5-1.0.3.2 or newer
 * GPU Operator v1.9.0 or newer
 * NVIDIA GPU and driver supporting GPUDirect e.g Quadro RTX 6000/8000 or NVIDIA T4/NVIDIA V100/NVIDIA A100
 
@@ -1003,7 +1003,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network
 
 Network Operator deployment with InfiniBand network requires the following:
 
-* MLNX_OFED and OpenSM running. OpenSM runs on top of the MLNX_OFED stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`.
+* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`.
 * InfiniBand device – Both the host device and switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
 
@@ -1122,7 +1122,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Manageme
 
 Network Operator deployment with InfiniBand network requires the following:
 
-* MLNX_OFED and OpenSM running. OpenSM runs on top of the MLNX_OFED stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article`_.
+* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article`_.
 * NVIDIA UFM running on top of OpenSM. For more details, please refer to `the project documentation`_.
 * InfiniBand device – Both the host device and the switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
@@ -1186,7 +1186,7 @@ Current limitations:
       ipamPlugin:
         deploy: true
 
-Wait for MLNX_OFED to install and apply the following CRs:
+Wait for NVIDIA DOCA Driver to install and apply the following CRs:
 
 ``sriov-ib-network-node-policy.yaml``
 
