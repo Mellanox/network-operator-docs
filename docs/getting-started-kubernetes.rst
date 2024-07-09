@@ -1528,6 +1528,7 @@ Create SriovNetworkNodePolicy for selected NIC
 
 .. code-block:: yaml
 
+    apiVersion: sriovnetwork.openshift.io/v1
     kind: SriovNetworkNodePolicy
     metadata:
       name: ovs-switchdev
@@ -1616,6 +1617,7 @@ Create SriovNetworkNodePolicy for selected NIC
 
 .. code-block:: yaml
 
+    apiVersion: sriovnetwork.openshift.io/v1
     kind: SriovNetworkNodePolicy
     metadata:
       name: ovs-switchdev
