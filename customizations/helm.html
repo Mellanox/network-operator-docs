@@ -114,8 +114,8 @@ can find those below.</p>
 <li><p><a class="reference internal" href="#nfd-labels" id="id20">NFD labels</a></p></li>
 <li><p><a class="reference internal" href="#sr-iov-network-operator" id="id21">SR-IOV Network Operator</a></p></li>
 <li><p><a class="reference internal" href="#container-resources" id="id22">Container Resources</a></p></li>
-<li><p><a class="reference internal" href="#mlnx-ofed-driver" id="id23">MLNX_OFED Driver</a></p></li>
-<li><p><a class="reference internal" href="#mlnx-ofed-driver-environment-variables" id="id24">MLNX_OFED Driver Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-driver" id="id23">NVIDIA DOCA Driver</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-driver-driver-environment-variables" id="id24">NVIDIA DOCA Driver Driver Environment Variables</a></p></li>
 <li><p><a class="reference internal" href="#rdma-shared-device-plugin" id="id25">RDMA Shared Device Plugin</a></p></li>
 <li><p><a class="reference internal" href="#rdma-device-plugin-resource-configurations" id="id26">RDMA Device Plugin Resource Configurations</a></p></li>
 <li><p><a class="reference internal" href="#sr-iov-network-device-plugin" id="id27">SR-IOV Network Device Plugin</a></p></li>
@@ -390,8 +390,8 @@ can find those below.</p>
 </pre></div>
 </div>
 </section>
-<section id="mlnx-ofed-driver">
-<h2>MLNX_OFED Driver<a class="headerlink" href="#mlnx-ofed-driver" title="Permalink to this headline"></a></h2>
+<section id="nvidia-doca-driver">
+<h2>NVIDIA DOCA Driver<a class="headerlink" href="#nvidia-doca-driver" title="Permalink to this headline"></a></h2>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
@@ -410,22 +410,22 @@ can find those below.</p>
 <tr class="row-even"><td><p>ofedDriver.deploy</p></td>
 <td><p>Bool</p></td>
 <td><p>false</p></td>
-<td><p>Deploy the MLNX_OFED driver container</p></td>
+<td><p>Deploy the  NVIDIA DOCA Driver driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.repository</p></td>
 <td><p>String</p></td>
 <td><p>nvcr.io/nvidia/mellanox</p></td>
-<td><p>MLNX_OFED driver image repository</p></td>
+<td><p>NVIDIA DOCA Driver image repository</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.image</p></td>
 <td><p>String</p></td>
 <td><p>doca-driver</p></td>
-<td><p>MLNX_OFED driver image name</p></td>
+<td><p>NVIDIA DOCA Driver image name</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.version</p></td>
 <td><p>String</p></td>
 <td><p>24.04-0.6.6.0-0</p></td>
-<td><p>MLNX_OFED driver version</p></td>
+<td><p>NVIDIA DOCA Driver version</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.initContainer.enable</p></td>
 <td><p>Bool</p></td>
@@ -465,7 +465,7 @@ can find those below.</p>
 <tr class="row-odd"><td><p>ofedDriver.imagePullSecrets</p></td>
 <td><p>List</p></td>
 <td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the MLNX_OFED driver images</p></td>
+<td><p>An optional list of references to secrets to use for pulling any of the NVIDIA DOCA Driver images</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.env</p></td>
 <td><p>List</p></td>
@@ -475,32 +475,32 @@ can find those below.</p>
 <tr class="row-odd"><td><p>ofedDriver.startupProbe.initialDelaySeconds</p></td>
 <td><p>Int</p></td>
 <td><p>10</p></td>
-<td><p>MLNX_OFED startup probe initial delay</p></td>
+<td><p>NVIDIA DOCA Driver startup probe initial delay</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.startupProbe.periodSeconds</p></td>
 <td><p>Int</p></td>
 <td><p>20</p></td>
-<td><p>MLNX_OFED startup probe interval</p></td>
+<td><p>NVIDIA DOCA Driver startup probe interval</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.livenessProbe.initialDelaySeconds</p></td>
 <td><p>Int</p></td>
 <td><p>30</p></td>
-<td><p>MLNX_OFED liveness probe initial delay</p></td>
+<td><p>NVIDIA DOCA Driver liveness probe initial delay</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.livenessProbe.periodSeconds</p></td>
 <td><p>Int</p></td>
 <td><p>30</p></td>
-<td><p>MLNX_OFED liveness probe interval</p></td>
+<td><p>NVIDIA DOCA Driver liveness probe interval</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.readinessProbe.initialDelaySeconds</p></td>
 <td><p>Int</p></td>
 <td><p>10</p></td>
-<td><p>MLNX_OFED readiness probe initial delay</p></td>
+<td><p>NVIDIA DOCA Driver readiness probe initial delay</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.readinessProbe.periodSeconds</p></td>
 <td><p>Int</p></td>
 <td><p>30</p></td>
-<td><p>MLNX_OFED readiness probe interval</p></td>
+<td><p>NVIDIA DOCA Driver readiness probe interval</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.upgradePolicy.autoUpgrade</p></td>
 <td><p>Bool</p></td>
@@ -565,9 +565,9 @@ can find those below.</p>
 </tbody>
 </table>
 </section>
-<section id="mlnx-ofed-driver-environment-variables">
-<h2>MLNX_OFED Driver Environment Variables<a class="headerlink" href="#mlnx-ofed-driver-environment-variables" title="Permalink to this headline"></a></h2>
-<p>The following are special environment variables supported by the MLNX_OFED container to configure its behavior:</p>
+<section id="nvidia-doca-driver-driver-environment-variables">
+<h2>NVIDIA DOCA Driver Driver Environment Variables<a class="headerlink" href="#nvidia-doca-driver-driver-environment-variables" title="Permalink to this headline"></a></h2>
+<p>The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 33%" />
@@ -592,7 +592,7 @@ can find those below.</p>
 <tr class="row-odd"><td><p>UNLOAD_STORAGE_MODULES</p></td>
 <td><p>“false”</p></td>
 <td><div class="line-block">
-<div class="line">Unload host storage modules prior to loading MLNX_OFED modules:</div>
+<div class="line">Unload host storage modules prior to loading NVIDIA DOCA Driver modules:</div>
 <div class="line-block">
 <div class="line">* ib_isert</div>
 <div class="line">* nvme_rdma</div>
@@ -606,7 +606,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>ENABLE_NFSRDMA</p></td>
 <td><p>“false”</p></td>
-<td><p>Enable loading of NFS related storage modules from a MLNX_OFED container</p></td>
+<td><p>Enable loading of NFS related storage modules from a NVIDIA DOCA Driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
 <td><p>“true”</p></td>
@@ -614,7 +614,7 @@ can find those below.</p>
 </tr>
 </tbody>
 </table>
-<p>In addition, it is possible to specify any environment variables to be exposed to the MLNX_OFED container, such as the standard “HTTP_PROXY”, “HTTPS_PROXY”, “NO_PROXY”.</p>
+<p>In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard “HTTP_PROXY”, “HTTPS_PROXY”, “NO_PROXY”.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).</p>
@@ -1301,7 +1301,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 27, 2024.
+      <span class="lastupdated">Last updated on Jul 09, 2024.
       </span></p>
   </div>
 

@@ -453,7 +453,7 @@ spec:
 <tr class="row-even"><td><p>The node is in upgrade-failed state.</p></td>
 <td><ul class="simple">
 <li><p>Drain the node manually by running kubectl drain &lt;node name&gt; –ignore-daemonsets.</p></li>
-<li><p>Delete the MLNX_OFED pod on the node manually, by running the following command: <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">pod</span> <span class="pre">-n</span> <span class="pre">`kubectl</span> <span class="pre">get</span> <span class="pre">pods</span> <span class="pre">--A</span> <span class="pre">--field-selector</span> <span class="pre">spec.nodeName=&lt;node</span> <span class="pre">name&gt;</span> <span class="pre">-l</span> <span class="pre">nvidia.com/ofed-driver</span> <span class="pre">--no-headers</span> <span class="pre">|</span> <span class="pre">awk</span> <span class="pre">'{print</span> <span class="pre">$1</span> <span class="pre">&quot;</span> <span class="pre">&quot;$2}'`</span></code>.</p></li>
+<li><p>Delete the NVIDIA DOCA Driver pod on the node manually, by running the following command: <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">pod</span> <span class="pre">-n</span> <span class="pre">`kubectl</span> <span class="pre">get</span> <span class="pre">pods</span> <span class="pre">--A</span> <span class="pre">--field-selector</span> <span class="pre">spec.nodeName=&lt;node</span> <span class="pre">name&gt;</span> <span class="pre">-l</span> <span class="pre">nvidia.com/ofed-driver</span> <span class="pre">--no-headers</span> <span class="pre">|</span> <span class="pre">awk</span> <span class="pre">'{print</span> <span class="pre">$1</span> <span class="pre">&quot;</span> <span class="pre">&quot;$2}'`</span></code>.</p></li>
 </ul>
 <p><strong>NOTE:</strong> If the “Safe driver loading” feature is enabled, you may also need to remove the <code class="docutils literal notranslate"><span class="pre">nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load</span></code> annotation from the node object to unblock the loading of the driver
 <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">annotate</span> <span class="pre">node</span> <span class="pre">&lt;node_name&gt;</span> <span class="pre">nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load-</span></code></p>
@@ -462,9 +462,9 @@ spec:
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><td><p>The updated MLNX_OFED pod failed to start/ a new version of MLNX_OFED cannot be installed on the node.</p></td>
+<tr class="row-odd"><td><p>The updated NVIDIA DOCA Driver pod failed to start/ a new version of NVIDIA DOCA Driver cannot be installed on the node.</p></td>
 <td><p>Manually delete the pod by using <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">-n</span> <span class="pre">&lt;Network</span> <span class="pre">Operator</span> <span class="pre">Namespace&gt;</span> <span class="pre">&lt;pod</span> <span class="pre">name&gt;</span></code>.
-If following the restart the pod still fails, change the MLNX_OFED version in the NicClusterPolicy to the previous version or to another working version.</p></td>
+If following the restart the pod still fails, change the NVIDIA DOCA Driver version in the NicClusterPolicy to the previous version or to another working version.</p></td>
 </tr>
 </tbody>
 </table>
@@ -557,7 +557,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 27, 2024.
+      <span class="lastupdated">Last updated on Jul 09, 2024.
       </span></p>
   </div>
 

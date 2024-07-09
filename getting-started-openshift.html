@@ -202,7 +202,7 @@ Roles:              worker
 <p class="admonition-title">Warning</p>
 <p>The SR-IOV resources created will have the <cite>openshift.io</cite> prefix.</p>
 </div>
-<p>For the default SriovOperatorConfig CR to work with the MLNX_OFED container, please run this command to update the following values:</p>
+<p>For the default SriovOperatorConfig CR to work with the NVIDIA DOCA Driver container, please run this command to update the following values:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc patch sriovoperatorconfig default <span class="se">\</span>
   --type<span class="o">=</span>merge -n openshift-sriov-network-operator <span class="se">\</span>
   --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;configDaemonNodeSelector&quot;: { &quot;network.nvidia.com/operator.mofed.wait&quot;: &quot;false&quot;, &quot;node-role.kubernetes.io/worker&quot;: &quot;&quot;, &quot;feature.node.kubernetes.io/pci-15b3.sriov.capable&quot;: &quot;true&quot; } } }&#39;</span>
@@ -371,7 +371,7 @@ The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:
 <span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OnFailure</span><span class="w"></span>
 <span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;rdma image&gt;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mofed-test-ctr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-test-ctr</span><span class="w"></span>
 <span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&quot;IPC_LOCK&quot;</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w"></span>
@@ -572,7 +572,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 27, 2024.
+      <span class="lastupdated">Last updated on Jul 09, 2024.
       </span></p>
   </div>
 
