@@ -910,7 +910,7 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       maxUnavailable: "20"
       nodeSelector:
@@ -931,7 +931,7 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       maxUnavailable: "10%"
       nodeSelector:
@@ -967,7 +967,7 @@ New  method to configure nodes in a parallel:
     kind: SriovNetworkPoolConfig
     metadata:
       name: pool-1
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       maxUnavailable: "5"
       nodeSelector:
@@ -1464,7 +1464,7 @@ Create IPPool object for nv-ipam
     kind: IPPool
     metadata:
       name: pool1
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       subnet: 192.168.0.0/16
       perNodeBlockSize: 100
@@ -1531,7 +1531,7 @@ Create SriovNetworkNodePolicy for selected NIC
     kind: SriovNetworkNodePolicy
     metadata:
       name: ovs-switchdev
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       eSwitchMode: switchdev
       mtu: 1500
@@ -1555,7 +1555,7 @@ Create OVSNetwork CR
     kind: OVSNetwork
     metadata:
       name: ovs
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       networkNamespace: default
       ipam: |
@@ -1619,7 +1619,7 @@ Create SriovNetworkNodePolicy for selected NIC
     kind: SriovNetworkNodePolicy
     metadata:
       name: ovs-switchdev
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       eSwitchMode: switchdev
       mtu: 1500
@@ -1649,7 +1649,7 @@ Create OVSNetwork CR
     kind: OVSNetwork
     metadata:
       name: ovs
-      namespace: network-operator
+      namespace: nvidia-network-operator
     spec:
       networkNamespace: default
       ipam: |
