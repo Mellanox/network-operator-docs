@@ -1237,7 +1237,42 @@ Wait for MLNX_OFED to install and apply the following CRs:
           "range": "10.56.217.0/24",
           "log_file" : "/var/log/whereabouts.log",
           "log_level" : "info"
-        }
+      }
+    }'
+
+.. note::
+    To use the IB network with Pkey management feature with RDMA isolation, use the following ``sriov-ib-network.yaml``:
+
+.. code-block:: yaml
+
+    apiVersion: "k8s.cni.cncf.io/v1"
+    kind: NetworkAttachmentDefinition
+    metadata:
+      name: ib-sriov-network
+      annotations:
+        k8s.v1.cni.cncf.io/resourceName: nvidia.com/mlnxnics
+    spec:
+      config: '{
+      "type": "ib-sriov",
+      "cniVersion": "0.3.1",
+      "name": "ib-sriov-network",
+      "metaPluginsConfigured": true,
+      "metaPlugins": {
+          "type": "rdma"
+      },
+      "pkey": "0x6",
+      "link_state": "enable",
+      "ibKubernetesEnabled": true,
+      "ipam": {
+          "type": "whereabouts",
+          "datastore": "kubernetes",
+          "kubernetes": {
+            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
+          },
+          "range": "10.56.217.0/24",
+          "log_file" : "/var/log/whereabouts.log",
+          "log_level" : "info"
+      }
     }'
 
 ``sriov-ib-network-pod.yaml``
