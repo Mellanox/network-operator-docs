@@ -335,6 +335,13 @@ RHEL
 
 Replace `RH_USERNAME` and `RH_PASSWORD` with your Red Hat account username and password.
 
+~~~~~
+RHCOS
+~~~~~
+
+- Install `oc <https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html>`_ CLI tool.
+- Download OpenShift `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_.
+
 -------------------
 Dockerfile Overview
 -------------------
@@ -367,8 +374,10 @@ Before building the container, you need to provide following parameters as `buil
 
 **NOTE:** Check desired NVIDIA NIC drivers sources[^1] availability for designated container OS, only versions available on download page can be utilized
 
+**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **driver_ver-container_ver-kernel_ver-os-arch**. For example: 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64
+
 ------------------------------
-RHEL-specific build parameters
+RHEL specific build parameters
 ------------------------------
 
 1. `D_BASE_IMAGE`: DriverToolKit container image
@@ -379,7 +388,39 @@ RHEL-specific build parameters
 
 For more details regarding DTK please read `official documentation <https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload>`_.
 
-**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **driver_ver-container_ver-kernel_ver-os-arch**. For example: 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64
+-------------------------------
+RHCOS specific build parameters
+-------------------------------
+
+1. `D_BASE_IMAGE`: DriverToolKit container image
+
+**NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+
+In order to get the specific DTK container image for a specific OpenShift release, run:
+
+.. code-block:: bash
+
+   oc adm release info <OCP_VERSION> --image-for=driver-toolkit
+
+
+For example, for OpenShift 4.16.0:
+
+.. code-block:: bash
+
+   oc adm release info 4.16.0 --image-for=driver-toolkit
+   quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+
+
+Then pull the DTK image locally using your pull-secret:
+
+.. code-block:: bash
+
+   podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+
+
+2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
+
+3. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed `here <https://access.redhat.com/solutions/7077108>`_.
 
 ~~~~~~~~~~~~
 RHEL example
@@ -397,6 +438,25 @@ To build RHEL-based image please use provided :download:`Dockerfile <files/RHEL_
     --build-arg D_BASE_IMAGE="registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream" \
     --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:latest \
     --tag 24.04-0.6.6.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 \
+    -f RHEL_Dockerfile \
+    --target precompiled .
+
+~~~~~~~~~~~~~
+RHCOS example
+~~~~~~~~~~~~~
+
+To build RHCOS based image please use provided :download:`Dockerfile <files/RHEL_Dockerfile>`:
+
+.. code-block:: bash
+
+   podman build \
+    --build-arg D_OS=rhcos4.16 \
+    --build-arg D_ARCH=x86_64 \
+    --build-arg D_KERNEL_VER=5.14.0-427.22.1.el9_4.x86_64 \
+    --build-arg D_OFED_VERSION=24.01-0.3.3.1 \
+    --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f" \
+    --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.4 \
+    --tag 24.01-0.3.3.1-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 \
     -f RHEL_Dockerfile \
     --target precompiled .
 
@@ -421,6 +481,7 @@ To build RHEL-based image please use provided :download:`Dockerfile <files/Ubunt
 **NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
 **NOTE:** Entrypoint script :download:`download <files/entrypoint.sh>`
+
 **NOTE:** Driver build script :download:`download <files/dtk_nic_driver_build.sh>`
 
 .. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.
