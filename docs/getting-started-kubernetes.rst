@@ -64,8 +64,8 @@ Prerequisites
 
    .. code-block:: console
 
-      $ kubectl create ns network-operator
-      $ kubectl label --overwrite ns network-operator pod-security.kubernetes.io/enforce=privileged
+      $ kubectl create ns nvidia-network-operator
+      $ kubectl label --overwrite ns nvidia-network-operator pod-security.kubernetes.io/enforce=privileged
 
 #. Node Feature Discovery (NFD) is a dependency for the Operator on each node.
    By default, NFD master and worker are automatically deployed by the Operator.
@@ -1311,7 +1311,7 @@ E.g.: old method to configure nodes in a parallel:
 
 .. code-block:: bash
 
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "maxParallelNodeConfiguration": 5 } }' --type='merge'
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "maxParallelNodeConfiguration": 5 } }' --type='merge'
 
 
 New  method to configure nodes in a parallel:
@@ -1342,7 +1342,7 @@ To apply SriovNetworkNodePolicy on several nodes in parallel, specify the ``feat
 
 .. code-block:: bash
 
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "featureGates": { "parallelNicConfig": true  } } }' --type='merge'
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "featureGates": { "parallelNicConfig": true  } } }' --type='merge'
 
 ---------------------------------------------------------------------------
 SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service
@@ -1352,7 +1352,7 @@ To enable systemd SR-IOV configuration mode, specify the configurationMode optio
 
 .. code-block:: bash
 
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "configurationMode": "systemd"} }' --type='merge'
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "configurationMode": "systemd"} }' --type='merge'
 
 -------------------------------------------------------------
 Network Operator Deployment with an SR-IOV InfiniBand Network
@@ -1908,7 +1908,7 @@ Enable ``manageSoftwareBridges`` featureGate for sriov-network-operator
 
 .. code-block:: bash
 
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch '{ "spec": { "featureGates": { "manageSoftwareBridges": true  } } }' --type='merge'
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "featureGates": { "manageSoftwareBridges": true  } } }' --type='merge'
     
 Create IPPool object for nv-ipam
 
