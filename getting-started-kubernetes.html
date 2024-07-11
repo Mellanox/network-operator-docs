@@ -166,8 +166,8 @@
 <li><p>Nodes must be configured with a container engine such CRI-O or containerd.</p></li>
 <li><p>If your cluster uses Pod Security Admission (PSA) to restrict the behavior of pods,
 label the namespace for the Operator to set the enforcement policy to privileged:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl create ns network-operator
-<span class="gp">$ </span>kubectl label --overwrite ns network-operator pod-security.kubernetes.io/enforce<span class="o">=</span>privileged
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl create ns nvidia-network-operator
+<span class="gp">$ </span>kubectl label --overwrite ns nvidia-network-operator pod-security.kubernetes.io/enforce<span class="o">=</span>privileged
 </pre></div>
 </div>
 </li>
@@ -1295,7 +1295,7 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <h4>Upgrade from NVIDIA Network Operator v24.1.0<a class="headerlink" href="#upgrade-from-nvidia-network-operator-v24-1-0" title="Permalink to this headline"></a></h4>
 <p>To upgrade SR-IOV Network operator you need to create <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> CR with the number of nodes to be configured in a parallel as we did in <cite>SriovOperatorConfig`</cite> in previous releases.</p>
 <p>E.g.: old method to configure nodes in a parallel:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;maxParallelNodeConfiguration&quot;: 5 } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;maxParallelNodeConfiguration&quot;: 5 } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
 </pre></div>
 </div>
 <p>New  method to configure nodes in a parallel:</p>
@@ -1322,14 +1322,14 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <p>This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
 </div>
 <p>To apply SriovNetworkNodePolicy on several nodes in parallel, specify the <code class="docutils literal notranslate"><span class="pre">featureGates</span></code> option in the SriovOperatorConfig CRD:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;parallelNicConfig&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;parallelNicConfig&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
 </pre></div>
 </div>
 </section>
 <section id="sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service">
 <h3>SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service<a class="headerlink" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" title="Permalink to this headline"></a></h3>
 <p>To enable systemd SR-IOV configuration mode, specify the configurationMode option in the SriovOperatorConfig CRD:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;configurationMode&quot;: &quot;systemd&quot;} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;configurationMode&quot;: &quot;systemd&quot;} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -1835,7 +1835,7 @@ spec:
     imagePullSecrets: []
     enableWebhook: false</pre>
 <p>Enable <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code> featureGate for sriov-network-operator</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;manageSoftwareBridges&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;manageSoftwareBridges&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
 </pre></div>
 </div>
 <p>Create IPPool object for nv-ipam</p>
