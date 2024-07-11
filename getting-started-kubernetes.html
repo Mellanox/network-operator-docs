@@ -241,130 +241,225 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 </div>
 <section id="network-operator-deployment-with-rdma-shared-device-plugin">
 <h3>Network Operator Deployment with RDMA Shared Device Plugin<a class="headerlink" href="#network-operator-deployment-with-rdma-shared-device-plugin" title="Permalink to this headline"></a></h3>
-<p>Network operator deployment with the default version of the OFED driver and a single RDMA resource mapped to ens1f0 netdev.:</p>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> configuration file for such a deployment:</p>
+<p>First install the Network Operator with NFD enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ens1f0</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with
+* DOCA driver
+* RDMA Shared device plugin configured to a netdev with name ens1f0.</p>
+<p>Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  rdmaSharedDevicePlugin:
+    # [map[ifNames:[ens1f0] name:rdma_shared_device_a]]
+    image: k8s-rdma-shared-dev-plugin
+    repository: ghcr.io/mellanox
+    version: 1.4.0
+    imagePullSecrets: []
+    # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+    # Replace 'devices' with your (RDMA capable) netdevice name.
+    config: |
+      {
+        &quot;configList&quot;: [
+          {
+            &quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,
+            &quot;rdmaHcaMax&quot;: 63,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;deviceIDs&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;ifNames&quot;: [&quot;ens1f0&quot;],
+              &quot;linkTypes&quot;: []
+            }
+          }
+        ]
+      }</pre>
 </section>
 <section id="network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin">
 <h3>Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin<a class="headerlink" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" title="Permalink to this headline"></a></h3>
-<p>Network Operator deployment with the default version of OFED and an RDMA device plugin with two RDMA resources. The first is mapped to ens1f0 and ens1f1, and the second is mapped to ens2f0 and ens2f1.</p>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> configuration file for such a deployment:</p>
+<p>First install the Network Operator with NFD enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ens1f0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ens1f1</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_b</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ens2f0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ens2f1</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* RDMA Shared Device pluging with two RDMA resources - the first mapped to ens1f0 and ens1f1 and the second mapped to ens2f0 and ens2f1.</p>
+<p>Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  rdmaSharedDevicePlugin:
+    # [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]
+    image: k8s-rdma-shared-dev-plugin
+    repository: ghcr.io/mellanox
+    version: 1.4.0
+    imagePullSecrets: []
+    # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+    # Replace 'devices' with your (RDMA capable) netdevice name.
+    config: |
+      {
+        &quot;configList&quot;: [
+          {
+            &quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,
+            &quot;rdmaHcaMax&quot;: 63,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;deviceIDs&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;ifNames&quot;: [&quot;ens1f0&quot;,&quot;ens1f1&quot;],
+              &quot;linkTypes&quot;: []
+            }
+          },
+          {
+            &quot;resourceName&quot;: &quot;rdma_shared_device_b&quot;,
+            &quot;rdmaHcaMax&quot;: 63,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;deviceIDs&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;ifNames&quot;: [&quot;ens2f0&quot;,&quot;ens2f1&quot;],
+              &quot;linkTypes&quot;: []
+            }
+          }
+        ]
+      }</pre>
 </section>
 <section id="network-operator-deployment-with-a-secondary-network">
 <h3>Network Operator Deployment with a Secondary Network<a class="headerlink" href="#network-operator-deployment-with-a-secondary-network" title="Permalink to this headline"></a></h3>
-<p>Network Operator deployment with:</p>
-<ul class="simple">
-<li><p>RDMA shared device plugin</p></li>
-<li><p>Secondary network</p></li>
-<li><p>Mutlus CNI</p></li>
-<li><p>Container-networking-plugins CNI plugins</p></li>
-<li><p>Whereabouts IPAM CNI Plugin</p></li>
-</ul>
+<p>First install the Network Operator with NFD enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ens1f0</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with the following enabled:
+* Secondary network
+* Multus CNI
+* Container-networking-plugins CNI plugins
+* IPAM Plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 </section>
 <section id="network-operator-deployment-with-nvidia-ipam">
 <h3>Network Operator Deployment with NVIDIA-IPAM<a class="headerlink" href="#network-operator-deployment-with-nvidia-ipam" title="Permalink to this headline"></a></h3>
-<p>Network Operator deployment with:</p>
-<ul class="simple">
-<li><p>RDMA shared device plugin</p></li>
-<li><p>Secondary network</p></li>
-<li><p>Multus CNI</p></li>
-<li><p>Container-networking-plugins</p></li>
-<li><p>CNI plugins</p></li>
-<li><p>NVIDIA-IPAM CNI Plugin</p></li>
-</ul>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ens1f0</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Once the Network Operator is installed deploy a NicClusterPolicy with the following enabled:</dt><dd><ul class="simple">
+<li><p>Secondary network</p></li>
+<li><p>Multus CNI</p></li>
+<li><p>Container Networking plugins</p></li>
+<li><p>NVIDIA-IPAM plugin</p></li>
+</ul>
+</dd>
+</dl>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: ghcr.io/mellanox
+    version: v0.1.2
+    imagePullSecrets: []
+    enableWebhook: false</pre>
 <p>To create an NV-IPAM IPPool, apply:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
@@ -397,14 +492,6 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 </section>
 <section id="network-operator-deployment-with-a-host-device-network">
 <h3>Network Operator Deployment with a Host Device Network<a class="headerlink" href="#network-operator-deployment-with-a-host-device-network" title="Permalink to this headline"></a></h3>
-<p>Network Operator deployment with:</p>
-<ul class="simple">
-<li><p>SR-IOV device plugin, single SR-IOV resource pool</p></li>
-<li><p>Secondary network</p></li>
-<li><p>Multus CNI</p></li>
-<li><p>Container-networking-plugins CNI plugins</p></li>
-<li><p>Whereabouts IPAM CNI plugin</p></li>
-</ul>
 <p>In this mode, the Network Operator could be deployed on virtualized deployments as well. It supports both Ethernet and InfiniBand modes. From the Network Operator perspective, there is no difference between the deployment procedures. To work on a VM (virtual machine), the PCI passthrough must be configured for SR-IOV devices. The Network Operator works both with VF (Virtual Function) and PF (Physical Function) inside the VMs.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -414,34 +501,67 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <li><p>the kernel-modules-extra package on the RedHat-based hosts</p></li>
 </ul>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev</span><span class="w"></span>
-<span class="w">      </span><span class="nt">vendors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15b3</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Once the Network Operator is installed deploy a NicClusterPolicy with:</dt><dd><ul class="simple">
+<li><p>SR-IOV device plugin configured with a single SR-IOV resource pool</p></li>
+<li><p>Secondary network</p></li>
+<li><p>Multus CNI</p></li>
+<li><p>Container Networking plugins</p></li>
+<li><p>IPAM plugin</p></li>
+</ul>
+</dd>
+</dl>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  sriovDevicePlugin:
+    image: sriov-network-device-plugin
+    repository: ghcr.io/k8snetworkplumbingwg
+    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    imagePullSecrets: []
+    config: |
+      {
+        &quot;resourceList&quot;: [
+          {
+            &quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,
+            &quot;resourceName&quot;: &quot;hostdev&quot;,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [&quot;15b3&quot;],
+              &quot;devices&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;pfNames&quot;: [],
+              &quot;pciAddresses&quot;: [],
+              &quot;rootDevices&quot;: [],
+              &quot;linkTypes&quot;: [],
+              &quot;isRdma&quot;: true
+            }
+          }
+        ]
+      }
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p>Following the deployment, the network operator should be configured, and K8s networking should be deployed to use it in pod configuration.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">host-device-net.yaml</span></code> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
@@ -517,77 +637,186 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <section id="network-operator-deployment-with-a-host-device-network-and-macvlan-network">
 <h3>Network Operator Deployment with a Host Device Network and Macvlan Network<a class="headerlink" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" title="Permalink to this headline"></a></h3>
 <p>In this combined deployment, different NVIDIA NICs are used for RDMA Shared Device Plugin and SR-IOV Network Device Plugin in order to work with a Host Device Network or a Macvlan Network on different NICs. It is impossible to combine different networking types on the same NICs. The same principle should be applied for other networking combinations.</p>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">linkTypes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ether</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev</span><span class="w"></span>
-<span class="w">      </span><span class="nt">linkTypes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">“infiniband”</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<dl class="simple">
+<dt>Once the Network Operator is installed deploy a NicClusterPolicy with:</dt><dd><ul class="simple">
+<li><p>RDMA shared device plugin with</p></li>
+<li><p>SR-IOV device plugin, single SR-IOV resource pool</p></li>
+<li><p>Secondary network</p></li>
+<li><p>Multus CNI</p></li>
+<li><p>Container-networking-plugins CNI plugins</p></li>
+<li><p>RDMA Shared device plugin</p></li>
+<li><p>Whereabouts IPAM CNI plugin</p></li>
+</ul>
+</dd>
+</dl>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  rdmaSharedDevicePlugin:
+    # [map[linkTypes:[ether] name:rdma_shared_device_a]]
+    image: k8s-rdma-shared-dev-plugin
+    repository: ghcr.io/mellanox
+    version: 1.4.0
+    imagePullSecrets: []
+    # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+    # Replace 'devices' with your (RDMA capable) netdevice name.
+    config: |
+      {
+        &quot;configList&quot;: [
+          {
+            &quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,
+            &quot;rdmaHcaMax&quot;: 63,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;deviceIDs&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;ifNames&quot;: [],
+              &quot;linkTypes&quot;: [&quot;ether&quot;]
+            }
+          }
+        ]
+      }
+  sriovDevicePlugin:
+    image: sriov-network-device-plugin
+    repository: ghcr.io/k8snetworkplumbingwg
+    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    imagePullSecrets: []
+    config: |
+      {
+        &quot;resourceList&quot;: [
+          {
+            &quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,
+            &quot;resourceName&quot;: &quot;hostdev&quot;,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;devices&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;pfNames&quot;: [],
+              &quot;pciAddresses&quot;: [],
+              &quot;rootDevices&quot;: [],
+              &quot;linkTypes&quot;: [&quot;“infiniband”&quot;],
+              &quot;isRdma&quot;: true
+            }
+          }
+        ]
+      }
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p>For pods and network configuration examples please refer to the corresponding sections: Network Operator Deployment with the RDMA Shared Device Plugin and Network Operator Deployment with a Host Device Network.</p>
 </section>
 <section id="network-operator-deployment-with-an-ip-over-infiniband-ipoib-network">
 <h3>Network Operator Deployment with an IP over InfiniBand (IPoIB) Network<a class="headerlink" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" title="Permalink to this headline"></a></h3>
-<p>Network Operator deployment with:</p>
-<ul class="simple">
-<li><p>RDMA shared device plugin</p></li>
-<li><p>Secondary network</p></li>
-<li><p>Multus CNI</p></li>
-<li><p>IPoIB CNI</p></li>
-<li><p>Whereabouts IPAM CNI plugin</p></li>
-</ul>
 <p>In this mode, the Network Operator could be deployed on virtualized deployments as well. It supports both Ethernet and InfiniBand modes. From the Network Operator perspective, there is no difference between the deployment procedures. To work on a VM (virtual machine), the PCI passthrough must be configured for SR-IOV devices. The Network Operator works both with VF (Virtual Function) and PF (Physical Function) inside the VMs.</p>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ifNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">ibs1f0</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* RDMA shared device plugin
+* Secondary network
+* Multus CNI
+* IPoIB CNI
+* Whereabouts IPAM CNI plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  rdmaSharedDevicePlugin:
+    # [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]
+    image: k8s-rdma-shared-dev-plugin
+    repository: ghcr.io/mellanox
+    version: 1.4.0
+    imagePullSecrets: []
+    # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+    # Replace 'devices' with your (RDMA capable) netdevice name.
+    config: |
+      {
+        &quot;configList&quot;: [
+          {
+            &quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,
+            &quot;rdmaHcaMax&quot;: 63,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [],
+              &quot;deviceIDs&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;ifNames&quot;: [&quot;ibs1f0&quot;],
+              &quot;linkTypes&quot;: []
+            }
+          }
+        ]
+      }
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipoib:
+      image: ipoib-cni
+      repository: ghcr.io/mellanox
+      version: 428715a57c0b633e48ec7620f6e3af6863149ccf
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p>Following the deployment, the network operator should be configured, and K8s networking deployed to use it in the pod configuration.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">ipoib-net.yaml</span></code> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
@@ -669,32 +898,90 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <li><p>GPU Operator v1.9.0 or newer</p></li>
 <li><p>NVIDIA GPU and driver supporting GPUDirect e.g Quadro RTX 6000/8000 or NVIDIA T4/NVIDIA V100/NVIDIA A100</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> example:</p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev</span><span class="w"></span>
-<span class="w">      </span><span class="nt">vendors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15b3</span><span class="p p-Indicator">]</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* SR-IOV Device Plugin
+* Secondary network
+* Multus CNI
+* Container Networking plugins
+* IPAM plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  sriovDevicePlugin:
+    image: sriov-network-device-plugin
+    repository: ghcr.io/k8snetworkplumbingwg
+    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    imagePullSecrets: []
+    config: |
+      {
+        &quot;resourceList&quot;: [
+          {
+            &quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,
+            &quot;resourceName&quot;: &quot;hostdev&quot;,
+            &quot;selectors&quot;: {
+              &quot;vendors&quot;: [&quot;15b3&quot;],
+              &quot;devices&quot;: [],
+              &quot;drivers&quot;: [],
+              &quot;pfNames&quot;: [],
+              &quot;pciAddresses&quot;: [],
+              &quot;rootDevices&quot;: [],
+              &quot;linkTypes&quot;: [],
+              &quot;isRdma&quot;: true
+            }
+          }
+        ]
+      }
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p><code class="docutils literal notranslate"><span class="pre">host-device-net.yaml:</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HostDeviceNetwork</span><span class="w"></span>
@@ -778,31 +1065,67 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p class="admonition-title">Warning</p>
 <p>This deployment mode supports SR-IOV in legacy mode.</p>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> configuration for such a deployment:</p>
+<p>First install the Network Operator with NFD and SRIOV Network Operator enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* Secondary network
+* Multus CNI
+* IPoIB CNI
+* IPAM CNI plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p>Following the deployment, the Network Operator should be configured, and sriovnetwork node policy and K8s networking should be deployed.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">sriovnetwork-node-policy.yaml</span></code> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -1018,31 +1341,67 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <li><p>InfiniBand device – Both the host device and switch ports must be enabled in InfiniBand mode.</p></li>
 <li><p>rdma-core package should be installed when an inbox driver is used.</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
+<p>First install the Network Operator with NFD and SR-IOV Network Operator enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* Secondary network
+* Multus CNI
+* Container Networking Plugins
+* IPAM plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-ib-network-node-policy.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
@@ -1151,38 +1510,77 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <span class="w">  </span><span class="nt">UFM_CERTIFICATE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourcePrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nvidia.com&quot;</span><span class="w"></span>
-
-<span class="c1"># NicClusterPolicy CR values:</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="nt">ibKubernetes</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">periodicUpdateSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
-<span class="w">  </span><span class="nt">pKeyGUIDPoolRangeStart</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;02:00:00:00:00:00:00:00&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">pKeyGUIDPoolRangeEnd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;02:FF:FF:FF:FF:FF:FF:FF&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ufmSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ufm-secret</span><span class="w"></span>
-
-<span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator is installed create a NicClusterPolicy with:
+* DOCA driver
+* ibKubernetes
+* Secondary network
+* Multus CNI
+* Container Networking plugins
+* IPAM Plugin</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvidia/mellanox
+    version: 24.04-0.6.6.0-0
+    forcePrecompiled: false
+    imagePullSecrets: []
+    terminationGracePeriodSeconds: 300
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 20
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      safeLoad: false
+      drain:
+        enable: true
+        force: true
+        podSelector: &quot;&quot;
+        timeoutSeconds: 300
+        deleteEmptyDir: true
+  ibKubernetes:
+    image: ib-kubernetes
+    repository: ghcr.io/mellanox
+    version: v1.0.2
+    imagePullSecrets: []
+    pKeyGUIDPoolRangeStart: 02:00:00:00:00:00:00:00
+    pKeyGUIDPoolRangeEnd: 02:FF:FF:FF:FF:FF:FF:FF
+    ufmSecret: &quot;ufm-secret&quot;
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v1.3.0
+      imagePullSecrets: []
+    multus:
+      image: multus-cni
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v3.9.3
+      imagePullSecrets: []
+    ipamPlugin:
+      image: whereabouts
+      repository: ghcr.io/k8snetworkplumbingwg
+      version: v0.7.0
+      imagePullSecrets: []</pre>
 <p>Wait for NVIDIA DOCA Driver to install and apply the following CRs:</p>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-ib-network-node-policy.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -1417,14 +1815,25 @@ spec:
 <section id="network-operator-configuration">
 <h4>Network Operator Configuration<a class="headerlink" href="#network-operator-configuration" title="Permalink to this headline"></a></h4>
 <p>Deploy network-operator by Helm with sriov-network-operator and nv-ipam.</p>
-<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
+<p>First install the Network Operator with NFD enabled:
+<code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">deployCR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
+<p>Once the Network Operator has been installed create a NicClusterPolicy with:
+* NVIPAM</p>
+<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: ghcr.io/mellanox
+    version: v0.1.2
+    imagePullSecrets: []
+    enableWebhook: false</pre>
 <p>Enable <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code> featureGate for sriov-network-operator</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;featureGates&quot;: { &quot;manageSoftwareBridges&quot;: true  } } }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
 </pre></div>
