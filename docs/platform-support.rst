@@ -201,9 +201,9 @@ NVIDIA Network Operator has been validated in the following scenarios:
    * - Red Hat Enterprise Linux 9
      - Yes
      - Yes
-     - For containerd support DOCA/MOFED drivers must be pre-installed on host
+     - 
    * - Red Hat Enterprise Linux 8
      - Yes
      - Yes
-     - For containerd support DOCA/MOFED drivers must be pre-installed on host
+     - 
 
