@@ -87,8 +87,10 @@ install_python()
 	PROCESSOR=`uname -m`
 	PYTHON_VERSION=3.7.13-nv1
 
-	if [ $PLATFORM == 'Darwin' ]; then
+	if [ $PLATFORM == 'Darwin' ] && [ $PROCESSOR == 'x86_64' ]; then
 		PYTHON_PACKAGE=$PYTHON_VERSION-macos-x86_64
+	elif [ $PLATFORM == 'Darwin' ] && [ $PROCESSOR == 'arm64' ]; then
+		PYTHON_PACKAGE=$PYTHON_VERSION-macos-aarch64
 	elif [ $PLATFORM == 'Linux' ] && [ $PROCESSOR == 'x86_64' ]; then
 		PYTHON_PACKAGE=$PYTHON_VERSION-linux-x86_64
 	elif [ $PLATFORM == 'Linux' ] && [ $PROCESSOR == 'aarch64' ]; then
