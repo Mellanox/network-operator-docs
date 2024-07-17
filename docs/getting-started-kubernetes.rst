@@ -665,7 +665,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
                   "pfNames": [],
                   "pciAddresses": [],
                   "rootDevices": [],
-                  "linkTypes": ["“infiniband”"],
+                  "linkTypes": ["IB"],
                   "isRdma": true
                 }
               }
@@ -1447,7 +1447,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
         feature.node.kubernetes.io/pci-15b3.present: "true"
       nicSelector:
         vendor: "15b3"
-      linkType: infiniband
+      linkType: IB
       isRdma: true
       numVfs: 8
       priority: 90
@@ -1644,7 +1644,7 @@ Wait for NVIDIA DOCA Driver to install and apply the following CRs:
         feature.node.kubernetes.io/pci-15b3.present: "true"
       nicSelector:
         vendor: "15b3"
-      linkType: ib
+      linkType: IB
       isRdma: true
       numVfs: 8
       priority: 90
