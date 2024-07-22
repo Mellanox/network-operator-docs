@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.4.1
+     - | - Fixed NVIDIA Network Operator images in OpenShift Container Platform bundle.
    * - 24.4.0
      - | - Added support for OpenShift Container Platform v4.15.
        | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) as a GA feature.
