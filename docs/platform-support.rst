@@ -87,6 +87,12 @@ The following component versions are deployed by the Network Operator:
    * - NV IPAM Plugin
      - |nvidia-ipam-version|
      -
+   * - NIC Feature Discovery
+     - |nic-feature-discovery-version|
+     -
+   * - DOCA Telemetry
+     - |doca-telemetry-version|
+     -
 
 ===================
 System Requirements
