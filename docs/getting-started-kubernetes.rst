@@ -115,7 +115,7 @@ Install Network Operator from the NVIDIA NGC chart using the default values:
     helm install network-operator nvidia/network-operator \
       -n nvidia-network-operator \
       --create-namespace \
-      --version |helm-chart-version| \
+      --version |network-operator-version| \
       --wait
 
 .. code-block:: bash
@@ -129,14 +129,14 @@ Install the Network Operator from the NVIDIA NGC chart using custom values:
 
 .. parsed-literal::
 
-   helm show values nvidia/network-operator --version |helm-chart-version| > values.yaml
+   helm show values nvidia/network-operator --version |network-operator-version| > values.yaml
 
 .. parsed-literal::
 
     helm install network-operator nvidia/network-operator \
       -n nvidia-network-operator \
       --create-namespace \
-      --version |helm-chart-version| \
+      --version |network-operator-version| \
       -f ./values.yaml \
       --wait
 
@@ -476,7 +476,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
       sriovDevicePlugin:
         image: sriov-network-device-plugin
         repository: ghcr.io/k8snetworkplumbingwg
-        version: |sriovnetop-sriov-device-plugin-image-tag|
+        version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
           {
@@ -650,7 +650,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
       sriovDevicePlugin:
         image: sriov-network-device-plugin
         repository: ghcr.io/k8snetworkplumbingwg
-        version: |sriovnetop-sriov-device-plugin-image-tag|
+        version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
           {
@@ -933,7 +933,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       sriovDevicePlugin:
         image: sriov-network-device-plugin
         repository: ghcr.io/k8snetworkplumbingwg
-        version: |sriovnetop-sriov-device-plugin-image-tag|
+        version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
           {

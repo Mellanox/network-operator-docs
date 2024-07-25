@@ -17,9 +17,9 @@
 .. headings # #, * *, =, -, ^, "
 .. include:: ./common/vars.rst
 
-********************************************
-NVIDIA Network Operator |helm-chart-version|
-********************************************
+**************************************************
+NVIDIA Network Operator |network-operator-version|
+**************************************************
 
 
 The NVIDIA Network Operator simplifies the provisioning and management of NVIDIA networking resources in a Kubernetes cluster.
