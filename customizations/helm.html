@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Helm Chart Customization Options &mdash; NVIDIA Network Operator 24.4.0 documentation</title>
+  <title>Helm Chart Customization Options &mdash; NVIDIA Network Operator v24.7.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -344,32 +344,32 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
 <td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.4.0</p></td>
+<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.7.0-beta.2</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
 <td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.4.0</p></td>
+<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.2</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovCni</p></td>
 <td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/sriov-cni:3e6368077716f6b8368b0e036a1290d1c64cf1fb</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0</p></td>
 <td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0-arm64</span></code> image</p></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
 <td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:fc002af57a81855542759d0f77d16dacd7e1aa38</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.1.1</p></td>
 <td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:1.1.0-arm64</span></code> image</p></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
 <td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:e6ead1e8f76a407783430ee2666b403db2d76f64</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.7.0</p></td>
 <td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-arm64</span></code> image</p></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.webhook</p></td>
 <td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.4.0</p></td>
+<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.2</p></td>
 <td></td>
 </tr>
 </tbody>
@@ -424,7 +424,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.version</p></td>
 <td><p>String</p></td>
-<td><p>24.04-0.6.6.0-0</p></td>
+<td><p>24.07-0.3.2.0-0</p></td>
 <td><p>NVIDIA DOCA Driver version</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.initContainer.enable</p></td>
@@ -666,7 +666,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>rdmaSharedDevicePlugin.version</p></td>
 <td><p>String</p></td>
-<td><p>1.4.0</p></td>
+<td><p>v1.5.1</p></td>
 <td><p>RDMA shared device plugin version</p></td>
 </tr>
 <tr class="row-even"><td><p>rdmaSharedDevicePlugin.imagePullSecrets</p></td>
@@ -747,7 +747,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriovDevicePlugin.version</p></td>
 <td><p>String</p></td>
-<td><p>e6ead1e8f76a407783430ee2666b403db2d76f64</p></td>
+<td><p>v3.7.0</p></td>
 <td><div class="line-block">
 <div class="line">SR-IOV Network device plugin version</div>
 <div class="line">For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64</span></code> image</div>
@@ -957,7 +957,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.version</p></td>
 <td><p>String</p></td>
-<td><p>v1.3.0-amd64</p></td>
+<td><p>v1.5.0-amd64</p></td>
 <td><p>CNI Plugins image version</p></td>
 </tr>
 <tr class="row-even"><td><p>secondaryNetwork.cniPlugins.imagePullSecrets</p></td>
@@ -1062,7 +1062,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>secondaryNetwork.ipoib.version</p></td>
 <td><p>String</p></td>
-<td><p>428715a57c0b633e48ec7620f6e3af6863149ccf</p></td>
+<td><p>v1.2.0</p></td>
 <td><p>IPoIB CNI image version</p></td>
 </tr>
 <tr class="row-even"><td><p>secondaryNetwork.ipoib.imagePullSecrets</p></td>
@@ -1163,7 +1163,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>nvIpam.version</p></td>
 <td><p>String</p></td>
-<td><p>v0.1.2</p></td>
+<td><p>v0.2.0</p></td>
 <td><p>NVIDIA IPAM Plugin image version</p></td>
 </tr>
 <tr class="row-even"><td><p>nvIpam.imagePullSecrets</p></td>
@@ -1301,7 +1301,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 22, 2024.
+      <span class="lastupdated">Last updated on Jul 28, 2024.
       </span></p>
   </div>
 

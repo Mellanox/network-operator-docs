@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started with Red Hat OpenShift &mdash; NVIDIA Network Operator 24.4.0 documentation</title>
+  <title>Getting Started with Red Hat OpenShift &mdash; NVIDIA Network Operator v24.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -252,7 +252,7 @@ metadata:
   name: nvidia-network-operator
   namespace: nvidia-network-operator
 spec:
-  channel: &quot;v24.4.0&quot;
+  channel: &quot;v24.7&quot;
   name: nvidia-network-operator
   source: certified-operators
   sourceNamespace: openshift-marketplace</pre>
@@ -306,7 +306,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -319,7 +319,7 @@ spec:
   sriovDevicePlugin:
       image: sriov-network-device-plugin
       repository: ghcr.io/k8snetworkplumbingwg
-      version: e6ead1e8f76a407783430ee2666b403db2d76f64
+      version: v3.7.0
       config: |
         {
           &quot;resourceList&quot;: [
@@ -398,7 +398,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -489,7 +489,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -514,7 +514,7 @@ spec:
       }
     image: k8s-rdma-shared-dev-plugin
     repository: nvcr.io/nvidia/cloud-native
-    version: 1.4.0</pre>
+    version: v1.5.1</pre>
 <p>The <cite>macvlan-net-ocp.yaml</cite> configuration file for such a deployment in an OpenShift Platform:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MacvlanNetwork</span><span class="w"></span>
@@ -571,7 +571,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 22, 2024.
+      <span class="lastupdated">Last updated on Jul 28, 2024.
       </span></p>
   </div>
 

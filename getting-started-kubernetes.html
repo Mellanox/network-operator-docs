@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started with Kubernetes &mdash; NVIDIA Network Operator 24.4.0 documentation</title>
+  <title>Getting Started with Kubernetes &mdash; NVIDIA Network Operator v24.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -214,7 +214,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 </div>
 </div>
 <p>Install Network Operator from the NVIDIA NGC chart using the default values:</p>
-<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.4.0   --wait</pre>
+<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-beta.2   --wait</pre>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">View deployed resources</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
@@ -226,8 +226,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p class="admonition-title">Warning</p>
 <p>Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.</p>
 </div>
-<pre class="literal-block">helm show values nvidia/network-operator --version v24.4.0 &gt; values.yaml</pre>
-<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.4.0   -f ./values.yaml   --wait</pre>
+<pre class="literal-block">helm show values nvidia/network-operator --version v24.7.0-beta.2 &gt; values.yaml</pre>
+<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-beta.2   -f ./values.yaml   --wait</pre>
 </section>
 <section id="deployment-examples">
 <h2>Deployment Examples<a class="headerlink" href="#deployment-examples" title="Permalink to this headline"></a></h2>
@@ -259,7 +259,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -286,7 +286,7 @@ spec:
     # [map[ifNames:[ens1f0] name:rdma_shared_device_a]]
     image: k8s-rdma-shared-dev-plugin
     repository: ghcr.io/mellanox
-    version: 1.4.0
+    version: v1.5.1
     imagePullSecrets: []
     # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
     # Replace 'devices' with your (RDMA capable) netdevice name.
@@ -327,7 +327,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -354,7 +354,7 @@ spec:
     # [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]
     image: k8s-rdma-shared-dev-plugin
     repository: ghcr.io/mellanox
-    version: 1.4.0
+    version: v1.5.1
     imagePullSecrets: []
     # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
     # Replace 'devices' with your (RDMA capable) netdevice name.
@@ -408,7 +408,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -447,7 +447,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -457,7 +457,7 @@ spec:
   nvIpam:
     image: nvidia-k8s-ipam
     repository: ghcr.io/mellanox
-    version: v0.1.2
+    version: v0.2.0
     imagePullSecrets: []
     enableWebhook: false</pre>
 <p>To create an NV-IPAM IPPool, apply:</p>
@@ -525,7 +525,7 @@ spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
-    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    version: v3.7.0
     imagePullSecrets: []
     config: |
       {
@@ -550,7 +550,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -664,7 +664,7 @@ spec:
     # [map[linkTypes:[ether] name:rdma_shared_device_a]]
     image: k8s-rdma-shared-dev-plugin
     repository: ghcr.io/mellanox
-    version: 1.4.0
+    version: v1.5.1
     imagePullSecrets: []
     # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
     # Replace 'devices' with your (RDMA capable) netdevice name.
@@ -687,7 +687,7 @@ spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
-    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    version: v3.7.0
     imagePullSecrets: []
     config: |
       {
@@ -712,7 +712,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -750,7 +750,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -777,7 +777,7 @@ spec:
     # [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]
     image: k8s-rdma-shared-dev-plugin
     repository: ghcr.io/mellanox
-    version: 1.4.0
+    version: v1.5.1
     imagePullSecrets: []
     # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
     # Replace 'devices' with your (RDMA capable) netdevice name.
@@ -801,7 +801,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -919,7 +919,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -945,7 +945,7 @@ spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
-    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    version: v3.7.0
     imagePullSecrets: []
     config: |
       {
@@ -970,7 +970,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -1087,7 +1087,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1114,7 +1114,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -1363,7 +1363,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1390,7 +1390,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -1534,7 +1534,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1569,7 +1569,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0
+      version: v1.5.0
       imagePullSecrets: []
     multus:
       image: multus-cni
@@ -1709,11 +1709,11 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
-    version: e6ead1e8f76a407783430ee2666b403db2d76f64
+    version: v3.7.0
      config: |
       {
         &quot;resourceList&quot;: [
@@ -1732,7 +1732,7 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: v1.3.0-amd64
+      version: v1.5.0-amd64
     ipamPlugin:
       image: whereabouts
       repository: ghcr.io/k8snetworkplumbingwg
@@ -1831,7 +1831,7 @@ spec:
   nvIpam:
     image: nvidia-k8s-ipam
     repository: ghcr.io/mellanox
-    version: v0.1.2
+    version: v0.2.0
     imagePullSecrets: []
     enableWebhook: false</pre>
 <p>Enable <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code> featureGate for sriov-network-operator</p>
@@ -2062,7 +2062,7 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 22, 2024.
+      <span class="lastupdated">Last updated on Jul 28, 2024.
       </span></p>
   </div>
 

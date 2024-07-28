@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Cycle Management &mdash; NVIDIA Network Operator 24.4.0 documentation</title>
+  <title>Life Cycle Management &mdash; NVIDIA Network Operator v24.7.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -207,7 +207,7 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <h3>Downloading a New Helm Chart<a class="headerlink" href="#downloading-a-new-helm-chart" title="Permalink to this headline"></a></h3>
 <p>To obtain new releases, run:</p>
 <pre class="literal-block"># Download Helm chart
-$ helm fetch https://helm.ngc.nvidia.com/nvidia/charts/network-operator-24.4.0.tgz
+$ helm fetch https://helm.ngc.nvidia.com/nvidia/charts/network-operator-24.7.0-beta.2.tgz
 $ ls network-operator-*.tgz | xargs -n 1 tar xf</pre>
 </section>
 <section id="upgrading-crds-for-a-specific-release">
@@ -323,7 +323,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
     upgradePolicy:
       # autoUpgrade is a global switch for automatic upgrade feature
       # if set to false all other options are ignored
@@ -417,7 +417,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.04-0.6.6.0-0
+    version: 24.07-0.3.2.0-0
      upgradePolicy:
       autoUpgrade: true
       maxParallelUpgrades: 1
@@ -557,7 +557,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 22, 2024.
+      <span class="lastupdated">Last updated on Jul 28, 2024.
       </span></p>
   </div>
 
