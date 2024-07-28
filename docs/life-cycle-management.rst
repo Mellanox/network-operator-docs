@@ -104,7 +104,7 @@ To obtain new releases, run:
 .. parsed-literal::
 
   # Download Helm chart
-  $ helm fetch \https://helm.ngc.nvidia.com/nvidia/charts/network-operator-|network-operator-version|.tgz
+  $ helm fetch \https://helm.ngc.nvidia.com/nvidia/charts/network-operator-|helm-chart-version|.tgz
   $ ls network-operator-\*.tgz | xargs -n 1 tar xf
 
 
