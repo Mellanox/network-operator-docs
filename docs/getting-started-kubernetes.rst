@@ -1609,6 +1609,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
         pKeyGUIDPoolRangeStart: 02:00:00:00:00:00:00:00
         pKeyGUIDPoolRangeEnd: 02:FF:FF:FF:FF:FF:FF:FF
         ufmSecret: "ufm-secret"
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: ghcr.io/mellanox
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -1620,11 +1626,25 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           repository: ghcr.io/k8snetworkplumbingwg
           version: |multus-version|
           imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
-          version: |whereabouts-version|
-          imagePullSecrets: []
+
+Create IPPool object for nv-ipam
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: pool1
+      namespace: nvidia-network-operator
+    spec:
+      subnet: 192.168.0.0/16
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
+      nodeSelector:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/worker
+              operator: Exists
 
 Wait for NVIDIA DOCA Driver to install and apply the following CRs:
 
@@ -1669,15 +1689,9 @@ Wait for NVIDIA DOCA Driver to install and apply the following CRs:
       "link_state": "enable",
       "ibKubernetesEnabled": true,
       "ipam": {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "10.56.217.0/24",
-          "log_file" : "/var/log/whereabouts.log",
-          "log_level" : "info"
-      }
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
     }'
 
 .. note::
@@ -1693,26 +1707,23 @@ Wait for NVIDIA DOCA Driver to install and apply the following CRs:
         k8s.v1.cni.cncf.io/resourceName: nvidia.com/mlnxnics
     spec:
       config: '{
-      "type": "ib-sriov",
       "cniVersion": "0.3.1",
       "name": "ib-sriov-network",
-      "metaPluginsConfigured": true,
-      "metaPlugins": {
-          "type": "rdma"
+      "plugins": [
+      {
+        "type": "ib-sriov",
+        "pkey": "0x6",
+        "link_state": "enable",
+        "ibKubernetesEnabled": true,
+        "ipam": {
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
       },
-      "pkey": "0x6",
-      "link_state": "enable",
-      "ibKubernetesEnabled": true,
-      "ipam": {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "10.56.217.0/24",
-          "log_file" : "/var/log/whereabouts.log",
-          "log_level" : "info"
+      {
+        "type": "rdma"
       }
+      ]
     }'
 
 ``sriov-ib-network-pod.yaml``
