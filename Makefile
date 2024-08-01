@@ -17,14 +17,13 @@ $(TOOLSDIR):
 $(BUILDDIR): ; $(info Creating build directory...)
 	mkdir -p $@
 
+BRANCH ?= master
 # Paths to download the helm chart to.
 HELM_CHART_DEP_ROOT ?= $(BUILDDIR)/helmcharts
 # Helm chart version and url
 HELM_CHART_VERSION ?= 24.4.1
-NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts
-
-build-docs: helm-docs
-	./repo.sh docs
+NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
+BRANCH_HELM_CHART_URL ?= https://github.com/Mellanox/network-operator/archive/refs/heads/${BRANCH}.tar.gz
 
 # helm-docs is used to generate helm chart documentation
 HELM_DOCS_PKG := github.com/norwoodj/helm-docs/cmd/helm-docs
@@ -43,8 +42,20 @@ define go-install-tool
 	$Q mv $(TOOLSDIR)/$(2) $(TOOLSDIR)/$(2)-$(3)
 endef
 
+download-ngc-helm-chart:
+	mkdir -p ${HELM_CHART_DEP_ROOT} && cd ${HELM_CHART_DEP_ROOT} \
+	&& curl -sL ${NGC_HELM_CHART_URL} | tar -xz
+
+download-branch-helm-chart:
+	mkdir -p ${HELM_CHART_DEP_ROOT} \
+	&& curl -sL ${BRANCH_HELM_CHART_URL} \
+	| tar -xz -C ${HELM_CHART_DEP_ROOT} \
+	--strip-components 2 network-operator-${BRANCH}/deployment/network-operator
+
 # Generate helm chart documentation in a reStructuredText format.
 helm-docs: $(HELM_DOCS)
-	mkdir -p ${HELM_CHART_DEP_ROOT} && cd ${HELM_CHART_DEP_ROOT} && curl -sL ${NGC_HELM_CHART_URL}/network-operator-${HELM_CHART_VERSION}.tgz | tar xz
-	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.rst --ignore-file=.helmdocsignore --template-files=./templates/helm.rst.gotmpl ${HELM_CHART_DEP_ROOT}/network-operator
+	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.rst --ignore-file=.helmdocsignore --template-files=./templates/helm.rst.gotmpl ${HELM_CHART_DEP_ROOT}
 
+ngc-helm-docs: download-ngc-helm-chart helm-docs
+
+branch-helm-docs: download-branch-helm-chart helm-docs
