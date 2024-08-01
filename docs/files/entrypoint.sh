@@ -247,7 +247,14 @@ function redhat_install_prerequisites() {
         rt_substr=""
         k_ver=$FULL_KVER
 
-        exec_cmd "dnf config-manager --set-enabled rhel-${RHEL_MAJOR_VERSION}-for-${ARCH}-baseos-eus-rpms || true"
+        eus_available=("8.4" "8.6" "8.8" "9.0" "9.2" "9.4")
+
+        if [[ ${eus_available[@]} =~ $RHEL_VERSION ]]
+        then
+          exec_cmd "dnf config-manager --set-enabled rhel-${RHEL_MAJOR_VERSION}-for-${ARCH}-baseos-eus-rpms"
+        fi
+
+
 
         # Dependencies for RH 9.x changed, thus explict installation required
         exec_cmd "dnf -q -y ${releasever_str} install kernel-${FULL_KVER}"
@@ -288,8 +295,8 @@ function redhat_install_prerequisites() {
 function set_append_driver_build_flags() {
     debug_print "Function: ${FUNCNAME[0]}"
 
-    if [[ "${ENABLE_NFSRDMA}" = false ]]; then
-        append_driver_build_flags="$append_driver_build_flags --without-mlnx-nfsrdma${pkg_dkms_suffix} --without-mlnx-nvme${pkg_dkms_suffix}"
+    if [[ "${ENABLE_NFSRDMA}" = true ]]; then
+        append_driver_build_flags="$append_driver_build_flags --with-mlnx-nfsrdma${pkg_dkms_suffix} --with-mlnx-nvme${pkg_dkms_suffix}"
     fi
 }
 
@@ -497,6 +504,18 @@ function find_mlx_devs() {
 
             eswitch_mode=$(devlink dev eswitch show pci/$pci_addr 2>/dev/null | awk '{for (i=1; i<=NF; i++) if ($i == "mode") {print $(i+1); exit}}')
 
+            if [ "${eswitch_mode}" == "switchdev" ]; then
+                representor_regex="^pf([0-9]+)vf([0-9]+)$"
+
+                mlnx_dev_phys_port_name=$(cat /sys/class/net/"${dev_name}"/phys_port_name 2>/dev/null)
+                # Use regex to parse the string and extract numbers
+                if [[ "$mlnx_dev_phys_port_name" =~ $representor_regex ]]; then
+                    debug_print "Device ${mlnx_dev_name} is a switchdev representor, not a PF, skipping"
+
+                    continue
+                fi
+            fi
+
             dev_record="$pci_addr $dev_type $dev_name $dev_operstate $dev_mtu $pf_numvfs $dev_guid $eswitch_mode"
             debug_print "Storing device record [${mlx_dev_record_idx}] $dev_record"
             mlx_devs_arr[${mlx_dev_record_idx}]=$dev_record
@@ -547,19 +566,6 @@ function find_mlx_vfs() {
             num_mlx_devices=$(($num_mlx_devices-1))
 
             continue
-        fi
-
-        if [ "${mlnx_dev_eswitch_mode}" == "switchdev" ]; then
-            representor_regex="^pf([0-9]+)vf([0-9]+)$"
-
-            mlnx_dev_phys_port_name=$(cat /sys/class/net/"${mlnx_dev_name}"/phys_port_name 2>/dev/null)
-            # Use regex to parse the string and extract numbers
-            if [[ "$mlnx_dev_phys_port_name" =~ $representor_regex ]]; then
-                debug_print "Device ${mlnx_dev_name} is a switchdev representor, not a PF, skipping"
-
-                num_mlx_devices=$(($num_mlx_devices-1))
-                continue
-            fi
         fi
 
         found_sriov_conf=$(($found_sriov_conf+1))
@@ -725,8 +731,13 @@ function restore_sriov_config() {
 
         timestamp_print "Restoring SR-IOV config for device: $pf_pci_addr (VFs=$pf_numvfs) netdev name: ${pf_new_dev_name}"
 
+        # To support the old kernel versions, we need to follow the recommended way of creating switchdev VFs
+        # 1) Set the NIC in legacy mode
+        # 2) Create the required amount of VFs
+        # 3) Unbind all of the VFs
+        # 4) Set the NIC in switchdev mode
         if [ "${pf_eswitch_mode}" == "switchdev" ]; then
-            exec_cmd "devlink dev eswitch set pci/$pf_pci_addr mode switchdev"
+            exec_cmd "devlink dev eswitch set pci/$pf_pci_addr mode legacy"
         fi
 
         exec_cmd "ip link set dev ${pf_new_dev_name} $pf_oper_state"
@@ -777,6 +788,12 @@ function restore_sriov_config() {
 
                  # Driver rebind VF
                 exec_cmd "echo ${vf_pci_addr} > ${DRIVER_PATH}/unbind"
+
+                # As per the comment above, we need to set the NIC in switchdev mode first before binding back the VFs
+                if [ "${pf_eswitch_mode}" == "switchdev" ]; then
+                    continue
+                fi
+
                 exec_cmd "echo ${vf_pci_addr} > ${DRIVER_PATH}/bind"
 
                 sleep ${BIND_DELAY_SEC}
@@ -786,6 +803,43 @@ function restore_sriov_config() {
                 # Permission denied via sysfs
             fi
         done
+
+        # Set the PF in switchdev mode and rebind its VFs to the driver
+        if [ "${pf_eswitch_mode}" == "switchdev" ]; then
+            exec_cmd "devlink dev eswitch set pci/$pf_pci_addr mode switchdev"
+
+            for vf_record in $(seq 0 1 $((vf_record_idx-1))); do
+                declare -a mlx_vf_info=(${mlx_vfs_arr[$vf_record]})
+
+                vf_parent_pci_addr=${mlx_vf_info[0]}
+
+                debug_print "Inspecting VF entry: ${mlx_vf_info[@]}"
+
+                if [ "${vf_parent_pci_addr}" == "${pf_pci_addr}" ]; then
+                    # pf_pci_addr vf_pci_addr dev_name vf_name mlnx_dev_type vf_index vf_operstate vf_mac vf_admin_mac vf_mtu_val vf_guid
+                    # [0]         [1]         [2]      [3]     [4]           [5]      [6]          [7]    [8]          [9]        [10]
+                    vf_pci_addr=${mlx_vf_info[1]}
+                    vf_operstate=${mlx_vf_info[6]}
+                    vf_mtu=${mlx_vf_info[9]}
+
+                    timestamp_print "Restoring VF configuration for switchdev device: $vf_pci_addr"
+
+                    exec_cmd "echo ${vf_pci_addr} > ${DRIVER_PATH}/bind"
+
+                    sleep ${BIND_DELAY_SEC}
+
+                    vf_pci_dev_path="/sys/bus/pci/devices/$vf_pci_addr"
+                    vf_new_dev_name=$(ls "$vf_pci_dev_path"/net/)
+
+                    vf_new_netdev_path="${vf_pci_dev_path}/net/${vf_new_dev_name}"
+
+                    exec_cmd "echo $vf_mtu > $vf_new_netdev_path/mtu"
+                    exec_cmd "ip link set dev ${vf_new_dev_name} $vf_operstate"
+                    # Permission denied via sysfs
+                fi
+            done
+
+        fi
 
         exec_cmd "echo $pf_mtu > $pf_new_netdev_path/mtu"
 
