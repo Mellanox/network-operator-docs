@@ -14,7 +14,7 @@ https://mellanox.github.io/network-operator-docs/
 To generate the docs run:
 
 ```bash
-./repo.sh docs
+make gen-docs
 ```
 
 Generated files will be under `_build/docs/nvidia_network_operator/latest/`
