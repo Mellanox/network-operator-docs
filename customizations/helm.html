@@ -106,31 +106,28 @@
 can find those below.</p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><p><a class="reference internal" href="#general-parameters" id="id18">General Parameters</a></p>
+<li><p><a class="reference internal" href="#general-parameters" id="id6">General Parameters</a></p>
 <ul>
-<li><p><a class="reference internal" href="#imagepullsecrets-customization" id="id19">ImagePullSecrets customization</a></p></li>
+<li><p><a class="reference internal" href="#imagepullsecrets-customization" id="id7">ImagePullSecrets customization</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nfd-labels" id="id20">NFD labels</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator" id="id21">SR-IOV Network Operator</a></p></li>
-<li><p><a class="reference internal" href="#container-resources" id="id22">Container Resources</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-doca-driver" id="id23">NVIDIA DOCA Driver</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-doca-driver-driver-environment-variables" id="id24">NVIDIA DOCA Driver Driver Environment Variables</a></p></li>
-<li><p><a class="reference internal" href="#rdma-shared-device-plugin" id="id25">RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#rdma-device-plugin-resource-configurations" id="id26">RDMA Device Plugin Resource Configurations</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-device-plugin" id="id27">SR-IOV Network Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-device-plugin-resource-configuration" id="id28">SR-IOV Network Device Plugin Resource Configuration</a></p></li>
-<li><p><a class="reference internal" href="#ib-kubernetes" id="id29">IB Kubernetes</a></p></li>
-<li><p><a class="reference internal" href="#ufm-secret" id="id30">UFM Secret</a></p></li>
-<li><p><a class="reference internal" href="#secondary-network" id="id31">Secondary Network</a></p></li>
-<li><p><a class="reference internal" href="#cni-plugin" id="id32">CNI Plugin</a></p></li>
-<li><p><a class="reference internal" href="#id7" id="id33">Multus CNI</a></p></li>
-<li><p><a class="reference internal" href="#id9" id="id34">IPoIB CNI</a></p></li>
-<li><p><a class="reference internal" href="#ipam-cni-plugin" id="id35">IPAM CNI Plugin</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-ipam-plugin" id="id36">NVIDIA IPAM Plugin</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-nic-feature-discovery" id="id37">NVIDIA NIC Feature Discovery</a></p></li>
-<li><p><a class="reference internal" href="#doca-telemetry-service" id="id38">DOCA Telemetry Service</a></p></li>
-<li><p><a class="reference internal" href="#helm-customization-file" id="id39">Helm customization file</a></p></li>
+<li><p><a class="reference internal" href="#nfd-labels" id="id8">NFD labels</a></p></li>
+<li><p><a class="reference internal" href="#node-feature-discovery" id="id9">Node Feature Discovery</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator" id="id10">SR-IOV Network Operator</a></p></li>
+<li><p><a class="reference internal" href="#container-resources" id="id11">Container Resources</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-driver" id="id12">NVIDIA DOCA Driver</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-driver-driver-environment-variables" id="id13">NVIDIA DOCA Driver Driver Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#rdma-shared-device-plugin" id="id14">RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#rdma-device-plugin-resource-configurations" id="id15">RDMA Device Plugin Resource Configurations</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-device-plugin" id="id16">SR-IOV Network Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-device-plugin-resource-configuration" id="id17">SR-IOV Network Device Plugin Resource Configuration</a></p></li>
+<li><p><a class="reference internal" href="#ib-kubernetes" id="id18">IB Kubernetes</a></p></li>
+<li><p><a class="reference internal" href="#ufm-secret" id="id19">UFM Secret</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-ipam-plugin" id="id20">NVIDIA IPAM Plugin</a></p></li>
+<li><p><a class="reference internal" href="#secondary-network" id="id21">Secondary Network</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-nic-feature-discovery" id="id22">NVIDIA NIC Feature Discovery</a></p></li>
+<li><p><a class="reference internal" href="#doca-telemetry-service" id="id23">DOCA Telemetry Service</a></p></li>
+<li><p><a class="reference internal" href="#helm-customization-file" id="id24">Helm customization file</a></p></li>
 </ul>
 </div>
 <section id="general-parameters">
@@ -150,139 +147,185 @@ can find those below.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>operator.admissionController.enabled</p></td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
-<td><p>Deploy with admission controller</p></td>
-</tr>
-<tr class="row-odd"><td><p>operator.admissionController.useCertManager</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
-<td><p>Use cert-manager for generating self-signed certificate</p></td>
-</tr>
-<tr class="row-even"><td><p>operator.admissionController.certificate.tlsCrt</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>External TLS certificate. Ignored if cert-manager is used</p></td>
-</tr>
-<tr class="row-odd"><td><p>operator.admissionController.certificate.tlsKey</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>External TLS private key. Ignored if cert-manager is used</p></td>
-</tr>
-<tr class="row-even"><td><p>nfd.enabled</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
-<td><p>Deploy Node Feature Discovery</p></td>
-</tr>
-<tr class="row-odd"><td><p>nfd.deployNodeFeatureRules</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
-<td><p>Deploy Node Feature Rules to label the nodes</p></td>
-</tr>
-<tr class="row-even"><td><p>sriovNetworkOperator.enabled</p></td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
-<td><p>Deploy SR-IOV Network Operator</p></td>
-</tr>
-<tr class="row-odd"><td><p>sriovNetworkOperator.configDaemonNodeSelectorExtra</p></td>
-<td><p>List</p></td>
-<td><p>node-role.kubernetes.io/worker: “”</p></td>
-<td><p>Additional values for SR-IOV Config Daemon nodes selector</p></td>
-</tr>
-<tr class="row-even"><td><p>upgradeCRDs</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
-<td><p>Enable CRDs upgrade with helm pre-install and pre-upgrade hooks</p></td>
-</tr>
-<tr class="row-odd"><td><p>operator.repository</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia</p></td>
-<td><p>Network Operator image repository</p></td>
-</tr>
-<tr class="row-even"><td><p>operator.image</p></td>
-<td><p>String</p></td>
-<td><p>network-operator</p></td>
-<td><p>Network Operator image name</p></td>
-</tr>
-<tr class="row-odd"><td><p>operator.tag</p></td>
-<td><p>String</p></td>
-<td><p>None</p></td>
-<td><p>Network Operator image tag. If set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the chart’s <code class="docutils literal notranslate"><span class="pre">appVersion</span></code> will be used</p></td>
-</tr>
-<tr class="row-even"><td><p>operator.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling Network Operator image</p></td>
-</tr>
-<tr class="row-odd"><td><p>operator.cniBinDirectory</p></td>
-<td><p>String</p></td>
-<td><p>/opt/cni/bin</p></td>
-<td><p>Directory, where CNI binaries will be deployed on the nodes. Setting for the sriov-network-operator is set with <code class="docutils literal notranslate"><span class="pre">sriov-network-operator.cniBinPath</span></code> parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.</p></td>
-</tr>
-<tr class="row-even"><td><p>operator.resources</p></td>
-<td><p>Yaml</p></td>
-<td><div class="line-block">
-<div class="line">resources:</div>
-<div class="line-block">
-<div class="line">limits:</div>
-<div class="line-block">
-<div class="line">cpu: 500m</div>
-<div class="line">memory: 128Mi</div>
-</div>
-<div class="line">requests:</div>
-<div class="line-block">
-<div class="line">cpu: 5m</div>
-<div class="line">memory: 64Mi</div>
-</div>
-</div>
-</div>
-</td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator</p></td>
+<tr class="row-even"><td><p>deployCR</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the Network Operator image, if it is not overridden</p></td>
+<td><p>list</p></td>
+<td><p><cite>[]</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>deployCR</p></td>
-<td><p>Bool</p></td>
-<td><p>False</p></td>
-<td><p>Deploy <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> custom resource according to the provided parameters</p></td>
+<tr class="row-even"><td><p>nfd.deployNodeFeatureRules</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>nodeAffinity</p></td>
-<td><p>Yaml</p></td>
-<td><div class="line-block">
-<div class="line">requiredDuringSchedulingIgnoredDuringExecution:</div>
-<div class="line-block">
-<div class="line">nodeSelectorTerms:</div>
-<div class="line-block">
-<div class="line">- matchExpressions:</div>
-<div class="line-block">
-<div class="line">- key: node-role.kubernetes.io/master</div>
-<div class="line-block">
-<div class="line">operator: DoesNotExist</div>
-</div>
-<div class="line">- key: node-role.kubernetes.io/control-plane</div>
-<div class="line-block">
-<div class="line">operator: DoesNotExist</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</td>
-<td><p>Configure node affinity settings for Network Operator components</p></td>
+<tr class="row-odd"><td><p>nfd.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>tolerations</p></td>
-<td><p>Yaml</p></td>
-<td><p>“”</p></td>
-<td><p>Set additional tolerations for various Daemonsets deployed by the network operator, e.g. whereabouts, multus, cni-plugins.</p></td>
+<tr class="row-even"><td><p>operator.admissionController.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>useDTK</p></td>
-<td><p>Bool</p></td>
-<td><p>True</p></td>
-<td><p>Enable the use of Driver ToolKit to compile OFED drivers (OpenShift only)</p></td>
+<tr class="row-odd"><td><p>operator.admissionController.useCertManager</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/master”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“In”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight</p></td>
+<td><p>int</p></td>
+<td><p><cite>1</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/control-plane”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“In”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].weight</p></td>
+<td><p>int</p></td>
+<td><p><cite>1</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.cniBinDirectory</p></td>
+<td><p>string</p></td>
+<td><p><cite>“/opt/cni/bin”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.fullnameOverride</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“network-operator”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.nameOverride</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.nodeSelector</p></td>
+<td><p>object</p></td>
+<td><p><cite>{}</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/cloud-native”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.resources.limits.cpu</p></td>
+<td><p>string</p></td>
+<td><p><cite>“500m”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.resources.limits.memory</p></td>
+<td><p>string</p></td>
+<td><p><cite>“128Mi”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.resources.requests.cpu</p></td>
+<td><p>string</p></td>
+<td><p><cite>“5m”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.resources.requests.memory</p></td>
+<td><p>string</p></td>
+<td><p><cite>“64Mi”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.tolerations[0].effect</p></td>
+<td><p>string</p></td>
+<td><p><cite>“NoSchedule”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.tolerations[0].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/master”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.tolerations[0].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“Equal”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.tolerations[0].value</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.tolerations[1].effect</p></td>
+<td><p>string</p></td>
+<td><p><cite>“NoSchedule”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.tolerations[1].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/control-plane”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.tolerations[1].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“Equal”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>operator.tolerations[1].value</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>operator.useDTK</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriovNetworkOperator.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>test.pf</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ens2f0”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>upgradeCRDs</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -319,6 +362,117 @@ can find those below.</p>
 </tbody>
 </table>
 </section>
+<section id="node-feature-discovery">
+<h2>Node Feature Discovery<a class="headerlink" href="#node-feature-discovery" title="Permalink to this headline"></a></h2>
+<p>Node Feature Discovery Helm chart customization options can be found <a class="reference external" href="https://github.com/kubernetes-sigs/node-feature-discovery/blob/master/deployment/helm/node-feature-discovery/values.yaml">here</a>. Following is a list of overriden values by NVIDIA Operator Helm Chart:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default in NVIDIA Network Operator</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>node-feature-discovery.enableNodeFeatureApi</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.master.config.extraLabelNs[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvidia.com”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.master.serviceAccount.create</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.master.serviceAccount.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-feature-discovery”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.config.sources.pci.deviceClassWhitelist[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“0300”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.config.sources.pci.deviceClassWhitelist[1]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“0302”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.config.sources.pci.deviceLabelFields[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“vendor”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.serviceAccount.create</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.serviceAccount.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-feature-discovery”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.tolerations[0].effect</p></td>
+<td><p>string</p></td>
+<td><p><cite>“NoSchedule”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.tolerations[0].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/master”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.tolerations[0].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“Exists”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.tolerations[1].effect</p></td>
+<td><p>string</p></td>
+<td><p><cite>“NoSchedule”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.tolerations[1].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“node-role.kubernetes.io/control-plane”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.tolerations[1].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“Exists”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.tolerations[2].effect</p></td>
+<td><p>string</p></td>
+<td><p><cite>“NoSchedule”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>node-feature-discovery.worker.tolerations[2].key</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvidia.com/gpu”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.worker.tolerations[2].operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“Exists”</cite></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="sr-iov-network-operator">
 <h2>SR-IOV Network Operator<a class="headerlink" href="#sr-iov-network-operator" title="Permalink to this headline"></a></h2>
 <p>SR-IOV Network Operator Helm chart customization options can be found <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/deployment/sriov-network-operator/README.md">here</a>. Following is a list of overriden values by NVIDIA Operator Helm Chart:</p>
@@ -337,39 +491,99 @@ can find those below.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>sriov-network-operator.operator.resourcePrefix</p></td>
-<td><p>String</p></td>
-<td><p>nvidia.com</p></td>
+<tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:fc002af57a81855542759d0f77d16dacd7e1aa38”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.7.0-beta.2</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.4.1”</cite></p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.2</p></td>
+<tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin:6f8174b1a47c47657fe9e59fe448f2a452bb6960”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.images.rdmaCni</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/rdma-cni:v1.1.0”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.images.resourcesInjector</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/network-resources-injector:8810e6a127366cc1eb829d3f7cb3f866d096946e”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovCni</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0</p></td>
-<td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0-arm64</span></code> image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/sriov-cni:3e6368077716f6b8368b0e036a1290d1c64cf1fb”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.1.1</p></td>
-<td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:1.1.0-arm64</span></code> image</p></td>
+<tr class="row-even"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.4.1”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.7.0</p></td>
-<td><p>For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-arm64</span></code> image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:e6ead1e8f76a407783430ee2666b403db2d76f64”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.webhook</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.2</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.4.1”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.operator.admissionControllers.certificates.certManager.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers.certificates.certManager.generateSelfSigned</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.operator.admissionControllers.certificates.custom.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers.certificates.secretNames.injector</p></td>
+<td><p>string</p></td>
+<td><p><cite>“network-resources-injector-cert”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.operator.admissionControllers.certificates.secretNames.operator</p></td>
+<td><p>string</p></td>
+<td><p><cite>“operator-webhook-cert”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.operator.resourcePrefix</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvidia.com”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector.”beta.kubernetes.io/os”</p></td>
+<td><p>string</p></td>
+<td><p><cite>“linux”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector.”network.nvidia.com/operator.mofed.wait”</p></td>
+<td><p>string</p></td>
+<td><p><cite>“false”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>sriov-network-operator.sriovOperatorConfig.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -407,160 +621,140 @@ can find those below.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>ofedDriver.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy the  NVIDIA DOCA Driver driver container</p></td>
+<tr class="row-even"><td><p>ofedDriver.certConfig.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.repository</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/mellanox</p></td>
-<td><p>NVIDIA DOCA Driver image repository</p></td>
+<tr class="row-odd"><td><p>ofedDriver.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>ofedDriver.image</p></td>
-<td><p>String</p></td>
-<td><p>doca-driver</p></td>
-<td><p>NVIDIA DOCA Driver image name</p></td>
+<tr class="row-even"><td><p>ofedDriver.forcePrecompiled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.version</p></td>
-<td><p>String</p></td>
-<td><p>24.07-0.3.2.0-0</p></td>
-<td><p>NVIDIA DOCA Driver version</p></td>
+<tr class="row-odd"><td><p>ofedDriver.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“doca-driver”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.initContainer.enable</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy init container</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.initContainer.repository</p></td>
+<tr class="row-odd"><td><p>ofedDriver.initContainer.image</p></td>
 <td><p>string</p></td>
-<td><p>ghcr.io/mellanox</p></td>
-<td><p>init container image repository</p></td>
+<td><p><cite>“network-operator-init-container”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>ofedDriver.initContainer.image</p></td>
+<tr class="row-even"><td><p>ofedDriver.initContainer.repository</p></td>
 <td><p>string</p></td>
-<td><p>network-operator-init-container</p></td>
-<td><p>init container image name</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
-<td><p>v0.0.2</p></td>
-<td><p>init container image version</p></td>
+<td><p><cite>“v0.0.2”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>ofedDriver.certConfig.name</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>Custom TLS key/certificate configuration configMap name</p></td>
+<tr class="row-even"><td><p>ofedDriver.livenessProbe.initialDelaySeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>30</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.repoConfig.name</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>Private mirror repository configuration configMap name</p></td>
+<tr class="row-odd"><td><p>ofedDriver.livenessProbe.periodSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>30</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.readinessProbe.initialDelaySeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>10</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ofedDriver.readinessProbe.periodSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>30</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.repoConfig.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ofedDriver.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.startupProbe.initialDelaySeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>10</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ofedDriver.startupProbe.periodSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>20</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.terminationGracePeriodSeconds</p></td>
-<td><p>Int</p></td>
-<td><p>300</p></td>
-<td><p>NVIDIA OFED termination grace periods in seconds</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the NVIDIA DOCA Driver images</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.env</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.29/#envvar-v1-core">environment variables</a> passed to the NVIDIA OFED driver image</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.startupProbe.initialDelaySeconds</p></td>
-<td><p>Int</p></td>
-<td><p>10</p></td>
-<td><p>NVIDIA DOCA Driver startup probe initial delay</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.startupProbe.periodSeconds</p></td>
-<td><p>Int</p></td>
-<td><p>20</p></td>
-<td><p>NVIDIA DOCA Driver startup probe interval</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.livenessProbe.initialDelaySeconds</p></td>
-<td><p>Int</p></td>
-<td><p>30</p></td>
-<td><p>NVIDIA DOCA Driver liveness probe initial delay</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.livenessProbe.periodSeconds</p></td>
-<td><p>Int</p></td>
-<td><p>30</p></td>
-<td><p>NVIDIA DOCA Driver liveness probe interval</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.readinessProbe.initialDelaySeconds</p></td>
-<td><p>Int</p></td>
-<td><p>10</p></td>
-<td><p>NVIDIA DOCA Driver readiness probe initial delay</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.readinessProbe.periodSeconds</p></td>
-<td><p>Int</p></td>
-<td><p>30</p></td>
-<td><p>NVIDIA DOCA Driver readiness probe interval</p></td>
+<td><p>int</p></td>
+<td><p><cite>300</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.upgradePolicy.autoUpgrade</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>A global switch for the automatic upgrade feature. If set to false, all other options are ignored.</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.upgradePolicy.maxParallelUpgrades</p></td>
-<td><p>Int</p></td>
-<td><p>1</p></td>
-<td><p>The amount of nodes that can be upgraded in parallel. 0 means no limit. All nodes will be upgraded in parallel.</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.safeLoad</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Cordon and drain (if enabled) a node before loading the driver on it, requires <code class="docutils literal notranslate"><span class="pre">ofedDriver.initContainer</span></code> to be enabled and <code class="docutils literal notranslate"><span class="pre">ofedDriver.upgradePolicy.autoUpgrade</span></code> to be true</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.enable</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Options for node drain (<code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">drain</span></code>) before driver reload, if auto upgrade is enabled.</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.force</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Use force drain of pods</p></td>
-</tr>
-<tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.podSelector</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>Pod selector to specify which pods will be drained from the node. An empty selector means all pods.</p></td>
-</tr>
-<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.timeoutSeconds</p></td>
-<td><p>Int</p></td>
-<td><p>300</p></td>
-<td><p>Number of seconds to wait for pod eviction</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.deleteEmptyDir</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Delete pods local storage</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.waitForCompletion.podSelector</p></td>
-<td><p>String</p></td>
-<td><p>Not set</p></td>
-<td><p>Specifies a label selector for the pods to wait for completion before starting the driver upgrade</p></td>
+<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.enable</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>ofedDriver.upgradePolicy.waitForCompletion.timeoutSeconds</p></td>
+<tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.force</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.podSelector</p></td>
+<td><p>string</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain.timeoutSeconds</p></td>
 <td><p>int</p></td>
-<td><p>Not set</p></td>
-<td><p>Specify the length of time in seconds to wait before giving up for workload to finish. Zero means infinite</p></td>
+<td><p><cite>300</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ofedDriver.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> and limits for the <code class="docutils literal notranslate"><span class="pre">mofed-container</span></code></p></td>
+<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.maxParallelUpgrades</p></td>
+<td><p>int</p></td>
+<td><p><cite>1</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>ofedDriver.forcePrecompiled</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Fail Mellanox OFED deployment if precompiled OFED driver container image does not exists</p></td>
+<tr class="row-even"><td><p>ofedDriver.upgradePolicy.safeLoad</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ofedDriver.upgradePolicy.waitForCompletion</p></td>
+<td><p>string</p></td>
+<td><p><cite>nil</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ofedDriver.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“24.04-0.6.6.0-0”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -650,48 +844,44 @@ can find those below.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>rdmaSharedDevicePlugin.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy RDMA shared device plugin</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.repository</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/cloud-native</p></td>
-<td><p>RDMA shared device plugin image repository</p></td>
+<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“k8s-rdma-shared-dev-plugin”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>rdmaSharedDevicePlugin.image</p></td>
-<td><p>String</p></td>
-<td><p>k8s-rdma-shared-dev-plugin</p></td>
-<td><p>RDMA shared device plugin image name</p></td>
+<tr class="row-even"><td><p>rdmaSharedDevicePlugin.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.version</p></td>
-<td><p>String</p></td>
-<td><p>v1.5.1</p></td>
-<td><p>RDMA shared device plugin version</p></td>
+<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.resources[0].name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“rdma_shared_device_a”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>rdmaSharedDevicePlugin.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the RDMA Shared device plugin image</p></td>
+<tr class="row-even"><td><p>rdmaSharedDevicePlugin.resources[0].rdmaHcaMax</p></td>
+<td><p>int</p></td>
+<td><p><cite>63</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.resources</p></td>
-<td><p>List</p></td>
-<td><p>See below</p></td>
-<td><p>RDMA shared device plugin resources</p></td>
+<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.resources[0].vendors[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“15b3”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>rdmaSharedDevicePlugin.useCdi</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><div class="line-block">
-<div class="line">Enable Container Device Interface (CDI) mode.</div>
-<div class="line"><strong>NOTE</strong>: NVIDIA Network Operator does not configure container runtime to enable CDI</div>
-</div>
-</td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">rdma-shared-dp</span></code> container</p></td>
+<tr class="row-odd"><td><p>rdmaSharedDevicePlugin.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“1.4.0”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -731,52 +921,39 @@ can find those below.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>sriovDevicePlugin.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy SR-IOV Network device plugin</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>sriovDevicePlugin.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
-<td><p>SR-IOV Network device plugin image repository</p></td>
+<tr class="row-odd"><td><p>sriovDevicePlugin.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“sriov-network-device-plugin”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>sriovDevicePlugin.image</p></td>
-<td><p>String</p></td>
-<td><p>sriov-network-device-plugin</p></td>
-<td><p>SR-IOV Network device plugin image name</p></td>
+<tr class="row-even"><td><p>sriovDevicePlugin.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>sriovDevicePlugin.version</p></td>
-<td><p>String</p></td>
-<td><p>v3.7.0</p></td>
-<td><div class="line-block">
-<div class="line">SR-IOV Network device plugin version</div>
-<div class="line">For ARM-based deployments, it is recommended to use the <code class="docutils literal notranslate"><span class="pre">ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64</span></code> image</div>
-</div>
-</td>
+<tr class="row-odd"><td><p>sriovDevicePlugin.resources[0].name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“hostdev”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>sriovDevicePlugin.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the SR-IOV Network device plugin image</p></td>
+<tr class="row-even"><td><p>sriovDevicePlugin.resources[0].vendors[0]</p></td>
+<td><p>string</p></td>
+<td><p><cite>“15b3”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>sriovDevicePlugin.resources</p></td>
-<td><p>List</p></td>
-<td><p>See below</p></td>
-<td><p>SR-IOV Network device plugin resources</p></td>
+<tr class="row-odd"><td><p>sriovDevicePlugin.useCdi</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>sriovDevicePlugin.useCdi</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><div class="line-block">
-<div class="line">Enable Container Device Interface (CDI) mode.</div>
-<div class="line"><strong>NOTE</strong>: NVIDIA Network Operator does not configure container runtime to enable CD.</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p>sriovDevicePlugin.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">kube-sriovdp</span></code> container</p></td>
+<tr class="row-even"><td><p>sriovDevicePlugin.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“e6ead1e8f76a407783430ee2666b403db2d76f64”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -817,53 +994,43 @@ can find those below.</p>
 <tbody>
 <tr class="row-even"><td><p>ibKubernetes.deploy</p></td>
 <td><p>bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy IB Kubernetes</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ibKubernetes.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ib-kubernetes”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ibKubernetes.pKeyGUIDPoolRangeEnd</p></td>
+<td><p>string</p></td>
+<td><p><cite>“02:FF:FF:FF:FF:FF:FF:FF”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>ibKubernetes.pKeyGUIDPoolRangeStart</p></td>
+<td><p>string</p></td>
+<td><p><cite>“02:00:00:00:00:00:00:00”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ibKubernetes.periodicUpdateSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>5</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>ibKubernetes.repository</p></td>
 <td><p>string</p></td>
-<td><p>ghcr.io/mellanox</p></td>
-<td><p>IB Kubernetes image repository</p></td>
-</tr>
-<tr class="row-even"><td><p>ibKubernetes.image</p></td>
-<td><p>string</p></td>
-<td><p>ib-kubernetes</p></td>
-<td><p>IB Kubernetes image name</p></td>
-</tr>
-<tr class="row-odd"><td><p>ibKubernetes.version</p></td>
-<td><p>string</p></td>
-<td><p>v1.0.2</p></td>
-<td><p>IB Kubernetes version</p></td>
-</tr>
-<tr class="row-even"><td><p>ibKubernetes.imagePullSecrets</p></td>
-<td><p>list</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets used for pulling any of the IB Kubernetes images</p></td>
-</tr>
-<tr class="row-odd"><td><p>ibKubernetes.periodicUpdateSeconds</p></td>
-<td><p>int</p></td>
-<td><p>5</p></td>
-<td><p>Interval of periodic update in seconds</p></td>
-</tr>
-<tr class="row-even"><td><p>ibKubernetes.pKeyGUIDPoolRangeStart</p></td>
-<td><p>string</p></td>
-<td><p>02:00:00:00:00:00:00:00</p></td>
-<td><p>Minimal available GUID value to be allocated for the pod</p></td>
-</tr>
-<tr class="row-odd"><td><p>ibKubernetes.pKeyGUIDPoolRangeEnd</p></td>
-<td><p>string</p></td>
-<td><p>02:FF:FF:FF:FF:FF:FF:FF</p></td>
-<td><p>Maximal available GUID value to be allocated for the pod</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>ibKubernetes.ufmSecret</p></td>
 <td><p>string</p></td>
-<td><p>See below</p></td>
-<td><p>Name of the Secret with the NVIDIA UFM access credentials, deployed in advance</p></td>
+<td><p><cite>“”</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td><p>ibKubernetes.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">ib-kubernetes</span></code> container</p></td>
+<tr class="row-odd"><td><p>ibKubernetes.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v1.0.2”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -891,243 +1058,6 @@ can find those below.</p>
 <p>The InfiniBand Fabric manages a single pool of GUIDs. In order to use IB Kubernetes in different clusters, different GUID ranges must be specified to avoid collisions.</p>
 </div>
 </section>
-<section id="secondary-network">
-<h2>Secondary Network<a class="headerlink" href="#secondary-network" title="Permalink to this headline"></a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>secondaryNetwork.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy Secondary Network</p></td>
-</tr>
-</tbody>
-</table>
-<p>Specifies components to deploy in order to facilitate a secondary network in Kubernetes. It consists of the following optionally deployed components:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus-CNI</a>: Delegate CNI plugin to support secondary networks in Kubernetes</p></li>
-<li><p>CNI plugins: Currently only <a class="reference external" href="https://github.com/containernetworking/plugins">containernetworking-plugins</a> is supported</p></li>
-<li><p>IPAM CNI: Currently only <a class="reference external" href="https://github.com/k8snetworkplumbingwg/whereabouts">Whereabout IPAM CNI</a> is supported as a part of the secondaryNetwork section. NVIDIA-IPAM is configured separately.</p></li>
-<li><p><a class="reference external" href="https://github.com/Mellanox/ipoib-cni">IPoIB CNI</a>: Allows the user to create IPoIB child link and move it to the pod</p></li>
-</ul>
-</section>
-<section id="cni-plugin">
-<h2>CNI Plugin<a class="headerlink" href="#cni-plugin" title="Permalink to this headline"></a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>secondaryNetwork.cniPlugins.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy CNI Plugins Secondary Network</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.image</p></td>
-<td><p>String</p></td>
-<td><p>plugins</p></td>
-<td><p>CNI Plugins image name</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.cniPlugins.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
-<td><p>CNI Plugins image repository</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.version</p></td>
-<td><p>String</p></td>
-<td><p>v1.5.0-amd64</p></td>
-<td><p>CNI Plugins image version</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.cniPlugins.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the CNI Plugins images</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">cni-plugins</span></code> container</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="id7">
-<h2>Multus CNI<a class="headerlink" href="#id7" title="Permalink to this headline"></a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>secondaryNetwork.multus.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy Multus Secondary Network</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.multus.image</p></td>
-<td><p>String</p></td>
-<td><p>multus-cni</p></td>
-<td><p>Multus image name</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.multus.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
-<td><p>Multus image repository</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.multus.version</p></td>
-<td><p>String</p></td>
-<td><p>v3.9.3</p></td>
-<td><p>Multus image version</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.multus.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the Multus images</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.multus.config</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>Multus CNI config. If empty, the config will be automatically generated from the CNI configuration file of the master plugin (the first file in lexicographical order in the cni-confg-dir).</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.multus.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">kube-multus</span></code> container</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="id9">
-<h2>IPoIB CNI<a class="headerlink" href="#id9" title="Permalink to this headline"></a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>secondaryNetwork.ipoib.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy IPoIB CNI</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipoib.image</p></td>
-<td><p>String</p></td>
-<td><p>ipoib-cni</p></td>
-<td><p>IPoIB CNI image name</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.ipoib.repository</p></td>
-<td><p>String</p></td>
-<td><p>“”</p></td>
-<td><p>IPoIB CNI image repository</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipoib.version</p></td>
-<td><p>String</p></td>
-<td><p>v1.2.0</p></td>
-<td><p>IPoIB CNI image version</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.ipoib.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the IPoIB CNI images</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipoib.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">ipoib-cni</span></code> container</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="ipam-cni-plugin">
-<h2>IPAM CNI Plugin<a class="headerlink" href="#ipam-cni-plugin" title="Permalink to this headline"></a></h2>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>secondaryNetwork.ipamPlugin.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy IPAM CNI Plugin Secondary Network</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipamPlugin.image</p></td>
-<td><p>String</p></td>
-<td><p>whereabouts</p></td>
-<td><p>IPAM CNI Plugin image name</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.ipamPlugin.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
-<td><p>IPAM CNI Plugin image repository</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipamPlugin.version</p></td>
-<td><p>String</p></td>
-<td><p>v0.7.0-amd64</p></td>
-<td><p>IPAM CNI Plugin image version</p></td>
-</tr>
-<tr class="row-even"><td><p>secondaryNetwork.ipamPlugin.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the IPAM CNI Plugin images</p></td>
-</tr>
-<tr class="row-odd"><td><p>secondaryNetwork.ipamPlugin.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">whereabouts</span></code> container</p></td>
-</tr>
-</tbody>
-</table>
-</section>
 <section id="nvidia-ipam-plugin">
 <h2>NVIDIA IPAM Plugin<a class="headerlink" href="#nvidia-ipam-plugin" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="https://github.com/Mellanox/nvidia-k8s-ipam">NVIDIA IPAM Plugin</a> is recommended to be used on large-scale deployments of the NVIDIA Network Operator.</p>
@@ -1147,39 +1077,29 @@ can find those below.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>nvIpam.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>true</p></td>
-<td><p>Deploy NVIDIA IPAM Plugin</p></td>
-</tr>
-<tr class="row-odd"><td><p>nvIpam.image</p></td>
-<td><p>String</p></td>
-<td><p>nvidia-k8s-ipam</p></td>
-<td><p>NVIDIA IPAM Plugin image name</p></td>
-</tr>
-<tr class="row-even"><td><p>nvIpam.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/mellanox</p></td>
-<td><p>NVIDIA IPAM Plugin image repository</p></td>
-</tr>
-<tr class="row-odd"><td><p>nvIpam.version</p></td>
-<td><p>String</p></td>
-<td><p>v0.2.0</p></td>
-<td><p>NVIDIA IPAM Plugin image version</p></td>
-</tr>
-<tr class="row-even"><td><p>nvIpam.imagePullSecrets</p></td>
-<td><p>List</p></td>
-<td><p>[]</p></td>
-<td><p>An optional list of references to secrets to use for pulling any of the Plugin images</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>nvIpam.enableWebhook</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Enable deployment of the validataion webhook for IPPool CRD</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td><p>nvIpam.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">nv-ipam-node</span></code> and <code class="docutils literal notranslate"><span class="pre">nv-ipam-controller</span></code> containers</p></td>
+<tr class="row-even"><td><p>nvIpam.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvidia-k8s-ipam”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nvIpam.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>nvIpam.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v0.1.2”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1187,6 +1107,118 @@ can find those below.</p>
 <p class="admonition-title">Warning</p>
 <p>Supported X.509 certificate management system should be available in the cluster to enable the validation webhook. Currently, the supported systems are <a class="reference external" href="https://cert-manager.io/">certmanager</a> and <a class="reference external" href="https://docs.openshift.com/container-platform/latest/security/certificates/service-serving-certificate.html">Openshift certificate management</a>.</p>
 </div>
+</section>
+<section id="secondary-network">
+<h2>Secondary Network<a class="headerlink" href="#secondary-network" title="Permalink to this headline"></a></h2>
+<p>Specifies components to deploy in order to facilitate a secondary network in Kubernetes. It consists of the following optionally deployed components:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus-CNI</a>: Delegate CNI plugin to support secondary networks in Kubernetes</p></li>
+<li><p>CNI plugins: Currently only <a class="reference external" href="https://github.com/containernetworking/plugins">containernetworking-plugins</a> is supported</p></li>
+<li><p>IPAM CNI: Currently only <a class="reference external" href="https://github.com/k8snetworkplumbingwg/whereabouts">Whereabout IPAM CNI</a> is supported as a part of the secondaryNetwork section. NVIDIA-IPAM is configured separately.</p></li>
+<li><p><a class="reference external" href="https://github.com/Mellanox/ipoib-cni">IPoIB CNI</a>: Allows the user to create IPoIB child link and move it to the pod</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>secondaryNetwork.cniPlugins.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“plugins”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.cniPlugins.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.cniPlugins.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v1.3.0”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.ipamPlugin.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.ipamPlugin.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“whereabouts”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.ipamPlugin.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.ipamPlugin.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v0.7.0”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.ipoib.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.ipoib.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ipoib-cni”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.ipoib.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.ipoib.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“428715a57c0b633e48ec7620f6e3af6863149ccf”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.multus.deploy</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.multus.image</p></td>
+<td><p>string</p></td>
+<td><p><cite>“multus-cni”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>secondaryNetwork.multus.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/k8snetworkplumbingwg”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>secondaryNetwork.multus.version</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v3.9.3”</cite></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="nvidia-nic-feature-discovery">
 <h2>NVIDIA NIC Feature Discovery<a class="headerlink" href="#nvidia-nic-feature-discovery" title="Permalink to this headline"></a></h2>
@@ -1207,29 +1239,24 @@ can find those below.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>nicFeatureDiscovery.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy NVIDIA NIC Feature Discovery</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>nicFeatureDiscovery.image</p></td>
-<td><p>String</p></td>
-<td><p>nic-feature-discovery</p></td>
-<td><p>NVIDIA NIC Feature Discovery image name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nic-feature-discovery”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>nicFeatureDiscovery.repository</p></td>
-<td><p>String</p></td>
-<td><p>ghcr.io/mellanox</p></td>
-<td><p>NVIDIA NIC Feature Discovery repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>nicFeatureDiscovery.version</p></td>
-<td><p>String</p></td>
-<td><p>v0.0.1</p></td>
-<td><p>NVIDIA NIC Feature Discovery image version</p></td>
-</tr>
-<tr class="row-even"><td><p>nicFeatureDiscovery.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">nic-feature-discovery</span></code> container</p></td>
+<td><p>string</p></td>
+<td><p><cite>“v0.0.1”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1253,29 +1280,24 @@ can find those below.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>docaTelemetryService.deploy</p></td>
-<td><p>Bool</p></td>
-<td><p>false</p></td>
-<td><p>Deploy DOCA Telemetry Service</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>docaTelemetryService.image</p></td>
-<td><p>String</p></td>
-<td><p>doca_telemetry</p></td>
-<td><p>DOCA Telemetry Service image name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“doca_telemetry”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p>docaTelemetryService.repository</p></td>
-<td><p>String</p></td>
-<td><p>nvcr.io/nvidia/doca</p></td>
-<td><p>DOCA Telemetry Service image repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/doca”</cite></p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>docaTelemetryService.version</p></td>
-<td><p>String</p></td>
-<td><p>1.16.5-doca2.6.0-host</p></td>
-<td><p>DOCA Telemetry Service image version</p></td>
-</tr>
-<tr class="row-even"><td><p>docaTelemetryService.containerResources</p></td>
-<td><p>List</p></td>
-<td><p>Not set</p></td>
-<td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the <code class="docutils literal notranslate"><span class="pre">doca-telemetry-service</span></code> container</p></td>
+<td><p>string</p></td>
+<td><p><cite>“1.16.5-doca2.6.0-host”</cite></p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1301,7 +1323,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 01, 2024.
+      <span class="lastupdated">Last updated on Aug 04, 2024.
       </span></p>
   </div>
 
