@@ -22,6 +22,9 @@ HELM_CHART_PATH ?=
 $(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT): ; $(info Creating directory $@...)
 	mkdir -p $@
 
+# release.yaml location
+BRANCH_RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/${BRANCH}/hack/release.yaml
+
 # helm-docs is used to generate helm chart documentation
 HELM_DOCS_PKG := github.com/norwoodj/helm-docs/cmd/helm-docs
 HELM_DOCS_VER := v1.14.2
@@ -80,3 +83,9 @@ local-helm-docs: copy-local-helm-chart helm-docs
 .PHONY: gen-docs
 gen-docs:
 	@ ./repo.sh docs
+
+.PHONY: generate-docs-versions-var
+generate-docs-versions-var:
+	curl -sL ${BRANCH_RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
+	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/ --outputDir $(CURDIR)/build/
+	mv $(CURDIR)/build/vars.yaml docs/common/vars.rst
