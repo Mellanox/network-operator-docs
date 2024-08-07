@@ -68,8 +68,7 @@ copy-local-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
 helm-docs: | $(HELM_DOCS)
 	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.rst \
 	--ignore-file=.helmdocsignore \
-	--template-files=./templates/helm.rst.gotmpl \
-	--chart-search-root ${HELM_CHART_DEP_ROOT}
+	--template-files=./templates/helm.rst.gotmpl ${HELM_CHART_DEP_ROOT}
 
 .PHONY: ngc-helm-docs
 ngc-helm-docs: download-ngc-helm-chart helm-docs
