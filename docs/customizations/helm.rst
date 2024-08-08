@@ -45,147 +45,75 @@ General Parameters
    * - deployCR
      - bool
      - `false`
-     -
+     - Deploy ``NicClusterPolicy`` custom resource according to the provided parameters.
    * - imagePullSecrets
      - list
      - `[]`
-     -
+     - An optional list of references to secrets to use for pulling any of the Network Operator images.
    * - nfd.deployNodeFeatureRules
      - bool
      - `true`
-     -
+     - Deploy Node Feature Rules to label the nodes with the discovered features.
    * - nfd.enabled
      - bool
      - `true`
-     -
+     - Deploy Node Feature Discovery operator.
    * - operator.admissionController.enabled
      - bool
      - `false`
-     -
+     - Deploy with admission controller.
    * - operator.admissionController.useCertManager
      - bool
      - `true`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key
-     - string
-     - `"node-role.kubernetes.io/master"`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator
-     - string
-     - `"In"`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]
-     - string
-     - `""`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight
-     - int
-     - `1`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].key
-     - string
-     - `"node-role.kubernetes.io/control-plane"`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator
-     - string
-     - `"In"`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]
-     - string
-     - `""`
-     -
-   * - operator.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].weight
-     - int
-     - `1`
-     -
+     - Use cert-manager for generating self-signed certificate.
+   * - operator.affinity.nodeAffinity
+     - object
+     - `{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"node-role.kubernetes.io/master","operator":"In","values":[""]}]},"weight":1},{"preference":{"matchExpressions":[{"key":"node-role.kubernetes.io/control-plane","operator":"In","values":[""]}]},"weight":1}]}`
+     - Configure node affinity settings for the operator.
    * - operator.cniBinDirectory
      - string
      - `"/opt/cni/bin"`
-     -
+     - Directory, where CNI binaries will be deployed on the nodes. Setting for  the sriov-network-operator is set with ``sriov-network-operator.cniBinPath`` parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.
    * - operator.fullnameOverride
      - string
      - `""`
-     -
+     - Name to be used to replace generated names.
    * - operator.image
      - string
      - `"network-operator"`
-     -
+     - Network Operator image name
    * - operator.nameOverride
      - string
      - `""`
-     -
+     - Name to be used as part of objects name generation.
    * - operator.nodeSelector
      - object
      - `{}`
-     -
+     - Configure node selector settings for the operator.
    * - operator.repository
      - string
-     - `"nvcr.io/nvidia/cloud-native"`
-     -
-   * - operator.resources.limits.cpu
-     - string
-     - `"500m"`
-     -
-   * - operator.resources.limits.memory
-     - string
-     - `"128Mi"`
-     -
-   * - operator.resources.requests.cpu
-     - string
-     - `"5m"`
-     -
-   * - operator.resources.requests.memory
-     - string
-     - `"64Mi"`
-     -
-   * - operator.tolerations[0].effect
-     - string
-     - `"NoSchedule"`
-     -
-   * - operator.tolerations[0].key
-     - string
-     - `"node-role.kubernetes.io/master"`
-     -
-   * - operator.tolerations[0].operator
-     - string
-     - `"Equal"`
-     -
-   * - operator.tolerations[0].value
-     - string
-     - `""`
-     -
-   * - operator.tolerations[1].effect
-     - string
-     - `"NoSchedule"`
-     -
-   * - operator.tolerations[1].key
-     - string
-     - `"node-role.kubernetes.io/control-plane"`
-     -
-   * - operator.tolerations[1].operator
-     - string
-     - `"Equal"`
-     -
-   * - operator.tolerations[1].value
-     - string
-     - `""`
-     -
+     - `"nvcr.io/nvstaging/mellanox"`
+     - Network Operator image repository.
+   * - operator.resources
+     - object
+     - `{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"5m","memory":"64Mi"}}`
+     - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ for the operator.
+   * - operator.tolerations
+     - list
+     - `[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Equal","value":""},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Equal","value":""}]`
+     - Set additional tolerations for various Daemonsets deployed by the operator.
    * - operator.useDTK
      - bool
      - `true`
-     -
+     - Enable the use of Driver ToolKit to compile OFED drivers (OpenShift only).
    * - sriovNetworkOperator.enabled
      - bool
      - `false`
-     -
-   * - test.pf
-     - string
-     - `"ens2f0"`
-     -
+     - Deploy SR-IOV Network Operator.
    * - upgradeCRDs
      - bool
      - `true`
-     -
+     - Enable CRDs upgrade with helm pre-install and pre-upgrade hooks.
 
 ------------------------------
 ImagePullSecrets customization
@@ -231,75 +159,35 @@ Node Feature Discovery Helm chart customization options can be found `here <http
    * - node-feature-discovery.enableNodeFeatureApi
      - bool
      - `true`
-     -
-   * - node-feature-discovery.master.config.extraLabelNs[0]
-     - string
-     - `"nvidia.com"`
-     -
-   * - node-feature-discovery.master.serviceAccount.create
+     - The Node Feature API enable communication between nfd master and worker through NodeFeature CRs. Otherwise communication is through gRPC.
+   * - node-feature-discovery.featureGates.NodeFeatureAPI
      - bool
      - `true`
      -
-   * - node-feature-discovery.master.serviceAccount.name
-     - string
-     - `"node-feature-discovery"`
-     -
-   * - node-feature-discovery.worker.config.sources.pci.deviceClassWhitelist[0]
-     - string
-     - `"0300"`
-     -
-   * - node-feature-discovery.worker.config.sources.pci.deviceClassWhitelist[1]
-     - string
-     - `"0302"`
-     -
-   * - node-feature-discovery.worker.config.sources.pci.deviceLabelFields[0]
-     - string
-     - `"vendor"`
-     -
-   * - node-feature-discovery.worker.serviceAccount.create
+   * - node-feature-discovery.gc.enable
+     - bool
+     - `true`
+     - Specifies whether the NFD Garbage Collector should be created
+   * - node-feature-discovery.gc.replicaCount
+     - int
+     - `1`
+     - Specifies the number of replicas for the NFD Garbage Collector
+   * - node-feature-discovery.gc.serviceAccount.create
      - bool
      - `false`
-     -
-   * - node-feature-discovery.worker.serviceAccount.name
+     - disable creation to avoid duplicate serviceaccount creation by master spec above.
+   * - node-feature-discovery.gc.serviceAccount.name
      - string
      - `"node-feature-discovery"`
-     -
-   * - node-feature-discovery.worker.tolerations[0].effect
-     - string
-     - `"NoSchedule"`
-     -
-   * - node-feature-discovery.worker.tolerations[0].key
-     - string
-     - `"node-role.kubernetes.io/master"`
-     -
-   * - node-feature-discovery.worker.tolerations[0].operator
-     - string
-     - `"Exists"`
-     -
-   * - node-feature-discovery.worker.tolerations[1].effect
-     - string
-     - `"NoSchedule"`
-     -
-   * - node-feature-discovery.worker.tolerations[1].key
-     - string
-     - `"node-role.kubernetes.io/control-plane"`
-     -
-   * - node-feature-discovery.worker.tolerations[1].operator
-     - string
-     - `"Exists"`
-     -
-   * - node-feature-discovery.worker.tolerations[2].effect
-     - string
-     - `"NoSchedule"`
-     -
-   * - node-feature-discovery.worker.tolerations[2].key
-     - string
-     - `"nvidia.com/gpu"`
-     -
-   * - node-feature-discovery.worker.tolerations[2].operator
-     - string
-     - `"Exists"`
-     -
+     - The name of the service account for garbage collector to use. If not set and create is true, a name is generated using the fullname template and -gc suffix.
+   * - node-feature-discovery.master
+     - object
+     - `{"config":{"extraLabelNs":["nvidia.com"]},"serviceAccount":{"create":true,"name":"node-feature-discovery"}}`
+     - NFD master deployment configuration.
+   * - node-feature-discovery.worker
+     - object
+     - `{"config":{"sources":{"pci":{"deviceClassWhitelist":["0300","0302"],"deviceLabelFields":["vendor"]}}},"serviceAccount":{"create":false,"name":"node-feature-discovery"},"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Exists"},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"},{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]}`
+     - NFD worker daemonset configuration.
 
 =======================
 SR-IOV Network Operator
@@ -316,19 +204,15 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:fc002af57a81855542759d0f77d16dacd7e1aa38"`
+     - `"ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.1.1"`
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.4.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-beta.3"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin:6f8174b1a47c47657fe9e59fe448f2a452bb6960"`
-     -
-   * - sriov-network-operator.images.rdmaCni
-     - string
-     - `"ghcr.io/k8snetworkplumbingwg/rdma-cni:v1.1.0"`
+     - `"ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin:v0.34.0"`
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
@@ -336,60 +220,48 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/sriov-cni:3e6368077716f6b8368b0e036a1290d1c64cf1fb"`
+     - `"ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.4.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:e6ead1e8f76a407783430ee2666b403db2d76f64"`
+     - `"ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.7.0"`
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.4.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.3"`
      -
+   * - sriov-network-operator.operator.admissionControllers
+     - object
+     - `{"certificates":{"certManager":{"enabled":true,"generateSelfSigned":true},"custom":{"enabled":false},"secretNames":{"injector":"network-resources-injector-cert","operator":"operator-webhook-cert"}},"enabled":false}`
+     - Enable admission controller.
    * - sriov-network-operator.operator.admissionControllers.certificates.certManager.enabled
      - bool
      - `true`
-     -
+     - When enabled, makes use of certificates managed by cert-manager.
    * - sriov-network-operator.operator.admissionControllers.certificates.certManager.generateSelfSigned
      - bool
      - `true`
-     -
-   * - sriov-network-operator.operator.admissionControllers.certificates.custom.enabled
-     - bool
-     - `false`
-     -
-   * - sriov-network-operator.operator.admissionControllers.certificates.secretNames.injector
-     - string
-     - `"network-resources-injector-cert"`
-     -
-   * - sriov-network-operator.operator.admissionControllers.certificates.secretNames.operator
-     - string
-     - `"operator-webhook-cert"`
-     -
-   * - sriov-network-operator.operator.admissionControllers.enabled
-     - bool
-     - `false`
-     -
+     - When enabled, certificates are generated via cert-manager and then name will match the name of the secrets defined above.
+   * - sriov-network-operator.operator.admissionControllers.certificates.custom
+     - object
+     - `{"enabled":false}`
+     - If not specified, no secret is created and secrets with the names defined above are expected to exist in the cluster. In that case, the ca.crt must be base64 encoded twice since it ends up being an env variable.
    * - sriov-network-operator.operator.resourcePrefix
      - string
      - `"nvidia.com"`
-     -
-   * - sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector."beta.kubernetes.io/os"
-     - string
-     - `"linux"`
-     -
-   * - sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector."network.nvidia.com/operator.mofed.wait"
-     - string
-     - `"false"`
-     -
+     - Prefix to be used for resources names.
+   * - sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector
+     - object
+     - `{"beta.kubernetes.io/os":"linux","network.nvidia.com/operator.mofed.wait":"false"}`
+     - Selects the nodes to be configured
    * - sriov-network-operator.sriovOperatorConfig.deploy
      - bool
      - `true`
-     -
+     - Deploy ``SriovOperatorConfig`` custom resource
 
 ===================
 Container Resources
@@ -424,111 +296,115 @@ For example:
    * - ofedDriver.certConfig.name
      - string
      - `""`
-     -
+     - Custom TLS key/certificate configuration configMap name.
    * - ofedDriver.deploy
      - bool
      - `false`
-     -
+     - Deploy the  NVIDIA DOCA Driver driver container.
    * - ofedDriver.forcePrecompiled
      - bool
      - `false`
-     -
+     - Fail Mellanox OFED deployment if precompiled OFED driver container image does not exists.
    * - ofedDriver.image
      - string
      - `"doca-driver"`
-     -
+     - NVIDIA DOCA Driver image name.
    * - ofedDriver.initContainer.enable
      - bool
      - `true`
-     -
+     - Deploy init container.
    * - ofedDriver.initContainer.image
      - string
      - `"network-operator-init-container"`
-     -
+     - Init container image name.
    * - ofedDriver.initContainer.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
+     - Init container image repository.
    * - ofedDriver.initContainer.version
      - string
      - `"v0.0.2"`
-     -
+     - Init container image version.
    * - ofedDriver.livenessProbe.initialDelaySeconds
      - int
      - `30`
-     -
+     - NVIDIA DOCA Driver liveness probe initial delay.
    * - ofedDriver.livenessProbe.periodSeconds
      - int
      - `30`
-     -
+     - NVIDIA DOCA Driver liveness probe interval.
    * - ofedDriver.readinessProbe.initialDelaySeconds
      - int
      - `10`
-     -
+     - NVIDIA DOCA Driver readiness probe initial delay.
    * - ofedDriver.readinessProbe.periodSeconds
      - int
      - `30`
-     -
-   * - ofedDriver.repoConfig.name
-     - string
-     - `""`
-     -
+     - NVIDIA DOCA Driver readiness probe interval.
+   * - ofedDriver.repoConfig
+     - object
+     - `{"name":""}`
+     - Private mirror repository configuration.
    * - ofedDriver.repository
      - string
-     - `"nvcr.io/nvidia/mellanox"`
-     -
+     - `"nvcr.io/nvstaging/mellanox"`
+     - NVIDIA DOCA Driver image repository.
    * - ofedDriver.startupProbe.initialDelaySeconds
      - int
      - `10`
-     -
+     - NVIDIA DOCA Driver startup probe initial delay.
    * - ofedDriver.startupProbe.periodSeconds
      - int
      - `20`
-     -
+     - NVIDIA DOCA Driver startup probe interval.
    * - ofedDriver.terminationGracePeriodSeconds
      - int
      - `300`
-     -
+     - The grace period before the driver containeris forcibly removed.
    * - ofedDriver.upgradePolicy.autoUpgrade
      - bool
      - `true`
-     -
+     - Global switch for automatic upgrade feature, if set to false all other options are ignored.
+   * - ofedDriver.upgradePolicy.drain
+     - object
+     - `{"deleteEmptyDir":true,"enable":true,"force":true,"podSelector":"","timeoutSeconds":300}`
+     - Options for node drain (`kubectl drain`) before the driver reload. If auto upgrade is enabled but drain.enable is false, then driver POD will be reloaded immediately without removing PODs from the node.
    * - ofedDriver.upgradePolicy.drain.deleteEmptyDir
      - bool
      - `true`
-     -
+     - Delete pods local storage.
    * - ofedDriver.upgradePolicy.drain.enable
      - bool
      - `true`
-     -
+     - Options for node drain (``kubectl drain``) before driver reload, if auto upgrade is enabled.
    * - ofedDriver.upgradePolicy.drain.force
      - bool
      - `true`
-     -
+     - Use force drain of pods.
    * - ofedDriver.upgradePolicy.drain.podSelector
      - string
      - `""`
-     -
+     - Pod selector to specify which pods will be drained from the node. An empty selector means all pods.
    * - ofedDriver.upgradePolicy.drain.timeoutSeconds
      - int
      - `300`
-     -
+     - It's recommended to set a timeout to avoid infinite drain in case non-fatal error keeps happening on retries.
    * - ofedDriver.upgradePolicy.maxParallelUpgrades
      - int
      - `1`
-     -
+     - Number of nodes that can be upgraded in parallel (default: 1). 0 means no limit, all nodes will be upgraded in parallel.
    * - ofedDriver.upgradePolicy.safeLoad
      - bool
      - `false`
-     -
+     - Cordon and drain (if enabled) a node before loading the driver on it.
    * - ofedDriver.upgradePolicy.waitForCompletion
      - string
      - `nil`
      -
    * - ofedDriver.version
      - string
-     - `"24.04-0.6.6.0-0"`
-     -
+     - `"24.07-0.4.7.0-0"`
+     - NVIDIA DOCA Driver version.
 
 ===============================================
 NVIDIA DOCA Driver Driver Environment Variables
@@ -596,35 +472,27 @@ RDMA Shared Device Plugin
    * - rdmaSharedDevicePlugin.deploy
      - bool
      - `true`
-     -
+     - Deploy RDMA shared device plugin.
    * - rdmaSharedDevicePlugin.image
      - string
      - `"k8s-rdma-shared-dev-plugin"`
-     -
+     - RDMA shared device plugin image name.
    * - rdmaSharedDevicePlugin.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
-   * - rdmaSharedDevicePlugin.resources[0].name
-     - string
-     - `"rdma_shared_device_a"`
-     -
-   * - rdmaSharedDevicePlugin.resources[0].rdmaHcaMax
-     - int
-     - `63`
-     -
-   * - rdmaSharedDevicePlugin.resources[0].vendors[0]
-     - string
-     - `"15b3"`
-     -
+     - RDMA shared device plugin image repository.
+   * - rdmaSharedDevicePlugin.resources
+     - list
+     - `[{"name":"rdma_shared_device_a","rdmaHcaMax":63,"vendors":["15b3"]}]`
+     - The following defines the RDMA resources in the cluster. It must be provided by the user when deploying the chart. Each entry in the resources element will create a resource with the provided <name> and list of devices.
    * - rdmaSharedDevicePlugin.useCdi
      - bool
      - `false`
-     -
+     - Enable Container Device Interface (CDI) mode. **NOTE**: NVIDIA Network Operator does not configure container runtime to enable CDI.
    * - rdmaSharedDevicePlugin.version
      - string
-     - `"1.4.0"`
-     -
+     - `"v1.5.1"`
+     - RDMA shared device plugin version.
 
 ==========================================
 RDMA Device Plugin Resource Configurations
@@ -660,15 +528,15 @@ SR-IOV Network Device Plugin
    * - sriovDevicePlugin.deploy
      - bool
      - `false`
-     -
+     - Deploy SR-IOV Network device plugin.
    * - sriovDevicePlugin.image
      - string
      - `"sriov-network-device-plugin"`
-     -
+     - SR-IOV Network device plugin image name.
    * - sriovDevicePlugin.repository
      - string
      - `"ghcr.io/k8snetworkplumbingwg"`
-     -
+     - SR-IOV Network device plugin image repository.
    * - sriovDevicePlugin.resources[0].name
      - string
      - `"hostdev"`
@@ -680,11 +548,11 @@ SR-IOV Network Device Plugin
    * - sriovDevicePlugin.useCdi
      - bool
      - `false`
-     -
+     - Enable Container Device Interface (CDI) mode. **NOTE**: NVIDIA Network Operator does not configure container runtime to enable CD.
    * - sriovDevicePlugin.version
      - string
-     - `"e6ead1e8f76a407783430ee2666b403db2d76f64"`
-     -
+     - `"v3.7.0"`
+     - SR-IOV Network device plugin version
 
 ===================================================
 SR-IOV Network Device Plugin Resource Configuration
@@ -721,35 +589,35 @@ ib-kubernetes provides a daemon that works in conjunction with the `SR-IOV Netwo
    * - ibKubernetes.deploy
      - bool
      - `false`
-     -
+     - Deploy IB Kubernetes.
    * - ibKubernetes.image
      - string
      - `"ib-kubernetes"`
-     -
+     - IB Kubernetes image name.
    * - ibKubernetes.pKeyGUIDPoolRangeEnd
      - string
      - `"02:FF:FF:FF:FF:FF:FF:FF"`
-     -
+     - Maximal available GUID value to be allocated for the pod.
    * - ibKubernetes.pKeyGUIDPoolRangeStart
      - string
      - `"02:00:00:00:00:00:00:00"`
-     -
+     - Minimal available GUID value to be allocated for the pod.
    * - ibKubernetes.periodicUpdateSeconds
      - int
      - `5`
-     -
+     - Interval of periodic update in seconds.
    * - ibKubernetes.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
+     - IB Kubernetes image repository.
    * - ibKubernetes.ufmSecret
      - string
      - `""`
-     -
+     - Name of the Secret with the NVIDIA UFM access credentials, deployed in advance.
    * - ibKubernetes.version
      - string
      - `"v1.0.2"`
-     -
+     - IB Kubernetes version.
 
 ==========
 UFM Secret
@@ -791,24 +659,24 @@ NVIDIA IPAM Plugin
      - Description
    * - nvIpam.deploy
      - bool
-     - `false`
-     -
+     - `true`
+     - Deploy NVIDIA IPAM Plugin.
    * - nvIpam.enableWebhook
      - bool
      - `false`
-     -
+     - Enable deployment of the validataion webhook for IPPool CRD.
    * - nvIpam.image
      - string
      - `"nvidia-k8s-ipam"`
-     -
+     - NVIDIA IPAM Plugin image name.
    * - nvIpam.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
+     - NVIDIA IPAM Plugin image repository.
    * - nvIpam.version
      - string
-     - `"v0.1.2"`
-     -
+     - `"v0.2.0"`
+     - NVIDIA IPAM Plugin image version.
 
 .. warning::
    Supported X.509 certificate management system should be available in the cluster to enable the validation webhook. Currently, the supported systems are `certmanager <https://cert-manager.io/>`_ and `Openshift certificate management <https://docs.openshift.com/container-platform/latest/security/certificates/service-serving-certificate.html>`_.
@@ -834,71 +702,71 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
    * - secondaryNetwork.cniPlugins.deploy
      - bool
      - `true`
-     -
+     - Deploy CNI Plugins Secondary Network.
    * - secondaryNetwork.cniPlugins.image
      - string
      - `"plugins"`
-     -
+     - CNI Plugins image name.
    * - secondaryNetwork.cniPlugins.repository
      - string
      - `"ghcr.io/k8snetworkplumbingwg"`
-     -
+     - CNI Plugins image repository.
    * - secondaryNetwork.cniPlugins.version
      - string
-     - `"v1.3.0"`
-     -
+     - `"v1.5.0"`
+     - CNI Plugins image version.
    * - secondaryNetwork.deploy
      - bool
      - `true`
-     -
+     - Deploy Secondary Network.
    * - secondaryNetwork.ipamPlugin.deploy
      - bool
-     - `true`
-     -
+     - `false`
+     - Deploy IPAM CNI Plugin Secondary Network.
    * - secondaryNetwork.ipamPlugin.image
      - string
      - `"whereabouts"`
-     -
+     - IPAM CNI Plugin image name.
    * - secondaryNetwork.ipamPlugin.repository
      - string
      - `"ghcr.io/k8snetworkplumbingwg"`
-     -
+     - IPAM CNI Plugin image repository.
    * - secondaryNetwork.ipamPlugin.version
      - string
      - `"v0.7.0"`
-     -
+     - IPAM CNI Plugin image version.
    * - secondaryNetwork.ipoib.deploy
      - bool
      - `false`
-     -
+     - Deploy IPoIB CNI.
    * - secondaryNetwork.ipoib.image
      - string
      - `"ipoib-cni"`
-     -
+     - IPoIB CNI image name.
    * - secondaryNetwork.ipoib.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
+     - IPoIB CNI image repository.
    * - secondaryNetwork.ipoib.version
      - string
-     - `"428715a57c0b633e48ec7620f6e3af6863149ccf"`
-     -
+     - `"v1.2.0"`
+     - IPoIB CNI image version.
    * - secondaryNetwork.multus.deploy
      - bool
      - `true`
-     -
+     - Deploy Multus Secondary Network.
    * - secondaryNetwork.multus.image
      - string
      - `"multus-cni"`
-     -
+     - Multus image name.
    * - secondaryNetwork.multus.repository
      - string
      - `"ghcr.io/k8snetworkplumbingwg"`
-     -
+     - Multus image repository.
    * - secondaryNetwork.multus.version
      - string
      - `"v3.9.3"`
-     -
+     - Multus image version.
 
 ============================
 NVIDIA NIC Feature Discovery
@@ -916,19 +784,19 @@ NVIDIA NIC Feature Discovery
    * - nicFeatureDiscovery.deploy
      - bool
      - `false`
-     -
+     - Deploy NVIDIA NIC Feature Discovery.
    * - nicFeatureDiscovery.image
      - string
      - `"nic-feature-discovery"`
-     -
+     - NVIDIA NIC Feature Discovery image name.
    * - nicFeatureDiscovery.repository
      - string
      - `"ghcr.io/mellanox"`
-     -
+     - NVIDIA NIC Feature Discovery repository.
    * - nicFeatureDiscovery.version
      - string
      - `"v0.0.1"`
-     -
+     - NVIDIA NIC Feature Discovery image version.
 
 ======================
 DOCA Telemetry Service
@@ -945,19 +813,19 @@ DOCA Telemetry Service
    * - docaTelemetryService.deploy
      - bool
      - `false`
-     -
+     - Deploy DOCA Telemetry Service.
    * - docaTelemetryService.image
      - string
      - `"doca_telemetry"`
-     -
+     - DOCA Telemetry Service image name.
    * - docaTelemetryService.repository
      - string
      - `"nvcr.io/nvidia/doca"`
-     -
+     - DOCA Telemetry Service image repository.
    * - docaTelemetryService.version
      - string
      - `"1.16.5-doca2.6.0-host"`
-     -
+     - DOCA Telemetry Service image version.
 
 =======================
 Helm customization file
