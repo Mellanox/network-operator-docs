@@ -96,11 +96,13 @@ download-branch-api: | $(CRD_API_DEP_ROOT)
 
 gen-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-branch-api
 	cd ${CRD_API_DEP_ROOT}/network-operator-${BRANCH}/api/v1alpha1 && \
-	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/config.json -template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/crds-api.html
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/config.json \
+	-template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/crds-api.html
 
 .PHONY: api-docs
 api-docs: gen-crd-api-docs
-	docker run --rm --volume "`pwd`:/data" --user `id -u`:`id -g` pandoc/minimal -f html -t rst --columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
+	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
+	--columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
 
 .PHONY: gen-docs
 gen-docs:

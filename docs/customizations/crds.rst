@@ -3,7 +3,7 @@ Network Operator API reference v1alpha1
 
 Packages:
 
--  `mellanox.com/v1alpha1 <#mellanox.com%2fv1alpha1>`__
+-  :ref:`mellanox.com/v1alpha1 <mellanox.com/v1alpha1>`
 
 .. _mellanox.com/v1alpha1:
 
@@ -14,12 +14,12 @@ Package v1alpha1 contains API Schema definitions for the mellanox.com v1alpha1 A
 
 Resource Types:
 
-.. _mellanox.com/v1alpha1.AppliedState:
+.. _AppliedState:
 
 AppliedState
 ~~~~~~~~~~~~
 
-(*Appears on:* `HostDeviceNetworkStatus <#mellanox.com/v1alpha1.HostDeviceNetworkStatus>`__, `NicClusterPolicyStatus <#mellanox.com/v1alpha1.NicClusterPolicyStatus>`__)
+(*Appears on:* :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
 
 AppliedState defines a finer-grained view of the observed state of NicClusterPolicy
 
@@ -31,21 +31,21 @@ AppliedState defines a finer-grained view of the observed state of NicClusterPol
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``name``                                                                                          |                                                                                                   |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``state``                                                                                         |                                                                                                   |
-      | `State <#mellanox.com/v1alpha1.State>`__                                                          |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``message``                                                                                       | Message is a human readable message indicating details about why the state is in this condition   |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.ConfigMapNameReference:
+.. _ConfigMapNameReference:
 
 ConfigMapNameReference
 ~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `OFEDDriverSpec <#mellanox.com/v1alpha1.OFEDDriverSpec>`__)
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
 
 ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.
 
@@ -57,15 +57,15 @@ ConfigMapNameReference references a config map in a specific namespace. The name
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``name``                                                                                          | Name of the ConfigMap                                                                             |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.DOCATelemetryServiceConfig:
+.. _DOCATelemetryServiceConfig:
 
 DOCATelemetryServiceConfig
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `DOCATelemetryServiceSpec <#mellanox.com/v1alpha1.DOCATelemetryServiceSpec>`__)
+(*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`)
 
 DOCATelemetryServiceConfig contains configuration for the DOCATelemetryService.
 
@@ -77,16 +77,16 @@ DOCATelemetryServiceConfig contains configuration for the DOCATelemetryService.
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``fromConfigMap``                                                                                 | *(Optional)*                                                                                      |
-      | *string*                                                                                          | FromConfigMap sets the configMap the DOCATelemetryService gets its configuration from. The        |
+      | string                                                                                            | FromConfigMap sets the configMap the DOCATelemetryService gets its configuration from. The        |
       |                                                                                                   | ConfigMap must be in the same namespace as the NICClusterPolicy.                                  |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.DOCATelemetryServiceSpec:
+.. _DOCATelemetryServiceSpec:
 
 DOCATelemetryServiceSpec
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
 
@@ -98,19 +98,19 @@ DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     |                                                                                                   |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``config``                                                                                        | *(Optional)*                                                                                      |
-      | `DOCATelemetryServiceConfig <#mellanox.com/v1alpha1.DOCATelemetryServiceConfig>`__                | Config contains custom config for the DOCATelemetryService. If set no default config will be      |
+      | :ref:`DOCATelemetryServiceConfig <DOCATelemetryServiceConfig>`                                    | Config contains custom config for the DOCATelemetryService. If set no default config will be      |
       |                                                                                                   | deployed.                                                                                         |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.DevicePluginSpec:
+.. _DevicePluginSpec:
 
 DevicePluginSpec
 ~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 DevicePluginSpec describes configuration options for device plugin 1. Image information for device plugin 2. Device plugin configuration
 
@@ -122,18 +122,18 @@ DevicePluginSpec describes configuration options for device plugin 1. Image info
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
-      | `ImageSpecWithConfig <#mellanox.com/v1alpha1.ImageSpecWithConfig>`__                              |                                                                                                   |
+      | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``useCdi``                                                                                        | Enables use of container device interface (CDI)                                                   |
-      | *bool*                                                                                            |                                                                                                   |
+      | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.DrainSpec:
+.. _DrainSpec:
 
 DrainSpec
 ~~~~~~~~~
 
-(*Appears on:* `DriverUpgradePolicySpec <#mellanox.com/v1alpha1.DriverUpgradePolicySpec>`__)
+(*Appears on:* :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`)
 
 DrainSpec describes configuration for node drain during automatic upgrade
 
@@ -145,31 +145,31 @@ DrainSpec describes configuration for node drain during automatic upgrade
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``enable``                                                                                        | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | Enable indicates if node draining is allowed during upgrade                                       |
+      | bool                                                                                              | Enable indicates if node draining is allowed during upgrade                                       |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``force``                                                                                         | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | Force indicates if force draining is allowed                                                      |
+      | bool                                                                                              | Force indicates if force draining is allowed                                                      |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``podSelector``                                                                                   | *(Optional)*                                                                                      |
-      | *string*                                                                                          | PodSelector specifies a label selector to filter pods on the node that need to be drained For     |
+      | string                                                                                            | PodSelector specifies a label selector to filter pods on the node that need to be drained For     |
       |                                                                                                   | more details on label selectors, see:                                                             |
       |                                                                                                   | https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors         |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``timeoutSeconds``                                                                                | *(Optional)*                                                                                      |
-      | *int*                                                                                             | TimeoutSecond specifies the length of time in seconds to wait before giving up drain, zero means  |
+      | int                                                                                               | TimeoutSecond specifies the length of time in seconds to wait before giving up drain, zero means  |
       |                                                                                                   | infinite                                                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``deleteEmptyDir``                                                                                | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | DeleteEmptyDir indicates if should continue even if there are pods using emptyDir (local data     |
+      | bool                                                                                              | DeleteEmptyDir indicates if should continue even if there are pods using emptyDir (local data     |
       |                                                                                                   | that will be deleted when the node is drained)                                                    |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.DriverUpgradePolicySpec:
+.. _DriverUpgradePolicySpec:
 
 DriverUpgradePolicySpec
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `OFEDDriverSpec <#mellanox.com/v1alpha1.OFEDDriverSpec>`__)
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
 
 DriverUpgradePolicySpec describes policy configuration for automatic upgrades
 
@@ -181,24 +181,24 @@ DriverUpgradePolicySpec describes policy configuration for automatic upgrades
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``autoUpgrade``                                                                                   | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | AutoUpgrade is a global switch for automatic upgrade feature if set to false all other options    |
+      | bool                                                                                              | AutoUpgrade is a global switch for automatic upgrade feature if set to false all other options    |
       |                                                                                                   | are ignored                                                                                       |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``maxParallelUpgrades``                                                                           | *(Optional)*                                                                                      |
-      | *int*                                                                                             | MaxParallelUpgrades indicates how many nodes can be upgraded in parallel 0 means no limit, all    |
+      | int                                                                                               | MaxParallelUpgrades indicates how many nodes can be upgraded in parallel 0 means no limit, all    |
       |                                                                                                   | nodes will be upgraded in parallel                                                                |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``waitForCompletion``                                                                             |                                                                                                   |
-      | `WaitForCompletionSpec <#mellanox.com/v1alpha1.WaitForCompletionSpec>`__                          |                                                                                                   |
+      | :ref:`WaitForCompletionSpec <WaitForCompletionSpec>`                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``drain``                                                                                         |                                                                                                   |
-      | `DrainSpec <#mellanox.com/v1alpha1.DrainSpec>`__                                                  |                                                                                                   |
+      | :ref:`DrainSpec <DrainSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``safeLoad``                                                                                      | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)        |
+      | bool                                                                                              | SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)        |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.HostDeviceNetwork:
+.. _HostDeviceNetwork:
 
 HostDeviceNetwork
 ~~~~~~~~~~~~~~~~~
@@ -218,26 +218,26 @@ HostDeviceNetwork is the Schema for the hostdevicenetworks API
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
-      | `HostDeviceNetworkSpec <#mellanox.com/v1alpha1.HostDeviceNetworkSpec>`__                          | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
-      |                                                                                                   | | *string*                                     | custom resource                              |   |
+      | :ref:`HostDeviceNetworkSpec <HostDeviceNetworkSpec>`                                              | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``resourceName``                             | Host device resource pool name               |   |
-      |                                                                                                   | | *string*                                     |                                              |   |
+      |                                                                                                   | | string                                       |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
-      |                                                                                                   | | *string*                                     | network                                      |   |
+      |                                                                                                   | | string                                       | network                                      |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``status``                                                                                        |                                                                                                   |
-      | `HostDeviceNetworkStatus <#mellanox.com/v1alpha1.HostDeviceNetworkStatus>`__                      |                                                                                                   |
+      | :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.HostDeviceNetworkSpec:
+.. _HostDeviceNetworkSpec:
 
 HostDeviceNetworkSpec
 ~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `HostDeviceNetwork <#mellanox.com/v1alpha1.HostDeviceNetwork>`__)
+(*Appears on:* :ref:`HostDeviceNetwork <HostDeviceNetwork>`)
 
 HostDeviceNetworkSpec defines the desired state of HostDeviceNetwork
 
@@ -249,21 +249,21 @@ HostDeviceNetworkSpec defines the desired state of HostDeviceNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``resourceName``                                                                                  | Host device resource pool name                                                                    |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipam``                                                                                          | IPAM configuration to be used for this network                                                    |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.HostDeviceNetworkStatus:
+.. _HostDeviceNetworkStatus:
 
 HostDeviceNetworkStatus
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `HostDeviceNetwork <#mellanox.com/v1alpha1.HostDeviceNetwork>`__)
+(*Appears on:* :ref:`HostDeviceNetwork <HostDeviceNetwork>`)
 
 HostDeviceNetworkStatus defines the observed state of HostDeviceNetwork
 
@@ -275,24 +275,24 @@ HostDeviceNetworkStatus defines the observed state of HostDeviceNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``state``                                                                                         | Reflects the state of the HostDeviceNetwork                                                       |
-      | `State <#mellanox.com/v1alpha1.State>`__                                                          |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``hostDeviceNetworkAttachmentDef``                                                                | Network attachment definition generated from HostDeviceNetworkSpec                                |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
-      | `[]AppliedState <#mellanox.com/v1alpha1.AppliedState>`__                                          |                                                                                                   |
+      | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.IBKubernetesSpec:
+.. _IBKubernetesSpec:
 
 IBKubernetesSpec
 ~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 IBKubernetesSpec describes configuration options for ib-kubernetes
 
@@ -304,22 +304,22 @@ IBKubernetesSpec describes configuration options for ib-kubernetes
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     | Image information for ib-kubernetes                                                               |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``periodicUpdateSeconds``                                                                         | *(Optional)*                                                                                      |
-      | *int*                                                                                             | Interval of updates in seconds                                                                    |
+      | int                                                                                               | Interval of updates in seconds                                                                    |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pKeyGUIDPoolRangeStart``                                                                        | The first guid in the pool                                                                        |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pKeyGUIDPoolRangeEnd``                                                                          | The last guid in the pool                                                                         |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ufmSecret``                                                                                     | Secret containing credentials to UFM service                                                      |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.IPoIBNetwork:
+.. _IPoIBNetwork:
 
 IPoIBNetwork
 ~~~~~~~~~~~~
@@ -339,26 +339,26 @@ IPoIBNetwork is the Schema for the ipoibnetworks API
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
-      | `IPoIBNetworkSpec <#mellanox.com/v1alpha1.IPoIBNetworkSpec>`__                                    | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
-      |                                                                                                   | | *string*                                     | custom resource                              |   |
+      | :ref:`IPoIBNetworkSpec <IPoIBNetworkSpec>`                                                        | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``master``                                   | Name of the host interface to enslave.       |   |
-      |                                                                                                   | | *string*                                     | Defaults to default route interface          |   |
+      |                                                                                                   | | string                                       | Defaults to default route interface          |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
-      |                                                                                                   | | *string*                                     | network.                                     |   |
+      |                                                                                                   | | string                                       | network.                                     |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``status``                                                                                        |                                                                                                   |
-      | `IPoIBNetworkStatus <#mellanox.com/v1alpha1.IPoIBNetworkStatus>`__                                |                                                                                                   |
+      | :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.IPoIBNetworkSpec:
+.. _IPoIBNetworkSpec:
 
 IPoIBNetworkSpec
 ~~~~~~~~~~~~~~~~
 
-(*Appears on:* `IPoIBNetwork <#mellanox.com/v1alpha1.IPoIBNetwork>`__)
+(*Appears on:* :ref:`IPoIBNetwork <IPoIBNetwork>`)
 
 IPoIBNetworkSpec defines the desired state of IPoIBNetwork
 
@@ -370,21 +370,21 @@ IPoIBNetworkSpec defines the desired state of IPoIBNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``master``                                                                                        | Name of the host interface to enslave. Defaults to default route interface                        |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.IPoIBNetworkStatus:
+.. _IPoIBNetworkStatus:
 
 IPoIBNetworkStatus
 ~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `IPoIBNetwork <#mellanox.com/v1alpha1.IPoIBNetwork>`__)
+(*Appears on:* :ref:`IPoIBNetwork <IPoIBNetwork>`)
 
 IPoIBNetworkStatus defines the observed state of IPoIBNetwork
 
@@ -396,23 +396,22 @@ IPoIBNetworkStatus defines the observed state of IPoIBNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``state``                                                                                         | Reflects the state of the IPoIBNetwork                                                            |
-      | `State <#mellanox.com/v1alpha1.State>`__                                                          |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipoibNetworkAttachmentDef``                                                                     | Network attachment definition generated from IPoIBNetworkSpec                                     |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.ImageSpec:
+.. _ImageSpec:
 
 ImageSpec
 ~~~~~~~~~
 
-(*Appears on:* `DOCATelemetryServiceSpec <#mellanox.com/v1alpha1.DOCATelemetryServiceSpec>`__, `IBKubernetesSpec <#mellanox.com/v1alpha1.IBKubernetesSpec>`__,
-`ImageSpecWithConfig <#mellanox.com/v1alpha1.ImageSpecWithConfig>`__, `NICFeatureDiscoverySpec <#mellanox.com/v1alpha1.NICFeatureDiscoverySpec>`__, `NVIPAMSpec <#mellanox.com/v1alpha1.NVIPAMSpec>`__,
-`OFEDDriverSpec <#mellanox.com/v1alpha1.OFEDDriverSpec>`__, `SecondaryNetworkSpec <#mellanox.com/v1alpha1.SecondaryNetworkSpec>`__)
+(*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`, :ref:`IBKubernetesSpec <IBKubernetesSpec>`, :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`,
+:ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`, :ref:`NVIPAMSpec <NVIPAMSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`, :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
 
 ImageSpec Contains container image specifications
 
@@ -424,28 +423,28 @@ ImageSpec Contains container image specifications
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``image``                                                                                         | Name of the image                                                                                 |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``repository``                                                                                    | Address of the registry that stores the image                                                     |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``version``                                                                                       | Version of the image to use                                                                       |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
-      | *[]string*                                                                                        | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for    |
+      | []string                                                                                          | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for    |
       |                                                                                                   | pulling the image                                                                                 |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``containerResources``                                                                            | ResourceRequirements describes the compute resource requirements                                  |
-      | `[]ResourceRequirements <#mellanox.com/v1alpha1.ResourceRequirements>`__                          |                                                                                                   |
+      | :ref:`[]ResourceRequirements <ResourceRequirements>`                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.ImageSpecWithConfig:
+.. _ImageSpecWithConfig:
 
 ImageSpecWithConfig
 ~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `DevicePluginSpec <#mellanox.com/v1alpha1.DevicePluginSpec>`__, `MultusSpec <#mellanox.com/v1alpha1.MultusSpec>`__)
+(*Appears on:* :ref:`DevicePluginSpec <DevicePluginSpec>`, :ref:`MultusSpec <MultusSpec>`)
 
 ImageSpecWithConfig Contains ImageSpec and optional configuration
 
@@ -457,13 +456,13 @@ ImageSpecWithConfig Contains ImageSpec and optional configuration
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     |                                                                                                   |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``config``                                                                                        | Configuration for the component as a string                                                       |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.MacvlanNetwork:
+.. _MacvlanNetwork:
 
 MacvlanNetwork
 ~~~~~~~~~~~~~~
@@ -483,32 +482,32 @@ MacvlanNetwork is the Schema for the macvlannetworks API
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
-      | `MacvlanNetworkSpec <#mellanox.com/v1alpha1.MacvlanNetworkSpec>`__                                | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
-      |                                                                                                   | | *string*                                     | custom resource                              |   |
+      | :ref:`MacvlanNetworkSpec <MacvlanNetworkSpec>`                                                    | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``master``                                   | Name of the host interface to enslave.       |   |
-      |                                                                                                   | | *string*                                     | Defaults to default route interface          |   |
+      |                                                                                                   | | string                                       | Defaults to default route interface          |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``mode``                                     | Mode of interface one of “bridge”,           |   |
-      |                                                                                                   | | *string*                                     | “private”, “vepa”, “passthru”                |   |
+      |                                                                                                   | | string                                       | “private”, “vepa”, “passthru”                |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``mtu``                                      | MTU of interface to the specified value. 0   |   |
-      |                                                                                                   | | *int*                                        | for master’s MTU                             |   |
+      |                                                                                                   | | int                                          | for master’s MTU                             |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
-      |                                                                                                   | | *string*                                     | network.                                     |   |
+      |                                                                                                   | | string                                       | network.                                     |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``status``                                                                                        |                                                                                                   |
-      | `MacvlanNetworkStatus <#mellanox.com/v1alpha1.MacvlanNetworkStatus>`__                            |                                                                                                   |
+      | :ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.MacvlanNetworkSpec:
+.. _MacvlanNetworkSpec:
 
 MacvlanNetworkSpec
 ~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `MacvlanNetwork <#mellanox.com/v1alpha1.MacvlanNetwork>`__)
+(*Appears on:* :ref:`MacvlanNetwork <MacvlanNetwork>`)
 
 MacvlanNetworkSpec defines the desired state of MacvlanNetwork
 
@@ -520,27 +519,27 @@ MacvlanNetworkSpec defines the desired state of MacvlanNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``master``                                                                                        | Name of the host interface to enslave. Defaults to default route interface                        |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``mode``                                                                                          | Mode of interface one of “bridge”, “private”, “vepa”, “passthru”                                  |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``mtu``                                                                                           | MTU of interface to the specified value. 0 for master’s MTU                                       |
-      | *int*                                                                                             |                                                                                                   |
+      | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.MacvlanNetworkStatus:
+.. _MacvlanNetworkStatus:
 
 MacvlanNetworkStatus
 ~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `MacvlanNetwork <#mellanox.com/v1alpha1.MacvlanNetwork>`__)
+(*Appears on:* :ref:`MacvlanNetwork <MacvlanNetwork>`)
 
 MacvlanNetworkStatus defines the observed state of MacvlanNetwork
 
@@ -552,21 +551,21 @@ MacvlanNetworkStatus defines the observed state of MacvlanNetwork
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``state``                                                                                         | Reflects the state of the MacvlanNetwork                                                          |
-      | `State <#mellanox.com/v1alpha1.State>`__                                                          |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``macvlanNetworkAttachmentDef``                                                                   | Network attachment definition generated from MacvlanNetworkSpec                                   |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.MultusSpec:
+.. _MultusSpec:
 
 MultusSpec
 ~~~~~~~~~~
 
-(*Appears on:* `SecondaryNetworkSpec <#mellanox.com/v1alpha1.SecondaryNetworkSpec>`__)
+(*Appears on:* :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
 
 MultusSpec describes configuration options for Multus CNI 1. Image information for Multus CNI 2. Multus CNI config if config is missing or empty then multus config will be automatically generated from
 the CNI configuration file of the master plugin (the first file in lexicographical order in cni-conf-dir)
@@ -579,15 +578,15 @@ the CNI configuration file of the master plugin (the first file in lexicographic
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
-      | `ImageSpecWithConfig <#mellanox.com/v1alpha1.ImageSpecWithConfig>`__                              |                                                                                                   |
+      | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.NICFeatureDiscoverySpec:
+.. _NICFeatureDiscoverySpec:
 
 NICFeatureDiscoverySpec
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 NICFeatureDiscoverySpec describes configuration options for nic-feature-discovery
 
@@ -599,15 +598,15 @@ NICFeatureDiscoverySpec describes configuration options for nic-feature-discover
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     |                                                                                                   |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.NVIPAMSpec:
+.. _NVIPAMSpec:
 
 NVIPAMSpec
 ~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 NVIPAMSpec describes configuration options for nv-ipam 1. Image information for nv-ipam 2. Configuration for nv-ipam
 
@@ -619,13 +618,13 @@ NVIPAMSpec describes configuration options for nv-ipam 1. Image information for 
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``enableWebhook``                                                                                 | Enable deployment of the validation webhook                                                       |
-      | *bool*                                                                                            |                                                                                                   |
+      | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ImageSpec``                                                                                     |                                                                                                   |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.NicClusterPolicy:
+.. _NicClusterPolicy:
 
 NicClusterPolicy
 ~~~~~~~~~~~~~~~~
@@ -645,7 +644,7 @@ NicClusterPolicy is the Schema for the nicclusterpolicies API
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
-      | `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__                            | | ``nodeAffinity``                             | Additional nodeAffinity rules to inject to   |   |
+      | :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`                                                | | ``nodeAffinity``                             | Additional nodeAffinity rules to inject to   |   |
       |                                                                                                   | | `Kubernetes                                  | the DaemonSets objects that are managed by   |   |
       |                                                                                                   | | core/v1.NodeAffinity <https://g              | the operator                                 |   |
       |                                                                                                   | | odoc.org/k8s.io/api/core/v1#NodeAffinity>`__ |                                              |   |
@@ -656,48 +655,43 @@ NicClusterPolicy is the Schema for the nicclusterpolicies API
       |                                                                                                   | | /godoc.org/k8s.io/api/core/v1#Toleration>`__ |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``ofedDriver``                               |                                              |   |
-      |                                                                                                   | | `OFEDDriverSpe                               |                                              |   |
-      |                                                                                                   | | c <#mellanox.com/v1alpha1.OFEDDriverSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`OFEDDriverSpec <OFEDDriverSpec>`       |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``rdmaSharedDevicePlugin``                   |                                              |   |
-      |                                                                                                   | | `DevicePluginSpec                            |                                              |   |
-      |                                                                                                   | | <#mellanox.com/v1alpha1.DevicePluginSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`DevicePluginSpec <DevicePluginSpec>`   |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``sriovDevicePlugin``                        |                                              |   |
-      |                                                                                                   | | `DevicePluginSpec                            |                                              |   |
-      |                                                                                                   | | <#mellanox.com/v1alpha1.DevicePluginSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`DevicePluginSpec <DevicePluginSpec>`   |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``ibKubernetes``                             |                                              |   |
-      |                                                                                                   | | `IBKubernetesSpec                            |                                              |   |
-      |                                                                                                   | | <#mellanox.com/v1alpha1.IBKubernetesSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`IBKubernetesSpec <IBKubernetesSpec>`   |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``secondaryNetwork``                         |                                              |   |
-      |                                                                                                   | | `SecondaryNetworkSpec <#me                   |                                              |   |
-      |                                                                                                   | | llanox.com/v1alpha1.SecondaryNetworkSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`                                       |                                              |   |
+      |                                                                                                   | | SecondaryNetworkSpec <SecondaryNetworkSpec>` |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``nvIpam``                                   |                                              |   |
-      |                                                                                                   | | `NVIPA                                       |                                              |   |
-      |                                                                                                   | | MSpec <#mellanox.com/v1alpha1.NVIPAMSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`NVIPAMSpec <NVIPAMSpec>`               |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``nicFeatureDiscovery``                      |                                              |   |
-      |                                                                                                   | | `NICFeatureDiscoverySpec <#mella             |                                              |   |
-      |                                                                                                   | | nox.com/v1alpha1.NICFeatureDiscoverySpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`NICFea                                 |                                              |   |
+      |                                                                                                   | | tureDiscoverySpec <NICFeatureDiscoverySpec>` |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       |                                                                                                   | | ``docaTelemetryService``                     |                                              |   |
-      |                                                                                                   | | `DOCATelemetryServiceSpec <#mellan           |                                              |   |
-      |                                                                                                   | | ox.com/v1alpha1.DOCATelemetryServiceSpec>`__ |                                              |   |
+      |                                                                                                   | | :ref:`DOCATele                               |                                              |   |
+      |                                                                                                   | | metryServiceSpec <DOCATelemetryServiceSpec>` |                                              |   |
       |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``status``                                                                                        |                                                                                                   |
-      | `NicClusterPolicyStatus <#mellanox.com/v1alpha1.NicClusterPolicyStatus>`__                        |                                                                                                   |
+      | :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.NicClusterPolicySpec:
+.. _NicClusterPolicySpec:
 
 NicClusterPolicySpec
 ~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicy <#mellanox.com/v1alpha1.NicClusterPolicy>`__)
+(*Appears on:* :ref:`NicClusterPolicy <NicClusterPolicy>`)
 
 NicClusterPolicySpec defines the desired state of NicClusterPolicy
 
@@ -715,36 +709,36 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ofedDriver``                                                                                    |                                                                                                   |
-      | `OFEDDriverSpec <#mellanox.com/v1alpha1.OFEDDriverSpec>`__                                        |                                                                                                   |
+      | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rdmaSharedDevicePlugin``                                                                        |                                                                                                   |
-      | `DevicePluginSpec <#mellanox.com/v1alpha1.DevicePluginSpec>`__                                    |                                                                                                   |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``sriovDevicePlugin``                                                                             |                                                                                                   |
-      | `DevicePluginSpec <#mellanox.com/v1alpha1.DevicePluginSpec>`__                                    |                                                                                                   |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ibKubernetes``                                                                                  |                                                                                                   |
-      | `IBKubernetesSpec <#mellanox.com/v1alpha1.IBKubernetesSpec>`__                                    |                                                                                                   |
+      | :ref:`IBKubernetesSpec <IBKubernetesSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``secondaryNetwork``                                                                              |                                                                                                   |
-      | `SecondaryNetworkSpec <#mellanox.com/v1alpha1.SecondaryNetworkSpec>`__                            |                                                                                                   |
+      | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nvIpam``                                                                                        |                                                                                                   |
-      | `NVIPAMSpec <#mellanox.com/v1alpha1.NVIPAMSpec>`__                                                |                                                                                                   |
+      | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nicFeatureDiscovery``                                                                           |                                                                                                   |
-      | `NICFeatureDiscoverySpec <#mellanox.com/v1alpha1.NICFeatureDiscoverySpec>`__                      |                                                                                                   |
+      | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``docaTelemetryService``                                                                          |                                                                                                   |
-      | `DOCATelemetryServiceSpec <#mellanox.com/v1alpha1.DOCATelemetryServiceSpec>`__                    |                                                                                                   |
+      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.NicClusterPolicyStatus:
+.. _NicClusterPolicyStatus:
 
 NicClusterPolicyStatus
 ~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicy <#mellanox.com/v1alpha1.NicClusterPolicy>`__)
+(*Appears on:* :ref:`NicClusterPolicy <NicClusterPolicy>`)
 
 NicClusterPolicyStatus defines the observed state of NicClusterPolicy
 
@@ -756,21 +750,21 @@ NicClusterPolicyStatus defines the observed state of NicClusterPolicy
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``state``                                                                                         | Reflects the current state of the cluster policy                                                  |
-      | `State <#mellanox.com/v1alpha1.State>`__                                                          |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
-      | `[]AppliedState <#mellanox.com/v1alpha1.AppliedState>`__                                          |                                                                                                   |
+      | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.OFEDDriverSpec:
+.. _OFEDDriverSpec:
 
 OFEDDriverSpec
 ~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 OFEDDriverSpec describes configuration options for OFED driver
 
@@ -782,45 +776,45 @@ OFEDDriverSpec describes configuration options for OFED driver
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     | Image information for ofed driver container                                                       |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``startupProbe``                                                                                  | Pod startup probe settings                                                                        |
-      | `PodProbeSpec <#mellanox.com/v1alpha1.PodProbeSpec>`__                                            |                                                                                                   |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``livenessProbe``                                                                                 | Pod liveness probe settings                                                                       |
-      | `PodProbeSpec <#mellanox.com/v1alpha1.PodProbeSpec>`__                                            |                                                                                                   |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``readinessProbe``                                                                                | Pod readiness probe settings                                                                      |
-      | `PodProbeSpec <#mellanox.com/v1alpha1.PodProbeSpec>`__                                            |                                                                                                   |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``env``                                                                                           | List of environment variables to set in the OFED container.                                       |
       | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``upgradePolicy``                                                                                 | Ofed auto-upgrade settings                                                                        |
-      | `DriverUpgradePolicySpec <#mellanox.com/v1alpha1.DriverUpgradePolicySpec>`__                      |                                                                                                   |
+      | :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for driver container                              |
-      | `ConfigMapNameReference <#mellanox.com/v1alpha1.ConfigMapNameReference>`__                        |                                                                                                   |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for OFED container                              |
-      | `ConfigMapNameReference <#mellanox.com/v1alpha1.ConfigMapNameReference>`__                        |                                                                                                   |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``terminationGracePeriodSeconds``                                                                 | *(Optional)*                                                                                      |
-      | *int64*                                                                                           | TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the  |
+      | int64                                                                                             | TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the  |
       |                                                                                                   | OFED pod on termination                                                                           |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``forcePrecompiled``                                                                              | *(Optional)*                                                                                      |
-      | *bool*                                                                                            | ForcePrecompiled specifies if only MOFED precompiled images are allowed If set to false and       |
+      | bool                                                                                              | ForcePrecompiled specifies if only MOFED precompiled images are allowed If set to false and       |
       |                                                                                                   | precompiled image does not exists, MOFED drivers will be compiled on Nodes If set to true and     |
       |                                                                                                   | precompiled image does not exists, OFED state will be Error.                                      |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.PodProbeSpec:
+.. _PodProbeSpec:
 
 PodProbeSpec
 ~~~~~~~~~~~~
 
-(*Appears on:* `OFEDDriverSpec <#mellanox.com/v1alpha1.OFEDDriverSpec>`__)
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
 
 PodProbeSpec describes a pod probe.
 
@@ -832,18 +826,18 @@ PodProbeSpec describes a pod probe.
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``initialDelaySeconds``                                                                           | Number of seconds after the container has started before the probe is initiated                   |
-      | *int*                                                                                             |                                                                                                   |
+      | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``periodSeconds``                                                                                 | How often (in seconds) to perform the probe                                                       |
-      | *int*                                                                                             |                                                                                                   |
+      | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.ResourceRequirements:
+.. _ResourceRequirements:
 
 ResourceRequirements
 ~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__)
+(*Appears on:* :ref:`ImageSpec <ImageSpec>`)
 
 ResourceRequirements describes the compute resource requirements.
 
@@ -855,7 +849,7 @@ ResourceRequirements describes the compute resource requirements.
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``name``                                                                                          | Name of the container the requirements are set for                                                |
-      | *string*                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``limits``                                                                                        | *(Optional)*                                                                                      |
       | `Kubernetes core/v1.ResourceList <https://godoc.org/k8s.io/api/core/v1#ResourceList>`__           | Limits describes the maximum amount of compute resources allowed. More info:                      |
@@ -868,12 +862,12 @@ ResourceRequirements describes the compute resource requirements.
       |                                                                                                   | https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/                    |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.SecondaryNetworkSpec:
+.. _SecondaryNetworkSpec:
 
 SecondaryNetworkSpec
 ~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `NicClusterPolicySpec <#mellanox.com/v1alpha1.NicClusterPolicySpec>`__)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 SecondaryNetworkSpec describes configuration options for secondary network
 
@@ -885,35 +879,34 @@ SecondaryNetworkSpec describes configuration options for secondary network
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``multus``                                                                                        | Image and configuration information for multus                                                    |
-      | `MultusSpec <#mellanox.com/v1alpha1.MultusSpec>`__                                                |                                                                                                   |
+      | :ref:`MultusSpec <MultusSpec>`                                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``cniPlugins``                                                                                    | Image information for CNI plugins                                                                 |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipoib``                                                                                         | Image information for IPoIB CNI                                                                   |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipamPlugin``                                                                                    | Image information for IPAM plugin                                                                 |
-      | `ImageSpec <#mellanox.com/v1alpha1.ImageSpec>`__                                                  |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _mellanox.com/v1alpha1.State:
+.. _State:
 
 State (``string`` alias)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `AppliedState <#mellanox.com/v1alpha1.AppliedState>`__, `HostDeviceNetworkStatus <#mellanox.com/v1alpha1.HostDeviceNetworkStatus>`__,
-`IPoIBNetworkStatus <#mellanox.com/v1alpha1.IPoIBNetworkStatus>`__, `MacvlanNetworkStatus <#mellanox.com/v1alpha1.MacvlanNetworkStatus>`__,
-`NicClusterPolicyStatus <#mellanox.com/v1alpha1.NicClusterPolicyStatus>`__)
+(*Appears on:* :ref:`AppliedState <AppliedState>`, :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`,
+:ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
 
 State represents reconcile state of the system.
 
-.. _mellanox.com/v1alpha1.WaitForCompletionSpec:
+.. _WaitForCompletionSpec:
 
 WaitForCompletionSpec
 ~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* `DriverUpgradePolicySpec <#mellanox.com/v1alpha1.DriverUpgradePolicySpec>`__)
+(*Appears on:* :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`)
 
 WaitForCompletionSpec describes the configuration for waiting on job completions
 
@@ -925,11 +918,11 @@ WaitForCompletionSpec describes the configuration for waiting on job completions
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``podSelector``                                                                                   | *(Optional)*                                                                                      |
-      | *string*                                                                                          | PodSelector specifies a label selector for the pods to wait for completion For more details on    |
+      | string                                                                                            | PodSelector specifies a label selector for the pods to wait for completion For more details on    |
       |                                                                                                   | label selectors, see:                                                                             |
       |                                                                                                   | https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors         |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``timeoutSeconds``                                                                                | *(Optional)*                                                                                      |
-      | *int*                                                                                             | TimeoutSecond specifies the length of time in seconds to wait before giving up on pod             |
+      | int                                                                                               | TimeoutSecond specifies the length of time in seconds to wait before giving up on pod             |
       |                                                                                                   | termination, zero means infinite                                                                  |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+

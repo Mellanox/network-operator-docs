@@ -4,15 +4,15 @@
             <tr>
                 <td>
                     <code>{{ fieldName . }}</code><br>
-                    <em>
-                        {{ if linkForType .Type }}
-                            <a href="{{ linkForType .Type }}">
-                                {{ typeDisplayName .Type }}
-                            </a>
-                        {{ else }}
+                    
+                    {{ if linkForType .Type }}
+                        <a href="{{ linkForType .Type }}">
                             {{ typeDisplayName .Type }}
-                        {{ end }}
-                    </em>
+                        </a>
+                    {{ else }}
+                        {{ typeDisplayName .Type }}
+                    {{ end }}
+                    
                 </td>
                 <td>
                     {{ if fieldEmbedded . }}
