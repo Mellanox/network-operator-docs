@@ -44,8 +44,4 @@
             {{ template "type" .  }}
         {{ end }}
     {{ end }}
-
-    <div class="admonition note">
-        <p class="last">This page was automatically generated with <code>gen-crd-api-reference-docs</code></p>
-    </div>
 {{ end }}
