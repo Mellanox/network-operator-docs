@@ -208,7 +208,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-beta.3"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-beta.4"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -224,7 +224,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.3"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.4"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -232,7 +232,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.3"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.4"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - object
@@ -403,7 +403,7 @@ For example:
      -
    * - ofedDriver.version
      - string
-     - `"24.07-0.4.7.0-0"`
+     - `"24.07-0.6.0.0-1"`
      - NVIDIA DOCA Driver version.
 
 ===============================================
@@ -433,7 +433,7 @@ The following are special environment variables supported by the NVIDIA DOCA Dri
        |    * ib_srpt
    * - ENABLE_NFSRDMA
      - "false"
-     - Enable loading of NFS related storage modules from a NVIDIA DOCA Driver container
+     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "true"
      - Restore host drivers when a container
@@ -442,6 +442,10 @@ In addition, it is possible to specify any environment variables to be exposed t
 
 .. warning::
    CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
+
+.. warning::
+  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
+  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.
 
 To set these variables, change them into Helm values. For example:
 
