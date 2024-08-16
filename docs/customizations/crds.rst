@@ -1,51 +1,928 @@
-.. license-header
-  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-  SPDX-License-Identifier: Apache-2.0
+Network Operator API reference v1alpha1
+=======================================
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+Packages:
 
-  http://www.apache.org/licenses/LICENSE-2.0
+-  :ref:`mellanox.com/v1alpha1 <mellanox.com/v1alpha1>`
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+.. _mellanox.com/v1alpha1:
 
-.. headings # #, * *, =, -, ^, "
+mellanox.com/v1alpha1
+---------------------
 
+Package v1alpha1 contains API Schema definitions for the mellanox.com v1alpha1 API group
 
-****
-CRDs
-****
+Resource Types:
 
-.. contents::
-   :depth: 2
-   :local:
-   :backlinks: none
+.. _AppliedState:
 
-====================
-NicClusterPolicy CRD
-====================
+AppliedState
+~~~~~~~~~~~~
 
-To change ``NicClusterPolicy`` CRD object manually without helm you need to change ``nic-cluster-policy`` CR like a regular Kubernetes resource. For more information on NicClusterPolicy custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#nicclusterpolicy-crd>`__.
+(*Appears on:* :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
 
-==================
-MacVlanNetwork CRD
-==================
+AppliedState defines a finer-grained view of the observed state of NicClusterPolicy
 
-For more information on `MacVlanNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#macvlannetwork-crd>`__.
+.. container:: md-typeset__scrollwrap
 
-=====================
-HostDeviceNetwork CRD
-=====================
+   .. container:: md-typeset__table
 
-For more information on `HostDeviceNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#hostdevicenetwork-crd>`__.
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``name``                                                                                          |                                                                                                   |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``state``                                                                                         |                                                                                                   |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``message``                                                                                       | Message is a human readable message indicating details about why the state is in this condition   |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-================
-IPoIBNetwork CRD
-================
+.. _ConfigMapNameReference:
 
-For more information on `IPoIBNetwork` custom resource, please refer to the `Network-Operator Project Sources <https://github.com/Mellanox/network-operator#ipoibnetwork-crd>`__.
+ConfigMapNameReference
+~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
+
+ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``name``                                                                                          | Name of the ConfigMap                                                                             |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _DOCATelemetryServiceConfig:
+
+DOCATelemetryServiceConfig
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`)
+
+DOCATelemetryServiceConfig contains configuration for the DOCATelemetryService.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``fromConfigMap``                                                                                 | *(Optional)*                                                                                      |
+      | string                                                                                            | FromConfigMap sets the configMap the DOCATelemetryService gets its configuration from. The        |
+      |                                                                                                   | ConfigMap must be in the same namespace as the NICClusterPolicy.                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _DOCATelemetryServiceSpec:
+
+DOCATelemetryServiceSpec
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``config``                                                                                        | *(Optional)*                                                                                      |
+      | :ref:`DOCATelemetryServiceConfig <DOCATelemetryServiceConfig>`                                    | Config contains custom config for the DOCATelemetryService. If set no default config will be      |
+      |                                                                                                   | deployed.                                                                                         |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _DevicePluginSpec:
+
+DevicePluginSpec
+~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+DevicePluginSpec describes configuration options for device plugin 1. Image information for device plugin 2. Device plugin configuration
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
+      | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``useCdi``                                                                                        | Enables use of container device interface (CDI)                                                   |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _DrainSpec:
+
+DrainSpec
+~~~~~~~~~
+
+(*Appears on:* :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`)
+
+DrainSpec describes configuration for node drain during automatic upgrade
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enable``                                                                                        | *(Optional)*                                                                                      |
+      | bool                                                                                              | Enable indicates if node draining is allowed during upgrade                                       |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``force``                                                                                         | *(Optional)*                                                                                      |
+      | bool                                                                                              | Force indicates if force draining is allowed                                                      |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``podSelector``                                                                                   | *(Optional)*                                                                                      |
+      | string                                                                                            | PodSelector specifies a label selector to filter pods on the node that need to be drained For     |
+      |                                                                                                   | more details on label selectors, see:                                                             |
+      |                                                                                                   | https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors         |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``timeoutSeconds``                                                                                | *(Optional)*                                                                                      |
+      | int                                                                                               | TimeoutSecond specifies the length of time in seconds to wait before giving up drain, zero means  |
+      |                                                                                                   | infinite                                                                                          |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``deleteEmptyDir``                                                                                | *(Optional)*                                                                                      |
+      | bool                                                                                              | DeleteEmptyDir indicates if should continue even if there are pods using emptyDir (local data     |
+      |                                                                                                   | that will be deleted when the node is drained)                                                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _DriverUpgradePolicySpec:
+
+DriverUpgradePolicySpec
+~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
+
+DriverUpgradePolicySpec describes policy configuration for automatic upgrades
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``autoUpgrade``                                                                                   | *(Optional)*                                                                                      |
+      | bool                                                                                              | AutoUpgrade is a global switch for automatic upgrade feature if set to false all other options    |
+      |                                                                                                   | are ignored                                                                                       |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``maxParallelUpgrades``                                                                           | *(Optional)*                                                                                      |
+      | int                                                                                               | MaxParallelUpgrades indicates how many nodes can be upgraded in parallel 0 means no limit, all    |
+      |                                                                                                   | nodes will be upgraded in parallel                                                                |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``waitForCompletion``                                                                             |                                                                                                   |
+      | :ref:`WaitForCompletionSpec <WaitForCompletionSpec>`                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``drain``                                                                                         |                                                                                                   |
+      | :ref:`DrainSpec <DrainSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``safeLoad``                                                                                      | *(Optional)*                                                                                      |
+      | bool                                                                                              | SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)        |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _HostDeviceNetwork:
+
+HostDeviceNetwork
+~~~~~~~~~~~~~~~~~
+
+HostDeviceNetwork is the Schema for the hostdevicenetworks API
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``metadata``                                                                                      | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
+      | `Kubernetes                                                                                       |                                                                                                   |
+      | meta/v1.Object                                                                                    |                                                                                                   |
+      | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
+      | :ref:`HostDeviceNetworkSpec <HostDeviceNetworkSpec>`                                              | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``resourceName``                             | Host device resource pool name               |   |
+      |                                                                                                   | | string                                       |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
+      |                                                                                                   | | string                                       | network                                      |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``status``                                                                                        |                                                                                                   |
+      | :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _HostDeviceNetworkSpec:
+
+HostDeviceNetworkSpec
+~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`HostDeviceNetwork <HostDeviceNetwork>`)
+
+HostDeviceNetworkSpec defines the desired state of HostDeviceNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``resourceName``                                                                                  | Host device resource pool name                                                                    |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipam``                                                                                          | IPAM configuration to be used for this network                                                    |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _HostDeviceNetworkStatus:
+
+HostDeviceNetworkStatus
+~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`HostDeviceNetwork <HostDeviceNetwork>`)
+
+HostDeviceNetworkStatus defines the observed state of HostDeviceNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``state``                                                                                         | Reflects the state of the HostDeviceNetwork                                                       |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``hostDeviceNetworkAttachmentDef``                                                                | Network attachment definition generated from HostDeviceNetworkSpec                                |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
+      | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _IBKubernetesSpec:
+
+IBKubernetesSpec
+~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+IBKubernetesSpec describes configuration options for ib-kubernetes
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     | Image information for ib-kubernetes                                                               |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``periodicUpdateSeconds``                                                                         | *(Optional)*                                                                                      |
+      | int                                                                                               | Interval of updates in seconds                                                                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``pKeyGUIDPoolRangeStart``                                                                        | The first guid in the pool                                                                        |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``pKeyGUIDPoolRangeEnd``                                                                          | The last guid in the pool                                                                         |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ufmSecret``                                                                                     | Secret containing credentials to UFM service                                                      |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _IPoIBNetwork:
+
+IPoIBNetwork
+~~~~~~~~~~~~
+
+IPoIBNetwork is the Schema for the ipoibnetworks API
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``metadata``                                                                                      | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
+      | `Kubernetes                                                                                       |                                                                                                   |
+      | meta/v1.Object                                                                                    |                                                                                                   |
+      | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
+      | :ref:`IPoIBNetworkSpec <IPoIBNetworkSpec>`                                                        | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``master``                                   | Name of the host interface to enslave.       |   |
+      |                                                                                                   | | string                                       | Defaults to default route interface          |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
+      |                                                                                                   | | string                                       | network.                                     |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``status``                                                                                        |                                                                                                   |
+      | :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`                                                    |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _IPoIBNetworkSpec:
+
+IPoIBNetworkSpec
+~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`IPoIBNetwork <IPoIBNetwork>`)
+
+IPoIBNetworkSpec defines the desired state of IPoIBNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``master``                                                                                        | Name of the host interface to enslave. Defaults to default route interface                        |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _IPoIBNetworkStatus:
+
+IPoIBNetworkStatus
+~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`IPoIBNetwork <IPoIBNetwork>`)
+
+IPoIBNetworkStatus defines the observed state of IPoIBNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``state``                                                                                         | Reflects the state of the IPoIBNetwork                                                            |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipoibNetworkAttachmentDef``                                                                     | Network attachment definition generated from IPoIBNetworkSpec                                     |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _ImageSpec:
+
+ImageSpec
+~~~~~~~~~
+
+(*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`, :ref:`IBKubernetesSpec <IBKubernetesSpec>`, :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`,
+:ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`, :ref:`NVIPAMSpec <NVIPAMSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`, :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
+
+ImageSpec Contains container image specifications
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``image``                                                                                         | Name of the image                                                                                 |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``repository``                                                                                    | Address of the registry that stores the image                                                     |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``version``                                                                                       | Version of the image to use                                                                       |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
+      | []string                                                                                          | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for    |
+      |                                                                                                   | pulling the image                                                                                 |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``containerResources``                                                                            | ResourceRequirements describes the compute resource requirements                                  |
+      | :ref:`[]ResourceRequirements <ResourceRequirements>`                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _ImageSpecWithConfig:
+
+ImageSpecWithConfig
+~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`DevicePluginSpec <DevicePluginSpec>`, :ref:`MultusSpec <MultusSpec>`)
+
+ImageSpecWithConfig Contains ImageSpec and optional configuration
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``config``                                                                                        | Configuration for the component as a string                                                       |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _MacvlanNetwork:
+
+MacvlanNetwork
+~~~~~~~~~~~~~~
+
+MacvlanNetwork is the Schema for the macvlannetworks API
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``metadata``                                                                                      | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
+      | `Kubernetes                                                                                       |                                                                                                   |
+      | meta/v1.Object                                                                                    |                                                                                                   |
+      | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
+      | :ref:`MacvlanNetworkSpec <MacvlanNetworkSpec>`                                                    | | ``networkNamespace``                         | Namespace of the NetworkAttachmentDefinition |   |
+      |                                                                                                   | | string                                       | custom resource                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``master``                                   | Name of the host interface to enslave.       |   |
+      |                                                                                                   | | string                                       | Defaults to default route interface          |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``mode``                                     | Mode of interface one of “bridge”,           |   |
+      |                                                                                                   | | string                                       | “private”, “vepa”, “passthru”                |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``mtu``                                      | MTU of interface to the specified value. 0   |   |
+      |                                                                                                   | | int                                          | for master’s MTU                             |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``ipam``                                     | IPAM configuration to be used for this       |   |
+      |                                                                                                   | | string                                       | network.                                     |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``status``                                                                                        |                                                                                                   |
+      | :ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _MacvlanNetworkSpec:
+
+MacvlanNetworkSpec
+~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`MacvlanNetwork <MacvlanNetwork>`)
+
+MacvlanNetworkSpec defines the desired state of MacvlanNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``networkNamespace``                                                                              | Namespace of the NetworkAttachmentDefinition custom resource                                      |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``master``                                                                                        | Name of the host interface to enslave. Defaults to default route interface                        |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``mode``                                                                                          | Mode of interface one of “bridge”, “private”, “vepa”, “passthru”                                  |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``mtu``                                                                                           | MTU of interface to the specified value. 0 for master’s MTU                                       |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _MacvlanNetworkStatus:
+
+MacvlanNetworkStatus
+~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`MacvlanNetwork <MacvlanNetwork>`)
+
+MacvlanNetworkStatus defines the observed state of MacvlanNetwork
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``state``                                                                                         | Reflects the state of the MacvlanNetwork                                                          |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``macvlanNetworkAttachmentDef``                                                                   | Network attachment definition generated from MacvlanNetworkSpec                                   |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _MultusSpec:
+
+MultusSpec
+~~~~~~~~~~
+
+(*Appears on:* :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
+
+MultusSpec describes configuration options for Multus CNI 1. Image information for Multus CNI 2. Multus CNI config if config is missing or empty then multus config will be automatically generated from
+the CNI configuration file of the master plugin (the first file in lexicographical order in cni-conf-dir)
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
+      | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NICFeatureDiscoverySpec:
+
+NICFeatureDiscoverySpec
+~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+NICFeatureDiscoverySpec describes configuration options for nic-feature-discovery
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NVIPAMSpec:
+
+NVIPAMSpec
+~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+NVIPAMSpec describes configuration options for nv-ipam 1. Image information for nv-ipam 2. Configuration for nv-ipam
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enableWebhook``                                                                                 | Enable deployment of the validation webhook                                                       |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicClusterPolicy:
+
+NicClusterPolicy
+~~~~~~~~~~~~~~~~
+
+NicClusterPolicy is the Schema for the nicclusterpolicies API
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``metadata``                                                                                      | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
+      | `Kubernetes                                                                                       |                                                                                                   |
+      | meta/v1.Object                                                                                    |                                                                                                   |
+      | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spec``                                                                                          | +----------------------------------------------+----------------------------------------------+   |
+      | :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`                                                | | ``nodeAffinity``                             | Additional nodeAffinity rules to inject to   |   |
+      |                                                                                                   | | `Kubernetes                                  | the DaemonSets objects that are managed by   |   |
+      |                                                                                                   | | core/v1.NodeAffinity <https://g              | the operator                                 |   |
+      |                                                                                                   | | odoc.org/k8s.io/api/core/v1#NodeAffinity>`__ |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``tolerations``                              | Additional tolerations to inject to the      |   |
+      |                                                                                                   | | `[]Kubernetes                                | DaemonSets objects that are managed by the   |   |
+      |                                                                                                   | | core/v1.Toleration <https:/                  | operator                                     |   |
+      |                                                                                                   | | /godoc.org/k8s.io/api/core/v1#Toleration>`__ |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``ofedDriver``                               |                                              |   |
+      |                                                                                                   | | :ref:`OFEDDriverSpec <OFEDDriverSpec>`       |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``rdmaSharedDevicePlugin``                   |                                              |   |
+      |                                                                                                   | | :ref:`DevicePluginSpec <DevicePluginSpec>`   |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``sriovDevicePlugin``                        |                                              |   |
+      |                                                                                                   | | :ref:`DevicePluginSpec <DevicePluginSpec>`   |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``ibKubernetes``                             |                                              |   |
+      |                                                                                                   | | :ref:`IBKubernetesSpec <IBKubernetesSpec>`   |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``secondaryNetwork``                         |                                              |   |
+      |                                                                                                   | | :ref:`                                       |                                              |   |
+      |                                                                                                   | | SecondaryNetworkSpec <SecondaryNetworkSpec>` |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``nvIpam``                                   |                                              |   |
+      |                                                                                                   | | :ref:`NVIPAMSpec <NVIPAMSpec>`               |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``nicFeatureDiscovery``                      |                                              |   |
+      |                                                                                                   | | :ref:`NICFea                                 |                                              |   |
+      |                                                                                                   | | tureDiscoverySpec <NICFeatureDiscoverySpec>` |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      |                                                                                                   | | ``docaTelemetryService``                     |                                              |   |
+      |                                                                                                   | | :ref:`DOCATele                               |                                              |   |
+      |                                                                                                   | | metryServiceSpec <DOCATelemetryServiceSpec>` |                                              |   |
+      |                                                                                                   | +----------------------------------------------+----------------------------------------------+   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``status``                                                                                        |                                                                                                   |
+      | :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicClusterPolicySpec:
+
+NicClusterPolicySpec
+~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicy <NicClusterPolicy>`)
+
+NicClusterPolicySpec defines the desired state of NicClusterPolicy
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``nodeAffinity``                                                                                  | Additional nodeAffinity rules to inject to the DaemonSets objects that are managed by the         |
+      | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           | operator                                                                                          |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``tolerations``                                                                                   | Additional tolerations to inject to the DaemonSets objects that are managed by the operator       |
+      | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ofedDriver``                                                                                    |                                                                                                   |
+      | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rdmaSharedDevicePlugin``                                                                        |                                                                                                   |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``sriovDevicePlugin``                                                                             |                                                                                                   |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ibKubernetes``                                                                                  |                                                                                                   |
+      | :ref:`IBKubernetesSpec <IBKubernetesSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``secondaryNetwork``                                                                              |                                                                                                   |
+      | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nvIpam``                                                                                        |                                                                                                   |
+      | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nicFeatureDiscovery``                                                                           |                                                                                                   |
+      | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``docaTelemetryService``                                                                          |                                                                                                   |
+      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicClusterPolicyStatus:
+
+NicClusterPolicyStatus
+~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicy <NicClusterPolicy>`)
+
+NicClusterPolicyStatus defines the observed state of NicClusterPolicy
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``state``                                                                                         | Reflects the current state of the cluster policy                                                  |
+      | :ref:`State <State>`                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
+      | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _OFEDDriverSpec:
+
+OFEDDriverSpec
+~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+OFEDDriverSpec describes configuration options for OFED driver
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     | Image information for ofed driver container                                                       |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``startupProbe``                                                                                  | Pod startup probe settings                                                                        |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``livenessProbe``                                                                                 | Pod liveness probe settings                                                                       |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``readinessProbe``                                                                                | Pod readiness probe settings                                                                      |
+      | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``env``                                                                                           | List of environment variables to set in the OFED container.                                       |
+      | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``upgradePolicy``                                                                                 | Ofed auto-upgrade settings                                                                        |
+      | :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for driver container                              |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for OFED container                              |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``terminationGracePeriodSeconds``                                                                 | *(Optional)*                                                                                      |
+      | int64                                                                                             | TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the  |
+      |                                                                                                   | OFED pod on termination                                                                           |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``forcePrecompiled``                                                                              | *(Optional)*                                                                                      |
+      | bool                                                                                              | ForcePrecompiled specifies if only MOFED precompiled images are allowed If set to false and       |
+      |                                                                                                   | precompiled image does not exists, MOFED drivers will be compiled on Nodes If set to true and     |
+      |                                                                                                   | precompiled image does not exists, OFED state will be Error.                                      |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _PodProbeSpec:
+
+PodProbeSpec
+~~~~~~~~~~~~
+
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
+
+PodProbeSpec describes a pod probe.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``initialDelaySeconds``                                                                           | Number of seconds after the container has started before the probe is initiated                   |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``periodSeconds``                                                                                 | How often (in seconds) to perform the probe                                                       |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _ResourceRequirements:
+
+ResourceRequirements
+~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`ImageSpec <ImageSpec>`)
+
+ResourceRequirements describes the compute resource requirements.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``name``                                                                                          | Name of the container the requirements are set for                                                |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``limits``                                                                                        | *(Optional)*                                                                                      |
+      | `Kubernetes core/v1.ResourceList <https://godoc.org/k8s.io/api/core/v1#ResourceList>`__           | Limits describes the maximum amount of compute resources allowed. More info:                      |
+      |                                                                                                   | https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``requests``                                                                                      | *(Optional)*                                                                                      |
+      | `Kubernetes core/v1.ResourceList <https://godoc.org/k8s.io/api/core/v1#ResourceList>`__           | Requests describes the minimum amount of compute resources required. If Requests is omitted for a |
+      |                                                                                                   | container, it defaults to Limits if that is explicitly specified, otherwise to an                 |
+      |                                                                                                   | implementation-defined value. Requests cannot exceed Limits. More info:                           |
+      |                                                                                                   | https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _SecondaryNetworkSpec:
+
+SecondaryNetworkSpec
+~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+SecondaryNetworkSpec describes configuration options for secondary network
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``multus``                                                                                        | Image and configuration information for multus                                                    |
+      | :ref:`MultusSpec <MultusSpec>`                                                                    |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``cniPlugins``                                                                                    | Image information for CNI plugins                                                                 |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipoib``                                                                                         | Image information for IPoIB CNI                                                                   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ipamPlugin``                                                                                    | Image information for IPAM plugin                                                                 |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _State:
+
+State (``string`` alias)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`AppliedState <AppliedState>`, :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`,
+:ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
+
+State represents reconcile state of the system.
+
+.. _WaitForCompletionSpec:
+
+WaitForCompletionSpec
+~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`)
+
+WaitForCompletionSpec describes the configuration for waiting on job completions
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``podSelector``                                                                                   | *(Optional)*                                                                                      |
+      | string                                                                                            | PodSelector specifies a label selector for the pods to wait for completion For more details on    |
+      |                                                                                                   | label selectors, see:                                                                             |
+      |                                                                                                   | https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors         |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``timeoutSeconds``                                                                                | *(Optional)*                                                                                      |
+      | int                                                                                               | TimeoutSecond specifies the length of time in seconds to wait before giving up on pod             |
+      |                                                                                                   | termination, zero means infinite                                                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+

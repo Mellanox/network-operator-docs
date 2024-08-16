@@ -11,15 +11,17 @@ endif
 export PATH:=$(GOBIN):${PATH}
 
 BRANCH ?= master
-# Paths to download the helm chart to.
+# Path to download the crd api to.
+CRD_API_DEP_ROOT = $(BUILDDIR)/crd
+# Path to download the helm chart to.
 HELM_CHART_DEP_ROOT = $(BUILDDIR)/helmcharts
 # Helm chart version and url
 HELM_CHART_VERSION ?= 24.4.1
 NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
-BRANCH_HELM_CHART_URL ?= https://github.com/Mellanox/network-operator/archive/refs/heads/${BRANCH}.tar.gz
+BRANCH_REPO_URL ?= https://github.com/Mellanox/network-operator/archive/refs/heads/${BRANCH}.tar.gz
 HELM_CHART_PATH ?=
 
-$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT): ; $(info Creating directory $@...)
+$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT): ; $(info Creating directory $@...)
 	mkdir -p $@
 
 # release.yaml location
@@ -32,6 +34,14 @@ HELM_DOCS_BIN := helm-docs
 HELM_DOCS = $(abspath $(TOOLSDIR)/$(HELM_DOCS_BIN))-$(HELM_DOCS_VER)
 $(HELM_DOCS): | $(TOOLSDIR)
 	$(call go-install-tool,$(HELM_DOCS_PKG),$(HELM_DOCS_BIN),$(HELM_DOCS_VER))
+
+# Find or download gen-crd-api-reference-docs
+GEN_API_REF_DOCS_PKG := github.com/ahmetb/gen-crd-api-reference-docs
+GEN_API_REF_DOCS_VERSION ?= 819de227e5fe85ee70022e71191d7838847e075a
+GEN_CRD_API_REFERENCE_DOCS_BIN = gen-crd-api-reference-docs
+GEN_CRD_API_REFERENCE_DOCS = $(abspath $(TOOLSDIR)/$/$(GEN_CRD_API_REFERENCE_DOCS_BIN))-$(GEN_API_REF_DOCS_VERSION)
+$(GEN_CRD_API_REFERENCE_DOCS): | $(TOOLSDIR)
+	$(call go-install-tool,$(GEN_API_REF_DOCS_PKG),$(GEN_CRD_API_REFERENCE_DOCS_BIN),$(GEN_API_REF_DOCS_VERSION))
 
 # go-install-tool will 'go install' a go module $1 with version $3 and install it with the name $2-$3 to $TOOLSDIR.
 define go-install-tool
@@ -51,7 +61,7 @@ download-ngc-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
 
 .PHONY: download-branch-helm-chart
 download-branch-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
-	curl -sL ${BRANCH_HELM_CHART_URL} \
+	curl -sL ${BRANCH_REPO_URL} \
 	| tar -xz -C ${HELM_CHART_DEP_ROOT} \
 	--strip-components 2 network-operator-${BRANCH}/deployment/network-operator
 
@@ -78,6 +88,21 @@ branch-helm-docs: download-branch-helm-chart helm-docs
 
 .PHONY: local-helm-docs
 local-helm-docs: copy-local-helm-chart helm-docs
+
+.PHONY: download-branch-api
+download-branch-api: | $(CRD_API_DEP_ROOT)
+	curl -sL ${BRANCH_REPO_URL} \
+	| tar -xz -C ${CRD_API_DEP_ROOT}
+
+gen-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-branch-api
+	cd ${CRD_API_DEP_ROOT}/network-operator-${BRANCH}/api/v1alpha1 && \
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/config.json \
+	-template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/crds-api.html
+
+.PHONY: api-docs
+api-docs: gen-crd-api-docs
+	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
+	--columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
 
 .PHONY: gen-docs
 gen-docs:
