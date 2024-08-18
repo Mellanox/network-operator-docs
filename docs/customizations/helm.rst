@@ -433,7 +433,7 @@ The following are special environment variables supported by the NVIDIA DOCA Dri
        |    * ib_srpt
    * - ENABLE_NFSRDMA
      - "false"
-     - Enable loading of NFS related storage modules from a NVIDIA DOCA Driver container
+     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "true"
      - Restore host drivers when a container
@@ -442,6 +442,10 @@ In addition, it is possible to specify any environment variables to be exposed t
 
 .. warning::
    CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
+
+.. warning::
+  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
+  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.
 
 To set these variables, change them into Helm values. For example:
 

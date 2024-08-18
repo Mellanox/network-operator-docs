@@ -183,6 +183,10 @@ Known Limitations
 
    * - Version
      - Description
+   * - 24.7.0
+     -  - In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load. User should
+          blacklist NVMe modules to prevent them from loading on system boot. if this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must
+          be set to `false`. Using features such as GPU Direct Storage is not supported in such case. 
    * - 23.10.0
      - | - IPoIB sub-interface creation does not work on RHEL 8.8 and RHEL 9.2 due to the kernel limitations in these distributions. This means that IPoIBNetwork cannot be used with these operating systems.
    * - 23.4.0
