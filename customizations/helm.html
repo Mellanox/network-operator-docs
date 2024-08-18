@@ -645,7 +645,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>ENABLE_NFSRDMA</p></td>
 <td><p>“false”</p></td>
-<td><p>Enable loading of NFS related storage modules from a NVIDIA DOCA Driver container</p></td>
+<td><p>Enable loading of NFS &amp; NVME related storage modules from a NVIDIA DOCA Driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
 <td><p>“true”</p></td>
@@ -657,6 +657,11 @@ can find those below.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When ENABLE_NFSRDMA is set to <cite>true</cite>, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
+(e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.</p>
 </div>
 <p>To set these variables, change them into Helm values. For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
@@ -1158,7 +1163,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 16, 2024.
+      <span class="lastupdated">Last updated on Aug 18, 2024.
       </span></p>
   </div>
 
