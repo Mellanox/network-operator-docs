@@ -1769,7 +1769,7 @@ Network Operator deployment with:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
         version: |mofed-version|
-        sriovDevicePlugin:
+      sriovDevicePlugin:
         image: sriov-network-device-plugin
         repository: ghcr.io/k8snetworkplumbingwg
         version: |sriov-device-plugin-version|
@@ -1867,7 +1867,7 @@ Network Operator Deployment and OpenvSwitch offload
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
-.. warning:: This mode of operation is not compatible with OFED container.
+.. warning:: To use OFED container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
 
 .. warning:: Tech Preview feature.
 
