@@ -119,7 +119,7 @@ generate-docs-versions-var:
 
 .PHONY: doca-driver-build-update
 doca-driver-build-update:
-	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}entrypoint.sh -o $(CURDIR)/docs/files/entrypoint.sh
-	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}dtk_nic_driver_build.sh -o $(CURDIR)/docs/files/dtk_nic_driver_build.sh
-	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}RHEL_Dockerfile -o $(CURDIR)/docs/files/RHEL_Dockerfile
-	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}Ubuntu_Dockerfile -o $(CURDIR)/docs/files/Ubuntu_Dockerfile
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}entrypoint.sh -o $(CURDIR)/docs/downloads/entrypoint.sh
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}dtk_nic_driver_build.sh -o $(CURDIR)/docs/downloads/dtk_nic_driver_build.sh
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}RHEL_Dockerfile -o $(CURDIR)/docs/downloads/RHEL_Dockerfile
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}Ubuntu_Dockerfile -o $(CURDIR)/docs/downloads/Ubuntu_Dockerfile
