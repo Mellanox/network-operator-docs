@@ -484,4 +484,6 @@ To build RHEL-based image please use provided :download:`Dockerfile <files/Ubunt
 
 **NOTE:** Driver build script :download:`download <files/dtk_nic_driver_build.sh>`
 
+**NOTE:** Make sure the `.sh` files are executable by running `chmod +x entrypoint.sh dtk_nic_driver_build.sh`
+
 .. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.

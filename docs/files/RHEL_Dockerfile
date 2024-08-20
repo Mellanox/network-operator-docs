@@ -2,7 +2,7 @@
 ARG D_OS="rhel9.2"
 ARG D_ARCH="x86_64"
 ARG D_CONTAINER_VER="0"
-ARG D_OFED_VERSION="24.04-0.6.6.0"
+ARG D_OFED_VERSION="23.10-0.5.5.0"
 ARG D_KERNEL_VER="5.14.0-284.32.1.el9_2.x86_64"
 ARG D_OFED_SRC_DOWNLOAD_PATH="/run/mellanox/src"
 ARG OFED_SRC_LOCAL_DIR=${D_OFED_SRC_DOWNLOAD_PATH}/MLNX_OFED_SRC-${D_OFED_VERSION}
@@ -25,6 +25,7 @@ FROM $D_BASE_IMAGE AS base
 # Inherited global args
 ARG D_OS
 
+# https://redmine.mellanox.com/issues/3528150/issue_history#note-9
 RUN if [[ "${D_OS}" == *"rhel9"* ]] ; then \
         sed -i 's#/etc/pki/entitlement#/etc/pki/entitlement-host#g' /etc/rhsm/rhsm.conf ;\
     fi
@@ -61,7 +62,7 @@ RUN set -x && \
 # Install prerequirements
     dnf install -y curl --allowerasing \
 # Driver build requirements
-    autoconf python3-devel ethtool automake pciutils libtool hostname
+    autoconf python3-devel ethtool automake pciutils libtool hostname dracut
 
 RUN set -x && \
 # Download NVIDIA NIC driver sources
@@ -86,7 +87,7 @@ ARG D_KERNEL_VER
 ARG OFED_SRC_LOCAL_DIR
 
 RUN set -x && \
-# NVIDIA DOCA Driver installation requirements
+# MOFED installation requirements
     dnf install -y autoconf gcc make rpm-build
 
 # Build driver
@@ -123,7 +124,7 @@ RUN set -x && \
     ./mlnx-tools-*.rpm
 
 RUN set -x && \
-# NVIDIA DOCA Driver functional requirements
+# MOFED functional requirements
     dnf install -y pciutils hostname udev ethtool \
 # Container functional requirements
     jq iproute kmod procps-ng udev
@@ -135,7 +136,7 @@ RUN touch /lib/modules/${D_KERNEL_VER}/modules.order /lib/modules/${D_KERNEL_VER
 
 WORKDIR /
 ADD ./entrypoint.sh /root/entrypoint.sh
-ADD ./dtk_nic_driver_build.sh  /root/dtk_nic_driver_build.sh
+ADD ./dtk_nic_driver_build.sh /root/dtk_nic_driver_build.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["precompiled"]
