@@ -121,7 +121,7 @@ function termination_handler() {
             timestamp_print "Restoring Mellanox OFED Driver from host..."
             /usr/sbin/mlnxofedctl --alt-mods force-restart
 
-            print_drivers_info
+            print_loaded_drv_ver_str
 
             restore_sriov_config
         fi
@@ -249,7 +249,7 @@ function redhat_install_prerequisites() {
 
         eus_available=("8.4" "8.6" "8.8" "9.0" "9.2" "9.4")
 
-        if [[ ${eus_available[@]} =~ $RHEL_VERSION ]]
+        if [[ " ${eus_available[@]} " =~ " $RHEL_VERSION " ]]
         then
           exec_cmd "dnf config-manager --set-enabled rhel-${RHEL_MAJOR_VERSION}-for-${ARCH}-baseos-eus-rpms"
         fi
@@ -259,7 +259,9 @@ function redhat_install_prerequisites() {
         # Dependencies for RH 9.x changed, thus explict installation required
         exec_cmd "dnf -q -y ${releasever_str} install kernel-${FULL_KVER}"
         exec_cmd "dnf -q -y ${releasever_str} install kernel-headers-${FULL_KVER}"
-        exec_cmd "dnf -q -y ${releasever_str} install kernel-devel-${FULL_KVER}"
+	# note: we provide --allowerasing flag to allow install of possible conflict packages
+	# like openssl-libs which is required for kernel-devel that coflicts with openssl-fips in container
+        exec_cmd "dnf -q -y ${releasever_str} install kernel-devel-${FULL_KVER}" --allowerasing
         exec_cmd "dnf -q -y ${releasever_str} install kernel-core-${FULL_KVER}"
 
     else
@@ -295,8 +297,8 @@ function redhat_install_prerequisites() {
 function set_append_driver_build_flags() {
     debug_print "Function: ${FUNCNAME[0]}"
 
-    if [[ "${ENABLE_NFSRDMA}" = true ]]; then
-        append_driver_build_flags="$append_driver_build_flags --with-mlnx-nfsrdma${pkg_dkms_suffix} --with-mlnx-nvme${pkg_dkms_suffix}"
+    if [[ "${ENABLE_NFSRDMA}" = false ]]; then
+        append_driver_build_flags="$append_driver_build_flags --without-mlnx-nfsrdma${pkg_dkms_suffix} --without-mlnx-nvme${pkg_dkms_suffix}"
     fi
 }
 
@@ -306,7 +308,7 @@ function dtk_ocp_setup_driver_build() {
     timestamp_print "Copy required files to shared dir with OCP DTK"
     exec_cmd "cp -r ${NVIDIA_NIC_DRIVER_PATH} ${DTK_OCP_NIC_SHARED_DIR}/"
 
-    exec_cmd "sed -i '/append_driver_build_flags=/c\append_driver_build_flags=${append_driver_build_flags}' ${DTK_OCP_BUILD_SCRIPT}"
+    exec_cmd "sed -i '/append_driver_build_flags=/c\append_driver_build_flags=\"${append_driver_build_flags}\"' ${DTK_OCP_BUILD_SCRIPT}"
     exec_cmd "sed -i '/DTK_OCP_COMPILED_DRIVER_VER=/c\DTK_OCP_COMPILED_DRIVER_VER=${NVIDIA_NIC_DRIVER_VER}' ${DTK_OCP_BUILD_SCRIPT}"
     exec_cmd "sed -i '/DTK_OCP_START_COMPILE_FLAG=/c\DTK_OCP_START_COMPILE_FLAG=${DTK_OCP_START_COMPILE_FLAG}' ${DTK_OCP_BUILD_SCRIPT}"
     exec_cmd "sed -i '/DTK_OCP_DONE_COMPILE_FLAG=/c\DTK_OCP_DONE_COMPILE_FLAG=${DTK_OCP_DONE_COMPILE_FLAG}' ${DTK_OCP_BUILD_SCRIPT}"
@@ -432,6 +434,11 @@ function restart_driver() {
     # Ensure mlx5_core dependencies loaded
     exec_cmd "modprobe -d /host tls"
     exec_cmd "modprobe -d /host psample"
+
+    # Check if mlx5_ib depends on macsec if so, load it.
+    if modinfo -Fdepends mlx5_ib | grep -qw macsec; then
+        exec_cmd "modprobe -d /host macsec"
+    fi
 
     load_pci_hyperv_intf=false
 
@@ -934,14 +941,29 @@ function load_nfsrdma() {
     fi
 }
 
+# function check_loaded_kmod_srcver_vs_modinfo() returns 0 if all provided modules
+# srcversion from sysfs match information from modinfo
+function check_loaded_kmod_srcver_vs_modinfo() {
+    debug_print "Function: ${FUNCNAME[0]}"
+
+    for module in "$@"; do
+        debug_print "checking module $module"
+        local srcver_from_modinfo=$(/sbin/modinfo $module 2>/dev/null | grep srcversion | awk '{print $NF}')
+        local srcver_from_sysfs=$(/bin/cat /sys/module/$module/srcversion)
+        debug_print "module: $module, srcver_from_modinfo: $srcver_from_modinfo, srcver_from_sysfs: $srcver_from_sysfs"
+        if [[ "${srcver_from_modinfo}" != "${srcver_from_sysfs}" ]]; then
+            debug_print "module: $module, srcver differs"
+            return 1
+        fi
+    done
+    # all modules srcver match between modinfo and sysfs
+    return 0
+}
+
 function load_driver() {
     debug_print "Function: ${FUNCNAME[0]}"
 
-    candidate_drv_srcver=$(/sbin/modinfo mlx5_core 2>/dev/null | grep srcversion | awk '{print $NF}')
-
-    print_drivers_info 1
-
-    if [ "${loaded_drv_srcver}" != "${candidate_drv_srcver}" ]; then
+    if ! check_loaded_kmod_srcver_vs_modinfo mlx5_core mlx5_ib; then
         restart_driver
 
         new_driver_loaded=true
@@ -951,6 +973,7 @@ function load_driver() {
 
     else
         debug_print "Loaded and candidate drivers are identical, *skipping reload*"
+        new_driver_loaded=true
     fi
 
     print_loaded_drv_ver_str
@@ -1134,25 +1157,13 @@ function print_loaded_drv_ver_str() {
         debug_print "Fetching driver info via ethtool from netdev ${mlx_net_dev_name} (${mlx_dev_pci})"
         drv_ver_str=$(ethtool --driver ${mlx_net_dev_name} | grep ^version | cut -d" " -f 2)
 
-        timestamp_print "Current driver version: ${drv_ver_str}"
+        timestamp_print "Current mlx5_core driver version: ${drv_ver_str}"
 
-        loaded_drv_srcver=$(/bin/cat /sys/module/mlx5_core/srcversion)
-        debug_print "Current driver srcversion: ${loaded_drv_srcver}"
+        local loaded_drv_srcver=$(/bin/cat /sys/module/mlx5_core/srcversion)
+        debug_print "Current mlx5_core driver srcversion: ${loaded_drv_srcver}"
 
     else
         timestamp_print "mlx5_core driver not loaded"
-    fi
-}
-
-function print_drivers_info() {
-    debug_print "Function: ${FUNCNAME[0]}"
-
-    info_detail=${1:-0}
-
-    print_loaded_drv_ver_str
-
-    if [ ${info_detail} -ge 1 ]; then
-        debug_print "Candidate driver srcversion: ${candidate_drv_srcver}"
     fi
 }
 
@@ -1187,8 +1198,6 @@ pkg_dkms_suffix=""
 found_long_mlx_dev_id_net_name_path=false
 
 mlx5_core_loaded=false; [[ "$(lsmod | grep -i ^mlx5_core -c)" != "0" ]] && mlx5_core_loaded=true
-loaded_drv_srcver="<old-ver>"
-candidate_drv_srcver="<new-ver>"
 build_src=false
 build_precompiled=false
 reuse_driver_inventory=false

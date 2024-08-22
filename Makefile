@@ -27,6 +27,9 @@ $(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT): ; $(info Cre
 # release.yaml location
 BRANCH_RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/${BRANCH}/hack/release.yaml
 
+# doca-driver build location
+DOCA_DRIVER_BUILD_BASE_URL ?= https://raw.githubusercontent.com/Mellanox/doca-driver-build/main/
+
 # helm-docs is used to generate helm chart documentation
 HELM_DOCS_PKG := github.com/norwoodj/helm-docs/cmd/helm-docs
 HELM_DOCS_VER := v1.14.2
@@ -113,3 +116,10 @@ generate-docs-versions-var:
 	curl -sL ${BRANCH_RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
 	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/ --outputDir $(CURDIR)/build/
 	mv $(CURDIR)/build/vars.yaml docs/common/vars.rst
+
+.PHONY: doca-driver-build-update
+doca-driver-build-update:
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}entrypoint.sh -o $(CURDIR)/docs/downloads/entrypoint.sh
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}dtk_nic_driver_build.sh -o $(CURDIR)/docs/downloads/dtk_nic_driver_build.sh
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}RHEL_Dockerfile -o $(CURDIR)/docs/downloads/RHEL_Dockerfile
+	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}Ubuntu_Dockerfile -o $(CURDIR)/docs/downloads/Ubuntu_Dockerfile

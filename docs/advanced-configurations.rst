@@ -426,7 +426,7 @@ Then pull the DTK image locally using your pull-secret:
 RHEL example
 ~~~~~~~~~~~~
 
-To build RHEL-based image please use provided :download:`Dockerfile <files/RHEL_Dockerfile>`:
+To build RHEL-based image please use provided :download:`Dockerfile <downloads/RHEL_Dockerfile>`:
 
 .. code-block:: bash
 
@@ -445,7 +445,7 @@ To build RHEL-based image please use provided :download:`Dockerfile <files/RHEL_
 RHCOS example
 ~~~~~~~~~~~~~
 
-To build RHCOS based image please use provided :download:`Dockerfile <files/RHEL_Dockerfile>`:
+To build RHCOS based image please use provided :download:`Dockerfile <downloads/RHEL_Dockerfile>`:
 
 .. code-block:: bash
 
@@ -464,7 +464,7 @@ To build RHCOS based image please use provided :download:`Dockerfile <files/RHEL
 Ubuntu example
 ~~~~~~~~~~~~~~
 
-To build RHEL-based image please use provided :download:`Dockerfile <files/Ubuntu_Dockerfile>`:.
+To build RHEL-based image please use provided :download:`Dockerfile <downloads/Ubuntu_Dockerfile>`:.
 
 .. code-block:: bash
 
@@ -480,8 +480,10 @@ To build RHEL-based image please use provided :download:`Dockerfile <files/Ubunt
 
 **NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
-**NOTE:** Entrypoint script :download:`download <files/entrypoint.sh>`
+**NOTE:** Entrypoint script :download:`download <downloads/entrypoint.sh>`
 
-**NOTE:** Driver build script :download:`download <files/dtk_nic_driver_build.sh>`
+**NOTE:** Driver build script :download:`download <downloads/dtk_nic_driver_build.sh>`
+
+**NOTE:** Make sure the `.sh` files are executable by running `chmod +x entrypoint.sh dtk_nic_driver_build.sh`
 
 .. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.
