@@ -11,6 +11,15 @@ endif
 export PATH:=$(GOBIN):${PATH}
 
 BRANCH ?= master
+TAG ?=
+# Then using TAG, the tar file starts with v, but the extracted dir does not
+SRC := $(shell echo $(if $(TAG),$(TAG),$(BRANCH)) | sed 's/^v//')
+
+# Network Operator source tar location
+REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(if $(TAG),tags/$(TAG),heads/$(BRANCH)).tar.gz
+# release.yaml location
+RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/$(if $(TAG),$(TAG),$(BRANCH))/hack/release.yaml
+
 # Path to download the crd api to.
 CRD_API_DEP_ROOT = $(BUILDDIR)/crd
 # Path to download the helm chart to.
@@ -18,14 +27,10 @@ HELM_CHART_DEP_ROOT = $(BUILDDIR)/helmcharts
 # Helm chart version and url
 HELM_CHART_VERSION ?= 24.4.1
 NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
-BRANCH_REPO_URL ?= https://github.com/Mellanox/network-operator/archive/refs/heads/${BRANCH}.tar.gz
 HELM_CHART_PATH ?=
 
 $(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT): ; $(info Creating directory $@...)
 	mkdir -p $@
-
-# release.yaml location
-BRANCH_RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/${BRANCH}/hack/release.yaml
 
 # doca-driver build location
 DOCA_DRIVER_BUILD_BASE_URL ?= https://raw.githubusercontent.com/Mellanox/doca-driver-build/main/
@@ -62,11 +67,11 @@ download-ngc-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
 	cd ${HELM_CHART_DEP_ROOT} \
 	&& curl -sL ${NGC_HELM_CHART_URL} | tar -xz
 
-.PHONY: download-branch-helm-chart
-download-branch-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
-	curl -sL ${BRANCH_REPO_URL} \
+.PHONY: download-helm-chart
+download-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
+	curl -sL ${REPO_TAR_URL} \
 	| tar -xz -C ${HELM_CHART_DEP_ROOT} \
-	--strip-components 2 network-operator-${BRANCH}/deployment/network-operator
+	--strip-components 2 network-operator-${SRC}/deployment/network-operator
 
 .PHONY: copy-local-helm-chart
 copy-local-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
@@ -86,19 +91,19 @@ helm-docs: | $(HELM_DOCS)
 .PHONY: ngc-helm-docs
 ngc-helm-docs: download-ngc-helm-chart helm-docs
 
-.PHONY: branch-helm-docs
-branch-helm-docs: download-branch-helm-chart helm-docs
+.PHONY: helm-docs
+helm-docs: download-helm-chart helm-docs
 
 .PHONY: local-helm-docs
 local-helm-docs: copy-local-helm-chart helm-docs
 
-.PHONY: download-branch-api
-download-branch-api: | $(CRD_API_DEP_ROOT)
-	curl -sL ${BRANCH_REPO_URL} \
+.PHONY: download-api
+download-api: | $(CRD_API_DEP_ROOT)
+	curl -sL ${REPO_TAR_URL} \
 	| tar -xz -C ${CRD_API_DEP_ROOT}
 
-gen-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-branch-api
-	cd ${CRD_API_DEP_ROOT}/network-operator-${BRANCH}/api/v1alpha1 && \
+gen-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-api
+	cd ${CRD_API_DEP_ROOT}/network-operator-${SRC}/api/v1alpha1 && \
 	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/config.json \
 	-template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/crds-api.html
 
@@ -113,7 +118,7 @@ gen-docs:
 
 .PHONY: generate-docs-versions-var
 generate-docs-versions-var:
-	curl -sL ${BRANCH_RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
+	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
 	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/ --outputDir $(CURDIR)/build/
 	mv $(CURDIR)/build/vars.yaml docs/common/vars.rst
 
