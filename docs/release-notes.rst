@@ -135,6 +135,9 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 24.7.0
+     - | - Deploying NicClusterPolicy Custom Resource through helm is deprecated, support will be removed in Network Operator 24.10.
+           It is advised to keep deployCR=false in your helm values and create/update NicClusterPolicy Custom Resource post helm install/update.
    * - 23.10.0
      - | - In NV-IPAM v0.1.1, the IP Pools configurations are read from IPPool CRs instead of using a ConfigMap. Existing ConfigMap configuration will be automatically migrated to IPPools CRs as part of the upgrade process.
    * - 23.7.0
