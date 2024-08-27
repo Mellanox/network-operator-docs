@@ -214,7 +214,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 </div>
 </div>
 <p>Install Network Operator from the NVIDIA NGC chart using the default values:</p>
-<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-beta.4   --wait</pre>
+<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-rc.2   --wait</pre>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">View deployed resources</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
@@ -226,8 +226,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p class="admonition-title">Warning</p>
 <p>Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.</p>
 </div>
-<pre class="literal-block">helm show values nvidia/network-operator --version v24.7.0-beta.4 &gt; values.yaml</pre>
-<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-beta.4   -f ./values.yaml   --wait</pre>
+<pre class="literal-block">helm show values nvidia/network-operator --version v24.7.0-rc.2 &gt; values.yaml</pre>
+<pre class="literal-block">helm install network-operator nvidia/network-operator   -n nvidia-network-operator   --create-namespace   --version v24.7.0-rc.2   -f ./values.yaml   --wait</pre>
 </section>
 <section id="deployment-examples">
 <h2>Deployment Examples<a class="headerlink" href="#deployment-examples" title="Permalink to this headline"></a></h2>
@@ -259,7 +259,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -327,7 +327,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -750,7 +750,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -919,7 +919,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1087,7 +1087,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1363,7 +1363,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1534,7 +1534,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
     forcePrecompiled: false
     imagePullSecrets: []
     terminationGracePeriodSeconds: 300
@@ -1718,7 +1718,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.0.0-1
+    version: 24.07-0.6.1.0-0
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
