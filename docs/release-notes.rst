@@ -36,6 +36,11 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.7.0
+     - | - Added support for OpenShift Container Platform v4.16.
+       | - Added support for NVIDIA Grace based ARM platforms with OpenShift Container Platform.
+       | - Added support for RHEL v8.9, v8.10, v9.3 and v9.4 with Upstream K8s and Containerd runtime.
+       | - Added support for Switchdev mode SR-IOV mode with OVS CNI with RHEL.
    * - 24.4.1
      - | - Fixed NVIDIA Network Operator images in OpenShift Container Platform bundle.
    * - 24.4.0
