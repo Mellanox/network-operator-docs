@@ -1565,6 +1565,12 @@ spec:
     pKeyGUIDPoolRangeStart: 02:00:00:00:00:00:00:00
     pKeyGUIDPoolRangeEnd: 02:FF:FF:FF:FF:FF:FF:FF
     ufmSecret: &quot;ufm-secret&quot;
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: ghcr.io/mellanox
+    version: v0.2.0
+    imagePullSecrets: []
+    enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
@@ -1575,12 +1581,24 @@ spec:
       image: multus-cni
       repository: ghcr.io/k8snetworkplumbingwg
       version: v3.9.3
-      imagePullSecrets: []
-    ipamPlugin:
-      image: whereabouts
-      repository: ghcr.io/k8snetworkplumbingwg
-      version: v0.7.0
       imagePullSecrets: []</pre>
+<p>Create IPPool object for nv-ipam</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pool1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/16</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nodeSelectorTerms</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-role.kubernetes.io/worker</span><span class="w"></span>
+<span class="w">          </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Exists</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Wait for NVIDIA DOCA Driver to install and apply the following CRs:</p>
 <p><code class="docutils literal notranslate"><span class="pre">sriov-ib-network-node-policy.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -1618,15 +1636,9 @@ spec:
 <span class="w">  </span><span class="s">&quot;link_state&quot;:</span><span class="nv"> </span><span class="s">&quot;enable&quot;,</span><span class="w"></span>
 <span class="w">  </span><span class="s">&quot;ibKubernetesEnabled&quot;:</span><span class="nv"> </span><span class="s">true,</span><span class="w"></span>
 <span class="w">  </span><span class="s">&quot;ipam&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;whereabouts&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;datastore&quot;:</span><span class="nv"> </span><span class="s">&quot;kubernetes&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;kubernetes&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;kubeconfig&quot;:</span><span class="nv"> </span><span class="s">&quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="s">},</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;range&quot;:</span><span class="nv"> </span><span class="s">&quot;10.56.217.0/24&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;log_file&quot;</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">&quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;log_level&quot;</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="s">}</span><span class="w"></span>
+<span class="w">      </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="s">&quot;poolName&quot;:</span><span class="nv"> </span><span class="s">&quot;pool1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">}</span><span class="w"></span>
 <span class="s">}&#39;</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1642,26 +1654,23 @@ spec:
 <span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia.com/mlnxnics</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;ib-sriov&quot;,</span><span class="w"></span>
 <span class="w">  </span><span class="s">&quot;cniVersion&quot;:</span><span class="nv"> </span><span class="s">&quot;0.3.1&quot;,</span><span class="w"></span>
 <span class="w">  </span><span class="s">&quot;name&quot;:</span><span class="nv"> </span><span class="s">&quot;ib-sriov-network&quot;,</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;metaPluginsConfigured&quot;:</span><span class="nv"> </span><span class="s">true,</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;metaPlugins&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;rdma&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;plugins&quot;:</span><span class="nv"> </span><span class="s">[</span><span class="w"></span>
+<span class="w">  </span><span class="s">{</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;ib-sriov&quot;,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;pkey&quot;:</span><span class="nv"> </span><span class="s">&quot;0x6&quot;,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;link_state&quot;:</span><span class="nv"> </span><span class="s">&quot;enable&quot;,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;ibKubernetesEnabled&quot;:</span><span class="nv"> </span><span class="s">true,</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;ipam&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
+<span class="w">      </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="s">&quot;poolName&quot;:</span><span class="nv"> </span><span class="s">&quot;pool1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">}</span><span class="w"></span>
 <span class="w">  </span><span class="s">},</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;pkey&quot;:</span><span class="nv"> </span><span class="s">&quot;0x6&quot;,</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;link_state&quot;:</span><span class="nv"> </span><span class="s">&quot;enable&quot;,</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;ibKubernetesEnabled&quot;:</span><span class="nv"> </span><span class="s">true,</span><span class="w"></span>
-<span class="w">  </span><span class="s">&quot;ipam&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;whereabouts&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;datastore&quot;:</span><span class="nv"> </span><span class="s">&quot;kubernetes&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;kubernetes&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;kubeconfig&quot;:</span><span class="nv"> </span><span class="s">&quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="s">},</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;range&quot;:</span><span class="nv"> </span><span class="s">&quot;10.56.217.0/24&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;log_file&quot;</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">&quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;log_level&quot;</span><span class="nv"> </span><span class="s">:</span><span class="nv"> </span><span class="s">&quot;info&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="s">{</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;rdma&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="s">}</span><span class="w"></span>
+<span class="w">  </span><span class="s">]</span><span class="w"></span>
 <span class="s">}&#39;</span><span class="w"></span>
 </pre></div>
 </div>
@@ -2062,7 +2071,7 @@ ovs-vsctl <span class="nb">set</span> Open_vSwitch . other_config:hw-offload<spa
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 25, 2024.
+      <span class="lastupdated">Last updated on Aug 27, 2024.
       </span></p>
   </div>
 
