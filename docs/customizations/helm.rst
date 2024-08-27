@@ -208,7 +208,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-beta.4"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-rc.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -220,11 +220,11 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0"`
+     - `"ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.1"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-beta.4"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -232,7 +232,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-beta.4"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-rc.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - object
@@ -403,7 +403,7 @@ For example:
      -
    * - ofedDriver.version
      - string
-     - `"24.07-0.6.0.0-1"`
+     - `"24.07-0.6.1.0-0"`
      - NVIDIA DOCA Driver version.
 
 ===============================================
