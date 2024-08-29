@@ -36,6 +36,11 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.7.0
+     - | - Added support for OpenShift Container Platform v4.16.
+       | - Added support for NVIDIA Grace based ARM platforms with OpenShift Container Platform.
+       | - Added support for RHEL v8.9, v8.10, v9.3 and v9.4 with Upstream K8s and Containerd runtime.
+       | - Added support for Switchdev mode SR-IOV mode with OVS CNI with RHEL.
    * - 24.4.1
      - | - Fixed NVIDIA Network Operator images in OpenShift Container Platform bundle.
    * - 24.4.0
@@ -130,6 +135,9 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 24.7.0
+     - | - Deploying NicClusterPolicy Custom Resource through helm is deprecated, support will be removed in Network Operator 24.10.
+           It is advised to keep deployCR=false in your helm values and create/update NicClusterPolicy Custom Resource post helm install/update.
    * - 23.10.0
      - | - In NV-IPAM v0.1.1, the IP Pools configurations are read from IPPool CRs instead of using a ConfigMap. Existing ConfigMap configuration will be automatically migrated to IPPools CRs as part of the upgrade process.
    * - 23.7.0

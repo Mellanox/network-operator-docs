@@ -164,13 +164,13 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - 
    * - Red Hat Core OS
      - 
-     - 4.12-4.15
+     - 4.14-4.16
      - RT kernels support
-   * - Red Hat Enterprise Linux 9.2, 9.0
+   * - Red Hat Enterprise Linux 9.4, 9.3, 9.2, 9.0
      - 1.27-1.29
      - 
      - 
-   * - Red Hat Enterprise Linux 8.8, 8.6
+   * - Red Hat Enterprise Linux 8.10, 8.9, 8.8, 8.6
      - 1.27-1.29
      - 
      - RT kernels support
