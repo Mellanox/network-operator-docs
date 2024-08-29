@@ -92,7 +92,7 @@ General Parameters
      - Configure node selector settings for the operator.
    * - operator.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/cloud-native"`
      - Network Operator image repository.
    * - operator.resources
      - object
@@ -208,7 +208,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.7.0"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -224,7 +224,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -232,7 +232,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - object
@@ -347,7 +347,7 @@ For example:
      - Private mirror repository configuration.
    * - ofedDriver.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/mellanox"`
      - NVIDIA DOCA Driver image repository.
    * - ofedDriver.startupProbe.initialDelaySeconds
      - int
