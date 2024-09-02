@@ -1,4 +1,4 @@
-name: documentation CI
+name: Documentation CI
 
 on:
   workflow_call:
@@ -24,7 +24,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+        repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
+        token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
     - name: Make docs
       run: |
         make helm-docs api-docs generate-docs-versions-var doca-driver-build-update
