@@ -232,7 +232,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0-"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - object
