@@ -1,6 +1,7 @@
 # Package related
 TOOLSDIR=$(CURDIR)/hack/tools/bin
 BUILDDIR=$(CURDIR)/build/_output
+CACHE_DIR=$(CURDIR)/.cache/packman
 
 # If gobin not set, create one on ./build and add to path.
 ifeq (,$(shell go env GOBIN))
@@ -112,12 +113,27 @@ api-docs: gen-crd-api-docs
 	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
 	--columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
 
+.PHONY: build-cache
+build-cache:
+	@if [ -d "$(CACHE_DIR)" ]; then \
+		echo "$(CACHE_DIR) exists. Skipping build-cache."; \
+	else \
+		echo "Creating $(CACHE_DIR)..."; \
+		mkdir -p $(CACHE_DIR); \
+		# Add commands to populate the cache here \
+		export PM_PACKAGES_ROOT=${CACHE_DIR}; \
+		${CURDIR}/repo.sh docs || true; \
+		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions; \
+	fi
+
 .PHONY: gen-docs
-gen-docs:
-	@ ./repo.sh docs
+gen-docs: build-cache
+	@echo "Generating documentation..."; \
+    export PM_PACKAGES_ROOT=${CACHE_DIR}; \
+	${CURDIR}/repo.sh docs
 
 .PHONY: generate-docs-versions-var
-generate-docs-versions-var:
+generate-docs-versions-var: | $(BUILDDIR)
 	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
 	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/ --outputDir $(CURDIR)/build/
 	mv $(CURDIR)/build/vars.yaml docs/common/vars.rst
@@ -128,3 +144,10 @@ doca-driver-build-update:
 	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}dtk_nic_driver_build.sh -o $(CURDIR)/docs/downloads/dtk_nic_driver_build.sh
 	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}RHEL_Dockerfile -o $(CURDIR)/docs/downloads/RHEL_Dockerfile
 	curl -sL ${DOCA_DRIVER_BUILD_BASE_URL}Ubuntu_Dockerfile -o $(CURDIR)/docs/downloads/Ubuntu_Dockerfile
+
+.PHONY: clean
+clean:
+	@echo "Cleaning..."; \
+	rm -rf .cache;\
+	rm -rf build;\
+	rm -rf _build

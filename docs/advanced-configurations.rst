@@ -14,7 +14,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-.. headings # #, * *, =, -, ^, "
+.. headings # #, * *, =, -, ^, ", ~
 
 
 ***********************
@@ -318,7 +318,6 @@ Before you begin, ensure that you have the following prerequisites:
 ~~~~~~
 Common
 ~~~~~~
-
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
 - Web access to NVIDIA NIC drivers sources. Latest NIC drivers published at `NIC drivers download center <https://network.nvidia.com/products/infiniband-drivers/linux/mlnx_ofed/>`_, for example: `https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz <https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz>`_
 
@@ -326,7 +325,6 @@ Common
 ~~~~
 RHEL
 ~~~~
-
 - Active subscription and login credentials for `registry.redhat.io <https://registry.redhat.io>`_. To build RHEL based container from official repository, you need to log in to `registry.redhat.io <https://registry.redhat.io>`_, run the following command:
 
 .. code-block:: bash
@@ -338,7 +336,6 @@ Replace `RH_USERNAME` and `RH_PASSWORD` with your Red Hat account username and p
 ~~~~~
 RHCOS
 ~~~~~
-
 - Install `oc <https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html>`_ CLI tool.
 - Download OpenShift `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_.
 
@@ -379,11 +376,8 @@ Before building the container, you need to provide following parameters as `buil
 ------------------------------
 RHEL specific build parameters
 ------------------------------
-
 1. `D_BASE_IMAGE`: DriverToolKit container image
-
-**NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.
-
+    **NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.
 2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
 
 For more details regarding DTK please read `official documentation <https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload>`_.
@@ -391,12 +385,9 @@ For more details regarding DTK please read `official documentation <https://docs
 -------------------------------
 RHCOS specific build parameters
 -------------------------------
-
 1. `D_BASE_IMAGE`: DriverToolKit container image
-
-**NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
-
-In order to get the specific DTK container image for a specific OpenShift release, run:
+   **NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+   In order to get the specific DTK container image for a specific OpenShift release, run:
 
 .. code-block:: bash
 
