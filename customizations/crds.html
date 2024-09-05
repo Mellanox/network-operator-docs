@@ -382,29 +382,7 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#hostdevicenetworkspec"><span class="std std-ref">HostDeviceNetworkSpec</span></a></p></td>
-<td><table class="docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
-string</p></td>
-<td><p>Namespace of the NetworkAttachmentDefinition
-custom resource</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">resourceName</span></code>
-string</p></td>
-<td><p>Host device resource pool name</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
-string</p></td>
-<td><p>IPAM configuration to be used for this
-network</p></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#hostdevicenetworkstatus"><span class="std std-ref">HostDeviceNetworkStatus</span></a></p></td>
@@ -554,30 +532,7 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#ipoibnetworkspec"><span class="std std-ref">IPoIBNetworkSpec</span></a></p></td>
-<td><table class="docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
-string</p></td>
-<td><p>Namespace of the NetworkAttachmentDefinition
-custom resource</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">master</span></code>
-string</p></td>
-<td><p>Name of the host interface to enslave.
-Defaults to default route interface</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
-string</p></td>
-<td><p>IPAM configuration to be used for this
-network.</p></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#ipoibnetworkstatus"><span class="std std-ref">IPoIBNetworkStatus</span></a></p></td>
@@ -755,40 +710,7 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#macvlannetworkspec"><span class="std std-ref">MacvlanNetworkSpec</span></a></p></td>
-<td><table class="docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
-string</p></td>
-<td><p>Namespace of the NetworkAttachmentDefinition
-custom resource</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">master</span></code>
-string</p></td>
-<td><p>Name of the host interface to enslave.
-Defaults to default route interface</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code>
-string</p></td>
-<td><p>Mode of interface one of “bridge”,
-“private”, “vepa”, “passthru”</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mtu</span></code>
-int</p></td>
-<td><p>MTU of interface to the specified value. 0
-for master’s MTU</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
-string</p></td>
-<td><p>IPAM configuration to be used for this
-network.</p></td>
-</tr>
-</tbody>
-</table>
-</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#macvlannetworkstatus"><span class="std std-ref">MacvlanNetworkStatus</span></a></p></td>
@@ -982,64 +904,7 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a></p></td>
-<td><table class="docutils align-default">
-<colgroup>
-<col style="width: 50%" />
-<col style="width: 50%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nodeAffinity</span></code>
-<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#NodeAffinity">Kubernetes
-core/v1.NodeAffinity</a></p></td>
-<td><p>Additional nodeAffinity rules to inject to
-the DaemonSets objects that are managed by
-the operator</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tolerations</span></code>
-<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#Toleration">[]Kubernetes
-core/v1.Toleration</a></p></td>
-<td><p>Additional tolerations to inject to the
-DaemonSets objects that are managed by the
-operator</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>
-<a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a></p></td>
 <td></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>
-<a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>
-<a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ibKubernetes</span></code>
-<a class="reference internal" href="#ibkubernetesspec"><span class="std std-ref">IBKubernetesSpec</span></a></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">secondaryNetwork</span></code>
-:ref:`
-SecondaryNetworkSpec &lt;SecondaryNetworkSpec&gt;`</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
-<a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nicFeatureDiscovery</span></code>
-<a class="reference internal" href="#nicfeaturediscoveryspec"><span class="std std-ref">NICFea
-tureDiscoverySpec</span></a></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">docaTelemetryService</span></code>
-<a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATele
-metryServiceSpec</span></a></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#nicclusterpolicystatus"><span class="std std-ref">NicClusterPolicyStatus</span></a></p></td>
