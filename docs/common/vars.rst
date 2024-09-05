@@ -1,6 +1,6 @@
 .. |network-operator-version| replace:: v24.7.0
 .. |helm-chart-version| replace:: 24.7.0
-.. |ocp-channel| replace::  v24.7
+.. |ocp-channel| replace::  v24.7.1
 .. |mofed-version| replace:: 24.07-0.6.1.0-0
 .. |mofed-init-container-version| replace:: v0.0.2
 .. |sriov-device-plugin-version| replace:: v3.7.0
