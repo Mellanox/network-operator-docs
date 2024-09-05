@@ -408,10 +408,11 @@ This approach is used to optimize the resulting container image size and reduce 
 <section id="rhel-specific-build-parameters">
 <h3>RHEL specific build parameters<a class="headerlink" href="#rhel-specific-build-parameters" title="Permalink to this headline"></a></h3>
 <ol class="arabic simple">
-<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</p></li>
-</ol>
-<p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.</p>
-<ol class="arabic simple" start="2">
+<li><dl class="simple">
+<dt><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</dt><dd><p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.</p>
+</dd>
+</dl>
+</li>
 <li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
 </ol>
 <p>For more details regarding DTK please read <a class="reference external" href="https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload">official documentation</a>.</p>
@@ -419,10 +420,10 @@ This approach is used to optimize the resulting container image size and reduce 
 <section id="rhcos-specific-build-parameters">
 <h3>RHCOS specific build parameters<a class="headerlink" href="#rhcos-specific-build-parameters" title="Permalink to this headline"></a></h3>
 <ol class="arabic simple">
-<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</p></li>
+<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image
+<strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+In order to get the specific DTK container image for a specific OpenShift release, run:</p></li>
 </ol>
-<p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.</p>
-<p>In order to get the specific DTK container image for a specific OpenShift release, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info &lt;OCP_VERSION&gt; --image-for<span class="o">=</span>driver-toolkit
 </pre></div>
 </div>
@@ -507,7 +508,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 02, 2024.
+      <span class="lastupdated">Last updated on Sep 05, 2024.
       </span></p>
   </div>
 

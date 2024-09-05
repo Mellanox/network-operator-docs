@@ -246,16 +246,18 @@ Roles:              worker
 </div>
 </li>
 <li><p>Create the following Subscription CR, and save the YAML in the network-operator-sub.yaml file:</p>
-<pre class="literal-block">apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: nvidia-network-operator
-  namespace: nvidia-network-operator
-spec:
-  channel: &quot;v24.7&quot;
-  name: nvidia-network-operator
-  source: certified-operators
-  sourceNamespace: openshift-marketplace</pre>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.coreos.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Subscription</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v24.7&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">certified-operators</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sourceNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-marketplace</span><span class="w"></span>
+</pre></div>
+</div>
 </li>
 <li><p>Create the subscription object by running the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc create -f network-operator-sub.yaml
@@ -298,41 +300,43 @@ nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">2<
 <ul class="simple">
 <li><p>There is no need for a secondary network configuration, as it is installed by default in OCP.</p></li>
 </ul>
-<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
-kind: NicClusterPolicy
-metadata:
-  name: nic-cluster-policy
-spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.1.0-0
-     startupProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 20
-    livenessProbe:
-      initialDelaySeconds: 30
-      periodSeconds: 30
-    readinessProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 30
-  sriovDevicePlugin:
-      image: sriov-network-device-plugin
-      repository: ghcr.io/k8snetworkplumbingwg
-      version: v3.7.0
-      config: |
-        {
-          &quot;resourceList&quot;: [
-              {
-                  &quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,
-                  &quot;resourceName&quot;: &quot;hostdev&quot;,
-                  &quot;selectors&quot;: {
-                      &quot;vendors&quot;: [&quot;15b3&quot;],
-                      &quot;isRdma&quot;: true
-                  }
-              }
-          ]
-        }</pre>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24.07-0.6.1.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">startupProbe</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/k8snetworkplumbingwg</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v3.7.0</span><span class="w"></span>
+<span class="w">      </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">        </span><span class="no">{</span><span class="w"></span>
+<span class="w">          </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
+<span class="w">              </span><span class="no">{</span><span class="w"></span>
+<span class="w">                  </span><span class="no">&quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,</span><span class="w"></span>
+<span class="w">                  </span><span class="no">&quot;resourceName&quot;: &quot;hostdev&quot;,</span><span class="w"></span>
+<span class="w">                  </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">                      </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
+<span class="w">                      </span><span class="no">&quot;isRdma&quot;: true</span><span class="w"></span>
+<span class="w">                  </span><span class="no">}</span><span class="w"></span>
+<span class="w">              </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">]</span><span class="w"></span>
+<span class="w">        </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Following the deployment, the Network Operator should be configured, and K8s networking deployed to use it in pod configuration.
 The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
@@ -390,24 +394,26 @@ The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:
 <h5>Network Operator Deployment with SR-IOV Legacy Mode - OCP<a class="headerlink" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp" title="Permalink to this headline"></a></h5>
 <p>This deployment mode supports SR-IOV in legacy mode.
 Note that the SR-IOV Network Operator is required as described in the Deployment for OCP section.</p>
-<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
-kind: NicClusterPolicy
-metadata:
-  name: nic-cluster-policy
-spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.1.0-0
-     startupProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 20
-    livenessProbe:
-      initialDelaySeconds: 30
-      periodSeconds: 30
-    readinessProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 30</pre>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24.07-0.6.1.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">startupProbe</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Sriovnetwork node policy and K8s networking should be deployed.
 <cite>sriovnetwork-node-policy.yaml</cite> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -430,26 +436,28 @@ spec:
 </pre></div>
 </div>
 <p>The <cite>sriovnetwork.yaml</cite> configuration file for such a deployment:</p>
-<pre class="literal-block">apiVersion: sriovnetwork.openshift.io/v1
-kind: SriovNetwork
-metadata:
-  name: &quot;sriov-network&quot;
-  namespace:  openshift-sriov-network-operator
-spec:
-  vlan: 0
-  networkNamespace: &quot;default&quot;
-  resourceName: &quot;sriovlegacy&quot;
-  ipam: |-
-    {
-      &quot;datastore&quot;: &quot;kubernetes&quot;,
-      &quot;kubernetes&quot;: {
-        &quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;
-      },
-      &quot;log_file&quot;: &quot;/tmp/whereabouts.log&quot;,
-      &quot;log_level&quot;: &quot;debug&quot;,
-      &quot;type&quot;: &quot;whereabouts&quot;,
-      &quot;range&quot;: &quot;192.168.101.0/24&quot;
-  }</pre>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">openshift-sriov-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sriovlegacy&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot;: &quot;/tmp/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot;: &quot;debug&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.101.0/24&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Note that the resource prefix in this case will be <cite>openshift.io</cite>.
 The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
@@ -481,40 +489,42 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 <section id="network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">
 <h5>Network Operator Deployment with the RDMA Shared Device Plugin - OCP<a class="headerlink" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp" title="Permalink to this headline"></a></h5>
 <p>The following is an example of RDMA Shared with MacVlanNetwork:</p>
-<pre class="literal-block">apiVersion: mellanox.com/v1alpha1
-kind: NicClusterPolicy
-metadata:
-  name: nic-cluster-policy
-spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvidia/mellanox
-    version: 24.07-0.6.1.0-0
-     startupProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 20
-    livenessProbe:
-      initialDelaySeconds: 30
-      periodSeconds: 30
-    readinessProbe:
-      initialDelaySeconds: 10
-      periodSeconds: 30
-  rdmaSharedDevicePlugin:
-    config: |
-      {
-        &quot;configList&quot;: [
-          {
-            &quot;resourceName&quot;: &quot;rdmashared&quot;,
-            &quot;rdmaHcaMax&quot;: 1000,
-            &quot;selectors&quot;: {
-              &quot;ifNames&quot;: [&quot;enp4s0f0np0&quot;]
-            }
-          }
-        ]
-      }
-    image: k8s-rdma-shared-dev-plugin
-    repository: nvcr.io/nvidia/cloud-native
-    version: v1.5.1</pre>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24.07-0.6.1.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">startupProbe</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;rdmashared&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;rdmaHcaMax&quot;: 1000,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;ifNames&quot;: [&quot;enp4s0f0np0&quot;]</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/cloud-native</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1.5.1</span><span class="w"></span>
+</pre></div>
+</div>
 <p>The <cite>macvlan-net-ocp.yaml</cite> configuration file for such a deployment in an OpenShift Platform:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MacvlanNetwork</span><span class="w"></span>
@@ -571,7 +581,7 @@ spec:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 02, 2024.
+      <span class="lastupdated">Last updated on Sep 05, 2024.
       </span></p>
   </div>
 
