@@ -101,11 +101,12 @@ Downloading a New Helm Chart
 
 To obtain new releases, run:
 
-.. parsed-literal::
+.. code-block:: bash
+   :substitutions:
 
-  # Download Helm chart
-  $ helm fetch \https://helm.ngc.nvidia.com/nvidia/charts/network-operator-|helm-chart-version|.tgz
-  $ ls network-operator-\*.tgz | xargs -n 1 tar xf
+    # Download Helm chart
+    $ helm fetch \https://helm.ngc.nvidia.com/nvidia/charts/network-operator-|helm-chart-version|.tgz
+    $ ls network-operator-\*.tgz | xargs -n 1 tar xf
 
 
 -------------------------------------
@@ -239,47 +240,48 @@ To enable automatic OFED upgrade, define the UpgradePolicy section for the ofedD
 
 ``nicclusterpolicy.yaml``:
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
-  apiVersion: mellanox.com/v1alpha1
-  kind: NicClusterPolicy
-  metadata:
-    name: nic-cluster-policy
-    namespace: nvidia-network-operator
-  spec:
-    ofedDriver:
-      image: doca-driver
-      repository: nvcr.io/nvidia/mellanox
-      version: |mofed-version|
-      upgradePolicy:
-        # autoUpgrade is a global switch for automatic upgrade feature
-        # if set to false all other options are ignored
-        autoUpgrade: true
-        # maxParallelUpgrades indicates how many nodes can be upgraded in parallel
-        # 0 means no limit, all nodes will be upgraded in parallel
-        maxParallelUpgrades: 0
-        # cordon and drain (if enabled) a node before loading the driver on it
-        safeLoad: false
-        # describes the configuration for waiting on job completions
-        waitForCompletion:
-          # specifies a label selector for the pods to wait for completion
-          podSelector: "app=myapp"
-          # specify the length of time in seconds to wait before giving up for workload to finish, zero means infinite
-          # if not specified, the default is 300 seconds
-          timeoutSeconds: 300
-        # describes configuration for node drain during automatic upgrade
-        drain:
-          # allow node draining during upgrade
-          enable: true
-          # allow force draining
-          force: false
-          # specify a label selector to filter pods on the node that need to be drained
-          podSelector: ""
-          # specify the length of time in seconds to wait before giving up drain, zero means infinite
-          # if not specified, the default is 300 seconds
-          timeoutSeconds: 300
-          # specify if should continue even if there are pods using emptyDir
-          deleteEmptyDir: false
+    apiVersion: mellanox.com/v1alpha1
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+      namespace: nvidia-network-operator
+    spec:
+      ofedDriver:
+        image: doca-driver
+        repository: nvcr.io/nvidia/mellanox
+        version: |mofed-version|
+        upgradePolicy:
+          # autoUpgrade is a global switch for automatic upgrade feature
+          # if set to false all other options are ignored
+          autoUpgrade: true
+          # maxParallelUpgrades indicates how many nodes can be upgraded in parallel
+          # 0 means no limit, all nodes will be upgraded in parallel
+          maxParallelUpgrades: 0
+          # cordon and drain (if enabled) a node before loading the driver on it
+          safeLoad: false
+          # describes the configuration for waiting on job completions
+          waitForCompletion:
+            # specifies a label selector for the pods to wait for completion
+            podSelector: "app=myapp"
+            # specify the length of time in seconds to wait before giving up for workload to finish, zero means infinite
+            # if not specified, the default is 300 seconds
+            timeoutSeconds: 300
+          # describes configuration for node drain during automatic upgrade
+          drain:
+            # allow node draining during upgrade
+            enable: true
+            # allow force draining
+            force: false
+            # specify a label selector to filter pods on the node that need to be drained
+            podSelector: ""
+            # specify the length of time in seconds to wait before giving up drain, zero means infinite
+            # if not specified, the default is 300 seconds
+            timeoutSeconds: 300
+            # specify if should continue even if there are pods using emptyDir
+            deleteEmptyDir: false
 
 Apply NicClusterPolicy CRD:
 
@@ -323,26 +325,27 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
 
 .. warning:: Depending on your cluster workloads and pod Disruption Budget, set the following values for auto upgrade:
 
-  .. parsed-literal::
+  .. code-block:: yaml
+    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-      namespace: nvidia-network-operator
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
-         upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          drain:
-            enable: true
-            force: false
-            deleteEmptyDir: true
-            podSelector: ""
+      apiVersion: mellanox.com/v1alpha1
+      kind: NicClusterPolicy
+      metadata:
+        name: nic-cluster-policy
+        namespace: nvidia-network-operator
+      spec:
+        ofedDriver:
+          image: doca-driver
+          repository: nvcr.io/nvidia/mellanox
+          version: |mofed-version|
+          upgradePolicy:
+            autoUpgrade: true
+            maxParallelUpgrades: 1
+            drain:
+              enable: true
+              force: false
+              deleteEmptyDir: true
+              podSelector: ""
 
 ###################
 Safe Driver Loading

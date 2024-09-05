@@ -165,7 +165,8 @@ Network Operator Installation using OpenShift OC CLI
 #. Create the following Subscription CR, and save the YAML in the network-operator-sub.yaml file:
 
 
-   .. parsed-literal::
+   .. code-block:: yaml
+      :substitutions:
 
       apiVersion: operators.coreos.com/v1alpha1
       kind: Subscription
@@ -237,8 +238,8 @@ SR-IOV device plugin, single SR-IOV resource pool:
 
 - There is no need for a secondary network configuration, as it is installed by default in OCP.
 
-.. parsed-literal::
-
+.. code-block:: yaml
+   :substitutions:
    
    apiVersion: mellanox.com/v1alpha1
    kind: NicClusterPolicy
@@ -340,7 +341,8 @@ Network Operator Deployment with SR-IOV Legacy Mode - OCP
 This deployment mode supports SR-IOV in legacy mode.
 Note that the SR-IOV Network Operator is required as described in the Deployment for OCP section. 
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
    
    apiVersion: mellanox.com/v1alpha1
    kind: NicClusterPolicy
@@ -386,18 +388,18 @@ Sriovnetwork node policy and K8s networking should be deployed.
 
 The `sriovnetwork.yaml` configuration file for such a deployment:
 
-.. parsed-literal::
+.. code-block:: yaml
 
    apiVersion: sriovnetwork.openshift.io/v1
    kind: SriovNetwork
    metadata:
-     name: "sriov-network"
+     name: sriov-network
      namespace:  openshift-sriov-network-operator
    spec:
      vlan: 0
      networkNamespace: "default"
      resourceName: "sriovlegacy" 
-     ipam: \|-
+     ipam: |
        {
          "datastore": "kubernetes",
          "kubernetes": {
@@ -407,7 +409,7 @@ The `sriovnetwork.yaml` configuration file for such a deployment:
          "log_level": "debug",
          "type": "whereabouts",
          "range": "192.168.101.0/24"
-     }
+       }
 
 
 Note that the resource prefix in this case will be `openshift.io`.
@@ -446,7 +448,8 @@ Network Operator Deployment with the RDMA Shared Device Plugin - OCP
 
 The following is an example of RDMA Shared with MacVlanNetwork:
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
    apiVersion: mellanox.com/v1alpha1
    kind: NicClusterPolicy

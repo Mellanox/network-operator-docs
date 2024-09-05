@@ -51,7 +51,7 @@ Prerequisites
 
    You can run the following commands to install the Helm CLI:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
           && chmod 700 get_helm.sh \
@@ -62,7 +62,7 @@ Prerequisites
 #. If your cluster uses Pod Security Admission (PSA) to restrict the behavior of pods,
    label the namespace for the Operator to set the enforcement policy to privileged:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       $ kubectl create ns nvidia-network-operator
       $ kubectl label --overwrite ns nvidia-network-operator pod-security.kubernetes.io/enforce=privileged
@@ -74,7 +74,7 @@ Prerequisites
 
    One way to determine if NFD is already running in the cluster is to check for a NFD label on your nodes:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       $ kubectl get nodes -o json | jq '.items[].metadata.labels | keys | any(startswith("feature.node.kubernetes.io"))'
 
@@ -110,7 +110,8 @@ The provided Helm chart contains various parameters to facilitate the creation o
 
 Install Network Operator from the NVIDIA NGC chart using the default values:
 
-.. parsed-literal::
+.. code-block:: bash
+   :substitutions:
 
     helm install network-operator nvidia/network-operator \
       -n nvidia-network-operator \
@@ -127,11 +128,13 @@ Install the Network Operator from the NVIDIA NGC chart using custom values:
 
 .. warning:: Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.
 
-.. parsed-literal::
+.. code-block:: bash
+   :substitutions:
 
    helm show values nvidia/network-operator --version |network-operator-version| > values.yaml
 
-.. parsed-literal::
+.. code-block:: bash
+   :substitutions:
 
     helm install network-operator nvidia/network-operator \
       -n nvidia-network-operator \
@@ -172,7 +175,8 @@ Once the Network Operator is installed create a NicClusterPolicy with
 
 Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -251,7 +255,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 
 Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -339,7 +344,8 @@ Once the Network Operator is installed create a NicClusterPolicy with the follow
 * Container-networking-plugins CNI plugins
 * IPAM Plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -381,7 +387,8 @@ Once the Network Operator is installed deploy a NicClusterPolicy with the follow
     * Container Networking plugins
     * NVIDIA-IPAM plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -466,7 +473,8 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
     * Container Networking plugins
     * IPAM plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -616,7 +624,8 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
     * RDMA Shared device plugin
     * Whereabouts IPAM CNI plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -713,7 +722,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 * IPoIB CNI
 * Whereabouts IPAM CNI plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -897,7 +907,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 * IPAM plugin
 
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1074,7 +1085,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 * IPoIB CNI
 * IPAM CNI plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1360,7 +1372,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network
 
 Network Operator deployment with InfiniBand network requires the following:
 
-* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`.
+* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to this `article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`_.
 * InfiniBand device – Both the host device and switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
 
@@ -1381,7 +1393,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 * Container Networking Plugins
 * IPAM plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1568,7 +1581,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 * Container Networking plugins
 * IPAM Plugin
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1769,7 +1783,8 @@ Network Operator deployment with:
 
 ``nicclusterpolicy.yaml``
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1897,10 +1912,10 @@ First install the Network Operator with NFD enabled:
     sriovNetworkOperator:
       enabled: true
 
-Once the Network Operator has been installed create a NicClusterPolicy with:
-* NVIPAM
+Once the Network Operator has been installed create a NicClusterPolicy with nv-ipam:
 
-.. parsed-literal::
+.. code-block:: yaml
+   :substitutions:
 
     apiVersion: mellanox.com/v1alpha1
     kind: NicClusterPolicy
@@ -1948,6 +1963,7 @@ Prerequisites for Worker Nodes
 Supported operating systems:
 
 * Ubuntu 22.04
+* RHEL 8.8
 
 OpenvSwitch from the ``NVIDIA DOCA for Host`` package with ``doca-all`` or ``doca-networking`` profile should be installed on each worker node.
 

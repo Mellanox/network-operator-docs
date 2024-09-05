@@ -37,7 +37,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.27 and <=1.29
+     - >=1.27 and <=1.30.4
      -
    * - Helm
      - v3.5+
@@ -89,7 +89,7 @@ The following component versions are deployed by the Network Operator:
      -
    * - NIC Feature Discovery
      - |nic-feature-discovery-version|
-     -
+     - Only one instance of NFD should be deployed.
    * - DOCA Telemetry
      - |doca-telemetry-version|
      -
@@ -135,8 +135,8 @@ The following ARM based systems has been tested with Network Operator:
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA Grace ARM Server
      - ConnectX-7
-     - Ubuntu 22.04 (ARM64)
-     - Tech Preview
+     - Ubuntu 22.04 (ARM64) / OCP 4.16
+     - GA
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
@@ -151,15 +151,15 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - Red Hat OpenShift
      - Notes
    * - Ubuntu 24.04 LTS
-     - 1.27-1.29
+     - 1.27-1.30.4
      - 
      - 
    * - Ubuntu 22.04 LTS
-     - 1.27-1.29
+     - 1.27-1.30.4
      - 
      - RT kernels support
    * - Ubuntu 20.04 LTS
-     - 1.27-1.29
+     - 1.27-1.30.4
      - 
      - 
    * - Red Hat Core OS
@@ -167,11 +167,11 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - 4.14-4.16
      - RT kernels support
    * - Red Hat Enterprise Linux 9.4, 9.3, 9.2, 9.0
-     - 1.27-1.29
+     - 1.27-1.30.4
      - 
      - 
    * - Red Hat Enterprise Linux 8.10, 8.9, 8.8, 8.6
-     - 1.27-1.29
+     - 1.27-1.30.4
      - 
      - RT kernels support
 
