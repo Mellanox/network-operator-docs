@@ -417,7 +417,7 @@ Then pull the DTK image locally using your pull-secret:
 RHEL example
 ~~~~~~~~~~~~
 
-To build RHEL-based image please use provided :download:`Dockerfile <downloads/RHEL_Dockerfile>`:
+To build RHEL-based image please use provided `RHEL Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/RHEL_Dockerfile>`_:
 
 .. code-block:: bash
 
@@ -436,7 +436,7 @@ To build RHEL-based image please use provided :download:`Dockerfile <downloads/R
 RHCOS example
 ~~~~~~~~~~~~~
 
-To build RHCOS based image please use provided :download:`Dockerfile <downloads/RHEL_Dockerfile>`:
+To build RHCOS based image please use provided `RHCOS Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/RHEL_Dockerfile>`_:
 
 .. code-block:: bash
 
@@ -455,7 +455,7 @@ To build RHCOS based image please use provided :download:`Dockerfile <downloads/
 Ubuntu example
 ~~~~~~~~~~~~~~
 
-To build RHEL-based image please use provided :download:`Dockerfile <downloads/Ubuntu_Dockerfile>`:.
+To build Ubuntu-based image please use provided `Ubuntu Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/Ubuntu_Dockerfile>`_:.
 
 .. code-block:: bash
 
@@ -471,9 +471,9 @@ To build RHEL-based image please use provided :download:`Dockerfile <downloads/U
 
 **NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
-**NOTE:** Entrypoint script :download:`download <downloads/entrypoint.sh>`
+**NOTE:** Download `entrypoint script file <https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/entrypoint.sh>`_
 
-**NOTE:** Driver build script :download:`download <downloads/dtk_nic_driver_build.sh>`
+**NOTE:** Download `DTK build script file <https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/dtk_nic_driver_build.sh>`_
 
 **NOTE:** Make sure the `.sh` files are executable by running `chmod +x entrypoint.sh dtk_nic_driver_build.sh`
 
