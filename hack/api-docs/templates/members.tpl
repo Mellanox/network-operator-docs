@@ -31,14 +31,6 @@
                         Refer to the Kubernetes API documentation for the fields of the
                         <code>metadata</code> field.
                     {{ end }}
-
-                    {{ if or (eq (fieldName .) "spec") }}
-                        <br/>
-                        <br/>
-                        <table>
-                            {{ template "members" .Type }}
-                        </table>
-                    {{ end }}
                 </td>
             </tr>
         {{ end }}
