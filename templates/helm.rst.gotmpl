@@ -50,7 +50,9 @@ General Parameters
        (hasPrefix "node-feature-discovery" .Key))) }}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -104,7 +106,9 @@ Node Feature Discovery Helm chart customization options can be found `here <http
         {{- if hasPrefix "node-feature-discovery" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -130,7 +134,9 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
         {{- if hasPrefix "sriov-network-operator" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -173,7 +179,9 @@ For example:
         {{- if hasPrefix "ofedDriver" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -253,7 +261,9 @@ RDMA Shared Device Plugin
         {{- if hasPrefix "rdmaSharedDevicePlugin" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -297,7 +307,9 @@ SR-IOV Network Device Plugin
         {{- if hasPrefix "sriovDevicePlugin" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -342,7 +354,9 @@ ib-kubernetes provides a daemon that works in conjunction with the `SR-IOV Netwo
         {{- if hasPrefix "ibKubernetes" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -393,7 +407,9 @@ NVIDIA IPAM Plugin
         {{- if hasPrefix "nvIpam" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -427,7 +443,9 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
         {{- if hasPrefix "secondaryNetwork" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -453,7 +471,9 @@ NVIDIA NIC Feature Discovery
         {{- if hasPrefix "nicFeatureDiscovery" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}
@@ -478,7 +498,9 @@ DOCA Telemetry Service
         {{- if hasPrefix "docaTelemetryService" .Key}}
    * - {{ .Key }}
      - {{ .Type }}
-     - {{ if .Default }}{{ .Default }}{{ else }}{{ "" }}{{ end }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
      - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
        {{- end }}
      {{- end }}

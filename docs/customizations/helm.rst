@@ -67,8 +67,23 @@ General Parameters
      - `true`
      - Use cert-manager for generating self-signed certificate.
    * - operator.affinity.nodeAffinity
-     - object
-     - `{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"node-role.kubernetes.io/master","operator":"In","values":[""]}]},"weight":1},{"preference":{"matchExpressions":[{"key":"node-role.kubernetes.io/control-plane","operator":"In","values":[""]}]},"weight":1}]}`
+     - yaml
+     - .. code-block:: yaml
+
+          preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 1
+                preference:
+                  matchExpressions:
+                      - key: "node-role.kubernetes.io/master"
+                        operator: In
+                        values: [""]
+              - weight: 1
+                preference:
+                  matchExpressions:
+                      - key: "node-role.kubernetes.io/control-plane"
+                        operator: In
+                        values: [""]
+         
      - Configure node affinity settings for the operator.
    * - operator.cniBinDirectory
      - string
@@ -95,12 +110,30 @@ General Parameters
      - `"nvcr.io/nvidia/cloud-native"`
      - Network Operator image repository.
    * - operator.resources
-     - object
-     - `{"limits":{"cpu":"500m","memory":"128Mi"},"requests":{"cpu":"5m","memory":"64Mi"}}`
+     - yaml
+     - .. code-block:: yaml
+
+          limits:
+              cpu: 500m
+              memory: 128Mi
+          requests:
+              cpu: 5m
+              memory: 64Mi
+         
      - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ for the operator.
    * - operator.tolerations
-     - list
-     - `[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Equal","value":""},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Equal","value":""}]`
+     - yaml
+     - .. code-block:: yaml
+
+          - key: "node-role.kubernetes.io/master"
+            operator: "Equal"
+            value: ""
+            effect: "NoSchedule"
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Equal"
+            value: ""
+            effect: "NoSchedule"
+         
      - Set additional tolerations for various Daemonsets deployed by the operator.
    * - operator.useDTK
      - bool
@@ -181,12 +214,44 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      - `"node-feature-discovery"`
      - The name of the service account for garbage collector to use. If not set and create is true, a name is generated using the fullname template and -gc suffix.
    * - node-feature-discovery.master
-     - object
-     - `{"config":{"extraLabelNs":["nvidia.com"]},"serviceAccount":{"create":true,"name":"node-feature-discovery"}}`
+     - yaml
+     - .. code-block:: yaml
+
+          serviceAccount:
+              name: node-feature-discovery
+              create: true
+          config:
+              extraLabelNs: ["nvidia.com"]
+         
      - NFD master deployment configuration.
    * - node-feature-discovery.worker
-     - object
-     - `{"config":{"sources":{"pci":{"deviceClassWhitelist":["0300","0302"],"deviceLabelFields":["vendor"]}}},"serviceAccount":{"create":false,"name":"node-feature-discovery"},"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Exists"},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"},{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]}`
+     - yaml
+     - .. code-block:: yaml
+
+          serviceAccount:
+              # disable creation to avoid duplicate serviceaccount creation by master spec
+              # above
+              name: node-feature-discovery
+              create: false
+          tolerations:
+              - key: "node-role.kubernetes.io/master"
+                operator: "Exists"
+                effect: "NoSchedule"
+              - key: "node-role.kubernetes.io/control-plane"
+                operator: "Exists"
+                effect: "NoSchedule"
+              - key: nvidia.com/gpu
+                operator: Exists
+                effect: NoSchedule
+          config:
+              sources:
+                  pci:
+                      deviceClassWhitelist:
+                          - "0300"
+                          - "0302"
+                      deviceLabelFields:
+                          - vendor
+         
      - NFD worker daemonset configuration.
 
 =======================
@@ -235,8 +300,58 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0"`
      -
    * - sriov-network-operator.operator.admissionControllers
-     - object
-     - `{"certificates":{"certManager":{"enabled":true,"generateSelfSigned":true},"custom":{"enabled":false},"secretNames":{"injector":"network-resources-injector-cert","operator":"operator-webhook-cert"}},"enabled":false}`
+     - yaml
+     - .. code-block:: yaml
+
+          enabled: false
+          certificates:
+              secretNames:
+                  operator: "operator-webhook-cert"
+                  injector: "network-resources-injector-cert"
+              certManager:
+                  # -- When enabled, makes use of certificates managed by cert-manager.
+                  enabled: true
+                  # -- When enabled, certificates are generated via cert-manager and then
+                  # name will match the name of the secrets defined above.
+                  generateSelfSigned: true
+              # -- If not specified, no secret is created and secrets with the names
+              # defined above are expected to exist in the cluster. In that case,
+              # the ca.crt must be base64 encoded twice since it ends up being an env variable.
+              custom:
+                  enabled: false
+          #   operator:
+          #     caCrt: |
+          #       -----BEGIN CERTIFICATE-----
+          #       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G
+          #       ...
+          #       -----END CERTIFICATE-----
+          #     tlsCrt: |
+          #       -----BEGIN CERTIFICATE-----
+          #       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G
+          #       ...
+          #       -----END CERTIFICATE-----
+          #     tlsKey: |
+          #       -----BEGIN EC PRIVATE KEY-----
+          #       MHcl4wOuDwKQa+upc8GftXE2C//4mKANBC6It01gUaTIpo=
+          #       ...
+          #      -----END EC PRIVATE KEY-----
+          #   injector:
+          #     caCrt: |
+          #       -----BEGIN CERTIFICATE-----
+          #       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G
+          #       ...
+          #       -----END CERTIFICATE-----
+          #     tlsCrt: |
+          #       -----BEGIN CERTIFICATE-----
+          #       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G
+          #       ...
+          #       -----END CERTIFICATE-----
+          #     tlsKey: |
+          #       -----BEGIN EC PRIVATE KEY-----
+          #       MHcl4wOuDwKQa+upc8GftXE2C//4mKANBC6It01gUaTIpo=
+          #       ...
+          #      -----END EC PRIVATE KEY-----
+         
      - Enable admission controller.
    * - sriov-network-operator.operator.admissionControllers.certificates.certManager.enabled
      - bool
@@ -255,8 +370,12 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - `"nvidia.com"`
      - Prefix to be used for resources names.
    * - sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector
-     - object
-     - `{"beta.kubernetes.io/os":"linux","network.nvidia.com/operator.mofed.wait":"false"}`
+     - yaml
+     - .. code-block:: yaml
+
+          beta.kubernetes.io/os: "linux"
+          network.nvidia.com/operator.mofed.wait: "false"
+         
      - Selects the nodes to be configured
    * - sriov-network-operator.sriovOperatorConfig.deploy
      - bool
@@ -342,8 +461,11 @@ For example:
      - `30`
      - NVIDIA DOCA Driver readiness probe interval.
    * - ofedDriver.repoConfig
-     - object
-     - `{"name":""}`
+     - yaml
+     - .. code-block:: yaml
+
+          name: ""
+         
      - Private mirror repository configuration.
    * - ofedDriver.repository
      - string
@@ -366,8 +488,23 @@ For example:
      - `true`
      - Global switch for automatic upgrade feature, if set to false all other options are ignored.
    * - ofedDriver.upgradePolicy.drain
-     - object
-     - `{"deleteEmptyDir":true,"enable":true,"force":true,"podSelector":"","timeoutSeconds":300}`
+     - yaml
+     - .. code-block:: yaml
+
+          # -- Options for node drain (``kubectl drain``) before driver reload, if
+          # auto upgrade is enabled.
+          enable: true
+          # -- Use force drain of pods.
+          force: true
+          # -- Pod selector to specify which pods will be drained from the node.
+          # An empty selector means all pods.
+          podSelector: ""
+          # -- It's recommended to set a timeout to avoid infinite drain in case
+          # non-fatal error keeps happening on retries.
+          timeoutSeconds: 300
+          # -- Delete pods local storage.
+          deleteEmptyDir: true
+         
      - Options for node drain (`kubectl drain`) before the driver reload. If auto upgrade is enabled but drain.enable is false, then driver POD will be reloaded immediately without removing PODs from the node.
    * - ofedDriver.upgradePolicy.drain.deleteEmptyDir
      - bool
@@ -486,8 +623,13 @@ RDMA Shared Device Plugin
      - `"ghcr.io/mellanox"`
      - RDMA shared device plugin image repository.
    * - rdmaSharedDevicePlugin.resources
-     - list
-     - `[{"name":"rdma_shared_device_a","rdmaHcaMax":63,"vendors":["15b3"]}]`
+     - yaml
+     - .. code-block:: yaml
+
+          - name: rdma_shared_device_a
+            vendors: [15b3]
+            rdmaHcaMax: 63
+         
      - The following defines the RDMA resources in the cluster. It must be provided by the user when deploying the chart. Each entry in the resources element will create a resource with the provided <name> and list of devices.
    * - rdmaSharedDevicePlugin.useCdi
      - bool

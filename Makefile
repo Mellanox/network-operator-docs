@@ -81,20 +81,20 @@ copy-local-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
 	cp -r $(HELM_CHART_PATH) $(HELM_CHART_DEP_ROOT)
 
 # Generate helm chart documentation in a reStructuredText format.
-.PHONY: helm-docs
-helm-docs: | $(HELM_DOCS)
+.PHONY: gen-helm-docs
+gen-helm-docs: | $(HELM_DOCS)
 	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.rst \
 	--ignore-file=.helmdocsignore \
 	--template-files=./templates/helm.rst.gotmpl ${HELM_CHART_DEP_ROOT}
 
 .PHONY: ngc-helm-docs
-ngc-helm-docs: download-ngc-helm-chart helm-docs
+ngc-helm-docs: download-ngc-helm-chart gen-helm-docs
 
 .PHONY: helm-docs
-helm-docs: download-helm-chart helm-docs
+helm-docs: download-helm-chart gen-helm-docs
 
 .PHONY: local-helm-docs
-local-helm-docs: copy-local-helm-chart helm-docs
+local-helm-docs: copy-local-helm-chart gen-helm-docs
 
 .PHONY: download-api
 download-api: | $(CRD_API_DEP_ROOT)
