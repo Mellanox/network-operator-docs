@@ -178,8 +178,23 @@ can find those below.</p>
 <td><p>Use cert-manager for generating self-signed certificate.</p></td>
 </tr>
 <tr class="row-even"><td><p>operator.affinity.nodeAffinity</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“preferredDuringSchedulingIgnoredDuringExecution”:[{“preference”:{“matchExpressions”:[{“key”:”node-role.kubernetes.io/master”,”operator”:”In”,”values”:[“”]}]},”weight”:1},{“preference”:{“matchExpressions”:[{“key”:”node-role.kubernetes.io/control-plane”,”operator”:”In”,”values”:[“”]}]},”weight”:1}]}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">preference</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
+<span class="w">              </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">              </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">preference</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/control-plane&quot;</span><span class="w"></span>
+<span class="w">              </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">              </span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Configure node affinity settings for the operator.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.cniBinDirectory</p></td>
@@ -213,13 +228,31 @@ can find those below.</p>
 <td><p>Network Operator image repository.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.resources</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“limits”:{“cpu”:”500m”,”memory”:”128Mi”},”requests”:{“cpu”:”5m”,”memory”:”64Mi”}}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span><span class="w"></span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128Mi</span><span class="w"></span>
+<span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span><span class="w"></span>
+<span class="w">    </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64Mi</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator.</p></td>
 </tr>
 <tr class="row-even"><td><p>operator.tolerations</p></td>
-<td><p>list</p></td>
-<td><p><cite>[{“effect”:”NoSchedule”,”key”:”node-role.kubernetes.io/master”,”operator”:”Equal”,”value”:””},{“effect”:”NoSchedule”,”key”:”node-role.kubernetes.io/control-plane”,”operator”:”Equal”,”value”:””}]</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/control-plane&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Set additional tolerations for various Daemonsets deployed by the operator.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.useDTK</p></td>
@@ -321,13 +354,45 @@ can find those below.</p>
 <td><p>The name of the service account for garbage collector to use. If not set and create is true, a name is generated using the fullname template and -gc suffix.</p></td>
 </tr>
 <tr class="row-even"><td><p>node-feature-discovery.master</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“config”:{“extraLabelNs”:[“nvidia.com”]},”serviceAccount”:{“create”:true,”name”:”node-feature-discovery”}}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-feature-discovery</span><span class="w"></span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">extraLabelNs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;nvidia.com&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>NFD master deployment configuration.</p></td>
 </tr>
 <tr class="row-odd"><td><p>node-feature-discovery.worker</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“config”:{“sources”:{“pci”:{“deviceClassWhitelist”:[“0300”,”0302”],”deviceLabelFields”:[“vendor”]}}},”serviceAccount”:{“create”:false,”name”:”node-feature-discovery”},”tolerations”:[{“effect”:”NoSchedule”,”key”:”node-role.kubernetes.io/master”,”operator”:”Exists”},{“effect”:”NoSchedule”,”key”:”node-role.kubernetes.io/control-plane”,”operator”:”Exists”},{“effect”:”NoSchedule”,”key”:”nvidia.com/gpu”,”operator”:”Exists”}]}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># disable creation to avoid duplicate serviceaccount creation by master spec</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># above</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-feature-discovery</span><span class="w"></span>
+<span class="w">    </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="nt">tolerations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/control-plane&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia.com/gpu</span><span class="w"></span>
+<span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Exists</span><span class="w"></span>
+<span class="w">      </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NoSchedule</span><span class="w"></span>
+<span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">sources</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pci</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">deviceClassWhitelist</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0300&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0302&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="nt">deviceLabelFields</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vendor</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>NFD worker daemonset configuration.</p></td>
 </tr>
 </tbody>
@@ -392,8 +457,58 @@ can find those below.</p>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“certificates”:{“certManager”:{“enabled”:true,”generateSelfSigned”:true},”custom”:{“enabled”:false},”secretNames”:{“injector”:”network-resources-injector-cert”,”operator”:”operator-webhook-cert”}},”enabled”:false}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="nt">certificates</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">secretNames</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;operator-webhook-cert&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">injector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;network-resources-injector-cert&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">certManager</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="c1"># -- When enabled, makes use of certificates managed by cert-manager.</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="c1"># -- When enabled, certificates are generated via cert-manager and then</span><span class="w"></span>
+<span class="w">        </span><span class="c1"># name will match the name of the secrets defined above.</span><span class="w"></span>
+<span class="w">        </span><span class="nt">generateSelfSigned</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># -- If not specified, no secret is created and secrets with the names</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># defined above are expected to exist in the cluster. In that case,</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># the ca.crt must be base64 encoded twice since it ends up being an env variable.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">custom</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="c1">#   operator:</span><span class="w"></span>
+<span class="c1">#     caCrt: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#       -----END CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#     tlsCrt: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#       -----END CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#     tlsKey: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN EC PRIVATE KEY-----</span><span class="w"></span>
+<span class="c1">#       MHcl4wOuDwKQa+upc8GftXE2C//4mKANBC6It01gUaTIpo=</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#      -----END EC PRIVATE KEY-----</span><span class="w"></span>
+<span class="c1">#   injector:</span><span class="w"></span>
+<span class="c1">#     caCrt: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#       -----END CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#     tlsCrt: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#       MIIMIICLDCCAdKgAwIBAgIBADAKBggqhkjOPQQDAjB9MQswCQYDVQQGEwJCRTEPMA0G</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#       -----END CERTIFICATE-----</span><span class="w"></span>
+<span class="c1">#     tlsKey: |</span><span class="w"></span>
+<span class="c1">#       -----BEGIN EC PRIVATE KEY-----</span><span class="w"></span>
+<span class="c1">#       MHcl4wOuDwKQa+upc8GftXE2C//4mKANBC6It01gUaTIpo=</span><span class="w"></span>
+<span class="c1">#       ...</span><span class="w"></span>
+<span class="c1">#      -----END EC PRIVATE KEY-----</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Enable admission controller.</p></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.operator.admissionControllers.certificates.certManager.enabled</p></td>
@@ -417,8 +532,12 @@ can find those below.</p>
 <td><p>Prefix to be used for resources names.</p></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“beta.kubernetes.io/os”:”linux”,”network.nvidia.com/operator.mofed.wait”:”false”}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">beta.kubernetes.io/os</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;linux&quot;</span><span class="w"></span>
+<span class="nt">network.nvidia.com/operator.mofed.wait</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Selects the nodes to be configured</p></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.sriovOperatorConfig.deploy</p></td>
@@ -522,8 +641,11 @@ can find those below.</p>
 <td><p>NVIDIA DOCA Driver readiness probe interval.</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.repoConfig</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“name”:””}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Private mirror repository configuration.</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.repository</p></td>
@@ -552,8 +674,23 @@ can find those below.</p>
 <td><p>Global switch for automatic upgrade feature, if set to false all other options are ignored.</p></td>
 </tr>
 <tr class="row-even"><td><p>ofedDriver.upgradePolicy.drain</p></td>
-<td><p>object</p></td>
-<td><p><cite>{“deleteEmptyDir”:true,”enable”:true,”force”:true,”podSelector”:””,”timeoutSeconds”:300}</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># -- Options for node drain (``kubectl drain``) before driver reload, if</span><span class="w"></span>
+<span class="c1"># auto upgrade is enabled.</span><span class="w"></span>
+<span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="c1"># -- Use force drain of pods.</span><span class="w"></span>
+<span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="c1"># -- Pod selector to specify which pods will be drained from the node.</span><span class="w"></span>
+<span class="c1"># An empty selector means all pods.</span><span class="w"></span>
+<span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="c1"># -- It&#39;s recommended to set a timeout to avoid infinite drain in case</span><span class="w"></span>
+<span class="c1"># non-fatal error keeps happening on retries.</span><span class="w"></span>
+<span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="c1"># -- Delete pods local storage.</span><span class="w"></span>
+<span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>Options for node drain (<cite>kubectl drain</cite>) before the driver reload. If auto upgrade is enabled but drain.enable is false, then driver POD will be reloaded immediately without removing PODs from the node.</p></td>
 </tr>
 <tr class="row-odd"><td><p>ofedDriver.upgradePolicy.drain.deleteEmptyDir</p></td>
@@ -709,8 +846,13 @@ can find those below.</p>
 <td><p>RDMA shared device plugin image repository.</p></td>
 </tr>
 <tr class="row-odd"><td><p>rdmaSharedDevicePlugin.resources</p></td>
-<td><p>list</p></td>
-<td><p><cite>[{“name”:”rdma_shared_device_a”,”rdmaHcaMax”:63,”vendors”:[“15b3”]}]</cite></p></td>
+<td><p>yaml</p></td>
+<td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_device_a</span><span class="w"></span>
+<span class="w">  </span><span class="nt">vendors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15b3</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaHcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
+</pre></div>
+</div>
+</td>
 <td><p>The following defines the RDMA resources in the cluster. It must be provided by the user when deploying the chart. Each entry in the resources element will create a resource with the provided &lt;name&gt; and list of devices.</p></td>
 </tr>
 <tr class="row-even"><td><p>rdmaSharedDevicePlugin.useCdi</p></td>
@@ -1163,7 +1305,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 05, 2024.
+      <span class="lastupdated">Last updated on Sep 09, 2024.
       </span></p>
   </div>
 
