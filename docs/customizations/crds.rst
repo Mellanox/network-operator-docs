@@ -30,10 +30,10 @@ AppliedState defines a finer-grained view of the observed state of NicClusterPol
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``name``                                                                                          |                                                                                                   |
+      | ``name``                                                                                          | Name of the deployed component this state refers to                                               |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``state``                                                                                         |                                                                                                   |
+      | ``state``                                                                                         | The state of the deployed component. (“ready”, “notReady”, “ignore”, “error”)                     |
       | :ref:`State <State>`                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``message``                                                                                       | Message is a human readable message indicating details about why the state is in this condition   |
@@ -97,7 +97,7 @@ DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | ``ImageSpec``                                                                                     | Image information for DOCA Telemetry Service                                                      |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``config``                                                                                        | *(Optional)*                                                                                      |
@@ -121,7 +121,7 @@ DevicePluginSpec describes configuration options for device plugin 1. Image info
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
+      | ``ImageSpecWithConfig``                                                                           | Image information for the device plugin and optional configuration                                |
       | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``useCdi``                                                                                        | Enables use of container device interface (CDI)                                                   |
@@ -188,10 +188,10 @@ DriverUpgradePolicySpec describes policy configuration for automatic upgrades
       | int                                                                                               | MaxParallelUpgrades indicates how many nodes can be upgraded in parallel 0 means no limit, all    |
       |                                                                                                   | nodes will be upgraded in parallel                                                                |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``waitForCompletion``                                                                             |                                                                                                   |
+      | ``waitForCompletion``                                                                             | The configuration for waiting on pods completions                                                 |
       | :ref:`WaitForCompletionSpec <WaitForCompletionSpec>`                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``drain``                                                                                         |                                                                                                   |
+      | ``drain``                                                                                         | The configuration for node drain during automatic upgrade                                         |
       | :ref:`DrainSpec <DrainSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``safeLoad``                                                                                      | *(Optional)*                                                                                      |
@@ -217,10 +217,10 @@ HostDeviceNetwork is the Schema for the hostdevicenetworks API
       | meta/v1.Object                                                                                    |                                                                                                   |
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spec``                                                                                          |                                                                                                   |
+      | ``spec``                                                                                          | Defines the desired state of HostDeviceNetwork                                                    |
       | :ref:`HostDeviceNetworkSpec <HostDeviceNetworkSpec>`                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``status``                                                                                        |                                                                                                   |
+      | ``status``                                                                                        | Defines the observed state of HostDeviceNetwork                                                   |
       | :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -330,10 +330,10 @@ IPoIBNetwork is the Schema for the ipoibnetworks API
       | meta/v1.Object                                                                                    |                                                                                                   |
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spec``                                                                                          |                                                                                                   |
+      | ``spec``                                                                                          | Defines the desired state of IPoIBNetwork                                                         |
       | :ref:`IPoIBNetworkSpec <IPoIBNetworkSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``status``                                                                                        |                                                                                                   |
+      | ``status``                                                                                        | Defines the observed state of IPoIBNetwork                                                        |
       | :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -439,7 +439,7 @@ ImageSpecWithConfig Contains ImageSpec and optional configuration
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | ``ImageSpec``                                                                                     | Image information for the component                                                               |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``config``                                                                                        | Configuration for the component as a string                                                       |
@@ -465,10 +465,10 @@ MacvlanNetwork is the Schema for the macvlannetworks API
       | meta/v1.Object                                                                                    |                                                                                                   |
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spec``                                                                                          |                                                                                                   |
+      | ``spec``                                                                                          | Defines the desired state of MacvlanNetworkSpec                                                   |
       | :ref:`MacvlanNetworkSpec <MacvlanNetworkSpec>`                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``status``                                                                                        |                                                                                                   |
+      | ``status``                                                                                        | Defines the observed state of MacvlanNetwork                                                      |
       | :ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -547,7 +547,7 @@ the CNI configuration file of the master plugin (the first file in lexicographic
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpecWithConfig``                                                                           |                                                                                                   |
+      | ``ImageSpecWithConfig``                                                                           | Image information for Multus and optional configuration                                           |
       | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -567,7 +567,7 @@ NICFeatureDiscoverySpec describes configuration options for nic-feature-discover
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | ``ImageSpec``                                                                                     | Image information for nic-feature-discovery                                                       |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -590,7 +590,7 @@ NVIPAMSpec describes configuration options for nv-ipam 1. Image information for 
       | ``enableWebhook``                                                                                 | Enable deployment of the validation webhook                                                       |
       | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``ImageSpec``                                                                                     |                                                                                                   |
+      | ``ImageSpec``                                                                                     | Image information for nv-ipam                                                                     |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -613,10 +613,10 @@ NicClusterPolicy is the Schema for the nicclusterpolicies API
       | meta/v1.Object                                                                                    |                                                                                                   |
       | Meta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spec``                                                                                          |                                                                                                   |
+      | ``spec``                                                                                          | Defines the desired state of NicClusterPolicy                                                     |
       | :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``status``                                                                                        |                                                                                                   |
+      | ``status``                                                                                        | Defines the observed state of NicClusterPolicy                                                    |
       | :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -642,28 +642,28 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``tolerations``                                                                                   | Additional tolerations to inject to the DaemonSets objects that are managed by the operator       |
       | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``ofedDriver``                                                                                    |                                                                                                   |
+      | ``ofedDriver``                                                                                    | Configuration options for OFED driver                                                             |
       | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``rdmaSharedDevicePlugin``                                                                        |                                                                                                   |
+      | ``rdmaSharedDevicePlugin``                                                                        | Configuration options for RDMA shared device plugin                                               |
       | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``sriovDevicePlugin``                                                                             |                                                                                                   |
+      | ``sriovDevicePlugin``                                                                             | Configuration options for SRIOV device plugin                                                     |
       | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``ibKubernetes``                                                                                  |                                                                                                   |
+      | ``ibKubernetes``                                                                                  | Configuration options for ib-kubernetes                                                           |
       | :ref:`IBKubernetesSpec <IBKubernetesSpec>`                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``secondaryNetwork``                                                                              |                                                                                                   |
+      | ``secondaryNetwork``                                                                              | Configuration options for secondary network                                                       |
       | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nvIpam``                                                                                        |                                                                                                   |
+      | ``nvIpam``                                                                                        | Configuration options nv-ipam                                                                     |
       | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nicFeatureDiscovery``                                                                           |                                                                                                   |
+      | ``nicFeatureDiscovery``                                                                           | Configuration options nic-feature-discovery                                                       |
       | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``docaTelemetryService``                                                                          |                                                                                                   |
+      | ``docaTelemetryService``                                                                          | Configuration options DOCA Telemetry Service                                                      |
       | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
@@ -842,7 +842,7 @@ WaitForCompletionSpec
 
 (*Appears on:* :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`)
 
-WaitForCompletionSpec describes the configuration for waiting on job completions
+WaitForCompletionSpec describes the configuration for waiting on pods completions
 
 .. container:: md-typeset__scrollwrap
 
