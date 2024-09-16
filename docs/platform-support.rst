@@ -42,7 +42,9 @@ Prerequisites
    * - Helm
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
-
+   * - Node Feature Discovery
+     - >=0.15.6 and <=0.16.3
+     - When deploying the Network Operator and GPU Operator on the same cluster, ensure only one instance of Node Feature Discovery (NFD) is installed. We recommend using the version included with the GPU Operator.
 
 =================================
 Network Operator Component Matrix
