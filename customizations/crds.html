@@ -129,11 +129,11 @@
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code>
 string</p></td>
-<td></td>
+<td><p>Name of the deployed component this state refers to</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
 <a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
-<td></td>
+<td><p>The state of the deployed component. (“ready”, “notReady”, “ignore”, “error”)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code>
 string</p></td>
@@ -217,7 +217,7 @@ ConfigMap must be in the same namespace as the NICClusterPolicy.</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td></td>
+<td><p>Image information for DOCA Telemetry Service</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code>
 <a class="reference internal" href="#docatelemetryserviceconfig"><span class="std std-ref">DOCATelemetryServiceConfig</span></a></p></td>
@@ -249,7 +249,7 @@ deployed.</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpecWithConfig</span></code>
 <a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a></p></td>
-<td></td>
+<td><p>Image information for the device plugin and optional configuration</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">useCdi</span></code>
 bool</p></td>
@@ -342,11 +342,11 @@ nodes will be upgraded in parallel</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">waitForCompletion</span></code>
 <a class="reference internal" href="#waitforcompletionspec"><span class="std std-ref">WaitForCompletionSpec</span></a></p></td>
-<td></td>
+<td><p>The configuration for waiting on pods completions</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">drain</span></code>
 <a class="reference internal" href="#drainspec"><span class="std std-ref">DrainSpec</span></a></p></td>
-<td></td>
+<td><p>The configuration for node drain during automatic upgrade</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">safeLoad</span></code>
 bool</p></td>
@@ -382,11 +382,11 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#hostdevicenetworkspec"><span class="std std-ref">HostDeviceNetworkSpec</span></a></p></td>
-<td></td>
+<td><p>Defines the desired state of HostDeviceNetwork</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#hostdevicenetworkstatus"><span class="std std-ref">HostDeviceNetworkStatus</span></a></p></td>
-<td></td>
+<td><p>Defines the observed state of HostDeviceNetwork</p></td>
 </tr>
 </tbody>
 </table>
@@ -532,11 +532,11 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#ipoibnetworkspec"><span class="std std-ref">IPoIBNetworkSpec</span></a></p></td>
-<td></td>
+<td><p>Defines the desired state of IPoIBNetwork</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#ipoibnetworkstatus"><span class="std std-ref">IPoIBNetworkStatus</span></a></p></td>
-<td></td>
+<td><p>Defines the observed state of IPoIBNetwork</p></td>
 </tr>
 </tbody>
 </table>
@@ -675,7 +675,7 @@ pulling the image</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td></td>
+<td><p>Image information for the component</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code>
 string</p></td>
@@ -710,11 +710,11 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#macvlannetworkspec"><span class="std std-ref">MacvlanNetworkSpec</span></a></p></td>
-<td></td>
+<td><p>Defines the desired state of MacvlanNetworkSpec</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#macvlannetworkstatus"><span class="std std-ref">MacvlanNetworkStatus</span></a></p></td>
-<td></td>
+<td><p>Defines the observed state of MacvlanNetwork</p></td>
 </tr>
 </tbody>
 </table>
@@ -817,7 +817,7 @@ the CNI configuration file of the master plugin (the first file in lexicographic
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpecWithConfig</span></code>
 <a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a></p></td>
-<td></td>
+<td><p>Image information for Multus and optional configuration</p></td>
 </tr>
 </tbody>
 </table>
@@ -843,7 +843,7 @@ the CNI configuration file of the master plugin (the first file in lexicographic
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td></td>
+<td><p>Image information for nic-feature-discovery</p></td>
 </tr>
 </tbody>
 </table>
@@ -873,7 +873,7 @@ bool</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td></td>
+<td><p>Image information for nv-ipam</p></td>
 </tr>
 </tbody>
 </table>
@@ -904,11 +904,11 @@ Meta</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
 <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a></p></td>
-<td></td>
+<td><p>Defines the desired state of NicClusterPolicy</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
 <a class="reference internal" href="#nicclusterpolicystatus"><span class="std std-ref">NicClusterPolicyStatus</span></a></p></td>
-<td></td>
+<td><p>Defines the observed state of NicClusterPolicy</p></td>
 </tr>
 </tbody>
 </table>
@@ -943,35 +943,35 @@ operator</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>
 <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options for OFED driver</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>
 <a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options for RDMA shared device plugin</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>
 <a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options for SRIOV device plugin</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ibKubernetes</span></code>
 <a class="reference internal" href="#ibkubernetesspec"><span class="std std-ref">IBKubernetesSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options for ib-kubernetes</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">secondaryNetwork</span></code>
 <a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options for secondary network</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
 <a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options nv-ipam</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicFeatureDiscovery</span></code>
 <a class="reference internal" href="#nicfeaturediscoveryspec"><span class="std std-ref">NICFeatureDiscoverySpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options nic-feature-discovery</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docaTelemetryService</span></code>
 <a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATelemetryServiceSpec</span></a></p></td>
-<td></td>
+<td><p>Configuration options DOCA Telemetry Service</p></td>
 </tr>
 </tbody>
 </table>
@@ -1196,7 +1196,7 @@ implementation-defined value. Requests cannot exceed Limits. More info:
 <section id="waitforcompletionspec">
 <span id="id31"></span><h3>WaitForCompletionSpec<a class="headerlink" href="#waitforcompletionspec" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a>)</p>
-<p>WaitForCompletionSpec describes the configuration for waiting on job completions</p>
+<p>WaitForCompletionSpec describes the configuration for waiting on pods completions</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
 <table class="docutils align-default">
@@ -1240,7 +1240,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 09, 2024.
+      <span class="lastupdated">Last updated on Sep 16, 2024.
       </span></p>
   </div>
 
