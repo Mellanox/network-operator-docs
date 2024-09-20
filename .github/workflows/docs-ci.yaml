@@ -28,7 +28,7 @@ jobs:
         token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
     - name: Make docs
       run: |
-        make helm-docs api-docs generate-docs-versions-var
+        make helm-docs generate-docs-versions-var
     - name: Close any existing documentation PRs
       run: |
         for pr_number in $(gh pr list --search "$PR_TITLE_PREFIX" --json number --jq ".[].number"); do
