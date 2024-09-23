@@ -107,7 +107,7 @@ General Parameters
      - Configure node selector settings for the operator.
    * - operator.repository
      - string
-     - `"nvcr.io/nvidia/cloud-native"`
+     - `"nvcr.io/nvstaging/mellanox"`
      - Network Operator image repository.
    * - operator.resources
      - yaml
@@ -273,7 +273,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.7.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-beta.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -289,7 +289,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.7.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-beta.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -297,7 +297,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.7.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-beta.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -469,7 +469,7 @@ For example:
      - Private mirror repository configuration.
    * - ofedDriver.repository
      - string
-     - `"nvcr.io/nvidia/mellanox"`
+     - `"nvcr.io/nvstaging/mellanox"`
      - NVIDIA DOCA Driver image repository.
    * - ofedDriver.startupProbe.initialDelaySeconds
      - int
@@ -540,7 +540,7 @@ For example:
      -
    * - ofedDriver.version
      - string
-     - `"24.07-0.6.1.0-0"`
+     - `"24.10-0.3.2.0-0"`
      - NVIDIA DOCA Driver version.
 
 ===============================================
@@ -637,7 +637,7 @@ RDMA Shared Device Plugin
      - Enable Container Device Interface (CDI) mode. **NOTE**: NVIDIA Network Operator does not configure container runtime to enable CDI.
    * - rdmaSharedDevicePlugin.version
      - string
-     - `"v1.5.1"`
+     - `"sha-4f3eb2224b8b5f97be3f17441ddee8d41753b7d5"`
      - RDMA shared device plugin version.
 
 ==========================================
@@ -762,7 +762,7 @@ ib-kubernetes provides a daemon that works in conjunction with the `SR-IOV Netwo
      - Name of the Secret with the NVIDIA UFM access credentials, deployed in advance.
    * - ibKubernetes.version
      - string
-     - `"v1.0.2"`
+     - `"v1.1.0"`
      - IB Kubernetes version.
 
 ==========
@@ -911,7 +911,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
      - Multus image repository.
    * - secondaryNetwork.multus.version
      - string
-     - `"v3.9.3"`
+     - `"v4.1.0"`
      - Multus image version.
 
 ============================
