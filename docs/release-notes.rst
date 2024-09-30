@@ -135,6 +135,8 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 24.10.0
+     - | - Dropped Multus CNI support for versions older than v4.1.0.
    * - 24.7.0
      - | - Deploying NicClusterPolicy Custom Resource through helm is deprecated, support will be removed in Network Operator 24.10.
            It is advised to keep deployCR=false in your helm values and create/update NicClusterPolicy Custom Resource post helm install/update.
