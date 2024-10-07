@@ -58,8 +58,7 @@ An example of Node Feature Discovery configuration:
      namespace: openshift-nfd
    spec:
      operand:
-       namespace: openshift-nfd
-       image: registry.redhat.io/openshift4/ose-node-feature-discovery:v4.10
+       image: registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9:v4.16
        imagePullPolicy: Always
      workerConfig:
        configData: |
@@ -72,10 +71,10 @@ An example of Node Feature Discovery configuration:
                - "0207"
              deviceLabelFields:
                - vendor
-     customConfig:
-       configData: ""
 
 Verify that the following label is present on the nodes containing NVIDIA networking hardware: `feature.node.kubernetes.io/pci-15b3.present=true`
+
+For more details please read official NFD `documentation <https://docs.openshift.com/container-platform/4.16/hardware_enablement/psap-node-feature-discovery-operator.html#creating-nfd-cr-cli_psap-node-feature-discovery-operator>`_.
 
 .. code-block:: bash
 
