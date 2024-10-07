@@ -26,9 +26,13 @@ jobs:
       with:
         repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
         token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+    - name: Setup Go
+      uses: actions/setup-go@v5.0.2
+      with:
+        go-version: 1.23.x
     - name: Make docs
       run: |
-        make helm-docs generate-docs-versions-var
+        make api-docs helm-docs generate-docs-versions-var
     - name: Close any existing documentation PRs
       run: |
         for pr_number in $(gh pr list --search "$PR_TITLE_PREFIX" --json number --jq ".[].number"); do
