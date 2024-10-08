@@ -657,13 +657,13 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``secondaryNetwork``                                                                              | Configuration options for secondary network                                                       |
       | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nvIpam``                                                                                        | Configuration options nv-ipam                                                                     |
+      | ``nvIpam``                                                                                        | Configuration options for nv-ipam                                                                 |
       | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nicFeatureDiscovery``                                                                           | Configuration options nic-feature-discovery                                                       |
+      | ``nicFeatureDiscovery``                                                                           | Configuration options for nic-feature-discovery                                                   |
       | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``docaTelemetryService``                                                                          | Configuration options DOCA Telemetry Service                                                      |
+      | ``docaTelemetryService``                                                                          | Configuration options for DOCA Telemetry Service                                                  |
       | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
