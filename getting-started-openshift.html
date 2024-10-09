@@ -153,8 +153,7 @@ A single instance of Node Feature Discovery is expected to be used in the cluste
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-nfd</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">operand</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-nfd</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.redhat.io/openshift4/ose-node-feature-discovery:v4.10</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9:v4.16</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 <span class="w">  </span><span class="nt">workerConfig</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">configData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
@@ -167,11 +166,10 @@ A single instance of Node Feature Discovery is expected to be used in the cluste
 <span class="w">            </span><span class="no">- &quot;0207&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="no">deviceLabelFields:</span><span class="w"></span>
 <span class="w">            </span><span class="no">- vendor</span><span class="w"></span>
-<span class="w">  </span><span class="nt">customConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">configData</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Verify that the following label is present on the nodes containing NVIDIA networking hardware: <cite>feature.node.kubernetes.io/pci-15b3.present=true</cite></p>
+<p>For more details please read official NFD <a class="reference external" href="https://docs.openshift.com/container-platform/4.16/hardware_enablement/psap-node-feature-discovery-operator.html#creating-nfd-cr-cli_psap-node-feature-discovery-operator">documentation</a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc describe node <span class="p">|</span> grep -E <span class="s1">&#39;Roles|pci&#39;</span> <span class="p">|</span> grep -v <span class="s2">&quot;control-plane&quot;</span>
 
 Roles:              worker
