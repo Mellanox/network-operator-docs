@@ -135,11 +135,11 @@
 <h2>Network Operator Deployment on an OpenShift Container Platform<a class="headerlink" href="#network-operator-deployment-on-an-openshift-container-platform" title="Permalink to this headline"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Currently, NVIDIA Network Operator does not support Single Node OpenShift (SNO) deployments.</p>
+<p>It is recommended to have dedicated control plane nodes for OpenShift deployments with NVIDIA Network Operator.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>It is recommended to have dedicated control plane nodes for OpenShift deployments with NVIDIA Network Operator.</p>
+<p>Automatic OFED Driver Upgrade doesn’t work on Single Node OpenShift (SNO) deployments.</p>
 </div>
 <section id="node-feature-discovery">
 <h3>Node Feature Discovery<a class="headerlink" href="#node-feature-discovery" title="Permalink to this headline"></a></h3>
@@ -581,7 +581,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 02, 2024.
+      <span class="lastupdated">Last updated on Oct 09, 2024.
       </span></p>
   </div>
 
