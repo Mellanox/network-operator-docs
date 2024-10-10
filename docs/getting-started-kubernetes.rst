@@ -1887,15 +1887,20 @@ Network Operator deployment with:
          emptyDir:
            medium: HugePages
 
-----------------------------------------------------
-Network Operator Deployment and OpenvSwitch offload
-----------------------------------------------------
+-------------------------------------------------------------------------
+Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch
+-------------------------------------------------------------------------
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
 .. warning:: To use OFED container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
 
 .. warning:: Tech Preview feature.
+
+
+In this mode, the sriov-network-operator automatically creates and configures OpenvSwitch bridges.
+For more complex scenarios, such as VF lag, you must use the "externally managed OpenvSwitch" feature of the sriov-network-operator,
+which is detailed in a separate section of the documentation.
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1928,6 +1933,16 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
+      cniPlugins:
+        image: plugins
+        repository: ghcr.io/k8snetworkplumbingwg
+        version: |cni-plugins-version|
+        imagePullSecrets: []
+      multus:
+        image: multus-cni
+        repository: ghcr.io/k8snetworkplumbingwg
+        version: |multus-version|
+        imagePullSecrets: []
 
 
 Enable ``manageSoftwareBridges`` featureGate for sriov-network-operator
@@ -1963,7 +1978,6 @@ Prerequisites for Worker Nodes
 Supported operating systems:
 
 * Ubuntu 22.04
-* RHEL 8.8
 
 OpenvSwitch from the ``NVIDIA DOCA for Host`` package with ``doca-all`` or ``doca-networking`` profile should be installed on each worker node.
 
@@ -2187,7 +2201,369 @@ Test Workload
 Troubleshooting OVS
 ^^^^^^^^^^^^^^^^^^^
 
-For OVS hardware offload verification and troubleshooting steps, please refer to the following DOCA documentation:
+Please see the following DOCA documentation for OVS hardware offload verification and troubleshooting steps:
+
+* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
+
+* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
+
+
+------------------------------------------------------------------------------------------------
+Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag
+------------------------------------------------------------------------------------------------
+
+.. warning:: This feature is not compatible with the OFED container.
+
+.. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
+
+.. warning:: Tech Preview feature.
+
+
+In this mode, the sriov-network-operator is responsible for configuring the physical and virtual functions but will not manage the configuration of the software bridge.
+The VF LAG and Open vSwitch should be preconfigured on the host.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Network Operator Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Deploy network-operator by Helm with sriov-network-operator and nv-ipam.
+
+First install the Network Operator with NFD enabled:
+``values.yaml``
+
+.. code-block:: yaml
+
+    sriovNetworkOperator:
+      enabled: true
+
+Once the Network Operator has been installed create a NicClusterPolicy with nv-ipam:
+
+.. code-block:: yaml
+   :substitutions:
+
+    apiVersion: mellanox.com/v1alpha1
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+    spec:
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: ghcr.io/mellanox
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
+      cniPlugins:
+        image: plugins
+        repository: ghcr.io/k8snetworkplumbingwg
+        version: |cni-plugins-version|
+        imagePullSecrets: []
+      multus:
+        image: multus-cni
+        repository: ghcr.io/k8snetworkplumbingwg
+        version: |multus-version|
+        imagePullSecrets: []
+
+Switch sriov-network-operator to `systemd` configuration mode.
+
+.. code-block:: bash
+
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "configurationMode": "systemd"} }' --type='merge'
+
+
+Create IPPool object for nv-ipam
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: pool1
+      namespace: nvidia-network-operator
+    spec:
+      subnet: 192.168.0.0/16
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
+      nodeSelector:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: node-role.kubernetes.io/worker
+              operator: Exists
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Prerequisites for Worker Nodes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Supported operating systems:
+
+* Ubuntu 22.04
+
+OpenvSwitch from the ``NVIDIA DOCA for Host`` package with ``doca-all`` or ``doca-networking`` profile should be installed on each worker node.
+
+Check NVIDIA DOCA `Official installation guide <https://docs.nvidia.com/doca/sdk/nvidia+doca+installation+guide+for+linux/index.html>`_
+for details. 
+
+Supported OpenvSwitch dataplanes:
+
+* OVS-kernel
+
+* OVS-doca
+
+Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload+(ovs+in+doca)/index.html>`_ document to know about differences.
+
+""""""""""""""""""""""""""""""""""""""
+Configure Bond interface with netplan
+""""""""""""""""""""""""""""""""""""""
+
+.. code-block:: bash
+
+    # content of /etc/netplan/01-uplink-bond.yaml
+    network:
+      version: 2
+      renderer: networkd
+      ethernets:
+        enp4s0f0np0:
+          dhcp4: no
+          dhcp6: no
+        enp4s0f1np1:
+          dhcp4: no
+          dhcp6: no
+      bonds:
+        bond0:
+          dhcp4: no
+          dhcp6: no
+          interfaces:
+            - enp4s0f0np0
+            - enp4s0f1np1
+          parameters:
+            mode: 802.3ad
+
+*Replace `enp4s0f0np0` and `enp4s0f1np1` with the right PF names for you node*
+
+^^^^^^^^^^^
+OVS-kernel
+^^^^^^^^^^^
+
+*These steps are for OVS-kernel data plane, to use OVS-doca follow instructions from the relevant section.*
+
+"""""""""""""""""""""
+Prepare Worker Nodes
+"""""""""""""""""""""
+
+Configure Open_vSwitch
+
+.. code-block:: bash
+
+    ovs-vsctl set Open_vSwitch . other_config:hw-offload=true
+
+Restart Open_vSwitch
+
+.. code-block:: bash
+
+    systemctl restart openvswitch-switch.service
+
+
+Create bridge
+
+
+Create OVS bridge
+
+.. code-block:: bash
+
+    ovs-vsctl add-br mybr
+    # this commad may fail with "No such device" error
+    ovs-vsctl add-port mybr bond0
+
+
+*Note: the second command may fail with "No such device" error because bond0 interface is not exist yet.* 
+
+"""""""""""""""""""""""""""""""""""""
+Sriov Network Operator Configuration
+"""""""""""""""""""""""""""""""""""""
+
+Create SriovNetworkNodePolicy for selected NIC
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: SriovNetworkNodePolicy
+    metadata:
+      name: ovs-switchdev
+      namespace: nvidia-network-operator
+    spec:
+      eSwitchMode: switchdev
+      mtu: 1500
+      nicSelector:
+        deviceID: 101d
+        vendor: 15b3
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      numVfs: 4
+      isRdma: true
+      linkType: ETH
+      resourceName: switchdev
+
+Create OVSNetwork CR
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: OVSNetwork
+    metadata:
+      name: ovs
+      namespace: nvidia-network-operator
+    spec:
+      networkNamespace: default
+      ipam: |
+        {
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
+      resourceName: switchdev
+
+
+^^^^^^^^^^^
+OVS-doca
+^^^^^^^^^^^
+
+*These steps are for OVS-doca data plane, to use OVS-kernel follow instructions from the relevant section.*
+
+"""""""""""""""""""""
+Prepare Worker Nodes
+"""""""""""""""""""""
+
+Configure hugepages
+
+.. code-block:: bash
+
+    mkdir -p /hugepages
+    mount -t hugetlbfs hugetlbfs /hugepages
+    echo 4096 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+
+*Note: for multi CPU system hugepages should be created for each NUMA node: node0, node1, ...*
+
+Configure system to create hugepages on boot
+
+.. code-block:: bash
+
+    echo "vm.nr_hugepages=8192" > /etc/sysctl.d/99-hugepages.conf
+
+*Note: this example is for a server with two CPU*
+
+
+Configure Open_vSwitch
+
+.. code-block:: bash
+
+    ovs-vsctl --no-wait set Open_vSwitch . other_config:doca-init=true
+    ovs-vsctl set Open_vSwitch . other_config:hw-offload=true
+
+Restart Open_vSwitch
+
+.. code-block:: bash
+
+    systemctl restart openvswitch-switch.service
+
+Create OVS bridge
+
+.. code-block:: bash
+
+    ovs-vsctl --no-wait add-br mybr -- set bridge mybr datapath_type=netdev
+    # this commad may fail with "No such device" error
+    ovs-vsctl add-port mybr bond0 -- set Interface bond0 type=dpdk options:dpdk-lsc-interrupt=true mtu_request=1450
+
+*Note: the second command may fail with "No such device" error because bond0 interface is not exist yet.*
+
+"""""""""""""""""""""""""""""""""""""
+Sriov Network Operator Configuration
+"""""""""""""""""""""""""""""""""""""
+
+Create SriovNetworkNodePolicy for selected NIC
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: SriovNetworkNodePolicy
+    metadata:
+      name: ovs-switchdev
+      namespace: nvidia-network-operator
+    spec:
+      eSwitchMode: switchdev
+      mtu: 1500
+      nicSelector:
+        deviceID: 101d
+        vendor: 15b3
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+      numVfs: 4
+      isRdma: true
+      linkType: ETH
+      resourceName: switchdev
+
+Create OVSNetwork CR
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: OVSNetwork
+    metadata:
+      name: ovs
+      namespace: nvidia-network-operator
+    spec:
+      networkNamespace: default
+      ipam: |
+        {
+          "type": "nv-ipam",
+          "poolName": "pool1"
+        }
+      resourceName: switchdev
+      interfaceType: dpdk
+
+^^^^^^^^^^^^^^
+Test Workload
+^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: ovs-offload
+      labels:
+        app: ovs-offload
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: ovs-offload
+      template:
+        metadata:
+          labels:
+            app: ovs-offload
+          annotations:
+            k8s.v1.cni.cncf.io/networks: ovs
+        spec:
+          containers:
+          - name: ovs-offload-container
+            command: ["/bin/bash", "-c"]
+            args:
+            - |
+              while true; do sleep 1000; done
+            image: mellanox/rping-test
+            securityContext:
+              capabilities:
+                add: ["IPC_LOCK"]
+            resources:
+              requests:
+                nvidia.com/switchdev: 1
+              limits:
+                nvidia.com/switchdev: 1
+
+^^^^^^^^^^^^^^^^^^^
+Troubleshooting OVS
+^^^^^^^^^^^^^^^^^^^
+
+Please see the following DOCA documentation for OVS hardware offload verification and troubleshooting steps:
 
 * `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
 
