@@ -58,6 +58,34 @@ General Parameters
      - bool
      - `true`
      - Deploy Node Feature Discovery operator.
+   * - nic-configuration-operator-chart.configDaemon.image.name
+     - string
+     - `"nic-configuration-operator-daemon"`
+     -
+   * - nic-configuration-operator-chart.configDaemon.image.repository
+     - string
+     - `"ghcr.io/mellanox"`
+     -
+   * - nic-configuration-operator-chart.configDaemon.image.tag
+     - string
+     - `"v0.1.1"`
+     -
+   * - nic-configuration-operator-chart.operator.image.name
+     - string
+     - `"nic-configuration-operator"`
+     -
+   * - nic-configuration-operator-chart.operator.image.repository
+     - string
+     - `"ghcr.io/mellanox"`
+     -
+   * - nic-configuration-operator-chart.operator.image.tag
+     - string
+     - `"v0.1.1"`
+     -
+   * - nicConfigurationOperator.enabled
+     - bool
+     - `false`
+     - Deploy NIC Configuration Operator.
    * - operator.admissionController.enabled
      - bool
      - `false`
@@ -273,7 +301,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-beta.3"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -289,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -297,7 +325,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-beta.3"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -540,7 +568,7 @@ For example:
      -
    * - ofedDriver.version
      - string
-     - `"24.10-0.3.2.0-0"`
+     - `"24.10-0.4.6.0-0"`
      - NVIDIA DOCA Driver version.
 
 ===============================================
