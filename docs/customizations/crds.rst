@@ -3,7 +3,7 @@ Network Operator API reference v1alpha1
 
 Packages:
 
--  :ref:`mellanox.com/v1alpha1 <mellanox.com/v1alpha1>`
+- :ref:`mellanox.com/v1alpha1 <mellanox.com/v1alpha1>`
 
 .. _mellanox.com/v1alpha1:
 
