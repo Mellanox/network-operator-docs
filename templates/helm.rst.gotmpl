@@ -47,7 +47,7 @@ General Parameters
        (hasPrefix "rdmaSharedDevicePlugin" .Key) (hasPrefix "sriovDevicePlugin" .Key) 
        (hasPrefix "ibKubernetes" .Key) (hasPrefix "nvIpam" .Key) (hasPrefix "secondaryNetwork" .Key) 
        (hasPrefix "docaTelemetryService" .Key) (hasPrefix "nicFeatureDiscovery" .Key)
-       (hasPrefix "node-feature-discovery" .Key))) }}
+       (hasPrefix "node-feature-discovery" .Key) (hasPrefix "nic-configuration-operator-chart" .Key))) }}
    * - {{ .Key }}
      - {{ .Type }}
      - {{ if eq .Type "yaml" }}.. code-block:: yaml
@@ -143,6 +143,34 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
    {{- end }}
 
 {{ template "chart.sriovValuesTable" . }}
+
+==========================
+NIC Configuration Operator
+==========================
+
+NIC Configuration Operator Helm chart customization options can be found `here <https://github.com/Mellanox/nic-configuration-operator/blob/main/deployment/nic-configuration-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+
+.. list-table::
+   :header-rows: 1
+
+   {{- define "chart.nicConfigurationValuesTable" }}
+   * - Name
+     - Type
+     - Default in NVIDIA Network Operator
+     - Notes
+     {{- range .Values }}
+        {{- if hasPrefix "nic-configuration-operator-chart" .Key}}
+   * - {{ .Key }}
+     - {{ .Type }}
+     - {{ if eq .Type "yaml" }}.. code-block:: yaml
+
+{{ .Default | indent 10}}{{ else }}{{ .Default }}{{ end }}
+     - {{ if .Description }}{{ .Description }}{{ else }}{{ .AutoDescription }}{{ end }}
+       {{- end }}
+     {{- end }}
+   {{- end }}
+
+{{ template "chart.nicConfigurationValuesTable" . }}
 
 ===================
 Container Resources
