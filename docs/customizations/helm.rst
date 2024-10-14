@@ -58,30 +58,6 @@ General Parameters
      - bool
      - `true`
      - Deploy Node Feature Discovery operator.
-   * - nic-configuration-operator-chart.configDaemon.image.name
-     - string
-     - `"nic-configuration-operator-daemon"`
-     -
-   * - nic-configuration-operator-chart.configDaemon.image.repository
-     - string
-     - `"ghcr.io/mellanox"`
-     -
-   * - nic-configuration-operator-chart.configDaemon.image.tag
-     - string
-     - `"v0.1.1"`
-     -
-   * - nic-configuration-operator-chart.operator.image.name
-     - string
-     - `"nic-configuration-operator"`
-     -
-   * - nic-configuration-operator-chart.operator.image.repository
-     - string
-     - `"ghcr.io/mellanox"`
-     -
-   * - nic-configuration-operator-chart.operator.image.tag
-     - string
-     - `"v0.1.1"`
-     -
    * - nicConfigurationOperator.enabled
      - bool
      - `false`
@@ -409,6 +385,44 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - bool
      - `true`
      - Deploy ``SriovOperatorConfig`` custom resource
+
+==========================
+NIC Configuration Operator
+==========================
+
+NIC Configuration Operator Helm chart customization options can be found `here <https://github.com/Mellanox/nic-configuration-operator/blob/main/deployment/nic-configuration-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Type
+     - Default in NVIDIA Network Operator
+     - Notes
+   * - nic-configuration-operator-chart.configDaemon.image.name
+     - string
+     - `"nic-configuration-operator-daemon"`
+     -
+   * - nic-configuration-operator-chart.configDaemon.image.repository
+     - string
+     - `"ghcr.io/mellanox"`
+     -
+   * - nic-configuration-operator-chart.configDaemon.image.tag
+     - string
+     - `"v0.1.1"`
+     -
+   * - nic-configuration-operator-chart.operator.image.name
+     - string
+     - `"nic-configuration-operator"`
+     -
+   * - nic-configuration-operator-chart.operator.image.repository
+     - string
+     - `"ghcr.io/mellanox"`
+     -
+   * - nic-configuration-operator-chart.operator.image.tag
+     - string
+     - `"v0.1.1"`
+     -
 
 ===================
 Container Resources
