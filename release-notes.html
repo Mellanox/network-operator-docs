@@ -399,53 +399,64 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>24.7.0</p></td>
-<td><ul class="simple">
-<li><p>In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load. User should
-blacklist NVMe modules to prevent them from loading on system boot. if this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must
-be set to <cite>false</cite>. Using features such as GPU Direct Storage is not supported in such case.</p></li>
-</ul>
+<tr class="row-even"><td><p>24.10.0</p></td>
+<td><div class="line-block">
+<div class="line">- There is a known limitation when using <cite>docker</cite> on RHEL 8 and 9. If you encounter this issue, it is recommended to use “the preferred, maintained, and supported container runtime of choice for Red Hat Enterprise Linux”.</div>
+<div class="line-block">
+<div class="line">For more details, refer to the article <a class="reference external" href="https://access.redhat.com/solutions/3696691">Is the docker package available for Red Hat Enterprise Linux 8 and 9?</a> in the Red Hat Knowledge Base.</div>
+</div>
+</div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.10.0</p></td>
+<tr class="row-odd"><td><p>24.7.0</p></td>
+<td><div class="line-block">
+<div class="line">- In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load.</div>
+<div class="line-block">
+<div class="line">User should blacklist NVMe modules to prevent them from loading on system boot. If this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must be set to <cite>false</cite>.</div>
+<div class="line">Using features such as GPU Direct Storage is not supported in such case.</div>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>23.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- IPoIB sub-interface creation does not work on RHEL 8.8 and RHEL 9.2 due to the kernel limitations in these distributions. This means that IPoIBNetwork cannot be used with these operating systems.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>23.4.0</p></td>
+<tr class="row-odd"><td><p>23.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- In case that the UNLOAD_STORAGE_MODULES parameter is enabled for MOFED container deployment, it is required to make sure that the relevant storage modules are not in use in the OS.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.1.0</p></td>
+<tr class="row-even"><td><p>23.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Only a single PKey can be configured per IPoIB workload pod.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.4.0</p></td>
+<tr class="row-odd"><td><p>1.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- The operator upgrade procedure does not reflect configuration changes. The RDMA Shared Device Plugin or SR-IOV Device Plugin should be restarted manually in case of configuration changes.</div>
 <div class="line">- The RDMA subsystem could be exclusive or shared only in one cluster. Mixed configuration is not supported. The RDMA Shared Device Plugin requires shared RDMA subsystem.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.3.0</p></td>
+<tr class="row-even"><td><p>1.3.0</p></td>
 <td><div class="line-block">
 <div class="line">- MOFED container is not a supported configuration on the DGX platform.</div>
 <div class="line">- MOFED container deletion may lead to the driver’s unloading: In this case, the mlx5_core kernel driver must be reloaded manually. Network connectivity could be affected if there are only NVIDIA NICs on the node.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.2.0</p></td>
+<tr class="row-odd"><td><p>1.2.0</p></td>
 <td><div class="line-block">
 <div class="line">- N/A</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.1.0</p></td>
+<tr class="row-even"><td><p>1.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- NicClusterPolicy update is not supported at the moment.</div>
 <div class="line">- Network Operator is compatible only with NVIDIA GPU Operator v1.9.0 and above.</div>
@@ -455,7 +466,7 @@ be set to <cite>false</cite>. Using features such as GPU Direct Storage is not s
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.0.0</p></td>
+<tr class="row-odd"><td><p>1.0.0</p></td>
 <td><div class="line-block">
 <div class="line">- Network Operator is only compatible with NVIDIA GPU Operator v1.5.2 and above.</div>
 <div class="line">- Persistent NICs configuration for netplan or ifupdown scripts is required for SR-IOV and Shared RDMA interfaces on the host.</div>
