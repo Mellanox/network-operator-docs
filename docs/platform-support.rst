@@ -57,43 +57,43 @@ The following component versions are deployed by the Network Operator:
    :header-rows: 1
 
    * - Component
-     - Version
+     - Container Image
      - Notes
    * - Node Feature Discovery
-     - |node-feature-discovery-version|
+     - registry.k8s.io/nfd/node-feature-discovery:|node-feature-discovery-version|
      - Optionally deployed. May already be present in the cluster with proper configuration.
    * -  NVIDIA DOCA Driver container
-     - |mofed-version|
+     - nvcr.io/nvidia/mellanox/doca-driver:|mofed-version|
      -
    * - k8s-rdma-shared-device-plugin
-     - |k8s-rdma-shared-dev-plugin-version|
+     - ghcr.io/mellanox/k8s-rdma-shared-dev-plugin:|k8s-rdma-shared-dev-plugin-version|
      -
    * - sriov-network-device-plugin
-     - |sriov-device-plugin-version|
+     - ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:|sriov-device-plugin-version|
      -
    * - containernetworking CNI plugins
-     - |cni-plugins-version|
+     - ghcr.io/k8snetworkplumbingwg/plugins:|cni-plugins-version|
      -
    * - whereabouts CNI
-     - |whereabouts-version|
+     - ghcr.io/k8snetworkplumbingwg/whereabouts:|whereabouts-version|
      -
    * - multus CNI
-     - |multus-version|
+     - ghcr.io/k8snetworkplumbingwg/multus-cni:|multus-version|
      -
    * - IPoIB CNI
-     - |ipoib-cni-version|
+     -  ghcr.io/mellanox/ipoib-cni:|ipoib-cni-version|
      -
    * - IB Kubernetes
-     - |ib-kubernetes-version|
+     -  ghcr.io/mellanox/ib-kubernetes:|ib-kubernetes-version|
      -
    * - NV IPAM Plugin
-     - |nvidia-ipam-version|
+     -  ghcr.io/mellanox/nvidia-k8s-ipam:|nvidia-ipam-version|
      -
    * - NIC Feature Discovery
-     - |nic-feature-discovery-version|
+     - ghcr.io/mellanox/nic-feature-discovery:|nic-feature-discovery-version|
      - Only one instance of NFD should be deployed.
    * - DOCA Telemetry
-     - |doca-telemetry-version|
+     - nvcr.io/nvidia/doca/doca_telemetry:|doca-telemetry-version|
      -
 
 ===================
