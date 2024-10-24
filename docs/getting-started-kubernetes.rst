@@ -1537,12 +1537,17 @@ Network Operator deployment with InfiniBand network requires the following:
 * InfiniBand device – Both the host device and the switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
 
+
 Current limitations:
 
 * Only a single PKey can be configured per workload pod.
 * When a single instance of NVIDIA UFM is used with several K8s clusters, different PKey GUID pools should be configured for each cluster.
 
+.. note:: ib-kubernetes provides a daemon that works in conjunction with the `SR-IOV Network Device Plugin <https://github.com/openshift/sriov-network-operator>`_. It acts on Kubernetes pod object changes (Create/Update/Delete), reading the pod's network annotation, fetching its corresponding network CRD and reading the PKey. This is done in order to add the newly generated GUID or the predefined GUID in the GUID field of the CRD cni-args to that PKey for pods with ``mellanox.infiniband.app`` annotation.
+
 .. warning:: `ib-kubernetes-ufm-secret` should be created before NicClusterPolicy.
+
+IB Kubernetes must access `NVIDIA UFM <https://www.nvidia.com/en-us/networking/infiniband/ufm/>`_ in order to manage pods' GUIDs. To provide its credentials, the secret of the following format should be deployed in advance:
 
 ``ufm-secret.yaml``
 
