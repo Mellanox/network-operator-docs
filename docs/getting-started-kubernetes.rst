@@ -1933,16 +1933,17 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
-      cniPlugins:
-        image: plugins
-        repository: ghcr.io/k8snetworkplumbingwg
-        version: |cni-plugins-version|
-        imagePullSecrets: []
-      multus:
-        image: multus-cni
-        repository: ghcr.io/k8snetworkplumbingwg
-        version: |multus-version|
-        imagePullSecrets: []
+      secondaryNetwork:
+        cniPlugins:
+          image: plugins
+          repository: ghcr.io/k8snetworkplumbingwg
+          version: |cni-plugins-version|
+          imagePullSecrets: []
+        multus:
+          image: multus-cni
+          repository: ghcr.io/k8snetworkplumbingwg
+          version: |multus-version|
+          imagePullSecrets: []
 
 
 Enable ``manageSoftwareBridges`` featureGate for sriov-network-operator
@@ -2252,16 +2253,17 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
-      cniPlugins:
-        image: plugins
-        repository: ghcr.io/k8snetworkplumbingwg
-        version: |cni-plugins-version|
-        imagePullSecrets: []
-      multus:
-        image: multus-cni
-        repository: ghcr.io/k8snetworkplumbingwg
-        version: |multus-version|
-        imagePullSecrets: []
+      secondaryNetwork:
+        cniPlugins:
+          image: plugins
+          repository: ghcr.io/k8snetworkplumbingwg
+          version: |cni-plugins-version|
+          imagePullSecrets: []
+        multus:
+          image: multus-cni
+          repository: ghcr.io/k8snetworkplumbingwg
+          version: |multus-version|
+          imagePullSecrets: []
 
 Switch sriov-network-operator to `systemd` configuration mode.
 
