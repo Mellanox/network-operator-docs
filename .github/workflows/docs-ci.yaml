@@ -6,20 +6,25 @@ on:
       git_tag:
         type: string
         description: The git tag (version) from the calling workflow
-        required: true
+
   workflow_dispatch:
     inputs:
       git_tag:
         type: string
         description: The git tag (version) to use for `$TAG`
-        required: true
 
 jobs:
   docs-ci:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}
+      # keeping TAG for cases docs repo workflow is triggered with tag input
       TAG: ${{ inputs.git_tag }}
+      REF_NAME: ${{ github.ref_name }}
+      # in case of pushed PR, ref_head specifies PR's branch
+      REF_HEAD: ${{ github.head_ref }}
+      # will be used to specify repo tar url according to PR id
+      PR_NUMBER: ${{ github.event.number }}
       PR_TITLE_PREFIX: "task: update documentation for"
     steps:
     - uses: actions/checkout@v4
@@ -31,7 +36,19 @@ jobs:
       with:
         go-version: 1.23.x
     - name: Make docs
+      # handle triggered workflow by pushed tag or PR
       run: |
+        if [[ -n $PR_NUMBER ]]; then
+          export BRANCH=$REF_HEAD
+          echo "REF_NAME=$REF_HEAD" >> $GITHUB_ENV
+          echo "COMMIT_SUFFIX=pull/$PR_NUMBER" >> $GITHUB_ENV
+        else
+          TAG="${TAG:-$REF_NAME}"
+          export TAG
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "COMMIT_SUFFIX=$TAG" >> $GITHUB_ENV
+        fi
+ 
         make api-docs helm-docs generate-docs-versions-var
     - name: Close any existing documentation PRs
       run: |
@@ -40,23 +57,22 @@ jobs:
         done
     - name: Create PR
       env:
+        REF_NAME: ${{ github.ref_name }}
         DOWNSTREAM_REPO_OWNER: nvidia-ci-cd
-        DOWNSTREAM_FEATURE_BRANCH: update-docs-for-${{ env.TAG }}
+        DOWNSTREAM_FEATURE_BRANCH: update-docs-for-${{ env.REF_NAME }}
         UPSTREAM_REPO_OWNER: Mellanox
         UPSTREAM_DEFAULT_BRANCH: main
-        COMMIT_MESSAGE: ${{ env.PR_TITLE_PREFIX }} ${{ env.TAG }}
       run: |
-        git config user.name  nvidia-ci-cd
+        git config user.name nvidia-ci-cd
         git config user.email svc-cloud-orch-gh@nvidia.com
         gh repo fork --remote --default-branch-only
         gh repo sync $DOWNSTREAM_REPO_OWNER/network-operator-docs --source $UPSTREAM_REPO_OWNER/network-operator-docs --branch $UPSTREAM_DEFAULT_BRANCH
-
         git checkout -b $DOWNSTREAM_FEATURE_BRANCH
-        git status
         git add docs
+        COMMIT_MESSAGE="$PR_TITLE_PREFIX $COMMIT_SUFFIX"
         git commit -m "$COMMIT_MESSAGE"
 
-        git push -u origin $DOWNSTREAM_FEATURE_BRANCH
+        git push -u origin $DOWNSTREAM_FEATURE_BRANCH --force
         gh pr create \
           --head $DOWNSTREAM_REPO_OWNER:$DOWNSTREAM_FEATURE_BRANCH \
           --base $UPSTREAM_DEFAULT_BRANCH \
