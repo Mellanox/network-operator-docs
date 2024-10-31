@@ -489,13 +489,14 @@ Optional `requests and limits <https://kubernetes.io/docs/concepts/configuration
 For example, for the SR-IOV Device Plugin:
 
 .. code-block:: yaml
+
     kind: NicClusterPolicy
     metadata:
       name: nic-cluster-policy
     spec:
       sriovDevicePlugin:
         containerResources:
-        - name: "mofed-container"
+        - name: "sriov-device-plugin"
           requests:
             cpu: "200m"
             memory: "150Mi"
@@ -548,6 +549,7 @@ In addition, it is possible to specify any environment variables to be exposed t
 These variables can be set in the NicClusterPolicy. For example:
 
 .. code-block:: yaml
+
     kind: NicClusterPolicy
     metadata:
       name: nic-cluster-policy
@@ -560,8 +562,4 @@ These variables can be set in the NicClusterPolicy. For example:
           value: "true"
         - name: CREATE_IFNAMES_UDEV
           value: "true"
-
-===============================================
-Container Device Interface
-===============================================
 
