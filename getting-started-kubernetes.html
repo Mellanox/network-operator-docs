@@ -1535,10 +1535,15 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 <li><p>Only a single PKey can be configured per workload pod.</p></li>
 <li><p>When a single instance of NVIDIA UFM is used with several K8s clusters, different PKey GUID pools should be configured for each cluster.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ib-kubernetes provides a daemon that works in conjunction with the <a class="reference external" href="https://github.com/openshift/sriov-network-operator">SR-IOV Network Device Plugin</a>. It acts on Kubernetes pod object changes (Create/Update/Delete), reading the pod’s network annotation, fetching its corresponding network CRD and reading the PKey. This is done in order to add the newly generated GUID or the predefined GUID in the GUID field of the CRD cni-args to that PKey for pods with <code class="docutils literal notranslate"><span class="pre">mellanox.infiniband.app</span></code> annotation.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><cite>ib-kubernetes-ufm-secret</cite> should be created before NicClusterPolicy.</p>
 </div>
+<p>IB Kubernetes must access <a class="reference external" href="https://www.nvidia.com/en-us/networking/infiniband/ufm/">NVIDIA UFM</a> in order to manage pods’ GUIDs. To provide its credentials, the secret of the following format should be deployed in advance:</p>
 <p><code class="docutils literal notranslate"><span class="pre">ufm-secret.yaml</span></code></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span><span class="w"></span>
@@ -2433,7 +2438,7 @@ ovs-vsctl add-port mybr bond0 -- <span class="nb">set</span> Interface bond0 <sp
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 24, 2024.
+      <span class="lastupdated">Last updated on Nov 01, 2024.
       </span></p>
   </div>
 

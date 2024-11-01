@@ -124,6 +124,8 @@
 <li><p><a class="reference internal" href="#rhcos-specific-build-parameters" id="id18">RHCOS specific build parameters</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#container-resources" id="id19">Container Resources</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-driver-driver-environment-variables" id="id20">NVIDIA DOCA Driver Driver Environment Variables</a></p></li>
 </ul>
 </div>
 <section id="network-operator-deployment-with-admission-controller">
@@ -497,6 +499,101 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 </section>
 </section>
+<section id="container-resources">
+<h2>Container Resources<a class="headerlink" href="#container-resources" title="Permalink to this headline"></a></h2>
+<p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">requests and limits</a> can be configured for each component of the sub-resources deployed by the Network Operator by setting the parameter <code class="docutils literal notranslate"><span class="pre">containerResources</span></code>.</p>
+<p>For example, for the SR-IOV Device Plugin:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">containerResources</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sriov-device-plugin&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;200m&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;150Mi&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300m&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;300Mi&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="nvidia-doca-driver-driver-environment-variables">
+<h2>NVIDIA DOCA Driver Driver Environment Variables<a class="headerlink" href="#nvidia-doca-driver-driver-environment-variables" title="Permalink to this headline"></a></h2>
+<p>The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CREATE_IFNAMES_UDEV</p></td>
+<td><div class="line-block">
+<div class="line">* “true” for Ubuntu 20.04, RHEL v8.x and OCP &lt;= v4.13.</div>
+<div class="line">* “false” for newer OS.</div>
+</div>
+</td>
+<td><p>Create an udev rule to preserve “old-style” path based netdev names e.g enp3s0f0</p></td>
+</tr>
+<tr class="row-odd"><td><p>UNLOAD_STORAGE_MODULES</p></td>
+<td><p>“false”</p></td>
+<td><div class="line-block">
+<div class="line">Unload host storage modules prior to loading NVIDIA DOCA Driver modules:</div>
+<div class="line-block">
+<div class="line">* ib_isert</div>
+<div class="line">* nvme_rdma</div>
+<div class="line">* nvmet_rdma</div>
+<div class="line">* rpcrdma</div>
+<div class="line">* xprtrdma</div>
+<div class="line">* ib_srpt</div>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>ENABLE_NFSRDMA</p></td>
+<td><p>“false”</p></td>
+<td><p>Enable loading of NFS &amp; NVME related storage modules from a NVIDIA DOCA Driver container</p></td>
+</tr>
+<tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
+<td><p>“true”</p></td>
+<td><p>Restore host drivers when a container</p></td>
+</tr>
+</tbody>
+</table>
+<p>In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard “HTTP_PROXY”, “HTTPS_PROXY”, “NO_PROXY”.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When ENABLE_NFSRDMA is set to <cite>true</cite>, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
+(e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.</p>
+</div>
+<p>These variables can be set in the NicClusterPolicy. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESTORE_DRIVER_ON_POD_TERMINATION</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNLOAD_STORAGE_MODULES</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CREATE_IFNAMES_UDEV</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -508,7 +605,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 24, 2024.
+      <span class="lastupdated">Last updated on Nov 01, 2024.
       </span></p>
   </div>
 
