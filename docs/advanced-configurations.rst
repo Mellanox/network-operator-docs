@@ -478,3 +478,88 @@ To build Ubuntu-based image please use provided `Ubuntu Dockerfile <https://raw.
 **NOTE:** Make sure the `.sh` files are executable by running `chmod +x entrypoint.sh dtk_nic_driver_build.sh`
 
 .. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.
+
+
+===================
+Container Resources
+===================
+
+Optional `requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ can be configured for each component of the sub-resources deployed by the Network Operator by setting the parameter ``containerResources``.
+
+For example, for the SR-IOV Device Plugin:
+
+.. code-block:: yaml
+
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+    spec:
+      sriovDevicePlugin:
+        containerResources:
+        - name: "sriov-device-plugin"
+          requests:
+            cpu: "200m"
+            memory: "150Mi"
+          limits:
+            cpu: "300m"
+            memory: "300Mi"
+
+
+===============================================
+NVIDIA DOCA Driver Driver Environment Variables
+===============================================
+
+The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Default
+     - Description
+   * - CREATE_IFNAMES_UDEV
+     - | * "true” for Ubuntu 20.04, RHEL v8.x and OCP <= v4.13.
+       | * "false" for newer OS.
+     - Create an udev rule to preserve "old-style" path based netdev names e.g enp3s0f0
+   * - UNLOAD_STORAGE_MODULES
+     - "false"
+     - | Unload host storage modules prior to loading NVIDIA DOCA Driver modules:
+       |    * ib_isert
+       |    * nvme_rdma
+       |    * nvmet_rdma
+       |    * rpcrdma
+       |    * xprtrdma
+       |    * ib_srpt
+   * - ENABLE_NFSRDMA
+     - "false"
+     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA Driver container
+   * - RESTORE_DRIVER_ON_POD_TERMINATION
+     - "true"
+     - Restore host drivers when a container
+
+In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
+
+.. warning::
+   CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
+
+.. warning::
+  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
+  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.
+
+These variables can be set in the NicClusterPolicy. For example:
+
+.. code-block:: yaml
+
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+    spec:
+      ofedDriver:
+        env:
+        - name: RESTORE_DRIVER_ON_POD_TERMINATION
+          value: "true"
+        - name: UNLOAD_STORAGE_MODULES
+          value: "true"
+        - name: CREATE_IFNAMES_UDEV
+          value: "true"
+
