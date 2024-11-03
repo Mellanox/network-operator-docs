@@ -18,6 +18,15 @@ function Link(el)
   if href:match("^https://godoc") then
     return el  -- Do nothing, return the original link
   end
+  if href:match("^https://network.nvidia.com") then
+    return el  -- Do nothing, return the original link
+  end
+  if href:match("^https://github.com") then
+    return el  -- Do nothing, return the original link
+  end
+  if href:match("^https://docs.nvidia.com") then
+    return el  -- Do nothing, return the original link
+  end
   -- Check if the link is "#mellanox.com%2fv1alpha1"
   if href:match("mellanox%.com%%2fv*") then
     -- Update the href to be the correct path
