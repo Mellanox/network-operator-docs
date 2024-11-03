@@ -49,7 +49,7 @@ jobs:
         git config user.name  nvidia-ci-cd
         git config user.email svc-cloud-orch-gh@nvidia.com
         gh repo fork --remote --default-branch-only
-        gh repo sync $DOWNSTREAM_REPO_OWNER/${{ github.event.repository.name }} --source $UPSTREAM_REPO_OWNER/${{ github.event.repository.name }} --branch $UPSTREAM_DEFAULT_BRANCH
+        gh repo sync $DOWNSTREAM_REPO_OWNER/network-operator-docs --source $UPSTREAM_REPO_OWNER/network-operator-docs --branch $UPSTREAM_DEFAULT_BRANCH
 
         git checkout -b $DOWNSTREAM_FEATURE_BRANCH
         git status
