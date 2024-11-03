@@ -124,8 +124,8 @@ DevicePluginSpec describes configuration options for device plugin 1. Image info
       | ``ImageSpecWithConfig``                                                                           | Image information for the device plugin and optional configuration                                |
       | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``useCdi``                                                                                        | Enables use of container device interface (CDI) NOTE: NVIDIA Network Operator does not configure  |
-      | bool                                                                                              | container runtime to enable CDI.                                                                  |
+      | ``useCdi``                                                                                        | Enables use of container device interface (CDI)                                                   |
+      | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _DrainSpec:
@@ -636,46 +636,35 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ofedDriver``                                                                                    | OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes  |
-      | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            | with an OS. See https://network.nvidia.com/support/mlnx-ofed-matrix/                              |
+      | ``nodeAffinity``                                                                                  | Additional nodeAffinity rules to inject to the DaemonSets objects that are managed by the         |
+      | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           | operator                                                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``rdmaSharedDevicePlugin``                                                                        | RdmaSharedDevicePlugin manages support IB and RoCE HCAs through the Kubernetes device plugin      |
-      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        | framework. The config field is a json representation of the RDMA shared device plugin             |
-      |                                                                                                   | configuration. See https://github.com/Mellanox/k8s-rdma-shared-dev-plugin                         |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``sriovDevicePlugin``                                                                             | SriovDevicePlugin manages SRIOV through the Kubernetes device plugin framework. The config field  |
-      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        | is a json representation of the RDMA shared device plugin configuration. See                      |
-      |                                                                                                   | https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin                               |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``ibKubernetes``                                                                                  | IBKubernetes provides a daemon that works in conjunction with the SR-IOV Network Device Plugin.   |
-      | :ref:`IBKubernetesSpec <IBKubernetesSpec>`                                                        | It acts on Kubernetes pod object changes and reads the pod’s network annotation. From there it    |
-      |                                                                                                   | fetches the corresponding network CRD and reads the PKey. This is done in order to add the newly  |
-      |                                                                                                   | generated GUID or the predefined GUID in the GUID field of the CRD. This is then passed in        |
-      |                                                                                                   | cni-args to that PKey for pods with mellanox.infiniband.app annotation. See:                      |
-      |                                                                                                   | https://github.com/Mellanox/ib-kubernetes                                                         |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``secondaryNetwork``                                                                              | SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in     |
-      | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                | Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate   |
-      |                                                                                                   | CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only              |
-      |                                                                                                   | containernetworking-plugins is supported - IPAM CNI: Currently only Whereabout IPAM CNI is        |
-      |                                                                                                   | supported as a part of the secondaryNetwork section. - IPoIB CNI: Allows the user to create IPoIB |
-      |                                                                                                   | child link and move it to the pod                                                                 |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nvIpam``                                                                                        | NvIpam is an IPAM provider that dynamically assigns IP addresses with speed and performance in    |
-      | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    | mind. Note: NvIPam requires certificate management e.g. cert-manager or OpenShift cert            |
-      |                                                                                                   | management. See https://github.com/Mellanox/nvidia-k8s-ipam                                       |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nicFeatureDiscovery``                                                                           | NicFeatureDiscovery works with NodeFeatureDiscovery to expose information about NVIDIA NICs.      |
-      | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          | https://github.com/Mellanox/nic-feature-discovery                                                 |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``docaTelemetryService``                                                                          | DOCATelemetryService exposes telemetry from NVIDIA networking components to prometheus. See:      |
-      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        | https://docs.nvidia.com/doca/sdk/nvidia+doca+telemetry+service+guide/index.html                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nodeAffinity``                                                                                  | NodeAffinity rules to inject to the DaemonSets objects that are managed by the operator           |
-      | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``tolerations``                                                                                   | Tolerations to inject to the DaemonSets objects that are managed by the operator                  |
+      | ``tolerations``                                                                                   | Additional tolerations to inject to the DaemonSets objects that are managed by the operator       |
       | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ofedDriver``                                                                                    | Configuration options for OFED driver                                                             |
+      | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rdmaSharedDevicePlugin``                                                                        | Configuration options for RDMA shared device plugin                                               |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``sriovDevicePlugin``                                                                             | Configuration options for SRIOV device plugin                                                     |
+      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ibKubernetes``                                                                                  | Configuration options for ib-kubernetes                                                           |
+      | :ref:`IBKubernetesSpec <IBKubernetesSpec>`                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``secondaryNetwork``                                                                              | Configuration options for secondary network                                                       |
+      | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nvIpam``                                                                                        | Configuration options for nv-ipam                                                                 |
+      | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nicFeatureDiscovery``                                                                           | Configuration options for nic-feature-discovery                                                   |
+      | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``docaTelemetryService``                                                                          | Configuration options for DOCA Telemetry Service                                                  |
+      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicClusterPolicyStatus:
