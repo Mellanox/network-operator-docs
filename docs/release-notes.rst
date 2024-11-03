@@ -137,6 +137,9 @@ Upgrade Notes
      - Notes
    * - 24.10.0
      - | - Dropped Multus CNI support for versions older than v4.1.0.
+       | - NicClusterPolicy Custom Resource is no longer deployed through Helm. users should create NicClusterPolicy post install/update.
+       |   to keep the existing NicClusterPolicy Custom Resource from previous helm installation (e.g when upgrading from 24.7.0 to 24.10.0),
+       |   annotate the NicClusterPolicy Custom Resource with `helm.sh/resource-policy: keep`. e.g `kubectl annotate --overwrite nicclusterpolicies.mellanox.com nic-cluster-policy helm.sh/resource-policy=keep`
    * - 24.7.0
      - | - Deploying NicClusterPolicy Custom Resource through helm is deprecated, support will be removed in Network Operator 24.10.
            It is advised to keep deployCR=false in your helm values and create/update NicClusterPolicy Custom Resource post helm install/update.
