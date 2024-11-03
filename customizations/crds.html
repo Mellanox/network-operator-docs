@@ -254,7 +254,8 @@ deployed.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">useCdi</span></code>
 bool</p></td>
-<td><p>Enables use of container device interface (CDI)</p></td>
+<td><p>Enables use of container device interface (CDI) NOTE: NVIDIA Network Operator does not configure
+container runtime to enable CDI.</p></td>
 </tr>
 </tbody>
 </table>
@@ -933,46 +934,64 @@ Meta</a></p></td>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeAffinity</span></code>
-<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#NodeAffinity">Kubernetes core/v1.NodeAffinity</a></p></td>
-<td><p>Additional nodeAffinity rules to inject to the DaemonSets objects that are managed by the
-operator</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tolerations</span></code>
-<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#Toleration">[]Kubernetes core/v1.Toleration</a></p></td>
-<td><p>Additional tolerations to inject to the DaemonSets objects that are managed by the operator</p></td>
-</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>
 <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a></p></td>
-<td><p>Configuration options for OFED driver</p></td>
+<td><p>OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes
+with an OS. See <a class="reference external" href="https://network.nvidia.com/support/mlnx-ofed-matrix/">https://network.nvidia.com/support/mlnx-ofed-matrix/</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>
 <a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td><p>Configuration options for RDMA shared device plugin</p></td>
+<td><p>RdmaSharedDevicePlugin manages support IB and RoCE HCAs through the Kubernetes device plugin
+framework. The config field is a json representation of the RDMA shared device plugin
+configuration. See <a class="reference external" href="https://github.com/Mellanox/k8s-rdma-shared-dev-plugin">https://github.com/Mellanox/k8s-rdma-shared-dev-plugin</a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>
 <a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
-<td><p>Configuration options for SRIOV device plugin</p></td>
+<td><p>SriovDevicePlugin manages SRIOV through the Kubernetes device plugin framework. The config field
+is a json representation of the RDMA shared device plugin configuration. See
+<a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin">https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ibKubernetes</span></code>
 <a class="reference internal" href="#ibkubernetesspec"><span class="std std-ref">IBKubernetesSpec</span></a></p></td>
-<td><p>Configuration options for ib-kubernetes</p></td>
+<td><p>IBKubernetes provides a daemon that works in conjunction with the SR-IOV Network Device Plugin.
+It acts on Kubernetes pod object changes and reads the pod’s network annotation. From there it
+fetches the corresponding network CRD and reads the PKey. This is done in order to add the newly
+generated GUID or the predefined GUID in the GUID field of the CRD. This is then passed in
+cni-args to that PKey for pods with mellanox.infiniband.app annotation. See:
+<a class="reference external" href="https://github.com/Mellanox/ib-kubernetes">https://github.com/Mellanox/ib-kubernetes</a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">secondaryNetwork</span></code>
 <a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a></p></td>
-<td><p>Configuration options for secondary network</p></td>
+<td><p>SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in
+Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate
+CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only
+containernetworking-plugins is supported - IPAM CNI: Currently only Whereabout IPAM CNI is
+supported as a part of the secondaryNetwork section. - IPoIB CNI: Allows the user to create IPoIB
+child link and move it to the pod</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
 <a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
-<td><p>Configuration options for nv-ipam</p></td>
+<td><p>NvIpam is an IPAM provider that dynamically assigns IP addresses with speed and performance in
+mind. Note: NvIPam requires certificate management e.g. cert-manager or OpenShift cert
+management. See <a class="reference external" href="https://github.com/Mellanox/nvidia-k8s-ipam">https://github.com/Mellanox/nvidia-k8s-ipam</a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicFeatureDiscovery</span></code>
 <a class="reference internal" href="#nicfeaturediscoveryspec"><span class="std std-ref">NICFeatureDiscoverySpec</span></a></p></td>
-<td><p>Configuration options for nic-feature-discovery</p></td>
+<td><p>NicFeatureDiscovery works with NodeFeatureDiscovery to expose information about NVIDIA NICs.
+<a class="reference external" href="https://github.com/Mellanox/nic-feature-discovery">https://github.com/Mellanox/nic-feature-discovery</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docaTelemetryService</span></code>
 <a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATelemetryServiceSpec</span></a></p></td>
-<td><p>Configuration options for DOCA Telemetry Service</p></td>
+<td><p>DOCATelemetryService exposes telemetry from NVIDIA networking components to prometheus. See:
+<a class="reference external" href="https://docs.nvidia.com/doca/sdk/nvidia+doca+telemetry+service+guide/index.html">https://docs.nvidia.com/doca/sdk/nvidia+doca+telemetry+service+guide/index.html</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeAffinity</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#NodeAffinity">Kubernetes core/v1.NodeAffinity</a></p></td>
+<td><p>NodeAffinity rules to inject to the DaemonSets objects that are managed by the operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tolerations</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#Toleration">[]Kubernetes core/v1.Toleration</a></p></td>
+<td><p>Tolerations to inject to the DaemonSets objects that are managed by the operator</p></td>
 </tr>
 </tbody>
 </table>
@@ -1241,7 +1260,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 01, 2024.
+      <span class="lastupdated">Last updated on Nov 03, 2024.
       </span></p>
   </div>
 
