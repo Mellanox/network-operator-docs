@@ -2575,3 +2575,127 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 * `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
 
 * `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
+
+===========================================================================
+[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator
+===========================================================================
+`NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
+
+.. warning:: `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ is required to be deployed in the cluster for the NIC Configuration Operator
+
+First install the Network Operator with NIC Configuration Operator enabled:
+
+``values.yaml``:
+
+.. code-block:: yaml
+
+    nicConfigurationOperator:
+      enabled: true
+
+Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:
+
+.. code:: bash
+
+    > kubectl get nicdevices -n nvidia-network-operator
+
+    NAME                      AGE
+    node1-1015-mt1627x08307   1m
+    node1-101d-mt1952x03330   1m
+    node2-1015-mt1627x08305   1m
+    node2-101d-mt1952x03327   1m
+
+Discover more information about a specific device:
+
+.. code:: bash
+
+    kubectl get nicdevice -n nvidia-network-operator node1-1015-mt1627x08307 -o yaml
+
+.. code-block:: yaml
+
+    apiVersion: configuration.net.nvidia.com/v1alpha1
+    kind: NicDevice
+    metadata:
+      creationTimestamp: "2024-09-21T08:43:08Z"
+      generation: 1
+      name: node1-1015-mt1627x08307
+      namespace: nvidia-network-operator
+      ownerReferences:
+      - apiVersion: v1
+        kind: Node
+        name: node1
+        uid: 25c4f4e2-f7ba-4ba9-9a87-8056313ffc79
+      resourceVersion: "1177095"
+      uid: ac6763bf-67c6-4af5-81f8-1aad5da929bf
+    spec: {}
+    status:
+      conditions:
+      - lastTransitionTime: "2024-09-21T08:43:08Z"
+        message: Device configuration spec is empty, cannot update configuration
+        reason: DeviceConfigSpecEmpty
+        status: "False"
+        type: ConfigUpdateInProgress
+      firmwareVersion: 14.31.2006
+      node: node1
+      partNumber: mcx4131a-gcat
+      ports:
+      - networkInterface: enp129s0np0
+        pci: 0000:81:00.0
+        rdmaInterface: mlx5_2
+      psid: mt_2430110032
+      serialNumber: mt1627x08307
+      type: "1015"
+
+Configure and apply the NicConfigurationTemplate CR:
+
+.. code-block:: yaml
+
+    apiVersion: configuration.net.nvidia.com/v1alpha1
+    kind: NICConfigurationTemplate
+    metadata:
+       name: connectx6dx-config
+       namespace: nvidia-network-operator
+    spec:
+       nodeSelector:
+          feature.node.kubernetes.io/network-sriov.capable: "true"
+       nicSelector:
+          # nicType selector is mandatory, the rest are optional. Only a single type can be specified.
+          nicType: 1015
+          pciAddress:
+             - "0000:03:00.0"
+             - “0000:04:00.0”
+       resetToDefault: false # if set, template is ignored, device configuration should reset
+       template:
+          numVfs: 2
+          linkType: Ethernet
+          pciPerformanceOptimized:
+             enabled: true
+             maxAccOutRead: 44
+             maxReadRequest: 5
+          roceOptimized:
+             enabled: true
+             qos:
+                trust: dscp
+                pfc: "0,0,0,1,0,0,0,0"
+          gpuDirectOptimized:
+             enabled: true
+             env: Baremetal
+          rawNvConfig:
+             THIS_IS_A_SPECIAL_NVCONFIG_PARAM: "55"
+             SOME_ADVANCED_NVCONFIG_PARAM: "true"
+
+.. note:: It's not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
+
+For more information about the CRD API, refer to `API documentation <https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md>`_.
+For more information, which FW parameter each settings corresponds to, refer to `Configuration details doc section <https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details>`_.
+
+Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+
+    - lastTransitionTime: "2024-09-21T08:43:08Z"
+      message: ""
+      reason: UpdateStarted
+      status: "True"
+      type: ConfigUpdateInProgress
