@@ -274,7 +274,7 @@ Node Feature Discovery Helm chart customization options can be found `here <http
 SR-IOV Network Operator
 =======================
 
-SR-IOV Network Operator Helm chart customization options can be found `here <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/deployment/sriov-network-operator/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+SR-IOV Network Operator Helm chart customization options can be found `here <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/deployment/sriov-network-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
 
 .. list-table::
    :header-rows: 1
@@ -289,7 +289,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-beta.5"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-beta.6"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -305,7 +305,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-beta.5"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-beta.6"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -313,7 +313,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-beta.5"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-beta.6"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
