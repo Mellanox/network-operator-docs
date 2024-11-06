@@ -100,52 +100,53 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#network-operator-deployment-guide" id="id20">Network Operator Deployment Guide</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites" id="id21">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-on-vanilla-kubernetes-cluster" id="id22">Network Operator Deployment on Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#deployment-examples" id="id23">Deployment Examples</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-guide" id="id21">Network Operator Deployment Guide</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id22">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-on-vanilla-kubernetes-cluster" id="id23">Network Operator Deployment on Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#deployment-examples" id="id24">Deployment Examples</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin" id="id24">Network Operator Deployment with RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" id="id25">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network" id="id26">Network Operator Deployment with a Secondary Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam" id="id27">Network Operator Deployment with NVIDIA-IPAM</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id28">Network Operator Deployment with a Host Device Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id29">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id30">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id31">Network Operator Deployment for GPUDirect Workloads</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id32">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id33">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin" id="id25">Network Operator Deployment with RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" id="id26">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network" id="id27">Network Operator Deployment with a Secondary Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam" id="id28">Network Operator Deployment with NVIDIA-IPAM</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id29">Network Operator Deployment with a Host Device Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id30">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id31">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id32">Network Operator Deployment for GPUDirect Workloads</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id33">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id34">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p>
 <ul>
-<li><p><a class="reference internal" href="#upgrade-from-nvidia-network-operator-v24-1-0" id="id34">Upgrade from NVIDIA Network Operator v24.1.0</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-from-nvidia-network-operator-v24-1-0" id="id35">Upgrade from NVIDIA Network Operator v24.1.0</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id35">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id36">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id37">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id38">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id39">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-managed-openvswitch" id="id40">Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch</a></p>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id36">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id37">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id38">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id39">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id40">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-managed-openvswitch" id="id41">Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-configuration" id="id41">Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id42">Prerequisites for Worker Nodes</a></p></li>
-<li><p><a class="reference internal" href="#ovs-kernel" id="id43">OVS-kernel</a></p></li>
-<li><p><a class="reference internal" href="#ovs-doca" id="id44">OVS-doca</a></p></li>
-<li><p><a class="reference internal" href="#test-workload" id="id45">Test Workload</a></p></li>
-<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id46">Troubleshooting OVS</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-configuration" id="id42">Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id43">Prerequisites for Worker Nodes</a></p></li>
+<li><p><a class="reference internal" href="#ovs-kernel" id="id44">OVS-kernel</a></p></li>
+<li><p><a class="reference internal" href="#ovs-doca" id="id45">OVS-doca</a></p></li>
+<li><p><a class="reference internal" href="#test-workload" id="id46">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id47">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-externally-managed-openvswitch-with-vf-lag" id="id47">Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-externally-managed-openvswitch-with-vf-lag" id="id48">Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id3" id="id48">Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#id4" id="id49">Prerequisites for Worker Nodes</a></p></li>
-<li><p><a class="reference internal" href="#id7" id="id50">OVS-kernel</a></p></li>
-<li><p><a class="reference internal" href="#id10" id="id51">OVS-doca</a></p></li>
-<li><p><a class="reference internal" href="#id13" id="id52">Test Workload</a></p></li>
-<li><p><a class="reference internal" href="#id14" id="id53">Troubleshooting OVS</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id49">Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id50">Prerequisites for Worker Nodes</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id51">OVS-kernel</a></p></li>
+<li><p><a class="reference internal" href="#id10" id="id52">OVS-doca</a></p></li>
+<li><p><a class="reference internal" href="#id13" id="id53">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#id14" id="id54">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" id="id55">[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator</a></p></li>
 </ul>
 </div>
 <section id="network-operator-deployment-guide">
@@ -211,14 +212,14 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p class="admonition-title">Warning</p>
 <p>Each Network Operator Release has a set of default version values for the various components it deploys. It is recommended that these values will not be changed. Testing and validation were performed with these values, and there is no guarantee of interoperability nor correctness when different versions are used.</p>
 </div>
-<div class="literal-block-wrapper docutils container" id="id17">
-<div class="code-block-caption"><span class="caption-text">Add NVIDIA NGC Helm repository</span><a class="headerlink" href="#id17" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Add NVIDIA NGC Helm repository</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id18">
-<div class="code-block-caption"><span class="caption-text">Update helm repositories</span><a class="headerlink" href="#id18" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Update helm repositories</span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo update
 </pre></div>
 </div>
@@ -231,8 +232,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
    --wait
 </pre></div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id19">
-<div class="code-block-caption"><span class="caption-text">View deployed resources</span><a class="headerlink" href="#id19" title="Permalink to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">View deployed resources</span><a class="headerlink" href="#id20" title="Permalink to this code"></a></div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
 </pre></div>
 </div>
@@ -2427,6 +2428,120 @@ ovs-vsctl add-port mybr bond0 -- <span class="nb">set</span> Interface bond0 <sp
 </section>
 </section>
 </section>
+<section id="tech-preview-configure-nic-firmware-using-the-nic-configuration-operator">
+<h2>[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator<a class="headerlink" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> is required to be deployed in the cluster for the NIC Configuration Operator</p>
+</div>
+<p>First install the Network Operator with NIC Configuration Operator enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevices -n nvidia-network-operator
+
+NAME                      AGE
+node1-1015-mt1627x08307   1m
+node1-101d-mt1952x03330   1m
+node2-1015-mt1627x08305   1m
+node2-101d-mt1952x03327   1m
+</pre></div>
+</div>
+<p>Discover more information about a specific device:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicdevice -n nvidia-network-operator node1-1015-mt1627x08307 -o yaml
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicDevice</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">creationTimestamp</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">generation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1-1015-mt1627x08307</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ownerReferences</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25c4f4e2-f7ba-4ba9-9a87-8056313ffc79</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1177095&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ac6763bf-67c6-4af5-81f8-1aad5da929bf</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device configuration spec is empty, cannot update configuration</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeviceConfigSpecEmpty</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigUpdateInProgress</span><span class="w"></span>
+<span class="w">  </span><span class="nt">firmwareVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14.31.2006</span><span class="w"></span>
+<span class="w">  </span><span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">partNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcx4131a-gcat</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pci</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rdmaInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">psid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mt_2430110032</span><span class="w"></span>
+<span class="w">  </span><span class="nt">serialNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mt1627x08307</span><span class="w"></span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1015&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Configure and apply the NicConfigurationTemplate CR:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NICConfigurationTemplate</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># nicType selector is mandatory, the rest are optional. Only a single type can be specified.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1015</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">“0000:04:00.0”</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># if set, template is ignored, device configuration should reset</span><span class="w"></span>
+<span class="w">   </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">         </span><span class="nt">maxAccOutRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44</span><span class="w"></span>
+<span class="w">         </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
+<span class="w">      </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">         </span><span class="nt">qos</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dscp</span><span class="w"></span>
+<span class="w">            </span><span class="nt">pfc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0,0,0,1,0,0,0,0&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gpuDirectOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">         </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baremetal</span><span class="w"></span>
+<span class="w">      </span><span class="nt">rawNvConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="nt">THIS_IS_A_SPECIAL_NVCONFIG_PARAM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;55&quot;</span><span class="w"></span>
+<span class="w">         </span><span class="nt">SOME_ADVANCED_NVCONFIG_PARAM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.</p>
+</div>
+<p>For more information about the CRD API, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md">API documentation</a>.
+For more information, which FW parameter each settings corresponds to, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details">Configuration details doc section</a>.</p>
+<p>Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:08Z&quot;</span>
+  message: <span class="s2">&quot;&quot;</span>
+  reason: UpdateStarted
+  status: <span class="s2">&quot;True&quot;</span>
+  type: ConfigUpdateInProgress
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -2438,7 +2553,7 @@ ovs-vsctl add-port mybr bond0 -- <span class="nb">set</span> Interface bond0 <sp
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 05, 2024.
+      <span class="lastupdated">Last updated on Nov 06, 2024.
       </span></p>
   </div>
 
