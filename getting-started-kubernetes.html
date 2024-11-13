@@ -2491,27 +2491,30 @@ node2-101d-mt1952x03327   1m
 </div>
 <p>Configure and apply the NicConfigurationTemplate CR:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NICConfigurationTemplate</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
-<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6-config</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># nicType selector is mandatory, the rest are optional. Only a single type can be specified.</span><span class="w"></span>
-<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1015</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># nicType selector is mandatory the rest are optional. Only a single type can be specified.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101b</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pciAddresses</span><span class="p">:</span><span class="w"></span>
 <span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
 <span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">“0000:04:00.0”</span><span class="w"></span>
+<span class="w">      </span><span class="nt">serialNumbers</span><span class="p">:</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;MT2116X09299&quot;</span><span class="w"></span>
 <span class="w">   </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># if set, template is ignored, device configuration should reset</span><span class="w"></span>
 <span class="w">   </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># numVfs and linkType fields are mandatory, the rest are optional</span><span class="w"></span>
 <span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
 <span class="w">      </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">         </span><span class="nt">maxAccOutRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44</span><span class="w"></span>
-<span class="w">         </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
+<span class="w">         </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w"></span>
 <span class="w">      </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">         </span><span class="nt">qos</span><span class="p">:</span><span class="w"></span>
@@ -2521,13 +2524,19 @@ node2-101d-mt1952x03327   1m
 <span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">         </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baremetal</span><span class="w"></span>
 <span class="w">      </span><span class="nt">rawNvConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="nt">THIS_IS_A_SPECIAL_NVCONFIG_PARAM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;55&quot;</span><span class="w"></span>
-<span class="w">         </span><span class="nt">SOME_ADVANCED_NVCONFIG_PARAM</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">THIS_IS_A_SPECIAL_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">           </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;55&quot;</span><span class="w"></span>
+<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOME_ADVANCED_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">           </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It’s not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, numVfs and linkType need to match both in NicConfigurationTemplate and SriovNetworkNodePolicy CRs matching the same NICs.</p>
 </div>
 <p>For more information about the CRD API, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md">API documentation</a>.
 For more information, which FW parameter each settings corresponds to, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details">Configuration details doc section</a>.</p>
