@@ -2650,27 +2650,30 @@ Configure and apply the NicConfigurationTemplate CR:
 .. code-block:: yaml
 
     apiVersion: configuration.net.nvidia.com/v1alpha1
-    kind: NICConfigurationTemplate
+    kind: NicConfigurationTemplate
     metadata:
-       name: connectx6dx-config
-       namespace: nvidia-network-operator
+       name: connectx6-config
+       namespace: nic-configuration-operator
     spec:
        nodeSelector:
           feature.node.kubernetes.io/network-sriov.capable: "true"
        nicSelector:
-          # nicType selector is mandatory, the rest are optional. Only a single type can be specified.
-          nicType: 1015
-          pciAddress:
+          # nicType selector is mandatory the rest are optional. Only a single type can be specified.
+          nicType: 101b
+          pciAddresses:
              - "0000:03:00.0"
              - “0000:04:00.0”
+          serialNumbers:
+             - "MT2116X09299"
        resetToDefault: false # if set, template is ignored, device configuration should reset
        template:
+          # numVfs and linkType fields are mandatory, the rest are optional
           numVfs: 2
           linkType: Ethernet
           pciPerformanceOptimized:
              enabled: true
              maxAccOutRead: 44
-             maxReadRequest: 5
+             maxReadRequest: 4096
           roceOptimized:
              enabled: true
              qos:
@@ -2680,10 +2683,14 @@ Configure and apply the NicConfigurationTemplate CR:
              enabled: true
              env: Baremetal
           rawNvConfig:
-             THIS_IS_A_SPECIAL_NVCONFIG_PARAM: "55"
-             SOME_ADVANCED_NVCONFIG_PARAM: "true"
+             - name: THIS_IS_A_SPECIAL_NVCONFIG_PARAM
+               value: "55"
+             - name: SOME_ADVANCED_NVCONFIG_PARAM
+               value: "true"
 
 .. note:: It's not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
+
+.. note:: To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, numVfs and linkType need to match both in NicConfigurationTemplate and SriovNetworkNodePolicy CRs matching the same NICs.
 
 For more information about the CRD API, refer to `API documentation <https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md>`_.
 For more information, which FW parameter each settings corresponds to, refer to `Configuration details doc section <https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details>`_.
