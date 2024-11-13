@@ -535,7 +535,7 @@ The ``host-device-net.yaml`` configuration file for such a deployment:
       name: hostdev-net
     spec:
       networkNamespace: "default"
-      resourceName: "nvidia.com/hostdev"
+      resourceName: "hostdev"
       ipam: |
         {
           "type": "whereabouts",
@@ -562,7 +562,7 @@ The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the
       name: hostdev-net
     spec:
       networkNamespace: "default"
-      resourceName: "nvidia.com/hostdev"
+      resourceName: "hostdev"
       ipam: |
         {
           "type": "whereabouts",
