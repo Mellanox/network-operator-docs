@@ -286,7 +286,7 @@ The `host-device-net.yaml`` configuration file for such a deployment:
      name: hostdev-net
    spec:
      networkNamespace: "default"
-     resourceName: "nvidia.com/hostdev"
+     resourceName: "hostdev"
      ipam: |
        {
          "type": "whereabouts",
