@@ -13,11 +13,23 @@ export PATH:=$(GOBIN):${PATH}
 
 BRANCH ?= master
 TAG ?=
-# Then using TAG, the tar file starts with v, but the extracted dir does not
-SRC := $(shell echo $(if $(TAG),$(TAG),$(BRANCH)) | sed 's/^v//')
+# Handling the following use cases for repo url:
+# 1. PR - refs/pull/<PR id>
+# 2. TAG - refs/<tag name (omitted 'v' prefix in url)>
+# 3. BRANCH - refs/<branch name>
+ifdef PR_NUMBER
+    SRC = refs-pull-$(PR_NUMBER)-head
+    REFS_NAME = pull/$(PR_NUMBER)
+else ifdef TAG
+    SRC = $(shell echo $(TAG) | sed 's/^v//')
+    REFS_NAME=tags/$(TAG)
+else
+    SRC = $(BRANCH)
+    REFS_NAME=$(BRANCH)
+endif
 
 # Network Operator source tar location
-REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(if $(TAG),tags/$(TAG),heads/$(BRANCH)).tar.gz
+REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(REFS_NAME)/head.tar.gz
 # release.yaml location
 RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/$(if $(TAG),$(TAG),$(BRANCH))/hack/release.yaml
 
