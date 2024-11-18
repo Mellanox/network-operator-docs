@@ -15,9 +15,13 @@ on:
 
 jobs:
   docs-ci:
+    permissions:
+      # need to provide GH_TOKEN with content/pull-request write premissions
+      contents: write
+      pull-requests: write  
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
       # keeping TAG for cases docs repo workflow is triggered with tag input
       TAG: ${{ inputs.git_tag }}
       REF_NAME: ${{ github.ref_name }}
@@ -27,10 +31,24 @@ jobs:
       PR_NUMBER: ${{ github.event.number }}
       PR_TITLE_PREFIX: "task: update documentation for"
     steps:
+    - name: Check if PR actor is part of team
+      env:
+        ACTOR: ${{ github.actor }}
+      run: |
+        response=$(curl -H "Authorization: Bearer $GH_TOKEN" \
+                       -H "Accept: application/vnd.github+json" \
+                       "https://api.github.com/orgs/Mellanox/teams/cloud-orchestration/members/$ACTOR")
+
+        if [[ $(echo "$response" | jq -r '.message') == "Not Found" ]]; then
+          echo "Actor $ACTOR is not part of the 'Mellanox/cloud-orchestration' team and cannot initiate 'Documentation CI' workflow"
+          exit 1
+        else
+          echo "Actor $ACTOR is part of the 'Mellanox/cloud-orchestration' team"
+        fi    
     - uses: actions/checkout@v4
       with:
         repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
-        token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+        token: ${{ inputs.token || secrets.GH_TOKEN }}
     - name: Setup Go
       uses: actions/setup-go@v5.0.2
       with:
