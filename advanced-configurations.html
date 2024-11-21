@@ -444,7 +444,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </ol>
 <section id="rhel-example">
 <h4>RHEL example<a class="headerlink" href="#rhel-example" title="Permalink to this headline"></a></h4>
-<p>To build RHEL-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/RHEL_Dockerfile">RHEL Dockerfile</a>:</p>
+<p>To build RHEL-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/RHEL_Dockerfile">RHEL Dockerfile</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhel9.2 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -460,7 +460,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 <section id="rhcos-example">
 <h4>RHCOS example<a class="headerlink" href="#rhcos-example" title="Permalink to this headline"></a></h4>
-<p>To build RHCOS based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/RHEL_Dockerfile">RHCOS Dockerfile</a>:</p>
+<p>To build RHCOS based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/RHEL_Dockerfile">RHCOS Dockerfile</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhcos4.16 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -476,7 +476,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 <section id="ubuntu-example">
 <h4>Ubuntu example<a class="headerlink" href="#ubuntu-example" title="Permalink to this headline"></a></h4>
-<p>To build Ubuntu-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/Ubuntu_Dockerfile">Ubuntu Dockerfile</a>:.</p>
+<p>To build Ubuntu-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/Ubuntu_Dockerfile">Ubuntu Dockerfile</a>:.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>ubuntu22.04 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -489,8 +489,8 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </pre></div>
 </div>
 <p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/entrypoint.sh">entrypoint script file</a></p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/d3c60f550d9d67f5bd53302c6c3e0d6c559985eb/dtk_nic_driver_build.sh">DTK build script file</a></p>
+<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/entrypoint.sh">entrypoint script file</a></p>
+<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/dtk_nic_driver_build.sh">DTK build script file</a></p>
 <p><strong>NOTE:</strong> Make sure the <cite>.sh</cite> files are executable by running <cite>chmod +x entrypoint.sh dtk_nic_driver_build.sh</cite></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
