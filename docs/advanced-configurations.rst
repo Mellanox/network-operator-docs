@@ -305,6 +305,9 @@ If self-signed certificates are used for an HTTPS based internal repository, a C
      certConfg:
        name: cert-config
 
+
+.. _advanced-configurations-precompiled:
+
 =========================================================
 Precompiled Container Build Instructions for DOCA Drivers
 =========================================================

@@ -215,3 +215,39 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - Yes
      - 
 
+
+=======================================================
+Supported Precompiled Container Images for DOCA Drivers
+=======================================================
+
+--------
+Overview
+--------
+
+To save startup time and operational effort, precompiled DOCA driver container images are available for common OS/flavor/kernel/architecture variants.
+
+The container image tag pattern used for common variants is: **driver_ver-container_ver-kernel_ver-flavor-os-arch**. For example: ``24.07-0.6.1.0-0-6.8.0-49-generic-ubuntu24.04-amd64``
+
+**NOTE:** For the ``generic`` flavor of Ubuntu, the default Kernel version is used for precompiling (e.g. *6.8.0-31* for Ubuntu 24.04). Whereas for all other flavors, their latest (at time of DOCA packaging/release) Kernel version is used.
+
+---------------------------
+Supported Operating Systems
+---------------------------
+
+Currently precompiled DOCA driver container images are provided for the following operating systems:
+
+- Ubuntu 24.04 (amd64/arm64)
+- Ubuntu 22.04 (amd64/arm64)
+
+-----------
+Limitations
+-----------
+
+- NVIDIA supports precompiled driver containers for the most recently released DOCA GA drivers.
+- NVIDIA builds precompiled driver containers for ``generic``, ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel flavors.
+- Precompiled driver containers are currently unsigned.
+- If your hosts use a different kernel variant, you can create a custom precompiled driver container and host it in your own container registry. Please refer to :ref:`advanced-configurations-precompiled` section.
+
+.. warning::
+   - Only ``generic`` kernel variant is tested and supported as a GA.
+   - ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel variants are supported as a Tech Preview and have limited testing.
