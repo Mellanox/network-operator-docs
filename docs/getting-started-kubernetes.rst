@@ -2686,11 +2686,6 @@ Configure and apply the NicConfigurationTemplate CR:
           gpuDirectOptimized:
              enabled: true
              env: Baremetal
-          rawNvConfig:
-             - name: THIS_IS_A_SPECIAL_NVCONFIG_PARAM
-               value: "55"
-             - name: SOME_ADVANCED_NVCONFIG_PARAM
-               value: "true"
 
 .. note:: It's not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
 
