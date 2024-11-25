@@ -1313,37 +1313,6 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
           - key: other-label
             operator: "Exists"
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Upgrade from NVIDIA Network Operator v24.1.0
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To upgrade SR-IOV Network operator you need to create ``SriovNetworkPoolConfig`` CR with the number of nodes to be configured in a parallel as we did in `SriovOperatorConfig`` in previous releases.
-
-E.g.: old method to configure nodes in a parallel:
-
-.. code-block:: bash
-
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "maxParallelNodeConfiguration": 5 } }' --type='merge'
-
-
-New  method to configure nodes in a parallel:
-
-``sriov-network-pool-config-new.yaml``
-
-.. code-block:: yaml
-
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkPoolConfig
-    metadata:
-      name: pool-1
-      namespace: nvidia-network-operator
-    spec:
-      maxUnavailable: "5"
-      nodeSelector:
-        - matchExpressions:
-          - key: node-role.kubernetes.io/master
-                operator: Exists
-
 --------------------------------------------------------------------------
 SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV
 --------------------------------------------------------------------------
