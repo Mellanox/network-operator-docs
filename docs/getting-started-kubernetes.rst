@@ -2583,6 +2583,10 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 
 .. warning:: `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ is required to be deployed in the cluster for the NIC Configuration Operator
 
+.. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check `limitations <https://github.com/Mellanox/network-operator-docs/blob/main/docs/release-notes.rst>`_
+
+* `limitations <https://github.com/Mellanox/network-operator-docs/blob/main/docs/release-notes.rst>`_
+
 First install the Network Operator with NIC Configuration Operator enabled:
 
 ``values.yaml``:
