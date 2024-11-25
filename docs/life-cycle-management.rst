@@ -80,7 +80,7 @@ Get the NicClusterPolicy status:
 Network Operator Upgrade
 ========================
 
-Before upgrading to Network Operator v1.0 or newer with SR-IOV Network Operator enabled, the following manual actions are required:
+Before upgrading to Network Operator v24.10 or newer with SR-IOV Network Operator enabled, the following manual actions are required:
 
 .. code-block:: bash
 
