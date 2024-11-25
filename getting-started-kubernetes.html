@@ -146,7 +146,11 @@
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" id="id56">[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator</a></p></li>
+<li><p><a class="reference internal" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" id="id56">[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id57">NIC Firmware Mismatch Notification</a></p></li>
+</ul>
+</li>
 </ul>
 </div>
 <section id="network-operator-deployment-guide">
@@ -2557,6 +2561,33 @@ For more information, which FW parameter each settings corresponds to, refer to 
   type: ConfigUpdateInProgress
 </pre></div>
 </div>
+<section id="nic-firmware-mismatch-notification">
+<h3>NIC Firmware Mismatch Notification<a class="headerlink" href="#nic-firmware-mismatch-notification" title="Permalink to this headline"></a></h3>
+<p>NIC Configuration Operator updates status conditions of the NicDevice CR to set <cite>FirmwareConfigMatch</cite> condition based on a current NIC firmware:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:10Z&quot;</span>
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  reason: DeviceFirmwareConfigMatch
+  status: <span class="s2">&quot;True&quot;</span>
+  type: FirmwareConfigMatch
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>NIC Firmware Mismatch feature doesn’t support NVIDIA BlueField-3 NIC.</p>
+</div>
+<p><cite>FirmwareConfigMatch</cite> condition status is set to <cite>Unknown</cite> if MOFED is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by MOFED. E.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> &gt; kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- lastTransitionTime: <span class="s2">&quot;2024-11-08T09:19:41Z&quot;</span>
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  reason: DeviceFirmwareConfigMatch
+  status: <span class="s2">&quot;True&quot;</span>
+  type: FirmwareConfigMatch
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
