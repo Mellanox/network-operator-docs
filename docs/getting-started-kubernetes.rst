@@ -2706,3 +2706,33 @@ Status conditions of the NicDevice CR reflect the status of the configuration up
       reason: UpdateStarted
       status: "True"
       type: ConfigUpdateInProgress
+
+----------------------------------
+NIC Firmware Mismatch Notification
+----------------------------------
+
+NIC Configuration Operator updates status conditions of the NicDevice CR to set `FirmwareConfigMatch` condition based on a current NIC firmware:
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+
+    - lastTransitionTime: "2024-09-21T08:43:10Z"
+      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+      reason: DeviceFirmwareConfigMatch
+      status: "True"
+      type: FirmwareConfigMatch
+
+.. warning:: NIC Firmware Mismatch feature doesn't support NVIDIA BlueField-3 NIC.
+
+`FirmwareConfigMatch` condition status is set to `Unknown` if MOFED is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by MOFED. E.g.:
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+
+   - lastTransitionTime: "2024-11-08T09:19:41Z"
+     message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+     reason: DeviceFirmwareConfigMatch
+     status: "True"
+     type: FirmwareConfigMatch

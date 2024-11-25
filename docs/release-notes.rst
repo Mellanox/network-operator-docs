@@ -197,6 +197,7 @@ Known Limitations
      - | - There is a known limitation when using `docker` on RHEL 8 and 9. If you encounter this issue, it is recommended to use "the preferred, maintained, and supported container runtime of choice for Red Hat Enterprise Linux".
        |   For more details, refer to the article `Is the docker package available for Red Hat Enterprise Linux 8 and 9? <https://access.redhat.com/solutions/3696691>`_ in the Red Hat Knowledge Base.
        | - In NIC Configuration Operator template v0.1.14 BF2/BF3 DPUs (not SuperNICs) FW reset flow isn't supported.
+       | - NVIDIA NIC Configuration Operator v0.1.14 Firmware Mismatch notification feature doesn't support NVIDIA BlueField-3 SuperNIC.
    * - 24.7.0
      - | - In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load.
        |   User should blacklist NVMe modules to prevent them from loading on system boot. If this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must be set to `false`.
