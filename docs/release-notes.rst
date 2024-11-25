@@ -36,6 +36,10 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.10.0
+     - | - Added support for NVIDIA NIC Configuration Operator deployment.
+       | - Added support for Support Single-Node OpenShift (SNO).
+       | - NVIDIA Network Operator Helm chart does not create NicClusterPolicy CR anymore.
    * - 24.7.0
      - | - Added support for OpenShift Container Platform v4.16.
        | - Added support for NVIDIA Grace based ARM platforms with OpenShift Container Platform.
