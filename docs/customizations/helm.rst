@@ -123,7 +123,7 @@ General Parameters
      - Init container image version.
    * - operator.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/cloud-native"`
      - Network Operator image repository.
    * - operator.resources
      - yaml
@@ -289,7 +289,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-rc.4"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.10.0"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -305,7 +305,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-rc.4"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -313,7 +313,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-rc.4"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.10.0"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -433,7 +433,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v0.1.13"`
+     - `"v0.1.14"`
      -
 
 =======================
