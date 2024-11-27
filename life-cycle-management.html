@@ -482,6 +482,10 @@ If following the restart the pod still fails, change the NVIDIA DOCA Driver vers
 <h2>Uninstalling the Network Operator<a class="headerlink" href="#uninstalling-the-network-operator" title="Permalink to this headline"></a></h2>
 <section id="uninstalling-network-operator-on-a-vanilla-kubernetes-cluster">
 <h3>Uninstalling Network Operator on a Vanilla Kubernetes Cluster<a class="headerlink" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" title="Permalink to this headline"></a></h3>
+<p>Delete the NicClusterPolicy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl delete -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy
+</pre></div>
+</div>
 <p>Uninstall the Network Operator:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm uninstall network-operator -n nvidia-network-operator
 </pre></div>
@@ -563,7 +567,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 26, 2024.
+      <span class="lastupdated">Last updated on Nov 27, 2024.
       </span></p>
   </div>
 
