@@ -39,7 +39,7 @@ NVIDIA Network Operator leverages `Kubernetes CRDs`_ and `Operator SDK`_ to mana
 
 The goal of the Network Operator is to manage the networking related components, while enabling execution of RDMA and GPUDirect RDMA workloads in a Kubernetes cluster. This includes:
 
-* NVIDIA Networking drivers to enable advanced features - enp1 netdcreate, an NV-IPAM IPPool
+* NVIDIA Networking drivers to enable advanced features
 * Kubernetes device plugins to provide hardware resources required for an accelerated network
 * Kubernetes secondary network components for network intensive workloads
 
@@ -98,13 +98,15 @@ The provided Helm chart contains various parameters to facilitate the creation o
 
 .. warning:: Each Network Operator Release has a set of default version values for the various components it deploys. It is recommended that these values will not be changed. Testing and validation were performed with these values, and there is no guarantee of interoperability nor correctness when different versions are used.
 
+Add NVIDIA NGC Helm repository
+
 .. code-block:: bash
-   :caption: Add NVIDIA NGC Helm repository
 
    helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
 
+Update Helm repositories
+
 .. code-block:: bash
-   :caption: Update helm repositories
 
    helm repo update
 
@@ -119,8 +121,9 @@ Install Network Operator from the NVIDIA NGC chart using the default values:
       --version |network-operator-version| \
       --wait
 
+View deployed resources
+
 .. code-block:: bash
-   :caption: View deployed resources
 
    kubectl -n nvidia-network-operator get pods
 
@@ -132,6 +135,8 @@ Install the Network Operator from the NVIDIA NGC chart using custom values:
    :substitutions:
 
    helm show values nvidia/network-operator --version |network-operator-version| > values.yaml
+
+Install with specifying the custom `values.yaml`
 
 .. code-block:: bash
    :substitutions:
@@ -169,8 +174,8 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with
-* DOCA driver
-* RDMA Shared device plugin configured to a netdev with name ens1f0.
+    * DOCA driver
+    * RDMA Shared device plugin configured to a netdev with name ens1f0.
 
 
 Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.
@@ -250,8 +255,8 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* RDMA Shared Device pluging with two RDMA resources - the first mapped to ens1f0 and ens1f1 and the second mapped to ens2f0 and ens2f1.
+    * DOCA driver
+    * RDMA Shared Device pluging with two RDMA resources - the first mapped to ens1f0 and ens1f1 and the second mapped to ens2f0 and ens2f1.
 
 Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.
 
@@ -339,10 +344,10 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with the following enabled:
-* Secondary network
-* Multus CNI
-* Container-networking-plugins CNI plugins
-* IPAM Plugin
+    * Secondary network
+    * Multus CNI
+    * Container-networking-plugins CNI plugins
+    * IPAM Plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -381,7 +386,7 @@ First install the Network Operator with NFD enabled:
     nfd:
       enabled: true
 
-Once the Network Operator is installed deploy a NicClusterPolicy with the following enabled:
+Once the Network Operator is installed create a NicClusterPolicy with the following enabled:
     * Secondary network
     * Multus CNI
     * Container Networking plugins
@@ -466,7 +471,7 @@ First install the Network Operator with NFD enabled:
     nfd:
       enabled: true
 
-Once the Network Operator is installed deploy a NicClusterPolicy with:
+Once the Network Operator is installed create a NicClusterPolicy with:
     * SR-IOV device plugin configured with a single SR-IOV resource pool
     * Secondary network
     * Multus CNI
@@ -715,12 +720,12 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* RDMA shared device plugin
-* Secondary network
-* Multus CNI
-* IPoIB CNI
-* Whereabouts IPAM CNI plugin
+    * DOCA driver
+    * RDMA shared device plugin
+    * Secondary network
+    * Multus CNI
+    * IPoIB CNI
+    * Whereabouts IPAM CNI plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -899,12 +904,12 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* SR-IOV Device Plugin
-* Secondary network
-* Multus CNI
-* Container Networking plugins
-* IPAM plugin
+    * DOCA driver
+    * SR-IOV Device Plugin
+    * Secondary network
+    * Multus CNI
+    * Container Networking plugins
+    * IPAM plugin
 
 
 .. code-block:: yaml
@@ -1079,11 +1084,11 @@ First install the Network Operator with NFD and SRIOV Network Operator enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* Secondary network
-* Multus CNI
-* IPoIB CNI
-* IPAM CNI plugin
+    * DOCA driver
+    * Secondary network
+    * Multus CNI
+    * IPoIB CNI
+    * IPAM CNI plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -1356,11 +1361,11 @@ First install the Network Operator with NFD and SR-IOV Network Operator enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* Secondary network
-* Multus CNI
-* Container Networking Plugins
-* IPAM plugin
+    * DOCA driver
+    * Secondary network
+    * Multus CNI
+    * Container Networking Plugins
+    * IPAM plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -1548,12 +1553,12 @@ First install the Network Operator with NFD enabled:
       resourcePrefix: "nvidia.com"
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-* DOCA driver
-* ibKubernetes
-* Secondary network
-* Multus CNI
-* Container Networking plugins
-* IPAM Plugin
+    * DOCA driver
+    * ibKubernetes
+    * Secondary network
+    * Multus CNI
+    * Container Networking plugins
+    * IPAM Plugin
 
 .. code-block:: yaml
    :substitutions:

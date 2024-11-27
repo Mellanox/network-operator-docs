@@ -389,6 +389,12 @@ Uninstalling the Network Operator
 Uninstalling Network Operator on a Vanilla Kubernetes Cluster
 -------------------------------------------------------------
 
+Delete the NicClusterPolicy:
+
+.. code-block:: bash
+
+   kubectl delete -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy
+
 Uninstall the Network Operator:
 
 .. code-block:: bash
