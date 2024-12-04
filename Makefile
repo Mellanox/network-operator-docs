@@ -19,17 +19,17 @@ TAG ?=
 # 3. BRANCH - refs/<branch name>
 ifdef PR_NUMBER
     SRC = refs-pull-$(PR_NUMBER)-head
-    REFS_NAME = pull/$(PR_NUMBER)
+    TAR_PATH = pull/$(PR_NUMBER)/head.tar.gz
 else ifdef TAG
     SRC = $(shell echo $(TAG) | sed 's/^v//')
-    REFS_NAME=tags/$(TAG)
+    TAR_PATH = tags/$(TAG)/head.tar.gz
 else
     SRC = $(BRANCH)
-    REFS_NAME=$(BRANCH)
+    TAR_PATH = heads/$(BRANCH).tar.gz
 endif
 
 # Network Operator source tar location
-REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(REFS_NAME)/head.tar.gz
+REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(TAR_PATH)
 # release.yaml location
 RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/$(if $(TAG),$(TAG),$(BRANCH))/hack/release.yaml
 
