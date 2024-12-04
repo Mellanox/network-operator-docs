@@ -46,6 +46,10 @@ General Parameters
      - list
      - `[]`
      - An optional list of references to secrets to use for pulling any of the Network Operator images.
+   * - maintenanceOperator.enabled
+     - bool
+     - `false`
+     - Deploy Maintenance Operator.
    * - nfd.deployNodeFeatureRules
      - bool
      - `true`
@@ -123,7 +127,7 @@ General Parameters
      - Init container image version.
    * - operator.repository
      - string
-     - `"nvcr.io/nvidia/cloud-native"`
+     - `"nvcr.io/nvstaging/mellanox"`
      - Network Operator image repository.
    * - operator.resources
      - yaml
@@ -196,7 +200,7 @@ The NFD labels required by the Network Operator and GPU Operator:
 Node Feature Discovery
 =======================
 
-Node Feature Discovery Helm chart customization options can be found `here <https://github.com/kubernetes-sigs/node-feature-discovery/blob/master/deployment/helm/node-feature-discovery/values.yaml>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+Node Feature Discovery Helm chart customization options can be found `here <https://github.com/kubernetes-sigs/node-feature-discovery/blob/master/deployment/helm/node-feature-discovery/values.yaml>`__. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:
 
 .. list-table::
    :header-rows: 1
@@ -274,7 +278,7 @@ Node Feature Discovery Helm chart customization options can be found `here <http
 SR-IOV Network Operator
 =======================
 
-SR-IOV Network Operator Helm chart customization options can be found `here <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/deployment/sriov-network-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+SR-IOV Network Operator Helm chart customization options can be found `here <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/deployment/sriov-network-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:
 
 .. list-table::
    :header-rows: 1
@@ -289,7 +293,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-24.10.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-24.10.0-rc.1"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -305,7 +309,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-24.10.0-rc.1"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -313,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-24.10.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-24.10.0-rc.1"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -402,7 +406,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
 NIC Configuration Operator
 ==========================
 
-NIC Configuration Operator Helm chart customization options can be found `here <https://github.com/Mellanox/nic-configuration-operator/blob/main/deployment/nic-configuration-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Operator Helm Chart:
+NIC Configuration Operator Helm chart customization options can be found `here <https://github.com/Mellanox/nic-configuration-operator/blob/main/deployment/nic-configuration-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:
 
 .. list-table::
    :header-rows: 1
@@ -434,6 +438,52 @@ NIC Configuration Operator Helm chart customization options can be found `here <
    * - nic-configuration-operator-chart.operator.image.tag
      - string
      - `"v0.1.14"`
+     -
+
+====================
+Maintenance Operator
+====================
+
+Maintenance Operator Helm chart customization options can be found `here <https://github.com/Mellanox/maintenance-operator/blob/main/deployment/maintenance-operator-chart/README.md>`__. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Type
+     - Default in NVIDIA Network Operator
+     - Notes
+   * - maintenance-operator-chart.operator.admissionController.certificates.certManager.enable
+     - bool
+     - `false`
+     - use cert-manager for certificates
+   * - maintenance-operator-chart.operator.admissionController.certificates.certManager.generateSelfSigned
+     - bool
+     - `false`
+     - generate self-signed certificates with cert-manager
+   * - maintenance-operator-chart.operator.admissionController.certificates.custom.enable
+     - bool
+     - `false`
+     - enable custom certificates using secrets
+   * - maintenance-operator-chart.operator.admissionController.certificates.secretNames.operator
+     - string
+     - `"maintenance-webhook-cert"`
+     - secret name containing certificates for the operator admission controller
+   * - maintenance-operator-chart.operator.admissionController.enable
+     - bool
+     - `false`
+     - enable admission controller of the operator
+   * - maintenance-operator-chart.operator.image.name
+     - string
+     - `"maintenance-operator"`
+     -
+   * - maintenance-operator-chart.operator.image.repository
+     - string
+     - `"ghcr.io/mellanox"`
+     -
+   * - maintenance-operator-chart.operator.image.tag
+     - string
+     - `"v0.1.1"`
      -
 
 =======================
