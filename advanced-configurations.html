@@ -361,8 +361,10 @@ To allow Network Operator to work with a local registry, users can specify local
 <h4>Common<a class="headerlink" href="#common" title="Permalink to this headline"></a></h4>
 <ul class="simple">
 <li><p>Docker (Ubuntu) / Podman (RH) installed on your build system.</p></li>
-<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers published at <a class="reference external" href="https://network.nvidia.com/products/infiniband-drivers/linux/mlnx_ofed/">NIC drivers download center</a>, for example: <a class="reference external" href="https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz">https://www.mellanox.com/downloads/ofed/MLNX_OFED-24.04-0.6.6.0/MLNX_OFED_SRC-debian-24.04-0.6.6.0-0.tgz</a></p></li>
+<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at <a class="reference external" href="https://developer.nvidia.com/doca-downloads">NVIDIA DOCA Downloads</a>, for example: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz</a></p></li>
 </ul>
+<p><strong>NOTE:</strong> NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (MLNX_OFED) version need to be specified to fetch the correct driver sources when building the driver container.
+For example, given a DOCA package version (e.g <cite>2.9.1</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/</a> which is <cite>24.10-1.1.4.0</cite></p>
 </section>
 <section id="rhel">
 <h4>RHEL<a class="headerlink" href="#rhel" title="Permalink to this headline"></a></h4>
@@ -380,6 +382,10 @@ To allow Network Operator to work with a local registry, users can specify local
 <li><p>Install <a class="reference external" href="https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html">oc</a> CLI tool.</p></li>
 <li><p>Download OpenShift <a class="reference external" href="https://console.redhat.com/openshift/install/pull-secret">pull secret</a>.</p></li>
 </ul>
+</section>
+<section id="sles">
+<h4>SLES:<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h4>
+<p>Active subscription.</p>
 </section>
 </section>
 <section id="dockerfile-overview">
@@ -400,12 +406,13 @@ This approach is used to optimize the resulting container image size and reduce 
 <ol class="arabic simple">
 <li><p><cite>D_OS</cite>: The Linux distribution (e.g., ubuntu22.04 / rhel9.2)</p></li>
 <li><p><cite>D_ARCH</cite>: Compiled Architecture</p></li>
-<li><p><cite>D_BASE_IMAGE</cite>: Base container image</p></li>
+<li><p><cite>D_BASE_IMAGE</cite>: Base container image (e.g., ubuntu:22.04)</p></li>
 <li><p><cite>D_KERNEL_VER</cite>: The target kernel version (e.g., 5.15.0-25-generic / 5.14.0-284.32.1.el9_2.x86_64)</p></li>
-<li><p><cite>D_OFED_VERSION</cite>: NVIDIA NIC drivers version (e.g., 24.01-0.3.3.1)</p></li>
+<li><p><cite>D_DOCA_VERSION</cite>: NVIDIA DOCA version (e.g., 2.9.1)</p></li>
+<li><p><cite>D_OFED_VERSION</cite>: NVIDIA NIC drivers version (e.g., 24.10-1.1.4.0)</p></li>
 </ol>
-<p><strong>NOTE:</strong> Check desired NVIDIA NIC drivers sources[^1] availability for designated container OS, only versions available on download page can be utilized</p>
-<p><strong>NOTE:</strong> For proper Network Operator functionality container tag name must be in following pattern: <strong>driver_ver-container_ver-kernel_ver-os-arch</strong>. For example: 24.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64</p>
+<p><strong>NOTE:</strong> Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized</p>
+<p><strong>NOTE:</strong> For proper Network Operator functionality container tag name must be in following pattern: <strong>driver_ver-container_ver-kernel_ver-os-arch</strong>. For example: 24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64</p>
 </section>
 <section id="rhel-specific-build-parameters">
 <h3>RHEL specific build parameters<a class="headerlink" href="#rhel-specific-build-parameters" title="Permalink to this headline"></a></h3>
@@ -444,15 +451,16 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </ol>
 <section id="rhel-example">
 <h4>RHEL example<a class="headerlink" href="#rhel-example" title="Permalink to this headline"></a></h4>
-<p>To build RHEL-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/RHEL_Dockerfile">RHEL Dockerfile</a>:</p>
+<p>To build RHEL-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile">RHEL Dockerfile</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhel9.2 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
  --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-284.32.1.el9_2.x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.01-0.3.3.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
  --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream&quot;</span> <span class="se">\</span>
  --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:latest <span class="se">\</span>
- --tag <span class="m">24</span>.04-0.6.6.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 <span class="se">\</span>
+ --tag <span class="m">24</span>.10-1.1.4.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 <span class="se">\</span>
  -f RHEL_Dockerfile <span class="se">\</span>
  --target precompiled .
 </pre></div>
@@ -460,15 +468,16 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 <section id="rhcos-example">
 <h4>RHCOS example<a class="headerlink" href="#rhcos-example" title="Permalink to this headline"></a></h4>
-<p>To build RHCOS based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/RHEL_Dockerfile">RHCOS Dockerfile</a>:</p>
+<p>To build RHCOS based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile">RHCOS Dockerfile</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhcos4.16 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
  --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-427.22.1.el9_4.x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.01-0.3.3.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
  --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f&quot;</span> <span class="se">\</span>
  --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:9.4 <span class="se">\</span>
- --tag <span class="m">24</span>.01-0.3.3.1-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 <span class="se">\</span>
+ --tag <span class="m">24</span>.10-1.1.4.0-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 <span class="se">\</span>
  -f RHEL_Dockerfile <span class="se">\</span>
  --target precompiled .
 </pre></div>
@@ -476,21 +485,39 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 <section id="ubuntu-example">
 <h4>Ubuntu example<a class="headerlink" href="#ubuntu-example" title="Permalink to this headline"></a></h4>
-<p>To build Ubuntu-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/Ubuntu_Dockerfile">Ubuntu Dockerfile</a>:.</p>
+<p>To build Ubuntu-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/Ubuntu_Dockerfile">Ubuntu Dockerfile</a>:.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>ubuntu22.04 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>ubuntu:24.04 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>ubuntu:22.04 <span class="se">\</span>
  --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.15.0-25-generic <span class="se">\</span>
- --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.01-0.3.3.1 <span class="se">\</span>
- --tag <span class="m">24</span>.01-0.3.3.1-0-5.15.0-25-generic-ubuntu22.04-amd64 <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
+ --tag <span class="m">24</span>.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64 <span class="se">\</span>
  -f Ubuntu_Dockerfile <span class="se">\</span>
  --target precompiled .
 </pre></div>
 </div>
+</section>
+<section id="sles-example">
+<h4>SLES example<a class="headerlink" href="#sles-example" title="Permalink to this headline"></a></h4>
+<p>To build SLES-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/SLES_Dockerfile">SLES Dockerfile</a>:.</p>
+<p><strong>SLES example</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>sles15.5 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>registry.suse.com/suse/sle15:15.5 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.21-150500.55.83-default <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
+ --tag <span class="m">24</span>.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 <span class="se">\</span>
+ -f SLES_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
 <p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/entrypoint.sh">entrypoint script file</a></p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/336aa1f143601cd2eb1fba646827b39bb5c86515/dtk_nic_driver_build.sh">DTK build script file</a></p>
+<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/entrypoint.sh">entrypoint script file</a></p>
+<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/dtk_nic_driver_build.sh">DTK build script file</a></p>
 <p><strong>NOTE:</strong> Make sure the <cite>.sh</cite> files are executable by running <cite>chmod +x entrypoint.sh dtk_nic_driver_build.sh</cite></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -605,7 +632,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2024, NVIDIA.
-      <span class="lastupdated">Last updated on Dec 04, 2024.
+      <span class="lastupdated">Last updated on Dec 19, 2024.
       </span></p>
   </div>
 
