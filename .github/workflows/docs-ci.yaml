@@ -17,7 +17,7 @@ jobs:
   docs-ci:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}
+      GH_TOKEN: ${{ secrets.GH_DOCS_TOKEN }}
       # keeping TAG for cases docs repo workflow is triggered with tag input
       TAG: ${{ inputs.git_tag }}
       REF_NAME: ${{ github.ref_name }}
@@ -30,7 +30,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
-        token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+        token: ${{ inputs.token || secrets.GH_DOCS_TOKEN }}
     - name: Setup Go
       uses: actions/setup-go@v5.0.2
       with:
@@ -65,7 +65,8 @@ jobs:
       run: |
         git config user.name nvidia-ci-cd
         git config user.email svc-cloud-orch-gh@nvidia.com
-        gh repo fork --remote --default-branch-only
+        export GH_TOKEN=${{ env.GH_TOKEN }}
+
         gh repo sync $DOWNSTREAM_REPO_OWNER/network-operator-docs --source $UPSTREAM_REPO_OWNER/network-operator-docs --branch $UPSTREAM_DEFAULT_BRANCH
         git checkout -b $DOWNSTREAM_FEATURE_BRANCH
         git add docs
