@@ -6,6 +6,9 @@ on:
       git_tag:
         type: string
         description: The git tag (version) from the calling workflow
+      gh_docs_token:
+        type: string
+        description: Assigned nvidia-ci-cd PAT with docs repo r/w pull request permissions
 
   workflow_dispatch:
     inputs:
@@ -17,7 +20,7 @@ jobs:
   docs-ci:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GH_DOCS_TOKEN }}
+      GH_TOKEN: ${{ inputs.gh_docs_token }}
       # keeping TAG for cases docs repo workflow is triggered with tag input
       TAG: ${{ inputs.git_tag }}
       REF_NAME: ${{ github.ref_name }}
@@ -30,7 +33,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
-        token: ${{ inputs.token || secrets.GH_DOCS_TOKEN }}
+        token: ${{ inputs.token || inputs.gh_docs_token }}
     - name: Setup Go
       uses: actions/setup-go@v5.0.2
       with:
