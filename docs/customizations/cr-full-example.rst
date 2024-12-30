@@ -104,7 +104,6 @@ This example should serve as a reference, it is not recommended to apply it as i
           image: multus-cni
           repository: ghcr.io/k8snetworkplumbingwg
           version: |multus-version|
-          config: ''
         ipamPlugin:
           image: whereabouts
           repository: ghcr.io/k8snetworkplumbingwg
