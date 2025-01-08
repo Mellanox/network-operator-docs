@@ -541,9 +541,9 @@ For example, for the SR-IOV Device Plugin:
             memory: "300Mi"
 
 
-===============================================
-NVIDIA DOCA Driver Driver Environment Variables
-===============================================
+==================================================
+NVIDIA DOCA Driver Container Environment Variables
+==================================================
 
 The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:
 
