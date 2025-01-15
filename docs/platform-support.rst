@@ -91,7 +91,7 @@ The following component versions are deployed by the Network Operator:
      -
    * - NIC Feature Discovery
      - ghcr.io/mellanox/nic-feature-discovery:|nic-feature-discovery-version|
-     - Only one instance of NFD should be deployed.
+     -
    * - DOCA Telemetry
      - nvcr.io/nvidia/doca/doca_telemetry:|doca-telemetry-version|
      -
