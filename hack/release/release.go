@@ -29,12 +29,16 @@ import (
 	"sigs.k8s.io/yaml"
 
 	mellanoxv1alpha1 "github.com/Mellanox/network-operator/api/v1alpha1"
+	"github.com/google/go-containerregistry/pkg/authn"
+	"github.com/google/go-containerregistry/pkg/name"
+	"github.com/google/go-containerregistry/pkg/v1/remote"
 )
 
 // Release contains versions for operator release templates.
 type Release struct {
 	OcpDefaulChannel             string
 	HelmChartVersion             string
+	DocaDriverBuildCommitHash    string
 	NetworkOperator              *mellanoxv1alpha1.ImageSpec
 	NetworkOperatorInitContainer *mellanoxv1alpha1.ImageSpec
 	SriovNetworkOperator         *mellanoxv1alpha1.ImageSpec
@@ -116,6 +120,7 @@ func main() {
 	parts := strings.Split(release.NetworkOperator.Version, ".")
 	release.OcpDefaulChannel = fmt.Sprintf("%s.%s", parts[0], parts[1])
 	release.HelmChartVersion = strings.TrimPrefix(release.NetworkOperator.Version, "v")
+	retrieveDocaDriverBuildCommit(&release)
 
 	var files []string
 	err := filepath.Walk(*templateDir, func(path string, info os.FileInfo, err error) error {
@@ -161,4 +166,86 @@ func main() {
 			os.Exit(1)
 		}
 	}
+}
+
+func retrieveDocaDriverBuildCommit(release *Release) {
+	imagePath := release.Mofed.Repository + "/" + release.Mofed.Image
+	version := release.Mofed.Version
+	labelKey := "org.opencontainers.image.revision"
+
+	// Parse the image reference
+	repo, err := name.NewRepository(imagePath)
+	if err != nil {
+		log.Fatalf("failed to parse repository: %v", err)
+		os.Exit(1)
+	}
+
+	// Set authentication if needed
+	auth := remote.WithAuthFromKeychain(authn.DefaultKeychain)
+	if strings.Contains(release.Mofed.Repository, "nvstaging") {
+		nvcrToken := os.Getenv("NGC_CLI_API_KEY")
+		if nvcrToken == "" {
+			log.Fatalf("NGC_CLI_API_KEY is unset")
+			os.Exit(1)
+		}
+		authNvcr := &authn.Basic{
+			Username: "$oauthtoken",
+			Password: nvcrToken,
+		}
+		auth = remote.WithAuth(authNvcr)
+	}
+
+	// List tags
+	tags, err := remote.List(repo, auth)
+	if err != nil {
+		log.Fatalf("failed to list tags: %v", err)
+		os.Exit(1)
+	}
+
+	// Find the first tag that includes the version substring
+	var matchedTag string
+	for _, tag := range tags {
+		if strings.Contains(tag, version) {
+			matchedTag = tag
+			break
+		}
+	}
+
+	if matchedTag == "" {
+		log.Fatalf("no matching tag found for version: %s", version)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Matched tag: %s\n", matchedTag)
+
+	// Fetch the image
+	imageRef := fmt.Sprintf("%s:%s", imagePath, matchedTag)
+	img, err := name.NewTag(imageRef)
+	if err != nil {
+		log.Fatalf("failed to parse image reference: %v", err)
+		os.Exit(1)
+	}
+
+	image, err := remote.Image(img, auth)
+	if err != nil {
+		log.Fatalf("failed to fetch image: %v", err)
+		os.Exit(1)
+	}
+
+	// Get the image config
+	configFile, err := image.ConfigFile()
+	if err != nil {
+		log.Fatalf("failed to get image config: %v", err)
+		os.Exit(1)
+	}
+
+	// Look up the label
+	labelValue, ok := configFile.Config.Labels[labelKey]
+	if !ok {
+		log.Fatalf("label %q not found in image %s", labelKey, matchedTag)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Label value: %s\n", labelValue)
+	release.DocaDriverBuildCommitHash = labelValue
 }

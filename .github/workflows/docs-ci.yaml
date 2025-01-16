@@ -31,6 +31,8 @@ jobs:
       with:
         go-version: 1.23.x
     - name: Make docs
+      env:
+        NGC_CLI_API_KEY: ${{ secrets.NVCR_TOKEN }}
       run: |
         make api-docs helm-docs generate-docs-versions-var
     - name: Close any existing documentation PRs
