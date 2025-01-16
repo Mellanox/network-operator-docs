@@ -17,6 +17,8 @@
 .. headings # #, * *, =, -, ^, "
 .. include:: ../common/vars.rst
 
+.. _ncp-cr-example:
+
 ****************************************
 NicClusterPolicy Custom Resource Example
 ****************************************
