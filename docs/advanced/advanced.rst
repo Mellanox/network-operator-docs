@@ -1,5 +1,5 @@
 .. license-header
-  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
   SPDX-License-Identifier: Apache-2.0
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,11 @@
 
 .. headings # #, * *, =, -, ^, "
 
+***********************
+Advanced Configurations
+***********************
+
 .. toctree::
-   :caption: NVIDIA Network Operator
-   :titlesonly:
-   :hidden:
-
-   Release Notes <release-notes.rst>
-   Platform Support <platform-support.rst>
-   Getting Started with Kubernetes <getting-started-kubernetes.rst>
-   Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
-   Customization Options and CRDs <customizations/customization.rst>
-   Life Cycle Management <life-cycle-management.rst>
-   Advanced Configurations <advanced/advanced.rst>
-
-.. include:: overview.rst
+   Proxy & Air-gapped <proxy-airgapped.rst>
+   DOCA Drivers <doca-drivers.rst>
+   Other Advanced Configurations <advanced-configurations.rst>
