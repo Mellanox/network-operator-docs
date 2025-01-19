@@ -106,14 +106,15 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#nvidia-doca-driver-container-environment-variables" id="id2">NVIDIA DOCA Driver Container Environment Variables</a></p></li>
-<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-doca-drivers" id="id3">Precompiled Container Build Instructions for DOCA Drivers</a></p>
+<li><p><a class="reference internal" href="#nvidia-doca-driver-container-environment-variables" id="id3">NVIDIA DOCA Driver Container Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-doca-drivers" id="id4">Precompiled Container Build Instructions for DOCA Drivers</a></p>
 <ul>
-<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#dockerfile-overview" id="id5">Dockerfile Overview</a></p></li>
-<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id6">Common mandatory build parameters</a></p></li>
-<li><p><a class="reference internal" href="#rhel-specific-build-parameters" id="id7">RHEL specific build parameters</a></p></li>
-<li><p><a class="reference internal" href="#rhcos-specific-build-parameters" id="id8">RHCOS specific build parameters</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id5">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id6">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id7">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhcos" id="id8">RHCOS</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id9">Ubuntu</a></p></li>
+<li><p><a class="reference internal" href="#sles" id="id10">SLES</a></p></li>
 </ul>
 </li>
 </ul>
@@ -198,35 +199,23 @@
 <section id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
 <p>Before you begin, ensure that you have the following prerequisites:</p>
-<section id="common">
-<h4>Common<a class="headerlink" href="#common" title="Permalink to this headline"></a></h4>
 <ul class="simple">
 <li><p>Docker (Ubuntu) / Podman (RH) installed on your build system.</p></li>
 <li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at <a class="reference external" href="https://developer.nvidia.com/doca-downloads">NVIDIA DOCA Downloads</a>, for example: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz</a></p></li>
 </ul>
 <p><strong>NOTE:</strong> NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (MLNX_OFED) version need to be specified to fetch the correct driver sources when building the driver container.
 For example, given a DOCA package version (e.g <cite>2.9.1</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/</a> which is <cite>24.10-1.1.4.0</cite></p>
-</section>
-<section id="rhel">
-<h4>RHEL<a class="headerlink" href="#rhel" title="Permalink to this headline"></a></h4>
-<ul class="simple">
-<li><p>Active subscription and login credentials for <a class="reference external" href="https://registry.redhat.io">registry.redhat.io</a>. To build RHEL based container from official repository, you need to log in to <a class="reference external" href="https://registry.redhat.io">registry.redhat.io</a>, run the following command:</p></li>
-</ul>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman login registry.redhat.io --username<span class="o">=</span><span class="si">${</span><span class="nv">RH_USERNAME</span><span class="si">}</span> --password<span class="o">=</span><span class="si">${</span><span class="nv">RH_PASSWORD</span><span class="si">}</span>
+<section id="download-docker-files-and-scripts">
+<h4>Download Docker files and scripts:<a class="headerlink" href="#download-docker-files-and-scripts" title="Permalink to this headline"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/4bd571e02021cc3ab6c031b13d85aa0288b444b0/RHEL_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/4bd571e02021cc3ab6c031b13d85aa0288b444b0/Ubuntu_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/4bd571e02021cc3ab6c031b13d85aa0288b444b0/SLES_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/4bd571e02021cc3ab6c031b13d85aa0288b444b0/entrypoint.sh
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/4bd571e02021cc3ab6c031b13d85aa0288b444b0/dtk_nic_driver_build.sh
+
+chmod +x entrypoint.sh dtk_nic_driver_build.sh
 </pre></div>
 </div>
-<p>Replace <cite>RH_USERNAME</cite> and <cite>RH_PASSWORD</cite> with your Red Hat account username and password.</p>
-</section>
-<section id="rhcos">
-<h4>RHCOS<a class="headerlink" href="#rhcos" title="Permalink to this headline"></a></h4>
-<ul class="simple">
-<li><p>Install <a class="reference external" href="https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html">oc</a> CLI tool.</p></li>
-<li><p>Download OpenShift <a class="reference external" href="https://console.redhat.com/openshift/install/pull-secret">pull secret</a>.</p></li>
-</ul>
-</section>
-<section id="sles">
-<h4>SLES:<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h4>
-<p>Active subscription.</p>
 </section>
 </section>
 <section id="dockerfile-overview">
@@ -254,25 +243,28 @@ This approach is used to optimize the resulting container image size and reduce 
 </ol>
 <p><strong>NOTE:</strong> Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized</p>
 <p><strong>NOTE:</strong> For proper Network Operator functionality container tag name must be in following pattern: <strong>driver_ver-container_ver-kernel_ver-os-arch</strong>. For example: 24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64</p>
+<p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modification of <cite>D_OFED_SRC_DOWNLOAD_PATH</cite> must be tighdly coupled with corresponding update to entrypoint.sh script.</p>
+</div>
 </section>
-<section id="rhel-specific-build-parameters">
-<h3>RHEL specific build parameters<a class="headerlink" href="#rhel-specific-build-parameters" title="Permalink to this headline"></a></h3>
-<ol class="arabic simple">
-<li><dl class="simple">
-<dt><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</dt><dd><p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.</p>
-</dd>
-</dl>
+<section id="rhcos">
+<h3>RHCOS<a class="headerlink" href="#rhcos" title="Permalink to this headline"></a></h3>
+<section id="id1">
+<h4>Prerequisites<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Install <a class="reference external" href="https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html">oc</a> CLI tool.</p></li>
+<li><p>Download OpenShift <a class="reference external" href="https://console.redhat.com/openshift/install/pull-secret">pull secret</a>.</p></li>
+</ul>
+</section>
+<section id="specific-build-parameters">
+<h4>Specific build parameters<a class="headerlink" href="#specific-build-parameters" title="Permalink to this headline"></a></h4>
+<ol class="arabic">
+<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</p>
+<p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+In order to get the specific DTK container image for a specific OpenShift release, run:</p>
 </li>
-<li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
-</ol>
-<p>For more details regarding DTK please read <a class="reference external" href="https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload">official documentation</a>.</p>
-</section>
-<section id="rhcos-specific-build-parameters">
-<h3>RHCOS specific build parameters<a class="headerlink" href="#rhcos-specific-build-parameters" title="Permalink to this headline"></a></h3>
-<ol class="arabic simple">
-<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image
-<strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
-In order to get the specific DTK container image for a specific OpenShift release, run:</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info &lt;OCP_VERSION&gt; --image-for<span class="o">=</span>driver-toolkit
 </pre></div>
@@ -290,26 +282,14 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 <li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
 <li><p><cite>D_KERNEL_VER</cite>: CoreOS kernel versions for OpenShift are listed <a class="reference external" href="https://access.redhat.com/solutions/7077108">here</a>.</p></li>
 </ol>
-<section id="rhel-example">
-<h4>RHEL example<a class="headerlink" href="#rhel-example" title="Permalink to this headline"></a></h4>
-<p>To build RHEL-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile">RHEL Dockerfile</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
- --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhel9.2 <span class="se">\</span>
- --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-284.32.1.el9_2.x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
- --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
- --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream&quot;</span> <span class="se">\</span>
- --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:latest <span class="se">\</span>
- --tag <span class="m">24</span>.10-1.1.4.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 <span class="se">\</span>
- -f RHEL_Dockerfile <span class="se">\</span>
- --target precompiled .
+<p>Kernel version can also be found with the DTK image using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:47ba8a10d5938c41f907ee7f70d74aecb9c2dfd7afae4cea2942fc8f47256612 cat /etc/driver-toolkit-release.json <span class="p">|</span> jq -r <span class="s1">&#39;.KERNEL_VERSION&#39;</span>
+<span class="m">5</span>.14.0-427.22.1.el9_4.x86_64
 </pre></div>
 </div>
 </section>
 <section id="rhcos-example">
 <h4>RHCOS example<a class="headerlink" href="#rhcos-example" title="Permalink to this headline"></a></h4>
-<p>To build RHCOS based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile">RHCOS Dockerfile</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhcos4.16 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -324,9 +304,11 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </pre></div>
 </div>
 </section>
+</section>
+<section id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline"></a></h3>
 <section id="ubuntu-example">
 <h4>Ubuntu example<a class="headerlink" href="#ubuntu-example" title="Permalink to this headline"></a></h4>
-<p>To build Ubuntu-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/Ubuntu_Dockerfile">Ubuntu Dockerfile</a>:.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>ubuntu22.04 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -340,10 +322,15 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </pre></div>
 </div>
 </section>
+</section>
+<section id="sles">
+<h3>SLES<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h3>
+<section id="id2">
+<h4>Prerequisites<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
+<p>Active subscription. After registering, make sure to run <cite>zypper refresh &amp;&amp; zypper update -y</cite>.</p>
+</section>
 <section id="sles-example">
 <h4>SLES example<a class="headerlink" href="#sles-example" title="Permalink to this headline"></a></h4>
-<p>To build SLES-based image please use provided <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/SLES_Dockerfile">SLES Dockerfile</a>:.</p>
-<p><strong>SLES example</strong>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
  --build-arg <span class="nv">D_OS</span><span class="o">=</span>sles15.5 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
@@ -355,14 +342,6 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
  -f SLES_Dockerfile <span class="se">\</span>
  --target precompiled .
 </pre></div>
-</div>
-<p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/entrypoint.sh">entrypoint script file</a></p>
-<p><strong>NOTE:</strong> Download <a class="reference external" href="https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/dtk_nic_driver_build.sh">DTK build script file</a></p>
-<p><strong>NOTE:</strong> Make sure the <cite>.sh</cite> files are executable by running <cite>chmod +x entrypoint.sh dtk_nic_driver_build.sh</cite></p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Modification of <cite>D_OFED_SRC_DOWNLOAD_PATH</cite> must be tighdly coupled with corresponding update to entrypoint.sh script.</p>
 </div>
 </section>
 </section>
@@ -378,7 +357,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jan 16, 2025.
+      <span class="lastupdated">Last updated on Jan 19, 2025.
       </span></p>
   </div>
 
