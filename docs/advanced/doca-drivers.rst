@@ -1,9 +1,9 @@
 .. headings # #, * *, =, -, ^, ", ~
 .. include:: ../common/vars.rst
 
-************
-DOCA Drivers
-************
+****************************
+NVIDIA DOCA Driver Container
+****************************
 
 .. contents:: On this page
    :depth: 2
@@ -71,9 +71,9 @@ These variables can be set in the NicClusterPolicy. For example:
 
 .. _advanced-configurations-precompiled:
 
-=========================================================
-Precompiled Container Build Instructions for DOCA Drivers
-=========================================================
+=========================================================================
+Precompiled Container Build Instructions for NVIDIA DOCA Driver Container
+=========================================================================
 
 -------------
 Prerequisites
@@ -185,7 +185,9 @@ Then pull the DTK image locally using your pull-secret:
 
 2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
 
-3. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed `here <https://access.redhat.com/solutions/7077108>`_.
+3. `D_ARCH`: Target architecture: `x86_64` or `aarch64`.
+
+4. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed `here <https://access.redhat.com/solutions/7077108>`_.
 
 Kernel version can also be found with the DTK image using the following command:
 
