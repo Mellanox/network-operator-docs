@@ -1,5 +1,5 @@
 .. headings # #, * *, =, -, ^, ", ~
-
+.. include:: ../common/vars.rst
 
 *******************************
 Proxy & Air-Gapped Environments
@@ -89,7 +89,12 @@ To allow Network Operator to work with a local registry, users can specify local
 Pulling and Pushing Container Images to a Local Registry
 --------------------------------------------------------
 
-To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file.
+To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file or in the :ref:`ncp-cr-example` section.
+
+There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.
+
+For example for DOCA driver version |mofed-version|, the tag for Ubuntu 24.04 with X86 architecture is "|mofed-version|-ubuntu24.04-amd64".
+Available DOCA driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
 
 ------------------------
 Local Package Repository
