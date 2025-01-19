@@ -1,5 +1,5 @@
 .. headings # #, * *, =, -, ^, ", ~
-
+.. include:: ../common/vars.rst
 
 ************
 DOCA Drivers
@@ -81,36 +81,27 @@ Prerequisites
 
 Before you begin, ensure that you have the following prerequisites:
 
-~~~~~~
-Common
-~~~~~~
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
 - Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz <https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz>`_
 
 **NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (MLNX_OFED) version need to be specified to fetch the correct driver sources when building the driver container.
 For example, given a DOCA package version (e.g `2.9.1`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/>`_ which is `24.10-1.1.4.0`
 
-~~~~
-RHEL
-~~~~
-- Active subscription and login credentials for `registry.redhat.io <https://registry.redhat.io>`_. To build RHEL based container from official repository, you need to log in to `registry.redhat.io <https://registry.redhat.io>`_, run the following command:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Download Docker files and scripts:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
+    :substitutions:
 
-   podman login registry.redhat.io --username=${RH_USERNAME} --password=${RH_PASSWORD}
+    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/RHEL_Dockerfile
+    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/Ubuntu_Dockerfile
+    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/SLES_Dockerfile
+    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/entrypoint.sh
+    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/dtk_nic_driver_build.sh
 
-Replace `RH_USERNAME` and `RH_PASSWORD` with your Red Hat account username and password.
+    chmod +x entrypoint.sh dtk_nic_driver_build.sh
 
-~~~~~
-RHCOS
-~~~~~
-- Install `oc <https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html>`_ CLI tool.
-- Download OpenShift `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_.
-
-~~~~~
-SLES:
-~~~~~
-Active subscription.
 
 -------------------
 Dockerfile Overview
@@ -147,19 +138,28 @@ Before building the container, you need to provide following parameters as `buil
 
 **NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **driver_ver-container_ver-kernel_ver-os-arch**. For example: 24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64
 
-------------------------------
-RHEL specific build parameters
-------------------------------
-1. `D_BASE_IMAGE`: DriverToolKit container image
-    **NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel versions, verify match between kernel version to compile drivers for, versus DTK image.
-2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
+**NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
-For more details regarding DTK please read `official documentation <https://docs.openshift.com/container-platform/4.15/hardware_enablement/psap-driver-toolkit.html#pulling-the-driver-toolkit-from-payload>`_.
+.. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.
 
--------------------------------
-RHCOS specific build parameters
--------------------------------
+
+-----
+RHCOS
+-----
+
+~~~~~~~~~~~~~
+Prerequisites
+~~~~~~~~~~~~~
+
+- Install `oc <https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html>`_ CLI tool.
+- Download OpenShift `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Specific build parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
 1. `D_BASE_IMAGE`: DriverToolKit container image
+
    **NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
    In order to get the specific DTK container image for a specific OpenShift release, run:
 
@@ -187,31 +187,16 @@ Then pull the DTK image locally using your pull-secret:
 
 3. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed `here <https://access.redhat.com/solutions/7077108>`_.
 
-~~~~~~~~~~~~
-RHEL example
-~~~~~~~~~~~~
-
-To build RHEL-based image please use provided `RHEL Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile>`_:
+Kernel version can also be found with the DTK image using the following command:
 
 .. code-block:: bash
 
-   podman build \
-    --build-arg D_OS=rhel9.2 \
-    --build-arg D_ARCH=x86_64 \
-    --build-arg D_KERNEL_VER=5.14.0-284.32.1.el9_2.x86_64 \
-    --build-arg D_DOCA_VERSION=2.9.1 \
-    --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --build-arg D_BASE_IMAGE="registry.redhat.io/openshift4/driver-toolkit-rhel9:v4.13.0-202309112001.p0.gd719bdc.assembly.stream" \
-    --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:latest \
-    --tag 24.10-1.1.4.0-0-5.14.0-284.32.1.el9_2-rhel9.2-amd64 \
-    -f RHEL_Dockerfile \
-    --target precompiled .
+   podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:47ba8a10d5938c41f907ee7f70d74aecb9c2dfd7afae4cea2942fc8f47256612 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
+   5.14.0-427.22.1.el9_4.x86_64
 
 ~~~~~~~~~~~~~
 RHCOS example
 ~~~~~~~~~~~~~
-
-To build RHCOS based image please use provided `RHCOS Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/RHEL_Dockerfile>`_:
 
 .. code-block:: bash
 
@@ -227,11 +212,13 @@ To build RHCOS based image please use provided `RHCOS Dockerfile <https://raw.gi
     -f RHEL_Dockerfile \
     --target precompiled .
 
+------
+Ubuntu
+------
+
 ~~~~~~~~~~~~~~
 Ubuntu example
 ~~~~~~~~~~~~~~
-
-To build Ubuntu-based image please use provided `Ubuntu Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/Ubuntu_Dockerfile>`_:.
 
 .. code-block:: bash
 
@@ -246,13 +233,19 @@ To build Ubuntu-based image please use provided `Ubuntu Dockerfile <https://raw.
     -f Ubuntu_Dockerfile \
     --target precompiled .
 
+----
+SLES
+----
+
+~~~~~~~~~~~~~
+Prerequisites
+~~~~~~~~~~~~~
+
+Active subscription. After registering, make sure to run `zypper refresh && zypper update -y`.
+
 ~~~~~~~~~~~~
 SLES example
 ~~~~~~~~~~~~
-
-To build SLES-based image please use provided `SLES Dockerfile <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/SLES_Dockerfile>`_:.
-
-**SLES example**:
 
 .. code-block:: bash
 
@@ -266,14 +259,3 @@ To build SLES-based image please use provided `SLES Dockerfile <https://raw.gith
     --tag 24.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 \
     -f SLES_Dockerfile \
     --target precompiled .
-
-
-**NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
-
-**NOTE:** Download `entrypoint script file <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/entrypoint.sh>`_
-
-**NOTE:** Download `DTK build script file <https://raw.githubusercontent.com/Mellanox/doca-driver-build/249ff2118e4ae849d3c138ca6cbc5942f6101007/dtk_nic_driver_build.sh>`_
-
-**NOTE:** Make sure the `.sh` files are executable by running `chmod +x entrypoint.sh dtk_nic_driver_build.sh`
-
-.. warning:: Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.

@@ -18,4 +18,4 @@
 .. |sriovnetop-sriov-device-plugin-version| replace:: v3.8.0
 .. |doca-telemetry-version| replace:: 1.16.5-doca2.6.0-host
 .. |node-feature-discovery-version| replace:: v0.15.6
-
+.. |doca-driver-build-commit| replace::  4bd571e02021cc3ab6c031b13d85aa0288b444b0
