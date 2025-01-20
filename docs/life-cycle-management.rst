@@ -26,6 +26,43 @@ Life Cycle Management
    :local:
    :backlinks: none
 
+===========================
+Network Operator Versioning
+===========================
+
+NVIDIA Network Operator is versioned following the calendar versioning convention.
+
+The version follows the pattern ``YY.MM.PP``, such as 25.1.0, 24.10.0, and 24.10.1.
+The first two fields, ``YY.MM`` identify a major version and indicates when the major version was initially released.
+The third field, ``PP``, identifies the patch version of the major version.
+Patch releases typically include critical bug and CVE fixes.
+
+===========================
+Network Operator Life Cycle
+===========================
+
+When a major version of NVIDIA Network Operator is released, the previous major version enters maintenance support
+and only receives patch release updates for critical bug and CVE fixes.
+Prior maintance release enters EOL (end-of-life) and are no longer supported and do not receive patch release updates.
+
+The product life cycle and versioning are subject to change in the future.
+
+.. list-table:: Support Status for Releases
+   :header-rows: 1
+
+   * - Network Operator Version
+     - Status
+
+   * - 25.1.x
+     - Generally Available
+
+   * - 24.10.x
+     - Maintenance
+
+   * - 24.7.x and lower
+     - EOL
+
+
 =============================
 Ensuring Deployment Readiness
 =============================
