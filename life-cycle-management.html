@@ -100,51 +100,91 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#ensuring-deployment-readiness" id="id1">Ensuring Deployment Readiness</a></p>
+<li><p><a class="reference internal" href="#network-operator-versioning" id="id2">Network Operator Versioning</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-life-cycle" id="id3">Network Operator Life Cycle</a></p></li>
+<li><p><a class="reference internal" href="#ensuring-deployment-readiness" id="id4">Ensuring Deployment Readiness</a></p>
 <ul>
-<li><p><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance" id="id2">Status Field Example of a NICClusterPolicy Instance</a></p></li>
+<li><p><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance" id="id5">Status Field Example of a NICClusterPolicy Instance</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-upgrade" id="id3">Network Operator Upgrade</a></p>
+<li><p><a class="reference internal" href="#network-operator-upgrade" id="id6">Network Operator Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id4">Downloading a New Helm Chart</a></p></li>
-<li><p><a class="reference internal" href="#upgrading-crds-for-a-specific-release" id="id5">Upgrading CRDs for a Specific Release</a></p></li>
-<li><p><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release" id="id6">Preparing the Helm Values for the New Release</a></p></li>
-<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id7">Applying the Helm Chart Update</a></p></li>
-<li><p><a class="reference internal" href="#ofed-driver-manual-upgrade" id="id8">OFED Driver Manual Upgrade</a></p>
+<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id7">Downloading a New Helm Chart</a></p></li>
+<li><p><a class="reference internal" href="#upgrading-crds-for-a-specific-release" id="id8">Upgrading CRDs for a Specific Release</a></p></li>
+<li><p><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release" id="id9">Preparing the Helm Values for the New Release</a></p></li>
+<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id10">Applying the Helm Chart Update</a></p></li>
+<li><p><a class="reference internal" href="#ofed-driver-manual-upgrade" id="id11">OFED Driver Manual Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-ofed-driver" id="id9">Restarting Pods with a Containerized OFED Driver</a></p></li>
-<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id10">Removing Pods with a Secondary Network from the Node</a></p></li>
-<li><p><a class="reference internal" href="#restarting-the-ofed-driver-pod" id="id11">Restarting the OFED Driver Pod</a></p></li>
-<li><p><a class="reference internal" href="#deleting-the-ofed-driver-pod-from-the-node" id="id12">Deleting the OFED Driver Pod from the Node</a></p>
+<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-ofed-driver" id="id12">Restarting Pods with a Containerized OFED Driver</a></p></li>
+<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id13">Removing Pods with a Secondary Network from the Node</a></p></li>
+<li><p><a class="reference internal" href="#restarting-the-ofed-driver-pod" id="id14">Restarting the OFED Driver Pod</a></p></li>
+<li><p><a class="reference internal" href="#deleting-the-ofed-driver-pod-from-the-node" id="id15">Deleting the OFED Driver Pod from the Node</a></p>
 <ul>
-<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id13">Returning Pods with a Secondary Network to the Node</a></p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#automatic-ofed-driver-upgrade" id="id14">Automatic OFED Driver Upgrade</a></p>
-<ul>
-<li><p><a class="reference internal" href="#node-upgrade-states" id="id15">Node Upgrade States</a></p></li>
-<li><p><a class="reference internal" href="#safe-driver-loading" id="id16">Safe Driver Loading</a></p>
-<ul>
-<li><p><a class="reference internal" href="#troubleshooting" id="id17">Troubleshooting</a></p></li>
+<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id16">Returning Pods with a Secondary Network to the Node</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id18">Uninstalling the Network Operator</a></p>
+<li><p><a class="reference internal" href="#automatic-ofed-driver-upgrade" id="id17">Automatic OFED Driver Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id19">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id20">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
-<li><p><a class="reference internal" href="#additional-steps" id="id21">Additional Steps</a></p></li>
+<li><p><a class="reference internal" href="#node-upgrade-states" id="id18">Node Upgrade States</a></p></li>
+<li><p><a class="reference internal" href="#safe-driver-loading" id="id19">Safe Driver Loading</a></p>
+<ul>
+<li><p><a class="reference internal" href="#troubleshooting" id="id20">Troubleshooting</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id22">NicClusterPolicy CRD Update</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id21">Uninstalling the Network Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id22">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id23">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
+<li><p><a class="reference internal" href="#additional-steps" id="id24">Additional Steps</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id25">NicClusterPolicy CRD Update</a></p></li>
 </ul>
 </div>
+<section id="network-operator-versioning">
+<h2>Network Operator Versioning<a class="headerlink" href="#network-operator-versioning" title="Permalink to this headline"></a></h2>
+<p>NVIDIA Network Operator is versioned following the calendar versioning convention.</p>
+<p>The version follows the pattern <code class="docutils literal notranslate"><span class="pre">YY.MM.PP</span></code>, such as 25.1.0, 24.10.0, and 24.10.1.
+The first two fields, <code class="docutils literal notranslate"><span class="pre">YY.MM</span></code> identify a major version and indicates when the major version was initially released.
+The third field, <code class="docutils literal notranslate"><span class="pre">PP</span></code>, identifies the patch version of the major version.
+Patch releases typically include critical bug and CVE fixes.</p>
+</section>
+<section id="network-operator-life-cycle">
+<h2>Network Operator Life Cycle<a class="headerlink" href="#network-operator-life-cycle" title="Permalink to this headline"></a></h2>
+<p>When a major version of NVIDIA Network Operator is released, the previous major version enters maintenance support
+and only receives patch release updates for critical bug and CVE fixes.
+Prior maintance release enters EOL (end-of-life) and are no longer supported and do not receive patch release updates.</p>
+<p>The product life cycle and versioning are subject to change in the future.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Support Status for Releases</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Network Operator Version</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>25.1.x</p></td>
+<td><p>Generally Available</p></td>
+</tr>
+<tr class="row-odd"><td><p>24.10.x</p></td>
+<td><p>Maintenance</p></td>
+</tr>
+<tr class="row-even"><td><p>24.7.x and lower</p></td>
+<td><p>EOL</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="ensuring-deployment-readiness">
 <h2>Ensuring Deployment Readiness<a class="headerlink" href="#ensuring-deployment-readiness" title="Permalink to this headline"></a></h2>
 <p>Once the Network Operator is deployed, and a NicClusterPolicy resource is created, the operator will reconcile the state of the cluster until it reaches the desired state, as defined in the resource.</p>
