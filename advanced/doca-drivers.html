@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DOCA Drivers &mdash; NVIDIA Network Operator v25.01.0 documentation</title>
+  <title>NVIDIA DOCA Driver Container &mdash; NVIDIA Network Operator v25.01.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="proxy-airgapped.html">Proxy &amp; Air-gapped</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">DOCA Drivers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DOCA Driver Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
 </ul>
 </li>
@@ -86,7 +86,7 @@
 <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
   
     <li><a href="advanced.html">Advanced Configurations</a> &raquo;</li>
-<li>DOCA Drivers</li>
+<li>NVIDIA DOCA Driver Container</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -101,13 +101,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="doca-drivers">
-<h1>DOCA Drivers<a class="headerlink" href="#doca-drivers" title="Permalink to this headline"></a></h1>
+  <section id="nvidia-doca-driver-container">
+<h1>NVIDIA DOCA Driver Container<a class="headerlink" href="#nvidia-doca-driver-container" title="Permalink to this headline"></a></h1>
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#nvidia-doca-driver-container-environment-variables" id="id3">NVIDIA DOCA Driver Container Environment Variables</a></p></li>
-<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-doca-drivers" id="id4">Precompiled Container Build Instructions for DOCA Drivers</a></p>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-driver-container" id="id4">Precompiled Container Build Instructions for NVIDIA DOCA Driver Container</a></p>
 <ul>
 <li><p><a class="reference internal" href="#prerequisites" id="id5">Prerequisites</a></p></li>
 <li><p><a class="reference internal" href="#dockerfile-overview" id="id6">Dockerfile Overview</a></p></li>
@@ -194,8 +194,8 @@
 </pre></div>
 </div>
 </section>
-<section id="precompiled-container-build-instructions-for-doca-drivers">
-<span id="advanced-configurations-precompiled"></span><h2>Precompiled Container Build Instructions for DOCA Drivers<a class="headerlink" href="#precompiled-container-build-instructions-for-doca-drivers" title="Permalink to this headline"></a></h2>
+<section id="precompiled-container-build-instructions-for-nvidia-doca-driver-container">
+<span id="advanced-configurations-precompiled"></span><h2>Precompiled Container Build Instructions for NVIDIA DOCA Driver Container<a class="headerlink" href="#precompiled-container-build-instructions-for-nvidia-doca-driver-container" title="Permalink to this headline"></a></h2>
 <section id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
 <p>Before you begin, ensure that you have the following prerequisites:</p>
@@ -280,6 +280,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </div>
 <ol class="arabic simple" start="2">
 <li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
+<li><p><cite>D_ARCH</cite>: Target architecture: <cite>x86_64</cite> or <cite>aarch64</cite>.</p></li>
 <li><p><cite>D_KERNEL_VER</cite>: CoreOS kernel versions for OpenShift are listed <a class="reference external" href="https://access.redhat.com/solutions/7077108">here</a>.</p></li>
 </ol>
 <p>Kernel version can also be found with the DTK image using the following command:</p>
@@ -357,7 +358,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jan 19, 2025.
+      <span class="lastupdated">Last updated on Jan 20, 2025.
       </span></p>
   </div>
 
