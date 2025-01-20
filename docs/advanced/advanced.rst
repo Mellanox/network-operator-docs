@@ -22,5 +22,5 @@ Advanced Configurations
 
 .. toctree::
    Proxy & Air-gapped <proxy-airgapped.rst>
-   DOCA Drivers <doca-drivers.rst>
+   DOCA Driver Container <doca-drivers.rst>
    Other Advanced Configurations <advanced-configurations.rst>
