@@ -123,7 +123,7 @@ General Parameters
      - Init container image repository.
    * - operator.ofedDriver.initContainer.version
      - string
-     - `"v0.0.2"`
+     - `"v0.0.3"`
      - Init container image version.
    * - operator.repository
      - string
@@ -293,7 +293,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.1.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.1.0-beta.3"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -301,7 +301,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/network-resources-injector:8810e6a127366cc1eb829d3f7cb3f866d096946e"`
+     - `"ghcr.io/k8snetworkplumbingwg/network-resources-injector:v1.7.0"`
      -
    * - sriov-network-operator.images.sriovCni
      - string
@@ -309,7 +309,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -317,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.1.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.1.0-beta.3"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -437,7 +437,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v0.1.14"`
+     - `"v0.1.15"`
      -
 
 ====================
