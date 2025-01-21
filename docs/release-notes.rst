@@ -36,6 +36,14 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.1.0
+     - | - Added support for OpenShift Container Platform v4.17.
+       | - Added support for SUSE Linux Enterprise Server 15 SP6 with Upstream K8s and Rancher.
+       | - Added support for RHEL v9.5.
+       | - Removed support for Ubuntu 20.04.
+       | - Added support for NVIDIA Maintenance Operator deployment.
+   * - 24.10.1
+     - | - CVE fix (CVE-2024-45338).
    * - 24.10.0
      - | - Added support for NVIDIA NIC Configuration Operator deployment.
        | - Added support for Support Single-Node OpenShift (SNO).
