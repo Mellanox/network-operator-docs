@@ -1,12 +1,6 @@
 name: Documentation CI
 
 on:
-  workflow_call:
-    inputs:
-      git_tag:
-        type: string
-        description: The git tag (version) from the calling workflow
-        required: true
   workflow_dispatch:
     inputs:
       git_tag:
@@ -24,8 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        repository: ${{ github.repository_owner }}/network-operator-docs  # repo must be explicitly set here for workflow calling to behave correctly
-        token: ${{ inputs.token || secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+        token: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
     - name: Setup Go
       uses: actions/setup-go@v5.0.2
       with:
