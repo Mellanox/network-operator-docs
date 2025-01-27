@@ -96,6 +96,79 @@ There is one caveat with regards to the DOCA driver image. The version field mus
 For example for DOCA driver version |mofed-version|, the tag for Ubuntu 24.04 with X86 architecture is "|mofed-version|-ubuntu24.04-amd64".
 Available DOCA driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
 
+-----------------------------------
+Configuring Local Registry TLS Cert
+-----------------------------------
+
+NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
+This is required to verify the availability of precompiled DOCA Driver container images.
+
+If the Image Registry uses a TLS certificate that is not issued by a well-known Certificate Authority (CA), it is required to configure the NVIDIA Network Operator with the Certificate.
+
+
+Fetch the TLS Certificates from the Image Registry server and save them in the `ca.crt` file:
+
+.. code-block:: bash
+
+   export REGISTRY_HOST=myregistry.example.com
+   export REGISTRY_PORT=5000
+   openssl s_client -showcerts -connect ${REGISTRY_HOST}:${REGISTRY_PORT} </dev/null 2>/dev/null | awk '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/' > ca.crt
+
+Create a ConfigMap containing the TLS Certificates from the `ca.crt file`:
+
+.. code-block:: bash
+
+   kubectl create configmap custom-registry-cert --from-file=<external_registry>=ca.crt -n nvidia-network-operator
+
+In OpenShift, update the `nvidia-network-operator` Subscription by adding the following `config` under `spec`:
+
+.. code-block:: bash
+
+   kubectl apply -f - <<EOF
+   apiVersion: operators.coreos.com/v1alpha1
+   kind: Subscription
+   metadata:
+     name: nvidia-network-operator
+     namespace: nvidia-network-operator
+   spec:
+     config:
+       volumes:
+         - configMap:
+             name: custom-registry-cert
+           name: custom-registry-ca
+       volumeMounts:
+         - mountPath: /etc/pki/tls/certs/
+           name: custom-registry-ca
+   EOF
+
+
+
+In Kubernetes, update the `network-operator` Deployment's volumes by running:
+
+.. code-block:: bash
+
+   kubectl apply -f - <<EOF
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: network-operator
+     namespace: nvidia-network-operator
+   spec:
+     template:
+       spec:
+         volumes:
+           - configMap:
+               name: custom-registry-cert
+             name: custom-registry-ca
+         containers:
+           - name: network-operator
+             volumeMounts:
+               - mountPath: /etc/pki/tls/certs/
+                 name: custom-registry-ca
+   EOF
+
+
+
 ------------------------
 Local Package Repository
 ------------------------
