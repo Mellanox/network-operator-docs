@@ -117,7 +117,8 @@
 <ul>
 <li><p><a class="reference internal" href="#local-image-registry" id="id6">Local Image Registry</a></p></li>
 <li><p><a class="reference internal" href="#pulling-and-pushing-container-images-to-a-local-registry" id="id7">Pulling and Pushing Container Images to a Local Registry</a></p></li>
-<li><p><a class="reference internal" href="#local-package-repository" id="id8">Local Package Repository</a></p></li>
+<li><p><a class="reference internal" href="#configuring-local-registry-tls-cert" id="id8">Configuring Local Registry TLS Cert</a></p></li>
+<li><p><a class="reference internal" href="#local-package-repository" id="id9">Local Package Repository</a></p></li>
 </ul>
 </li>
 </ul>
@@ -191,6 +192,63 @@ To allow Network Operator to work with a local registry, users can specify local
 <p>There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
 <p>For example for DOCA driver version 25.01-0.3.9.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.01-0.3.9.0-0-ubuntu24.04-amd64”.
 Available DOCA driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
+</section>
+<section id="configuring-local-registry-tls-cert">
+<h3>Configuring Local Registry TLS Cert<a class="headerlink" href="#configuring-local-registry-tls-cert" title="Permalink to this headline"></a></h3>
+<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
+This is required to verify the availability of precompiled DOCA Driver container images.</p>
+<p>If the Image Registry uses a TLS certificate that is not issued by a well-known Certificate Authority (CA), it is required to configure the NVIDIA Network Operator with the Certificate.</p>
+<p>Fetch the TLS Certificates from the Image Registry server and save them in the <cite>ca.crt</cite> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">REGISTRY_HOST</span><span class="o">=</span>myregistry.example.com
+<span class="nb">export</span> <span class="nv">REGISTRY_PORT</span><span class="o">=</span><span class="m">5000</span>
+openssl s_client -showcerts -connect <span class="si">${</span><span class="nv">REGISTRY_HOST</span><span class="si">}</span>:<span class="si">${</span><span class="nv">REGISTRY_PORT</span><span class="si">}</span> &lt;/dev/null <span class="m">2</span>&gt;/dev/null <span class="p">|</span> awk <span class="s1">&#39;/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/&#39;</span> &gt; ca.crt
+</pre></div>
+</div>
+<p>Create a ConfigMap containing the TLS Certificates from the <cite>ca.crt file</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create configmap custom-registry-cert --from-file<span class="o">=</span>&lt;external_registry&gt;<span class="o">=</span>ca.crt -n nvidia-network-operator
+</pre></div>
+</div>
+<p>In OpenShift, update the <cite>nvidia-network-operator</cite> Subscription by adding the following <cite>config</cite> under <cite>spec</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f - <span class="s">&lt;&lt;EOF</span>
+<span class="s">apiVersion: operators.coreos.com/v1alpha1</span>
+<span class="s">kind: Subscription</span>
+<span class="s">metadata:</span>
+<span class="s">  name: nvidia-network-operator</span>
+<span class="s">  namespace: nvidia-network-operator</span>
+<span class="s">spec:</span>
+<span class="s">  config:</span>
+<span class="s">    volumes:</span>
+<span class="s">      - configMap:</span>
+<span class="s">          name: custom-registry-cert</span>
+<span class="s">        name: custom-registry-ca</span>
+<span class="s">    volumeMounts:</span>
+<span class="s">      - mountPath: /etc/pki/tls/certs/</span>
+<span class="s">        name: custom-registry-ca</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>In Kubernetes, update the <cite>network-operator</cite> Deployment’s volumes by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f - <span class="s">&lt;&lt;EOF</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: network-operator</span>
+<span class="s">  namespace: nvidia-network-operator</span>
+<span class="s">spec:</span>
+<span class="s">  template:</span>
+<span class="s">    spec:</span>
+<span class="s">      volumes:</span>
+<span class="s">        - configMap:</span>
+<span class="s">            name: custom-registry-cert</span>
+<span class="s">          name: custom-registry-ca</span>
+<span class="s">      containers:</span>
+<span class="s">        - name: network-operator</span>
+<span class="s">          volumeMounts:</span>
+<span class="s">            - mountPath: /etc/pki/tls/certs/</span>
+<span class="s">              name: custom-registry-ca</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
 </section>
 <section id="local-package-repository">
 <h3>Local Package Repository<a class="headerlink" href="#local-package-repository" title="Permalink to this headline"></a></h3>
@@ -329,7 +387,7 @@ Available DOCA driver image tags can be found at <a class="reference external" h
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jan 23, 2025.
+      <span class="lastupdated">Last updated on Jan 27, 2025.
       </span></p>
   </div>
 
