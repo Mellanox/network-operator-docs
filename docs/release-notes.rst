@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 24.10.1
+     - | - CVE fix (CVE-2024-45338).
    * - 24.10.0
      - | - Added support for NVIDIA NIC Configuration Operator deployment.
        | - Added support for Support Single-Node OpenShift (SNO).

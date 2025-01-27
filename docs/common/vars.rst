@@ -1,5 +1,5 @@
-.. |network-operator-version| replace:: v24.10.0
-.. |helm-chart-version| replace:: 24.10.0
+.. |network-operator-version| replace:: v24.10.1
+.. |helm-chart-version| replace:: 24.10.1
 .. |ocp-channel| replace::  v24.10
 .. |mofed-version| replace:: 24.10-0.7.0.0-0
 .. |mofed-init-container-version| replace:: v0.0.2
