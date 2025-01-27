@@ -24,3 +24,4 @@ Advanced Configurations
    Proxy & Air-gapped <proxy-airgapped.rst>
    DOCA Driver Container <doca-drivers.rst>
    Other Advanced Configurations <advanced-configurations.rst>
+   Container Images Digests <images-sha256.rst>

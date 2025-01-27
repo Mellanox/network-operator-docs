@@ -23,6 +23,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -30,36 +32,55 @@ import (
 
 	mellanoxv1alpha1 "github.com/Mellanox/network-operator/api/v1alpha1"
 	"github.com/google/go-containerregistry/pkg/authn"
-	"github.com/google/go-containerregistry/pkg/name"
+	containerregistryname "github.com/google/go-containerregistry/pkg/name"
+	containerregistryv1 "github.com/google/go-containerregistry/pkg/v1"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
 )
+
+// ReleaseImageSpec contains ImageSpec in addition with Image SHA256.
+type ReleaseImageSpec struct {
+	// Shas is a list of SHA2256. A list is needed for DOCA drivers that have multiple images.
+	Shas []SHA256ImageRef
+	mellanoxv1alpha1.ImageSpec
+}
+
+// SHA256ImageRef contains container image in sha256 format and a description.
+type SHA256ImageRef struct {
+	// SHA256 is the SHA256 of the image
+	SHA256 string
+	// Tags is a list of tags
+	Tags []string
+}
 
 // Release contains versions for operator release templates.
 type Release struct {
 	OcpDefaulChannel             string
 	HelmChartVersion             string
 	DocaDriverBuildCommitHash    string
-	NetworkOperator              *mellanoxv1alpha1.ImageSpec
-	NetworkOperatorInitContainer *mellanoxv1alpha1.ImageSpec
-	SriovNetworkOperator         *mellanoxv1alpha1.ImageSpec
-	SriovNetworkOperatorWebhook  *mellanoxv1alpha1.ImageSpec
-	SriovConfigDaemon            *mellanoxv1alpha1.ImageSpec
-	SriovCni                     *mellanoxv1alpha1.ImageSpec
-	SriovIbCni                   *mellanoxv1alpha1.ImageSpec
-	Mofed                        *mellanoxv1alpha1.ImageSpec
-	RdmaSharedDevicePlugin       *mellanoxv1alpha1.ImageSpec
-	SriovDevicePlugin            *mellanoxv1alpha1.ImageSpec
-	IbKubernetes                 *mellanoxv1alpha1.ImageSpec
-	CniPlugins                   *mellanoxv1alpha1.ImageSpec
-	Multus                       *mellanoxv1alpha1.ImageSpec
-	Ipoib                        *mellanoxv1alpha1.ImageSpec
-	IpamPlugin                   *mellanoxv1alpha1.ImageSpec
-	NvIPAM                       *mellanoxv1alpha1.ImageSpec
-	NicFeatureDiscovery          *mellanoxv1alpha1.ImageSpec
-	DOCATelemetryService         *mellanoxv1alpha1.ImageSpec
-	OVSCni                       *mellanoxv1alpha1.ImageSpec
-	RDMACni                      *mellanoxv1alpha1.ImageSpec
-	Nfd                          *mellanoxv1alpha1.ImageSpec
+	NetworkOperator              *ReleaseImageSpec
+	NetworkOperatorInitContainer *ReleaseImageSpec
+	SriovNetworkOperator         *ReleaseImageSpec
+	SriovNetworkOperatorWebhook  *ReleaseImageSpec
+	SriovConfigDaemon            *ReleaseImageSpec
+	SriovCni                     *ReleaseImageSpec
+	SriovIbCni                   *ReleaseImageSpec
+	Mofed                        *ReleaseImageSpec
+	RdmaSharedDevicePlugin       *ReleaseImageSpec
+	SriovDevicePlugin            *ReleaseImageSpec
+	IbKubernetes                 *ReleaseImageSpec
+	CniPlugins                   *ReleaseImageSpec
+	Multus                       *ReleaseImageSpec
+	Ipoib                        *ReleaseImageSpec
+	IpamPlugin                   *ReleaseImageSpec
+	NvIPAM                       *ReleaseImageSpec
+	NicFeatureDiscovery          *ReleaseImageSpec
+	DOCATelemetryService         *ReleaseImageSpec
+	OVSCni                       *ReleaseImageSpec
+	RDMACni                      *ReleaseImageSpec
+	Nfd                          *ReleaseImageSpec
+	NicConfigurationOperator     *ReleaseImageSpec
+	NicConfigurationConfigDaemon *ReleaseImageSpec
+	MaintenanceOperator          *ReleaseImageSpec
 }
 
 func readDefaults(releaseDefaults string) Release {
@@ -83,7 +104,7 @@ func getEnviromnentVariableOrDefault(defaultValue, varName string) string {
 	return defaultValue
 }
 
-func initWithEnvVariale(name string, image *mellanoxv1alpha1.ImageSpec) {
+func initWithEnvVariale(name string, image *ReleaseImageSpec) {
 	envName := name + "_IMAGE"
 	image.Image = getEnviromnentVariableOrDefault(image.Image, envName)
 	envName = name + "_REPO"
@@ -114,6 +135,7 @@ func main() {
 	templateDir := flag.String("templateDir", ".", "Directory with templates to render")
 	outputDir := flag.String("outputDir", ".", "Destination directory to render templates to")
 	releaseDefaults := flag.String("releaseDefaults", "release.yaml", "Destination of the release defaults definition")
+	retrieveSha := flag.Bool("with-sha256", false, "retrieve SHA256 for container images references")
 	flag.Parse()
 	release := readDefaults(*releaseDefaults)
 	readEnvironmentVariables(&release)
@@ -121,7 +143,13 @@ func main() {
 	release.OcpDefaulChannel = fmt.Sprintf("%s.%s", parts[0], parts[1])
 	release.HelmChartVersion = strings.TrimPrefix(release.NetworkOperator.Version, "v")
 	retrieveDocaDriverBuildCommit(&release)
-
+	if *retrieveSha {
+		err := resolveImagesSha(&release)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	}
 	var files []string
 	err := filepath.Walk(*templateDir, func(path string, info os.FileInfo, err error) error {
 		// Error during traversal
@@ -147,14 +175,27 @@ func main() {
 	}
 
 	for _, file := range files {
-		tmpl, err := template.ParseFiles(file)
+		tmpl, err := template.New(filepath.Base(file)).Funcs(template.FuncMap{
+			"imageSha": func(obj interface{}) string {
+				imageSpec := obj.(*ReleaseImageSpec)
+				return imageSpec.Shas[0].SHA256
+			},
+			"hasSubstring": func(substring string, tags []string) bool {
+				for _, tag := range tags {
+					if strings.Contains(tag, substring) {
+						return true
+					}
+				}
+				return false
+			},
+		}).ParseFiles(file)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
 		}
 
 		// Generate new file full path
-		outputFile := filepath.Join(*outputDir, strings.Replace(filepath.Base(file), ".template", ".yaml", 1))
+		outputFile := filepath.Join(*outputDir, strings.Replace(filepath.Base(file), ".template", ".rst", 1))
 		f, err := os.Create(filepath.Clean(outputFile))
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -173,30 +214,8 @@ func retrieveDocaDriverBuildCommit(release *Release) {
 	version := release.Mofed.Version
 	labelKey := "org.opencontainers.image.revision"
 
-	// Parse the image reference
-	repo, err := name.NewRepository(imagePath)
-	if err != nil {
-		log.Fatalf("failed to parse repository: %v", err)
-		os.Exit(1)
-	}
-
-	// Set authentication if needed
-	auth := remote.WithAuthFromKeychain(authn.DefaultKeychain)
-	if strings.Contains(release.Mofed.Repository, "nvstaging") {
-		nvcrToken := os.Getenv("NGC_CLI_API_KEY")
-		if nvcrToken == "" {
-			log.Fatalf("NGC_CLI_API_KEY is unset")
-			os.Exit(1)
-		}
-		authNvcr := &authn.Basic{
-			Username: "$oauthtoken",
-			Password: nvcrToken,
-		}
-		auth = remote.WithAuth(authNvcr)
-	}
-
 	// List tags
-	tags, err := remote.List(repo, auth)
+	tags, err := listTags(release.Mofed.Repository, release.Mofed.Image)
 	if err != nil {
 		log.Fatalf("failed to list tags: %v", err)
 		os.Exit(1)
@@ -216,16 +235,14 @@ func retrieveDocaDriverBuildCommit(release *Release) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Matched tag: %s\n", matchedTag)
-
 	// Fetch the image
 	imageRef := fmt.Sprintf("%s:%s", imagePath, matchedTag)
-	img, err := name.NewTag(imageRef)
+	img, err := containerregistryname.NewTag(imageRef)
 	if err != nil {
 		log.Fatalf("failed to parse image reference: %v", err)
 		os.Exit(1)
 	}
-
+	auth := getAuth(release.Mofed.Repository)
 	image, err := remote.Image(img, auth)
 	if err != nil {
 		log.Fatalf("failed to fetch image: %v", err)
@@ -246,6 +263,116 @@ func retrieveDocaDriverBuildCommit(release *Release) {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Label value: %s\n", labelValue)
 	release.DocaDriverBuildCommitHash = labelValue
+}
+
+func resolveImagesSha(release *Release) error {
+	v := reflect.ValueOf(*release)
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if v.Type().Field(i).Type.Kind() != reflect.String && !field.IsNil() {
+			releaseImageSpec := field.Interface().(*ReleaseImageSpec)
+			if strings.Contains(releaseImageSpec.Image, "doca-driver") {
+				digests, err := resolveDocaDriversShas(releaseImageSpec.Repository, releaseImageSpec.Image,
+					releaseImageSpec.Version)
+				if err != nil {
+					return err
+				}
+				releaseImageSpec.Shas = digests
+			} else {
+				digest, err := resolveImageSha(releaseImageSpec.Repository, releaseImageSpec.Image,
+					releaseImageSpec.Version)
+				if err != nil {
+					return err
+				}
+				releaseImageSpec.Shas = make([]SHA256ImageRef, 1)
+				releaseImageSpec.Shas[0] = SHA256ImageRef{SHA256: digest}
+			}
+		}
+	}
+	return nil
+}
+
+func resolveImageSha(repo, image, tag string) (string, error) {
+	ref, err := containerregistryname.ParseReference(fmt.Sprintf("%s/%s:%s", repo, image, tag))
+	if err != nil {
+		return "", err
+	}
+	auth := getAuth(repo)
+	desc, err := remote.Get(ref, auth)
+	if err != nil {
+		return "", err
+	}
+
+	digest, err := containerregistryv1.NewHash(desc.Descriptor.Digest.String())
+	if err != nil {
+		return "", err
+	}
+	return digest.String(), nil
+}
+
+func resolveDocaDriversShas(repoName, imageName, ver string) ([]SHA256ImageRef, error) {
+	var sha256ImageRefs []SHA256ImageRef
+	digestToTags := make(map[string][]string)
+	orderedDigests := make([]string, 0)
+
+	tags, err := listTags(repoName, imageName)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, tag := range tags {
+		if strings.Contains(tag, ver) {
+			digest, err := resolveImageSha(repoName, imageName, tag)
+			if err != nil {
+				return nil, err
+			}
+			if _, exists := digestToTags[digest]; !exists {
+				orderedDigests = append(orderedDigests, digest)
+			}
+			digestToTags[digest] = append(digestToTags[digest], tag)
+		}
+	}
+
+	for _, digest := range orderedDigests {
+		sha256ImageRefs = append(sha256ImageRefs, SHA256ImageRef{
+			SHA256: digest,
+			Tags:   digestToTags[digest],
+		})
+	}
+
+	return sha256ImageRefs, nil
+}
+
+func listTags(repoName, imageName string) ([]string, error) {
+	tags := make([]string, 0)
+	image := fmt.Sprintf("%s/%s", repoName, imageName)
+	repo, err := containerregistryname.NewRepository(image)
+	if err != nil {
+		return tags, err
+	}
+	auth := getAuth(repoName)
+	tags, err = remote.List(repo, auth)
+	if err != nil {
+		return tags, err
+	}
+	sort.Strings(tags)
+	return tags, nil
+}
+
+func getAuth(repo string) remote.Option {
+	if strings.Contains(repo, "nvstaging") {
+		nvcrToken := os.Getenv("NGC_CLI_API_KEY")
+		if nvcrToken == "" {
+			log.Fatalf("NGC_CLI_API_KEY is unset")
+			os.Exit(1)
+		}
+		authNvcr := &authn.Basic{
+			Username: "$oauthtoken",
+			Password: nvcrToken,
+		}
+		return remote.WithAuth(authNvcr)
+	} else {
+		return remote.WithAuthFromKeychain(authn.DefaultKeychain)
+	}
 }
