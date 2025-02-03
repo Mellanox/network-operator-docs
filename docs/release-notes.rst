@@ -198,6 +198,10 @@ Known Limitations
    * - Version
      - Description
    * - 24.10.0
+     - | - There is a known limitation when using NVIDIA NICs as **primary network interfaces**. If the NVIDIA DOCA Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
+           If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA driver container then loads new drivers but only restores **basic configuration** (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will **not** be restored automatically.
+           This limitation applies to **all** versions of the NVIDIA Network Operator.
+   * - 24.10.0
      - | - There is a known limitation when using `docker` on RHEL 8 and 9. If you encounter this issue, it is recommended to use "the preferred, maintained, and supported container runtime of choice for Red Hat Enterprise Linux".
        |   For more details, refer to the article `Is the docker package available for Red Hat Enterprise Linux 8 and 9? <https://access.redhat.com/solutions/3696691>`_ in the Red Hat Knowledge Base.
        | - In NIC Configuration Operator template v0.1.14 BF2/BF3 DPUs (not SuperNICs) FW reset flow isn't supported.
