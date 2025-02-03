@@ -1601,7 +1601,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
         imagePullSecrets: []
         pKeyGUIDPoolRangeStart: 02:00:00:00:00:00:00:00
         pKeyGUIDPoolRangeEnd: 02:FF:FF:FF:FF:FF:FF:FF
-        ufmSecret: "ufm-secret"
+        ufmSecret: "ib-kubernetes-ufm-secret"
       nvIpam:
         image: nvidia-k8s-ipam
         repository: ghcr.io/mellanox
