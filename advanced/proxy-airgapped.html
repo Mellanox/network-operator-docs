@@ -190,7 +190,7 @@ To allow Network Operator to work with a local registry, users can specify local
 <h3>Pulling and Pushing Container Images to a Local Registry<a class="headerlink" href="#pulling-and-pushing-container-images-to-a-local-registry" title="Permalink to this headline"></a></h3>
 <p>To pull the correct images from the NVIDIA registry, you can leverage the fields <code class="docutils literal notranslate"><span class="pre">repository</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code> and <code class="docutils literal notranslate"><span class="pre">version</span></code> specified in the <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> file or in the <a class="reference internal" href="../customizations/cr-full-example.html#ncp-cr-example"><span class="std std-ref">NicClusterPolicy Custom Resource Example</span></a> section.</p>
 <p>There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
-<p>For example for DOCA driver version 25.01-0.3.9.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.01-0.3.9.0-0-ubuntu24.04-amd64”.
+<p>For example for DOCA driver version 25.01-0.5.4.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.01-0.5.4.0-0-ubuntu24.04-amd64”.
 Available DOCA driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
 </section>
 <section id="configuring-local-registry-tls-cert">
