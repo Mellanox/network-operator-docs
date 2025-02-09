@@ -96,6 +96,12 @@ There is one caveat with regards to the DOCA driver image. The version field mus
 For example for DOCA driver version |mofed-version|, the tag for Ubuntu 24.04 with X86 architecture is "|mofed-version|-ubuntu24.04-amd64".
 Available DOCA driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
 
+In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.
+
+.. note::
+    NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
+    Specifying pull secret is required in the NicClusterPolicy DOCA Driver section, even if global container access credentials are configured on nodes.
+
 -----------------------------------
 Configuring Local Registry TLS Cert
 -----------------------------------
