@@ -145,9 +145,8 @@ gen-docs: build-cache
 .PHONY: generate-docs-versions-var
 generate-docs-versions-var: | $(BUILDDIR)
 	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
-	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/ --outputDir $(CURDIR)/build/
-	mv $(CURDIR)/build/vars.yaml docs/common/vars.rst
-
+	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/vars --outputDir ../../docs/common/
+	cd hack/release && go run release.go --with-sha256 --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/image-sha256  --outputDir ../../docs/advanced/
 
 .PHONY: clean
 clean:

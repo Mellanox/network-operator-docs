@@ -89,7 +89,9 @@ To allow Network Operator to work with a local registry, users can specify local
 Pulling and Pushing Container Images to a Local Registry
 --------------------------------------------------------
 
-To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file or in the :ref:`ncp-cr-example` section.
+To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file or in the :ref:`container_images_digest` section.
+
+NicClusterPolicy supports use of image container digest in the `version` field, except for DOCA driver.
 
 There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.
 
