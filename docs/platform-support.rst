@@ -43,7 +43,7 @@ Prerequisites
      - v3.5+
      - For information and methods of Helm installation, please refer to the official Helm Website.
    * - Node Feature Discovery
-     - >=0.15.6 and <=0.16.3
+     - >=0.15.6 and <=0.17.0
      - When deploying the Network Operator and GPU Operator on the same cluster, ensure only one instance of Node Feature Discovery (NFD) is installed. We recommend using the version included with the GPU Operator.
 
 =================================
@@ -137,7 +137,7 @@ The following ARM based systems has been tested with Network Operator:
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA Grace ARM Server
      - BlueField-3 NIC Mode
-     - Ubuntu 22.04 (ARM64) / OCP 4.16
+     - Ubuntu 22.04 (ARM64) / OCP 4.17
      - GA (RoCE only, without GPUDirect RDMA)
 
 ====================================================
@@ -160,22 +160,22 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - 1.27-1.30.4
      - 
      - RT kernels support
-   * - Ubuntu 20.04 LTS
-     - 1.27-1.30.4
-     - 
-     - 
    * - Red Hat Core OS
      - 
-     - 4.14-4.16
+     - 4.14, 4.16, 4.17
      - RT kernels support
-   * - Red Hat Enterprise Linux 9.4, 9.3, 9.2, 9.0
+   * - Red Hat Enterprise Linux 9.5, 9.4, 9.2
      - 1.27-1.30.4
      - 
      - 
-   * - Red Hat Enterprise Linux 8.10, 8.9, 8.8, 8.6
+   * - Red Hat Enterprise Linux 8.10, 8.8
      - 1.27-1.30.4
      - 
      - RT kernels support
+   * - SUSE Linux Enterprise Server 15 SP6
+     - 1.27-1.30.4
+     - 
+     - Kubernetes and Rancher
 
 
 =============================
@@ -198,10 +198,6 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - Yes
      - No
      - 
-   * - Ubuntu 20.04 LTS
-     - Yes
-     - No
-     - 
    * - Red Hat Core OS
      - No
      - Yes
@@ -214,7 +210,10 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - Yes
      - Yes
      - 
-
+   * - SUSE Linux Enterprise Server 15 SP6
+     - Yes
+     - No
+     - 
 
 =======================================================
 Supported Precompiled Container Images for DOCA Drivers
