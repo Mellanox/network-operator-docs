@@ -194,6 +194,12 @@ To allow Network Operator to work with a local registry, users can specify local
 <p>There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
 <p>For example for DOCA driver version 25.01-0.5.4.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.01-0.5.4.0-0-ubuntu24.04-amd64”.
 Available DOCA driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
+<p>In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
+Specifying pull secret is required in the NicClusterPolicy DOCA Driver section, even if global container access credentials are configured on nodes.</p>
+</div>
 </section>
 <section id="configuring-local-registry-tls-cert">
 <h3>Configuring Local Registry TLS Cert<a class="headerlink" href="#configuring-local-registry-tls-cert" title="Permalink to this headline"></a></h3>
