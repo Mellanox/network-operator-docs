@@ -37,7 +37,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.27 and <=1.30.4
+     - >=1.27 and <=1.31.4
      -
    * - Helm
      - v3.5+
@@ -153,11 +153,11 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - Red Hat OpenShift
      - Notes
    * - Ubuntu 24.04 LTS
-     - 1.27-1.30.4
+     - 1.27-1.31.4
      - 
      - 
    * - Ubuntu 22.04 LTS
-     - 1.27-1.30.4
+     - 1.27-1.31.4
      - 
      - RT kernels support
    * - Red Hat Core OS
@@ -165,15 +165,15 @@ NVIDIA Network Operator has been validated in the following scenarios:
      - 4.14, 4.16, 4.17
      - RT kernels support
    * - Red Hat Enterprise Linux 9.5, 9.4, 9.2
-     - 1.27-1.30.4
+     - 1.27-1.31.4
      - 
      - 
    * - Red Hat Enterprise Linux 8.10, 8.8
-     - 1.27-1.30.4
+     - 1.27-1.31.4
      - 
      - RT kernels support
    * - SUSE Linux Enterprise Server 15 SP6
-     - 1.27-1.30.4
+     - 1.27-1.31.4
      - 
      - Kubernetes and Rancher
 
