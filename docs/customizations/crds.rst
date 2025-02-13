@@ -711,7 +711,7 @@ OFEDDriverSpec
 
 (*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
-OFEDDriverSpec describes configuration options for OFED driver
+OFEDDriverSpec describes configuration options for DOCA Driver
 
 .. container:: md-typeset__scrollwrap
 
@@ -732,16 +732,16 @@ OFEDDriverSpec describes configuration options for OFED driver
       | ``readinessProbe``                                                                                | Pod readiness probe settings                                                                      |
       | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``env``                                                                                           | List of environment variables to set in the OFED container.                                       |
+      | ``env``                                                                                           | List of environment variables to set in the DOCA Driver container                                 |
       | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``upgradePolicy``                                                                                 | Ofed auto-upgrade settings                                                                        |
+      | ``upgradePolicy``                                                                                 | DOCA Driver auto-upgrade settings                                                                 |
       | :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for driver container                              |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for OFED container                              |
+      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for DOCA Driver containe                        |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``terminationGracePeriodSeconds``                                                                 | *(Optional)*                                                                                      |

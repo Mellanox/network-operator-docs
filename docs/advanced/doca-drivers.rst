@@ -84,8 +84,8 @@ Before you begin, ensure that you have the following prerequisites:
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
 - Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz <https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz>`_
 
-**NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (MLNX_OFED) version need to be specified to fetch the correct driver sources when building the driver container.
-For example, given a DOCA package version (e.g `2.9.1`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/>`_ which is `24.10-1.1.4.0`
+**NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA Driver) version need to be specified to fetch the correct driver sources when building the driver container.
+For example, given a DOCA package version (e.g `2.10.0`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/>`_ which is `24.10-1.1.4.0`
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Download Docker files and scripts:
@@ -114,7 +114,7 @@ The Dockerfile consists of the following stages:
 
 1. **Base Image Update**: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.
 
-2. **Download Driver Sources**: This stage downloads the Mellanox OFED driver sources to the specified path. It prepares the necessary files for the driver build process.
+2. **Download Driver Sources**: This stage downloads the NVIDIA DOCA Driver sources to the specified path. It prepares the necessary files for the driver build process.
 
 3. **Build Driver**: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.
 

@@ -72,7 +72,7 @@ This section describes how to successfully deploy the Network Operator in cluste
 By default, the Network Operator requires internet access for the following reasons:
 
  - The container images must be pulled during the Network Operator installation.
- - The OFED driver container must download several OS packages prior to the driver installation.
+ - The DOCA Driver container must download several OS packages prior to the driver installation.
 
 To address these requirements, it may be necessary to create a local image registry and/or a local package repository, so that the necessary images and packages will be available for your cluster.
 Subsequent sections of this document detail how to configure the Network Operator to use local image registries and local package repositories.
@@ -184,7 +184,7 @@ Local Package Repository
 .. warning::
    The instructions below are provided as reference examples to set up a local package repository for NVIDIA Network Operator.
 
-The OFED driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:
+The DOCA Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:
 
 .. code-block::
 
