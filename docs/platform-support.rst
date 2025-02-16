@@ -137,7 +137,7 @@ The following ARM based systems has been tested with Network Operator:
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA Grace ARM Server
      - BlueField-3 NIC Mode
-     - Ubuntu 22.04 (ARM64) / OCP 4.17
+     - Ubuntu 22.04 (ARM64) / OCP 4.17 / SLES 15.6
      - GA (RoCE only, without GPUDirect RDMA)
 
 ====================================================
