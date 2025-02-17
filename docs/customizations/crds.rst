@@ -711,7 +711,7 @@ OFEDDriverSpec
 
 (*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
-OFEDDriverSpec describes configuration options for OFED driver
+OFEDDriverSpec describes configuration options for DOCA Driver Container
 
 .. container:: md-typeset__scrollwrap
 
@@ -720,7 +720,7 @@ OFEDDriverSpec describes configuration options for OFED driver
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpec``                                                                                     | Image information for ofed driver container                                                       |
+      | ``ImageSpec``                                                                                     | Image information for DOCA driver container                                                       |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``startupProbe``                                                                                  | Pod startup probe settings                                                                        |
@@ -732,25 +732,25 @@ OFEDDriverSpec describes configuration options for OFED driver
       | ``readinessProbe``                                                                                | Pod readiness probe settings                                                                      |
       | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``env``                                                                                           | List of environment variables to set in the OFED container.                                       |
+      | ``env``                                                                                           | List of environment variables to set in the DOCA driver container.                                |
       | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``upgradePolicy``                                                                                 | Ofed auto-upgrade settings                                                                        |
+      | ``upgradePolicy``                                                                                 | DOCA driver auto-upgrade settings                                                                 |
       | :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for driver container                              |
+      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for DOCA driver container                         |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for OFED container                              |
+      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for DOCA driver container                       |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``terminationGracePeriodSeconds``                                                                 | *(Optional)*                                                                                      |
       | int64                                                                                             | TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the  |
-      |                                                                                                   | OFED pod on termination                                                                           |
+      |                                                                                                   | DOCA driver container pod on termination                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``forcePrecompiled``                                                                              | *(Optional)*                                                                                      |
-      | bool                                                                                              | ForcePrecompiled specifies if only MOFED precompiled images are allowed If set to false and       |
-      |                                                                                                   | precompiled image does not exists, MOFED drivers will be compiled on Nodes If set to true and     |
+      | bool                                                                                              | ForcePrecompiled specifies if only DOCA driver precompiled images are allowed If set to false and |
+      |                                                                                                   | precompiled image does not exists, DOCA driver will be compiled on Nodes If set to true and       |
       |                                                                                                   | precompiled image does not exists, OFED state will be Error.                                      |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
