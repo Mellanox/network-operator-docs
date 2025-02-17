@@ -158,7 +158,7 @@ General Parameters
    * - operator.useDTK
      - bool
      - `true`
-     - Enable the use of Driver ToolKit to compile OFED drivers (OpenShift only).
+     - Enable the use of Driver ToolKit to compile DOCA Drivers (OpenShift only).
    * - sriovNetworkOperator.enabled
      - bool
      - `false`
