@@ -1035,7 +1035,7 @@ string</p></td>
 <section id="ofeddriverspec">
 <span id="id27"></span><h3>OFEDDriverSpec<a class="headerlink" href="#ofeddriverspec" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
-<p>OFEDDriverSpec describes configuration options for OFED driver</p>
+<p>OFEDDriverSpec describes configuration options for DOCA Driver Container</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
 <table class="docutils align-default">
@@ -1051,7 +1051,7 @@ string</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td><p>Image information for ofed driver container</p></td>
+<td><p>Image information for DOCA driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">startupProbe</span></code>
 <a class="reference internal" href="#podprobespec"><span class="std std-ref">PodProbeSpec</span></a></p></td>
@@ -1067,31 +1067,31 @@ string</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
 <a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#EnvVar">[]Kubernetes core/v1.EnvVar</a></p></td>
-<td><p>List of environment variables to set in the OFED container.</p></td>
+<td><p>List of environment variables to set in the DOCA driver container.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">upgradePolicy</span></code>
 <a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a></p></td>
-<td><p>Ofed auto-upgrade settings</p></td>
+<td><p>DOCA driver auto-upgrade settings</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">certConfig</span></code>
 <a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
-<td><p>Optional: Custom TLS certificates configuration for driver container</p></td>
+<td><p>Optional: Custom TLS certificates configuration for DOCA driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">repoConfig</span></code>
 <a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
-<td><p>Optional: Custom package repository configuration for OFED container</p></td>
+<td><p>Optional: Custom package repository configuration for DOCA driver container</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">terminationGracePeriodSeconds</span></code>
 int64</p></td>
 <td><p><em>(Optional)</em>
 TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the
-OFED pod on termination</p></td>
+DOCA driver container pod on termination</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">forcePrecompiled</span></code>
 bool</p></td>
 <td><p><em>(Optional)</em>
-ForcePrecompiled specifies if only MOFED precompiled images are allowed If set to false and
-precompiled image does not exists, MOFED drivers will be compiled on Nodes If set to true and
+ForcePrecompiled specifies if only DOCA driver precompiled images are allowed If set to false and
+precompiled image does not exists, DOCA driver will be compiled on Nodes If set to true and
 precompiled image does not exists, OFED state will be Error.</p></td>
 </tr>
 </tbody>
@@ -1260,7 +1260,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 16, 2025.
+      <span class="lastupdated">Last updated on Feb 20, 2025.
       </span></p>
   </div>
 
