@@ -158,7 +158,7 @@ General Parameters
    * - operator.useDTK
      - bool
      - `true`
-     - Enable the use of Driver ToolKit to compile OFED drivers (OpenShift only).
+     - Enable the use of Driver ToolKit to compile DOCA Drivers (OpenShift only).
    * - sriovNetworkOperator.enabled
      - bool
      - `false`
@@ -293,7 +293,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.1.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.1.0-rc.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -309,7 +309,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -317,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.1.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.1.0-rc.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -425,7 +425,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.configDaemon.image.tag
      - string
-     - `"v0.1.15"`
+     - `"v0.1.17"`
      -
    * - nic-configuration-operator-chart.operator.image.name
      - string
@@ -437,7 +437,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v0.1.15"`
+     - `"v0.1.17"`
      -
 
 ====================
