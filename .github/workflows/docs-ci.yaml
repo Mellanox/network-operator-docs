@@ -49,7 +49,7 @@ jobs:
         git checkout -b $DOWNSTREAM_FEATURE_BRANCH
         git status
         git add docs
-        git commit -m "$COMMIT_MESSAGE"
+        git commit -sm "$COMMIT_MESSAGE"
 
         git push -u origin $DOWNSTREAM_FEATURE_BRANCH
         gh pr create \
