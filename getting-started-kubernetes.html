@@ -536,7 +536,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p>In this mode, the Network Operator could be deployed on virtualized deployments as well. It supports both Ethernet and InfiniBand modes. From the Network Operator perspective, there is no difference between the deployment procedures. To work on a VM (virtual machine), the PCI passthrough must be configured for SR-IOV devices. The Network Operator works both with VF (Virtual Function) and PF (Physical Function) inside the VMs.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If the Host Device Network is used without the MLNX_OFED driver, the following packages should be installed:</p>
+<p>If the Host Device Network is used without the DOCA Driver, the following packages should be installed:</p>
 <ul class="simple">
 <li><p>the linux-generic package on Ubuntu hosts</p></li>
 <li><p>the kernel-modules-extra package on the RedHat-based hosts</p></li>
@@ -1874,7 +1874,7 @@ whereabouts-zvhrv                               <span class="m">1</span>/1     R
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>To use OFED container with this mode of operation, set the <cite>RESTORE_DRIVER_ON_POD_TERMINATION</cite> environment variable to <cite>false</cite> in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.</p>
+<p>To use DOCA Driver container with this mode of operation, set the <cite>RESTORE_DRIVER_ON_POD_TERMINATION</cite> environment variable to <cite>false</cite> in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -2595,7 +2595,7 @@ For more information, which FW parameter each settings corresponds to, refer to 
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 23, 2025.
+      <span class="lastupdated">Last updated on Feb 25, 2025.
       </span></p>
   </div>
 

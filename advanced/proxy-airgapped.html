@@ -176,7 +176,7 @@ By default, the Network Operator requires internet access for the following reas
 <blockquote>
 <div><ul class="simple">
 <li><p>The container images must be pulled during the Network Operator installation.</p></li>
-<li><p>The OFED driver container must download several OS packages prior to the driver installation.</p></li>
+<li><p>The DOCA Driver container must download several OS packages prior to the driver installation.</p></li>
 </ul>
 </div></blockquote>
 <p>To address these requirements, it may be necessary to create a local image registry and/or a local package repository, so that the necessary images and packages will be available for your cluster.
@@ -264,7 +264,7 @@ openssl s_client -showcerts -connect <span class="si">${</span><span class="nv">
 <p class="admonition-title">Warning</p>
 <p>The instructions below are provided as reference examples to set up a local package repository for NVIDIA Network Operator.</p>
 </div>
-<p>The OFED driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:</p>
+<p>The DOCA Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="nl">ubuntu</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">headers</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">modules</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
@@ -395,7 +395,7 @@ openssl s_client -showcerts -connect <span class="si">${</span><span class="nv">
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 23, 2025.
+      <span class="lastupdated">Last updated on Feb 25, 2025.
       </span></p>
   </div>
 

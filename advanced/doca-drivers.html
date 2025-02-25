@@ -202,10 +202,10 @@
 <p>Before you begin, ensure that you have the following prerequisites:</p>
 <ul class="simple">
 <li><p>Docker (Ubuntu) / Podman (RH) installed on your build system.</p></li>
-<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at <a class="reference external" href="https://developer.nvidia.com/doca-downloads">NVIDIA DOCA Downloads</a>, for example: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-24.10-1.1.4.0.tgz</a></p></li>
+<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at <a class="reference external" href="https://developer.nvidia.com/doca-downloads">NVIDIA DOCA Downloads</a>, for example: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz">https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz</a></p></li>
 </ul>
-<p><strong>NOTE:</strong> NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (MLNX_OFED) version need to be specified to fetch the correct driver sources when building the driver container.
-For example, given a DOCA package version (e.g <cite>2.9.1</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/">https://linux.mellanox.com/public/repo/doca/2.9.1/SOURCES/MLNX_OFED/</a> which is <cite>24.10-1.1.4.0</cite></p>
+<p><strong>NOTE:</strong> NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA Driver) version need to be specified to fetch the correct driver sources when building the driver container.
+For example, given a DOCA package version (e.g <cite>2.10.0</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/">https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/</a> which is <cite>25.01-0.6.0.0’</cite></p>
 <section id="download-docker-files-and-scripts">
 <h4>Download Docker files and scripts:<a class="headerlink" href="#download-docker-files-and-scripts" title="Permalink to this headline"></a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/6f2fb2243dad12f4ff45ea18b9291dcee68056b7/RHEL_Dockerfile
@@ -226,7 +226,7 @@ This approach is used to optimize the resulting container image size and reduce 
 <p>The Dockerfile consists of the following stages:</p>
 <ol class="arabic simple">
 <li><p><strong>Base Image Update</strong>: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.</p></li>
-<li><p><strong>Download Driver Sources</strong>: This stage downloads the Mellanox OFED driver sources to the specified path. It prepares the necessary files for the driver build process.</p></li>
+<li><p><strong>Download Driver Sources</strong>: This stage downloads the NVIDIA DOCA Driver sources to the specified path. It prepares the necessary files for the driver build process.</p></li>
 <li><p><strong>Build Driver</strong>: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.</p></li>
 <li><p><strong>Install precompiled driver</strong>: Finally, the precompiled driver is installed on clean container. This stage sets up the environment to run the NVIDIA NIC drivers on the target system.</p></li>
 </ol>
@@ -359,7 +359,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 23, 2025.
+      <span class="lastupdated">Last updated on Feb 25, 2025.
       </span></p>
   </div>
 
