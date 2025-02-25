@@ -458,7 +458,7 @@ Network Operator Deployment with a Host Device Network
 
 In this mode, the Network Operator could be deployed on virtualized deployments as well. It supports both Ethernet and InfiniBand modes. From the Network Operator perspective, there is no difference between the deployment procedures. To work on a VM (virtual machine), the PCI passthrough must be configured for SR-IOV devices. The Network Operator works both with VF (Virtual Function) and PF (Physical Function) inside the VMs.
 
-.. warning:: If the Host Device Network is used without the MLNX_OFED driver, the following packages should be installed:
+.. warning:: If the Host Device Network is used without the DOCA Driver, the following packages should be installed:
 
     * the linux-generic package on Ubuntu hosts
     * the kernel-modules-extra package on the RedHat-based hosts
@@ -1872,7 +1872,7 @@ Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
-.. warning:: To use OFED container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
+.. warning:: To use DOCA Driver container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
 
 .. warning:: Tech Preview feature.
 
