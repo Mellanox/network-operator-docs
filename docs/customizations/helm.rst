@@ -293,7 +293,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.1.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-25.1.0"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -309,7 +309,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -317,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.1.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-25.1.0"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
