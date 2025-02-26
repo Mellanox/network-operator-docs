@@ -208,6 +208,7 @@ Known Limitations
    * - 25.1.0
      - | - In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF).
            The recommendation is to create up to 16 VFs per PF. Larger number will cause "ip link show dev <device_name>" to fail with a "Message too long" error.
+         - SR-IOV switchdev mode is not supported on SLES.
    * - 24.10.0
      - | - There is a known limitation when using NVIDIA NICs as **primary network interfaces**. If the NVIDIA DOCA Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
            If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA driver container then loads new drivers but only restores **basic configuration** (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will **not** be restored automatically.
