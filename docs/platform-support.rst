@@ -64,7 +64,7 @@ The following component versions are deployed by the Network Operator:
      - Optionally deployed. May already be present in the cluster with proper configuration.
    * -  NVIDIA DOCA Driver container
      - nvcr.io/nvidia/mellanox/doca-driver:|mofed-version|
-     -
+     - LTS version: |mofed-version-lts|
    * - k8s-rdma-shared-device-plugin
      - ghcr.io/mellanox/k8s-rdma-shared-dev-plugin:|k8s-rdma-shared-dev-plugin-version|
      -
