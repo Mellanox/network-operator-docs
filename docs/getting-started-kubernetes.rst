@@ -191,7 +191,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -271,7 +271,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -738,7 +738,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -923,7 +923,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -1101,7 +1101,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -1378,7 +1378,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -1571,7 +1571,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
         terminationGracePeriodSeconds: 300
@@ -1753,7 +1753,7 @@ Network Operator Deployment for DPDK Workloads with NicClusterPolicy
 
 .. _HUGEPAGE: http://manpages.ubuntu.com/manpages/focal/man8/hugeadm.8.html
 
-This deployment mode supports DPDK applications. In order to run DPDK applications, HUGEPAGE_ should be configured on the required K8s Worker Nodes. By default, the inbox operating system driver is used. For support of cases with specific requirements, OFED container should be deployed.
+This deployment mode supports DPDK applications. In order to run DPDK applications, HUGEPAGE_ should be configured on the required K8s Worker Nodes. By default, the inbox operating system driver is used. For support of cases with specific requirements, DOCA Driver container should be deployed.
 
 Network Operator deployment with:
 
@@ -1773,7 +1773,7 @@ Network Operator deployment with:
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
       sriovDevicePlugin:
         image: sriov-network-device-plugin
         repository: ghcr.io/k8snetworkplumbingwg
@@ -2192,7 +2192,7 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag
 ------------------------------------------------------------------------------------------------
 
-.. warning:: This feature is not compatible with the OFED container.
+.. warning:: This feature is not compatible with the DOCA Driver container.
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
@@ -2698,7 +2698,7 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
 
 .. warning:: NIC Firmware Mismatch feature doesn't support NVIDIA BlueField-3 NIC.
 
-`FirmwareConfigMatch` condition status is set to `Unknown` if MOFED is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by MOFED. E.g.:
+`FirmwareConfigMatch` condition status is set to `Unknown` if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:
 
 .. code-block:: bash
 
