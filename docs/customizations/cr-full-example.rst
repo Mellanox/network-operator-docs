@@ -39,7 +39,7 @@ This example should serve as a reference, it is not recommended to apply it as i
       ofedDriver:
         image: doca-driver
         repository: nvcr.io/nvidia/mellanox
-        version: |mofed-version|
+        version: |doca-driver-version|
         upgradePolicy:
           autoUpgrade: true
           drain:
