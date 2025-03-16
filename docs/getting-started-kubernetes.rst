@@ -592,7 +592,7 @@ The ``pod.yaml`` configuration file for such a deployment:
       restartPolicy: OnFailure
       containers:
       - image:
-        name: mofed-test-ctr
+        name: doca-test-ctr
         securityContext:
           capabilities:
             add: [ "IPC_LOCK" ]
@@ -871,7 +871,7 @@ The ``pod.yaml`` configuration file for such a deployment:
       restartPolicy: OnFailure
       containers:
       - image:
-        name: mofed-test-ctr
+        name: doca-test-ctr
         securityContext:
           capabilities:
             add: [ "IPC_LOCK" ]

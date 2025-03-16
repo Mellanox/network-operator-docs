@@ -95,7 +95,7 @@ NicClusterPolicy supports use of image container digest in the `version` field, 
 
 There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.
 
-For example for DOCA driver version |mofed-version|, the tag for Ubuntu 24.04 with X86 architecture is "|mofed-version|-ubuntu24.04-amd64".
+For example for DOCA driver version |doca-driver-version|, the tag for Ubuntu 24.04 with X86 architecture is "|doca-driver-version|-ubuntu24.04-amd64".
 Available DOCA driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
 
 In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.

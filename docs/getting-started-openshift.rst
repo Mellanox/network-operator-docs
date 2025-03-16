@@ -247,7 +247,7 @@ SR-IOV device plugin, single SR-IOV resource pool:
      ofedDriver:
        image: doca-driver
        repository: nvcr.io/nvidia/mellanox
-       version: |mofed-version|
+       version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
          periodSeconds: 20
@@ -350,7 +350,7 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
      ofedDriver:
        image: doca-driver
        repository: nvcr.io/nvidia/mellanox
-       version: |mofed-version|
+       version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
          periodSeconds: 20
@@ -457,7 +457,7 @@ The following is an example of RDMA Shared with MacVlanNetwork:
      ofedDriver:     
        image: doca-driver
        repository: nvcr.io/nvidia/mellanox
-       version: |mofed-version|
+       version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
          periodSeconds: 20
