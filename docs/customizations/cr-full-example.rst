@@ -130,3 +130,18 @@ This example should serve as a reference, it is not recommended to apply it as i
         image: doca_telemetry
         repository: nvcr.io/nvidia/doca
         version: |doca-telemetry-version|
+      nicConfigurationOperator:
+        operator:
+          image: nic-configuration-operator
+          repository: ghcr.io/mellanox
+          version: |nic-configuration-operator-version|
+        configurationDaemon:
+          image: nic-configuration-operator-daemon
+          repository: ghcr.io/mellanox
+          version: |nic-configuration-operator-version|
+        nicFirmwareStorage:
+          create: true
+          pvcName: nic-fw-storage-pvc
+          storageClassName: nic-fw-storage-class
+          availableStorageSize: 1Gi
+        logLevel: info

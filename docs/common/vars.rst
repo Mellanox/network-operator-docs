@@ -20,3 +20,4 @@
 .. |doca-telemetry-version| replace:: 1.16.5-doca2.6.0-host
 .. |node-feature-discovery-version| replace:: v0.15.6
 .. |doca-driver-build-commit| replace::  6f2fb2243dad12f4ff45ea18b9291dcee68056b7
+.. |nic-configuration-operator-version| replace:: v0.1.18

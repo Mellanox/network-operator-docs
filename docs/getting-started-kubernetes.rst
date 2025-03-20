@@ -2553,22 +2553,44 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 ===========================================================================
 [TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator
 ===========================================================================
-`NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
+`NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
 
 .. warning:: `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ is required to be deployed in the cluster for the NIC Configuration Operator
 
 .. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check `limitations <https://github.com/Mellanox/network-operator-docs/blob/main/docs/release-notes.rst>`_
 
-* `limitations <https://github.com/Mellanox/network-operator-docs/blob/main/docs/release-notes.rst>`_
+.. note::
+    To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
+    To set up a persistent NFS storage in the cluster, the `example from the CSI NFS Driver repository <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md>`_ might be used.
+    After deploying the NFS server and NFS CSI driver, the `storage class <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml>`_ should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
 
-First install the Network Operator with NIC Configuration Operator enabled:
+First install the Network Operator and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:
 
-``values.yaml``:
+``nicclusterpolicy.yaml``:
 
 .. code-block:: yaml
+    :substitutions:
 
-    nicConfigurationOperator:
-      enabled: true
+    apiVersion: mellanox.com/v1alpha1
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+    spec:
+      nicConfigurationOperator:
+        operator:
+          image: nic-configuration-operator
+          repository: ghcr.io/mellanox
+          version: |nic-configuration-operator-version|
+        configurationDaemon:
+          image: nic-configuration-operator-daemon
+          repository: ghcr.io/mellanox
+          version: |nic-configuration-operator-version|
+        nicFirmwareStorage:
+          create: true
+          pvcName: nic-fw-storage-pvc
+          # Name of the storage class is provided by the user
+          storageClassName: nfs-csi
+          availableStorageSize: 1Gi
 
 Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:
 
@@ -2586,7 +2608,7 @@ Discover more information about a specific device:
 
 .. code:: bash
 
-    kubectl get nicdevice -n nvidia-network-operator node1-1015-mt1627x08307 -o yaml
+    kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o yaml
 
 .. code-block:: yaml
 
@@ -2595,7 +2617,7 @@ Discover more information about a specific device:
     metadata:
       creationTimestamp: "2024-09-21T08:43:08Z"
       generation: 1
-      name: node1-1015-mt1627x08307
+      name: node1-101d-mt1952x03327
       namespace: nvidia-network-operator
       ownerReferences:
       - apiVersion: v1
@@ -2607,21 +2629,76 @@ Discover more information about a specific device:
     spec: {}
     status:
       conditions:
+      - lastTransitionTime: "2024-09-21T08:43:04Z"
+        message: Device firmware spec is empty, cannot update or validate firmware
+        reason: DeviceFirmwareSpecEmpty
+        status: "False"
+        type: FirmwareUpdateInProgress
       - lastTransitionTime: "2024-09-21T08:43:08Z"
         message: Device configuration spec is empty, cannot update configuration
         reason: DeviceConfigSpecEmpty
         status: "False"
         type: ConfigUpdateInProgress
-      firmwareVersion: 14.31.2006
-      node: node1
-      partNumber: mcx4131a-gcat
-      ports:
-      - networkInterface: enp129s0np0
-        pci: 0000:81:00.0
-        rdmaInterface: mlx5_2
-      psid: mt_2430110032
-      serialNumber: mt1627x08307
-      type: "1015"
+    firmwareVersion: 22.39.1015
+    node: cloud-dev-41
+    partNumber: mcx623106ac-cdat
+    ports:
+    - networkInterface: enp3s0f0np0
+      pci: "0000:03:00.0"
+      rdmaInterface: mlx5_0
+    - networkInterface: enp3s0f1np1
+      pci: "0000:03:00.1"
+      rdmaInterface: mlx5_1
+    psid: mt_0000000436
+    serialNumber: mt1952x03327
+    type: 101d
+
+Configure and apply the NICFirmwareSource CR:
+
+.. code-block:: yaml
+
+    apiVersion: configuration.net.nvidia.com/v1alpha1
+    kind: NicFirmwareSource
+    metadata:
+      name: connectx6-dx-firmware-22-44-1036
+      namespace: nvidia-network-operator
+      finalizers:
+        - configuration.net.nvidia.com/nic-configuration-operator
+    spec:
+      # a list of firmware binaries from mlnx website if they are zipped try to unzip before placing
+      binUrlSources:
+        - https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip
+
+Observe the NICFirmwareSource status:
+
+.. code:: bash
+
+    > kubectl get nicfirmwaresource -n nvidia-network-operator connectx6-dx-firmware-22-44-1036 -o yaml
+
+    ...
+    status:
+      state: Success
+      versions:
+        22.44.1036:
+        - mt_0000000436
+
+Configure and apply the NicFirmwareSource CR:
+
+.. code-block:: yaml
+
+    apiVersion: configuration.net.nvidia.com/v1alpha1
+    kind: NicFirmwareTemplate
+    metadata:
+      name: connectx6dx-config
+      namespace: nvidia-network-operator
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: node1
+      nicSelector:
+        nicType: "101d"
+      template:
+        nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+        updatePolicy: Update
 
 Configure and apply the NicConfigurationTemplate CR:
 
@@ -2631,18 +2708,18 @@ Configure and apply the NicConfigurationTemplate CR:
     kind: NicConfigurationTemplate
     metadata:
        name: connectx6-config
-       namespace: nic-configuration-operator
+       namespace: nvidia-network-operator
     spec:
        nodeSelector:
           feature.node.kubernetes.io/network-sriov.capable: "true"
        nicSelector:
           # nicType selector is mandatory the rest are optional. Only a single type can be specified.
-          nicType: 101b
+          nicType: 101d
           pciAddresses:
              - "0000:03:00.0"
              - “0000:04:00.0”
           serialNumbers:
-             - "MT2116X09299"
+             - "mt1952x03327"
        resetToDefault: false # if set, template is ignored, device configuration should reset
        template:
           # numVfs and linkType fields are mandatory, the rest are optional
@@ -2661,9 +2738,9 @@ Configure and apply the NicConfigurationTemplate CR:
              enabled: true
              env: Baremetal
 
-.. note:: It's not possible to apply more than one template to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
+.. note:: It's not possible to apply more than one template of each kind (NICFirmwareTemplate or NICConfigurationTemplate) to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
 
-.. note:: To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, numVfs and linkType need to match both in NicConfigurationTemplate and SriovNetworkNodePolicy CRs matching the same NICs.
+.. note:: To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, "mellanox" `plugin should be disabled <https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins>`_ in the SR-IOV Network Operator.
 
 For more information about the CRD API, refer to `API documentation <https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md>`_.
 For more information, which FW parameter each settings corresponds to, refer to `Configuration details doc section <https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details>`_.
@@ -2672,8 +2749,14 @@ Status conditions of the NicDevice CR reflect the status of the configuration up
 
 .. code-block:: bash
 
-    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
+    - lastTransitionTime: "2024-09-21T08:42:23Z"
+      message: Firmware matches the requested version
+      observedGeneration: 4
+      reason: DeviceFirmwareConfigMatch
+      status: "False"
+      type: FirmwareUpdateInProgress
     - lastTransitionTime: "2024-09-21T08:43:08Z"
       message: ""
       reason: UpdateStarted
@@ -2688,7 +2771,7 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
 
 .. code-block:: bash
 
-    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
     - lastTransitionTime: "2024-09-21T08:43:10Z"
       message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
@@ -2702,7 +2785,7 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
 
 .. code-block:: bash
 
-    > kubectl get nicdevice -n nic-configuration-operator cloud-dev-40-1015-mt1627x08307 -o jsonpath='{.status.conditions}' | yq -P
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
    - lastTransitionTime: "2024-11-08T09:19:41Z"
      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
