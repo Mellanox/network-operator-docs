@@ -213,6 +213,10 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      - Type
      - Default in NVIDIA Network Operator
      - Notes
+   * - node-feature-discovery.cleanupLabels
+     - bool
+     - `false`
+     - Enable labels cleanup when uninstalling NFD
    * - node-feature-discovery.enableNodeFeatureApi
      - bool
      - `true`
@@ -297,7 +301,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-25.1.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-beta.1"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -313,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-25.1.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-beta.1"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -321,7 +325,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-25.1.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-beta.1"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
