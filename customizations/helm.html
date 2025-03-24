@@ -157,22 +157,27 @@ can find those below.</p>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy Node Feature Discovery operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>nicConfigurationOperator.enabled</p></td>
+<tr class="row-even"><td><p>nicConfigurationOperator</p></td>
+<td><p>object</p></td>
+<td><p><cite>{“enabled”:false}</cite></p></td>
+<td><p>NIC Configuration Operator helm chart is deprecated and will be deleted in future releases. Use NIC Cluster Policy to deploy the NIC Configuration Operator instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nicConfigurationOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy NIC Configuration Operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.admissionController.enabled</p></td>
+<tr class="row-even"><td><p>operator.admissionController.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy with admission controller.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.admissionController.useCertManager</p></td>
+<tr class="row-odd"><td><p>operator.admissionController.useCertManager</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Use cert-manager for generating self-signed certificate.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.affinity.nodeAffinity</p></td>
+<tr class="row-even"><td><p>operator.affinity.nodeAffinity</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
@@ -192,57 +197,57 @@ can find those below.</p>
 </td>
 <td><p>Configure node affinity settings for the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.cniBinDirectory</p></td>
+<tr class="row-odd"><td><p>operator.cniBinDirectory</p></td>
 <td><p>string</p></td>
 <td><p><cite>“/opt/cni/bin”</cite></p></td>
 <td><p>Directory, where CNI binaries will be deployed on the nodes. Setting for  the sriov-network-operator is set with <code class="docutils literal notranslate"><span class="pre">sriov-network-operator.cniBinPath</span></code> parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.fullnameOverride</p></td>
+<tr class="row-even"><td><p>operator.fullnameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used to replace generated names.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.image</p></td>
+<tr class="row-odd"><td><p>operator.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator”</cite></p></td>
 <td><p>Network Operator image name</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.nameOverride</p></td>
+<tr class="row-even"><td><p>operator.nameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used as part of objects name generation.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.nodeSelector</p></td>
+<tr class="row-odd"><td><p>operator.nodeSelector</p></td>
 <td><p>object</p></td>
 <td><p><cite>{}</cite></p></td>
 <td><p>Configure node selector settings for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.enable</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.enable</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy init container.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.image</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator-init-container”</cite></p></td>
 <td><p>Init container image name.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.repository</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.repository</p></td>
 <td><p>string</p></td>
 <td><p><cite>“ghcr.io/mellanox”</cite></p></td>
 <td><p>Init container image repository.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.version</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
 <td><p><cite>“v0.0.3”</cite></p></td>
 <td><p>Init container image version.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.repository</p></td>
+<tr class="row-even"><td><p>operator.repository</p></td>
 <td><p>string</p></td>
 <td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
 <td><p>Network Operator image repository.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.resources</p></td>
+<tr class="row-odd"><td><p>operator.resources</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span><span class="w"></span>
@@ -255,7 +260,7 @@ can find those below.</p>
 </td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.tolerations</p></td>
+<tr class="row-even"><td><p>operator.tolerations</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
@@ -270,17 +275,17 @@ can find those below.</p>
 </td>
 <td><p>Set additional tolerations for various Daemonsets deployed by the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.useDTK</p></td>
+<tr class="row-odd"><td><p>operator.useDTK</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable the use of Driver ToolKit to compile DOCA Drivers (OpenShift only).</p></td>
 </tr>
-<tr class="row-odd"><td><p>sriovNetworkOperator.enabled</p></td>
+<tr class="row-even"><td><p>sriovNetworkOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy SR-IOV Network Operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>upgradeCRDs</p></td>
+<tr class="row-odd"><td><p>upgradeCRDs</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable CRDs upgrade with helm pre-install and pre-upgrade hooks.</p></td>
@@ -593,7 +598,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>nic-configuration-operator-chart.configDaemon.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“v0.1.17”</cite></p></td>
+<td><p><cite>“v0.1.18”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.name</p></td>
@@ -608,7 +613,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“v0.1.17”</cite></p></td>
+<td><p><cite>“v0.1.18”</cite></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -696,7 +701,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 16, 2025.
+      <span class="lastupdated">Last updated on Mar 24, 2025.
       </span></p>
   </div>
 

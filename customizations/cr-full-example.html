@@ -205,6 +205,21 @@ This example should serve as a reference, it is not recommended to apply it as i
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca_telemetry</span><span class="w"></span>
 <span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca</span><span class="w"></span>
 <span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.16.5-doca2.6.0-host</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v0.1.18</span><span class="w"></span>
+<span class="w">     </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v0.1.18</span><span class="w"></span>
+<span class="w">     </span><span class="nt">nicFirmwareStorage</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">       </span><span class="nt">pvcName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-fw-storage-pvc</span><span class="w"></span>
+<span class="w">       </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-fw-storage-class</span><span class="w"></span>
+<span class="w">       </span><span class="nt">availableStorageSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+<span class="w">     </span><span class="nt">logLevel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">info</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -218,7 +233,7 @@ This example should serve as a reference, it is not recommended to apply it as i
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 16, 2025.
+      <span class="lastupdated">Last updated on Mar 24, 2025.
       </span></p>
   </div>
 
