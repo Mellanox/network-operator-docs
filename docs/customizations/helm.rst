@@ -58,6 +58,10 @@ General Parameters
      - bool
      - `true`
      - Deploy Node Feature Discovery operator.
+   * - nicConfigurationOperator
+     - object
+     - `{"enabled":false}`
+     - NIC Configuration Operator helm chart is deprecated and will be deleted in future releases. Use NIC Cluster Policy to deploy the NIC Configuration Operator instead.
    * - nicConfigurationOperator.enabled
      - bool
      - `false`
@@ -425,7 +429,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.configDaemon.image.tag
      - string
-     - `"v0.1.17"`
+     - `"v0.1.18"`
      -
    * - nic-configuration-operator-chart.operator.image.name
      - string
@@ -437,7 +441,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v0.1.17"`
+     - `"v0.1.18"`
      -
 
 ====================

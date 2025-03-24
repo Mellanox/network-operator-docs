@@ -395,7 +395,8 @@ ImageSpec
 ~~~~~~~~~
 
 (*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`, :ref:`IBKubernetesSpec <IBKubernetesSpec>`, :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`,
-:ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`, :ref:`NVIPAMSpec <NVIPAMSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`, :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
+:ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`, :ref:`NVIPAMSpec <NVIPAMSpec>`, :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`,
+:ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
 
 ImageSpec Contains container image specifications
 
@@ -671,6 +672,9 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``docaTelemetryService``                                                                          | DOCATelemetryService exposes telemetry from NVIDIA networking components to prometheus. See:      |
       | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        | https://docs.nvidia.com/doca/sdk/nvidia+doca+telemetry+service+guide/index.html                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nicConfigurationOperator``                                                                      | NicConfigurationOperator provides Kubernetes CRD API to allow FW configuration on NVIDIA NICs in  |
+      | :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`                                | a coordinated manner See: https://github.com/Mellanox/nic-configuration-operator                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nodeAffinity``                                                                                  | NodeAffinity rules to inject to the DaemonSets objects that are managed by the operator           |
       | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -702,6 +706,64 @@ NicClusterPolicyStatus defines the observed state of NicClusterPolicy
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
       | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicConfigurationOperatorSpec:
+
+NicConfigurationOperatorSpec
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+NicConfigurationOperatorSpec is the configuration for NIC Configuration Operator
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``operator``                                                                                      | Image information for nic-configuration-operator                                                  |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``configurationDaemon``                                                                           | Image information for nic-configuration-daemon                                                    |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``nicFirmwareStorage``                                                                            | NicFirmwareStorage contains configuration for the NIC firmware storage                            |
+      | :ref:`NicFirmwareStorageSpec <NicFirmwareStorageSpec>`                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``logLevel``                                                                                      | LogLevel sets the verbosity level of the logs. info|debug                                         |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicFirmwareStorageSpec:
+
+NicFirmwareStorageSpec
+~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`)
+
+NicFirmwareStorageSpec contains configuration for the NIC firmware storage
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``create``                                                                                        | Create specifies whether to create a new PVC or use an existing one                               |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``pvcName``                                                                                       | PVCName is the name of the PVC to mount as NIC Firmware storage. Default value:                   |
+      | string                                                                                            | “nic-fw-storage-pvc”                                                                              |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``storageClassName``                                                                              | StorageClassName is the name of a storage class to be used to store NIC FW binaries during NIC FW |
+      | string                                                                                            | upgrade. If not provided, the cluster-default storage class will be used                          |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``availableStorageSize``                                                                          | storage size for the NIC Configuration Operator to request. Default value: 1Gi                    |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _OFEDDriverSpec:
