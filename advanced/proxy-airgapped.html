@@ -192,7 +192,7 @@ To allow Network Operator to work with a local registry, users can specify local
 <p>To pull the correct images from the NVIDIA registry, you can leverage the fields <code class="docutils literal notranslate"><span class="pre">repository</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code> and <code class="docutils literal notranslate"><span class="pre">version</span></code> specified in the <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> file or in the <a class="reference internal" href="images-sha256.html#container-images-digest"><span class="std std-ref">NVIDIA Network Operator Container Images</span></a> section.</p>
 <p>NicClusterPolicy supports use of image container digest in the <cite>version</cite> field, except for DOCA driver.</p>
 <p>There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
-<p>For example for DOCA driver version 25.01-0.6.0.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.01-0.6.0.0-0-ubuntu24.04-amd64”.
+<p>For example for DOCA driver version 25.04-0.2.3.0-0, the tag for Ubuntu 24.04 with X86 architecture is “25.04-0.2.3.0-0-ubuntu24.04-amd64”.
 Available DOCA driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
 <p>In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.</p>
 <div class="admonition note">
