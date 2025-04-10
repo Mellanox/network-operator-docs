@@ -753,8 +753,8 @@ NicFirmwareStorageSpec contains configuration for the NIC firmware storage
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``create``                                                                                        | Create specifies whether to create a new PVC or use an existing one                               |
-      | bool                                                                                              |                                                                                                   |
+      | ``create``                                                                                        | Create specifies whether to create a new PVC or use an existing one If create == false, the       |
+      | bool                                                                                              | existing PVC should be located in the same namespace as the operator                              |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pvcName``                                                                                       | PVCName is the name of the PVC to mount as NIC Firmware storage. Default value:                   |
       | string                                                                                            | “nic-fw-storage-pvc”                                                                              |
@@ -762,8 +762,8 @@ NicFirmwareStorageSpec contains configuration for the NIC firmware storage
       | ``storageClassName``                                                                              | StorageClassName is the name of a storage class to be used to store NIC FW binaries during NIC FW |
       | string                                                                                            | upgrade. If not provided, the cluster-default storage class will be used                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``availableStorageSize``                                                                          | storage size for the NIC Configuration Operator to request. Default value: 1Gi                    |
-      | string                                                                                            |                                                                                                   |
+      | ``availableStorageSize``                                                                          | AvailableStorageSize is storage size for the NIC Configuration Operator to request. Only applies  |
+      | string                                                                                            | if nicFirmwareStorage.create == true. Default value: 1Gi                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _OFEDDriverSpec:
