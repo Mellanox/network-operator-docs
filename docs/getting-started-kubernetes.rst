@@ -2551,7 +2551,7 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 * `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
 
 ===========================================================================
-[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator
+Configure NIC Firmware using the NIC Configuration Operator
 ===========================================================================
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
 
@@ -2682,7 +2682,7 @@ Observe the NICFirmwareSource status:
         22.44.1036:
         - mt_0000000436
 
-Configure and apply the NicFirmwareSource CR:
+Configure and apply the NicFirmwareTemplate CR:
 
 .. code-block:: yaml
 
@@ -2778,8 +2778,6 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
       reason: DeviceFirmwareConfigMatch
       status: "True"
       type: FirmwareConfigMatch
-
-.. warning:: NIC Firmware Mismatch feature doesn't support NVIDIA BlueField-3 NIC.
 
 `FirmwareConfigMatch` condition status is set to `Unknown` if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:
 
