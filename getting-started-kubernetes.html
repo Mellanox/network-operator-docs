@@ -142,7 +142,7 @@
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" id="id51">[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id51">Configure NIC Firmware using the NIC Configuration Operator</a></p>
 <ul>
 <li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id52">NIC Firmware Mismatch Notification</a></p></li>
 </ul>
@@ -2432,8 +2432,8 @@ ovs-vsctl add-port mybr bond0 -- <span class="nb">set</span> Interface bond0 <sp
 </section>
 </section>
 </section>
-<section id="tech-preview-configure-nic-firmware-using-the-nic-configuration-operator">
-<h2>[TECH PREVIEW] Configure NIC Firmware using the NIC Configuration Operator<a class="headerlink" href="#tech-preview-configure-nic-firmware-using-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<section id="configure-nic-firmware-using-the-nic-configuration-operator">
+<h2>Configure NIC Firmware using the NIC Configuration Operator<a class="headerlink" href="#configure-nic-firmware-using-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -2554,7 +2554,7 @@ status:
     - mt_0000000436
 </pre></div>
 </div>
-<p>Configure and apply the NicFirmwareSource CR:</p>
+<p>Configure and apply the NicFirmwareTemplate CR:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareTemplate</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -2644,10 +2644,6 @@ For more information, which FW parameter each settings corresponds to, refer to 
   type: FirmwareConfigMatch
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>NIC Firmware Mismatch feature doesn’t support NVIDIA BlueField-3 NIC.</p>
-</div>
 <p><cite>FirmwareConfigMatch</cite> condition status is set to <cite>Unknown</cite> if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> &gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
 
@@ -2671,7 +2667,7 @@ For more information, which FW parameter each settings corresponds to, refer to 
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 24, 2025.
+      <span class="lastupdated">Last updated on Apr 10, 2025.
       </span></p>
   </div>
 

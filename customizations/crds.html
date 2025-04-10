@@ -1095,7 +1095,8 @@ string</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create</span></code>
 bool</p></td>
-<td><p>Create specifies whether to create a new PVC or use an existing one</p></td>
+<td><p>Create specifies whether to create a new PVC or use an existing one If create == false, the
+existing PVC should be located in the same namespace as the operator</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pvcName</span></code>
 string</p></td>
@@ -1109,7 +1110,8 @@ upgrade. If not provided, the cluster-default storage class will be used</p></td
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">availableStorageSize</span></code>
 string</p></td>
-<td><p>storage size for the NIC Configuration Operator to request. Default value: 1Gi</p></td>
+<td><p>AvailableStorageSize is storage size for the NIC Configuration Operator to request. Only applies
+if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
 </tr>
 </tbody>
 </table>
@@ -1344,7 +1346,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Mar 24, 2025.
+      <span class="lastupdated">Last updated on Apr 10, 2025.
       </span></p>
   </div>
 
