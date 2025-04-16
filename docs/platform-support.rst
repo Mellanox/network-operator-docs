@@ -50,7 +50,7 @@ Prerequisites
 Network Operator Component Matrix
 =================================
 
-The following component versions are deployed by the Network Operator:
+The following component versions are deployed by **NVIDIA Network Operator**:
 
 
 .. list-table::
@@ -184,7 +184,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
 ====================================================
-NVIDIA Network Operator has been validated on the following OS / platform combinations:
+**NVIDIA Network Operator** has been validated on the following OS / platform combinations:
 
 .. list-table::
    :header-rows: 1
@@ -236,7 +236,7 @@ NVIDIA Network Operator has been validated on the following OS / platform combin
 =============================
 Supported Container Runtimes
 =============================
-NVIDIA Network Operator has been validated in the following scenarios:
+**NVIDIA Network Operator** has been validated in the following scenarios:
 
 .. list-table::
    :header-rows: 1
