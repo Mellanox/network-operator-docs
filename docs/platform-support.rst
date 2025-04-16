@@ -178,7 +178,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - x86
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode)
-     - Ubuntu 24.04 (ARM64)
+     - Ubuntu 24.04 (x86)
      - GA
 
 ====================================================
