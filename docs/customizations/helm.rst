@@ -297,11 +297,11 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.1.1"`
+     - `"ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.2.1"`
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-beta.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-beta.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -317,7 +317,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-beta.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-beta.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -325,7 +325,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-beta.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-beta.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -433,7 +433,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.configDaemon.image.tag
      - string
-     - `"v0.1.18"`
+     - `"v1.0.0"`
      -
    * - nic-configuration-operator-chart.operator.image.name
      - string
@@ -445,7 +445,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v0.1.18"`
+     - `"v1.0.0"`
      -
 
 ====================

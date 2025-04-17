@@ -45,7 +45,7 @@ AppliedState defines a finer-grained view of the observed state of NicClusterPol
 ConfigMapNameReference
 ~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`, :ref:`SpectrumXOperatorSpec <SpectrumXOperatorSpec>`)
 
 ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.
 
@@ -396,7 +396,7 @@ ImageSpec
 
 (*Appears on:* :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`, :ref:`IBKubernetesSpec <IBKubernetesSpec>`, :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`,
 :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`, :ref:`NVIPAMSpec <NVIPAMSpec>`, :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`,
-:ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`)
+:ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`, :ref:`SpectrumXOperatorSpec <SpectrumXOperatorSpec>`)
 
 ImageSpec Contains container image specifications
 
@@ -675,6 +675,9 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``nicConfigurationOperator``                                                                      | NicConfigurationOperator provides Kubernetes CRD API to allow FW configuration on NVIDIA NICs in  |
       | :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`                                | a coordinated manner See: https://github.com/Mellanox/nic-configuration-operator                  |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spectrumXOperator``                                                                             | SpectrumXOperator exposes NVIDIA Spectrum-X Operator. See:                                        |
+      | :ref:`SpectrumXOperatorSpec <SpectrumXOperatorSpec>`                                              | https://github.com/Mellanox/spectrum-x-operator/                                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nodeAffinity``                                                                                  | NodeAffinity rules to inject to the DaemonSets objects that are managed by the operator           |
       | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -896,6 +899,32 @@ SecondaryNetworkSpec describes configuration options for secondary network
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipamPlugin``                                                                                    | Image information for IPAM plugin                                                                 |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _SpectrumXOperatorSpec:
+
+SpectrumXOperatorSpec
+~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
+
+SpectrumXOperatorSpec describes configuration options for NVIDIA Spectrum-X Operator
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``ImageSpec``                                                                                     | Image information for NVIDIA Spectrum-X Operator                                                  |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spectrumXConfig``                                                                               | Spectrum-X Operator ConfigMap name                                                                |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``sriovObjNamespace``                                                                             | SR-IOV Network Operator and related CRDs namespace                                                |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _State:
