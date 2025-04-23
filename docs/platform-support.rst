@@ -37,7 +37,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.27 and <=1.31.4
+     - >=1.29 and <=1.32
      -
    * - Helm
      - v3.5+
@@ -50,7 +50,7 @@ Prerequisites
 Network Operator Component Matrix
 =================================
 
-The following component versions are deployed by the Network Operator:
+The following component versions are deployed by **NVIDIA Network Operator**:
 
 
 .. list-table::
@@ -100,88 +100,143 @@ The following component versions are deployed by the Network Operator:
 System Requirements
 ===================
 
-* NVIDIA RDMA-capable network adapters:
-   * NVIDIA ConnectX NICs
-        * ConnectX-5 or newer
-   * NVIDIA BlueField Network Platforms
-        * BlueField-2 DPU (NIC mode)
-        * BlueField-3 DPU (NIC mode)
-        * BlueField-3 SuperNIC (NIC mode)
-* NVIDIA GPU Operator Version 24.3.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)
+* **RDMA‑capable NVIDIA network adapters**
+   * NVIDIA ConnectX NICs and SuperNICs
+   * NVIDIA BlueField Networking Platforms
+* **NVIDIA GPU Operator v25.3.x or newer** – required for workloads that use NVIDIA GPUs and GPUDirect RDMA.
 
-=======================
-Tested Network Adapters
-=======================
-The following network adapters have been tested with the Network Operator:
+=================================
+Supported NVIDIA Network Adapters
+=================================
+The following adapters have been tested and validated with **NVIDIA Network Operator**:
 
-* ConnectX-6 Dx
-* ConnectX-7
-* BlueField-2 NIC Mode
-* BlueField-3 NIC Mode
+.. list-table::
+   :header-rows: 1
 
-=============================
-Supported ARM Based Platforms
-=============================
-The following ARM based systems has been tested with Network Operator:
+   * - Product Family
+     - Network Technology
+     - Max Port Speed
+     - Notes
+   * - NVIDIA ConnectX‑6 NIC
+     - Ethernet & InfiniBand
+     - 200 Gb/s
+     - IB RDMA and RoCE
+   * - NVIDIA ConnectX-6 Dx NIC
+     - Ethernet
+     - 200 Gb/s
+     - RoCE
+   * - NVIDIA ConnectX-7 NIC
+     - Ethernet & InfiniBand
+     - 400 Gb/s
+     - IB RDMA and RoCE
+   * - NVIDIA ConnectX-8 SuperNIC
+     - Ethernet & InfiniBand
+     - 800 Gb/s
+     - IB RDMA and RoCE
+   * - NVIDIA BlueField-3 DPU
+     - Ethernet
+     - 200 Gb/s
+     - NIC mode only; RoCE
+   * - NVIDIA BlueField-3 SuperNIC
+     - Ethernet
+     - 400 Gb/s
+     - NIC mode only; RoCE
+
+====================================
+Supported NVIDIA Data Center Systems
+====================================
+The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**:
 
 .. list-table::
    :header-rows: 1
 
    * - System
-     - Network Adapters
-     - OS
+     - CPU Architecture
+     - GPU Architecture
+     - Network Adapter(s)
+     - Operating System(s)
      - Notes
    * - NVIDIA IGX Orin
+     - Arm (NVIDIA Orin)
+     - NVIDIA Ampere
      - ConnectX-7
      - Ubuntu 22.04 (ARM64)
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA Grace ARM Server
-     - BlueField-3 NIC Mode
+     - Arm (NVIDIA Grace)
+     - NVIDIA Hopper
+     - BlueField-3 (NIC Mode)
      - Ubuntu 22.04 (ARM64) / OCP 4.17 / SLES 15.6
      - GA (RoCE only, without GPUDirect RDMA)
+   * - NVIDIA DGX/HGX GB200 NVL72
+     - Arm (NVIDIA Grace)
+     - NVIDIA Blackwell
+     - ConnectX-7
+     - Ubuntu 24.04 (ARM64)
+     - GA
+   * - NVIDIA DGX/HGX B200
+     - x86
+     - NVIDIA Blackwell
+     - BlueField-3 SuperNIC (NIC mode)
+     - Ubuntu 24.04 (x86)
+     - GA
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
 ====================================================
-NVIDIA Network Operator has been validated in the following scenarios:
+**NVIDIA Network Operator** has been validated on the following OS / platform combinations:
 
 .. list-table::
    :header-rows: 1
 
    * - Operating System
-     - Kubernetes
-     - Red Hat OpenShift
+     - Upstream Kubernetes
+     - Red Hat OpenShift
+     - Rancher RKE2
+     - Canonical MicroK8s
      - Notes
-   * - Ubuntu 24.04 LTS
-     - 1.27-1.31.4
-     - 
-     - 
-   * - Ubuntu 22.04 LTS
-     - 1.27-1.31.4
-     - 
+   * - Ubuntu 24.04 LTS
+     - 1.29–1.32
+     - —
+     - —
+     - 1.29–1.32
+     - —
+   * - Ubuntu 22.04 LTS
+     - 1.29–1.32
+     - —
+     - —
+     - 1.29–1.32
+     - RT‑kernel support
+   * - Red Hat CoreOS
+     - —
+     - 4.15–4.18
+     - —
+     - —
      - RT kernels support
-   * - Red Hat Core OS
-     - 
-     - 4.14, 4.16, 4.17
+   * - Red Hat Enterprise Linux 9.4 / 9.2
+     - 1.29–1.32
+     - —
+     - —
+     - —
      - RT kernels support
-   * - Red Hat Enterprise Linux 9.5, 9.4, 9.2
-     - 1.27-1.31.4
-     - 
-     - 
-   * - Red Hat Enterprise Linux 8.10, 8.8
-     - 1.27-1.31.4
-     - 
-     - RT kernels support
-   * - SUSE Linux Enterprise Server 15 SP6
-     - 1.27-1.31.4
-     - 
+   * - Red Hat Enterprise Linux 8.10 / 8.8
+     - 1.29–1.32
+     - —
+     - —
+     - —
+     - RT‑kernel support
+   * - SUSE Linux Enterprise Server 15 SP6
+     - 1.29–1.32
+     - —
+     - 1.29–1.32
+     - —
      - Kubernetes and Rancher
 
 
 =============================
 Supported Container Runtimes
 =============================
-NVIDIA Network Operator has been validated in the following scenarios:
+**NVIDIA Network Operator** has been validated in the following scenarios:
 
 .. list-table::
    :header-rows: 1
