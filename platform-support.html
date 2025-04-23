@@ -103,8 +103,8 @@
 <li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p></li>
 <li><p><a class="reference internal" href="#network-operator-component-matrix" id="id2">Network Operator Component Matrix</a></p></li>
 <li><p><a class="reference internal" href="#system-requirements" id="id3">System Requirements</a></p></li>
-<li><p><a class="reference internal" href="#tested-network-adapters" id="id4">Tested Network Adapters</a></p></li>
-<li><p><a class="reference internal" href="#supported-arm-based-platforms" id="id5">Supported ARM Based Platforms</a></p></li>
+<li><p><a class="reference internal" href="#supported-nvidia-network-adapters" id="id4">Supported NVIDIA Network Adapters</a></p></li>
+<li><p><a class="reference internal" href="#supported-nvidia-data-center-systems" id="id5">Supported NVIDIA Data Center Systems</a></p></li>
 <li><p><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms" id="id6">Supported Operating Systems and Kubernetes Platforms</a></p></li>
 <li><p><a class="reference internal" href="#supported-container-runtimes" id="id7">Supported Container Runtimes</a></p></li>
 <li><p><a class="reference internal" href="#supported-precompiled-container-images-for-doca-drivers" id="id8">Supported Precompiled Container Images for DOCA Drivers</a></p>
@@ -132,7 +132,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Kubernetes</p></td>
-<td><p>&gt;=1.27 and &lt;=1.31.4</p></td>
+<td><p>&gt;=1.29 and &lt;=1.32</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>Helm</p></td>
@@ -148,7 +148,7 @@
 </section>
 <section id="network-operator-component-matrix">
 <h2>Network Operator Component Matrix<a class="headerlink" href="#network-operator-component-matrix" title="Permalink to this headline"></a></h2>
-<p>The following component versions are deployed by the Network Operator:</p>
+<p>The following component versions are deployed by <strong>NVIDIA Network Operator</strong>:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 33%" />
@@ -217,43 +217,19 @@
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>NVIDIA RDMA-capable network adapters:</dt><dd><ul>
-<li><dl class="simple">
-<dt>NVIDIA ConnectX NICs</dt><dd><ul>
-<li><p>ConnectX-5 or newer</p></li>
+<dt><strong>RDMA‑capable NVIDIA network adapters</strong></dt><dd><ul>
+<li><p>NVIDIA ConnectX NICs and SuperNICs</p></li>
+<li><p>NVIDIA BlueField Networking Platforms</p></li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><dl class="simple">
-<dt>NVIDIA BlueField Network Platforms</dt><dd><ul>
-<li><p>BlueField-2 DPU (NIC mode)</p></li>
-<li><p>BlueField-3 DPU (NIC mode)</p></li>
-<li><p>BlueField-3 SuperNIC (NIC mode)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>NVIDIA GPU Operator Version 24.3.x or newer (required for the workloads using NVIDIA GPUs and GPUDirect RDMA technology)</p></li>
+<li><p><strong>NVIDIA GPU Operator v25.3.x or newer</strong> – required for workloads that use NVIDIA GPUs and GPUDirect RDMA.</p></li>
 </ul>
 </section>
-<section id="tested-network-adapters">
-<h2>Tested Network Adapters<a class="headerlink" href="#tested-network-adapters" title="Permalink to this headline"></a></h2>
-<p>The following network adapters have been tested with the Network Operator:</p>
-<ul class="simple">
-<li><p>ConnectX-6 Dx</p></li>
-<li><p>ConnectX-7</p></li>
-<li><p>BlueField-2 NIC Mode</p></li>
-<li><p>BlueField-3 NIC Mode</p></li>
-</ul>
-</section>
-<section id="supported-arm-based-platforms">
-<h2>Supported ARM Based Platforms<a class="headerlink" href="#supported-arm-based-platforms" title="Permalink to this headline"></a></h2>
-<p>The following ARM based systems has been tested with Network Operator:</p>
+<section id="supported-nvidia-network-adapters">
+<h2>Supported NVIDIA Network Adapters<a class="headerlink" href="#supported-nvidia-network-adapters" title="Permalink to this headline"></a></h2>
+<p>The following adapters have been tested and validated with <strong>NVIDIA Network Operator</strong>:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
@@ -262,72 +238,161 @@
 <col style="width: 25%" />
 </colgroup>
 <thead>
+<tr class="row-odd"><th class="head"><p>Product Family</p></th>
+<th class="head"><p>Network Technology</p></th>
+<th class="head"><p>Max Port Speed</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NVIDIA ConnectX‑6 NIC</p></td>
+<td><p>Ethernet &amp; InfiniBand</p></td>
+<td><p>200 Gb/s</p></td>
+<td><p>IB RDMA and RoCE</p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA ConnectX-6 Dx NIC</p></td>
+<td><p>Ethernet</p></td>
+<td><p>200 Gb/s</p></td>
+<td><p>RoCE</p></td>
+</tr>
+<tr class="row-even"><td><p>NVIDIA ConnectX-7 NIC</p></td>
+<td><p>Ethernet &amp; InfiniBand</p></td>
+<td><p>400 Gb/s</p></td>
+<td><p>IB RDMA and RoCE</p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA ConnectX-8 SuperNIC</p></td>
+<td><p>Ethernet &amp; InfiniBand</p></td>
+<td><p>800 Gb/s</p></td>
+<td><p>IB RDMA and RoCE</p></td>
+</tr>
+<tr class="row-even"><td><p>NVIDIA BlueField-3 DPU</p></td>
+<td><p>Ethernet</p></td>
+<td><p>200 Gb/s</p></td>
+<td><p>NIC mode only; RoCE</p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA BlueField-3 SuperNIC</p></td>
+<td><p>Ethernet</p></td>
+<td><p>400 Gb/s</p></td>
+<td><p>NIC mode only; RoCE</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="supported-nvidia-data-center-systems">
+<h2>Supported NVIDIA Data Center Systems<a class="headerlink" href="#supported-nvidia-data-center-systems" title="Permalink to this headline"></a></h2>
+<p>The following NVIDIA Data Center systems have been tested and validated with <strong>NVIDIA Network Operator</strong>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
 <tr class="row-odd"><th class="head"><p>System</p></th>
-<th class="head"><p>Network Adapters</p></th>
-<th class="head"><p>OS</p></th>
+<th class="head"><p>CPU Architecture</p></th>
+<th class="head"><p>GPU Architecture</p></th>
+<th class="head"><p>Network Adapter(s)</p></th>
+<th class="head"><p>Operating System(s)</p></th>
 <th class="head"><p>Notes</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>NVIDIA IGX Orin</p></td>
+<td><p>Arm (NVIDIA Orin)</p></td>
+<td><p>NVIDIA Ampere</p></td>
 <td><p>ConnectX-7</p></td>
 <td><p>Ubuntu 22.04 (ARM64)</p></td>
 <td><p>GA (RoCE only, without GPUDirect RDMA)</p></td>
 </tr>
 <tr class="row-odd"><td><p>NVIDIA Grace ARM Server</p></td>
-<td><p>BlueField-3 NIC Mode</p></td>
+<td><p>Arm (NVIDIA Grace)</p></td>
+<td><p>NVIDIA Hopper</p></td>
+<td><p>BlueField-3 (NIC Mode)</p></td>
 <td><p>Ubuntu 22.04 (ARM64) / OCP 4.17 / SLES 15.6</p></td>
 <td><p>GA (RoCE only, without GPUDirect RDMA)</p></td>
+</tr>
+<tr class="row-even"><td><p>NVIDIA DGX/HGX GB200 NVL72</p></td>
+<td><p>Arm (NVIDIA Grace)</p></td>
+<td><p>NVIDIA Blackwell</p></td>
+<td><p>ConnectX-7</p></td>
+<td><p>Ubuntu 24.04 (ARM64)</p></td>
+<td><p>GA</p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA DGX/HGX B200</p></td>
+<td><p>x86</p></td>
+<td><p>NVIDIA Blackwell</p></td>
+<td><p>BlueField-3 SuperNIC (NIC mode)</p></td>
+<td><p>Ubuntu 24.04 (x86)</p></td>
+<td><p>GA</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="supported-operating-systems-and-kubernetes-platforms">
 <h2>Supported Operating Systems and Kubernetes Platforms<a class="headerlink" href="#supported-operating-systems-and-kubernetes-platforms" title="Permalink to this headline"></a></h2>
-<p>NVIDIA Network Operator has been validated in the following scenarios:</p>
+<p><strong>NVIDIA Network Operator</strong> has been validated on the following OS / platform combinations:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
+<col style="width: 17%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Operating System</p></th>
-<th class="head"><p>Kubernetes</p></th>
-<th class="head"><p>Red Hat OpenShift</p></th>
+<th class="head"><p>Upstream Kubernetes</p></th>
+<th class="head"><p>Red Hat OpenShift</p></th>
+<th class="head"><p>Rancher RKE2</p></th>
+<th class="head"><p>Canonical MicroK8s</p></th>
 <th class="head"><p>Notes</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Ubuntu 24.04 LTS</p></td>
-<td><p>1.27-1.31.4</p></td>
-<td></td>
-<td></td>
+<tr class="row-even"><td><p>Ubuntu 24.04 LTS</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>Ubuntu 22.04 LTS</p></td>
-<td><p>1.27-1.31.4</p></td>
-<td></td>
+<tr class="row-odd"><td><p>Ubuntu 22.04 LTS</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>RT‑kernel support</p></td>
+</tr>
+<tr class="row-even"><td><p>Red Hat CoreOS</p></td>
+<td><p>—</p></td>
+<td><p>4.15–4.18</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
 <td><p>RT kernels support</p></td>
 </tr>
-<tr class="row-even"><td><p>Red Hat Core OS</p></td>
-<td></td>
-<td><p>4.14, 4.16, 4.17</p></td>
+<tr class="row-odd"><td><p>Red Hat Enterprise Linux 9.4 / 9.2</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
 <td><p>RT kernels support</p></td>
 </tr>
-<tr class="row-odd"><td><p>Red Hat Enterprise Linux 9.5, 9.4, 9.2</p></td>
-<td><p>1.27-1.31.4</p></td>
-<td></td>
-<td></td>
+<tr class="row-even"><td><p>Red Hat Enterprise Linux 8.10 / 8.8</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>RT‑kernel support</p></td>
 </tr>
-<tr class="row-even"><td><p>Red Hat Enterprise Linux 8.10, 8.8</p></td>
-<td><p>1.27-1.31.4</p></td>
-<td></td>
-<td><p>RT kernels support</p></td>
-</tr>
-<tr class="row-odd"><td><p>SUSE Linux Enterprise Server 15 SP6</p></td>
-<td><p>1.27-1.31.4</p></td>
-<td></td>
+<tr class="row-odd"><td><p>SUSE Linux Enterprise Server 15 SP6</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
+<td><p>1.29–1.32</p></td>
+<td><p>—</p></td>
 <td><p>Kubernetes and Rancher</p></td>
 </tr>
 </tbody>
@@ -335,7 +400,7 @@
 </section>
 <section id="supported-container-runtimes">
 <h2>Supported Container Runtimes<a class="headerlink" href="#supported-container-runtimes" title="Permalink to this headline"></a></h2>
-<p>NVIDIA Network Operator has been validated in the following scenarios:</p>
+<p><strong>NVIDIA Network Operator</strong> has been validated in the following scenarios:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
@@ -428,7 +493,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 17, 2025.
+      <span class="lastupdated">Last updated on Apr 23, 2025.
       </span></p>
   </div>
 
