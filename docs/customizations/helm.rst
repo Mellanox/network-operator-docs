@@ -105,6 +105,10 @@ General Parameters
      - string
      - `"network-operator"`
      - Network Operator image name
+   * - operator.maintenanceOperator
+     - object
+     - `{"nodeMaintenanceNamespace":"default","requestorID":"nvidia.network.operator","useRequestor":false}`
+     - Enable the use of maintenance operator upgrade logic.
    * - operator.nameOverride
      - string
      - `""`
@@ -301,7 +305,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-beta.3"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -317,7 +321,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -325,7 +329,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-beta.3"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -491,7 +495,7 @@ Maintenance Operator Helm chart customization options can be found `here <https:
      -
    * - maintenance-operator-chart.operator.image.tag
      - string
-     - `"v0.2.0"`
+     - `"v0.2.1"`
      -
 
 =======================
