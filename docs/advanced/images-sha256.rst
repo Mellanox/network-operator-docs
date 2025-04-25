@@ -34,8 +34,8 @@ NVIDIA Network Operator Container Images
      - Digest
    * - nvcr.io/nvstaging/mellanox
      - network-operator
-     - v25.4.0-beta.2
-     - sha256:73d55ff475bf0be7c9bc83b364f4ecfc32e6de8501d32f1f707648d4e21f476d
+     - v25.4.0-beta.3
+     - sha256:30cf8975926940a6a813b48f9a1dd7322c5ddd87541024476aa0da0778c9bdde
    * - ghcr.io/mellanox
      - network-operator-init-container
      - v0.0.3
@@ -66,16 +66,16 @@ NVIDIA Network Operator Container Images
      - sha256:866971717cb2683f2742d265c9793f93242f55b6e8bd9a0a88a558869f9b9cd7
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
-     - network-operator-25.4.0-beta.2
-     - sha256:9a4b6efd3cd4163ece92f64c3ba584754f527e391f83d4f8dbaa59098b73d40b
+     - network-operator-25.4.0-beta.3
+     - sha256:f68e5b3c9c3f1bb83714d1d5e98a355ca5f2cfd12bab833ec37f94f51a3b9e5b
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
-     - network-operator-25.4.0-beta.2
-     - sha256:e08a0a8317830d2a73422f6fd07ddea3d89a9668844ad1249b745a8afc9da3d5
+     - network-operator-25.4.0-beta.3
+     - sha256:86aef6b1a36f0c9231b10f71018f6e7ac35bbca4221b612b66f6eb0ee47cb534
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-25.4.0-beta.2
-     - sha256:356bbd7aa033de379825f33a9c04061690030b6d5b8ceb407cfd49d990b3177f
+     - network-operator-25.4.0-beta.3
+     - sha256:2d68cb4083c334107b2f47ae8a559bce76e13b5b6336232a03ab2fb709b10ad5
    * - ghcr.io/k8snetworkplumbingwg
      - sriov-network-device-plugin
      - v3.9.0
@@ -118,8 +118,8 @@ NVIDIA Network Operator Container Images
      - sha256:920ad0b70bdbe8b81c62feb39108bba1a1ab236be90c614b31886c7ce52177bf
    * - ghcr.io/mellanox
      - maintenance-operator
-     - v0.2.0
-     - sha256:47d87129d967a5f9d947915b414931e6ba7d42be45186123b531d760b93c6306
+     - v0.2.1
+     - sha256:cdd9ac1a953b8ad21e4ad9619aa977d52fe82f112167cb1c0bb589051936911a
 
 
 ============================
