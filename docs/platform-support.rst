@@ -46,55 +46,6 @@ Prerequisites
      - >=0.15.6 and <=0.17.0
      - When deploying the Network Operator and GPU Operator on the same cluster, ensure only one instance of Node Feature Discovery (NFD) is installed. We recommend using the version included with the GPU Operator.
 
-=================================
-Network Operator Component Matrix
-=================================
-
-The following component versions are deployed by **NVIDIA Network Operator**:
-
-
-.. list-table::
-   :header-rows: 1
-
-   * - Component
-     - Container Image
-     - Notes
-   * - Node Feature Discovery
-     - registry.k8s.io/nfd/node-feature-discovery:|node-feature-discovery-version|
-     - Optionally deployed. May already be present in the cluster with proper configuration.
-   * -  NVIDIA DOCA Driver container
-     - nvcr.io/nvidia/mellanox/doca-driver:|doca-driver-version|
-     - LTS version: |doca-driver-version-lts|
-   * - k8s-rdma-shared-device-plugin
-     - ghcr.io/mellanox/k8s-rdma-shared-dev-plugin:|k8s-rdma-shared-dev-plugin-version|
-     -
-   * - sriov-network-device-plugin
-     - ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:|sriov-device-plugin-version|
-     -
-   * - containernetworking CNI plugins
-     - ghcr.io/k8snetworkplumbingwg/plugins:|cni-plugins-version|
-     -
-   * - whereabouts CNI
-     - ghcr.io/k8snetworkplumbingwg/whereabouts:|whereabouts-version|
-     -
-   * - multus CNI
-     - ghcr.io/k8snetworkplumbingwg/multus-cni:|multus-version|
-     -
-   * - IPoIB CNI
-     -  ghcr.io/mellanox/ipoib-cni:|ipoib-cni-version|
-     -
-   * - IB Kubernetes
-     -  ghcr.io/mellanox/ib-kubernetes:|ib-kubernetes-version|
-     -
-   * - NV IPAM Plugin
-     -  ghcr.io/mellanox/nvidia-k8s-ipam:|nvidia-ipam-version|
-     -
-   * - NIC Feature Discovery
-     - ghcr.io/mellanox/nic-feature-discovery:|nic-feature-discovery-version|
-     -
-   * - DOCA Telemetry
-     - nvcr.io/nvidia/doca/doca_telemetry:|doca-telemetry-version|
-     -
 
 ===================
 System Requirements
@@ -305,3 +256,190 @@ Limitations
 .. warning::
    - Only ``generic`` kernel variant is tested and supported as a GA.
    - ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel variants are supported as a Tech Preview and have limited testing.
+
+
+=================================
+Network Operator Component Matrix
+=================================
+
+The following component versions are deployed by **NVIDIA Network Operator**:
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Origin
+     - Repository
+     - Image Image
+     - Tag
+     - NVAIE
+     - Notes
+   * - NVIDIA Network Operator
+     - NVIDIA (OSS)
+     - nvcr.io/nvstaging/mellanox
+     - network-operator
+     - v25.4.0-beta.1
+     - Yes
+     - 
+   * - NVIDIA Network Operator
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - network-operator-init-container
+     - v0.0.3
+     - Yes
+     - 
+   * - DOCA-OFED Driver Container
+     - NVIDIA (EULA)
+     - nvcr.io/nvstaging/mellanox
+     - doca-driver
+     - 25.04-0.3.8.0-0
+     - Yes
+     - LTS version: 24.10-0.7.0.0-0
+   * - RDMA Shared Device Plugin 
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - k8s-rdma-shared-dev-plugin
+     - v1.5.2
+     - Yes
+     - 
+   * - IB Kubernetes Plugin
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - ib-kubernetes
+     - v1.1.0
+     - Yes
+     - 
+   * - IP Over Infiniband (IPoIB) CNI plugin
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - ipoib-cni
+     - v1.1.0
+     - Yes
+     - 
+   * - NVIDIA IPAM Plugin
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - nvidia-k8s-ipam
+     - v0.3.6
+     - Yes
+     - 
+   * - NVIDIA NIC Feature Discovery
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - nic-feature-discovery
+     - v0.0.1
+     - Yes
+     - 
+   * - DOCA Telemetry Service (DTS)
+     - NVIDIA (EULA)
+     - nvcr.io/nvidia/doca
+     - doca_telemetry
+     - 1.16.5-doca2.6.0-host
+     - Yes
+     - 
+   * - Node Feature Discovery
+     - Community (OSS)
+     - registry.k8s.io/nfd
+     - node-feature-discovery
+     - v0.15.6
+     - Yes
+     - Optionally deployed. May already be present in the cluster with proper configuration.
+   * - SRIOV Network Operator
+     - Community (OSS)
+     - nvcr.io/nvstaging/mellanox
+     - sriov-network-operator
+     - network-operator-25.4.0-beta.1
+     - Yes
+     - 
+   * - SRIOV Network Operator
+     - Community (OSS)
+     - nvcr.io/nvstaging/mellanox
+     - sriov-network-operator-webhook
+     - network-operator-25.4.0-beta.1
+     - Yes
+     - 
+   * - SRIOV Network Operator
+     - Community (OSS)
+     - nvcr.io/nvstaging/mellanox
+     - sriov-network-operator-config-daemon
+     - network-operator-25.4.0-beta.1
+     - Yes
+     - 
+   * - SR-IOV Network Device Plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - sriov-network-device-plugin
+     - v3.9.0
+     - Yes
+     - 
+   * - SR-IOV CNI plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - sriov-cni
+     - v2.8.1
+     - Yes
+     - 
+   * - InfiniBand SR-IOV CNI plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - ib-sriov-cni
+     - v1.1.1
+     - Yes
+     - 
+   * - K8s CNI network plugins
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - plugins
+     - v1.6.2
+     - Yes
+     - 
+   * - Multus CNI
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - multus-cni
+     - v4.1.0
+     - Yes
+     - 
+   * - Whereabouts IPAM Plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - whereabouts
+     - v0.7.0
+     - Yes
+     - 
+   * - RDMA CNI plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - rdma-cni
+     - v1.2.0
+     - Yes
+     - 
+   * - Open vSwitch CNI plugin
+     - Community (OSS)
+     - ghcr.io/k8snetworkplumbingwg
+     - ovs-cni-plugin
+     - v0.37.0
+     - No
+     - 
+   * - NVIDIA NIC Configuration Operator
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - nic-configuration-operator
+     - v0.1.18
+     - No
+     - 
+   * - NVIDIA NIC Configuration Operator
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - nic-configuration-operator-daemon
+     - v0.1.18
+     - No
+     - 
+   * - NVIDIA Maintenance Operator
+     - NVIDIA (OSS)
+     - ghcr.io/mellanox
+     - maintenance-operator
+     - v0.2.0
+     - No
+     - 
