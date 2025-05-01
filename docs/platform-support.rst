@@ -271,7 +271,7 @@ The following component versions are deployed by **NVIDIA Network Operator**:
    * - Component
      - Origin
      - Repository
-     - Image Image
+     - Image Name
      - Tag
      - NVAIE
      - Notes
