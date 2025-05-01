@@ -275,168 +275,168 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - Tag
      - NVAIE
      - Notes
-   * - NVIDIA Network Operator
+   * - `NVIDIA Network Operator <https://github.com/Mellanox/network-operator>`_
      - NVIDIA (OSS)
      - nvcr.io/nvstaging/mellanox
      - network-operator
      - v25.4.0-beta.1
      - Yes
      - 
-   * - NVIDIA Network Operator
+   * - `NVIDIA Network Operator <https://github.com/Mellanox/network-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - network-operator-init-container
      - v0.0.3
      - Yes
      - 
-   * - DOCA-OFED Driver Container
+   * - `DOCA-OFED Driver Container <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver>`_
      - NVIDIA (EULA)
      - nvcr.io/nvstaging/mellanox
      - doca-driver
      - 25.04-0.3.8.0-0
      - Yes
      - LTS version: 24.10-0.7.0.0-0
-   * - RDMA Shared Device Plugin 
+   * - `RDMA Shared Device Plugin <https://github.com/Mellanox/k8s-rdma-shared-dev-plugin>`_ 
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - k8s-rdma-shared-dev-plugin
      - v1.5.2
      - Yes
      - 
-   * - IB Kubernetes Plugin
+   * - `IB Kubernetes Plugin <https://github.com/Mellanox/ib-kubernetes>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - ib-kubernetes
      - v1.1.0
      - Yes
      - 
-   * - IP Over Infiniband (IPoIB) CNI plugin
+   * - `IP Over Infiniband (IPoIB) CNI plugin <https://github.com/Mellanox/ipoib-cni>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - ipoib-cni
      - v1.1.0
      - Yes
      - 
-   * - NVIDIA IPAM Plugin
+   * - `NVIDIA IPAM Plugin <https://github.com/Mellanox/nvidia-k8s-ipam>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nvidia-k8s-ipam
      - v0.3.6
      - Yes
      - 
-   * - NVIDIA NIC Feature Discovery
+   * - `NVIDIA NIC Feature Discovery <https://github.com/Mellanox/nic-feature-discovery>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-feature-discovery
      - v0.0.1
      - Yes
      - 
-   * - DOCA Telemetry Service (DTS)
+   * - `DOCA Telemetry Service (DTS) <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry>`_
      - NVIDIA (EULA)
      - nvcr.io/nvidia/doca
      - doca_telemetry
      - 1.16.5-doca2.6.0-host
      - Yes
      - 
-   * - Node Feature Discovery
+   * - `Node Feature Discovery <https://github.com/kubernetes-sigs/node-feature-discovery>`_
      - Community (OSS)
      - registry.k8s.io/nfd
      - node-feature-discovery
      - v0.15.6
      - Yes
      - Optionally deployed. May already be present in the cluster with proper configuration.
-   * - SRIOV Network Operator
+   * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
      - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
      - network-operator-25.4.0-beta.1
      - Yes
      - 
-   * - SRIOV Network Operator
+   * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
      - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
      - network-operator-25.4.0-beta.1
      - Yes
      - 
-   * - SRIOV Network Operator
+   * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
      - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
      - network-operator-25.4.0-beta.1
      - Yes
      - 
-   * - SR-IOV Network Device Plugin
+   * - `SR-IOV Network Device Plugin <https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - sriov-network-device-plugin
      - v3.9.0
      - Yes
      - 
-   * - SR-IOV CNI plugin
+   * - `SR-IOV CNI plugin <https://github.com/k8snetworkplumbingwg/sriov-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - sriov-cni
      - v2.8.1
      - Yes
      - 
-   * - InfiniBand SR-IOV CNI plugin
+   * - `InfiniBand SR-IOV CNI plugin <https://github.com/k8snetworkplumbingwg/ib-sriov-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - ib-sriov-cni
      - v1.1.1
      - Yes
      - 
-   * - K8s CNI network plugins
+   * - `K8s CNI network plugins <https://github.com/containernetworking/plugins>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - plugins
      - v1.6.2
      - Yes
      - 
-   * - Multus CNI
+   * - `Multus CNI <https://github.com/k8snetworkplumbingwg/multus-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - multus-cni
      - v4.1.0
      - Yes
      - 
-   * - Whereabouts IPAM Plugin
+   * - `Whereabouts IPAM Plugin <https://github.com/k8snetworkplumbingwg/whereabouts>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - whereabouts
      - v0.7.0
      - Yes
      - 
-   * - RDMA CNI plugin
+   * - `RDMA CNI plugin <https://github.com/k8snetworkplumbingwg/rdma-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - rdma-cni
      - v1.2.0
      - Yes
      - 
-   * - Open vSwitch CNI plugin
+   * - `Open vSwitch CNI plugin <https://github.com/k8snetworkplumbingwg/ovs-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - ovs-cni-plugin
      - v0.37.0
      - No
      - 
-   * - NVIDIA NIC Configuration Operator
+   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-configuration-operator
      - v0.1.18
      - No
      - 
-   * - NVIDIA NIC Configuration Operator
+   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-configuration-operator-daemon
      - v0.1.18
      - No
      - 
-   * - NVIDIA Maintenance Operator
+   * - `NVIDIA Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - maintenance-operator
