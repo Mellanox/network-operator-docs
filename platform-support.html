@@ -100,20 +100,20 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-component-matrix" id="id2">Network Operator Component Matrix</a></p></li>
-<li><p><a class="reference internal" href="#system-requirements" id="id3">System Requirements</a></p></li>
-<li><p><a class="reference internal" href="#supported-nvidia-network-adapters" id="id4">Supported NVIDIA Network Adapters</a></p></li>
-<li><p><a class="reference internal" href="#supported-nvidia-data-center-systems" id="id5">Supported NVIDIA Data Center Systems</a></p></li>
-<li><p><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms" id="id6">Supported Operating Systems and Kubernetes Platforms</a></p></li>
-<li><p><a class="reference internal" href="#supported-container-runtimes" id="id7">Supported Container Runtimes</a></p></li>
-<li><p><a class="reference internal" href="#supported-precompiled-container-images-for-doca-drivers" id="id8">Supported Precompiled Container Images for DOCA Drivers</a></p>
+<li><p><a class="reference internal" href="#prerequisites" id="id5">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#system-requirements" id="id6">System Requirements</a></p></li>
+<li><p><a class="reference internal" href="#supported-nvidia-network-adapters" id="id7">Supported NVIDIA Network Adapters</a></p></li>
+<li><p><a class="reference internal" href="#supported-nvidia-data-center-systems" id="id8">Supported NVIDIA Data Center Systems</a></p></li>
+<li><p><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms" id="id9">Supported Operating Systems and Kubernetes Platforms</a></p></li>
+<li><p><a class="reference internal" href="#supported-container-runtimes" id="id10">Supported Container Runtimes</a></p></li>
+<li><p><a class="reference internal" href="#supported-precompiled-container-images-for-doca-drivers" id="id11">Supported Precompiled Container Images for DOCA Drivers</a></p>
 <ul>
-<li><p><a class="reference internal" href="#overview" id="id9">Overview</a></p></li>
-<li><p><a class="reference internal" href="#supported-operating-systems" id="id10">Supported Operating Systems</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id12">Overview</a></p></li>
+<li><p><a class="reference internal" href="#supported-operating-systems" id="id13">Supported Operating Systems</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id14">Limitations</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#network-operator-component-matrix" id="id15">Network Operator Component Matrix</a></p></li>
 </ul>
 </div>
 <section id="prerequisites">
@@ -142,73 +142,6 @@
 <tr class="row-even"><td><p>Node Feature Discovery</p></td>
 <td><p>&gt;=0.15.6 and &lt;=0.17.0</p></td>
 <td><p>When deploying the Network Operator and GPU Operator on the same cluster, ensure only one instance of Node Feature Discovery (NFD) is installed. We recommend using the version included with the GPU Operator.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="network-operator-component-matrix">
-<h2>Network Operator Component Matrix<a class="headerlink" href="#network-operator-component-matrix" title="Permalink to this headline"></a></h2>
-<p>The following component versions are deployed by <strong>NVIDIA Network Operator</strong>:</p>
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Component</p></th>
-<th class="head"><p>Container Image</p></th>
-<th class="head"><p>Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Node Feature Discovery</p></td>
-<td><p>registry.k8s.io/nfd/node-feature-discovery:v0.15.6</p></td>
-<td><p>Optionally deployed. May already be present in the cluster with proper configuration.</p></td>
-</tr>
-<tr class="row-odd"><td><p>NVIDIA DOCA Driver container</p></td>
-<td><p>nvcr.io/nvidia/mellanox/doca-driver:25.04-0.3.8.0-0</p></td>
-<td><p>LTS version: 24.10-0.7.0.0-0</p></td>
-</tr>
-<tr class="row-even"><td><p>k8s-rdma-shared-device-plugin</p></td>
-<td><p>ghcr.io/mellanox/k8s-rdma-shared-dev-plugin:v1.5.3</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>sriov-network-device-plugin</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.9.0</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>containernetworking CNI plugins</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/plugins:v1.6.2-update.1</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>whereabouts CNI</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/whereabouts:v0.7.0</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>multus CNI</p></td>
-<td><p>ghcr.io/k8snetworkplumbingwg/multus-cni:v4.1.0</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>IPoIB CNI</p></td>
-<td><p>ghcr.io/mellanox/ipoib-cni:v1.2.2</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>IB Kubernetes</p></td>
-<td><p>ghcr.io/mellanox/ib-kubernetes:v1.1.1</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>NV IPAM Plugin</p></td>
-<td><p>ghcr.io/mellanox/nvidia-k8s-ipam:v0.3.7</p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>NIC Feature Discovery</p></td>
-<td><p>ghcr.io/mellanox/nic-feature-discovery:v0.0.2</p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>DOCA Telemetry</p></td>
-<td><p>nvcr.io/nvidia/doca/doca_telemetry:1.16.5-doca2.6.0-host</p></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -482,6 +415,225 @@
 </div>
 </section>
 </section>
+<section id="network-operator-component-matrix">
+<h2>Network Operator Component Matrix<a class="headerlink" href="#network-operator-component-matrix" title="Permalink to this headline"></a></h2>
+<p>The following component versions are deployed by <strong>NVIDIA Network Operator</strong>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Origin</p></th>
+<th class="head"><p>Repository</p></th>
+<th class="head"><p>Image Name</p></th>
+<th class="head"><p>Tag</p></th>
+<th class="head"><p>NVAIE</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Mellanox/network-operator">NVIDIA Network Operator</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>network-operator</p></td>
+<td><p>v25.4.0-beta.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/network-operator">NVIDIA Network Operator</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>network-operator-init-container</p></td>
+<td><p>v0.0.3</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver">DOCA-OFED Driver Container</a></p></td>
+<td><p>NVIDIA (EULA)</p></td>
+<td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>doca-driver</p></td>
+<td><p>25.04-0.3.8.0-0</p></td>
+<td><p>Yes</p></td>
+<td><p>LTS version: 24.10-0.7.0.0-0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/k8s-rdma-shared-dev-plugin">RDMA Shared Device Plugin</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>k8s-rdma-shared-dev-plugin</p></td>
+<td><p>v1.5.2</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Mellanox/ib-kubernetes">IB Kubernetes Plugin</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>ib-kubernetes</p></td>
+<td><p>v1.1.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/ipoib-cni">IP Over Infiniband (IPoIB) CNI plugin</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>ipoib-cni</p></td>
+<td><p>v1.1.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Mellanox/nvidia-k8s-ipam">NVIDIA IPAM Plugin</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>nvidia-k8s-ipam</p></td>
+<td><p>v0.3.6</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/nic-feature-discovery">NVIDIA NIC Feature Discovery</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>nic-feature-discovery</p></td>
+<td><p>v0.0.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry">DOCA Telemetry Service (DTS)</a></p></td>
+<td><p>NVIDIA (EULA)</p></td>
+<td><p>nvcr.io/nvidia/doca</p></td>
+<td><p>doca_telemetry</p></td>
+<td><p>1.16.5-doca2.6.0-host</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/kubernetes-sigs/node-feature-discovery">Node Feature Discovery</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>registry.k8s.io/nfd</p></td>
+<td><p>node-feature-discovery</p></td>
+<td><p>v0.15.6</p></td>
+<td><p>Yes</p></td>
+<td><p>Optionally deployed. May already be present in the cluster with proper configuration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator">SRIOV Network Operator</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator</p></td>
+<td><p>network-operator-25.4.0-beta.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator">SRIOV Network Operator</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator-webhook</p></td>
+<td><p>network-operator-25.4.0-beta.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator">SRIOV Network Operator</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator-config-daemon</p></td>
+<td><p>network-operator-25.4.0-beta.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin">SR-IOV Network Device Plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>sriov-network-device-plugin</p></td>
+<td><p>v3.9.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-cni">SR-IOV CNI plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>sriov-cni</p></td>
+<td><p>v2.8.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/ib-sriov-cni">InfiniBand SR-IOV CNI plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>ib-sriov-cni</p></td>
+<td><p>v1.1.1</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/containernetworking/plugins">K8s CNI network plugins</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>plugins</p></td>
+<td><p>v1.6.2</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus CNI</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>multus-cni</p></td>
+<td><p>v4.1.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/whereabouts">Whereabouts IPAM Plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>whereabouts</p></td>
+<td><p>v0.7.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/rdma-cni">RDMA CNI plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>rdma-cni</p></td>
+<td><p>v1.2.0</p></td>
+<td><p>Yes</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/ovs-cni">Open vSwitch CNI plugin</a></p></td>
+<td><p>Community (OSS)</p></td>
+<td><p>ghcr.io/k8snetworkplumbingwg</p></td>
+<td><p>ovs-cni-plugin</p></td>
+<td><p>v0.37.0</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>nic-configuration-operator</p></td>
+<td><p>v0.1.18</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>nic-configuration-operator-daemon</p></td>
+<td><p>v0.1.18</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/Mellanox/maintenance-operator">NVIDIA Maintenance Operator</a></p></td>
+<td><p>NVIDIA (OSS)</p></td>
+<td><p>ghcr.io/mellanox</p></td>
+<td><p>maintenance-operator</p></td>
+<td><p>v0.2.0</p></td>
+<td><p>No</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 
 
@@ -493,7 +645,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 28, 2025.
+      <span class="lastupdated">Last updated on May 02, 2025.
       </span></p>
   </div>
 
