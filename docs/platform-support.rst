@@ -277,169 +277,169 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - Notes
    * - `NVIDIA Network Operator <https://github.com/Mellanox/network-operator>`_
      - NVIDIA (OSS)
-     - nvcr.io/nvstaging/mellanox
+     - nvcr.io/nvidia/cloud-native
      - network-operator
-     - v25.4.0-beta.1
+     - |network-operator-version|
      - Yes
      - 
    * - `NVIDIA Network Operator <https://github.com/Mellanox/network-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - network-operator-init-container
-     - v0.0.3
+     - |doca-init-container-version|
      - Yes
      - 
    * - `DOCA-OFED Driver Container <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver>`_
      - NVIDIA (EULA)
-     - nvcr.io/nvstaging/mellanox
+     - nvcr.io/nvidia/mellanox
      - doca-driver
-     - 25.04-0.3.8.0-0
+     - |doca-driver-version|
      - Yes
-     - LTS version: 24.10-0.7.0.0-0
+     - LTS version: |doca-driver-version-lts|
    * - `RDMA Shared Device Plugin <https://github.com/Mellanox/k8s-rdma-shared-dev-plugin>`_ 
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - k8s-rdma-shared-dev-plugin
-     - v1.5.2
+     - |k8s-rdma-shared-dev-plugin-version|
      - Yes
      - 
    * - `IB Kubernetes Plugin <https://github.com/Mellanox/ib-kubernetes>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - ib-kubernetes
-     - v1.1.0
+     - |ib-kubernetes-version|
      - Yes
      - 
    * - `IP Over Infiniband (IPoIB) CNI plugin <https://github.com/Mellanox/ipoib-cni>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - ipoib-cni
-     - v1.1.0
+     - |ipoib-cni-version|
      - Yes
      - 
    * - `NVIDIA IPAM Plugin <https://github.com/Mellanox/nvidia-k8s-ipam>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nvidia-k8s-ipam
-     - v0.3.6
+     - |nvidia-ipam-version|
      - Yes
      - 
    * - `NVIDIA NIC Feature Discovery <https://github.com/Mellanox/nic-feature-discovery>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-feature-discovery
-     - v0.0.1
+     - |nic-feature-discovery-version|
      - Yes
      - 
    * - `DOCA Telemetry Service (DTS) <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry>`_
      - NVIDIA (EULA)
      - nvcr.io/nvidia/doca
      - doca_telemetry
-     - 1.16.5-doca2.6.0-host
+     - |doca-telemetry-version|
      - Yes
      - 
    * - `Node Feature Discovery <https://github.com/kubernetes-sigs/node-feature-discovery>`_
      - Community (OSS)
      - registry.k8s.io/nfd
      - node-feature-discovery
-     - v0.15.6
+     - |node-feature-discovery-version|
      - Yes
      - Optionally deployed. May already be present in the cluster with proper configuration.
    * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
-     - nvcr.io/nvstaging/mellanox
+     - nvcr.io/nvidia/mellanox
      - sriov-network-operator
-     - network-operator-25.4.0-beta.1
+     - |sriovnetop-version|
      - Yes
      - 
    * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
-     - nvcr.io/nvstaging/mellanox
+     - nvcr.io/nvidia/mellanox
      - sriov-network-operator-webhook
-     - network-operator-25.4.0-beta.1
+     - |sriovnetop-version|
      - Yes
      - 
    * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
-     - nvcr.io/nvstaging/mellanox
+     - nvcr.io/nvidia/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-25.4.0-beta.1
+     - |sriovnetop-version|
      - Yes
      - 
    * - `SR-IOV Network Device Plugin <https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - sriov-network-device-plugin
-     - v3.9.0
+     - |sriovnetop-sriov-device-plugin-version|
      - Yes
      - 
    * - `SR-IOV CNI plugin <https://github.com/k8snetworkplumbingwg/sriov-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - sriov-cni
-     - v2.8.1
+     - |sriovnetop-sriov-cni-version|
      - Yes
      - 
    * - `InfiniBand SR-IOV CNI plugin <https://github.com/k8snetworkplumbingwg/ib-sriov-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - ib-sriov-cni
-     - v1.1.1
+     - |sriovnetop-ib-sriov-cni-version|
      - Yes
      - 
    * - `K8s CNI network plugins <https://github.com/containernetworking/plugins>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - plugins
-     - v1.6.2
+     - |cni-plugins-version|
      - Yes
      - 
    * - `Multus CNI <https://github.com/k8snetworkplumbingwg/multus-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - multus-cni
-     - v4.1.0
+     - |multus-version|
      - Yes
      - 
    * - `Whereabouts IPAM Plugin <https://github.com/k8snetworkplumbingwg/whereabouts>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - whereabouts
-     - v0.7.0
+     - |whereabouts-version|
      - Yes
      - 
    * - `RDMA CNI plugin <https://github.com/k8snetworkplumbingwg/rdma-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - rdma-cni
-     - v1.2.0
+     - |rdma-cni-version|
      - Yes
      - 
    * - `Open vSwitch CNI plugin <https://github.com/k8snetworkplumbingwg/ovs-cni>`_
      - Community (OSS)
      - ghcr.io/k8snetworkplumbingwg
      - ovs-cni-plugin
-     - v0.37.0
+     - |ovs-cni-version|
      - No
      - 
    * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-configuration-operator
-     - v0.1.18
+     - |nic-configuration-operator-version|
      - No
      - 
    * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - nic-configuration-operator-daemon
-     - v0.1.18
+     - |nic-configuration-operator-version|
      - No
      - 
    * - `NVIDIA Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_
      - NVIDIA (OSS)
      - ghcr.io/mellanox
      - maintenance-operator
-     - v0.2.0
+     - |maintenance-operator-version|
      - No
      - 

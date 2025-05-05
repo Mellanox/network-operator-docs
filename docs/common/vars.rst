@@ -21,3 +21,6 @@
 .. |node-feature-discovery-version| replace:: v0.15.6
 .. |doca-driver-build-commit| replace::  a8a0f73337303b41111e1a46500f110d3663bfa0
 .. |nic-configuration-operator-version| replace:: v1.0.0
+.. |maintenance-operator-version| replace:: v0.2.1
+.. |ovs-cni-version| replace:: v0.38.2
+.. |rdma-cni-version| replace:: v1.3.0
