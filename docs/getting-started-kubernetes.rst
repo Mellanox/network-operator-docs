@@ -110,7 +110,9 @@ Update Helm repositories
 
    helm repo update
 
+----------------------------------------------------------------------------
 Install Network Operator from the NVIDIA NGC chart using the default values:
+----------------------------------------------------------------------------
 
 .. code-block:: bash
    :substitutions:
@@ -127,7 +129,9 @@ View deployed resources
 
    kubectl -n nvidia-network-operator get pods
 
-Install the Network Operator from the NVIDIA NGC chart using custom values:
+------------------------------------------------------------------------------
+OR install the Network Operator from the NVIDIA NGC chart using custom values:
+------------------------------------------------------------------------------
 
 .. warning:: Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.
 
