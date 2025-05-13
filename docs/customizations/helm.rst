@@ -217,7 +217,7 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      - Type
      - Default in NVIDIA Network Operator
      - Notes
-   * - node-feature-discovery.cleanupLabels
+   * - node-feature-discovery.postDeleteCleanup
      - bool
      - `false`
      - Enable labels cleanup when uninstalling NFD
