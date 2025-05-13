@@ -2559,8 +2559,6 @@ Configure NIC Firmware using the NIC Configuration Operator
 ===========================================================================
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
 
-.. warning:: `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ is required to be deployed in the cluster for the NIC Configuration Operator
-
 .. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check `limitations <https://github.com/Mellanox/network-operator-docs/blob/main/docs/release-notes.rst>`_
 
 .. note::
@@ -2568,7 +2566,14 @@ Configure NIC Firmware using the NIC Configuration Operator
     To set up a persistent NFS storage in the cluster, the `example from the CSI NFS Driver repository <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md>`_ might be used.
     After deploying the NFS server and NFS CSI driver, the `storage class <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml>`_ should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
 
-First install the Network Operator and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:
+First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:
+
+``values.yaml``:
+
+.. code-block:: yaml
+
+    maintenanceOperator:
+      enabled: true
 
 ``nicclusterpolicy.yaml``:
 
