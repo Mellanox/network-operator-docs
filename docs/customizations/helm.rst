@@ -107,7 +107,7 @@ General Parameters
      - Network Operator image name
    * - operator.maintenanceOperator
      - object
-     - `{"nodeMaintenanceNamespace":"default","requestorID":"nvidia.network.operator","useRequestor":false}`
+     - `{"nodeMaintenanceNamePrefix":"network-operator","nodeMaintenanceNamespace":"default","requestorID":"nvidia.network.operator","useRequestor":false}`
      - Enable the use of maintenance operator upgrade logic.
    * - operator.nameOverride
      - string
@@ -217,10 +217,6 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      - Type
      - Default in NVIDIA Network Operator
      - Notes
-   * - node-feature-discovery.postDeleteCleanup
-     - bool
-     - `false`
-     - Enable labels cleanup when uninstalling NFD
    * - node-feature-discovery.enableNodeFeatureApi
      - bool
      - `true`
@@ -256,6 +252,10 @@ Node Feature Discovery Helm chart customization options can be found `here <http
               extraLabelNs: ["nvidia.com"]
          
      - NFD master deployment configuration.
+   * - node-feature-discovery.postDeleteCleanup
+     - bool
+     - `false`
+     - Enable labels cleanup when uninstalling NFD
    * - node-feature-discovery.worker
      - yaml
      - .. code-block:: yaml
@@ -305,7 +305,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-rc.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
@@ -321,7 +321,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
@@ -329,7 +329,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-rc.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -437,7 +437,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.configDaemon.image.tag
      - string
-     - `"v1.0.0"`
+     - `"v1.0.3"`
      -
    * - nic-configuration-operator-chart.operator.image.name
      - string
@@ -449,7 +449,7 @@ NIC Configuration Operator Helm chart customization options can be found `here <
      -
    * - nic-configuration-operator-chart.operator.image.tag
      - string
-     - `"v1.0.0"`
+     - `"v1.0.3"`
      -
 
 ====================
