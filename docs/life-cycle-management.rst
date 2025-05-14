@@ -347,8 +347,8 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
      - Set when DOCA Driver POD is up-to-date and running on the node, the node is schedulable.
    * - ``upgrade-required``
      - Set when DOCA Driver POD on the node is not up-to-date and requires upgrade. No actions are performed at this stage.
-   * - ``node-maintenance-required`` 
-     - Set when requestor mode upgrade is used (e.g. ``MAINTENANCE_OPERATOR_ENABLED=true``) post ``upgrade-required`` state. Essentially it will create a matching nodeMaintenance object for maintenance operator to perform its node operations.
+   * - ``node-maintenance-required``
+     - Set when requestor mode upgrade is used, e.g. `MAINTENANCE_OPERATOR_ENABLED=true`, post `upgrade-required` state. Essentially it will create a matching nodeMaintenance object for dedicated node(s), utilizing maintenance operator to perform its node operations.
    * - ``cordon-required``
      - Set when the node needs to be made unschedulable in preparation for driver upgrade.
    * - ``wait-for-jobs-required``
@@ -396,27 +396,34 @@ DOCA Driver upgrade supports the following modes:
 
 .. list-table::
    :header-rows: 1
+
    * - Mode
      - Description
    * - In-place
-     - In-place (legacy) mode is incorporating full driver upgrade lifecycle, including nodes operations e.g. cordon, pod eviction, drain, uncordon. It also maintains an internal scheduler for performing above node operations, according to provided ``maxParallelUpgrades`` under ``UpgradePolicy``.
+     - In-place (legacy) mode is incorporates full driver upgrade lifecycle, including nodes operations e.g. cordon, pod eviction, drain, uncordon. It also maintains an internal scheduler for performing above node operations, according to provided ``maxParallelUpgrades`` under ``UpgradePolicy``.
    * - Requestor
      - New ``requestor`` upgrade mode uses NVIDIA maintenance operator (please refer to `maintenance-operator repo`_) nodeMaintenance k8s API objects, to initiate the DOCA driver upgrade process. Essentially, it will retire current upgrade controller (in-place mode) from performing the following node operations: cordon, wait for pods completion, drain, uncordon. To enable requestor mode, the following environment variable should be enabled ``MAINTENANCE_OPERATOR_ENABLED=true``.
 
-.. note:: Enabling requestor mode will require deployment of NVIDIA maintenance operator on the cluster. Also this can be done through Network Operator helm ``values.yaml``:
+.. note:: Enabling requestor mode will require deployment of NVIDIA maintenance operator on the cluster.
+  By default, upgrade controller will use in-place mode.
+  ``nodeMaintenanceNamePrefix`` is used to distinguish between different (operators) requestors, requesting node maintenance operations on the same node(s).
+  Deploying maintenance operator, as well as enabling requestor mode, setting requestors env variables ``MAINTENANCE_OPERATOR_REQUESTOR_ID``, ``MAINTENANCE_OPERATOR_REQUESTOR_NAMESPACE``, ``MAINTENANCE_OPERATOR_NODE_MAINTENANCE_PREFIX``,
+  can be done through Network Operator helm ``values.yaml``:
+
 .. code-block:: yaml
+
+  maintenanceOperator:
+    enabled: true
+  maintenance-operator-chart:
+    operatorConfig:
+      maxParallelOperations: 2
+      maxUnavailable: 2
+  operator:
     maintenanceOperator:
-      enabled: true
-    maintenance-operator-chart:
-      operatorConfig:
-        maxParallelOperations: 4
-        maxUnavailable: 2
-    operator:
-      maintenanceOperator:
-        useRequestor: true
-        requestorID: "nvidia.network.operator"
-        nodeMaintenanceNamePrefix: "network-operator"
-        nodeMaintenanceNamespace: default      
+      useRequestor: true
+      requestorID: "nvidia.network.operator"
+      nodeMaintenanceNamePrefix: "network-operator"
+      nodeMaintenanceNamespace: default
 
 ###################
 Safe Driver Loading
