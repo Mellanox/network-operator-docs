@@ -81,6 +81,7 @@ type Release struct {
 	NicConfigurationOperator     *ReleaseImageSpec
 	NicConfigurationConfigDaemon *ReleaseImageSpec
 	MaintenanceOperator          *ReleaseImageSpec
+	SpectrumXOperator            *ReleaseImageSpec
 }
 
 func readDefaults(releaseDefaults string) Release {

@@ -120,7 +120,10 @@ NVIDIA Network Operator Container Images
      - maintenance-operator
      - v0.2.2
      - sha256:951ff8b27a21109df91314f89745f061fb2dc357094da57de98e0117ee5b7359
-
+   * - ghcr.io/mellanox
+     - spectrum-x-operator
+     - v0.0.3
+     - sha256:d6a2546a8a65e1034d08ab7d85819f062769842dc96513b4fec44f75d3077316
 
 ============================
 DOCA Driver Container Images
@@ -250,6 +253,9 @@ RHCOS
    * -
        | 25.04-0.6.1.0-2-rhcos4.18
      - sha256:6bee03b26e7abf7e61b69522ece35e35648c6f4d52a89519bca2407a8c6087b9
+   * -
+       | 25.04-0.6.1.0-200-rhcos4.18-amd64
+     - sha256:10a29c282d159a66e972bd2be12a8dce03c3b891deed07ad2b97c9ed9c1c2afe
 
 ----
 RHEL
