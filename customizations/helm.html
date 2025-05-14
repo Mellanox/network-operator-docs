@@ -214,7 +214,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>operator.maintenanceOperator</p></td>
 <td><p>object</p></td>
-<td><p><cite>{“nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.network.operator”,”useRequestor”:false}</cite></p></td>
+<td><p><cite>{“nodeMaintenanceNamePrefix”:”network-operator”,”nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.network.operator”,”useRequestor”:false}</cite></p></td>
 <td><p>Enable the use of maintenance operator upgrade logic.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.nameOverride</p></td>
@@ -348,42 +348,37 @@ can find those below.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>node-feature-discovery.postDeleteCleanup</p></td>
-<td><p>bool</p></td>
-<td><p><cite>false</cite></p></td>
-<td><p>Enable labels cleanup when uninstalling NFD</p></td>
-</tr>
-<tr class="row-odd"><td><p>node-feature-discovery.enableNodeFeatureApi</p></td>
+<tr class="row-even"><td><p>node-feature-discovery.enableNodeFeatureApi</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>The Node Feature API enable communication between nfd master and worker through NodeFeature CRs. Otherwise communication is through gRPC.</p></td>
 </tr>
-<tr class="row-even"><td><p>node-feature-discovery.featureGates.NodeFeatureAPI</p></td>
+<tr class="row-odd"><td><p>node-feature-discovery.featureGates.NodeFeatureAPI</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>node-feature-discovery.gc.enable</p></td>
+<tr class="row-even"><td><p>node-feature-discovery.gc.enable</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Specifies whether the NFD Garbage Collector should be created</p></td>
 </tr>
-<tr class="row-even"><td><p>node-feature-discovery.gc.replicaCount</p></td>
+<tr class="row-odd"><td><p>node-feature-discovery.gc.replicaCount</p></td>
 <td><p>int</p></td>
 <td><p><cite>1</cite></p></td>
 <td><p>Specifies the number of replicas for the NFD Garbage Collector</p></td>
 </tr>
-<tr class="row-odd"><td><p>node-feature-discovery.gc.serviceAccount.create</p></td>
+<tr class="row-even"><td><p>node-feature-discovery.gc.serviceAccount.create</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>disable creation to avoid duplicate serviceaccount creation by master spec above.</p></td>
 </tr>
-<tr class="row-even"><td><p>node-feature-discovery.gc.serviceAccount.name</p></td>
+<tr class="row-odd"><td><p>node-feature-discovery.gc.serviceAccount.name</p></td>
 <td><p>string</p></td>
 <td><p><cite>“node-feature-discovery”</cite></p></td>
 <td><p>The name of the service account for garbage collector to use. If not set and create is true, a name is generated using the fullname template and -gc suffix.</p></td>
 </tr>
-<tr class="row-odd"><td><p>node-feature-discovery.master</p></td>
+<tr class="row-even"><td><p>node-feature-discovery.master</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-feature-discovery</span><span class="w"></span>
@@ -394,6 +389,11 @@ can find those below.</p>
 </div>
 </td>
 <td><p>NFD master deployment configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>node-feature-discovery.postDeleteCleanup</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td><p>Enable labels cleanup when uninstalling NFD</p></td>
 </tr>
 <tr class="row-even"><td><p>node-feature-discovery.worker</p></td>
 <td><p>yaml</p></td>
@@ -453,7 +453,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-25.4.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
@@ -473,7 +473,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-25.4.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
@@ -483,7 +483,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.webhook</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-25.4.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers</p></td>
@@ -608,7 +608,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>nic-configuration-operator-chart.configDaemon.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“v1.0.0”</cite></p></td>
+<td><p><cite>“v1.0.3”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.name</p></td>
@@ -623,7 +623,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“v1.0.0”</cite></p></td>
+<td><p><cite>“v1.0.3”</cite></p></td>
 <td></td>
 </tr>
 </tbody>
