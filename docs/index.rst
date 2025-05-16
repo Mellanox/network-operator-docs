@@ -28,5 +28,6 @@
    Customization Options and CRDs <customizations/customization.rst>
    Life Cycle Management <life-cycle-management.rst>
    Advanced Configurations <advanced/advanced.rst>
+   Legal Notices and 3rd Party Licenses <licenses.rst>
 
 .. include:: overview.rst
