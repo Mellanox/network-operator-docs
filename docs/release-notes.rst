@@ -147,6 +147,9 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 25.4.0
+     - | - Whereabouts support will be deprecated in Network Operator 25.7.
+           It is advised to migrate to NV-IPAM as 'ipam' plugin.
    * - 24.10.0
      - | - Dropped Multus CNI support for versions older than v4.1.0.
    * - 24.7.0
