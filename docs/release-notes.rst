@@ -36,6 +36,12 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.4.0
+     - | - Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases.
+       | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA OFED container upgrade.
+       | - Added support for OpenShift 4.18.
+       | - Added support for ConnectX-8 SuperNIC.
+       | - Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview.       
    * - 25.1.0
      - | - Added support for OpenShift Container Platform v4.17.
        | - Added support for SUSE Linux Enterprise Server 15 SP6 with Upstream K8s and Rancher.
