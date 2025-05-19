@@ -24,3 +24,4 @@
 .. |maintenance-operator-version| replace:: v0.2.2
 .. |ovs-cni-version| replace:: v0.38.2
 .. |rdma-cni-version| replace:: v1.3.0
+.. |spectrumxop-version| replace:: v0.0.3
