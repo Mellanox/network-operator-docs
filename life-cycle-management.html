@@ -128,23 +128,24 @@
 <li><p><a class="reference internal" href="#automatic-doca-driver-upgrade" id="id17">Automatic DOCA  Driver Upgrade</a></p>
 <ul>
 <li><p><a class="reference internal" href="#node-upgrade-states" id="id18">Node Upgrade States</a></p></li>
-<li><p><a class="reference internal" href="#safe-driver-loading" id="id19">Safe Driver Loading</a></p>
+<li><p><a class="reference internal" href="#upgrade-modes" id="id19">Upgrade modes</a></p></li>
+<li><p><a class="reference internal" href="#safe-driver-loading" id="id20">Safe Driver Loading</a></p>
 <ul>
-<li><p><a class="reference internal" href="#troubleshooting" id="id20">Troubleshooting</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id21">Troubleshooting</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id21">Uninstalling the Network Operator</a></p>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id22">Uninstalling the Network Operator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id22">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id23">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
-<li><p><a class="reference internal" href="#additional-steps" id="id24">Additional Steps</a></p></li>
+<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id23">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id24">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
+<li><p><a class="reference internal" href="#additional-steps" id="id25">Additional Steps</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id25">NicClusterPolicy CRD Update</a></p></li>
+<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id26">NicClusterPolicy CRD Update</a></p></li>
 </ul>
 </div>
 <section id="network-operator-versioning">
@@ -429,22 +430,25 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">upgrade-required</span></code></p></td>
 <td><p>Set when DOCA Driver POD on the node is not up-to-date and requires upgrade. No actions are performed at this stage.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cordon-required</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">node-maintenance-required</span></code></p></td>
+<td><p>Set when requestor mode upgrade is used, e.g. <cite>MAINTENANCE_OPERATOR_ENABLED=true</cite>, post <cite>upgrade-required</cite> state. Essentially it will create a matching nodeMaintenance object for dedicated node(s), utilizing maintenance operator to perform its node operations.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cordon-required</span></code></p></td>
 <td><p>Set when the node needs to be made unschedulable in preparation for driver upgrade.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">wait-for-jobs-required</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">wait-for-jobs-required</span></code></p></td>
 <td><p>Set on the node when waiting is required for jobs to complete until the given timeout.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">drain-required</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">drain-required</span></code></p></td>
 <td><p>Set when the node is scheduled for drain. After the drain, the state is changed either to pod-restart-required or upgrade-failed.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pod-restart-required</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pod-restart-required</span></code></p></td>
 <td><p>Set when the DOCA Driver POD on the node is scheduled for restart. After the restart, the state is changed to uncordon-required.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uncordon-required</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uncordon-required</span></code></p></td>
 <td><p>Set when DOCA Driver POD on the node is up-to-date and has “Ready” status. After uncordone, the state is changed to upgrade-done</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">upgrade-failed</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">upgrade-failed</span></code></p></td>
 <td><p>Set when the upgrade on the node has failed. Manual interaction is required at this stage. See Troubleshooting section for more details.</p></td>
 </tr>
 </tbody>
@@ -472,6 +476,51 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <span class="w">          </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 </pre></div>
 </div>
+</div>
+</section>
+<section id="upgrade-modes">
+<h4>Upgrade modes<a class="headerlink" href="#upgrade-modes" title="Permalink to this headline"></a></h4>
+<p>DOCA Driver upgrade supports the following modes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>In-place</p></td>
+<td><p>In-place (legacy) mode is incorporates full driver upgrade lifecycle, including nodes operations e.g. cordon, pod eviction, drain, uncordon. It also maintains an internal scheduler for performing above node operations, according to provided <code class="docutils literal notranslate"><span class="pre">maxParallelUpgrades</span></code> under <code class="docutils literal notranslate"><span class="pre">UpgradePolicy</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Requestor</p></td>
+<td><p>New <code class="docutils literal notranslate"><span class="pre">requestor</span></code> upgrade mode uses NVIDIA maintenance operator (please refer to <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">maintenance-operator repo</a>) nodeMaintenance k8s API objects, to initiate the DOCA driver upgrade process. Essentially, it will retire current upgrade controller (in-place mode) from performing the following node operations: cordon, wait for pods completion, drain, uncordon. To enable requestor mode, the following environment variable should be enabled <code class="docutils literal notranslate"><span class="pre">MAINTENANCE_OPERATOR_ENABLED=true</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Enabling requestor mode will require deployment of NVIDIA maintenance operator on the cluster.
+By default, upgrade controller will use in-place mode.
+<code class="docutils literal notranslate"><span class="pre">nodeMaintenanceNamePrefix</span></code> is used to distinguish between different (operators) requestors, requesting node maintenance operations on the same node(s).
+Deploying maintenance operator, as well as enabling requestor mode, setting requestors env variables <code class="docutils literal notranslate"><span class="pre">MAINTENANCE_OPERATOR_REQUESTOR_ID</span></code>, <code class="docutils literal notranslate"><span class="pre">MAINTENANCE_OPERATOR_REQUESTOR_NAMESPACE</span></code>, <code class="docutils literal notranslate"><span class="pre">MAINTENANCE_OPERATOR_NODE_MAINTENANCE_PREFIX</span></code>,
+can be done through Network Operator helm <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">maintenance-operator-chart</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">operatorConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">maxParallelOperations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="nt">operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">useRequestor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">requestorID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;nvidia.network.operator&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nodeMaintenanceNamePrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;network-operator&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nodeMaintenanceNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+</pre></div>
 </div>
 </section>
 <section id="safe-driver-loading">
@@ -607,7 +656,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on May 16, 2025.
+      <span class="lastupdated">Last updated on May 19, 2025.
       </span></p>
   </div>
 
