@@ -2515,16 +2515,16 @@ node2-101d-mt1952x03327   1m
 <span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
 <span class="nt">status</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:04Z&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device firmware spec is empty, cannot update or validate firmware</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FirmwareUpdateInProgress</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeviceFirmwareSpecEmpty</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device firmware spec is empty, cannot update or validate firmware</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:04Z&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigUpdateInProgress</span><span class="w"></span>
 <span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FirmwareUpdateInProgress</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device configuration spec is empty, cannot update configuration</span><span class="w"></span>
 <span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeviceConfigSpecEmpty</span><span class="w"></span>
-<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigUpdateInProgress</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device configuration spec is empty, cannot update configuration</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
 <span class="nt">firmwareVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">22.39.1015</span><span class="w"></span>
 <span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
 <span class="nt">partNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcx623106ac-cdat</span><span class="w"></span>
@@ -2549,7 +2549,7 @@ node2-101d-mt1952x03327   1m
 <span class="w">  </span><span class="nt">finalizers</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/nic-configuration-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># a list of firmware binaries from mlnx website if they are zipped try to unzip before placing</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># a list of firmware binaries zip archives from the Mellanox website, can point to any url accessible from the cluster</span><span class="w"></span>
 <span class="w">  </span><span class="nt">binUrlSources</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip</span><span class="w"></span>
 </pre></div>
@@ -2605,7 +2605,6 @@ status:
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
 <span class="w">      </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">maxAccOutRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44</span><span class="w"></span>
 <span class="w">         </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w"></span>
 <span class="w">      </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -2627,20 +2626,42 @@ status:
 </div>
 <p>For more information about the CRD API, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md">API documentation</a>.
 For more information, which FW parameter each settings corresponds to, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details">Configuration details doc section</a>.</p>
+<p>Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec}&#39;</span> <span class="p">|</span> yq -P
+
+template:
+  firmware:
+      nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+      updatePolicy: Update
+  configuration:
+      numVfs: <span class="m">2</span>
+      linkType: Ethernet
+      pciPerformanceOptimized:
+        enabled: <span class="nb">true</span>
+      roceOptimized:
+        enabled: <span class="nb">true</span>
+        qos:
+            trust: dscp
+            pfc: <span class="s2">&quot;0,0,0,1,0,0,0,0&quot;</span>
+      gpuDirectOptimized:
+        enabled: <span class="nb">true</span>
+        env: Baremetal
+</pre></div>
+</div>
 <p>Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
 
-- lastTransitionTime: <span class="s2">&quot;2024-09-21T08:42:23Z&quot;</span>
+- type: FirmwareUpdateInProgress
+  status: <span class="s2">&quot;False&quot;</span>
+  reason: DeviceFirmwareConfigMatch
   message: Firmware matches the requested version
   observedGeneration: <span class="m">4</span>
-  reason: DeviceFirmwareConfigMatch
-  status: <span class="s2">&quot;False&quot;</span>
-  type: FirmwareUpdateInProgress
-- lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:08Z&quot;</span>
-  message: <span class="s2">&quot;&quot;</span>
-  reason: UpdateStarted
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:42:23Z&quot;</span>
+- type: ConfigUpdateInProgress
   status: <span class="s2">&quot;True&quot;</span>
-  type: ConfigUpdateInProgress
+  reason: UpdateStarted
+  message: <span class="s2">&quot;&quot;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:08Z&quot;</span>
 </pre></div>
 </div>
 <section id="nic-firmware-mismatch-notification">
@@ -2648,21 +2669,21 @@ For more information, which FW parameter each settings corresponds to, refer to 
 <p>NIC Configuration Operator updates status conditions of the NicDevice CR to set <cite>FirmwareConfigMatch</cite> condition based on a current NIC firmware:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
 
-- lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:10Z&quot;</span>
-  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
-  reason: DeviceFirmwareConfigMatch
+- type: FirmwareConfigMatch
   status: <span class="s2">&quot;True&quot;</span>
-  type: FirmwareConfigMatch
+  reason: DeviceFirmwareConfigMatch
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:10Z&quot;</span>
 </pre></div>
 </div>
 <p><cite>FirmwareConfigMatch</cite> condition status is set to <cite>Unknown</cite> if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> &gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
 
-- lastTransitionTime: <span class="s2">&quot;2024-11-08T09:19:41Z&quot;</span>
-  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
-  reason: DeviceFirmwareConfigMatch
+- type: FirmwareConfigMatch
   status: <span class="s2">&quot;True&quot;</span>
-  type: FirmwareConfigMatch
+  reason: DeviceFirmwareConfigMatch
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-11-08T09:19:41Z&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -2678,7 +2699,7 @@ For more information, which FW parameter each settings corresponds to, refer to 
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on May 19, 2025.
+      <span class="lastupdated">Last updated on May 20, 2025.
       </span></p>
   </div>
 
