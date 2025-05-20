@@ -128,8 +128,8 @@ The following NVIDIA Data Center systems have been tested and validated with **N
    * - NVIDIA DGX/HGX B200
      - x86
      - NVIDIA Blackwell
-     - BlueField-3 SuperNIC (NIC mode)
-     - Ubuntu 24.04 (x86)
+     - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
+     - Ubuntu 22.04 / 24.04 (x86)
      - GA
 
 ====================================================
@@ -145,6 +145,7 @@ Supported Operating Systems and Kubernetes Platforms
      - Red Hat OpenShift
      - Rancher RKE2
      - Canonical MicroK8s
+     - Nutanix NKP
      - Notes
    * - Ubuntu 24.04 LTS
      - 1.29–1.32
@@ -152,20 +153,24 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - 1.29–1.32
      - —
+     - —
    * - Ubuntu 22.04 LTS
      - 1.29–1.32
      - —
      - —
      - 1.29–1.32
+     - 2.14 (K8s v1.31.4)
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
      - 4.15–4.18
      - —
      - —
+     - —
      - RT kernels support
    * - Red Hat Enterprise Linux 9.4 / 9.2
      - 1.29–1.32
+     - —
      - —
      - —
      - —
@@ -175,11 +180,13 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - —
+     - —
      - RT‑kernel support
    * - SUSE Linux Enterprise Server 15 SP6
      - 1.29–1.32
      - —
      - 1.29–1.32
+     - —
      - —
      - Kubernetes and Rancher
 
