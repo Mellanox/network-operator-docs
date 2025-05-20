@@ -2638,16 +2638,16 @@ Discover more information about a specific device:
     spec: {}
     status:
       conditions:
-      - lastTransitionTime: "2024-09-21T08:43:04Z"
-        message: Device firmware spec is empty, cannot update or validate firmware
+      - type: FirmwareUpdateInProgress
+        status: "False"
         reason: DeviceFirmwareSpecEmpty
+        message: Device firmware spec is empty, cannot update or validate firmware
+        lastTransitionTime: "2024-09-21T08:43:04Z"
+      - type: ConfigUpdateInProgress
         status: "False"
-        type: FirmwareUpdateInProgress
-      - lastTransitionTime: "2024-09-21T08:43:08Z"
-        message: Device configuration spec is empty, cannot update configuration
         reason: DeviceConfigSpecEmpty
-        status: "False"
-        type: ConfigUpdateInProgress
+        message: Device configuration spec is empty, cannot update configuration
+        lastTransitionTime: "2024-09-21T08:43:08Z"
     firmwareVersion: 22.39.1015
     node: cloud-dev-41
     partNumber: mcx623106ac-cdat
@@ -2674,7 +2674,7 @@ Configure and apply the NICFirmwareSource CR:
       finalizers:
         - configuration.net.nvidia.com/nic-configuration-operator
     spec:
-      # a list of firmware binaries from mlnx website if they are zipped try to unzip before placing
+      # a list of firmware binaries zip archives from the Mellanox website, can point to any url accessible from the cluster
       binUrlSources:
         - https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip
 
@@ -2736,7 +2736,6 @@ Configure and apply the NicConfigurationTemplate CR:
           linkType: Ethernet
           pciPerformanceOptimized:
              enabled: true
-             maxAccOutRead: 44
              maxReadRequest: 4096
           roceOptimized:
              enabled: true
@@ -2754,23 +2753,48 @@ Configure and apply the NicConfigurationTemplate CR:
 For more information about the CRD API, refer to `API documentation <https://github.com/Mellanox/nic-configuration-operator/blob/main/docs/api-reference.md>`_.
 For more information, which FW parameter each settings corresponds to, refer to `Configuration details doc section <https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details>`_.
 
+Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.spec}' | yq -P
+
+    template:
+      firmware:
+          nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+          updatePolicy: Update
+      configuration:
+          numVfs: 2
+          linkType: Ethernet
+          pciPerformanceOptimized:
+            enabled: true
+          roceOptimized:
+            enabled: true
+            qos:
+                trust: dscp
+                pfc: "0,0,0,1,0,0,0,0"
+          gpuDirectOptimized:
+            enabled: true
+            env: Baremetal
+
+
 Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process
 
 .. code-block:: bash
 
     > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
-    - lastTransitionTime: "2024-09-21T08:42:23Z"
+    - type: FirmwareUpdateInProgress
+      status: "False"
+      reason: DeviceFirmwareConfigMatch
       message: Firmware matches the requested version
       observedGeneration: 4
-      reason: DeviceFirmwareConfigMatch
-      status: "False"
-      type: FirmwareUpdateInProgress
-    - lastTransitionTime: "2024-09-21T08:43:08Z"
-      message: ""
-      reason: UpdateStarted
+      lastTransitionTime: "2024-09-21T08:42:23Z"
+    - type: ConfigUpdateInProgress
       status: "True"
-      type: ConfigUpdateInProgress
+      reason: UpdateStarted
+      message: ""
+      lastTransitionTime: "2024-09-21T08:43:08Z"
 
 ----------------------------------
 NIC Firmware Mismatch Notification
@@ -2782,11 +2806,11 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
 
     > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
-    - lastTransitionTime: "2024-09-21T08:43:10Z"
-      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
-      reason: DeviceFirmwareConfigMatch
+    - type: FirmwareConfigMatch
       status: "True"
-      type: FirmwareConfigMatch
+      reason: DeviceFirmwareConfigMatch
+      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+      lastTransitionTime: "2024-09-21T08:43:10Z"
 
 `FirmwareConfigMatch` condition status is set to `Unknown` if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:
 
@@ -2794,8 +2818,8 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
 
     > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
 
-   - lastTransitionTime: "2024-11-08T09:19:41Z"
-     message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
-     reason: DeviceFirmwareConfigMatch
+   - type: FirmwareConfigMatch
      status: "True"
-     type: FirmwareConfigMatch
+     reason: DeviceFirmwareConfigMatch
+     message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+     lastTransitionTime: "2024-11-08T09:19:41Z"
