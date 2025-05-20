@@ -194,7 +194,7 @@ Supported Operating Systems and Kubernetes Platforms
      - Red Hat OpenShift
      - Rancher RKE2
      - Canonical MicroK8s
-     - Nutanix NKP
+     - Nutanix NKP
      - Notes
    * - Ubuntu 24.04 LTS
      - 1.29–1.32
@@ -208,7 +208,7 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - 1.29–1.32
-     - 2.14 (K8s v1.31.4)
+     - 2.14 (K8s v1.31.4)
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
