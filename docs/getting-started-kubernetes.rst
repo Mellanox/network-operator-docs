@@ -164,6 +164,8 @@ Below are deployment examples, which the ``values.yaml`` file provided to the He
 
    helm install -f ./values.yaml -n nvidia-network-operator --create-namespace --wait nvidia/network-operator network-operator
 
+.. _shared_device_plugin_deployment:
+
 ----------------------------------------------------------
 Network Operator Deployment with RDMA Shared Device Plugin
 ----------------------------------------------------------
@@ -2553,6 +2555,132 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 * `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
 
 * `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
+
+-------------------------------------------------------------
+Network Operator Deployment and RDMA exclusive subsystem mode
+-------------------------------------------------------------
+
+When RDMA subsystem is in shared mode, RDMA device is accessible in all network namespace. When RDMA device isolation
+among multiple network namespaces is not needed, shared mode can be used. This mode is enabled by default.
+
+.. note::
+    To use RDMA shared mode with MacVlanNetwork please check :ref:`shared_device_plugin_deployment` section.
+
+When user wants to assign dedicated RDMA device to a particular network namespace, exclusive mode should be configured.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SR-IOV Network Operator Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+First install the Network Operator with NFD and SR-IOV Operator enabled:
+
+``values.yaml``:
+
+.. code-block:: yaml
+
+    nfd:
+      enabled: true
+
+    sriovNetworkOperator:
+      enabled: true
+
+To configure RDMA exclusive mode  apply ``SriovNetworkPoolConfig`` CR and specify ``rdmaMode``:
+
+``sriov-network-pool-config-number.yaml``
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: SriovNetworkPoolConfig
+    metadata:
+      name: rdma-exclusive-pool
+      namespace: nvidia-network-operator
+    spec:
+      nodeSelector:
+        - matchExpressions:
+          - key: feature.node.kubernetes.io/pci-15b3.present
+            operator: "Exists"
+      rdmaMode: exclusive
+
+
+The ``sriovnetwork-node-policy.yaml`` configuration should be applied to configure SR-IOV and deploy `RDMA CNI <https://github.com/k8snetworkplumbingwg/rdma-cni>`_:
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: SriovNetworkNodePolicy
+    metadata:
+      name: policy-1
+      namespace: nvidia-network-operator
+    spec:
+      deviceType: netdevice
+      mtu: 1500
+      nicSelector:
+        vendor: "15b3"
+        pfNames: ["ens2f0"]
+      nodeSelector:
+        feature.node.kubernetes.io/pci-15b3.present: "true"
+      numVfs: 8
+      priority: 90
+      isRdma: true
+      resourceName: sriov_resource
+
+
+RDMA CNI plugin is intended to be run as a chained CNI plugin:
+
+.. code-block:: yaml
+
+    apiVersion: sriovnetwork.openshift.io/v1
+    kind: SriovNetwork
+    metadata:
+      name: "example-sriov-network"
+      namespace: nvidia-network-operator
+    spec:
+      vlan: 0
+      networkNamespace: "default"
+      resourceName: "sriov_resource"
+      ipam: |-
+        {
+           "type": "nv-ipam",
+           "poolName": "pool1"
+        }
+      metaPlugins: |
+        {
+          "type": "rdma"
+        }
+
+^^^^^^^^^^^^^^
+Test Workload
+^^^^^^^^^^^^^^
+
+The ``pod.yaml`` configuration file for such a deployment:
+
+.. code-block:: yaml
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: testpod1
+      annotations:
+        k8s.v1.cni.cncf.io/networks: example-sriov-network
+    spec:
+      containers:
+      - name: appcntr1
+        image: <image>
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          capabilities:
+            add: ["IPC_LOCK"]
+        resources:
+          requests:
+            nvidia.com/sriov_resource: '1'
+          limits:
+            nvidia.com/sriov_resource: '1'
+        command:
+        - sh
+        - -c
+        - sleep inf
+
 
 ===========================================================================
 Configure NIC Firmware using the NIC Configuration Operator
