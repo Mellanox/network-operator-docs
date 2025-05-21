@@ -34,8 +34,8 @@ NVIDIA Network Operator Container Images
      - Digest
    * - nvcr.io/nvstaging/mellanox
      - network-operator
-     - v25.4.0-rc.3
-     - sha256:079126a18048667e4f0cfc43fcf4195443d053c5612a342dfdb34914b80d03c0
+     - v25.4.0
+     - sha256:93c2063f4da6a93810784be95df0083f07618486699d93245c97a29a63861dee
    * - ghcr.io/mellanox
      - network-operator-init-container
      - v0.0.3
@@ -66,16 +66,16 @@ NVIDIA Network Operator Container Images
      - sha256:866971717cb2683f2742d265c9793f93242f55b6e8bd9a0a88a558869f9b9cd7
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
-     - network-operator-25.4.0-rc.3
-     - sha256:9ea8538ed3753222d058d9c096892b758414d5f41e2fb8344e4a6d3e88136e7b
+     - network-operator-25.4.0
+     - sha256:fd4ef7f4a5342518d49526ebc5c0168adc9660e6be1bb665dc53db327d5a87eb
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
-     - network-operator-25.4.0-rc.3
-     - sha256:ba2c58118f3b3d0b578c2c2069905e63336a161c5f217335d365c1f679fc1a12
+     - network-operator-25.4.0
+     - sha256:cd350ea326bf311064db6f403f424f72b4b33bb1f6681214fb3b521ad3db9945
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-25.4.0-rc.3
-     - sha256:8c12b637827410561c9f2c53d5f90411f0c6eb17631926f990e76df267d6822b
+     - network-operator-25.4.0
+     - sha256:747c2de5521389bbd9666a82aaf9c1864d57288fa7a334ddd75dd4960fb27f43
    * - ghcr.io/k8snetworkplumbingwg
      - sriov-network-device-plugin
      - v3.9.0
@@ -170,6 +170,12 @@ Ubuntu
    * -
        | 25.04-0.6.1.0-2-ubuntu24.04-arm64
      - sha256:97c311b6cf9b973b65767b5520cb0a76077837599ecd1b8581c774deb6ae50db
+   * -
+       | 25.04-0.6.1.0-21-ubuntu24.04-amd64
+     - sha256:188eabded1db4f60051c58df8b162f39b66d96197790dc614ff0f1cd2a7cfad5
+   * -
+       | 25.04-0.6.1.0-22-ubuntu24.04-amd64
+     - sha256:607ae32ada98fc16c3d523829f81cdd99b27a759ba340133b735928cdcc5fdab
 
 -----
 RHCOS
@@ -202,6 +208,15 @@ RHCOS
    * -
        | 25.04-0.6.1.0-200-rhcos4.18-amd64
      - sha256:10a29c282d159a66e972bd2be12a8dce03c3b891deed07ad2b97c9ed9c1c2afe
+   * -
+       | 25.04-0.6.1.0-210-rhcos4.16-amd64
+     - sha256:710c72cca18b3625637d4828a612cc16fd3c6a7b37c4cd7c8c78a1bfaff963d9
+   * -
+       | 25.04-0.6.1.0-210-rhcos4.18-amd64
+     - sha256:8b6992a0a96fd0a549e31553b449c6683de9d8c681cf9a4414e6fa2fc8048f80
+   * -
+       | 25.04-0.6.1.0-211-rhcos4.16-amd64
+     - sha256:9178c2cb416396e22b6707089c3670aec32bec60221c4cba1db8e5f3aa41e72e
 
 ----
 RHEL
