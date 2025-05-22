@@ -39,7 +39,7 @@ The following are special environment variables supported by the NVIDIA DOCA Dri
      - "false"
      - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
-     - "true"
+     - "false"
      - Restore host drivers when a container
 
 In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
@@ -62,7 +62,7 @@ These variables can be set in the NicClusterPolicy. For example:
       ofedDriver:
         env:
         - name: RESTORE_DRIVER_ON_POD_TERMINATION
-          value: "true"
+          value: "false"
         - name: UNLOAD_STORAGE_MODULES
           value: "true"
         - name: CREATE_IFNAMES_UDEV
