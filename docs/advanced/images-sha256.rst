@@ -32,7 +32,7 @@ NVIDIA Network Operator Container Images
      - Image Name
      - Tag
      - Digest
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/cloud-native
      - network-operator
      - v25.4.0
      - sha256:93c2063f4da6a93810784be95df0083f07618486699d93245c97a29a63861dee
@@ -64,15 +64,15 @@ NVIDIA Network Operator Container Images
      - doca_telemetry
      - 1.16.5-doca2.6.0-host
      - sha256:866971717cb2683f2742d265c9793f93242f55b6e8bd9a0a88a558869f9b9cd7
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator
      - network-operator-25.4.0
      - sha256:fd4ef7f4a5342518d49526ebc5c0168adc9660e6be1bb665dc53db327d5a87eb
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator-webhook
      - network-operator-25.4.0
      - sha256:cd350ea326bf311064db6f403f424f72b4b33bb1f6681214fb3b521ad3db9945
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator-config-daemon
      - network-operator-25.4.0
      - sha256:747c2de5521389bbd9666a82aaf9c1864d57288fa7a334ddd75dd4960fb27f43
@@ -136,7 +136,7 @@ DOCA Driver Container Images
    * - Repository
      - Image Name
      - Version
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - doca-driver
      - 25.04-0.6.1.0-2
 
