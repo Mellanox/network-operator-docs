@@ -39,7 +39,7 @@ import (
 
 // ReleaseImageSpec contains ImageSpec in addition with Image SHA256.
 type ReleaseImageSpec struct {
-	// Shas is a list of SHA2256. A list is needed for DOCA drivers that have multiple images.
+	// Shas is a list of SHA2256. A list is needed for DOCA-OFED drivers that have multiple images.
 	Shas []SHA256ImageRef
 	mellanoxv1alpha1.ImageSpec
 }

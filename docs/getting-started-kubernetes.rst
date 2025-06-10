@@ -180,7 +180,7 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with
-    * DOCA driver
+    * DOCA-OFED driver
     * RDMA Shared device plugin configured to a netdev with name ens1f0.
 
 
@@ -261,7 +261,7 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * RDMA Shared Device pluging with two RDMA resources - the first mapped to ens1f0 and ens1f1 and the second mapped to ens2f0 and ens2f1.
 
 Note: You may need to change the interface names in the NicClusterPolicy to those used by your target nodes.
@@ -464,7 +464,7 @@ Network Operator Deployment with a Host Device Network
 
 In this mode, the Network Operator could be deployed on virtualized deployments as well. It supports both Ethernet and InfiniBand modes. From the Network Operator perspective, there is no difference between the deployment procedures. To work on a VM (virtual machine), the PCI passthrough must be configured for SR-IOV devices. The Network Operator works both with VF (Virtual Function) and PF (Physical Function) inside the VMs.
 
-.. warning:: If the Host Device Network is used without the DOCA Driver, the following packages should be installed:
+.. warning:: If the Host Device Network is used without the DOCA-OFED Driver, the following packages should be installed:
 
     * the linux-generic package on Ubuntu hosts
     * the kernel-modules-extra package on the RedHat-based hosts
@@ -726,7 +726,7 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * RDMA shared device plugin
     * Secondary network
     * Multus CNI
@@ -897,7 +897,7 @@ Network Operator Deployment for GPUDirect Workloads
 
 GPUDirect requires the following:
 
-* NVIDIA DOCA Driver v5.5-1.0.3.2 or newer
+* NVIDIA DOCA-OFED Driver v5.5-1.0.3.2 or newer
 * GPU Operator v1.9.0 or newer
 * NVIDIA GPU and driver supporting GPUDirect e.g Quadro RTX 6000/8000 or NVIDIA T4/NVIDIA V100/NVIDIA A100
 
@@ -910,7 +910,7 @@ First install the Network Operator with NFD enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * SR-IOV Device Plugin
     * Secondary network
     * Multus CNI
@@ -1090,7 +1090,7 @@ First install the Network Operator with NFD and SRIOV Network Operator enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * Secondary network
     * Multus CNI
     * IPoIB CNI
@@ -1352,7 +1352,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network
 
 Network Operator deployment with InfiniBand network requires the following:
 
-* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to this `article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`_.
+* NVIDIA DOCA-OFED Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA-OFED Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to this `article <https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM>`_.
 * InfiniBand device – Both the host device and switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
 
@@ -1367,7 +1367,7 @@ First install the Network Operator with NFD and SR-IOV Network Operator enabled:
       enabled: true
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * Secondary network
     * Multus CNI
     * Container Networking Plugins
@@ -1512,7 +1512,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Manageme
 
 Network Operator deployment with InfiniBand network requires the following:
 
-* NVIDIA DOCA Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article`_.
+* NVIDIA DOCA-OFED Driver and OpenSM running. OpenSM runs on top of the NVIDIA DOCA-OFED Driver stack, so both the driver and the subnet manager should come from the same installation. Note that partitions that are configured by OpenSM should specify defmember=full to enable the SR-IOV functionality over InfiniBand. For more details, please refer to `this article`_.
 * NVIDIA UFM running on top of OpenSM. For more details, please refer to `the project documentation`_.
 * InfiniBand device – Both the host device and the switch ports must be enabled in InfiniBand mode.
 * rdma-core package should be installed when an inbox driver is used.
@@ -1559,7 +1559,7 @@ First install the Network Operator with NFD enabled:
       resourcePrefix: "nvidia.com"
 
 Once the Network Operator is installed create a NicClusterPolicy with:
-    * DOCA driver
+    * DOCA-OFED driver
     * ibKubernetes
     * Secondary network
     * Multus CNI
@@ -1645,7 +1645,7 @@ Create IPPool object for nv-ipam
             - key: node-role.kubernetes.io/worker
               operator: Exists
 
-Wait for NVIDIA DOCA Driver to install and apply the following CRs:
+Wait for NVIDIA DOCA-OFED Driver to install and apply the following CRs:
 
 ``sriov-ib-network-node-policy.yaml``
 
@@ -1759,7 +1759,7 @@ Network Operator Deployment for DPDK Workloads with NicClusterPolicy
 
 .. _HUGEPAGE: http://manpages.ubuntu.com/manpages/focal/man8/hugeadm.8.html
 
-This deployment mode supports DPDK applications. In order to run DPDK applications, HUGEPAGE_ should be configured on the required K8s Worker Nodes. By default, the inbox operating system driver is used. For support of cases with specific requirements, DOCA Driver container should be deployed.
+This deployment mode supports DPDK applications. In order to run DPDK applications, HUGEPAGE_ should be configured on the required K8s Worker Nodes. By default, the inbox operating system driver is used. For support of cases with specific requirements, DOCA-OFED Driver container should be deployed.
 
 Network Operator deployment with:
 
@@ -1877,6 +1877,8 @@ Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch
 -------------------------------------------------------------------------
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
+
+.. warning:: To use DOCA-OFED Driver container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
 
 .. warning:: Tech Preview feature.
 
@@ -2196,7 +2198,7 @@ Please see the following DOCA documentation for OVS hardware offload verificatio
 Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag
 ------------------------------------------------------------------------------------------------
 
-.. warning:: This feature is not compatible with the DOCA Driver container.
+.. warning:: This feature is not compatible with the DOCA-OFED Driver container.
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
@@ -2938,7 +2940,7 @@ NIC Configuration Operator updates status conditions of the NicDevice CR to set 
       message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
       lastTransitionTime: "2024-09-21T08:43:10Z"
 
-`FirmwareConfigMatch` condition status is set to `Unknown` if DOCA Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA Driver. E.g.:
+`FirmwareConfigMatch` condition status is set to `Unknown` if DOCA-OFED Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA-OFED Driver. E.g.:
 
 .. code-block:: bash
 

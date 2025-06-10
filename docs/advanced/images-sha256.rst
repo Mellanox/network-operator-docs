@@ -125,9 +125,9 @@ NVIDIA Network Operator Container Images
      - v0.0.3
      - sha256:d6a2546a8a65e1034d08ab7d85819f062769842dc96513b4fec44f75d3077316
 
-============================
-DOCA Driver Container Images
-============================
+=================================
+DOCA-OFED Driver Container Images
+=================================
 
 
 .. list-table::
@@ -141,7 +141,7 @@ DOCA Driver Container Images
      - 25.04-0.6.1.0-2
 
 
-The followings tags are available for the above DOCA Driver container version:
+The followings tags are available for the above DOCA-OFED Driver container version:
 
 ------
 Ubuntu

@@ -38,7 +38,7 @@ Changes and New Features
      - Description
    * - 25.4.0
      - | - Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases.
-       | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA OFED container upgrade.
+       | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade.
        | - Added support for OpenShift 4.18.
        | - Added support for ConnectX-8 SuperNIC.
        | - Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview.       
@@ -66,16 +66,16 @@ Changes and New Features
        | - Added support for Ubuntu 24.04.
        | - Added support for NVIDIA Grace based ARM platforms with Ubuntu 22.04 and Upstream K8s as a Tech Preview feature.
        | - Added support for NVIDIA IGX Orin based ARM platforms with Ubuntu 22.04 and Upstream K8s as a GA feature.
-       | - Added support for Precompiled DOCA Driver containers for Ubuntu 22.04.
+       | - Added support for Precompiled DOCA-OFED Driver containers for Ubuntu 22.04.
        | - Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI as a Tech Preview feature.
        | - Added support for DOCA Telemetry Service (DTS) integration to expose network telemetry and NIC metrics in K8s.
        | - Added support for network namespace isolation of RDMA devices with RDMA CNI
        | - Added support for RHEL and OpenShift deployments with Real-time kernels.
-       | - Enhanced DOCA Driver container deployment and significantly reduced compilation time after node reboots.
+       | - Enhanced DOCA-OFED Driver container deployment and significantly reduced compilation time after node reboots.
    * - 24.1.0
      - | - Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview.
        | - Added support for CNI bin directory configuration.
-       | - Added support for OpenShift MOFED/DOCA driver container build and deployment via driver toolkit (DTK).
+       | - Added support for OpenShift MOFED/DOCA-OFED driver container build and deployment via driver toolkit (DTK).
        | - Added support for Ubuntu 22.04 deployments with Real-time kernels.
        | - Added the ability to disable SR-IOV VF for SR-IOV Network Operator (in systems with pre-configured SR-IOV).
        | - Added the ability to set resource request and limits on the network operator and it components.
@@ -218,10 +218,10 @@ Known Limitations
      - | - In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF).
            The recommendation is to create up to 16 VFs per PF. Larger number will cause "ip link show dev <device_name>" to fail with a "Message too long" error.
        | - SR-IOV switchdev mode is not supported on SLES.
-       | - In infiniband mode, in case of existing Intel NICs, loaded `irdma` module should be unloaded before deploying DOCA driver.
+       | - In infiniband mode, in case of existing Intel NICs, loaded `irdma` module should be unloaded before deploying DOCA-OFED driver.
    * - 24.10.0
-     - | - There is a known limitation when using NVIDIA NICs as **primary network interfaces**. If the NVIDIA DOCA Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
-           If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA driver container then loads new drivers but only restores **basic configuration** (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will **not** be restored automatically.
+     - | - There is a known limitation when using NVIDIA NICs as **primary network interfaces**. If the NVIDIA DOCA-OFED Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
+           If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA-OFED driver container then loads new drivers but only restores **basic configuration** (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will **not** be restored automatically.
            This limitation applies to **all** versions of the NVIDIA Network Operator.
    * - 24.10.0
      - | - There is a known limitation when using `docker` on RHEL 8 and 9. If you encounter this issue, it is recommended to use "the preferred, maintained, and supported container runtime of choice for Red Hat Enterprise Linux".
@@ -229,7 +229,7 @@ Known Limitations
        | - In NIC Configuration Operator template v0.1.14 BF2/BF3 DPUs (not SuperNICs) FW reset flow isn't supported.
        | - NVIDIA NIC Configuration Operator v0.1.14 Firmware Mismatch notification feature doesn't support NVIDIA BlueField-3 SuperNIC.
    * - 24.7.0
-     - | - In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load.
+     - | - In case ENABLE_NFSRDMA is enabled for DOCA-OFED Driver container and NVMe modules are loaded in the host system, NVIDA DOCA-OFED Driver Container will fail to load.
        |   User should blacklist NVMe modules to prevent them from loading on system boot. If this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must be set to `false`.
        |   Using features such as GPU Direct Storage is not supported in such case.
    * - 23.10.0

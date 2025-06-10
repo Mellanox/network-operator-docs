@@ -125,7 +125,7 @@ Before upgrading to Network Operator v24.10 or newer with SR-IOV Network Operato
 
   $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwork.openshift.io default
 
-The network operator provides limited upgrade capabilities, which require additional manual actions if a containerized DOCA Driver is used. Future releases of the network operator will provide an automatic upgrade flow for the containerized driver.
+The network operator provides limited upgrade capabilities, which require additional manual actions if a containerized DOCA-OFED Driver is used. Future releases of the network operator will provide an automatic upgrade flow for the containerized driver.
 
 Since Helm does not support auto-upgrade of existing CRDs, the user must follow a two-step process to upgrade the network-operator release:
 
@@ -185,35 +185,35 @@ To apply the Helm chart update, run:
 
 .. warning:: The --devel option is required if you wish to use the Beta release.
 
---------------------------
-DOCA Driver Manual Upgrade
---------------------------
+-------------------------------
+DOCA-OFED Driver Manual Upgrade
+-------------------------------
 
-################################################
-Restarting Pods with a Containerized DOCA Driver
-################################################
+#####################################################
+Restarting Pods with a Containerized DOCA-OFED Driver
+#####################################################
 
-.. warning:: This operation is required only if containerized DOCA Driver is in use.
+.. warning:: This operation is required only if containerized DOCA-OFED Driver is in use.
 
-When a containerized DOCA Driver is reloaded on the node, all pods that use a secondary network based on NVIDIA NICs will lose network interface in their containers. To prevent outage, remove all pods that use a secondary network from the node before you reload the driver pod on it.
+When a containerized DOCA-OFED Driver is reloaded on the node, all pods that use a secondary network based on NVIDIA NICs will lose network interface in their containers. To prevent outage, remove all pods that use a secondary network from the node before you reload the driver pod on it.
 
-The Helm upgrade command will only upgrade the DaemonSet spec of the DOCA Driver to point to the new driver version. The DOCA Driver's DaemonSet will not automatically restart pods with the driver on the nodes, as it uses "OnDelete" updateStrategy. The old DOCA Driver version will still run on the node until you explicitly remove the driver pod or reboot the node:
+The Helm upgrade command will only upgrade the DaemonSet spec of the DOCA-OFED Driver to point to the new driver version. The DOCA-OFED Driver's DaemonSet will not automatically restart pods with the driver on the nodes, as it uses "OnDelete" updateStrategy. The old DOCA-OFED Driver version will still run on the node until you explicitly remove the driver pod or reboot the node:
 
 .. code-block:: bash
 
   $ kubectl delete pod -l app=mofed-<OS_NAME> -n nvidia-network-operator
 
-It is possible to remove all pods with secondary networks from all cluster nodes, and then restart the DOCA Driver pods on all nodes at once.
+It is possible to remove all pods with secondary networks from all cluster nodes, and then restart the DOCA-OFED Driver pods on all nodes at once.
 
 The alternative option is to perform an upgrade in a rolling manner to reduce the impact of the driver upgrade on the cluster. The driver pod restart can be done on each node individually. In this case, pods with secondary networks should be removed from the single node only. There is no need to stop pods on all nodes.
 
 For each node, follow these steps to reload the driver on the node:
 
 1. Remove pods with a secondary network from the node.
-2. Restart the DOCA Driver pod.
+2. Restart the DOCA-OFED Driver pod.
 3. Return the pods with a secondary network to the node.
 
-When the DOCA Driver is ready, proceed with the same steps for other nodes.
+When the DOCA-OFED Driver is ready, proceed with the same steps for other nodes.
 
 ####################################################
 Removing Pods with a Secondary Network from the Node
@@ -227,11 +227,11 @@ To remove pods with a secondary network from the node with node drain, run the f
 
 .. warning:: Replace <NODE_NAME> with -l "network.nvidia.com/operator.mofed.wait=false" if you wish to drain all nodes at once.
 
-##############################
-Restarting the DOCA Driver Pod
-##############################
+###################################
+Restarting the DOCA-OFED Driver Pod
+###################################
 
-Find the DOCA Driver pod name for the node:
+Find the DOCA-OFED Driver pod name for the node:
 
 .. code-block:: bash
 
@@ -243,25 +243,25 @@ Example for Ubuntu 20.04:
 
   kubectl get pod -l app=mofed-ubuntu20.04 -o wide -A
 
-##########################################
-Deleting the DOCA Driver Pod from the Node
-##########################################
+###############################################
+Deleting the DOCA-OFED Driver Pod from the Node
+###############################################
 
-To delete the DOCA Driver pod from the node, run:
+To delete the DOCA-OFED Driver pod from the node, run:
 
 .. code-block:: bash
 
   $ kubectl delete pod -n <DRIVER_NAMESPACE> <DOCA_DRIVER_POD_NAME>
 
-.. warning:: Replace <DOCA_DRIVER_POD_NAME> with -l app=mofed-ubuntu20.04 if you wish to remove DOCA Driver pods on all nodes at once.
+.. warning:: Replace <DOCA_DRIVER_POD_NAME> with -l app=mofed-ubuntu20.04 if you wish to remove DOCA-OFED Driver pods on all nodes at once.
 
-A new version of the DOCA Driver pod will automatically start.
+A new version of the DOCA-OFED Driver pod will automatically start.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Returning Pods with a Secondary Network to the Node
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After the DOCA Driver pod is ready on the node, you can make the node schedulable again.
+After the DOCA-OFED Driver pod is ready on the node, you can make the node schedulable again.
 
 The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSchedule taint) the node, and return the pods to it:
 
@@ -269,11 +269,11 @@ The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSched
 
   $ kubectl uncordon -l "network.nvidia.com/operator.mofed.wait=false"
 
-------------------------------
-Automatic DOCA  Driver Upgrade
-------------------------------
+----------------------------------
+Automatic DOCA-OFED Driver Upgrade
+----------------------------------
 
-To enable automatic DOCA Driver upgrade, define the UpgradePolicy section for the ofedDriver in the NicClusterPolicy spec, and change the DOCA Driver version.
+To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section for the ofedDriver in the NicClusterPolicy spec, and change the DOCA-OFED Driver version.
 
 ``nicclusterpolicy.yaml``:
 
@@ -344,9 +344,9 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
    * - Unknown (empty)
      - The node has this state when the upgrade flow is disabled or the node has not been processed yet.
    * - ``upgrade-done``
-     - Set when DOCA Driver POD is up-to-date and running on the node, the node is schedulable.
+     - Set when DOCA-OFED Driver POD is up-to-date and running on the node, the node is schedulable.
    * - ``upgrade-required``
-     - Set when DOCA Driver POD on the node is not up-to-date and requires upgrade. No actions are performed at this stage.
+     - Set when DOCA-OFED Driver POD on the node is not up-to-date and requires upgrade. No actions are performed at this stage.
    * - ``node-maintenance-required``
      - Set when requestor mode upgrade is used, e.g. `MAINTENANCE_OPERATOR_ENABLED=true`, post `upgrade-required` state. Essentially it will create a matching nodeMaintenance object for dedicated node(s), utilizing maintenance operator to perform its node operations.
    * - ``cordon-required``
@@ -356,9 +356,9 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
    * - ``drain-required``
      - Set when the node is scheduled for drain. After the drain, the state is changed either to pod-restart-required or upgrade-failed.
    * - ``pod-restart-required``
-     - Set when the DOCA Driver POD on the node is scheduled for restart. After the restart, the state is changed to uncordon-required.
+     - Set when the DOCA-OFED Driver POD on the node is scheduled for restart. After the restart, the state is changed to uncordon-required.
    * - ``uncordon-required``
-     - Set when DOCA Driver POD on the node is up-to-date and has "Ready" status. After uncordone, the state is changed to upgrade-done
+     - Set when DOCA-OFED Driver POD on the node is up-to-date and has "Ready" status. After uncordone, the state is changed to upgrade-done
    * - ``upgrade-failed``
      - Set when the upgrade on the node has failed. Manual interaction is required at this stage. See Troubleshooting section for more details.
 
@@ -392,7 +392,7 @@ Upgrade modes
 
 .. _maintenance-operator repo: https://github.com/Mellanox/maintenance-operator
 
-DOCA Driver upgrade supports the following modes:
+DOCA-OFED Driver upgrade supports the following modes:
 
 .. list-table::
    :header-rows: 1
@@ -402,7 +402,7 @@ DOCA Driver upgrade supports the following modes:
    * - In-place
      - In-place (legacy) mode is incorporates full driver upgrade lifecycle, including nodes operations e.g. cordon, pod eviction, drain, uncordon. It also maintains an internal scheduler for performing above node operations, according to provided ``maxParallelUpgrades`` under ``UpgradePolicy``.
    * - Requestor
-     - New ``requestor`` upgrade mode uses NVIDIA maintenance operator (please refer to `maintenance-operator repo`_) nodeMaintenance k8s API objects, to initiate the DOCA driver upgrade process. Essentially, it will retire current upgrade controller (in-place mode) from performing the following node operations: cordon, wait for pods completion, drain, uncordon. To enable requestor mode, the following environment variable should be enabled ``MAINTENANCE_OPERATOR_ENABLED=true``.
+     - New ``requestor`` upgrade mode uses NVIDIA maintenance operator (please refer to `maintenance-operator repo`_) nodeMaintenance k8s API objects, to initiate the DOCA-OFED driver upgrade process. Essentially, it will retire current upgrade controller (in-place mode) from performing the following node operations: cordon, wait for pods completion, drain, uncordon. To enable requestor mode, the following environment variable should be enabled ``MAINTENANCE_OPERATOR_ENABLED=true``.
 
 .. note:: Enabling requestor mode will require deployment of NVIDIA maintenance operator on the cluster.
   By default, upgrade controller will use in-place mode.
@@ -431,11 +431,11 @@ Safe Driver Loading
 
 .. warning:: The state of this feature can be controlled with the ofedDriver.upgradePolicy.safeLoad option.
 
-Upon node startup, the DOCA Driver container takes some time to compile and load the driver. During that time, workloads might get scheduled on that node. When DOCA Driver is loaded, all existing PODs that use NVIDIA NICs will lose their network interfaces. Some such PODs might silently fail or hang. To avoid this situation, before the DOCA Driver container is loaded, the node should get cordoned and drained to ensure all workloads are rescheduled. The node should be un-cordoned when the driver is ready on it.
+Upon node startup, the DOCA-OFED Driver container takes some time to compile and load the driver. During that time, workloads might get scheduled on that node. When DOCA-OFED Driver is loaded, all existing PODs that use NVIDIA NICs will lose their network interfaces. Some such PODs might silently fail or hang. To avoid this situation, before the DOCA-OFED Driver container is loaded, the node should get cordoned and drained to ensure all workloads are rescheduled. The node should be un-cordoned when the driver is ready on it.
 
-The safe driver loading feature is implemented as a part of the upgrade flow, meaning safe driver loading is a special scenario of the upgrade procedure, where we upgrade from the inbox driver to the containerized DOCA Driver.
+The safe driver loading feature is implemented as a part of the upgrade flow, meaning safe driver loading is a special scenario of the upgrade procedure, where we upgrade from the inbox driver to the containerized DOCA-OFED Driver.
 
-When this feature is enabled, the initial DOCA Driver driver rollout on the large cluster can take a while. To speed up the rollout, the initial deployment can be done with the safe driver loading feature disabled, and this feature can be enabled later by updating the NicClusterPolicy CRD.
+When this feature is enabled, the initial DOCA-OFED Driver driver rollout on the large cluster can take a while. To speed up the rollout, the initial deployment can be done with the safe driver loading feature disabled, and this feature can be enabled later by updating the NicClusterPolicy CRD.
 
 ^^^^^^^^^^^^^^^
 Troubleshooting
@@ -448,16 +448,16 @@ Troubleshooting
      - Required Action
    * - The node is in upgrade-failed state.
      - * Drain the node manually by running kubectl drain <node name> --ignore-daemonsets.
-       * Delete the NVIDIA DOCA Driver pod on the node manually, by running the following command: ``kubectl delete pod -n `kubectl get pods --A --field-selector spec.nodeName=<node name> -l nvidia.com/ofed-driver --no-headers | awk '{print $1 " "$2}'```.
+       * Delete the NVIDIA DOCA-OFED Driver pod on the node manually, by running the following command: ``kubectl delete pod -n `kubectl get pods --A --field-selector spec.nodeName=<node name> -l nvidia.com/ofed-driver --no-headers | awk '{print $1 " "$2}'```.
 
        **NOTE:** If the "Safe driver loading" feature is enabled, you may also need to remove the ``nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load`` annotation from the node object to unblock the loading of the driver
        ``kubectl annotate node <node_name> nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load-``
 
        * Wait for the node to complete the upgrade.
 
-   * - The updated NVIDIA DOCA Driver pod failed to start/ a new version of NVIDIA DOCA Driver cannot be installed on the node.
+   * - The updated NVIDIA DOCA-OFED Driver pod failed to start/ a new version of NVIDIA DOCA-OFED Driver cannot be installed on the node.
      - Manually delete the pod by using ``kubectl delete -n <Network Operator Namespace> <pod name>``.
-       If following the restart the pod still fails, change the NVIDIA DOCA Driver version in the NicClusterPolicy to the previous version or to another working version.
+       If following the restart the pod still fails, change the NVIDIA DOCA-OFED Driver version in the NicClusterPolicy to the previous version or to another working version.
 
 =================================
 Uninstalling the Network Operator

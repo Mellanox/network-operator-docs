@@ -228,15 +228,15 @@ Supported Container Runtimes
      - No
      - 
 
-=======================================================
-Supported Precompiled Container Images for DOCA Drivers
-=======================================================
+============================================================
+Supported Precompiled Container Images for DOCA-OFED Drivers
+============================================================
 
 --------
 Overview
 --------
 
-To save startup time and operational effort, precompiled DOCA driver container images are available for common OS/flavor/kernel/architecture variants.
+To save startup time and operational effort, precompiled DOCA-OFED driver container images are available for common OS/flavor/kernel/architecture variants.
 
 The container image tag pattern used for common variants is: **driver_ver-container_ver-kernel_ver-flavor-os-arch**. For example: ``24.07-0.6.1.0-0-6.8.0-49-generic-ubuntu24.04-amd64``
 
@@ -246,7 +246,7 @@ The container image tag pattern used for common variants is: **driver_ver-contai
 Supported Operating Systems
 ---------------------------
 
-Currently precompiled DOCA driver container images are provided for the following operating systems:
+Currently precompiled DOCA-OFED driver container images are provided for the following operating systems:
 
 - Ubuntu 24.04 (amd64/arm64)
 - Ubuntu 22.04 (amd64/arm64)
@@ -255,7 +255,7 @@ Currently precompiled DOCA driver container images are provided for the followin
 Limitations
 -----------
 
-- NVIDIA supports precompiled driver containers for the most recently released DOCA GA drivers.
+- NVIDIA supports precompiled driver containers for the most recently released DOCA-OFED GA drivers.
 - NVIDIA builds precompiled driver containers for ``generic``, ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel flavors.
 - Precompiled driver containers are currently unsigned.
 - If your hosts use a different kernel variant, you can create a custom precompiled driver container and host it in your own container registry. Please refer to :ref:`advanced-configurations-precompiled` section.

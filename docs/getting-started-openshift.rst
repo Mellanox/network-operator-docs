@@ -36,7 +36,7 @@ Network Operator Deployment on an OpenShift Container Platform
    It is recommended to have dedicated control plane nodes for OpenShift deployments with NVIDIA Network Operator.
 
 .. warning::
-   Automatic DOCA Driver Upgrade doesn't work on Single Node OpenShift (SNO) deployments.
+   Automatic DOCA-OFED Driver Upgrade doesn't work on Single Node OpenShift (SNO) deployments.
 
 ----------------------
 Node Feature Discovery
@@ -107,7 +107,7 @@ If you are planning to use SR-IOV, follow these `instructions <https://docs.open
 .. warning::
    The SR-IOV resources created will have the `openshift.io` prefix.
 
-For the default SriovOperatorConfig CR to work with the NVIDIA DOCA Driver container, please run this command to update the following values:
+For the default SriovOperatorConfig CR to work with the NVIDIA DOCA-OFED Driver container, please run this command to update the following values:
 
 .. code-block:: bash
 
