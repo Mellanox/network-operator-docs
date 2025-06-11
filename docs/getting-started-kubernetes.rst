@@ -1878,8 +1878,6 @@ Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
-.. warning:: To use DOCA Driver container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
-
 .. warning:: Tech Preview feature.
 
 
