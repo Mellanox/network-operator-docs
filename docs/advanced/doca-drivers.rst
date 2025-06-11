@@ -136,7 +136,7 @@ Before building the container, you need to provide following parameters as `buil
 
 **NOTE:** Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized
 
-**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **driver_ver-container_ver-kernel_ver-os-arch**. For example: 24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64
+**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **doca<doca_version>-<driver_ver>-<container_ver>-<kernel_ver-os-arch>**. For example: doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64
 
 **NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
@@ -210,7 +210,7 @@ RHCOS example
     --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
     --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f" \
     --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.4 \
-    --tag 24.10-1.1.4.0-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 \
+    --tag doca2.9.1-24.10-1.1.4.0-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 \
     -f RHEL_Dockerfile \
     --target precompiled .
 
@@ -231,7 +231,7 @@ Ubuntu example
     --build-arg D_KERNEL_VER=5.15.0-25-generic \
     --build-arg D_DOCA_VERSION=2.9.1 \
     --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --tag 24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64 \
+    --tag doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64 \
     -f Ubuntu_Dockerfile \
     --target precompiled .
 
@@ -258,6 +258,6 @@ SLES example
     --build-arg D_KERNEL_VER=5.14.21-150500.55.83-default \
     --build-arg D_DOCA_VERSION=2.9.1 \
     --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --tag 24.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 \
+    --tag doca2.9.1-24.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 \
     -f SLES_Dockerfile \
     --target precompiled .
