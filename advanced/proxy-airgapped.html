@@ -26,7 +26,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="NVIDIA DOCA Driver Container" href="doca-drivers.html" />
+    <link rel="next" title="NVIDIA DOCA-OFED Driver Container" href="doca-drivers.html" />
     <link rel="prev" title="Advanced Configurations" href="advanced.html" />
  
 
@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Proxy &amp; Air-gapped</a></li>
-<li class="toctree-l2"><a class="reference internal" href="doca-drivers.html">DOCA Driver Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doca-drivers.html">DOCA-OFED Driver Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="images-sha256.html">Container Images Digests</a></li>
 </ul>
@@ -177,7 +177,7 @@ By default, the Network Operator requires internet access for the following reas
 <blockquote>
 <div><ul class="simple">
 <li><p>The container images must be pulled during the Network Operator installation.</p></li>
-<li><p>The DOCA Driver container must download several OS packages prior to the driver installation.</p></li>
+<li><p>The DOCA-OFED Driver container must download several OS packages prior to the driver installation.</p></li>
 </ul>
 </div></blockquote>
 <p>To address these requirements, it may be necessary to create a local image registry and/or a local package repository, so that the necessary images and packages will be available for your cluster.
@@ -191,21 +191,21 @@ To allow Network Operator to work with a local registry, users can specify local
 <section id="pulling-and-pushing-container-images-to-a-local-registry">
 <h3>Pulling and Pushing Container Images to a Local Registry<a class="headerlink" href="#pulling-and-pushing-container-images-to-a-local-registry" title="Permalink to this headline"></a></h3>
 <p>To pull the correct images from the NVIDIA registry, you can leverage the fields <code class="docutils literal notranslate"><span class="pre">repository</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code> and <code class="docutils literal notranslate"><span class="pre">version</span></code> specified in the <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> file or in the <a class="reference internal" href="images-sha256.html#container-images-digest"><span class="std std-ref">NVIDIA Network Operator Container Images</span></a> section.</p>
-<p>NicClusterPolicy supports use of image container digest in the <cite>version</cite> field, except for DOCA driver.</p>
-<p>There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
-<p>For example for DOCA driver version 25.04-0.6.1.0-2, the tag for Ubuntu 24.04 with X86 architecture is “25.04-0.6.1.0-2-ubuntu24.04-amd64”.
-Available DOCA driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
+<p>NicClusterPolicy supports use of image container digest in the <cite>version</cite> field, except for DOCA-OFED driver.</p>
+<p>There is one caveat with regards to the DOCA-OFED driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
+<p>For example for DOCA-OFED driver version 25.04-0.6.1.0-2, the tag for Ubuntu 24.04 with X86 architecture is “25.04-0.6.1.0-2-ubuntu24.04-amd64”.
+Available DOCA-OFED driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
 <p>In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
-Specifying pull secret is required in the NicClusterPolicy DOCA Driver section, even if global container access credentials are configured on nodes.</p>
+<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA-OFED Driver in the NICClusterPolicy to list the available tags.
+Specifying pull secret is required in the NicClusterPolicy DOCA-OFED Driver section, even if global container access credentials are configured on nodes.</p>
 </div>
 </section>
 <section id="configuring-local-registry-tls-cert">
 <h3>Configuring Local Registry TLS Cert<a class="headerlink" href="#configuring-local-registry-tls-cert" title="Permalink to this headline"></a></h3>
-<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
-This is required to verify the availability of precompiled DOCA Driver container images.</p>
+<p>NVIDIA Network Operator communicates with the Image Registry configured for the DOCA-OFED Driver in the NICClusterPolicy to list the available tags.
+This is required to verify the availability of precompiled DOCA-OFED Driver container images.</p>
 <p>If the Image Registry uses a TLS certificate that is not issued by a well-known Certificate Authority (CA), it is required to configure the NVIDIA Network Operator with the Certificate.</p>
 <p>Fetch the TLS Certificates from the Image Registry server and save them in the <cite>ca.crt</cite> file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">REGISTRY_HOST</span><span class="o">=</span>myregistry.example.com
@@ -265,7 +265,7 @@ openssl s_client -showcerts -connect <span class="si">${</span><span class="nv">
 <p class="admonition-title">Warning</p>
 <p>The instructions below are provided as reference examples to set up a local package repository for NVIDIA Network Operator.</p>
 </div>
-<p>The DOCA Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:</p>
+<p>The DOCA-OFED Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="nl">ubuntu</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">headers</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
 <span class="w">   </span><span class="n">linux</span><span class="o">-</span><span class="n">modules</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>

@@ -127,7 +127,7 @@
 <tr class="row-even"><td><p>25.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases.</div>
-<div class="line">- Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA OFED container upgrade.</div>
+<div class="line">- Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade.</div>
 <div class="line">- Added support for OpenShift 4.18.</div>
 <div class="line">- Added support for ConnectX-8 SuperNIC.</div>
 <div class="line">- Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview.</div>
@@ -179,12 +179,12 @@
 <div class="line">- Added support for Ubuntu 24.04.</div>
 <div class="line">- Added support for NVIDIA Grace based ARM platforms with Ubuntu 22.04 and Upstream K8s as a Tech Preview feature.</div>
 <div class="line">- Added support for NVIDIA IGX Orin based ARM platforms with Ubuntu 22.04 and Upstream K8s as a GA feature.</div>
-<div class="line">- Added support for Precompiled DOCA Driver containers for Ubuntu 22.04.</div>
+<div class="line">- Added support for Precompiled DOCA-OFED Driver containers for Ubuntu 22.04.</div>
 <div class="line">- Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI as a Tech Preview feature.</div>
 <div class="line">- Added support for DOCA Telemetry Service (DTS) integration to expose network telemetry and NIC metrics in K8s.</div>
 <div class="line">- Added support for network namespace isolation of RDMA devices with RDMA CNI</div>
 <div class="line">- Added support for RHEL and OpenShift deployments with Real-time kernels.</div>
-<div class="line">- Enhanced DOCA Driver container deployment and significantly reduced compilation time after node reboots.</div>
+<div class="line">- Enhanced DOCA-OFED Driver container deployment and significantly reduced compilation time after node reboots.</div>
 </div>
 </td>
 </tr>
@@ -192,7 +192,7 @@
 <td><div class="line-block">
 <div class="line">- Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview.</div>
 <div class="line">- Added support for CNI bin directory configuration.</div>
-<div class="line">- Added support for OpenShift MOFED/DOCA driver container build and deployment via driver toolkit (DTK).</div>
+<div class="line">- Added support for OpenShift MOFED/DOCA-OFED driver container build and deployment via driver toolkit (DTK).</div>
 <div class="line">- Added support for Ubuntu 22.04 deployments with Real-time kernels.</div>
 <div class="line">- Added the ability to disable SR-IOV VF for SR-IOV Network Operator (in systems with pre-configured SR-IOV).</div>
 <div class="line">- Added the ability to set resource request and limits on the network operator and it components.</div>
@@ -446,14 +446,14 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 <div class="line">- In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF).
 The recommendation is to create up to 16 VFs per PF. Larger number will cause “ip link show dev &lt;device_name&gt;” to fail with a “Message too long” error.</div>
 <div class="line">- SR-IOV switchdev mode is not supported on SLES.</div>
-<div class="line">- In infiniband mode, in case of existing Intel NICs, loaded <cite>irdma</cite> module should be unloaded before deploying DOCA driver.</div>
+<div class="line">- In infiniband mode, in case of existing Intel NICs, loaded <cite>irdma</cite> module should be unloaded before deploying DOCA-OFED driver.</div>
 </div>
 </td>
 </tr>
 <tr class="row-odd"><td><p>24.10.0</p></td>
 <td><div class="line-block">
-<div class="line">- There is a known limitation when using NVIDIA NICs as <strong>primary network interfaces</strong>. If the NVIDIA DOCA Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
-If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA driver container then loads new drivers but only restores <strong>basic configuration</strong> (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will <strong>not</strong> be restored automatically.
+<div class="line">- There is a known limitation when using NVIDIA NICs as <strong>primary network interfaces</strong>. If the NVIDIA DOCA-OFED Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
+If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA-OFED driver container then loads new drivers but only restores <strong>basic configuration</strong> (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will <strong>not</strong> be restored automatically.
 This limitation applies to <strong>all</strong> versions of the NVIDIA Network Operator.</div>
 </div>
 </td>
@@ -471,7 +471,7 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 </tr>
 <tr class="row-odd"><td><p>24.7.0</p></td>
 <td><div class="line-block">
-<div class="line">- In case ENABLE_NFSRDMA is enabled for DOCA Driver container and NVMe modules are loaded in the host system, NVIDA DOCA Driver Container will fail to load.</div>
+<div class="line">- In case ENABLE_NFSRDMA is enabled for DOCA-OFED Driver container and NVMe modules are loaded in the host system, NVIDA DOCA-OFED Driver Container will fail to load.</div>
 <div class="line-block">
 <div class="line">User should blacklist NVMe modules to prevent them from loading on system boot. If this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must be set to <cite>false</cite>.</div>
 <div class="line">Using features such as GPU Direct Storage is not supported in such case.</div>

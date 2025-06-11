@@ -140,7 +140,7 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Automatic DOCA Driver Upgrade doesn’t work on Single Node OpenShift (SNO) deployments.</p>
+<p>Automatic DOCA-OFED Driver Upgrade doesn’t work on Single Node OpenShift (SNO) deployments.</p>
 </div>
 <section id="node-feature-discovery">
 <h3>Node Feature Discovery<a class="headerlink" href="#node-feature-discovery" title="Permalink to this headline"></a></h3>
@@ -201,7 +201,7 @@ Roles:              worker
 <p class="admonition-title">Warning</p>
 <p>The SR-IOV resources created will have the <cite>openshift.io</cite> prefix.</p>
 </div>
-<p>For the default SriovOperatorConfig CR to work with the NVIDIA DOCA Driver container, please run this command to update the following values:</p>
+<p>For the default SriovOperatorConfig CR to work with the NVIDIA DOCA-OFED Driver container, please run this command to update the following values:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc patch sriovoperatorconfig default <span class="se">\</span>
   --type<span class="o">=</span>merge -n openshift-sriov-network-operator <span class="se">\</span>
   --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;configDaemonNodeSelector&quot;: { &quot;network.nvidia.com/operator.mofed.wait&quot;: &quot;false&quot;, &quot;node-role.kubernetes.io/worker&quot;: &quot;&quot;, &quot;feature.node.kubernetes.io/pci-15b3.sriov.capable&quot;: &quot;true&quot; } } }&#39;</span>
