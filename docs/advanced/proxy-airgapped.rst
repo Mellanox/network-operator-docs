@@ -72,7 +72,7 @@ This section describes how to successfully deploy the Network Operator in cluste
 By default, the Network Operator requires internet access for the following reasons:
 
  - The container images must be pulled during the Network Operator installation.
- - The DOCA Driver container must download several OS packages prior to the driver installation.
+ - The DOCA-OFED Driver container must download several OS packages prior to the driver installation.
 
 To address these requirements, it may be necessary to create a local image registry and/or a local package repository, so that the necessary images and packages will be available for your cluster.
 Subsequent sections of this document detail how to configure the Network Operator to use local image registries and local package repositories.
@@ -91,25 +91,25 @@ Pulling and Pushing Container Images to a Local Registry
 
 To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file or in the :ref:`container_images_digest` section.
 
-NicClusterPolicy supports use of image container digest in the `version` field, except for DOCA driver.
+NicClusterPolicy supports use of image container digest in the `version` field, except for DOCA-OFED driver.
 
-There is one caveat with regards to the DOCA driver image. The version field must be appended by the OS name and Architecture running on the worker node.
+There is one caveat with regards to the DOCA-OFED driver image. The version field must be appended by the OS name and Architecture running on the worker node.
 
-For example for DOCA driver version |doca-driver-version|, the tag for Ubuntu 24.04 with X86 architecture is "|doca-driver-version|-ubuntu24.04-amd64".
-Available DOCA driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
+For example for DOCA-OFED driver version |doca-driver-version|, the tag for Ubuntu 24.04 with X86 architecture is "|doca-driver-version|-ubuntu24.04-amd64".
+Available DOCA-OFED driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
 
 In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.
 
 .. note::
-    NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
-    Specifying pull secret is required in the NicClusterPolicy DOCA Driver section, even if global container access credentials are configured on nodes.
+    NVIDIA Network Operator communicates with the Image Registry configured for the DOCA-OFED Driver in the NICClusterPolicy to list the available tags.
+    Specifying pull secret is required in the NicClusterPolicy DOCA-OFED Driver section, even if global container access credentials are configured on nodes.
 
 -----------------------------------
 Configuring Local Registry TLS Cert
 -----------------------------------
 
-NVIDIA Network Operator communicates with the Image Registry configured for the DOCA Driver in the NICClusterPolicy to list the available tags.
-This is required to verify the availability of precompiled DOCA Driver container images.
+NVIDIA Network Operator communicates with the Image Registry configured for the DOCA-OFED Driver in the NICClusterPolicy to list the available tags.
+This is required to verify the availability of precompiled DOCA-OFED Driver container images.
 
 If the Image Registry uses a TLS certificate that is not issued by a well-known Certificate Authority (CA), it is required to configure the NVIDIA Network Operator with the Certificate.
 
@@ -184,7 +184,7 @@ Local Package Repository
 .. warning::
    The instructions below are provided as reference examples to set up a local package repository for NVIDIA Network Operator.
 
-The DOCA Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:
+The DOCA-OFED Driver container deployed as part of the Network Operator requires certain packages to be available for the driver installation. In restricted internet access or air-gapped installations, users are required to create a local mirror repository for their OS distribution, and make the following packages available:
 
 .. code-block::
 

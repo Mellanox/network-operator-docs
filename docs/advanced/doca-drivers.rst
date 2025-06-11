@@ -1,20 +1,20 @@
 .. headings # #, * *, =, -, ^, ", ~
 .. include:: ../common/vars.rst
 
-****************************
-NVIDIA DOCA Driver Container
-****************************
+*********************************
+NVIDIA DOCA-OFED Driver Container
+*********************************
 
 .. contents:: On this page
    :depth: 2
    :local:
    :backlinks: none
 
-==================================================
-NVIDIA DOCA Driver Container Environment Variables
-==================================================
+=======================================================
+NVIDIA DOCA-OFED Driver Container Environment Variables
+=======================================================
 
-The following are special environment variables supported by the NVIDIA DOCA Driver container to configure its behavior:
+The following are special environment variables supported by the NVIDIA DOCA-OFED Driver container to configure its behavior:
 
 .. list-table::
    :header-rows: 1
@@ -28,7 +28,7 @@ The following are special environment variables supported by the NVIDIA DOCA Dri
      - Create an udev rule to preserve "old-style" path based netdev names e.g enp3s0f0
    * - UNLOAD_STORAGE_MODULES
      - "false"
-     - | Unload host storage modules prior to loading NVIDIA DOCA Driver modules:
+     - | Unload host storage modules prior to loading NVIDIA DOCA-OFED Driver modules:
        |    * ib_isert
        |    * nvme_rdma
        |    * nvmet_rdma
@@ -37,19 +37,19 @@ The following are special environment variables supported by the NVIDIA DOCA Dri
        |    * ib_srpt
    * - ENABLE_NFSRDMA
      - "false"
-     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA Driver container
+     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA-OFED Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "false"
      - Restore host drivers when a container
 
-In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
+In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
 
 .. warning::
    CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
 
 .. warning::
-  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA Driver container when they are in use by the system
-  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA Driver container.
+  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA-OFED Driver container when they are in use by the system
+  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA-OFED Driver container.
 
 These variables can be set in the NicClusterPolicy. For example:
 
@@ -71,9 +71,9 @@ These variables can be set in the NicClusterPolicy. For example:
 
 .. _advanced-configurations-precompiled:
 
-=========================================================================
-Precompiled Container Build Instructions for NVIDIA DOCA Driver Container
-=========================================================================
+==============================================================================
+Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container
+==============================================================================
 
 -------------
 Prerequisites
@@ -84,7 +84,7 @@ Before you begin, ensure that you have the following prerequisites:
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
 - Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz <https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz>`_
 
-**NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA Driver) version need to be specified to fetch the correct driver sources when building the driver container.
+**NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
 For example, given a DOCA package version (e.g `2.10.0`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/>`_ which is `25.01-0.6.0.0'`
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,7 +114,7 @@ The Dockerfile consists of the following stages:
 
 1. **Base Image Update**: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.
 
-2. **Download Driver Sources**: This stage downloads the NVIDIA DOCA Driver sources to the specified path. It prepares the necessary files for the driver build process.
+2. **Download Driver Sources**: This stage downloads the NVIDIA DOCA-OFED Driver sources to the specified path. It prepares the necessary files for the driver build process.
 
 3. **Build Driver**: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.
 
