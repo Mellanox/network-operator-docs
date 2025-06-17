@@ -1,0 +1,56 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: |doca-driver-repository|
+    version: |doca-driver-version|
+  rdmaSharedDevicePlugin:
+    image: k8s-rdma-shared-dev-plugin
+    repository: |k8s-rdma-shared-dev-plugin-repository|
+    version: |k8s-rdma-shared-dev-plugin-version|
+    config: |
+      {
+        "configList": [
+          {
+            "resourceName": "rdma_shared_device_a",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs1f0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_device_b",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs1f1"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_device_c",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs2f0"]
+        ]
+      }
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: |nvidia-ipam-repository|
+    version: |nvidia-ipam-version|
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: |cni-plugins-repository|
+      version: |cni-plugins-version|
+    multus:
+      image: multus-cni
+      repository: |multus-repository|
+      version: |multus-version|
+    ipoib:
+      image: ipoib-cni
+      repository: |ipoib-cni-repository|
+      version: |ipoib-cni-version|

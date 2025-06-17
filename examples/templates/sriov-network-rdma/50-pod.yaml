@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sriov-test-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: sriov-rdma-network
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        nvidia.com/sriov_resource: '1'
+      limits:
+        nvidia.com/sriov_resource: '1' 
