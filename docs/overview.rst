@@ -29,6 +29,40 @@ The NVIDIA Network Operator works in conjunction with the NVIDIA GPU Operator to
 
 A Helm chart is provided for easily deploying the Network operator in a cluster to provision the host software on NVIDIA-enabled nodes.
 
+===================
+Networking Features
+===================
+
+**RDMA Support**
+  Remote Direct Memory Access (RDMA) for memory-to-memory data transfers that bypass the CPU and kernel networking stack. Supports InfiniBand and RDMA over Converged Ethernet (RoCE) protocols.
+
+**SR-IOV Virtualization**
+  Single Root I/O Virtualization technology that partitions network interface cards into multiple Virtual Functions (VFs) for hardware-level isolation and performance.
+
+**Secondary Networks**
+  Multiple network interface types including host device networks, MacVLAN networks, IP over InfiniBand networks, and SR-IOV networks for specialized networking requirements.
+
+**Driver Management**
+  Automated deployment and management of NVIDIA DOCA-OFED networking drivers across cluster nodes with version control and updates.
+
+==================
+Supported Hardware
+==================
+
+See the :doc:`platform-support` page for supported hardware and software.
+
+=========
+Use Cases
+=========
+
+**High-Performance Computing (HPC)**: Scientific simulations, modeling applications, and distributed computing workloads
+
+**Machine Learning**: Distributed training and inference workloads across multiple GPU nodes
+
+**Data Processing**: Database systems, analytics platforms, and storage applications requiring high network throughput
+
+**Legacy Applications**: Existing applications that require direct access to networking hardware
+
 =================
 License Agreement
 =================
@@ -42,3 +76,8 @@ Learn More
 
 The Network Operator is open-source. 
 For more information on contributions and release artifacts, see the `GitHub repo <https://github.com/Mellanox/network-operator>`_.
+
+For detailed deployment instructions and examples:
+
+- :doc:`quick-start/quick-start-k8s`: Quick deployment guide with common configurations  
+- :doc:`deployment-guide-kubernetes`: Detailed deployment scenarios

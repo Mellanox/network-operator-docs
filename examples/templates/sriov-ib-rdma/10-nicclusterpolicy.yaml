@@ -1,0 +1,24 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: |doca-driver-repository|
+    version: |doca-driver-version|
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: |nvidia-ipam-repository|
+    version: |nvidia-ipam-version|
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: |cni-plugins-repository|
+      version: |cni-plugins-version|
+    multus:
+      image: multus-cni
+      repository: |multus-repository|
+      version: |multus-version| 
