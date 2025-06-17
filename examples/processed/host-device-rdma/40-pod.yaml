@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostdev-test-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: hostdev-net
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        nvidia.com/hostdev: '1'
+      limits:
+        nvidia.com/hostdev: '1' 

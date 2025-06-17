@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-a
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-a
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_a: 1
+      limits:
+        rdma/rdma_shared_device_a: 1
+-----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-b
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-b
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_b: 1
+      limits:
+        rdma/rdma_shared_device_b: 1
+-----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-c
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-c
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_c: 1
+      limits:
+        rdma/rdma_shared_device_c: 1

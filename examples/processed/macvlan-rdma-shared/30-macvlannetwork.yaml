@@ -1,0 +1,14 @@
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network
+spec:
+  networkNamespace: "default"
+  master: "ens1f0"
+  mode: "bridge"
+  mtu: 1500
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "macvlan-pool"
+    } 

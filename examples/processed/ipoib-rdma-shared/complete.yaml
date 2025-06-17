@@ -1,0 +1,185 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvstaging/mellanox
+    version: 25.04-0.6.1.0-2
+  rdmaSharedDevicePlugin:
+    image: k8s-rdma-shared-dev-plugin
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    config: |
+      {
+        "configList": [
+          {
+            "resourceName": "rdma_shared_device_a",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs1f0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_device_b",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs1f1"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_device_c",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibs2f0"]
+        ]
+      }
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+    multus:
+      image: multus-cni
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+    ipoib:
+      image: ipoib-cni
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: ipoib-pool-a
+  namespace: nvidia-network-operator
+spec:
+  subnet: 192.168.5.0/24
+  perNodeBlockSize: 50
+  gateway: 192.168.5.1
+-----
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: ipoib-pool-b
+  namespace: nvidia-network-operator
+spec:
+  subnet: 192.168.6.0/24
+  perNodeBlockSize: 50
+  gateway: 192.168.6.1
+-----
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: ipoib-pool-c
+  namespace: nvidia-network-operator
+spec:
+  subnet: 192.168.7.0/24
+  perNodeBlockSize: 50
+  gateway: 192.168.7.1 
+---
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-a
+spec:
+  networkNamespace: "default"
+  master: "ibs1f0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "ipoib-pool-a"
+    } 
+-----
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-b
+spec:
+  networkNamespace: "default"
+  master: "ibs1f1"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "ipoib-pool-b"
+    }
+-----
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-c
+spec:
+  networkNamespace: "default"
+  master: "ibs2f0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "ipoib-pool-c"
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-a
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-a
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_a: 1
+      limits:
+        rdma/rdma_shared_device_a: 1
+-----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-b
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-b
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_b: 1
+      limits:
+        rdma/rdma_shared_device_b: 1
+-----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ipoib-test-pod-c
+  annotations:
+    k8s.v1.cni.cncf.io/networks: ipoib-network-c
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_c: 1
+      limits:
+        rdma/rdma_shared_device_c: 1
