@@ -37,19 +37,32 @@ The following are special environment variables supported by the NVIDIA DOCA-OFE
        |    * ib_srpt
    * - ENABLE_NFSRDMA
      - "false"
-     - Enable loading of NFS & NVME related storage modules from a NVIDIA DOCA-OFED Driver container
+     - Enable loading of NFS related storage modules from a NVIDIA DOCA-OFED Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "false"
      - Restore host drivers when a container
 
 In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
 
+----------------------------------------
+CREATE_IFNAMES_UDEV Environment Variable
+----------------------------------------
+
 .. warning::
    CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
 
-.. warning::
-  When ENABLE_NFSRDMA is set to `true`, it is not possible to load NVME related storage modules from NVIDIA DOCA-OFED Driver container when they are in use by the system
-  (e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA-OFED Driver container.
+-----------------------------------
+ENABLE_NFSRDMA Environment Variable
+-----------------------------------
+
+In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
+In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on `ib_core` which does not match (symbol error). Only NVME with local drive is supported.
+ 
+
+
+---------------------------
+Example of NicClusterPolicy
+---------------------------
 
 These variables can be set in the NicClusterPolicy. For example:
 
