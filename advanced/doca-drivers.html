@@ -108,15 +108,21 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables" id="id3">NVIDIA DOCA-OFED Driver Container Environment Variables</a></p></li>
-<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id4">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
+<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables" id="id3">NVIDIA DOCA-OFED Driver Container Environment Variables</a></p>
 <ul>
-<li><p><a class="reference internal" href="#prerequisites" id="id5">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#dockerfile-overview" id="id6">Dockerfile Overview</a></p></li>
-<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id7">Common mandatory build parameters</a></p></li>
-<li><p><a class="reference internal" href="#rhcos" id="id8">RHCOS</a></p></li>
-<li><p><a class="reference internal" href="#ubuntu" id="id9">Ubuntu</a></p></li>
-<li><p><a class="reference internal" href="#sles" id="id10">SLES</a></p></li>
+<li><p><a class="reference internal" href="#create-ifnames-udev-environment-variable" id="id4">CREATE_IFNAMES_UDEV Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#enable-nfsrdma-environment-variable" id="id5">ENABLE_NFSRDMA Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id6">Example of NicClusterPolicy</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id7">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id8">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id9">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id10">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhcos" id="id11">RHCOS</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id12">Ubuntu</a></p></li>
+<li><p><a class="reference internal" href="#sles" id="id13">SLES</a></p></li>
 </ul>
 </li>
 </ul>
@@ -162,7 +168,7 @@
 </tr>
 <tr class="row-even"><td><p>ENABLE_NFSRDMA</p></td>
 <td><p>“false”</p></td>
-<td><p>Enable loading of NFS &amp; NVME related storage modules from a NVIDIA DOCA-OFED Driver container</p></td>
+<td><p>Enable loading of NFS related storage modules from a NVIDIA DOCA-OFED Driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
 <td><p>“false”</p></td>
@@ -171,15 +177,20 @@
 </tbody>
 </table>
 <p>In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard “HTTP_PROXY”, “HTTPS_PROXY”, “NO_PROXY”.</p>
+<section id="create-ifnames-udev-environment-variable">
+<h3>CREATE_IFNAMES_UDEV Environment Variable<a class="headerlink" href="#create-ifnames-udev-environment-variable" title="Permalink to this headline"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>When ENABLE_NFSRDMA is set to <cite>true</cite>, it is not possible to load NVME related storage modules from NVIDIA DOCA-OFED Driver container when they are in use by the system
-(e.g the system has NVMe SSD drives in use). User should ensure the modules are not in use and blacklist them prior to the use of NVIDIA DOCA-OFED Driver container.</p>
-</div>
+</section>
+<section id="enable-nfsrdma-environment-variable">
+<h3>ENABLE_NFSRDMA Environment Variable<a class="headerlink" href="#enable-nfsrdma-environment-variable" title="Permalink to this headline"></a></h3>
+<p>In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
+In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on <cite>ib_core</cite> which does not match (symbol error). Only NVME with local drive is supported.</p>
+</section>
+<section id="example-of-nicclusterpolicy">
+<h3>Example of NicClusterPolicy<a class="headerlink" href="#example-of-nicclusterpolicy" title="Permalink to this headline"></a></h3>
 <p>These variables can be set in the NicClusterPolicy. For example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -195,6 +206,7 @@
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 </pre></div>
 </div>
+</section>
 </section>
 <section id="precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container">
 <span id="advanced-configurations-precompiled"></span><h2>Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container<a class="headerlink" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" title="Permalink to this headline"></a></h2>
@@ -360,7 +372,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 15, 2025.
+      <span class="lastupdated">Last updated on Jun 18, 2025.
       </span></p>
   </div>
 
