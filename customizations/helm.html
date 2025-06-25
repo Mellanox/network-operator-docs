@@ -201,59 +201,64 @@ can find those below.</p>
 <tr class="row-odd"><td><p>operator.cniBinDirectory</p></td>
 <td><p>string</p></td>
 <td><p><cite>“/opt/cni/bin”</cite></p></td>
-<td><p>Directory, where CNI binaries will be deployed on the nodes. Setting for  the sriov-network-operator is set with <code class="docutils literal notranslate"><span class="pre">sriov-network-operator.cniBinPath</span></code> parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.</p></td>
+<td><p>Directory, where CNI binaries will be deployed on the nodes. Setting for the sriov-network-operator is set with <code class="docutils literal notranslate"><span class="pre">sriov-network-operator.cniBinPath</span></code> parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.fullnameOverride</p></td>
+<tr class="row-even"><td><p>operator.cniNetworkDirectory</p></td>
+<td><p>string</p></td>
+<td><p><cite>“/etc/cni/net.d”</cite></p></td>
+<td><p>Directory, where CNI network configuration will be deployed on the nodes. Note that the CNI network directory should be aligned with the CNI network directory in the container runtime.</p></td>
+</tr>
+<tr class="row-odd"><td><p>operator.fullnameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used to replace generated names.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.image</p></td>
+<tr class="row-even"><td><p>operator.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator”</cite></p></td>
 <td><p>Network Operator image name</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.maintenanceOperator</p></td>
+<tr class="row-odd"><td><p>operator.maintenanceOperator</p></td>
 <td><p>object</p></td>
 <td><p><cite>{“nodeMaintenanceNamePrefix”:”network-operator”,”nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.network.operator”,”useRequestor”:false}</cite></p></td>
 <td><p>Enable the use of maintenance operator upgrade logic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.nameOverride</p></td>
+<tr class="row-even"><td><p>operator.nameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used as part of objects name generation.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.nodeSelector</p></td>
+<tr class="row-odd"><td><p>operator.nodeSelector</p></td>
 <td><p>object</p></td>
 <td><p><cite>{}</cite></p></td>
 <td><p>Configure node selector settings for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.enable</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.enable</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy init container.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.image</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator-init-container”</cite></p></td>
 <td><p>Init container image name.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.repository</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.repository</p></td>
 <td><p>string</p></td>
 <td><p><cite>“ghcr.io/mellanox”</cite></p></td>
 <td><p>Init container image repository.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.version</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
 <td><p><cite>“v0.0.3”</cite></p></td>
 <td><p>Init container image version.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.repository</p></td>
+<tr class="row-even"><td><p>operator.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvidia/cloud-native”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
 <td><p>Network Operator image repository.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.resources</p></td>
+<tr class="row-odd"><td><p>operator.resources</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span><span class="w"></span>
@@ -266,7 +271,7 @@ can find those below.</p>
 </td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.tolerations</p></td>
+<tr class="row-even"><td><p>operator.tolerations</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
@@ -281,17 +286,17 @@ can find those below.</p>
 </td>
 <td><p>Set additional tolerations for various Daemonsets deployed by the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.useDTK</p></td>
+<tr class="row-odd"><td><p>operator.useDTK</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
-<td><p>Enable the use of Driver ToolKit to compile DOCA Drivers (OpenShift only).</p></td>
+<td><p>Enable the use of Driver ToolKit to compile DOCA-OFED Drivers (OpenShift only).</p></td>
 </tr>
-<tr class="row-odd"><td><p>sriovNetworkOperator.enabled</p></td>
+<tr class="row-even"><td><p>sriovNetworkOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy SR-IOV Network Operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>upgradeCRDs</p></td>
+<tr class="row-odd"><td><p>upgradeCRDs</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable CRDs upgrade with helm pre-install and pre-upgrade hooks.</p></td>
@@ -449,7 +454,7 @@ can find those below.</p>
 <tbody>
 <tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.2.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v25.7.0-beta.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
@@ -459,7 +464,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin:v0.38.2”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v25.7.0-beta.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.resourcesInjector</p></td>
@@ -469,7 +474,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v25.7.0-beta.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
@@ -479,7 +484,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
 <td><p>string</p></td>
-<td><p><cite>“ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.9.0”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v25.7.0-beta.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.webhook</p></td>
@@ -680,12 +685,12 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>maintenance-operator-chart.operator.image.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“ghcr.io/mellanox”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>maintenance-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“v0.2.2”</cite></p></td>
+<td><p><cite>“network-operator-v25.7.0-beta.1”</cite></p></td>
 <td></td>
 </tr>
 </tbody>
@@ -712,7 +717,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 18, 2025.
+      <span class="lastupdated">Last updated on Jun 25, 2025.
       </span></p>
   </div>
 

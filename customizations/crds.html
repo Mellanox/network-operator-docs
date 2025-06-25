@@ -148,7 +148,7 @@ string</p></td>
 </section>
 <section id="configmapnamereference">
 <span id="id3"></span><h3>ConfigMapNameReference<a class="headerlink" href="#configmapnamereference" title="Permalink to this headline"></a></h3>
-<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>, <a class="reference internal" href="#spectrumxoperatorspec"><span class="std std-ref">SpectrumXOperatorSpec</span></a>)</p>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
 <p>ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
@@ -1123,7 +1123,7 @@ if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
 <section id="ofeddriverspec">
 <span id="id29"></span><h3>OFEDDriverSpec<a class="headerlink" href="#ofeddriverspec" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
-<p>OFEDDriverSpec describes configuration options for DOCA Driver Container</p>
+<p>OFEDDriverSpec describes configuration options for DOCA-OFED Driver Container</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
 <table class="docutils align-default">
@@ -1139,7 +1139,7 @@ if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td><p>Image information for DOCA driver container</p></td>
+<td><p>Image information for DOCA-OFED driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">startupProbe</span></code>
 <a class="reference internal" href="#podprobespec"><span class="std std-ref">PodProbeSpec</span></a></p></td>
@@ -1155,32 +1155,32 @@ if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
 <a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#EnvVar">[]Kubernetes core/v1.EnvVar</a></p></td>
-<td><p>List of environment variables to set in the DOCA driver container.</p></td>
+<td><p>List of environment variables to set in the DOCA-OFED driver container.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">upgradePolicy</span></code>
 <a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a></p></td>
-<td><p>DOCA driver auto-upgrade settings</p></td>
+<td><p>DOCA-OFED driver auto-upgrade settings</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">certConfig</span></code>
 <a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
-<td><p>Optional: Custom TLS certificates configuration for DOCA driver container</p></td>
+<td><p>Optional: Custom TLS certificates configuration for DOCA-OFED driver container</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">repoConfig</span></code>
 <a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
-<td><p>Optional: Custom package repository configuration for DOCA driver container</p></td>
+<td><p>Optional: Custom package repository configuration for DOCA-OFED driver container</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">terminationGracePeriodSeconds</span></code>
 int64</p></td>
 <td><p><em>(Optional)</em>
 TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the
-DOCA driver container pod on termination</p></td>
+DOCA-OFED driver container pod on termination</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">forcePrecompiled</span></code>
 bool</p></td>
 <td><p><em>(Optional)</em>
-ForcePrecompiled specifies if only DOCA driver precompiled images are allowed If set to false and
-precompiled image does not exists, DOCA driver will be compiled on Nodes If set to true and
-precompiled image does not exists, OFED state will be Error.</p></td>
+ForcePrecompiled specifies if only DOCA-OFED driver precompiled images are allowed If set to
+false and precompiled image does not exists, DOCA-OFED driver will be compiled on Nodes If set to
+true and precompiled image does not exists, OFED state will be Error.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1316,14 +1316,6 @@ implementation-defined value. Requests cannot exceed Limits. More info:
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
 <td><p>Image information for NVIDIA Spectrum-X Operator</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumXConfig</span></code>
-<a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
-<td><p>Spectrum-X Operator ConfigMap name</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sriovObjNamespace</span></code>
-string</p></td>
-<td><p>SR-IOV Network Operator and related CRDs namespace</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1382,7 +1374,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 18, 2025.
+      <span class="lastupdated">Last updated on Jun 25, 2025.
       </span></p>
   </div>
 
