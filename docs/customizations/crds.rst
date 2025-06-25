@@ -45,7 +45,7 @@ AppliedState defines a finer-grained view of the observed state of NicClusterPol
 ConfigMapNameReference
 ~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`, :ref:`SpectrumXOperatorSpec <SpectrumXOperatorSpec>`)
+(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
 
 ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.
 
@@ -772,7 +772,7 @@ OFEDDriverSpec
 
 (*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
-OFEDDriverSpec describes configuration options for DOCA Driver Container
+OFEDDriverSpec describes configuration options for DOCA-OFED Driver Container
 
 .. container:: md-typeset__scrollwrap
 
@@ -781,7 +781,7 @@ OFEDDriverSpec describes configuration options for DOCA Driver Container
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``ImageSpec``                                                                                     | Image information for DOCA driver container                                                       |
+      | ``ImageSpec``                                                                                     | Image information for DOCA-OFED driver container                                                  |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``startupProbe``                                                                                  | Pod startup probe settings                                                                        |
@@ -793,26 +793,26 @@ OFEDDriverSpec describes configuration options for DOCA Driver Container
       | ``readinessProbe``                                                                                | Pod readiness probe settings                                                                      |
       | :ref:`PodProbeSpec <PodProbeSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``env``                                                                                           | List of environment variables to set in the DOCA driver container.                                |
+      | ``env``                                                                                           | List of environment variables to set in the DOCA-OFED driver container.                           |
       | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``upgradePolicy``                                                                                 | DOCA driver auto-upgrade settings                                                                 |
+      | ``upgradePolicy``                                                                                 | DOCA-OFED driver auto-upgrade settings                                                            |
       | :ref:`DriverUpgradePolicySpec <DriverUpgradePolicySpec>`                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for DOCA driver container                         |
+      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for DOCA-OFED driver container                    |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for DOCA driver container                       |
+      | ``repoConfig``                                                                                    | Optional: Custom package repository configuration for DOCA-OFED driver container                  |
       | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``terminationGracePeriodSeconds``                                                                 | *(Optional)*                                                                                      |
       | int64                                                                                             | TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the  |
-      |                                                                                                   | DOCA driver container pod on termination                                                          |
+      |                                                                                                   | DOCA-OFED driver container pod on termination                                                     |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``forcePrecompiled``                                                                              | *(Optional)*                                                                                      |
-      | bool                                                                                              | ForcePrecompiled specifies if only DOCA driver precompiled images are allowed If set to false and |
-      |                                                                                                   | precompiled image does not exists, DOCA driver will be compiled on Nodes If set to true and       |
-      |                                                                                                   | precompiled image does not exists, OFED state will be Error.                                      |
+      | bool                                                                                              | ForcePrecompiled specifies if only DOCA-OFED driver precompiled images are allowed If set to      |
+      |                                                                                                   | false and precompiled image does not exists, DOCA-OFED driver will be compiled on Nodes If set to |
+      |                                                                                                   | true and precompiled image does not exists, OFED state will be Error.                             |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _PodProbeSpec:
@@ -915,12 +915,6 @@ SpectrumXOperatorSpec describes configuration options for NVIDIA Spectrum-X Oper
       +===================================================================================================+===================================================================================================+
       | ``ImageSpec``                                                                                     | Image information for NVIDIA Spectrum-X Operator                                                  |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spectrumXConfig``                                                                               | Spectrum-X Operator ConfigMap name                                                                |
-      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``sriovObjNamespace``                                                                             | SR-IOV Network Operator and related CRDs namespace                                                |
-      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _State:
