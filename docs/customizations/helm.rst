@@ -96,7 +96,11 @@ General Parameters
    * - operator.cniBinDirectory
      - string
      - `"/opt/cni/bin"`
-     - Directory, where CNI binaries will be deployed on the nodes. Setting for  the sriov-network-operator is set with ``sriov-network-operator.cniBinPath`` parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.
+     - Directory, where CNI binaries will be deployed on the nodes. Setting for the sriov-network-operator is set with ``sriov-network-operator.cniBinPath`` parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.
+   * - operator.cniNetworkDirectory
+     - string
+     - `"/etc/cni/net.d"`
+     - Directory, where CNI network configuration will be deployed on the nodes. Note that the CNI network directory should be aligned with the CNI network directory in the container runtime.
    * - operator.fullnameOverride
      - string
      - `""`
@@ -135,7 +139,7 @@ General Parameters
      - Init container image version.
    * - operator.repository
      - string
-     - `"nvcr.io/nvidia/cloud-native"`
+     - `"nvcr.io/nvstaging/mellanox"`
      - Network Operator image repository.
    * - operator.resources
      - yaml
@@ -166,7 +170,7 @@ General Parameters
    * - operator.useDTK
      - bool
      - `true`
-     - Enable the use of Driver ToolKit to compile DOCA Drivers (OpenShift only).
+     - Enable the use of Driver ToolKit to compile DOCA-OFED Drivers (OpenShift only).
    * - sriovNetworkOperator.enabled
      - bool
      - `false`
@@ -301,7 +305,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:v1.2.1"`
+     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v25.7.0-beta.1"`
      -
    * - sriov-network-operator.images.operator
      - string
@@ -309,7 +313,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.ovsCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/ovs-cni-plugin:v0.38.2"`
+     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v25.7.0-beta.1"`
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
@@ -317,7 +321,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v25.7.0-beta.1"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
@@ -325,7 +329,7 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
-     - `"ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.9.0"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v25.7.0-beta.1"`
      -
    * - sriov-network-operator.images.webhook
      - string
@@ -491,11 +495,11 @@ Maintenance Operator Helm chart customization options can be found `here <https:
      -
    * - maintenance-operator-chart.operator.image.repository
      - string
-     - `"ghcr.io/mellanox"`
+     - `"nvcr.io/nvstaging/mellanox"`
      -
    * - maintenance-operator-chart.operator.image.tag
      - string
-     - `"v0.2.2"`
+     - `"network-operator-v25.7.0-beta.1"`
      -
 
 =======================
