@@ -21,6 +21,7 @@
    :titlesonly:
    :hidden:
 
+   Quick Start Guide <quick-start-k8s.rst>
    Release Notes <release-notes.rst>
    Platform Support <platform-support.rst>
    Getting Started with Kubernetes <getting-started-kubernetes.rst>

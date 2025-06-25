@@ -1,0 +1,12 @@
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network
+spec:
+  networkNamespace: "default"
+  master: "ibs1f0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "ipoib-pool"
+    } 
