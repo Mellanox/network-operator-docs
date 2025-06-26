@@ -74,6 +74,7 @@ type Release struct {
 	IpamPlugin                   *ReleaseImageSpec
 	NvIPAM                       *ReleaseImageSpec
 	NicFeatureDiscovery          *ReleaseImageSpec
+	NodeFeatureDiscovery         *ReleaseImageSpec
 	DOCATelemetryService         *ReleaseImageSpec
 	OVSCni                       *ReleaseImageSpec
 	RDMACni                      *ReleaseImageSpec

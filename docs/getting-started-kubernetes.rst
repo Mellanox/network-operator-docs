@@ -196,7 +196,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -223,7 +223,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
       rdmaSharedDevicePlugin:
         # [map[ifNames:[ens1f0] name:rdma_shared_device_a]]
         image: k8s-rdma-shared-dev-plugin
-        repository: ghcr.io/mellanox
+        repository: |k8s-rdma-shared-dev-plugin-repository|
         version: |k8s-rdma-shared-dev-plugin-version|
         imagePullSecrets: []
         # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
@@ -276,7 +276,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -303,7 +303,7 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
       rdmaSharedDevicePlugin:
         # [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]
         image: k8s-rdma-shared-dev-plugin
-        repository: ghcr.io/mellanox
+        repository: |k8s-rdma-shared-dev-plugin-repository|
         version: |k8s-rdma-shared-dev-plugin-version|
         imagePullSecrets: []
         # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
@@ -366,17 +366,17 @@ Once the Network Operator is installed create a NicClusterPolicy with the follow
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -409,17 +409,17 @@ Once the Network Operator is installed create a NicClusterPolicy with the follow
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
       nvIpam:
         image: nvidia-k8s-ipam
-        repository: ghcr.io/mellanox
+        repository: |nvidia-ipam-repository|
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
@@ -494,7 +494,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       sriovDevicePlugin:
         image: sriov-network-device-plugin
-        repository: ghcr.io/k8snetworkplumbingwg
+        repository: |sriovnetop-sriov-device-plugin-repository|
         version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
@@ -519,17 +519,17 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -646,7 +646,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
       rdmaSharedDevicePlugin:
         # [map[linkTypes:[ether] name:rdma_shared_device_a]]
         image: k8s-rdma-shared-dev-plugin
-        repository: ghcr.io/mellanox
+        repository: |k8s-rdma-shared-dev-plugin-repository|
         version: |k8s-rdma-shared-dev-plugin-version|
         imagePullSecrets: []
         # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
@@ -669,7 +669,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
           }
       sriovDevicePlugin:
         image: sriov-network-device-plugin
-        repository: ghcr.io/k8snetworkplumbingwg
+        repository: |sriovnetop-sriov-device-plugin-repository|
         version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
@@ -694,17 +694,17 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -743,7 +743,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -770,7 +770,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       rdmaSharedDevicePlugin:
         # [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]
         image: k8s-rdma-shared-dev-plugin
-        repository: ghcr.io/mellanox
+        repository: |k8s-rdma-shared-dev-plugin-repository|
         version: |k8s-rdma-shared-dev-plugin-version|
         imagePullSecrets: []
         # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
@@ -794,21 +794,21 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipoib:
           image: ipoib-cni
-          repository: ghcr.io/mellanox
-          version: 428715a57c0b633e48ec7620f6e3af6863149ccf
+          repository: |ipoib-cni-repository|
+          version: |ipoib-cni-version|
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -928,7 +928,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -954,7 +954,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
             deleteEmptyDir: true
       sriovDevicePlugin:
         image: sriov-network-device-plugin
-        repository: ghcr.io/k8snetworkplumbingwg
+        repository: |sriovnetop-sriov-device-plugin-repository|
         version: |sriovnetop-sriov-device-plugin-version|
         imagePullSecrets: []
         config: |
@@ -979,17 +979,17 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -1106,7 +1106,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -1133,17 +1133,17 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -1383,7 +1383,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -1410,17 +1410,17 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
           imagePullSecrets: []
 
@@ -1576,7 +1576,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         forcePrecompiled: false
         imagePullSecrets: []
@@ -1602,7 +1602,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
             deleteEmptyDir: true
       ibKubernetes:
         image: ib-kubernetes
-        repository: ghcr.io/mellanox
+        repository: |ib-kubernetes-repository|
         version: |ib-kubernetes-version|
         imagePullSecrets: []
         pKeyGUIDPoolRangeStart: 02:00:00:00:00:00:00:00
@@ -1610,19 +1610,19 @@ Once the Network Operator is installed create a NicClusterPolicy with:
         ufmSecret: "ib-kubernetes-ufm-secret"
       nvIpam:
         image: nvidia-k8s-ipam
-        repository: ghcr.io/mellanox
+        repository: |nvidia-ipam-repository|
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
 
@@ -1778,11 +1778,11 @@ Network Operator deployment with:
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
       sriovDevicePlugin:
         image: sriov-network-device-plugin
-        repository: ghcr.io/k8snetworkplumbingwg
+        repository: |sriov-device-plugin-repository|
         version: |sriov-device-plugin-version|
          config: |
           {
@@ -1801,15 +1801,15 @@ Network Operator deployment with:
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
-          version: |cni-plugins-version|-amd64
+          repository: |cni-plugins-repository|
+          version: |cni-plugins-version|
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
-          version: |whereabouts-version|-amd64
+          repository: |whereabouts-repository|
+          version: |whereabouts-version|
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
 
 ``host-device-net.yaml``
@@ -1914,19 +1914,19 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
     spec:
       nvIpam:
         image: nvidia-k8s-ipam
-        repository: ghcr.io/mellanox
+        repository: |nvidia-ipam-repository|
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
 
@@ -2234,19 +2234,19 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
     spec:
       nvIpam:
         image: nvidia-k8s-ipam
-        repository: ghcr.io/mellanox
+        repository: |nvidia-ipam-repository|
         version: |nvidia-ipam-version|
         imagePullSecrets: []
         enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
           imagePullSecrets: []
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
 
@@ -2716,11 +2716,11 @@ First install the Network Operator helm chart with the Maintenance Operator enab
       nicConfigurationOperator:
         operator:
           image: nic-configuration-operator
-          repository: ghcr.io/mellanox
+          repository: |nic-configuration-operator-repository|
           version: |nic-configuration-operator-version|
         configurationDaemon:
           image: nic-configuration-operator-daemon
-          repository: ghcr.io/mellanox
+          repository: |nic-configuration-operator-repository|
           version: |nic-configuration-operator-version|
         nicFirmwareStorage:
           create: true

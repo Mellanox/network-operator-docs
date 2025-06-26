@@ -38,7 +38,7 @@ This example should serve as a reference, it is not recommended to apply it as i
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         upgradePolicy:
           autoUpgrade: true
@@ -59,7 +59,7 @@ This example should serve as a reference, it is not recommended to apply it as i
           periodSeconds: 30
       rdmaSharedDevicePlugin:
         image: k8s-rdma-shared-dev-plugin
-        repository: ghcr.io/mellanox
+        repository: |k8s-rdma-shared-dev-plugin-repository|
         version: |k8s-rdma-shared-dev-plugin-version|
         # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
         # Replace 'devices' with your (RDMA capable) netdevice name.
@@ -78,7 +78,7 @@ This example should serve as a reference, it is not recommended to apply it as i
           }
       sriovDevicePlugin:
         image: sriov-network-device-plugin
-        repository: ghcr.io/k8snetworkplumbingwg
+        repository: |sriov-device-plugin-repository|
         version: |sriov-device-plugin-version|
         config: |
           {
@@ -96,48 +96,48 @@ This example should serve as a reference, it is not recommended to apply it as i
       secondaryNetwork:
         cniPlugins:
           image: plugins
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |cni-plugins-repository|
           version: |cni-plugins-version|
         ipoib:
           image: ipoib-cni
-          repository: ghcr.io/mellanox
+          repository: |ipoib-cni-repository|
           version: |ipoib-cni-version|
         multus:
           image: multus-cni
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |multus-repository|
           version: |multus-version|
         ipamPlugin:
           image: whereabouts
-          repository: ghcr.io/k8snetworkplumbingwg
+          repository: |whereabouts-repository|
           version: |whereabouts-version|
       nvIpam:
         image: nvidia-k8s-ipam
-        repository: ghcr.io/mellanox
+        repository: |nvidia-ipam-repository|
         version: |nvidia-ipam-version|
         enableWebhook: false
       ibKubernetes:
         image: ib-kubernetes
-        repository: ghcr.io/mellanox/ib-kubernetes
+        repository: |ib-kubernetes-repository|
         version: |ib-kubernetes-version|
         pKeyGUIDPoolRangeStart: "02:00:00:00:00:00:00:00"
         pKeyGUIDPoolRangeEnd: "02:FF:FF:FF:FF:FF:FF:FF"
         ufmSecret: ufm-secret
       nicFeatureDiscovery:
         image: nic-feature-discovery
-        repository: ghcr.io/mellanox
+        repository: |nic-feature-discovery-repository|
         version: |nic-feature-discovery-version|
       docaTelemetryService:
         image: doca_telemetry
-        repository: nvcr.io/nvidia/doca
+        repository: |doca-telemetry-repository|
         version: |doca-telemetry-version|
       nicConfigurationOperator:
         operator:
           image: nic-configuration-operator
-          repository: ghcr.io/mellanox
+          repository: |nic-configuration-operator-repository|
           version: |nic-configuration-operator-version|
         configurationDaemon:
           image: nic-configuration-operator-daemon
-          repository: ghcr.io/mellanox
+          repository: |nic-configuration-operator-repository|
           version: |nic-configuration-operator-version|
         nicFirmwareStorage:
           create: true
