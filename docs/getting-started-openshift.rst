@@ -246,7 +246,7 @@ SR-IOV device plugin, single SR-IOV resource pool:
    spec:
      ofedDriver:
        image: doca-driver
-       repository: nvcr.io/nvidia/mellanox
+       repository: |doca-driver-repository|
        version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
@@ -259,7 +259,7 @@ SR-IOV device plugin, single SR-IOV resource pool:
          periodSeconds: 30
      sriovDevicePlugin:
          image: sriov-network-device-plugin
-         repository: ghcr.io/k8snetworkplumbingwg
+         repository: |sriov-device-plugin-repository|
          version: |sriov-device-plugin-version|
          config: |
            {
@@ -349,7 +349,7 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
    spec:
      ofedDriver:
        image: doca-driver
-       repository: nvcr.io/nvidia/mellanox
+       repository: |doca-driver-repository|
        version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
@@ -456,7 +456,7 @@ The following is an example of RDMA Shared with MacVlanNetwork:
    spec:
      ofedDriver:     
        image: doca-driver
-       repository: nvcr.io/nvidia/mellanox
+       repository: |doca-driver-repository|
        version: |doca-driver-version|
         startupProbe:
          initialDelaySeconds: 10
@@ -481,7 +481,7 @@ The following is an example of RDMA Shared with MacVlanNetwork:
            ]
          }
        image: k8s-rdma-shared-dev-plugin
-       repository: nvcr.io/nvidia/cloud-native
+       repository: |k8s-rdma-shared-dev-plugin-repository|
        version: |k8s-rdma-shared-dev-plugin-version|
 
 

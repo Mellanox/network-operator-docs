@@ -288,7 +288,7 @@ To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section f
     spec:
       ofedDriver:
         image: doca-driver
-        repository: nvcr.io/nvidia/mellanox
+        repository: |doca-driver-repository|
         version: |doca-driver-version|
         upgradePolicy:
           # autoUpgrade is a global switch for automatic upgrade feature
@@ -375,7 +375,7 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
       spec:
         ofedDriver:
           image: doca-driver
-          repository: nvcr.io/nvidia/mellanox
+          repository: |doca-driver-repository|
           version: |doca-driver-version|
           upgradePolicy:
             autoUpgrade: true
