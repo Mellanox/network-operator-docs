@@ -42,24 +42,24 @@ NVIDIA Network Operator Container Images
      - sha256:67e93ccf3ecb61f17597567faf0f72e1b8ddcf73c5d7440baeadcc1cb6bb811b
    * - nvcr.io/nvstaging/mellanox
      - k8s-rdma-shared-dev-plugin
-     - network-operator-v25.7.0-beta.1
-     - sha256:12dd75bdd8719d7a27a2c0fe0c685a246331dafdd3992ec3b59766cf3c50b569
+     - network-operator-v25.7.0-beta.2
+     - sha256:f69523e7e0f6f1cf5a8d18c4ebae83229f9c45373ed206f50926250672e8c6af
    * - nvcr.io/nvstaging/mellanox
      - ib-kubernetes
      - network-operator-v25.7.0-beta.1
      - sha256:bd3c9a7d7039379afbbfd345f7997b722de2f0f62b3f88efb836c53bd7b2ceb7
    * - nvcr.io/nvstaging/mellanox
      - ipoib-cni
-     - network-operator-v25.7.0-beta.1
-     - sha256:b69083add989ee3a527e3fe2d993afb9a68aba307694e4fc87ef01008f1a7f44
+     - network-operator-v25.7.0-beta.2
+     - sha256:3343112f345b8caa0f7aa29906cb3a0e5b290e737f18bd19fcd2d32cba903ecc
    * - nvcr.io/nvstaging/mellanox
      - nvidia-k8s-ipam
-     - network-operator-v25.7.0-beta.1
-     - sha256:49074d2b0b639cbf2187048a8df32d01da1e2f58a6064b66e85486a476ea4eb5
+     - network-operator-v25.7.0-beta.2
+     - sha256:a132150417d1c857e86418456af05d70deb7d4d828184013c064fd436cacbb82
    * - nvcr.io/nvstaging/mellanox
      - nic-feature-discovery
-     - network-operator-v25.7.0-beta.1
-     - sha256:e7665b6802d9414a7bc9d9b4deb3423a7e3f9b681faca6c376f87ec72c5e1526
+     - network-operator-v25.7.0-beta.2
+     - sha256:64547422659625aefbd85aa59944812dca49e5ef8428656bdb48dfbf6b33a628
    * - nvcr.io/nvidia/doca
      - doca_telemetry
      - 1.21.4-doca3.0.0-host
@@ -82,28 +82,28 @@ NVIDIA Network Operator Container Images
      - sha256:f6c1007ba124cd5103fa1b8bc08a068d17a8c156980d4b605b0472dd036fe124
    * - nvcr.io/nvstaging/mellanox
      - sriov-cni
-     - network-operator-v25.7.0-beta.1
-     - sha256:d158ac38a1667c6957b58610834987641994ca4fd8663eb798632b9f06d55779
+     - network-operator-v25.7.0-beta.2
+     - sha256:cad7b91d2e59c7d0b49ec6c1f430697e6848f2d828a002c66f49e26aa1a102ac
    * - nvcr.io/nvstaging/mellanox
      - ib-sriov-cni
      - network-operator-v25.7.0-beta.1
      - sha256:46e63ec98c6f94862b53df5c2471723302a64463c5342157f7f1c4b529d98bb9
    * - nvcr.io/nvstaging/mellanox
      - plugins
-     - network-operator-v25.7.0-beta.1
-     - sha256:0f1e5cf41f5700ff1410689d7b062f79df72d9cd5abd92663f064832f9e0fd2b
+     - network-operator-v25.7.0-beta.2
+     - sha256:226d1274c503c47473fb310c4ef2bf029be6d8c9b21f5a9f17a9c335d49e2020
    * - nvcr.io/nvstaging/mellanox
      - multus-cni
      - network-operator-v25.7.0-beta.1
      - sha256:5b1a9f5654afddf908dbde4bff47d40cf6740bacb84e30baedfcf10c53b66130
    * - nvcr.io/nvstaging/mellanox
      - whereabouts
-     - network-operator-v25.7.0-beta.1
-     - sha256:32c15a3d33f1bac7ab11b9b7107206c376758aae6100bdbdeaecc6ee547d703c
+     - network-operator-v25.7.0-beta.2
+     - sha256:ab4289c5bda987ca2eee10cbc7d35247cb13ed8487f9972dd95b0d00c3f617a9
    * - nvcr.io/nvstaging/mellanox
      - ovs-cni-plugin
-     - network-operator-v25.7.0-beta.1
-     - sha256:bfdf55c0ff1f26123acd2bd64f9f727c047c012915da456f5a13e8632542c2c7
+     - network-operator-v25.7.0-beta.2
+     - sha256:cd4c3bc9bb0ede3bed71026edbef2aadbfea97a90b156f9260e00e13ae8d9c55
    * - nvcr.io/nvstaging/mellanox
      - rdma-cni
      - network-operator-v25.7.0-beta.1
@@ -118,8 +118,8 @@ NVIDIA Network Operator Container Images
      - sha256:0e8478898e0b30aec13030b11081b205308666c2a9c5c5bf2c00121079901b41
    * - nvcr.io/nvstaging/mellanox
      - maintenance-operator
-     - network-operator-v25.7.0-beta.1
-     - sha256:ef194d8193b8a01f18d2f9f6593d326e7b239a837f50bac61c005a8f532d1428
+     - network-operator-v25.7.0-beta.2
+     - sha256:70c5725a2f99c3c9318477e00b1dfcd9b13c885bede3ad680bdc95f73a7b8ac9
    * - nvcr.io/nvstaging/mellanox
      - spectrum-x-operator
      - network-operator-v25.7.0-beta.1
@@ -213,6 +213,7 @@ Ubuntu
        | 25.04-0.6.1.0-2-6.8.0-31-generic-ubuntu24.04-arm64
      - sha256:50bca7f9910a15baa081445f62e5a02f3a04f376d28301fc3117f3163f7935cd
    * -
+       | 25.04-0.6.1.0-2-rhcos4.19
        | 25.04-0.6.1.0-2-ubuntu22.04
      - sha256:b3561383f61423fc5e312fb0bfdd30345cbe32e8c404482c329ca9fe929e9905
    * -
@@ -226,9 +227,11 @@ Ubuntu
      - sha256:86122f68639756d7565b0f12368ffe872fa487d09aff874a736c1055e2b22588
    * -
        | 25.04-0.6.1.0-2-ubuntu24.04-amd64
+       | 25.04-0.6.1.0-200-rhcos4.19-amd64
      - sha256:c9d12598ab699d29a04d6fadd89fdf0b2515dd5947f414baa704bc20f0d790a8
    * -
        | 25.04-0.6.1.0-2-ubuntu24.04-arm64
+       | 25.04-0.6.1.0-200-rhcos4.19-arm64
      - sha256:97c311b6cf9b973b65767b5520cb0a76077837599ecd1b8581c774deb6ae50db
    * -
        | 25.04-0.6.1.0-21-ubuntu24.04-amd64
@@ -247,8 +250,38 @@ RHCOS
    * - Tags
      - Digest
    * -
+       | 25.04-0.6.1.0-2-rhcos4.13-amd64
+       | 25.04-0.6.1.0-2-rhcos4.14-amd64
+       | 25.04-0.6.1.0-2-rhcos4.15-amd64
+       | 25.04-0.6.1.0-2-rhcos4.16-amd64
+       | 25.04-0.6.1.0-2-rhcos4.17-amd64
+       | 25.04-0.6.1.0-2-rhcos4.18-amd64
+       | 25.04-0.6.1.0-2-rhcos4.19-amd64
+     - sha256:0cec1ad27b1c7642c2d997dbfb00893b632b0cf2b1af658ea212e1d322445ce5
+   * -
+       | 25.04-0.6.1.0-2-rhcos4.13-arm64
+       | 25.04-0.6.1.0-2-rhcos4.14-arm64
+       | 25.04-0.6.1.0-2-rhcos4.15-arm64
+       | 25.04-0.6.1.0-2-rhcos4.16-arm64
+       | 25.04-0.6.1.0-2-rhcos4.17-arm64
+       | 25.04-0.6.1.0-2-rhcos4.18-arm64
+       | 25.04-0.6.1.0-2-rhcos4.19-arm64
+     - sha256:e1a8b3e702e6c77b061b64306769d9b86d960e0bad4fd4ef31c588e215b39e0b
+   * -
        | 25.04-0.6.1.0-2-rhcos4.18
-     - sha256:6bee03b26e7abf7e61b69522ece35e35648c6f4d52a89519bca2407a8c6087b9
+     - sha256:796facf411f137fec41ee447c7a4955af716bb929a80688d0e21a48d523394c7
+   * -
+       | 25.04-0.6.1.0-2-rhcos4.19
+       | 25.04-0.6.1.0-2-ubuntu22.04
+     - sha256:b3561383f61423fc5e312fb0bfdd30345cbe32e8c404482c329ca9fe929e9905
+   * -
+       | 25.04-0.6.1.0-2-ubuntu24.04-amd64
+       | 25.04-0.6.1.0-200-rhcos4.19-amd64
+     - sha256:c9d12598ab699d29a04d6fadd89fdf0b2515dd5947f414baa704bc20f0d790a8
+   * -
+       | 25.04-0.6.1.0-2-ubuntu24.04-arm64
+       | 25.04-0.6.1.0-200-rhcos4.19-arm64
+     - sha256:97c311b6cf9b973b65767b5520cb0a76077837599ecd1b8581c774deb6ae50db
    * -
        | 25.04-0.6.1.0-200-rhcos4.18-amd64
      - sha256:10a29c282d159a66e972bd2be12a8dce03c3b891deed07ad2b97c9ed9c1c2afe
@@ -272,6 +305,7 @@ RHEL
    * - Tags
      - Digest
    * -
+       | 25.04-0.6.1.0-2-mztest
        | 25.04-0.6.1.0-2-rhel8.10
      - sha256:9ffc93fa12782ea7bf064d2d3a199072510ceab5d0af18d34ec95b1980c1f733
    * -
