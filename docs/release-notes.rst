@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.4.1
+     - | - Added support for OpenShift 4.19.
    * - 25.4.0
      - | - Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases.
        | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade.
