@@ -680,6 +680,12 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``tolerations``                                                                                   | Tolerations to inject to the DaemonSets objects that are managed by the operator                  |
       | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``deploymentNodeAffinity``                                                                        | NodeAffinity rules to inject to the Deployments objects that are managed by the operator          |
+      | `Kubernetes core/v1.NodeAffinity <https://godoc.org/k8s.io/api/core/v1#NodeAffinity>`__           |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``deploymentTolerations``                                                                         | Tolerations to inject to the Deployments objects that are managed by the operator                 |
+      | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicClusterPolicyStatus:
 
