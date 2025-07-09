@@ -1,0 +1,24 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvstaging/mellanox
+    version: 25.04-0.6.1.0-2
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+    multus:
+      image: multus-cni
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1 

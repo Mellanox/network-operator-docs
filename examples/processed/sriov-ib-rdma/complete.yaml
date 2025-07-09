@@ -1,0 +1,87 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: nvcr.io/nvstaging/mellanox
+    version: 25.04-0.6.1.0-2
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+    multus:
+      image: multus-cni
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1 
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: sriov-ib-pool
+  namespace: nvidia-network-operator
+spec:
+  subnet: 192.168.6.0/24
+  perNodeBlockSize: 50
+  gateway: 192.168.6.1 
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov
+  namespace: nvidia-network-operator
+spec:
+  deviceType: netdevice
+  mtu: 1500
+  nodeSelector:
+    feature.node.kubernetes.io/pci-15b3.present: "true"
+  nicSelector:
+    vendor: "15b3"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: mlnxnics 
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-ib-network
+  namespace: nvidia-network-operator
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "sriov-ib-pool"
+    }
+  resourceName: mlnxnics
+  linkState: enable
+  networkNamespace: default 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sriov-ib-test-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: sriov-ib-network
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        nvidia.com/mlnxnics: '1'
+      limits:
+        nvidia.com/mlnxnics: '1' 

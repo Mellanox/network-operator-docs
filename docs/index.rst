@@ -23,6 +23,7 @@
 
    Release Notes <release-notes.rst>
    Platform Support <platform-support.rst>
+   Quick Start Guide <quick-start/quick-start-k8s.rst>
    Getting Started with Kubernetes <getting-started-kubernetes.rst>
    Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
    Customization Options and CRDs <customizations/customization.rst>
