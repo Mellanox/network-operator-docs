@@ -213,6 +213,8 @@ Kernel version can also be found with the DTK image using the following command:
 RHCOS example
 ~~~~~~~~~~~~~
 
+**NOTE:** Since OCP 4.19, RHCOS is based on RHEL 9.6, therefore the tag should include the RHEL version instead of the OCP version.
+
 .. code-block:: bash
 
    podman build \
