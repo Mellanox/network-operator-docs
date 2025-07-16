@@ -1,0 +1,47 @@
+name: docs-remove-stale-reviews
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "gh-pages"
+      - name: Initialize Git configuration
+        run: |
+          git config user.name docs-remove-stale-reviews
+          git config user.email do-not-send-@github.com
+      - name: List up to 200 open PRs
+        run: |
+          gh pr list -L 200 -s open
+      - name: Remove stale reviews
+        shell: bash
+        run: |
+          if [ ! -d "review" ]; then
+            echo "No reviews exist."
+            exit 0
+          fi
+          open=$(gh pr list -L 200 -s open --json 'number' -q '.[]|.pr = "pr-\(.number)"|.pr')
+          reviews=$(ls review/)
+          for i in ${reviews}; do
+            echo "Checking if ${i} is still open"
+            if ! [[ ${open[*]} =~ "${i}" ]]; then
+              echo "Removing review/${i}"
+              git rm -rf "review/${i}"
+            fi
+          done
+      - name: Commit changes
+        run: |
+          if git commit -m 'Removing stale reviews from GitHub Pages.'; then
+            git push -f
+          else
+           echo "Nothing changed."
+          fi

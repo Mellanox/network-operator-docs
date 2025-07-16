@@ -5,6 +5,7 @@ jobs:
   build:
     name: generate-html
     runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     permissions:
       contents: read
     steps:
@@ -17,3 +18,16 @@ jobs:
         with:
           name: generated-html
           path: _build/docs/nvidia_network_operator
+      - name: 'Create PR metadata'
+        if: github.event_name == 'pull_request'
+        run: |
+          mkdir -p pr
+          echo "${{ github.event.pull_request.number }}" > pr/pr.txt
+          echo "${{ github.event.pull_request.merged }}" > pr/merged.txt
+          echo "${{ github.event.action }}" > pr/action.txt
+      - name: 'Upload PR metadata artifact'
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr
+          path: pr
