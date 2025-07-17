@@ -27,7 +27,7 @@ jobs:
       env:
         NGC_CLI_API_KEY: ${{ secrets.NVCR_TOKEN }}
       run: |
-        make api-docs helm-docs generate-docs-versions-var
+        make api-docs helm-docs generate-docs-versions-var nic-conf-docs
     - name: Close any existing documentation PRs
       run: |
         for pr_number in $(gh pr list --search "$PR_TITLE_PREFIX" --json number --jq ".[].number"); do

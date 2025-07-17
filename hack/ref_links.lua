@@ -33,6 +33,12 @@ function Link(el)
     local ref_name = el.content[1].text
     return pandoc.RawInline('rst', string.format(":ref:`%s <%s>`", el.content[1].text, ref_name))
   end
+  -- Check if the link is "#configuration.net.nvidia.com%2fv1alpha1"
+  if href:match("configuration%.net%.nvidia%.com%%2fv*") then
+    -- Update the href to be the correct path
+    local ref_name = el.content[1].text
+    return pandoc.RawInline('rst', string.format(":ref:`%s <%s>`", el.content[1].text, ref_name))
+  end
   -- Remove asterisks from around the link text if present
   local link_text = el.content[1].text:gsub("^%*", ""):gsub("%*$", "")
   -- Remove the leading '#' if present
