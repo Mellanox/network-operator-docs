@@ -11,13 +11,77 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build HTML
         run: make gen-docs
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload HTML
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/docs/nvidia_network_operator/latest
+          name: html-build-artifact
+          path: _build/docs/nvidia_network_operator/latest
+          if-no-files-found: error
+          retention-days: 1
+
+  # Deploy to GitHub Pages
+  deploy:
+    needs: [build-and-deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Initialize Git configuration
+        run: |
+          git config user.name docs-publish
+          git config user.email do-not-send-@github.com
+
+      - name: Download artifacts to temp directory
+        uses: actions/download-artifact@v4
+        with:
+          name: html-build-artifact
+          path: /tmp/new-docs
+
+      - name: Copy HTML files (preserving review directories)
+        run: |
+          # Remove current files except review directories
+          find . -maxdepth 1 -not -name '.' -not -name '..' -not -name 'review' -not -name '.git' -not -name '.nojekyll' -exec rm -rf {} \; 2>/dev/null || true
+          
+          # Copy new documentation files from temp directory
+          cp -r /tmp/new-docs/* . 2>/dev/null || true
+          
+          # Clean up temp directory
+          rm -rf /tmp/new-docs
+          
+          # List what we have now
+          echo "Files after deployment:"
+          ls -la
+          
+          # Add all files to git
+          git add .
+
+      - name: Check or create dot-no-jekyll file
+        run: |
+          if [ -f ".nojekyll" ]; then
+            echo "The .nojekyll file already exists."
+          else
+            touch .nojekyll
+            git add .nojekyll
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git status
+          if git commit -m 'Deploy documentation to GitHub Pages.'; then
+            git push
+          else
+            echo "Nothing changed."
+          fi
+
+  # Clean up stale PR reviews
+  cleanup-stale-reviews:
+    needs: [deploy]
+    uses: ./.github/workflows/docs-remove-stale-reviews.yaml
