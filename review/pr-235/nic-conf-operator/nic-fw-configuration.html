@@ -61,6 +61,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">NIC Firmware Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration-details.html">Configuration Details</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
@@ -297,7 +298,7 @@ status:
 <p>To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, “mellanox” <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">plugin should be disabled</a> in the SR-IOV Network Operator.</p>
 </div>
 <p>For more information about the CRD API, refer to <a class="reference internal" href="crds.html"><span class="doc">CRD API Reference</span></a>.
-For more information, which FW parameter each settings corresponds to, refer to <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator?tab=readme-ov-file#configuration-details">Configuration details doc section</a>.</p>
+For detailed information about firmware parameters and configuration settings, refer to <a class="reference internal" href="configuration-details.html"><span class="doc">Configuration Details</span></a>.</p>
 <p>Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec}&#39;</span> <span class="p">|</span> yq -P
 
