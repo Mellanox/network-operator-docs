@@ -1,0 +1,80 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  sriovDevicePlugin:
+    image: sriov-network-device-plugin
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    config: |
+      {
+        "resourceList": [
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev",
+            "selectors": {
+              "vendors": ["15b3"],
+              "isRdma": true
+            }
+          }
+        ]
+      }
+  nvIpam:
+    image: nvidia-k8s-ipam
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-beta.1
+    imagePullSecrets: []
+    enableWebhook: false
+  secondaryNetwork:
+    cniPlugins:
+      image: plugins
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1
+    multus:
+      image: multus-cni
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.7.0-beta.1 
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: hostdev-pool
+  namespace: nvidia-network-operator
+spec:
+  subnet: 192.168.3.0/24
+  perNodeBlockSize: 50
+  gateway: 192.168.3.1 
+---
+apiVersion: mellanox.com/v1alpha1
+kind: HostDeviceNetwork
+metadata:
+  name: hostdev-net
+spec:
+  networkNamespace: "default"
+  resourceName: "hostdev"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "hostdev-pool"
+    } 
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostdev-test-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: hostdev-net
+spec:
+  containers:
+  - name: test-container
+    image: mellanox/rping-test
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        nvidia.com/hostdev: '1'
+      limits:
+        nvidia.com/hostdev: '1' 

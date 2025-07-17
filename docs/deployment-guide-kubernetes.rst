@@ -17,18 +17,15 @@
 .. headings # #, * *, =, -, ^, "
 .. include:: ./common/vars.rst
 
-*******************************
-Getting Started with Kubernetes
-*******************************
+********************************************************
+NVIDIA Network Operator Deployment Guide with Kubernetes
+********************************************************
 
 .. contents:: On this page
    :depth: 3
    :local:
    :backlinks: none
 
-=================================
-Network Operator Deployment Guide
-=================================
 .. _here: ./release-notes.html
 .. _Kubernetes CRDs: https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/
 .. _Operator SDK: https://github.com/operator-framework/operator-sdk

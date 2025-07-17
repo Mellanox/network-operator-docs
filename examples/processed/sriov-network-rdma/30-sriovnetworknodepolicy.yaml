@@ -1,0 +1,16 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: ethernet-sriov
+  namespace: nvidia-network-operator
+spec:
+  deviceType: netdevice
+  mtu: 1500
+  nodeSelector:
+    feature.node.kubernetes.io/pci-15b3.present: "true"
+  nicSelector:
+    vendor: "15b3"
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource 
