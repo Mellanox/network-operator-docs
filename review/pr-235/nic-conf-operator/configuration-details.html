@@ -125,10 +125,16 @@
 <ul>
 <li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> nvconfig parameter to <code class="docutils literal notranslate"><span class="pre">0</span></code> (use device defaults)</p></li>
 <li><p>Set PCI max read request size for each PF to <code class="docutils literal notranslate"><span class="pre">4096</span></code> (note: this is a runtime config and is not persistent)</p></li>
-<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> and <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code> &gt; [!IMPORTANT] &gt; According to the PRM, setting MAX_ACC_OUT_READ to zero enables the auto mode, &gt; which applies the best suitable optimizations. &gt; However, there is a bug in certain FW versions, where the zero value is not available. &gt; In this case, until the fix is available, MAX_ACC_OUT_READ will not be set and a warning event will be emitted for this device’s CR.</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> and <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
+<li><p><strong>IMPORTANT</strong> :</p>
+<ul>
+<li><p>According to the PRM, setting <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> to zero enables the auto mode,which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.</p></li>
+<li><p>In this case, until the fix is available, <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> will not be set and a warning event will be emitted for this device’s CR.</p></li>
 </ul>
 </li>
-<li><p>roceOptimized: performs RoCE related optimizations. If enabled performs the following by default:</p>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>: performs RoCE related optimizations. If enabled performs the following by default:</p>
 <ul>
 <li><p>Nvconfig set for both ports (can be applied from PF0)</p>
 <ul>
@@ -172,7 +178,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 17, 2025.
+      <span class="lastupdated">Last updated on Jul 20, 2025.
       </span></p>
   </div>
 
