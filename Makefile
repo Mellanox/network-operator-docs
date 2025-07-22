@@ -30,11 +30,15 @@ endif
 
 # Network Operator source tar location
 REPO_TAR_URL ?= https://github.com/Mellanox/network-operator/archive/refs/$(TAR_PATH)
+# NIC Configuration Operator source tar location
+NIC_CONF_REPO_TAR_URL ?= https://github.com/Mellanox/nic-configuration-operator/archive/refs/$(TAR_PATH)
 # release.yaml location
 RELEASE_YAML_URL ?= https://raw.githubusercontent.com/Mellanox/network-operator/$(if $(TAG),$(TAG),$(BRANCH))/hack/release.yaml
 
 # Path to download the crd api to.
 CRD_API_DEP_ROOT = $(BUILDDIR)/crd
+# Path to download the nic-conf-operator crd api to.
+NIC_CONF_CRD_API_DEP_ROOT = $(BUILDDIR)/nic-conf-crd
 # Path to download the helm chart to.
 HELM_CHART_DEP_ROOT = $(BUILDDIR)/helmcharts
 # Helm chart version and url
@@ -42,7 +46,7 @@ HELM_CHART_VERSION ?= 24.4.1
 NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
 HELM_CHART_PATH ?=
 
-$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT): ; $(info Creating directory $@...)
+$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT) $(NIC_CONF_CRD_API_DEP_ROOT): ; $(info Creating directory $@...)
 	mkdir -p $@
 
 
@@ -113,15 +117,47 @@ download-api: | $(CRD_API_DEP_ROOT)
 	curl -sL ${REPO_TAR_URL} \
 	| tar -xz -C ${CRD_API_DEP_ROOT}
 
+.PHONY: download-nic-conf-api
+download-nic-conf-api: | $(NIC_CONF_CRD_API_DEP_ROOT)
+	curl -sL ${NIC_CONF_REPO_TAR_URL} \
+	| tar -xz -C ${NIC_CONF_CRD_API_DEP_ROOT}
+
 gen-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-api
 	cd ${CRD_API_DEP_ROOT}/network-operator-${SRC}/api/v1alpha1 && \
 	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/config.json \
 	-template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/crds-api.html
 
+gen-nic-conf-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-nic-conf-api
+	cd ${NIC_CONF_CRD_API_DEP_ROOT}/nic-configuration-operator-${SRC}/api/v1alpha1 && \
+	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=. -config=${CURDIR}/hack/api-docs/nic-conf-config.json \
+	-template-dir=${CURDIR}/hack/api-docs/templates -out-file=${BUILDDIR}/nic-conf-crds-api.html
+
 .PHONY: api-docs
 api-docs: gen-crd-api-docs
 	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
 	--columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
+
+
+.PHONY: nic-conf-api-docs
+nic-conf-api-docs: gen-nic-conf-crd-api-docs
+	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
+	--columns 200 /data/build/_output/nic-conf-crds-api.html -o /data/docs/nic-conf-operator/crds.rst
+
+.PHONY: nic-conf-api-docs-versioned
+nic-conf-api-docs-versioned:
+	$(eval NIC_CONF_VERSION := $(shell grep "nic-configuration-operator-version" docs/common/vars.rst | sed 's/.*replace:: //'))
+	@echo "Using NIC Configuration Operator version: $(NIC_CONF_VERSION)"
+	TAG=$(NIC_CONF_VERSION) make nic-conf-api-docs
+
+.PHONY: fetch-config-docs
+fetch-config-docs:
+	$(eval NIC_CONF_VERSION := $(shell grep "nic-configuration-operator-version" docs/common/vars.rst | sed 's/.*replace:: //'))
+	@echo "Fetching configuration documentation for version: $(NIC_CONF_VERSION)"
+	./hack/fetch-config-docs.sh Mellanox/nic-configuration-operator $(NIC_CONF_VERSION) README.md docs/nic-conf-operator/configuration-details.rst
+
+.PHONY: nic-conf-docs
+nic-conf-docs: nic-conf-api-docs-versioned fetch-config-docs
+	@echo "Generated all NIC Configuration Operator documentation"
 
 .PHONY: build-cache
 build-cache:

@@ -16,19 +16,11 @@
 
 .. headings # #, * *, =, -, ^, "
 
+**************************
+NIC Configuration Operator
+**************************
+
 .. toctree::
-   :caption: NVIDIA Network Operator
-   :titlesonly:
-   :hidden:
-
-   Release Notes <release-notes.rst>
-   Platform Support <platform-support.rst>
-   Getting Started with Kubernetes <getting-started-kubernetes.rst>
-   Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
-   NIC Configuration Operator <nic-conf-operator/nic-configuration-operator.rst>
-   Customization Options and CRDs <customizations/customization.rst>
-   Life Cycle Management <life-cycle-management.rst>
-   Advanced Configurations <advanced/advanced.rst>
-   Legal Notices and 3rd Party Licenses <licenses.rst>
-
-.. include:: overview.rst
+   NIC Firmware Configuration <nic-fw-configuration.rst>
+   Configuration Details <configuration-details.rst>
+   CRD API Reference <crds.rst>
