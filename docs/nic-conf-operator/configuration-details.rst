@@ -42,7 +42,7 @@ Configuration details
    -  Users can override values via ``maxAccOutRead`` and ``maxReadRequest``
    -  **IMPORTANT** :
 
-      -  According to the PRM, setting ``MAX_ACC_OUT_READ`` to zero enables the auto mode,which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.
+      -  According to the PRM, setting ``MAX_ACC_OUT_READ`` to zero enables the auto mode, which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.
       -  In this case, until the fix is available, ``MAX_ACC_OUT_READ`` will not be set and a warning event will be emitted for this device’s CR.
 
 -  ``roceOptimized``: performs RoCE related optimizations. If enabled performs the following by default:
