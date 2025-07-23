@@ -16,7 +16,7 @@ echo "Fetching configuration documentation from ${REPO}/${BRANCH}/${FILE_PATH}"
 mkdir -p "$(dirname "$OUTPUT_PATH")"
 
 # Fetch the content from GitHub
-curl -s "https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}" > /tmp/config_docs.md
+curl -s "https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}" > ./tmp_config_docs.md
 
 # Convert markdown to reStructuredText and extract configuration details section
 cat > "$OUTPUT_PATH" << 'EOF'
@@ -45,17 +45,20 @@ Configuration Details
 EOF
 
 # Extract the configuration details section from the markdown
-awk '/#### Configuration details/,/### NicFirmwareSource/' /tmp/config_docs.md | head -n -1 > /tmp/config_section.md
+awk '/#### Configuration details/,/### NicFirmwareSource/' ./tmp_config_docs.md | head -n -1 > ./tmp_config_section.md
 
-# Convert to reStructuredText format
-pandoc /tmp/config_section.md -f markdown -t rst --wrap=none > /tmp/config_section.rst
+# Convert to reStructuredText format using Docker (same as other parts of the workflow)
+docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f markdown -t rst --wrap=none /data/tmp_config_section.md -o /data/tmp_config_section.rst
 
 # Create the final output
-cat "$OUTPUT_PATH" > /tmp/final_output.rst
-echo "" >> /tmp/final_output.rst
-cat /tmp/config_section.rst >> /tmp/final_output.rst
+cat "$OUTPUT_PATH" > ./tmp_final_output.rst
+echo "" >> ./tmp_final_output.rst
+cat ./tmp_config_section.rst >> ./tmp_final_output.rst
 
-mv /tmp/final_output.rst "$OUTPUT_PATH"
+mv ./tmp_final_output.rst "$OUTPUT_PATH"
+
+# Clean up temporary files
+rm -f ./tmp_config_docs.md ./tmp_config_section.md ./tmp_config_section.rst
 
 echo "Configuration documentation saved to ${OUTPUT_PATH}"
 echo "Source: https://github.com/${REPO}/blob/${BRANCH}/${FILE_PATH}#configuration-details" 
