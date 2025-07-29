@@ -56,14 +56,46 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="proxy-airgapped.html">Proxy &amp; Air-gapped</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">DOCA-OFED Driver Container</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DOCA-OFED Driver Container</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables">NVIDIA DOCA-OFED Driver Container Environment Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-ifnames-udev-environment-variable">CREATE_IFNAMES_UDEV Environment Variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enable-nfsrdma-environment-variable">ENABLE_NFSRDMA Environment Variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-of-nicclusterpolicy">Example of NicClusterPolicy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#download-docker-files-and-scripts">Download Docker files and scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#dockerfile-overview">Dockerfile Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-mandatory-build-parameters">Common mandatory build parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rhcos">RHCOS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id1">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#specific-build-parameters">Specific build parameters</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rhcos-example">RHCOS example</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#ubuntu">Ubuntu</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#ubuntu-example">Ubuntu example</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sles">SLES</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sles-example">SLES example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="images-sha256.html">Container Images Digests</a></li>
 </ul>
@@ -374,7 +406,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 

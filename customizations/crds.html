@@ -56,12 +56,51 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="helm.html">Helm Chart</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">CRDs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CRDs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mellanox-com-v1alpha1">mellanox.com/v1alpha1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#appliedstate">AppliedState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configmapnamereference">ConfigMapNameReference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docatelemetryserviceconfig">DOCATelemetryServiceConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docatelemetryservicespec">DOCATelemetryServiceSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#devicepluginspec">DevicePluginSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#drainspec">DrainSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#driverupgradepolicyspec">DriverUpgradePolicySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetwork">HostDeviceNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetworkspec">HostDeviceNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetworkstatus">HostDeviceNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ibkubernetesspec">IBKubernetesSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetwork">IPoIBNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetworkspec">IPoIBNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetworkstatus">IPoIBNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#imagespec">ImageSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#imagespecwithconfig">ImageSpecWithConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetwork">MacvlanNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetworkspec">MacvlanNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetworkstatus">MacvlanNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multusspec">MultusSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfeaturediscoveryspec">NICFeatureDiscoverySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nvipamspec">NVIPAMSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicy">NicClusterPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicyspec">NicClusterPolicySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicystatus">NicClusterPolicyStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicconfigurationoperatorspec">NicConfigurationOperatorSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwarestoragespec">NicFirmwareStorageSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ofeddriverspec">OFEDDriverSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#podprobespec">PodProbeSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resourcerequirements">ResourceRequirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#secondarynetworkspec">SecondaryNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumxoperatorspec">SpectrumXOperatorSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#state-string-alias">State (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#waitforcompletionspec">WaitForCompletionSpec</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="cr-full-example.html">NicClusterPolicy Reference Example</a></li>
 </ul>
 </li>
@@ -1383,7 +1422,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 

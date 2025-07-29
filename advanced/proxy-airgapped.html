@@ -56,13 +56,28 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Proxy &amp; Air-gapped</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Proxy &amp; Air-gapped</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-deployment-in-a-proxy-environment">Network Operator Deployment in a Proxy Environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-proxy-configuration-for-openshift">HTTP Proxy Configuration for Openshift</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#http-proxy-configuration">HTTP Proxy Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-deployment-in-an-air-gapped-environment">Network Operator Deployment in an Air-gapped Environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#local-image-registry">Local Image Registry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pulling-and-pushing-container-images-to-a-local-registry">Pulling and Pushing Container Images to a Local Registry</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuring-local-registry-tls-cert">Configuring Local Registry TLS Cert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#local-package-repository">Local Package Repository</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="doca-drivers.html">DOCA-OFED Driver Container</a></li>
 <li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="images-sha256.html">Container Images Digests</a></li>
@@ -397,7 +412,7 @@ openssl s_client -showcerts -connect <span class="si">${</span><span class="nv">
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 

@@ -54,7 +54,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
@@ -102,6 +102,30 @@ The operator automatically installs the required host networking software - brin
 These components include the NVIDIA networking driver, Kubernetes device plugin, CNI plugins, IP address management (IPAM) plugin and others.
 The NVIDIA Network Operator works in conjunction with the NVIDIA GPU Operator to deliver high-throughput, low-latency networking for scale-out, GPU computing clusters.</p>
 <p>A Helm chart is provided for easily deploying the Network operator in a cluster to provision the host software on NVIDIA-enabled nodes.</p>
+<section id="networking-features">
+<h2>Networking Features<a class="headerlink" href="#networking-features" title="Permalink to this headline"></a></h2>
+<dl class="simple">
+<dt><strong>RDMA Support</strong></dt><dd><p>Remote Direct Memory Access (RDMA) for memory-to-memory data transfers that bypass the CPU and kernel networking stack. Supports InfiniBand and RDMA over Converged Ethernet (RoCE) protocols.</p>
+</dd>
+<dt><strong>SR-IOV Virtualization</strong></dt><dd><p>Single Root I/O Virtualization technology that partitions network interface cards into multiple Virtual Functions (VFs) for hardware-level isolation and performance.</p>
+</dd>
+<dt><strong>Secondary Networks</strong></dt><dd><p>Multiple network interface types including host device networks, MacVLAN networks, IP over InfiniBand networks, and SR-IOV networks for specialized networking requirements.</p>
+</dd>
+<dt><strong>Driver Management</strong></dt><dd><p>Automated deployment and management of NVIDIA DOCA-OFED networking drivers across cluster nodes with version control and updates.</p>
+</dd>
+</dl>
+</section>
+<section id="supported-hardware">
+<h2>Supported Hardware<a class="headerlink" href="#supported-hardware" title="Permalink to this headline"></a></h2>
+<p>See the <a class="reference internal" href="platform-support.html"><span class="doc">Platform Support</span></a> page for supported hardware and software.</p>
+</section>
+<section id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Permalink to this headline"></a></h2>
+<p><strong>High-Performance Computing (HPC)</strong>: Scientific simulations, modeling applications, and distributed computing workloads</p>
+<p><strong>Machine Learning</strong>: Distributed training and inference workloads across multiple GPU nodes</p>
+<p><strong>Data Processing</strong>: Database systems, analytics platforms, and storage applications requiring high network throughput</p>
+<p><strong>Legacy Applications</strong>: Existing applications that require direct access to networking hardware</p>
+</section>
 <section id="license-agreement">
 <h2>License Agreement<a class="headerlink" href="#license-agreement" title="Permalink to this headline"></a></h2>
 <p>The NVIDIA Network Operator is licensed under Apache 2.0 and contributions are accepted with a DCO.
@@ -111,6 +135,11 @@ See the contributing document for more information on how to contribute and the 
 <h2>Learn More<a class="headerlink" href="#learn-more" title="Permalink to this headline"></a></h2>
 <p>The Network Operator is open-source.
 For more information on contributions and release artifacts, see the <a class="reference external" href="https://github.com/Mellanox/network-operator">GitHub repo</a>.</p>
+<p>For detailed deployment instructions and examples:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="quick-start/quick-start-k8s.html"><span class="doc">Quick Start Guide for Kubernetes</span></a>: Quick deployment guide with common configurations</p></li>
+<li><p><a class="reference internal" href="deployment-guide-kubernetes.html"><span class="doc">NVIDIA Network Operator Deployment Guide with Kubernetes</span></a>: Detailed deployment scenarios</p></li>
+</ul>
 </section>
 </section>
 
@@ -123,7 +152,7 @@ For more information on contributions and release artifacts, see the <a class="r
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 

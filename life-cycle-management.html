@@ -56,11 +56,52 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Life Cycle Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Life Cycle Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#network-operator-versioning">Network Operator Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-operator-life-cycle">Network Operator Life Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensuring-deployment-readiness">Ensuring Deployment Readiness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance">Status Field Example of a NICClusterPolicy Instance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#downloading-a-new-helm-chart">Downloading a New Helm Chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrading-crds-for-a-specific-release">Upgrading CRDs for a Specific Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release">Preparing the Helm Values for the New Release</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#applying-the-helm-chart-update">Applying the Helm Chart Update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doca-ofed-driver-manual-upgrade">DOCA-OFED Driver Manual Upgrade</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#restarting-pods-with-a-containerized-doca-ofed-driver">Restarting Pods with a Containerized DOCA-OFED Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node">Removing Pods with a Secondary Network from the Node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restarting-the-doca-ofed-driver-pod">Restarting the DOCA-OFED Driver Pod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deleting-the-doca-ofed-driver-pod-from-the-node">Deleting the DOCA-OFED Driver Pod from the Node</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node">Returning Pods with a Secondary Network to the Node</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade">Automatic DOCA-OFED Driver Upgrade</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#node-upgrade-states">Node Upgrade States</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#upgrade-modes">Upgrade modes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#safe-driver-loading">Safe Driver Loading</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstalling-the-network-operator">Uninstalling the Network Operator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster">Uninstalling the Network Operator on an OpenShift Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-steps">Additional Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#nicclusterpolicy-crd-update">NicClusterPolicy CRD Update</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced Configurations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licenses.html">Legal Notices and 3rd Party Licenses</a></li>
 </ul>
@@ -658,7 +699,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 

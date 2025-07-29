@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="NIC Configuration Operator" href="nic-conf-operator/nic-configuration-operator.html" />
-    <link rel="prev" title="Getting Started with Kubernetes" href="getting-started-kubernetes.html" />
+    <link rel="prev" title="NVIDIA Network Operator Deployment Guide with Kubernetes" href="deployment-guide-kubernetes.html" />
  
 
 
@@ -56,8 +56,34 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with Red Hat OpenShift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#network-operator-deployment-on-an-openshift-container-platform">Network Operator Deployment on an OpenShift Container Platform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#node-feature-discovery">Node Feature Discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sr-iov-network-operator">SR-IOV Network Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gpu-operator">GPU Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-installation">Network Operator Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation-using-openshift-catalog">Network Operator Installation Using OpenShift Catalog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation-using-openshift-oc-cli">Network Operator Installation using OpenShift OC CLI</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#verification">Verification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#deployment-examples-for-openshift-container-platform">Deployment Examples For OpenShift Container Platform</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp">Network Operator Deployment with a Host Device Network - OCP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp">Network Operator Deployment for DPDK Workloads - OCP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
@@ -581,7 +607,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 23, 2025.
+      <span class="lastupdated">Last updated on Jul 29, 2025.
       </span></p>
   </div>
 
