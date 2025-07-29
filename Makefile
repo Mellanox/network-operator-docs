@@ -46,9 +46,11 @@ HELM_CHART_VERSION ?= 24.4.1
 NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
 HELM_CHART_PATH ?=
 
-$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT) $(NIC_CONF_CRD_API_DEP_ROOT): ; $(info Creating directory $@...)
-	mkdir -p $@
+# Examples build directory for processed YAML files
+EXAMPLES_BUILD_DIR = examples/processed
 
+$(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT) $(NIC_CONF_CRD_API_DEP_ROOT) $(EXAMPLES_BUILD_DIR): ; $(info Creating directory $@...)
+	mkdir -p $@
 
 # helm-docs is used to generate helm chart documentation
 HELM_DOCS_PKG := github.com/norwoodj/helm-docs/cmd/helm-docs
@@ -172,8 +174,38 @@ build-cache:
 		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions; \
 	fi
 
+.PHONY: process-examples
+process-examples: | $(EXAMPLES_BUILD_DIR)
+	@echo "Processing YAML examples with version substitutions..."
+	@# Generate sed script from all variables in vars.rst
+	@grep -E '^\.\. \|.*\| replace::' docs/common/vars.rst | \
+		sed 's/\.\. |\(.*\)| replace:: \(.*\)/s@|\1|@\2@g/' > /tmp/vars.sed
+	@find examples/templates -name "*.yaml" -type f | while read -r file; do \
+		echo "Processing $$file"; \
+		relative_path=$$(echo "$$file" | sed 's|^examples/templates/||'); \
+		output_dir="$(EXAMPLES_BUILD_DIR)/$$(dirname "$$relative_path")"; \
+		mkdir -p "$$output_dir"; \
+		sed -f /tmp/vars.sed "$$file" > "$(EXAMPLES_BUILD_DIR)/$$relative_path"; \
+	done
+	@rm -f /tmp/vars.sed
+	@echo "Generating complete configuration files..."
+	@# Generate complete.yaml files by concatenating numbered files in order
+	@find $(EXAMPLES_BUILD_DIR) -mindepth 1 -maxdepth 1 -type d | while read -r dir; do \
+		echo "Creating complete.yaml for $$(basename "$$dir")"; \
+		complete_file="$$dir/complete.yaml"; \
+		> "$$complete_file"; \
+		find "$$dir" -name "[0-9]*-*.yaml" | sort | while read -r numbered_file; do \
+			cat "$$numbered_file" >> "$$complete_file"; \
+			echo "" >> "$$complete_file"; \
+			echo "---" >> "$$complete_file"; \
+		done; \
+		if [ -s "$$complete_file" ]; then \
+			sed -i '$$d' "$$complete_file"; \
+		fi; \
+	done
+
 .PHONY: gen-docs
-gen-docs: build-cache
+gen-docs: build-cache process-examples
 	@echo "Generating documentation..."; \
     export PM_PACKAGES_ROOT=${CACHE_DIR}; \
 	${CURDIR}/repo.sh docs

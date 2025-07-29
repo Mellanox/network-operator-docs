@@ -1,0 +1,14 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-ib-network
+  namespace: nvidia-network-operator
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "sriov-ib-pool"
+    }
+  resourceName: mlnxnics
+  linkState: enable
+  networkNamespace: default 
