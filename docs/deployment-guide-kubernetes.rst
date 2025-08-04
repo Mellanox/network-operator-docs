@@ -1505,7 +1505,7 @@ Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Manageme
 ----------------------------------------------------------------------------------
 
 .. _this article: https://docs.mellanox.com/display/MLNXOFEDv51258060/OpenSM
-.. _the project documentation: https://docs.nvidia.com/networking/display/UFMEnterpriseUMv652
+.. _the project documentation: https://docs.nvidia.com/networking/software/management-software/index.html#ufm-enterprise
 
 Network Operator deployment with InfiniBand network requires the following:
 

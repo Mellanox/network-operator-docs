@@ -42,7 +42,7 @@ Network Operator Deployment on an OpenShift Container Platform
 Node Feature Discovery
 ----------------------
 
-To enable Node Feature Discovery, please follow the official `guide <https://docs.openshift.com/container-platform/latest/hardware_enablement/psap-node-feature-discovery-operator.html>`_.
+To enable Node Feature Discovery, please follow the official `guide <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator>`_.
 A single instance of Node Feature Discovery is expected to be used in the cluster.
 
 
@@ -73,7 +73,7 @@ An example of Node Feature Discovery configuration:
 
 Verify that the following label is present on the nodes containing NVIDIA networking hardware: `feature.node.kubernetes.io/pci-15b3.present=true`
 
-For more details please read official NFD `documentation <https://docs.openshift.com/container-platform/4.16/hardware_enablement/psap-node-feature-discovery-operator.html#creating-nfd-cr-cli_psap-node-feature-discovery-operator>`_.
+For more details please read official NFD `documentation <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#creating-nfd-cr-cli_psap-node-feature-discovery-operator>`_.
 
 .. code-block:: bash
 
@@ -102,7 +102,7 @@ For more details please read official NFD `documentation <https://docs.openshift
 SR-IOV Network Operator
 -----------------------
 
-If you are planning to use SR-IOV, follow these `instructions <https://docs.openshift.com/container-platform/latest/networking/hardware_networks/installing-sriov-operator.html>`_ to install SR-IOV Network Operator on an OpenShift Container Platform.
+If you are planning to use SR-IOV, follow these `instructions <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#installing-sriov-operator>`_ to install SR-IOV Network Operator on an OpenShift Container Platform.
 
 .. warning::
    The SR-IOV resources created will have the `openshift.io` prefix.
@@ -116,7 +116,7 @@ For the default SriovOperatorConfig CR to work with the NVIDIA DOCA-OFED Driver 
      --patch '{ "spec": { "configDaemonNodeSelector": { "network.nvidia.com/operator.mofed.wait": "false", "node-role.kubernetes.io/worker": "", "feature.node.kubernetes.io/pci-15b3.sriov.capable": "true" } } }'
 
 .. warning::
-   SR-IOV Network Operator configuration documentation can be found on the `Official Website <https://docs.openshift.com/container-platform/latest/networking/hardware_networks/configuring-sriov-operator.html#configuring-sriov-operator>`_.
+   SR-IOV Network Operator configuration documentation can be found on the `Official Website <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator>`_.
 
 ------------
 GPU Operator
@@ -136,7 +136,7 @@ Network Operator Installation Using OpenShift Catalog
 
 - In the OpenShift Container Platform web console side menu, select Operators > OperatorHub, and search for the NVIDIA Network Operator.
 - Select NVIDIA Network Operator, and click Install in the first screen and in the subsequent one.
-- For additional information, see the `Red Hat OpenShift Container Platform Documentation <https://docs.openshift.com/container-platform/latest/operators/admin/olm-adding-operators-to-cluster.html>`_.
+- For additional information, see the `Red Hat OpenShift Container Platform Documentation <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-adding-operators-to-a-cluster>`_.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Network Operator Installation using OpenShift OC CLI
@@ -529,6 +529,6 @@ The `pod.yaml` configuration file for such a deployment:
 Network Operator Deployment for DPDK Workloads - OCP
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 
-In order to configure `HUGEPAGES` in OpenShift, refer to this `steps <https://docs.openshift.com/container-platform/latest/scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps.html>`_.
+In order to configure `HUGEPAGES` in OpenShift, refer to this `steps <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed>`_.
 
-For SR-IOV Network Operator configuration instructions, visit the Official `Website <https://docs.openshift.com/container-platform/latest/networking/hardware_networks/configuring-sriov-operator.html#configuring-sriov-operator>`_.
+For SR-IOV Network Operator configuration instructions, visit the Official `Website <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator>`_.
