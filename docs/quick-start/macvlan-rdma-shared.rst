@@ -66,9 +66,7 @@ Verify the deployment:
     kubectl exec -it macvlan-test-pod -- ip addr show
     kubectl exec -it macvlan-test-pod -- ibv_devinfo
 
-.. dropdown:: Complete Configuration
-   :color: primary
-   :icon: code
+**Complete Configuration**
 
-   .. literalinclude:: ../../examples/processed/macvlan-rdma-shared/complete.yaml
-      :language: yaml
+.. literalinclude:: ../../examples/processed/macvlan-rdma-shared/complete.yaml
+   :language: yaml

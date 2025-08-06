@@ -73,9 +73,7 @@ Verify the deployment:
     kubectl exec -it sriov-ib-test-pod -- ibv_devices
     kubectl exec -it sriov-ib-test-pod -- ibstat
 
-.. dropdown:: Complete Configuration
-   :color: primary
-   :icon: code
+**Complete Configuration**
 
-   .. literalinclude:: ../../examples/processed/sriov-ib-rdma/complete.yaml
-      :language: yaml
+.. literalinclude:: ../../examples/processed/sriov-ib-rdma/complete.yaml
+   :language: yaml

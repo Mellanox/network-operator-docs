@@ -6,22 +6,22 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvstaging/mellanox
-    version: 25.04-0.6.1.0-2
+    version: doca3.1.0-25.07-0.8.0.0-0
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-beta.1
+    version: network-operator-v25.7.0-rc.1
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1
+      version: network-operator-v25.7.0-rc.1
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1 
+      version: network-operator-v25.7.0-rc.1
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
@@ -31,7 +31,7 @@ metadata:
 spec:
   subnet: 192.168.6.0/24
   perNodeBlockSize: 50
-  gateway: 192.168.6.1 
+  gateway: 192.168.6.1
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetworkNodePolicy
@@ -49,7 +49,7 @@ spec:
   isRdma: true
   numVfs: 8
   priority: 90
-  resourceName: mlnxnics 
+  resourceName: mlnxnics
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovIBNetwork
@@ -64,7 +64,7 @@ spec:
     }
   resourceName: mlnxnics
   linkState: enable
-  networkNamespace: default 
+  networkNamespace: default
 ---
 apiVersion: v1
 kind: Pod
@@ -84,4 +84,4 @@ spec:
       requests:
         nvidia.com/mlnxnics: '1'
       limits:
-        nvidia.com/mlnxnics: '1' 
+        nvidia.com/mlnxnics: '1'

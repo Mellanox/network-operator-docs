@@ -73,9 +73,7 @@ Verify the deployment:
     kubectl exec -it sriov-test-pod -- ip addr show
     kubectl exec -it sriov-test-pod -- ibv_devices
 
-.. dropdown:: Complete Configuration
-   :color: primary
-   :icon: code
+**Complete Configuration**
 
-   .. literalinclude:: ../../examples/processed/sriov-network-rdma/complete.yaml
-      :language: yaml
+.. literalinclude:: ../../examples/processed/sriov-network-rdma/complete.yaml
+   :language: yaml
