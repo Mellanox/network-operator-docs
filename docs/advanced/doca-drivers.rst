@@ -164,7 +164,7 @@ RHCOS
 Prerequisites
 ~~~~~~~~~~~~~
 
-- Install `oc <https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html>`_ CLI tool.
+- Install `oc <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/cli_tools/openshift-cli-oc>`_ CLI tool.
 - Download OpenShift `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -38,7 +38,7 @@ HTTP Proxy Configuration for Openshift
 --------------------------------------
 
 For Openshift, it is recommended to use the cluster-wide Proxy object to provide proxy information for the cluster.
-Please follow the procedure described in `Configuring the Cluster-wide Proxy <https://docs.openshift.com/container-platform/latest/networking/enable-cluster-wide-proxy.html>`_ via the Red Hat Openshift public documentation. The NVIDIA Network Operator will automatically inject proxy related ENV into the driver container, based on the information present in the cluster-wide Proxy object.
+Please follow the procedure described in `Configuring the Cluster-wide Proxy <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/configuring_network_settings/enable-cluster-wide-proxy>`_ via the Red Hat Openshift public documentation. The NVIDIA Network Operator will automatically inject proxy related ENV into the driver container, based on the information present in the cluster-wide Proxy object.
 
 ------------------------
 HTTP Proxy Configuration

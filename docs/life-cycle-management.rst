@@ -496,7 +496,7 @@ Make sure that the CRDs created during the operator installation have been remov
 Uninstalling the Network Operator on an OpenShift Cluster
 ---------------------------------------------------------
 
-.. _Red Hat OpenShift Container Platform Documentation: https://docs.openshift.com/container-platform/4.10/operators/admin/olm-deleting-operators-from-cluster.html
+.. _Red Hat OpenShift Container Platform Documentation: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-deleting-operators-from-a-cluster
 
 From the console:
 
