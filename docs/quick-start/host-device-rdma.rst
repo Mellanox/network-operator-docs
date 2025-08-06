@@ -63,9 +63,7 @@ Verify the deployment:
 
     kubectl exec -it hostdev-test-pod -- lspci | grep Mellanox
 
-.. dropdown:: Complete Configuration
-   :color: primary
-   :icon: code
+**Complete Configuration**
 
-   .. literalinclude:: ../../examples/processed/host-device-rdma/complete.yaml
-      :language: yaml
+.. literalinclude:: ../../examples/processed/host-device-rdma/complete.yaml
+   :language: yaml

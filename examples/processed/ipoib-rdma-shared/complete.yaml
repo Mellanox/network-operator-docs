@@ -6,11 +6,11 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvstaging/mellanox
-    version: 25.04-0.6.1.0-2
+    version: doca3.1.0-25.07-0.8.0.0-0
   rdmaSharedDevicePlugin:
     image: k8s-rdma-shared-dev-plugin
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-beta.1
+    version: network-operator-v25.7.0-rc.1
     config: |
       {
         "configList": [
@@ -38,22 +38,22 @@ spec:
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-beta.1
+    version: network-operator-v25.7.0-rc.1
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1
+      version: network-operator-v25.7.0-rc.1
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1
+      version: network-operator-v25.7.0-rc.1
     ipoib:
       image: ipoib-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1
+      version: network-operator-v25.7.0-rc.1
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
@@ -83,7 +83,7 @@ metadata:
 spec:
   subnet: 192.168.7.0/24
   perNodeBlockSize: 50
-  gateway: 192.168.7.1 
+  gateway: 192.168.7.1
 ---
 apiVersion: mellanox.com/v1alpha1
 kind: IPoIBNetwork
@@ -96,7 +96,7 @@ spec:
     {
       "type": "nv-ipam",
       "poolName": "ipoib-pool-a"
-    } 
+    }
 -----
 apiVersion: mellanox.com/v1alpha1
 kind: IPoIBNetwork

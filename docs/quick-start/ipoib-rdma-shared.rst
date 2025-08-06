@@ -70,9 +70,7 @@ Verify the deployment:
     kubectl exec -it ipoib-test-pod-c -- ibstat
     kubectl exec -it ipoib-test-pod-c -- ip addr show
 
-.. dropdown:: Complete Configuration
-   :color: primary
-   :icon: code
+**Complete Configuration**
 
-   .. literalinclude:: ../../examples/processed/ipoib-rdma-shared/complete.yaml
-      :language: yaml
+.. literalinclude:: ../../examples/processed/ipoib-rdma-shared/complete.yaml
+   :language: yaml

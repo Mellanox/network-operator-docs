@@ -5,22 +5,23 @@ metadata:
 spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
-    repository: nvcr.io/nvidia/mellanox
-    version: network-operator-v25.7.0-beta.1
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.7.0-rc.1
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-beta.1
+    version: network-operator-v25.7.0-rc.1
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1
+      version: network-operator-v25.7.0-rc.1
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-beta.1 
+      version: network-operator-v25.7.0-rc.1
+
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
@@ -30,7 +31,7 @@ metadata:
 spec:
   subnet: 192.168.2.0/24
   perNodeBlockSize: 50
-  gateway: 192.168.2.1 
+  gateway: 192.168.2.1
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetworkNodePolicy
@@ -47,7 +48,7 @@ spec:
   isRdma: true
   numVfs: 8
   priority: 90
-  resourceName: sriov_resource 
+  resourceName: sriov_resource
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetwork
@@ -61,7 +62,7 @@ spec:
       "poolName": "sriov-pool"
     }
   networkNamespace: default
-  resourceName: sriov_resource 
+  resourceName: sriov_resource
 ---
 apiVersion: v1
 kind: Pod
@@ -81,4 +82,4 @@ spec:
       requests:
         nvidia.com/sriov_resource: '1'
       limits:
-        nvidia.com/sriov_resource: '1' 
+        nvidia.com/sriov_resource: '1'
