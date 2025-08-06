@@ -171,7 +171,7 @@
 </div>
 <section id="node-feature-discovery">
 <h3>Node Feature Discovery<a class="headerlink" href="#node-feature-discovery" title="Permalink to this headline"></a></h3>
-<p>To enable Node Feature Discovery, please follow the official <a class="reference external" href="https://docs.openshift.com/container-platform/latest/hardware_enablement/psap-node-feature-discovery-operator.html">guide</a>.
+<p>To enable Node Feature Discovery, please follow the official <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator">guide</a>.
 A single instance of Node Feature Discovery is expected to be used in the cluster.</p>
 <p>An example of Node Feature Discovery configuration:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfd.openshift.io/v1</span><span class="w"></span>
@@ -197,7 +197,7 @@ A single instance of Node Feature Discovery is expected to be used in the cluste
 </pre></div>
 </div>
 <p>Verify that the following label is present on the nodes containing NVIDIA networking hardware: <cite>feature.node.kubernetes.io/pci-15b3.present=true</cite></p>
-<p>For more details please read official NFD <a class="reference external" href="https://docs.openshift.com/container-platform/4.16/hardware_enablement/psap-node-feature-discovery-operator.html#creating-nfd-cr-cli_psap-node-feature-discovery-operator">documentation</a>.</p>
+<p>For more details please read official NFD <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#creating-nfd-cr-cli_psap-node-feature-discovery-operator">documentation</a>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc describe node <span class="p">|</span> grep -E <span class="s1">&#39;Roles|pci&#39;</span> <span class="p">|</span> grep -v <span class="s2">&quot;control-plane&quot;</span>
 
 Roles:              worker
@@ -223,7 +223,7 @@ Roles:              worker
 </section>
 <section id="sr-iov-network-operator">
 <h3>SR-IOV Network Operator<a class="headerlink" href="#sr-iov-network-operator" title="Permalink to this headline"></a></h3>
-<p>If you are planning to use SR-IOV, follow these <a class="reference external" href="https://docs.openshift.com/container-platform/latest/networking/hardware_networks/installing-sriov-operator.html">instructions</a> to install SR-IOV Network Operator on an OpenShift Container Platform.</p>
+<p>If you are planning to use SR-IOV, follow these <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#installing-sriov-operator">instructions</a> to install SR-IOV Network Operator on an OpenShift Container Platform.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The SR-IOV resources created will have the <cite>openshift.io</cite> prefix.</p>
@@ -236,7 +236,7 @@ Roles:              worker
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>SR-IOV Network Operator configuration documentation can be found on the <a class="reference external" href="https://docs.openshift.com/container-platform/latest/networking/hardware_networks/configuring-sriov-operator.html#configuring-sriov-operator">Official Website</a>.</p>
+<p>SR-IOV Network Operator configuration documentation can be found on the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator">Official Website</a>.</p>
 </div>
 </section>
 <section id="gpu-operator">
@@ -251,7 +251,7 @@ Roles:              worker
 <ul class="simple">
 <li><p>In the OpenShift Container Platform web console side menu, select Operators &gt; OperatorHub, and search for the NVIDIA Network Operator.</p></li>
 <li><p>Select NVIDIA Network Operator, and click Install in the first screen and in the subsequent one.</p></li>
-<li><p>For additional information, see the <a class="reference external" href="https://docs.openshift.com/container-platform/latest/operators/admin/olm-adding-operators-to-cluster.html">Red Hat OpenShift Container Platform Documentation</a>.</p></li>
+<li><p>For additional information, see the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-adding-operators-to-a-cluster">Red Hat OpenShift Container Platform Documentation</a>.</p></li>
 </ul>
 </section>
 <section id="network-operator-installation-using-openshift-oc-cli">
@@ -590,8 +590,8 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 </section>
 <section id="network-operator-deployment-for-dpdk-workloads-ocp">
 <h5>Network Operator Deployment for DPDK Workloads - OCP<a class="headerlink" href="#network-operator-deployment-for-dpdk-workloads-ocp" title="Permalink to this headline"></a></h5>
-<p>In order to configure <cite>HUGEPAGES</cite> in OpenShift, refer to this <a class="reference external" href="https://docs.openshift.com/container-platform/latest/scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed-by-apps.html">steps</a>.</p>
-<p>For SR-IOV Network Operator configuration instructions, visit the Official <a class="reference external" href="https://docs.openshift.com/container-platform/latest/networking/hardware_networks/configuring-sriov-operator.html#configuring-sriov-operator">Website</a>.</p>
+<p>In order to configure <cite>HUGEPAGES</cite> in OpenShift, refer to this <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed">steps</a>.</p>
+<p>For SR-IOV Network Operator configuration instructions, visit the Official <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator">Website</a>.</p>
 </section>
 </section>
 </section>
