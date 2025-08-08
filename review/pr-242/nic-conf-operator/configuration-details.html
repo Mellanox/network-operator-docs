@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Details &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Network Operator API reference v1alpha1" href="crds.html" />
+    <link rel="prev" title="NIC Firmware Configuration" href="nic-fw-configuration.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nic-fw-configuration.html">NIC Firmware Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Configuration details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="nic-configuration-operator.html">NIC Configuration Operator</a> &raquo;</li>
+<li>Configuration Details</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration-details">
+<h1>Configuration Details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>Configuration details<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numVFs</span></code>: if provided, configure SR-IOV VFs via nvconfig.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g: if <code class="docutils literal notranslate"><span class="pre">numVFs=2</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=1</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=2</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">numVFs=0</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=0</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=0</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code>: if provided configure <code class="docutils literal notranslate"><span class="pre">linkType</span></code> for the NIC for all NIC ports.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g <code class="docutils literal notranslate"><span class="pre">linkType</span> <span class="pre">=</span> <span class="pre">Infiniband</span></code> then set <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P1=IB</span></code> and <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P2=IB</span></code> if second PCI function is present</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code>: performs PCI performance optimizations. If enabled then by default the following will happen:</p>
+<ul>
+<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> nvconfig parameter to <code class="docutils literal notranslate"><span class="pre">0</span></code> (use device defaults)</p></li>
+<li><p>Set PCI max read request size for each PF to <code class="docutils literal notranslate"><span class="pre">4096</span></code> (note: this is a runtime config and is not persistent)</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> and <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
+<li><p><strong>IMPORTANT</strong> :</p>
+<ul>
+<li><p>According to the PRM, setting <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> to zero enables the auto mode, which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.</p></li>
+<li><p>In this case, until the fix is available, <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> will not be set and a warning event will be emitted for this device’s CR.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>: performs RoCE related optimizations. If enabled performs the following by default:</p>
+<ul>
+<li><p>Nvconfig set for both ports (can be applied from PF0)</p>
+<ul>
+<li><p>Conditionally applied for second port if present</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P1=255</span></code>, <code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P2=255</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P1=4</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P2=4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P1=6</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P2=6</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Configure pfc (Priority Flow Control) for priority 3 and set trust to dscp on each PF</p>
+<ul>
+<li><p>Non-persistent (need to be applied after each boot)</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">trust</span></code> and <code class="docutils literal notranslate"><span class="pre">pfc</span></code> parameters</p></li>
+</ul>
+</li>
+<li><p>Can only be enabled with <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpuDirectOptimized</span></code>: performs gpu direct optimizations. ATM only optimizations for Baremetal environment are supported. If enabled perform the following:</p>
+<ul>
+<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">ATS_ENABLED=0</span></code></p></li>
+<li><p>Can only be enabled when <code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code> is enabled</p></li>
+<li><p>Both the numeric values and their string aliases, supported by NVConfig, are allowed (e.g. <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=False</span></code>, <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=0</span></code>).</p></li>
+<li><p>For per port parameters (suffix <code class="docutils literal notranslate"><span class="pre">_P1</span></code>, <code class="docutils literal notranslate"><span class="pre">_P2</span></code>) parameters with <code class="docutils literal notranslate"><span class="pre">_P2</span></code> suffix are ignored if the device is single port.</p></li>
+</ul>
+</li>
+<li><p>If a configuration is not set in spec, its non-volatile configuration parameters (if any) should be set to device default.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Aug 08, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

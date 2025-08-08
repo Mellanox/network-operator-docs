@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Customization Options" href="../customizations/customization.html" />
+    <link rel="prev" title="Configuration Details" href="configuration-details.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nic-fw-configuration.html">NIC Firmware Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration-details.html">Configuration Details</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CRD API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-net-nvidia-com-v1alpha1">configuration.net.nvidia.com/v1alpha1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configurationtemplatespec">ConfigurationTemplateSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#firmwaretemplatespec">FirmwareTemplateSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gpudirectoptimizedspec">GpuDirectOptimizedSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#linktypeenum-string-alias">LinkTypeEnum (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicconfigurationtemplate">NicConfigurationTemplate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicconfigurationtemplatespec">NicConfigurationTemplateSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicdevice">NicDevice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicdeviceconfigurationspec">NicDeviceConfigurationSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicdeviceportspec">NicDevicePortSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicdevicespec">NicDeviceSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicdevicestatus">NicDeviceStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwaresource">NicFirmwareSource</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwaresourcespec">NicFirmwareSourceSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwaresourcestatus">NicFirmwareSourceStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwaretemplate">NicFirmwareTemplate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwaretemplatespec">NicFirmwareTemplateSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicselectorspec">NicSelectorSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nictemplatestatus">NicTemplateStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pciperformanceoptimizedspec">PciPerformanceOptimizedSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qosspec">QosSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#roceoptimizedspec">RoceOptimizedSpec</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="nic-configuration-operator.html">NIC Configuration Operator</a> &raquo;</li>
+<li>Network Operator API reference v1alpha1</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="network-operator-api-reference-v1alpha1">
+<h1>Network Operator API reference v1alpha1<a class="headerlink" href="#network-operator-api-reference-v1alpha1" title="Permalink to this headline"></a></h1>
+<p>Packages:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#configuration-net-nvidia-com-v1alpha1"><span class="std std-ref">configuration.net.nvidia.com/v1alpha1</span></a></p></li>
+</ul>
+<section id="configuration-net-nvidia-com-v1alpha1">
+<span id="id1"></span><h2>configuration.net.nvidia.com/v1alpha1<a class="headerlink" href="#configuration-net-nvidia-com-v1alpha1" title="Permalink to this headline"></a></h2>
+<p>Package v1alpha1 contains API Schema definitions for the configuration.net v1alpha1 API group</p>
+<p>Resource Types:</p>
+<section id="configurationtemplatespec">
+<span id="id2"></span><h3>ConfigurationTemplateSpec<a class="headerlink" href="#configurationtemplatespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationtemplatespec"><span class="std std-ref">NicConfigurationTemplateSpec</span></a>, <a class="reference internal" href="#nicdeviceconfigurationspec"><span class="std std-ref">NicDeviceConfigurationSpec</span></a>)</p>
+<p>ConfigurationTemplateSpec is a set of configurations for the NICs</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numVfs</span></code>
+int</p></td>
+<td><p>Number of VFs to be configured</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code>
+<a class="reference internal" href="#linktypeenum"><span class="std std-ref">LinkTypeEnum</span></a></p></td>
+<td><p>LinkType to be configured, Ethernet|Infiniband</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code>
+<a class="reference internal" href="#pciperformanceoptimizedspec"><span class="std std-ref">PciPerformanceOptimizedSpec</span></a></p></td>
+<td><p>PCI performance optimization settings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>
+<a class="reference internal" href="#roceoptimizedspec"><span class="std std-ref">RoceOptimizedSpec</span></a></p></td>
+<td><p>RoCE optimization settings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gpuDirectOptimized</span></code>
+<a class="reference internal" href="#gpudirectoptimizedspec"><span class="std std-ref">GpuDirectOptimizedSpec</span></a></p></td>
+<td><p>GPU Direct optimization settings</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="firmwaretemplatespec">
+<span id="id3"></span><h3>FirmwareTemplateSpec<a class="headerlink" href="#firmwaretemplatespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicdevicespec"><span class="std std-ref">NicDeviceSpec</span></a>, <a class="reference internal" href="#nicfirmwaretemplatespec"><span class="std std-ref">NicFirmwareTemplateSpec</span></a>)</p>
+<p>FirmwareTemplateSpec specifies a FW update policy for a given FW source ref</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicFirmwareSourceRef</span></code>
+string</p></td>
+<td><p>NicFirmwareSourceRef refers to existing NicFirmwareSource CR on where to get the FW from</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">updatePolicy</span></code>
+string</p></td>
+<td><p>UpdatePolicy indicates whether the operator needs to validate installed FW or upgrade it</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gpudirectoptimizedspec">
+<span id="id4"></span><h3>GpuDirectOptimizedSpec<a class="headerlink" href="#gpudirectoptimizedspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a>)</p>
+<p>GpuDirectOptimizedSpec specifies GPU Direct optimization settings</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code>
+bool</p></td>
+<td><p>Optimize GPU Direct</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
+string</p></td>
+<td><p>GPU direct environment, e.g. Baremetal</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="linktypeenum-string-alias">
+<span id="linktypeenum"></span><h3>LinkTypeEnum (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)<a class="headerlink" href="#linktypeenum-string-alias" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a>)</p>
+<p>LinkTypeEnum described the link type (Ethernet / Infiniband)</p>
+</section>
+<section id="nicconfigurationtemplate">
+<span id="id5"></span><h3>NicConfigurationTemplate<a class="headerlink" href="#nicconfigurationtemplate" title="Permalink to this headline"></a></h3>
+<p>NicConfigurationTemplate is the Schema for the nicconfigurationtemplates API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#nicconfigurationtemplatespec"><span class="std std-ref">NicConfigurationTemplateSpec</span></a></p></td>
+<td><p>Defines the desired state of NICs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#nictemplatestatus"><span class="std std-ref">NicTemplateStatus</span></a></p></td>
+<td><p>Defines the observed state of NicConfigurationTemplate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicconfigurationtemplatespec">
+<span id="id6"></span><h3>NicConfigurationTemplateSpec<a class="headerlink" href="#nicconfigurationtemplatespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationtemplate"><span class="std std-ref">NicConfigurationTemplate</span></a>)</p>
+<p>NicConfigurationTemplateSpec defines the desired state of NicConfigurationTemplate</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>
+map[string]string</p></td>
+<td><p>NodeSelector contains labels required on the node. When empty, the template will be applied to
+matching devices on all nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nicSelector</span></code>
+<a class="reference internal" href="#nicselectorspec"><span class="std std-ref">NicSelectorSpec</span></a></p></td>
+<td><p>NIC selector configuration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">resetToDefault</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+ResetToDefault specifies whether node agent needs to perform a reset flow The following
+operations will be performed: * Nvconfig reset of all non-volatile configurations - Mstconfig -d
+reset for each PF - Mstconfig -d set ADVANCED_PCI_SETTINGS=1 * Node reboot - Applies new NIC NV
+config - Will undo any runtime configuration previously performed for the device/driver</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code>
+<a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a></p></td>
+<td><p>Configuration template to be applied to matching devices</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicdevice">
+<span id="id7"></span><h3>NicDevice<a class="headerlink" href="#nicdevice" title="Permalink to this headline"></a></h3>
+<p>NicDevice is the Schema for the nicdevices API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#nicdevicespec"><span class="std std-ref">NicDeviceSpec</span></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#nicdevicestatus"><span class="std std-ref">NicDeviceStatus</span></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicdeviceconfigurationspec">
+<span id="id8"></span><h3>NicDeviceConfigurationSpec<a class="headerlink" href="#nicdeviceconfigurationspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicdevicespec"><span class="std std-ref">NicDeviceSpec</span></a>)</p>
+<p>NicDeviceConfigurationSpec contains desired configuration of the NIC</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">resetToDefault</span></code>
+bool</p></td>
+<td><p>ResetToDefault specifies whether node agent needs to perform a reset flow. In NIC Configuration
+Operator template v0.1.14 BF2/BF3 DPUs (not SuperNics) FW reset flow isn’t supported. The
+following operations will be performed: * Nvconfig reset of all non-volatile configurations -
+Mstconfig -d reset for each PF - Mstconfig -d set ADVANCED_PCI_SETTINGS=1 * Node reboot -
+Applies new NIC NV config - Will undo any runtime configuration previously performed for the
+device/driver</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code>
+<a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a></p></td>
+<td><p>Configuration template applied from the NicConfigurationTemplate CR</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicdeviceportspec">
+<span id="id9"></span><h3>NicDevicePortSpec<a class="headerlink" href="#nicdeviceportspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicdevicestatus"><span class="std std-ref">NicDeviceStatus</span></a>)</p>
+<p>NicDevicePortSpec describes the ports of the NIC</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pci</span></code>
+string</p></td>
+<td><p>PCI is a PCI address of the port, e.g. 0000:3b:00.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">networkInterface</span></code>
+string</p></td>
+<td><p>NetworkInterface is the name of the network interface for this port, e.g. eth1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaInterface</span></code>
+string</p></td>
+<td><p>RdmaInterface is the name of the rdma interface for this port, e.g. mlx5_1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicdevicespec">
+<span id="id10"></span><h3>NicDeviceSpec<a class="headerlink" href="#nicdevicespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicdevice"><span class="std std-ref">NicDevice</span></a>)</p>
+<p>NicDeviceSpec defines the desired state of NicDevice</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">configuration</span></code>
+<a class="reference internal" href="#nicdeviceconfigurationspec"><span class="std std-ref">NicDeviceConfigurationSpec</span></a></p></td>
+<td><p>Configuration specifies the configuration requested by NicConfigurationTemplate</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">firmware</span></code>
+<a class="reference internal" href="#firmwaretemplatespec"><span class="std std-ref">FirmwareTemplateSpec</span></a></p></td>
+<td><p>Firmware specifies the fw upgrade policy requested by NicFirmwareTemplate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicdevicestatus">
+<span id="id11"></span><h3>NicDeviceStatus<a class="headerlink" href="#nicdevicestatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicdevice"><span class="std std-ref">NicDevice</span></a>)</p>
+<p>NicDeviceStatus defines the observed state of NicDevice</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">node</span></code>
+string</p></td>
+<td><p>Node where the device is located</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code>
+string</p></td>
+<td><p>Type of device, e.g. ConnectX7</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">serialNumber</span></code>
+string</p></td>
+<td><p>Serial number of the device, e.g. MT2116X09299</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">partNumber</span></code>
+string</p></td>
+<td><p>Part number of the device, e.g. MCX713106AEHEA_QP1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">psid</span></code>
+string</p></td>
+<td><p>Product Serial ID of the device, e.g. MT_0000000221</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">firmwareVersion</span></code>
+string</p></td>
+<td><p>Firmware version currently installed on the device, e.g. 22.31.1014</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ports</span></code>
+<a class="reference internal" href="#nicdeviceportspec"><span class="std std-ref">[]NicDevicePortSpec</span></a></p></td>
+<td><p>List of ports for the device</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">conditions</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#condition-v1-meta">[]Kubernetes
+meta/v1.Condition</a></p></td>
+<td><p>List of conditions observed for the device</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwaresource">
+<span id="id12"></span><h3>NicFirmwareSource<a class="headerlink" href="#nicfirmwaresource" title="Permalink to this headline"></a></h3>
+<p>NicFirmwareSource is the Schema for the nicfirmwaresources API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#nicfirmwaresourcespec"><span class="std std-ref">NicFirmwareSourceSpec</span></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#nicfirmwaresourcestatus"><span class="std std-ref">NicFirmwareSourceStatus</span></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwaresourcespec">
+<span id="id13"></span><h3>NicFirmwareSourceSpec<a class="headerlink" href="#nicfirmwaresourcespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicfirmwaresource"><span class="std std-ref">NicFirmwareSource</span></a>)</p>
+<p>NicFirmwareSourceSpec represents a list of url sources for FW</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">binUrlSources</span></code>
+[]string</p></td>
+<td><p><em>(Optional)</em>
+BinUrlSources represents a list of url sources for ConnectX Firmware</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bfbUrlSource</span></code>
+string</p></td>
+<td><p><em>(Optional)</em>
+BFBUrlSource represents a url source for BlueField Bundle</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwaresourcestatus">
+<span id="id14"></span><h3>NicFirmwareSourceStatus<a class="headerlink" href="#nicfirmwaresourcestatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicfirmwaresource"><span class="std std-ref">NicFirmwareSource</span></a>)</p>
+<p>NicFirmwareSourceStatus represents the status of the FW from given sources, e.g. version available for PSIDs</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+string</p></td>
+<td><p>State represents the firmware processing state</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code>
+string</p></td>
+<td><p>Reason shows an error message if occurred</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">binaryVersions</span></code>
+map[string][]string</p></td>
+<td><p>Versions is a map of available FW binaries versions to PSIDs a PSID should have only a single FW
+version available for it</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bfbVersions</span></code>
+map[string]string</p></td>
+<td><p>BFBVersions represents the FW versions available in the provided BFB bundle</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwaretemplate">
+<span id="id15"></span><h3>NicFirmwareTemplate<a class="headerlink" href="#nicfirmwaretemplate" title="Permalink to this headline"></a></h3>
+<p>NicFirmwareTemplate is the Schema for the nicfirmwaretemplates API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#nicfirmwaretemplatespec"><span class="std std-ref">NicFirmwareTemplateSpec</span></a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#nictemplatestatus"><span class="std std-ref">NicTemplateStatus</span></a></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwaretemplatespec">
+<span id="id16"></span><h3>NicFirmwareTemplateSpec<a class="headerlink" href="#nicfirmwaretemplatespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicfirmwaretemplate"><span class="std std-ref">NicFirmwareTemplate</span></a>)</p>
+<p>NicFirmwareTemplateSpec defines the FW templates and node/nic selectors for it</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>
+map[string]string</p></td>
+<td><p>NodeSelector contains labels required on the node. When empty, the template will be applied to
+matching devices on all nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nicSelector</span></code>
+<a class="reference internal" href="#nicselectorspec"><span class="std std-ref">NicSelectorSpec</span></a></p></td>
+<td><p>NIC selector configuration</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code>
+<a class="reference internal" href="#firmwaretemplatespec"><span class="std std-ref">FirmwareTemplateSpec</span></a></p></td>
+<td><p>Firmware update template</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicselectorspec">
+<span id="id17"></span><h3>NicSelectorSpec<a class="headerlink" href="#nicselectorspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationtemplatespec"><span class="std std-ref">NicConfigurationTemplateSpec</span></a>, <a class="reference internal" href="#nicfirmwaretemplatespec"><span class="std std-ref">NicFirmwareTemplateSpec</span></a>)</p>
+<p>NicSelectorSpec is a desired configuration for NICs</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicType</span></code>
+string</p></td>
+<td><p>Type of the NIC to be selected, e.g. 101d,1015,a2d6 etc.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pciAddresses</span></code>
+[]string</p></td>
+<td><p>Array of PCI addresses to be selected, e.g. “0000:03:00.0”</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">serialNumbers</span></code>
+[]string</p></td>
+<td><p>Serial numbers of the NICs to be selected, e.g. MT2116X09299</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nictemplatestatus">
+<span id="id18"></span><h3>NicTemplateStatus<a class="headerlink" href="#nictemplatestatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationtemplate"><span class="std std-ref">NicConfigurationTemplate</span></a>, <a class="reference internal" href="#nicfirmwaretemplate"><span class="std std-ref">NicFirmwareTemplate</span></a>)</p>
+<p>NicTemplateStatus defines the observed state of NicConfigurationTemplate and NicFirmwareTemplate</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicDevices</span></code>
+[]string</p></td>
+<td><p>NicDevice CRs matching this configuration / firmware template</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="pciperformanceoptimizedspec">
+<span id="id19"></span><h3>PciPerformanceOptimizedSpec<a class="headerlink" href="#pciperformanceoptimizedspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a>)</p>
+<p>PciPerformanceOptimizedSpec specifies PCI performance optimization settings</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code>
+bool</p></td>
+<td><p>Specifies whether to enable PCI performance optimization</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code>
+int</p></td>
+<td><p>Specifies the PCIe Max Accumulative Outstanding read bytes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code>
+int</p></td>
+<td><p>Specifies the size of a single PCI read request in bytes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="qosspec">
+<span id="id20"></span><h3>QosSpec<a class="headerlink" href="#qosspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#roceoptimizedspec"><span class="std std-ref">RoceOptimizedSpec</span></a>)</p>
+<p>QosSpec specifies Quality of Service settings</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">trust</span></code>
+string</p></td>
+<td><p>Trust mode for QoS settings, e.g. trust-dscp</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pfc</span></code>
+string</p></td>
+<td><p>Priority-based Flow Control configuration, e.g. “0,0,0,1,0,0,0,0”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="roceoptimizedspec">
+<span id="id21"></span><h3>RoceOptimizedSpec<a class="headerlink" href="#roceoptimizedspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#configurationtemplatespec"><span class="std std-ref">ConfigurationTemplateSpec</span></a>)</p>
+<p>RoceOptimizedSpec specifies RoCE optimization settings</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code>
+bool</p></td>
+<td><p>Optimize RoCE</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">qos</span></code>
+<a class="reference internal" href="#qosspec"><span class="std std-ref">QosSpec</span></a></p></td>
+<td><p>Quality of Service settings</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Aug 08, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
