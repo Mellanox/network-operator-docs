@@ -666,7 +666,7 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | :ref:`NICFeatureDiscoverySpec <NICFeatureDiscoverySpec>`                                          | https://github.com/Mellanox/nic-feature-discovery                                                 |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``docaTelemetryService``                                                                          | DOCATelemetryService exposes telemetry from NVIDIA networking components to prometheus. See:      |
-      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        | https://docs.nvidia.com/doca/sdk/nvidia+doca+telemetry+service+guide/index.html                   |
+      | :ref:`DOCATelemetryServiceSpec <DOCATelemetryServiceSpec>`                                        | https://docs.nvidia.com/doca/sdk/doca+telemetry+service+guide/index.html                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nicConfigurationOperator``                                                                      | NicConfigurationOperator provides Kubernetes CRD API to allow FW configuration on NVIDIA NICs in  |
       | :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`                                | a coordinated manner See: https://github.com/Mellanox/nic-configuration-operator                  |
@@ -899,8 +899,8 @@ SecondaryNetworkSpec describes configuration options for secondary network
       | ``ipoib``                                                                                         | Image information for IPoIB CNI                                                                   |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``ipamPlugin``                                                                                    | Image information for IPAM plugin                                                                 |
-      | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
+      | ``ipamPlugin``                                                                                    | Image information for IPAM plugin Deprecated: This field is deprecated and will be removed in a   |
+      | :ref:`ImageSpec <ImageSpec>`                                                                      | future version. Use ‘nvIpam’ instead.                                                             |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _SpectrumXOperatorSpec:
