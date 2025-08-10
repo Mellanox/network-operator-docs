@@ -205,7 +205,7 @@ process-examples: | $(EXAMPLES_BUILD_DIR)
 	done
 
 .PHONY: gen-docs
-gen-docs: build-cache process-examples
+gen-docs: build-cache
 	@echo "Generating documentation..."; \
     export PM_PACKAGES_ROOT=${CACHE_DIR}; \
 	${CURDIR}/repo.sh docs
@@ -215,6 +215,10 @@ generate-docs-versions-var: | $(BUILDDIR)
 	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
 	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/vars --outputDir ../../docs/common/
 	cd hack/release && go run release.go --with-sha256 --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/image-sha256  --outputDir ../../docs/advanced/
+
+.PHONY: release-build
+release-build: api-docs helm-docs generate-docs-versions-var nic-conf-docs process-examples
+	@echo "Completed release build with all documentation targets"
 
 .PHONY: clean
 clean:
