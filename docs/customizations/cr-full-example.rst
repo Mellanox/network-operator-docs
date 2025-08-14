@@ -130,6 +130,10 @@ This example should serve as a reference, it is not recommended to apply it as i
         image: doca_telemetry
         repository: |doca-telemetry-repository|
         version: |doca-telemetry-version|
+      spectrumXOperator:
+        image: spectrum-x-operator
+        repository: |spectrumxop-repository|
+        version: |spectrumxop-version|
       nicConfigurationOperator:
         operator:
           image: nic-configuration-operator
