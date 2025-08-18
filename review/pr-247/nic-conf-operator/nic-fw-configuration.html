@@ -123,8 +123,19 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id1">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
-<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id2">Update NIC Firmware using the NIC Configuration Operator</a></p></li>
-<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id3">Configure NIC Firmware using the NIC Configuration Operator</a></p></li>
+<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id2">Update NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id3">Configure and apply the NICFirmwareSource CR</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id4">Configure and apply the NicFirmwareTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id5">NIC Firmware Mismatch Notification</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id6">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id7">Configure and apply the NicConfigurationTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id8">Observe the status of the configuration update</a></p></li>
+</ul>
+</li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.
