@@ -136,8 +136,11 @@
 <tbody>
 <tr class="row-even"><td><p>25.7.0</p></td>
 <td><div class="line-block">
+<div class="line">- Added support for OpenShift v4.19.</div>
 <div class="line">- Added support for RHEL v9.6.</div>
-<div class="line">- Added support for OpenShift 4.19.</div>
+<div class="line">- Added support for optimized DOCA driver container handling on pod termination, reducing cleanup time and avoiding unnecessary reloads.</div>
+<div class="line">- Added support for NIC Configuration Operator on Red Hat OpenShift.</div>
+<div class="line">- Added support for BlueField Firmware Bundle upgrades for BlueField-3 SuperNICs with NIC Configuration Operator.</div>
 </div>
 </td>
 </tr>
@@ -467,6 +470,7 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 <tr class="row-even"><td><p>25.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- NVIDIA DOCA-OFED Driver container can not start after kernel upgrade on OCP. To make Driver container work, please remove <cite>/var/opt/mofed-container/inventory</cite> directory on the host.</div>
+<div class="line">- DOCA driver container deployment may fail if NVIDIA drivers are in use by third-party kernel modules or user-space applications. The recommended workaround is to use non-containerized DOCA drivers deployed via the DOCA-Host package.</div>
 <div class="line">- SR-IOV Network Operator doesn’t support SR-IOV SystemD configuration mode.</div>
 </div>
 </td>
