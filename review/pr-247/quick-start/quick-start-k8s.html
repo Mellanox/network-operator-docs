@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start Guide for Kubernetes &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Deploy SR-IOV Network with RDMA" href="sriov-network-rdma.html" />
+    <link rel="prev" title="Getting Started with Kubernetes" href="../getting-started-with-kubernetes.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quick Start Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#before-you-begin">Before You Begin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#install-network-operator-helm-chart">Install Network Operator Helm Chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overview-of-quickstart-use-cases">Overview of Quickstart Use Cases</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sriov-network-rdma.html">SR-IOV Network with RDMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="host-device-rdma.html">Host Device Network with RDMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ipoib-rdma-shared.html">IP over InfiniBand with RDMA Shared Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN Network with RDMA Shared Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sriov-ib-rdma.html">SR-IOV InfiniBand Network with RDMA</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment-guide-kubernetes.html">Deployment Guide with Kubernetes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a> &raquo;</li>
+<li>Quick Start Guide for Kubernetes</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start-guide-for-kubernetes">
+<h1>Quick Start Guide for Kubernetes<a class="headerlink" href="#quick-start-guide-for-kubernetes" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#before-you-begin" id="id1">Before You Begin</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#install-network-operator-helm-chart" id="id3">Install Network Operator Helm Chart</a></p></li>
+<li><p><a class="reference internal" href="#overview-of-quickstart-use-cases" id="id4">Overview of Quickstart Use Cases</a></p></li>
+</ul>
+</div>
+<section id="before-you-begin">
+<h2>Before You Begin<a class="headerlink" href="#before-you-begin" title="Permalink to this headline"></a></h2>
+<p>Before deploying the NVIDIA Network Operator, ensure you have the following:</p>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
+<ol class="arabic">
+<li><p><strong>Kubernetes Cluster</strong>: A running Kubernetes cluster (v1.19+) with nodes that have NVIDIA NICs.</p></li>
+<li><p><strong>CLI Tools</strong>: Install <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span></code> on your client machine:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> chmod <span class="m">700</span> get_helm.sh <span class="se">\</span>
+    <span class="o">&amp;&amp;</span> ./get_helm.sh
+</pre></div>
+</div>
+</li>
+<li><p><strong>Container Runtime</strong>: Nodes must be configured with a container engine such as CRI-O or containerd.</p></li>
+</ol>
+</section>
+</section>
+<section id="install-network-operator-helm-chart">
+<h2>Install Network Operator Helm Chart<a class="headerlink" href="#install-network-operator-helm-chart" title="Permalink to this headline"></a></h2>
+<p>Add the NVIDIA NGC Helm repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add nvidia https://helm.ngc.nvidia.com/nvidia
+helm repo update
+</pre></div>
+</div>
+<p>Install the Network Operator:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install network-operator nvidia/network-operator <span class="se">\</span>
+  -n nvidia-network-operator <span class="se">\</span>
+  --create-namespace <span class="se">\</span>
+  --version v25.7.0-rc.3 <span class="se">\</span>
+  --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+  --wait
+</pre></div>
+</div>
+<p>Verify the installation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
+</pre></div>
+</div>
+</section>
+<section id="overview-of-quickstart-use-cases">
+<h2>Overview of Quickstart Use Cases<a class="headerlink" href="#overview-of-quickstart-use-cases" title="Permalink to this headline"></a></h2>
+<p>This quick start guide covers five essential networking configurations for different computational requirements:</p>
+<div class="toctree-wrapper compound">
+</div>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 26%" />
+<col style="width: 21%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Use Case</strong></p></th>
+<th class="head"><p><strong>Purpose</strong></p></th>
+<th class="head"><p><strong>Performance Requirements</strong></p></th>
+<th class="head"><p><strong>Applications</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="sriov-network-rdma.html"><span class="doc">SR-IOV Network with RDMA</span></a></p></td>
+<td><p>High-performance networking with hardware acceleration</p></td>
+<td><ul class="simple">
+<li><p>&gt;10 Gbps throughput</p></li>
+<li><p>&lt;1μs latency</p></li>
+<li><p>Dedicated VF resources</p></li>
+</ul>
+</td>
+<td><p>HPC simulations, distributed ML training, financial trading</p>
+<p><em>Keywords: SR-IOV, RDMA, HPC, low-latency, VF isolation</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="host-device-rdma.html"><span class="doc">Host Device Network with RDMA</span></a></p></td>
+<td><p>Direct hardware access for legacy applications</p></td>
+<td><ul class="simple">
+<li><p>Raw device control</p></li>
+<li><p>Exclusive hardware access</p></li>
+<li><p>Minimal CPU overhead</p></li>
+</ul>
+</td>
+<td><p>Legacy HPC codes, specialized protocols, DPDK applications</p>
+<p><em>Keywords: host-device, PCI-passthrough, direct-access, exclusive-access</em></p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ipoib-rdma-shared.html"><span class="doc">IP over InfiniBand with RDMA Shared Device</span></a></p></td>
+<td><p>InfiniBand networking with shared RDMA resources</p></td>
+<td><ul class="simple">
+<li><p>&gt;50 Gbps bandwidth</p></li>
+<li><p>Parallel I/O workloads</p></li>
+<li><p>Shared device efficiency</p></li>
+</ul>
+</td>
+<td><p>Distributed storage, data analytics, scientific computing</p>
+<p><em>Keywords: InfiniBand, IPoIB, shared-device, high-bandwidth</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="macvlan-rdma-shared.html"><span class="doc">MacVLAN Network with RDMA Shared Device</span></a></p></td>
+<td><p>Network isolation with shared RDMA capabilities</p></td>
+<td><ul class="simple">
+<li><p>Multi-tenant segmentation</p></li>
+<li><p>10+ pods per node</p></li>
+<li><p>Moderate throughput</p></li>
+</ul>
+</td>
+<td><p>Cloud-native HPC, microservices, multi-tenant ML</p>
+<p><em>Keywords: MacVLAN, multi-tenant, network-segmentation, resource-sharing</em></p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="sriov-ib-rdma.html"><span class="doc">SR-IOV InfiniBand Network with RDMA</span></a></p></td>
+<td><p>Virtualized InfiniBand with hardware acceleration</p></td>
+<td><ul class="simple">
+<li><p>&gt;100 Gbps bandwidth</p></li>
+<li><p>Hardware acceleration</p></li>
+<li><p>Isolated IB partitions</p></li>
+</ul>
+</td>
+<td><p>Large-scale HPC clusters, AI/ML training, research computing</p>
+<p><em>Keywords: SR-IOV, InfiniBand, hardware-acceleration, ultra-high-bandwidth</em></p>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Aug 18, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
