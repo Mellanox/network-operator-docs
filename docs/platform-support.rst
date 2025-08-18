@@ -163,7 +163,7 @@ Supported Operating Systems and Kubernetes Platforms
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
-     - 4.15–4.18
+     - 4.15–4.19
      - —
      - —
      - —
