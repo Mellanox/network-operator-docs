@@ -27,13 +27,14 @@ NIC Firmware Configuration
    :local:
    :backlinks: none
 
-
-===========================================================================
-Configure NIC Firmware using the NIC Configuration Operator
-===========================================================================
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
-
 .. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check :doc:`limitations <../release-notes>`.
+
+For more information about the CRD API, refer to :doc:`CRD API Reference <crds>`.
+
+=============================================================================
+Install the NIC Configuration Operator and observe NIC devices in the cluster
+=============================================================================
 
 .. note::
     To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
@@ -136,7 +137,14 @@ Discover more information about a specific device:
     serialNumber: mt1952x03327
     type: 101d
 
-Configure and apply the NICFirmwareSource CR:
+========================================================
+Update NIC Firmware using the NIC Configuration Operator
+========================================================
+--------------------------------------------
+Configure and apply the NICFirmwareSource CR
+--------------------------------------------
+
+Deploy the NICFirmwareSource CR:
 
 .. code-block:: yaml
 
@@ -148,9 +156,20 @@ Configure and apply the NICFirmwareSource CR:
       finalizers:
         - configuration.net.nvidia.com/nic-configuration-operator
     spec:
-      # a list of firmware binaries zip archives from the Mellanox website, can point to any url accessible from the cluster
+      # a list of firmware binaries zip archives from the Mellanox website, can point to any URL accessible from the cluster
       binUrlSources:
         - https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip
+      # a URL to the BlueField Bundle (BFB) file, can point to any URL accessible from the cluster
+      bfbUrlSource:
+        - https://example.com/bf-fwbundle-3.1.0-77_25.07-prod.bfb
+
+.. note::
+    The ConnectX firmware binaries can be downloaded from the `NVIDIA Networking Firmware Downloads page <https://network.nvidia.com/support/firmware/firmware-downloads/>`_.
+    The URLs of the firmware binaries from the website can be directly provided in the binUrlSources field of the NicFirmwareSource CR.
+
+.. note::
+    BlueField Bundle (BFB) can be downloaded from the `NVIDIA DOCA Downloads page <https://developer.nvidia.com/doca-downloads?deployment_platform=BlueField&deployment_package=BF-FW-Bundle&installer_type=BFB>`_.
+    The file should first be made available in the cluster and then its URL should be provided in the bfbUrlSource field of the NicFirmwareSource CR.
 
 Observe the NICFirmwareSource status:
 
@@ -164,6 +183,10 @@ Observe the NICFirmwareSource status:
       versions:
         22.44.1036:
         - mt_0000000436
+
+----------------------------------------------
+Configure and apply the NicFirmwareTemplate CR
+----------------------------------------------
 
 Configure and apply the NicFirmwareTemplate CR:
 
@@ -183,7 +206,66 @@ Configure and apply the NicFirmwareTemplate CR:
         nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
         updatePolicy: Update
 
-Configure and apply the NicConfigurationTemplate CR:
+Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.spec}' | yq -P
+
+    template:
+      firmware:
+          nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+          updatePolicy: Update
+
+Status conditions of the NicDevice CR reflect the status of the firmware update and indicate any errors that might occur during the process
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
+
+    - type: FirmwareUpdateInProgress
+      status: "False"
+      reason: DeviceFirmwareConfigMatch
+      message: Firmware matches the requested version
+      observedGeneration: 4
+      lastTransitionTime: "2024-09-21T08:42:23Z"
+
+----------------------------------
+NIC Firmware Mismatch Notification
+----------------------------------
+
+NIC Configuration Operator updates status conditions of the NicDevice CR to set `FirmwareConfigMatch` condition based on a current NIC firmware:
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
+
+    - type: FirmwareConfigMatch
+      status: "True"
+      reason: DeviceFirmwareConfigMatch
+      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+      lastTransitionTime: "2024-09-21T08:43:10Z"
+
+`FirmwareConfigMatch` condition status is set to `Unknown` if DOCA-OFED Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA-OFED Driver. E.g.:
+
+.. code-block:: bash
+
+    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
+
+   - type: FirmwareConfigMatch
+     status: "True"
+     reason: DeviceFirmwareConfigMatch
+     message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
+     lastTransitionTime: "2024-11-08T09:19:41Z"
+
+
+===========================================================
+Configure NIC Firmware using the NIC Configuration Operator
+===========================================================
+
+---------------------------------------------------
+Configure and apply the NicConfigurationTemplate CR
+---------------------------------------------------
 
 .. code-block:: yaml
 
@@ -224,7 +306,7 @@ Configure and apply the NicConfigurationTemplate CR:
 
 .. note:: To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, "mellanox" `plugin should be disabled <https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins>`_ in the SR-IOV Network Operator.
 
-For more information about the CRD API, refer to :doc:`CRD API Reference <crds>`.
+
 For detailed information about firmware parameters and configuration settings, refer to :doc:`Configuration Details <configuration-details>`.
 
 Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device
@@ -251,6 +333,9 @@ Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate a
             enabled: true
             env: Baremetal
 
+----------------------------------------------
+Observe the status of the configuration update
+----------------------------------------------
 
 Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process
 
@@ -270,30 +355,4 @@ Status conditions of the NicDevice CR reflect the status of the configuration up
       message: ""
       lastTransitionTime: "2024-09-21T08:43:08Z"
 
-----------------------------------
-NIC Firmware Mismatch Notification
-----------------------------------
-
-NIC Configuration Operator updates status conditions of the NicDevice CR to set `FirmwareConfigMatch` condition based on a current NIC firmware:
-
-.. code-block:: bash
-
-    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
-
-    - type: FirmwareConfigMatch
-      status: "True"
-      reason: DeviceFirmwareConfigMatch
-      message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
-      lastTransitionTime: "2024-09-21T08:43:10Z"
-
-`FirmwareConfigMatch` condition status is set to `Unknown` if DOCA-OFED Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA-OFED Driver. E.g.:
-
-.. code-block:: bash
-
-    > kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o jsonpath='{.status.conditions}' | yq -P
-
-   - type: FirmwareConfigMatch
-     status: "True"
-     reason: DeviceFirmwareConfigMatch
-     message: Device firmware '20.42.1000' matches to recommended version '20.42.1000'
-     lastTransitionTime: "2024-11-08T09:19:41Z"
+.. note:: If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.

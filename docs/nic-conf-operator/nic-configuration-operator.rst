@@ -21,6 +21,9 @@ NIC Configuration Operator
 **************************
 
 .. toctree::
+  :maxdepth: 1
+  :titlesonly:
+
    NIC Firmware Configuration <nic-fw-configuration.rst>
    Configuration Details <configuration-details.rst>
    CRD API Reference <crds.rst>
