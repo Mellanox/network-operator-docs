@@ -36,6 +36,12 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.7.0
+     - | - Added support for OpenShift v4.19.
+       | - Added support for RHEL v9.6.
+       | - Added support for optimized DOCA driver container handling on pod termination, reducing cleanup time and avoiding unnecessary reloads.
+       | - Added support for NIC Configuration Operator on Red Hat OpenShift.
+       | - Added support for BlueField Firmware Bundle upgrades for BlueField-3 SuperNICs with NIC Configuration Operator.
    * - 25.4.0
      - | - Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases.
        | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade.
@@ -153,6 +159,8 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 25.7.0
+     - | - MOFED driver container older than 5.7-0.1.2.0 is not supported.
    * - 25.4.0
      - | - Whereabouts support is deprecated in Network Operator 25.4.
            It is advised to migrate to NV-IPAM as 'ipam' plugin.
@@ -214,10 +222,13 @@ Known Limitations
 
    * - Version
      - Description
+   * - 25.7.0
+     - | - NVIDIA DOCA-OFED Driver container can not start after kernel upgrade on OCP. To make Driver container work, please remove `/var/opt/mofed-container/inventory` directory on the host.
+       | - DOCA driver container deployment may fail if NVIDIA drivers are in use by third-party kernel modules or user-space applications. The recommended workaround is to use non-containerized DOCA drivers deployed via the DOCA-Host package.
+       | - SR-IOV Network Operator doesn't support SR-IOV SystemD configuration mode.
    * - 25.1.0
      - | - In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF).
            The recommendation is to create up to 16 VFs per PF. Larger number will cause "ip link show dev <device_name>" to fail with a "Message too long" error.
-       | - SR-IOV switchdev mode is not supported on SLES.
        | - In infiniband mode, in case of existing Intel NICs, loaded `irdma` module should be unloaded before deploying DOCA-OFED driver.
    * - 24.10.0
      - | - There is a known limitation when using NVIDIA NICs as **primary network interfaces**. If the NVIDIA DOCA-OFED Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use.
