@@ -225,7 +225,7 @@ Known Limitations
    * - 25.7.0
      - | - NVIDIA DOCA-OFED Driver container can not start after kernel upgrade on OCP. To make Driver container work, please remove `/var/opt/mofed-container/inventory` directory on the host.
        | - DOCA driver container deployment may fail if NVIDIA drivers are in use by third-party kernel modules or user-space applications. The recommended workaround is to use non-containerized DOCA drivers deployed via the DOCA-Host package.
-       | - SR-IOV Network Operator doesn't support SR-IOV SystemD configuration mode.
+       | - SR-IOV Network Operator doesn't support SR-IOV SystemD configuration mode on OCP.
    * - 25.1.0
      - | - In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF).
            The recommendation is to create up to 16 VFs per PF. Larger number will cause "ip link show dev <device_name>" to fail with a "Message too long" error.
