@@ -9,8 +9,8 @@ spec:
     version: doca3.1.0-25.07-0.9.7.0-0
   rdmaSharedDevicePlugin:
     image: k8s-rdma-shared-dev-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-rc.3
+    repository: nvcr.io/nvidia/mellanox
+    version: network-operator-v25.7.0
     config: |
       {
         "configList": [
@@ -37,23 +37,23 @@ spec:
       }
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.7.0-rc.3
+    repository: nvcr.io/nvidia/mellanox
+    version: network-operator-v25.7.0
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-rc.3
+      repository: nvcr.io/nvidia/mellanox
+      version: network-operator-v25.7.0
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-rc.3
+      repository: nvcr.io/nvidia/mellanox
+      version: network-operator-v25.7.0
     ipoib:
       image: ipoib-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.7.0-rc.3
+      repository: nvcr.io/nvidia/mellanox
+      version: network-operator-v25.7.0
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
