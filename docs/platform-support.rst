@@ -152,14 +152,14 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - 1.29–1.32
-     - —
+     - 2.12-2.15
      - —
    * - Ubuntu 22.04 LTS
      - 1.29–1.32
      - —
      - —
      - 1.29–1.32
-     - 2.14 (K8s v1.31.4)
+     - 2.12-2.15
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
@@ -168,7 +168,7 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - RT kernels support
-   * - Red Hat Enterprise Linux 9.4 / 9.2
+   * - Red Hat Enterprise Linux 9.6 / 9.4
      - 1.29–1.32
      - —
      - —
