@@ -16,11 +16,11 @@
 
 .. headings # #, * *, =, -, ^, "
 
-.. include:: ./common/vars.rst
+.. include:: ../common/vars.rst
 
-**************************************
-Getting Started with Red Hat OpenShift
-**************************************
+*******************************************************
+NVIDIA Network Operator Deployment Guide with OpenShift
+*******************************************************
 
 .. contents:: On this page
    :depth: 4

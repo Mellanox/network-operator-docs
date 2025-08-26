@@ -91,9 +91,11 @@ Pulling and Pushing Container Images to a Local Registry
 
 To pull the correct images from the NVIDIA registry, you can leverage the fields ``repository``, ``image`` and ``version`` specified in the ``values.yaml`` file or in the :ref:`container_images_digest` section.
 
-NicClusterPolicy supports use of image container digest in the `version` field, except for DOCA-OFED driver.
+NicClusterPolicy supports use of image container digest in the `version` field.
 
-There is one caveat with regards to the DOCA-OFED driver image. The version field must be appended by the OS name and Architecture running on the worker node.
+For DOCA-OFED driver, the use of image container digest in the `version` field is supported only for precompiled images.
+
+For non-precompiled DOCA-OFED driver images, the version field must be appended by the OS name and Architecture running on the worker node.
 
 For example for DOCA-OFED driver version |doca-driver-version|, the tag for Ubuntu 24.04 with X86 architecture is "|doca-driver-version|-ubuntu24.04-amd64".
 Available DOCA-OFED driver image tags can be found at `NGC <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags>`_.
