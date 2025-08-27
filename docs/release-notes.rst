@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.7.1
+     - | - Added support for OpenShift 4.19.
    * - 25.7.0
      - | - Added support for OpenShift v4.19.
        | - Added support for RHEL v9.6.
