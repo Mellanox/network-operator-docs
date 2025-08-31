@@ -54,7 +54,6 @@ type SHA256ImageRef struct {
 
 // Release contains versions for operator release templates.
 type Release struct {
-	OcpDefaulChannel             string
 	HelmChartVersion             string
 	DocaDriverBuildCommitHash    string
 	NetworkOperator              *ReleaseImageSpec
@@ -141,8 +140,6 @@ func main() {
 	flag.Parse()
 	release := readDefaults(*releaseDefaults)
 	readEnvironmentVariables(&release)
-	parts := strings.Split(release.NetworkOperator.Version, ".")
-	release.OcpDefaulChannel = fmt.Sprintf("%s.%s", parts[0], parts[1])
 	release.HelmChartVersion = strings.TrimPrefix(release.NetworkOperator.Version, "v")
 	retrieveDocaDriverBuildCommit(&release)
 	if *retrieveSha {
