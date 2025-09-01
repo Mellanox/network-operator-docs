@@ -1,7 +1,6 @@
 .. |network-operator-version| replace:: v25.7.0
 .. |network-operator-repository| replace:: nvcr.io/nvidia/cloud-native
 .. |helm-chart-version| replace:: 25.7.0
-.. |ocp-channel| replace::  v25.7
 .. |doca-driver-version| replace:: doca3.1.0-25.07-0.9.7.0-0
 .. |doca-driver-repository| replace:: nvcr.io/nvidia/mellanox
 .. |doca-driver-version-lts| replace:: 24.10-0.7.0.0-0

@@ -172,7 +172,7 @@ Network Operator Installation using OpenShift OC CLI
         name: nvidia-network-operator
         namespace: nvidia-network-operator
       spec:
-        channel: "|ocp-channel|"
+        channel: stable
         name: nvidia-network-operator
         source: certified-operators
         sourceNamespace: openshift-marketplace
