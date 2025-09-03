@@ -4,30 +4,30 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started with Red Hat OpenShift &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
-      <link rel="stylesheet" href="_static/omni-style.css" type="text/css" />
-      <link rel="stylesheet" href="_static/api-styles.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <title>NVIDIA Network Operator Deployment Guide with OpenShift &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
   <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
+    <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/mermaid-init.js"></script>
-        <script src="_static/design-tabs.js"></script>
-        <script src="_static/version.js"></script>
-        <script src="_static/social-media.js"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="NIC Configuration Operator" href="nic-conf-operator/nic-configuration-operator.html" />
-    <link rel="prev" title="NVIDIA Network Operator Deployment Guide with Kubernetes" href="deployment-guide-kubernetes.html" />
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NVIDIA Network Operator Deployment on Disconnected OpenShift" href="disconnected-openshift.html" />
+    <link rel="prev" title="Getting Started with OpenShift" href="../getting-started-with-openshift.html" />
  
 
 
@@ -40,12 +40,12 @@
         <div class="wy-side-nav-search" >
 
 
-<a href="index.html">
-  <img src="_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
 </a>
 
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -54,28 +54,29 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with Red Hat OpenShift</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#network-operator-deployment-on-an-openshift-container-platform">Network Operator Deployment on an OpenShift Container Platform</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#node-feature-discovery">Node Feature Discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#sr-iov-network-operator">SR-IOV Network Operator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#gpu-operator">GPU Operator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#network-operator-installation">Network Operator Installation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation-using-openshift-catalog">Network Operator Installation Using OpenShift Catalog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation-using-openshift-oc-cli">Network Operator Installation using OpenShift OC CLI</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#verification">Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Deployment Guide with OpenShift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-deployment-on-an-openshift-container-platform">Network Operator Deployment on an OpenShift Container Platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#node-feature-discovery">Node Feature Discovery</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator">SR-IOV Network Operator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gpu-operator">GPU Operator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation">Network Operator Installation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-installation-using-openshift-catalog">Network Operator Installation Using OpenShift Catalog</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-installation-using-openshift-oc-cli">Network Operator Installation using OpenShift OC CLI</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#verification">Verification</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#deployment-examples-for-openshift-container-platform">Deployment Examples For OpenShift Container Platform</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp">Network Operator Deployment with a Host Device Network - OCP</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp">Network Operator Deployment for DPDK Workloads - OCP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#deployment-examples-for-openshift-container-platform">Deployment Examples For OpenShift Container Platform</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp">Network Operator Deployment with a Host Device Network - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp">Network Operator Deployment for DPDK Workloads - OCP</a></li>
 </ul>
 </li>
 </ul>
@@ -84,11 +85,14 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced Configurations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="disconnected-openshift.html">Deployment in Disconnected OpenShift</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
 </ul>
 
         </div>
@@ -97,7 +101,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">NVIDIA Network Operator</a>
+          <a href="../index.html">NVIDIA Network Operator</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -106,9 +110,10 @@
   <ul class="wy-breadcrumbs">
 
 
-<li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
   
-<li>Getting Started with Red Hat OpenShift</li>
+    <li><a href="../getting-started-with-openshift.html">Getting Started with OpenShift</a> &raquo;</li>
+<li>NVIDIA Network Operator Deployment Guide with OpenShift</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -123,8 +128,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="getting-started-with-red-hat-openshift">
-<h1>Getting Started with Red Hat OpenShift<a class="headerlink" href="#getting-started-with-red-hat-openshift" title="Permalink to this headline"></a></h1>
+  <section id="nvidia-network-operator-deployment-guide-with-openshift">
+<h1>NVIDIA Network Operator Deployment Guide with OpenShift<a class="headerlink" href="#nvidia-network-operator-deployment-guide-with-openshift" title="Permalink to this headline"></a></h1>
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
@@ -607,7 +612,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 01, 2025.
+      <span class="lastupdated">Last updated on Sep 03, 2025.
       </span></p>
   </div>
 
