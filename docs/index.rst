@@ -24,7 +24,7 @@
    Release Notes <release-notes.rst>
    Platform Support <platform-support.rst>
    Getting Started with Kubernetes <getting-started-with-kubernetes.rst>
-   Getting Started with Red Hat OpenShift <getting-started-openshift.rst>
+   Getting Started with Red Hat OpenShift <getting-started-with-openshift.rst>
    NIC Configuration Operator <nic-conf-operator/nic-configuration-operator.rst>
    Customization Options and CRDs <customizations/customization.rst>
    Life Cycle Management <life-cycle-management.rst>
