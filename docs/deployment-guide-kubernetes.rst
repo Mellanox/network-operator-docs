@@ -333,53 +333,9 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
             ]
           }
 
-----------------------------------------------------
-Network Operator Deployment with a Secondary Network
-----------------------------------------------------
-
-First install the Network Operator with NFD enabled:
-
-``values.yaml``:
-
-.. code-block:: yaml
-
-    nfd:
-      enabled: true
-
-Once the Network Operator is installed create a NicClusterPolicy with the following enabled:
-    * Secondary network
-    * Multus CNI
-    * Container-networking-plugins CNI plugins
-    * IPAM Plugin
-
-.. code-block:: yaml
-   :substitutions:
-
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
-          imagePullSecrets: []
-
---------------------------------------------
-Network Operator Deployment with NVIDIA-IPAM
---------------------------------------------
+--------------------------------------------------------------------
+Network Operator Deployment with a Secondary Network and NVIDIA-IPAM
+--------------------------------------------------------------------
 
 First install the Network Operator with NFD enabled:
 ``values.yaml``:
@@ -513,6 +469,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
               }
             ]
           }
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -524,12 +486,6 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           repository: |multus-repository|
           version: |multus-version|
           imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
-          imagePullSecrets: []
-
 
 Following the deployment, the network operator should be configured, and K8s networking should be deployed to use it in pod configuration.
 
@@ -546,18 +502,8 @@ The ``host-device-net.yaml`` configuration file for such a deployment:
       resourceName: "hostdev"
       ipam: |
         {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "192.168.3.225/28",
-          "exclude": [
-           "192.168.3.229/30",
-           "192.168.3.236/32"
-          ],
-          "log_file": "/var/log/whereabouts.log",
-          "log_level": "info"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
@@ -573,12 +519,8 @@ The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the
       resourceName: "hostdev"
       ipam: |
         {
-          "type": "whereabouts",
-          "range": "192.168.3.225/28",
-          "exclude": [
-           "192.168.3.229/30",
-           "192.168.3.236/32"
-          ]
+          "type": "nv-ipam",
+          "poolName": "myPool"
         }
 
 The ``pod.yaml`` configuration file for such a deployment:
@@ -630,7 +572,7 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
     * Multus CNI
     * Container-networking-plugins CNI plugins
     * RDMA Shared device plugin
-    * Whereabouts IPAM CNI plugin
+    * NVIDIA IPAM Plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -688,6 +630,12 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
               }
             ]
           }
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -698,11 +646,6 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
           image: multus-cni
           repository: |multus-repository|
           version: |multus-version|
-          imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
           imagePullSecrets: []
 
 For pods and network configuration examples please refer to the corresponding sections: Network Operator Deployment with the RDMA Shared Device Plugin and Network Operator Deployment with a Host Device Network.
@@ -728,7 +671,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     * Secondary network
     * Multus CNI
     * IPoIB CNI
-    * Whereabouts IPAM CNI plugin
+    * NVIDIA IPAM Plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -788,6 +731,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
               }
             ]
           }
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -803,11 +752,6 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           image: ipoib-cni
           repository: |ipoib-cni-repository|
           version: |ipoib-cni-version|
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
-          imagePullSecrets: []
 
 Following the deployment, the network operator should be configured, and K8s networking deployed to use it in the pod configuration.
 
@@ -824,19 +768,8 @@ The ``ipoib-net.yaml`` configuration file for such a deployment:
       master: "ibs1f0"
       ipam: |
         {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "192.168.5.225/28",
-          "exclude": [
-           "192.168.6.229/30",
-           "192.168.6.236/32"
-          ],
-          "log_file" : "/var/log/whereabouts.log",
-          "log_level" : "info",
-          "gateway": "192.168.6.1"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 The ``ipoib-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
@@ -852,12 +785,8 @@ The ``ipoib-net-ocp.yaml`` configuration file for such a deployment in the OpenS
       master: "ibs1f0"
       ipam: |
         {
-          "type": "whereabouts",
-          "range": "192.168.5.225/28",
-          "exclude": [
-           "192.168.6.229/30",
-           "192.168.6.236/32"
-          ]
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 The ``pod.yaml`` configuration file for such a deployment:
@@ -973,6 +902,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
               }
             ]
           }
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -983,11 +918,6 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           image: multus-cni
           repository: |multus-repository|
           version: |multus-version|
-          imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
           imagePullSecrets: []
 
 ``host-device-net.yaml:``
@@ -1003,18 +933,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
       resourceName: "hostdev"
       ipam: |
         {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "192.168.3.225/28",
-          "exclude": [
-           "192.168.3.229/30",
-           "192.168.3.236/32"
-          ],
-          "log_file" : "/var/log/whereabouts.log",
-          "log_level" : "info"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
@@ -1030,12 +950,8 @@ The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the
       resourceName: "hostdev"
       ipam: |
         {
-          "type": "whereabouts",
-          "range": "192.168.3.225/28",
-          "exclude": [
-           "192.168.3.229/30",
-           "192.168.3.236/32"
-          ]
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 ``host-net-gpudirect-pod.yaml``
@@ -1127,6 +1043,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
             podSelector: ""
             timeoutSeconds: 300
             deleteEmptyDir: true
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -1137,11 +1059,6 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           image: multus-cni
           repository: |multus-repository|
           version: |multus-version|
-          imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
           imagePullSecrets: []
 
 Following the deployment, the Network Operator should be configured, and sriovnetwork node policy and K8s networking should be deployed.
@@ -1183,14 +1100,8 @@ The ``sriovnetwork.yaml`` configuration file for such a deployment:
       resourceName: "sriov_resource"
       ipam: |-
         {
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "log_file": "/tmp/whereabouts.log",
-          "log_level": "debug",
-          "type": "whereabouts",
-          "range": "192.168.101.0/24"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 .. warning:: The ens2f0 network interface name has been chosen from the following command output: ``kubectl -n nvidia-network-operator get sriovnetworknodestates.sriovnetwork.openshift.io -o yaml``.
@@ -1239,8 +1150,10 @@ Wait for all required pods to be spawned:
     kube-multus-ds-mxgvl                            1/1     Running   0          5d
     mofed-ubuntu20.04-ds-2zzf4                      1/1     Running   0          5d
     mofed-ubuntu20.04-ds-rfnsw                      1/1     Running   0          5d
-    whereabouts-nw7hn                               1/1     Running   0          5d
-    whereabouts-zvhrv                               1/1     Running   0          5d
+    nv-ipam-controller-865f479547-6dkkg             1/1     Running   0          5d
+    nv-ipam-controller-865f479547-cbp4p             1/1     Running   0          5d
+    nv-ipam-node-4ghkj                              1/1     Running   0          5d
+    nv-ipam-node-p5kff                              1/1     Running   0          5d
     ...
 
 The ``pod.yaml`` configuration file for such a deployment:
@@ -1404,6 +1317,12 @@ Once the Network Operator is installed create a NicClusterPolicy with:
             podSelector: ""
             timeoutSeconds: 300
             deleteEmptyDir: true
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
@@ -1414,11 +1333,6 @@ Once the Network Operator is installed create a NicClusterPolicy with:
           image: multus-cni
           repository: |multus-repository|
           version: |multus-version|
-          imagePullSecrets: []
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
           imagePullSecrets: []
 
 ``sriov-ib-network-node-policy.yaml``
@@ -1455,18 +1369,8 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     spec:
       ipam: |
         {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "192.168.5.225/28",
-          "exclude": [
-           "192.168.5.229/30",
-           "192.168.5.236/32"
-          ],
-          "log_file": "/var/log/whereabouts.log",
-          "log_level": "info"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
       resourceName: mlnxnics
       linkState: enable
@@ -1795,15 +1699,17 @@ Network Operator deployment with:
                 }
             ]
           }
+      nvIpam:
+        image: nvidia-k8s-ipam
+        repository: |nvidia-ipam-repository|
+        version: |nvidia-ipam-version|
+        imagePullSecrets: []
+        enableWebhook: false
       secondaryNetwork:
         cniPlugins:
           image: plugins
           repository: |cni-plugins-repository|
           version: |cni-plugins-version|
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
         multus:
           image: multus-cni
           repository: |multus-repository|
@@ -1822,18 +1728,8 @@ Network Operator deployment with:
       resourceName: "rdma_host_dev"
       ipam: |
         {
-          "type": "whereabouts",
-          "datastore": "kubernetes",
-          "kubernetes": {
-            "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-          },
-          "range": "192.168.3.225/28",
-          "exclude": [
-           "192.168.3.229/30",
-           "192.168.3.236/32"
-          ],
-          "log_file" : "/var/log/whereabouts.log",
-          "log_level" : "info"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
         }
 
 ``pod.yaml``

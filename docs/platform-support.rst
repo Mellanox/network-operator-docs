@@ -408,13 +408,6 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |multus-version|
      - Yes
      - 
-   * - `Whereabouts IPAM Plugin <https://github.com/k8snetworkplumbingwg/whereabouts>`_
-     - Community (OSS)
-     - |whereabouts-repository|
-     - whereabouts
-     - |whereabouts-version|
-     - Yes
-     - 
    * - `RDMA CNI plugin <https://github.com/k8snetworkplumbingwg/rdma-cni>`_
      - Community (OSS)
      - |rdma-cni-repository|

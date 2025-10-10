@@ -160,6 +160,8 @@ Upgrade Notes
    * - Version
      - Notes
    * - 25.7.0
+     - | - Whereabouts IPAM plugin support removed for vanilla Kubernetes.
+   * - 25.7.0
      - | - MOFED driver container older than 5.7-0.1.2.0 is not supported.
    * - 25.4.0
      - | - Whereabouts support is deprecated in Network Operator 25.4.

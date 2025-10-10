@@ -654,9 +654,7 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       | ``secondaryNetwork``                                                                              | SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in     |
       | :ref:`SecondaryNetworkSpec <SecondaryNetworkSpec>`                                                | Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate   |
       |                                                                                                   | CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only              |
-      |                                                                                                   | containernetworking-plugins is supported - IPAM CNI: Currently only Whereabout IPAM CNI is        |
-      |                                                                                                   | supported as a part of the secondaryNetwork section. - IPoIB CNI: Allows the user to create IPoIB |
-      |                                                                                                   | child link and move it to the pod                                                                 |
+      |                                                                                                   | containernetworking-plugins is supported                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nvIpam``                                                                                        | NvIpam is an IPAM provider that dynamically assigns IP addresses with speed and performance in    |
       | :ref:`NVIPAMSpec <NVIPAMSpec>`                                                                    | mind. Note: NvIPam requires certificate management e.g. cert-manager or OpenShift cert            |
