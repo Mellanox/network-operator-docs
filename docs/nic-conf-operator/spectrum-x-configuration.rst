@@ -41,7 +41,7 @@ To install the operator and for more information about the CRDs follow the `NIC 
 Provision the DOCA SPC-X CC algorithm package
 =============================================
 
-To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm will be publicly available.
+To enable the DOCA SPC-X CC (Congestion Control) algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm will be publicly available.
 To access the package, contact your NVIDIA CPM.
 The package should be made available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.
 
