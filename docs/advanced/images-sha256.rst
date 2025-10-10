@@ -97,10 +97,6 @@ NVIDIA Network Operator Container Images
      - network-operator-v25.7.0
      - sha256:83d21583ffe922d694af603743ab8b806c181ef33370da08fd3c40370fe164e8
    * - nvcr.io/nvidia/mellanox
-     - whereabouts
-     - network-operator-v25.7.0
-     - sha256:5635df1f0cd35a1ee026093e763f469f58536aca48289b043c1381c6b9c0ea6b
-   * - nvcr.io/nvidia/mellanox
      - ovs-cni-plugin
      - network-operator-v25.7.0
      - sha256:17affe6f977807e1388a5a395df5f1e030f7f049c77856c6685cde4e960704ac
