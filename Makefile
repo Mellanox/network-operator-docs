@@ -171,7 +171,7 @@ build-cache:
 		# Add commands to populate the cache here \
 		export PM_PACKAGES_ROOT=${CACHE_DIR}; \
 		${CURDIR}/repo.sh docs || true; \
-		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions; \
+		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions sphinxext-remoteliteralinclude; \
 	fi
 
 .PHONY: process-examples
