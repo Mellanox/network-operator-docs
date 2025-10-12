@@ -45,6 +45,12 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | ``gpuDirectOptimized``                                                                            | GPU Direct optimization settings                                                                  |
       | :ref:`GpuDirectOptimizedSpec <GpuDirectOptimizedSpec>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==0. Other          |
+      | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | optimizations must be skipped or disabled. RawNvConfig must be empty.                             |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rawNvConfig``                                                                                   | List of arbitrary nv config parameters                                                            |
+      | :ref:`[]NvConfigParam <NvConfigParam>`                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _FirmwareTemplateSpec:
 
@@ -199,12 +205,10 @@ NicDeviceConfigurationSpec contains desired configuration of the NIC
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``resetToDefault``                                                                                | ResetToDefault specifies whether node agent needs to perform a reset flow. In NIC Configuration   |
-      | bool                                                                                              | Operator template v0.1.14 BF2/BF3 DPUs (not SuperNics) FW reset flow isn’t supported. The         |
-      |                                                                                                   | following operations will be performed: \* Nvconfig reset of all non-volatile configurations -    |
-      |                                                                                                   | Mstconfig -d reset for each PF - Mstconfig -d set ADVANCED_PCI_SETTINGS=1 \* Node reboot -        |
-      |                                                                                                   | Applies new NIC NV config - Will undo any runtime configuration previously performed for the      |
-      |                                                                                                   | device/driver                                                                                     |
+      | ``resetToDefault``                                                                                | ResetToDefault specifies whether node agent needs to perform a reset flow. The following          |
+      | bool                                                                                              | operations will be performed: \* Nvconfig reset of all non-volatile configurations - Mstconfig -d |
+      |                                                                                                   | reset for each PF - Mstconfig -d set ADVANCED_PCI_SETTINGS=1 \* Node reboot - Applies new NIC NV  |
+      |                                                                                                   | config - Will undo any runtime configuration previously performed for the device/driver           |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``template``                                                                                      | Configuration template applied from the NicConfigurationTemplate CR                               |
       | :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`                                      |                                                                                                   |
@@ -293,6 +297,15 @@ NicDeviceStatus defines the observed state of NicDevice
       | ``firmwareVersion``                                                                                           | Firmware version currently installed on the device, e.g. 22.31.1014                               |
       | string                                                                                                        |                                                                                                   |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``dpu``                                                                                                       | DPU indicates if the device is a BlueField in DPU mode                                            |
+      | bool                                                                                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``modelName``                                                                                                 | ModelName is the model name of the device, e.g. ConnectX-6 or BlueField-3                         |
+      | string                                                                                                        |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``superNIC``                                                                                                  | SuperNIC indicates if the device is a SuperNIC                                                    |
+      | bool                                                                                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ports``                                                                                                     | List of ports for the device                                                                      |
       | :ref:`[]NicDevicePortSpec <NicDevicePortSpec>`                                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -348,6 +361,10 @@ NicFirmwareSourceSpec represents a list of url sources for FW
       | ``bfbUrlSource``                                                                                  | *(Optional)*                                                                                      |
       | string                                                                                            | BFBUrlSource represents a url source for BlueField Bundle                                         |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``docaSpcXCCUrlSource``                                                                           | *(Optional)*                                                                                      |
+      | string                                                                                            | DocaSpcXCCUrlSource represents a url source for DOCA SPC-X CC .deb package for ubuntu 22.04 Will  |
+      |                                                                                                   | be removed in the future, once Doca SPC-X CC algorithm will be publicly available                 |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareSourceStatus:
 
@@ -376,6 +393,9 @@ NicFirmwareSourceStatus represents the status of the FW from given sources, e.g.
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``bfbVersions``                                                                                   | BFBVersions represents the FW versions available in the provided BFB bundle                       |
       | map[string]string                                                                                 |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``docaSpcXCCVersion``                                                                             | DocaSpcXCCVersion represents the FW versions available in the provided DOCA SPC-X CC .deb package |
+      | string                                                                                            | for ubuntu 22.04                                                                                  |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareTemplate:
@@ -475,6 +495,27 @@ NicTemplateStatus defines the observed state of NicConfigurationTemplate and Nic
       | []string                                                                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
+.. _NvConfigParam:
+
+NvConfigParam
+~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`)
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``name``                                                                                          | Name of the arbitrary nvconfig parameter                                                          |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``value``                                                                                         | Value of the arbitrary nvconfig parameter                                                         |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
 .. _PciPerformanceOptimizedSpec:
 
 PciPerformanceOptimizedSpec
@@ -523,6 +564,9 @@ QosSpec specifies Quality of Service settings
       | ``pfc``                                                                                           | Priority-based Flow Control configuration, e.g. “0,0,0,1,0,0,0,0”                                 |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``tos``                                                                                           | 8-bit value for type of service                                                                   |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _RoceOptimizedSpec:
 
@@ -545,4 +589,27 @@ RoceOptimizedSpec specifies RoCE optimization settings
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``qos``                                                                                           | Quality of Service settings                                                                       |
       | :ref:`QosSpec <QosSpec>`                                                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _SpectrumXOptimizedSpec:
+
+SpectrumXOptimizedSpec
+~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`)
+
+SpectrumXOptimizedSpec enables Spectrum-X specific optimizations
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enabled``                                                                                       | Optimize Spectrum X                                                                               |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``version``                                                                                       | Version of the Spectrum-X architecture to optimize for                                            |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+

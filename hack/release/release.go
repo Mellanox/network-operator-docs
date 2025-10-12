@@ -70,7 +70,6 @@ type Release struct {
 	CniPlugins                   *ReleaseImageSpec
 	Multus                       *ReleaseImageSpec
 	Ipoib                        *ReleaseImageSpec
-	IpamPlugin                   *ReleaseImageSpec
 	NvIPAM                       *ReleaseImageSpec
 	NicFeatureDiscovery          *ReleaseImageSpec
 	NodeFeatureDiscovery         *ReleaseImageSpec

@@ -5,20 +5,20 @@ metadata:
 spec:
   ofedDriver:
     image: doca-driver
-    repository: nvcr.io/nvidia/mellanox
-    version: doca3.1.0-25.07-0.9.7.0-0
+    repository: nvcr.io/nvstaging/mellanox
+    version: doca3.2.0-25.10-0.4.2.0-0
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvidia/mellanox
-    version: network-operator-v25.7.0
+    repository: nvcr.io/nvstaging/mellanox
+    version: network-operator-v25.10.0-beta.1
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvidia/mellanox
-      version: network-operator-v25.7.0
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.10.0-beta.1
     multus:
       image: multus-cni
-      repository: nvcr.io/nvidia/mellanox
-      version: network-operator-v25.7.0
+      repository: nvcr.io/nvstaging/mellanox
+      version: network-operator-v25.10.0-beta.1
