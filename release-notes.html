@@ -342,50 +342,56 @@
 <tbody>
 <tr class="row-even"><td><p>25.7.0</p></td>
 <td><div class="line-block">
+<div class="line">- Whereabouts IPAM plugin support removed for vanilla Kubernetes.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>25.7.0</p></td>
+<td><div class="line-block">
 <div class="line">- MOFED driver container older than 5.7-0.1.2.0 is not supported.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>25.4.0</p></td>
+<tr class="row-even"><td><p>25.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Whereabouts support is deprecated in Network Operator 25.4.
 It is advised to migrate to NV-IPAM as ‘ipam’ plugin.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>24.10.0</p></td>
+<tr class="row-odd"><td><p>24.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- Dropped Multus CNI support for versions older than v4.1.0.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>24.7.0</p></td>
+<tr class="row-even"><td><p>24.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- Deploying NicClusterPolicy Custom Resource through helm is deprecated, support will be removed in Network Operator 24.10.
 It is advised to keep deployCR=false in your helm values and create/update NicClusterPolicy Custom Resource post helm install/update.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>23.10.0</p></td>
+<tr class="row-odd"><td><p>23.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- In NV-IPAM v0.1.1, the IP Pools configurations are read from IPPool CRs instead of using a ConfigMap. Existing ConfigMap configuration will be automatically migrated to IPPools CRs as part of the upgrade process.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.7.0</p></td>
+<tr class="row-even"><td><p>23.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- Dropped MLNX_OFED support for versions older than 5.7-0.1.2.0.</div>
 <div class="line">- Removed nv-peer-mem support in favor of nvidia-peer-mem.</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.3.0</p></td>
+<tr class="row-odd"><td><p>1.3.0</p></td>
 <td><div class="line-block">
 <div class="line">- The option of manual gradual upgrade is not supported when upgrading to Network Operator v1.3.0, since all pods are dropped/restarted in case components are deployed into the single namespace when the old namespace is deleted. This could lead to networking connectivity issues during the upgrade procedure.</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.2.0</p></td>
+<tr class="row-even"><td><p>1.2.0</p></td>
 <td><div class="line-block">
 <div class="line">- Network Operator 1.2.0 deploys the NVIDIA MLNX_OFED 5.6 driver container by default. When deployed, depending on your system kernel and OS configuration, the network device name may change, as it no longer installs an udev rule to force network device naming scheme. Instead, the default setting uses the name already configured in the system by either <cite>systemd.network</cite> or any pre-existing udev rules (e.g <cite>enp3s0f0</cite> netdev will change to <cite>enp3s0f0np0</cite>). If that is the case in your system, please make sure to update the following:</div>
 <div class="line-block">
@@ -401,10 +407,10 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.1.0</p></td>
+<tr class="row-odd"><td><p>1.1.0</p></td>
 <td><p>N/A</p></td>
 </tr>
-<tr class="row-odd"><td><p>1.0.0</p></td>
+<tr class="row-even"><td><p>1.0.0</p></td>
 <td><p>N/A</p></td>
 </tr>
 </tbody>
@@ -581,7 +587,7 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 03, 2025.
+      <span class="lastupdated">Last updated on Oct 12, 2025.
       </span></p>
   </div>
 
