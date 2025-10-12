@@ -95,8 +95,6 @@ Get the NicClusterPolicy status:
       state: ignore
     - name: state-ipoib-cni
       state: ignore
-    - name: state-whereabouts-cni
-      state: ready
     - name: state-OFED
       state: ready
     - name: state-SRIOV-device-plugin
