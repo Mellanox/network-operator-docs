@@ -106,10 +106,6 @@ This example should serve as a reference, it is not recommended to apply it as i
           image: multus-cni
           repository: |multus-repository|
           version: |multus-version|
-        ipamPlugin:
-          image: whereabouts
-          repository: |whereabouts-repository|
-          version: |whereabouts-version|
       nvIpam:
         image: nvidia-k8s-ipam
         repository: |nvidia-ipam-repository|

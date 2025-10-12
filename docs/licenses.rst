@@ -79,10 +79,6 @@ Legal Notices and 3rd Party Licenses
      - |multus-version|
      - | - `License <https://content.mellanox.com/Legal/license_Multus-CNI_25.7.0.pdf>`__
        | - `3rd Part Notice <https://content.mellanox.com/Legal/3rdPartyNotice_Multus-CNI_25.7.0.pdf>`__
-   * - Whereabouts IPAM Plugin
-     - |whereabouts-version|
-     - | - `License <https://content.mellanox.com/Legal/license_Whereabouts_25.7.0-0.pdf>`__
-       | - `3rd Part Notice <https://content.mellanox.com/Legal/3rdPartyNotice_Whereabouts_25.7.0.pdf>`__
    * - RDMA CNI plugin
      - |rdma-cni-version|
      - | - `License <https://content.mellanox.com/Legal/license_RDMA-CNI_25.7.0.pdf>`__
