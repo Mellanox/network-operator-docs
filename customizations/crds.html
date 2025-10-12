@@ -1003,7 +1003,8 @@ cni-args to that PKey for pods with mellanox.infiniband.app annotation. See:
 <td><p>SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in
 Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate
 CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only
-containernetworking-plugins is supported</p></td>
+containernetworking-plugins is supported - IPoIB CNI: Allows the user to create IPoIB child link
+and move it to the pod</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
 <a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
@@ -1331,11 +1332,6 @@ implementation-defined value. Requests cannot exceed Limits. More info:
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipoib</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
 <td><p>Image information for IPoIB CNI</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipamPlugin</span></code>
-<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
-<td><p>Image information for IPAM plugin Deprecated: This field is deprecated and will be removed in a
-future version. Use ‘nvIpam’ instead.</p></td>
 </tr>
 </tbody>
 </table>
