@@ -26,4 +26,5 @@ NIC Configuration Operator
 
    NIC Firmware Configuration <nic-fw-configuration.rst>
    Configuration Details <configuration-details.rst>
+   Spectrum-X Configuration <spectrum-x-configuration.rst>
    CRD API Reference <crds.rst>
