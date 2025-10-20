@@ -321,7 +321,7 @@ nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">2<
 <p>See Deployment Examples for OCP:</p>
 <section id="deployment-examples-for-openshift-container-platform">
 <h4>Deployment Examples For OpenShift Container Platform<a class="headerlink" href="#deployment-examples-for-openshift-container-platform" title="Permalink to this headline"></a></h4>
-<p>In OCP, some components are deployed by default like Multus and WhereAbouts, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.</p>
+<p>In OCP, some components are deployed by default like Multus and CNI Plugins, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.</p>
 <p>In addition, since there is no use of the Helm chart, the configuration should be done via the NicClusterPolicy CRD.</p>
 <p>Following are examples of NicClusterPolicy configuration for OCP.</p>
 <section id="network-operator-deployment-with-a-host-device-network-ocp">
@@ -366,10 +366,27 @@ nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">2<
 <span class="w">              </span><span class="no">}</span><span class="w"></span>
 <span class="w">          </span><span class="no">]</span><span class="w"></span>
 <span class="w">        </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Following the deployment, the Network Operator should be configured, and K8s networking deployed to use it in pod configuration.
-The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:</p>
+<p>Following the deployment, the Network Operator should be configured, and K8s networking deployed to use it in pod configuration.</p>
+<p>To create an NV-IPAM IPPool, apply:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HostDeviceNetwork</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -379,18 +396,8 @@ The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
-<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">},</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
-<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
-<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">],</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;log_file&quot; : &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;log_level&quot; : &quot;info&quot;</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -443,10 +450,28 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
 <span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
 <span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Sriovnetwork node policy and K8s networking should be deployed.
-<cite>sriovnetwork-node-policy.yaml</cite> configuration file for such a deployment:</p>
+<p>SriovNetworkNodePolicy and K8s networking should be deployed.</p>
+<p>NV-IPAM IPPool should be created before SriovNetwork:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-sriov-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+</pre></div>
+</div>
+<p><cite>sriovnetwork-node-policy.yaml</cite> configuration file for such a deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -478,14 +503,8 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sriovlegacy&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
-<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">},</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;log_file&quot;: &quot;/tmp/whereabouts.log&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;log_level&quot;: &quot;debug&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.101.0/24&quot;</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -554,6 +573,23 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>To create an NV-IPAM IPPool, apply:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The <cite>macvlan-net-ocp.yaml</cite> configuration file for such a deployment in an OpenShift Platform:</p>
@@ -566,7 +602,11 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 <span class="w">  </span><span class="nt">master</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp4s0f0np0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span><span class="w"></span>
 <span class="w">  </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{&quot;type&quot;:</span><span class="nv"> </span><span class="s">&quot;whereabouts&quot;,</span><span class="nv"> </span><span class="s">&quot;range&quot;:</span><span class="nv"> </span><span class="s">&quot;16.0.2.0/24&quot;,</span><span class="nv"> </span><span class="s">&quot;gateway&quot;:</span><span class="nv"> </span><span class="s">&quot;16.0.2.1&quot;}&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
@@ -612,7 +652,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 15, 2025.
+      <span class="lastupdated">Last updated on Oct 20, 2025.
       </span></p>
   </div>
 
