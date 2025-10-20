@@ -220,7 +220,7 @@ See Deployment Examples for OCP:
 Deployment Examples For OpenShift Container Platform
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In OCP, some components are deployed by default like Multus and WhereAbouts, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.
+In OCP, some components are deployed by default like Multus and CNI Plugins, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.
 
 In addition, since there is no use of the Helm chart, the configuration should be done via the NicClusterPolicy CRD.
 
@@ -274,8 +274,28 @@ SR-IOV device plugin, single SR-IOV resource pool:
                  }
              ]
            }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
 
 Following the deployment, the Network Operator should be configured, and K8s networking deployed to use it in pod configuration.
+
+To create an NV-IPAM IPPool, apply:
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: my-pool
+    spec:
+      subnet: 192.168.0.0/24
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
+
 The `host-device-net.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
@@ -289,18 +309,8 @@ The `host-device-net.yaml`` configuration file for such a deployment:
      resourceName: "hostdev"
      ipam: |
        {
-         "type": "whereabouts",
-         "datastore": "kubernetes",
-         "kubernetes": {
-           "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-         },
-         "range": "192.168.3.225/28",
-         "exclude": [
-          "192.168.3.229/30",
-          "192.168.3.236/32"
-         ],
-         "log_file" : "/var/log/whereabouts.log",
-         "log_level" : "info"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
        }
 
 The `pod.yaml` configuration file for such a deployment:
@@ -360,8 +370,29 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
        readinessProbe:
          initialDelaySeconds: 10
          periodSeconds: 30
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
 
-Sriovnetwork node policy and K8s networking should be deployed.
+SriovNetworkNodePolicy and K8s networking should be deployed.
+
+NV-IPAM IPPool should be created before SriovNetwork:
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: my-pool
+      namespace: openshift-sriov-network-operator
+    spec:
+      subnet: 192.168.0.0/24
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
+
 `sriovnetwork-node-policy.yaml` configuration file for such a deployment:
 
 .. code-block:: yaml
@@ -399,14 +430,8 @@ The `sriovnetwork.yaml` configuration file for such a deployment:
      resourceName: "sriovlegacy" 
      ipam: |
        {
-         "datastore": "kubernetes",
-         "kubernetes": {
-           "kubeconfig": "/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig"
-         },
-         "log_file": "/tmp/whereabouts.log",
-         "log_level": "debug",
-         "type": "whereabouts",
-         "range": "192.168.101.0/24"
+          "type": "nv-ipam",
+          "poolName": "my-pool"
        }
 
 
@@ -483,7 +508,25 @@ The following is an example of RDMA Shared with MacVlanNetwork:
        image: k8s-rdma-shared-dev-plugin
        repository: |k8s-rdma-shared-dev-plugin-repository|
        version: |k8s-rdma-shared-dev-plugin-version|
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
 
+To create an NV-IPAM IPPool, apply:
+
+.. code-block:: yaml
+
+    apiVersion: nv-ipam.nvidia.com/v1alpha1
+    kind: IPPool
+    metadata:
+      name: my-pool
+    spec:
+      subnet: 192.168.0.0/24
+      perNodeBlockSize: 100
+      gateway: 192.168.0.1
 
 The `macvlan-net-ocp.yaml` configuration file for such a deployment in an OpenShift Platform:
 
@@ -498,7 +541,11 @@ The `macvlan-net-ocp.yaml` configuration file for such a deployment in an OpenSh
      master: enp4s0f0np0
      mode: bridge
      mtu: 1500
-     ipam: '{"type": "whereabouts", "range": "16.0.2.0/24", "gateway": "16.0.2.1"}' 
+     ipam: |
+       {
+          "type": "nv-ipam",
+          "poolName": "my-pool"
+       }
 
 The `pod.yaml` configuration file for such a deployment:
 
