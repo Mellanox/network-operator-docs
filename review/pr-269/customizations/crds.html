@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="helm.html">Helm Chart</a></li>
@@ -1003,8 +1003,9 @@ cni-args to that PKey for pods with mellanox.infiniband.app annotation. See:
 <td><p>SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in
 Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate
 CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only
-containernetworking-plugins is supported - IPoIB CNI: Allows the user to create IPoIB child link
-and move it to the pod</p></td>
+containernetworking-plugins is supported - IPAM CNI: Currently only Whereabout IPAM CNI is
+supported as a part of the secondaryNetwork section. - IPoIB CNI: Allows the user to create IPoIB
+child link and move it to the pod</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
 <a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
@@ -1259,14 +1260,6 @@ int</p></td>
 int</p></td>
 <td><p>How often (in seconds) to perform the probe</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">failureThreshold</span></code>
-int</p></td>
-<td><p>Minimum consecutive failures for the probe to be considered failed after having succeeded</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeoutSeconds</span></code>
-int</p></td>
-<td><p>Number of seconds after which the probe times out</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1340,6 +1333,11 @@ implementation-defined value. Requests cannot exceed Limits. More info:
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipoib</span></code>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
 <td><p>Image information for IPoIB CNI</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipamPlugin</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for IPAM plugin Deprecated: This field is deprecated and will be removed in a
+future version. Use ‘nvIpam’ instead.</p></td>
 </tr>
 </tbody>
 </table>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quick Start Guide for Kubernetes &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>Quick Start Guide for Kubernetes &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -76,7 +76,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../deployment-guide-kubernetes.html">Deployment Guide with Kubernetes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
@@ -160,7 +160,7 @@ helm repo update
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install network-operator nvidia/network-operator <span class="se">\</span>
   -n nvidia-network-operator <span class="se">\</span>
   --create-namespace <span class="se">\</span>
-  --version v25.10.0-beta.3 <span class="se">\</span>
+  --version v25.7.0 <span class="se">\</span>
   --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
   --wait
 </pre></div>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proxy &amp; Air-Gapped Environments &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>Proxy &amp; Air-Gapped Environments &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
@@ -207,10 +207,9 @@ To allow Network Operator to work with a local registry, users can specify local
 <section id="pulling-and-pushing-container-images-to-a-local-registry">
 <h3>Pulling and Pushing Container Images to a Local Registry<a class="headerlink" href="#pulling-and-pushing-container-images-to-a-local-registry" title="Permalink to this headline"></a></h3>
 <p>To pull the correct images from the NVIDIA registry, you can leverage the fields <code class="docutils literal notranslate"><span class="pre">repository</span></code>, <code class="docutils literal notranslate"><span class="pre">image</span></code> and <code class="docutils literal notranslate"><span class="pre">version</span></code> specified in the <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> file or in the <a class="reference internal" href="images-sha256.html#container-images-digest"><span class="std std-ref">NVIDIA Network Operator Container Images</span></a> section.</p>
-<p>NicClusterPolicy supports use of image container digest in the <cite>version</cite> field.</p>
-<p>For DOCA-OFED driver, the use of image container digest in the <cite>version</cite> field is supported only for precompiled images.</p>
-<p>For non-precompiled DOCA-OFED driver images, the version field must be appended by the OS name and Architecture running on the worker node.</p>
-<p>For example for DOCA-OFED driver version doca3.2.0-25.10-1.0.0.0-0, the tag for Ubuntu 24.04 with X86 architecture is “doca3.2.0-25.10-1.0.0.0-0-ubuntu24.04-amd64”.
+<p>NicClusterPolicy supports use of image container digest in the <cite>version</cite> field, except for DOCA-OFED driver.</p>
+<p>There is one caveat with regards to the DOCA-OFED driver image. The version field must be appended by the OS name and Architecture running on the worker node.</p>
+<p>For example for DOCA-OFED driver version doca3.1.0-25.07-0.9.7.0-0, the tag for Ubuntu 24.04 with X86 architecture is “doca3.1.0-25.07-0.9.7.0-0-ubuntu24.04-amd64”.
 Available DOCA-OFED driver image tags can be found at <a class="reference external" href="https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver/tags">NGC</a>.</p>
 <p>In case of local registry required authentication, make sure to create a pull secret and configure in NicClusterPolicy accordingly.</p>
 <div class="admonition note">

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Helm Chart Customization Options &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>Helm Chart Customization Options &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Helm Chart</a><ul>
@@ -68,6 +68,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#nfd-labels">NFD labels</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#node-feature-discovery">Node Feature Discovery</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sr-iov-network-operator">SR-IOV Network Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nic-configuration-operator">NIC Configuration Operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#maintenance-operator">Maintenance Operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#helm-customization-file">Helm customization file</a></li>
 </ul>
@@ -128,8 +129,9 @@ can find those below.</p>
 <li><p><a class="reference internal" href="#nfd-labels" id="id3">NFD labels</a></p></li>
 <li><p><a class="reference internal" href="#node-feature-discovery" id="id4">Node Feature Discovery</a></p></li>
 <li><p><a class="reference internal" href="#sr-iov-network-operator" id="id5">SR-IOV Network Operator</a></p></li>
-<li><p><a class="reference internal" href="#maintenance-operator" id="id6">Maintenance Operator</a></p></li>
-<li><p><a class="reference internal" href="#helm-customization-file" id="id7">Helm customization file</a></p></li>
+<li><p><a class="reference internal" href="#nic-configuration-operator" id="id6">NIC Configuration Operator</a></p></li>
+<li><p><a class="reference internal" href="#maintenance-operator" id="id7">Maintenance Operator</a></p></li>
+<li><p><a class="reference internal" href="#helm-customization-file" id="id8">Helm customization file</a></p></li>
 </ul>
 </div>
 <section id="general-parameters">
@@ -168,6 +170,16 @@ can find those below.</p>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy Node Feature Discovery operator.</p></td>
+</tr>
+<tr class="row-even"><td><p>nicConfigurationOperator</p></td>
+<td><p>object</p></td>
+<td><p><cite>{“enabled”:false}</cite></p></td>
+<td><p>NIC Configuration Operator helm chart is deprecated and will be deleted in future releases. Use NIC Cluster Policy to deploy the NIC Configuration Operator instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p>nicConfigurationOperator.enabled</p></td>
+<td><p>bool</p></td>
+<td><p><cite>false</cite></p></td>
+<td><p>Deploy NIC Configuration Operator.</p></td>
 </tr>
 <tr class="row-even"><td><p>operator.admissionController.enabled</p></td>
 <td><p>bool</p></td>
@@ -221,7 +233,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>operator.maintenanceOperator</p></td>
 <td><p>object</p></td>
-<td><p><cite>{“drainControllerRequestorID”:”nvidia.network-operator-drain-controller”,”nodeMaintenanceNamePrefix”:”network-operator”,”nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.network-operator-driver-upgrade-controller”,”useDrainControllerRequestor”:false,”useRequestor”:false}</cite></p></td>
+<td><p><cite>{“nodeMaintenanceNamePrefix”:”network-operator”,”nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.network.operator”,”useRequestor”:false}</cite></p></td>
 <td><p>Enable the use of maintenance operator upgrade logic.</p></td>
 </tr>
 <tr class="row-even"><td><p>operator.nameOverride</p></td>
@@ -246,17 +258,17 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>operator.ofedDriver.initContainer.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox”</cite></p></td>
 <td><p>Init container image repository.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“network-operator-v25.7.0”</cite></p></td>
 <td><p>Init container image version.</p></td>
 </tr>
 <tr class="row-even"><td><p>operator.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/cloud-native”</cite></p></td>
 <td><p>Network Operator image repository.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.resources</p></td>
@@ -392,12 +404,12 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>node-feature-discovery.image.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/node-feature-discovery”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/node-feature-discovery”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>node-feature-discovery.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>node-feature-discovery.master</p></td>
@@ -470,17 +482,17 @@ can find those below.</p>
 <tbody>
 <tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/ib-sriov-cni:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/ovs-cni-plugin:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.resourcesInjector</p></td>
@@ -490,22 +502,22 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-cni:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-device-plugin:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.webhook</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers</p></td>
@@ -600,6 +612,57 @@ can find those below.</p>
 </tbody>
 </table>
 </section>
+<section id="nic-configuration-operator">
+<h2>NIC Configuration Operator<a class="headerlink" href="#nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<p>NIC Configuration Operator Helm chart customization options can be found <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator/blob/main/deployment/nic-configuration-operator-chart/README.md">here</a>. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default in NVIDIA Network Operator</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>nic-configuration-operator-chart.configDaemon.image.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nic-configuration-operator-daemon”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nic-configuration-operator-chart.configDaemon.image.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>nic-configuration-operator-chart.configDaemon.image.tag</p></td>
+<td><p>string</p></td>
+<td><p><cite>“network-operator-v25.7.0”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.name</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nic-configuration-operator”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>nic-configuration-operator-chart.operator.image.repository</p></td>
+<td><p>string</p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox”</cite></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>nic-configuration-operator-chart.operator.image.tag</p></td>
+<td><p>string</p></td>
+<td><p><cite>“network-operator-v25.7.0”</cite></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="maintenance-operator">
 <h2>Maintenance Operator<a class="headerlink" href="#maintenance-operator" title="Permalink to this headline"></a></h2>
 <p>Maintenance Operator Helm chart customization options can be found <a class="reference external" href="https://github.com/Mellanox/maintenance-operator/blob/main/deployment/maintenance-operator-chart/README.md">here</a>. Following is a list of overriden values by NVIDIA Network Operator Helm Chart:</p>
@@ -650,12 +713,12 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>maintenance-operator-chart.operator.image.repository</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
+<td><p><cite>“nvcr.io/nvidia/mellanox”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>maintenance-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v25.10.0-beta.3”</cite></p></td>
+<td><p><cite>“network-operator-v25.7.0”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>maintenance-operator-chart.operatorConfig</p></td>

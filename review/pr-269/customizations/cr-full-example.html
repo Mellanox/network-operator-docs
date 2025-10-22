@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NicClusterPolicy Custom Resource Example &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>NicClusterPolicy Custom Resource Example &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="helm.html">Helm Chart</a></li>
@@ -115,8 +115,8 @@ This example should serve as a reference, it is not recommended to apply it as i
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">       </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
@@ -136,8 +136,8 @@ This example should serve as a reference, it is not recommended to apply it as i
 <span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
 <span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
 <span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
@@ -155,8 +155,8 @@ This example should serve as a reference, it is not recommended to apply it as i
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
 <span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">       </span><span class="no">{</span><span class="w"></span>
 <span class="w">         </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
@@ -173,49 +173,53 @@ This example should serve as a reference, it is not recommended to apply it as i
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipoib-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ibKubernetes</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ib-kubernetes</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">pKeyGUIDPoolRangeStart</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;02:00:00:00:00:00:00:00&quot;</span><span class="w"></span>
 <span class="w">     </span><span class="nt">pKeyGUIDPoolRangeEnd</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;02:FF:FF:FF:FF:FF:FF:FF&quot;</span><span class="w"></span>
 <span class="w">     </span><span class="nt">ufmSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ufm-secret</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nicFeatureDiscovery</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-feature-discovery</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">   </span><span class="nt">docaTelemetryService</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca_telemetry</span><span class="w"></span>
 <span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca</span><span class="w"></span>
 <span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.21.4-doca3.0.0-host</span><span class="w"></span>
 <span class="w">   </span><span class="nt">spectrumXOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-operator</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">nicFirmwareStorage</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">       </span><span class="nt">pvcName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-fw-storage-pvc</span><span class="w"></span>

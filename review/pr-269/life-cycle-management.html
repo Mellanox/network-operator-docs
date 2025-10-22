@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Cycle Management &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>Life Cycle Management &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Life Cycle Management</a><ul>
@@ -250,6 +250,8 @@ Prior maintance release enters EOL (end-of-life) and are no longer supported and
     state: ignore
   - name: state-ipoib-cni
     state: ignore
+  - name: state-whereabouts-cni
+    state: ready
   - name: state-OFED
     state: ready
   - name: state-SRIOV-device-plugin
@@ -289,7 +291,7 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <h3>Downloading a New Helm Chart<a class="headerlink" href="#downloading-a-new-helm-chart" title="Permalink to this headline"></a></h3>
 <p>To obtain new releases, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Download Helm chart</span>
- $ helm fetch <span class="se">\h</span>ttps://helm.ngc.nvidia.com/nvidia/charts/network-operator-25.10.0-beta.3.tgz
+ $ helm fetch <span class="se">\h</span>ttps://helm.ngc.nvidia.com/nvidia/charts/network-operator-25.7.0.tgz
  $ ls network-operator-<span class="se">\*</span>.tgz <span class="p">|</span> xargs -n <span class="m">1</span> tar xf
 </pre></div>
 </div>
@@ -406,8 +408,8 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="c1"># autoUpgrade is a global switch for automatic upgrade feature</span><span class="w"></span>
 <span class="w">       </span><span class="c1"># if set to false all other options are ignored</span><span class="w"></span>
@@ -505,8 +507,8 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <span class="w">  </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">      </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">        </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>

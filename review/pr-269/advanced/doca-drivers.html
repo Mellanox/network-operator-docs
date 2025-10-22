@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NVIDIA DOCA-OFED Driver Container &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>NVIDIA DOCA-OFED Driver Container &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
@@ -254,11 +254,11 @@ In this case, NVME over RDMA cannot be used. It is not possible to load inbox mo
 For example, given a DOCA package version (e.g <cite>2.10.0</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/">https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/</a> which is <cite>25.01-0.6.0.0’</cite></p>
 <section id="download-docker-files-and-scripts">
 <h4>Download Docker files and scripts:<a class="headerlink" href="#download-docker-files-and-scripts" title="Permalink to this headline"></a></h4>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/0c963328386190aef1bbf000d51bf592d5776de8/RHEL_Dockerfile
-wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/0c963328386190aef1bbf000d51bf592d5776de8/Ubuntu_Dockerfile
-wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/0c963328386190aef1bbf000d51bf592d5776de8/SLES_Dockerfile
-wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/0c963328386190aef1bbf000d51bf592d5776de8/entrypoint.sh
-wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/0c963328386190aef1bbf000d51bf592d5776de8/dtk_nic_driver_build.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/ebde0772891747a60bdf471a92228de8ba54b62c/RHEL_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/ebde0772891747a60bdf471a92228de8ba54b62c/Ubuntu_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/ebde0772891747a60bdf471a92228de8ba54b62c/SLES_Dockerfile
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/ebde0772891747a60bdf471a92228de8ba54b62c/entrypoint.sh
+wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/ebde0772891747a60bdf471a92228de8ba54b62c/dtk_nic_driver_build.sh
 
 chmod +x entrypoint.sh dtk_nic_driver_build.sh
 </pre></div>

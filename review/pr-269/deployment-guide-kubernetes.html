@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NVIDIA Network Operator Deployment Guide with Kubernetes &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>NVIDIA Network Operator Deployment Guide with Kubernetes &mdash; NVIDIA Network Operator v25.07.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -26,7 +26,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started with OpenShift" href="getting-started-with-openshift.html" />
+    <link rel="next" title="Getting Started with Red Hat OpenShift" href="getting-started-openshift.html" />
     <link rel="prev" title="Deploy SR-IOV InfiniBand Network with RDMA" href="quick-start/sriov-ib-rdma.html" />
  
 
@@ -68,7 +68,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#deployment-examples">Deployment Examples</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin">Network Operator Deployment with RDMA Shared Device Plugin</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network-and-nvidia-ipam">Network Operator Deployment with a Secondary Network and NVIDIA-IPAM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network">Network Operator Deployment with a Secondary Network</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam">Network Operator Deployment with NVIDIA-IPAM</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network">Network Operator Deployment with a Host Device Network</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network">Network Operator Deployment with a Host Device Network and Macvlan Network</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></li>
@@ -128,7 +129,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
@@ -185,42 +186,43 @@
 <ul>
 <li><p><a class="reference internal" href="#network-operator-deployment-with-rdma-shared-device-plugin" id="id23">Network Operator Deployment with RDMA Shared Device Plugin</a></p></li>
 <li><p><a class="reference internal" href="#network-operator-deployment-with-multiple-resources-in-rdma-shared-device-plugin" id="id24">Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network-and-nvidia-ipam" id="id25">Network Operator Deployment with a Secondary Network and NVIDIA-IPAM</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id26">Network Operator Deployment with a Host Device Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id27">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id28">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id29">Network Operator Deployment for GPUDirect Workloads</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id30">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id31">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id32">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id33">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id34">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id35">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id36">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-managed-openvswitch" id="id37">Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-secondary-network" id="id25">Network Operator Deployment with a Secondary Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-nvidia-ipam" id="id26">Network Operator Deployment with NVIDIA-IPAM</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network" id="id27">Network Operator Deployment with a Host Device Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-and-macvlan-network" id="id28">Network Operator Deployment with a Host Device Network and Macvlan Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-ip-over-infiniband-ipoib-network" id="id29">Network Operator Deployment with an IP over InfiniBand (IPoIB) Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-gpudirect-workloads" id="id30">Network Operator Deployment for GPUDirect Workloads</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-in-sr-iov-legacy-mode" id="id31">Network Operator Deployment in SR-IOV Legacy Mode</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-node-configuration-for-sr-iov" id="id32">SR-IOV Network Operator Deployment – Parallel Node Configuration for SR-IOV</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-parallel-nic-configuration-for-sr-iov" id="id33">SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-deployment-sr-iov-using-the-systemd-service" id="id34">SR-IOV Network Operator Deployment – SR-IOV Using the systemd Service</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network" id="id35">Network Operator Deployment with an SR-IOV InfiniBand Network</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-an-sr-iov-infiniband-network-with-pkey-management" id="id36">Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-with-nicclusterpolicy" id="id37">Network Operator Deployment for DPDK Workloads with NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-managed-openvswitch" id="id38">Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-configuration" id="id38">Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id39">Prerequisites for Worker Nodes</a></p></li>
-<li><p><a class="reference internal" href="#ovs-kernel" id="id40">OVS-kernel</a></p></li>
-<li><p><a class="reference internal" href="#ovs-doca" id="id41">OVS-doca</a></p></li>
-<li><p><a class="reference internal" href="#test-workload" id="id42">Test Workload</a></p></li>
-<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id43">Troubleshooting OVS</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-configuration" id="id39">Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites-for-worker-nodes" id="id40">Prerequisites for Worker Nodes</a></p></li>
+<li><p><a class="reference internal" href="#ovs-kernel" id="id41">OVS-kernel</a></p></li>
+<li><p><a class="reference internal" href="#ovs-doca" id="id42">OVS-doca</a></p></li>
+<li><p><a class="reference internal" href="#test-workload" id="id43">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-ovs" id="id44">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-externally-managed-openvswitch-with-vf-lag" id="id44">Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-openvswitch-offload-externally-managed-openvswitch-with-vf-lag" id="id45">Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSwitch with VF lag</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id3" id="id45">Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#id4" id="id46">Prerequisites for Worker Nodes</a></p></li>
-<li><p><a class="reference internal" href="#id7" id="id47">OVS-kernel</a></p></li>
-<li><p><a class="reference internal" href="#id10" id="id48">OVS-doca</a></p></li>
-<li><p><a class="reference internal" href="#id13" id="id49">Test Workload</a></p></li>
-<li><p><a class="reference internal" href="#id14" id="id50">Troubleshooting OVS</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id46">Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#id4" id="id47">Prerequisites for Worker Nodes</a></p></li>
+<li><p><a class="reference internal" href="#id7" id="id48">OVS-kernel</a></p></li>
+<li><p><a class="reference internal" href="#id10" id="id49">OVS-doca</a></p></li>
+<li><p><a class="reference internal" href="#id13" id="id50">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#id14" id="id51">Troubleshooting OVS</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-deployment-and-rdma-exclusive-subsystem-mode" id="id51">Network Operator Deployment and RDMA exclusive subsystem mode</a></p>
+<li><p><a class="reference internal" href="#network-operator-deployment-and-rdma-exclusive-subsystem-mode" id="id52">Network Operator Deployment and RDMA exclusive subsystem mode</a></p>
 <ul>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-configuration" id="id52">SR-IOV Network Operator Configuration</a></p></li>
-<li><p><a class="reference internal" href="#id17" id="id53">Test Workload</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-configuration" id="id53">SR-IOV Network Operator Configuration</a></p></li>
+<li><p><a class="reference internal" href="#id17" id="id54">Test Workload</a></p></li>
 </ul>
 </li>
 </ul>
@@ -300,7 +302,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> helm install network-operator nvidia/network-operator <span class="se">\</span>
    -n nvidia-network-operator <span class="se">\</span>
    --create-namespace <span class="se">\</span>
-   --version v25.10.0-beta.3 <span class="se">\</span>
+   --version v25.7.0 <span class="se">\</span>
    --wait
 </pre></div>
 </div>
@@ -315,14 +317,14 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <p class="admonition-title">Warning</p>
 <p>Since several parameters should be provided when creating custom resources during operator deployment, it is recommended to use a configuration file. While it is possible to override the parameters via CLI, we recommend to avoid the use of CLI arguments in favor of a configuration file.</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm show values nvidia/network-operator --version v25.10.0-beta.3 &gt; values.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm show values nvidia/network-operator --version v25.7.0 &gt; values.yaml
 </pre></div>
 </div>
 <p>Install with specifying the custom <cite>values.yaml</cite></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> helm install network-operator nvidia/network-operator <span class="se">\</span>
    -n nvidia-network-operator <span class="se">\</span>
    --create-namespace <span class="se">\</span>
-   --version v25.10.0-beta.3 <span class="se">\</span>
+   --version v25.7.0 <span class="se">\</span>
    -f ./values.yaml <span class="se">\</span>
    --wait
 </pre></div>
@@ -362,8 +364,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -389,8 +391,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># [map[ifNames:[ens1f0] name:rdma_shared_device_a]]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
@@ -436,8 +438,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -463,8 +465,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
@@ -498,8 +500,49 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 </pre></div>
 </div>
 </section>
-<section id="network-operator-deployment-with-a-secondary-network-and-nvidia-ipam">
-<h3>Network Operator Deployment with a Secondary Network and NVIDIA-IPAM<a class="headerlink" href="#network-operator-deployment-with-a-secondary-network-and-nvidia-ipam" title="Permalink to this headline"></a></h3>
+<section id="network-operator-deployment-with-a-secondary-network">
+<h3>Network Operator Deployment with a Secondary Network<a class="headerlink" href="#network-operator-deployment-with-a-secondary-network" title="Permalink to this headline"></a></h3>
+<p>First install the Network Operator with NFD enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Once the Network Operator is installed create a NicClusterPolicy with the following enabled:</dt><dd><ul class="simple">
+<li><p>Secondary network</p></li>
+<li><p>Multus CNI</p></li>
+<li><p>Container-networking-plugins CNI plugins</p></li>
+<li><p>IPAM Plugin</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="w"> </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="network-operator-deployment-with-nvidia-ipam">
+<h3>Network Operator Deployment with NVIDIA-IPAM<a class="headerlink" href="#network-operator-deployment-with-nvidia-ipam" title="Permalink to this headline"></a></h3>
 <p>First install the Network Operator with NFD enabled:
 <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
@@ -523,18 +566,18 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
@@ -603,8 +646,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">       </span><span class="no">{</span><span class="w"></span>
@@ -625,22 +668,21 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">           </span><span class="no">}</span><span class="w"></span>
 <span class="w">         </span><span class="no">]</span><span class="w"></span>
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -655,8 +697,18 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">],</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot;: &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot;: &quot;info&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -670,8 +722,12 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;myPool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">]</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -719,7 +775,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <li><p>Multus CNI</p></li>
 <li><p>Container-networking-plugins CNI plugins</p></li>
 <li><p>RDMA Shared device plugin</p></li>
-<li><p>NVIDIA IPAM Plugin</p></li>
+<li><p>Whereabouts IPAM CNI plugin</p></li>
 </ul>
 </dd>
 </dl>
@@ -731,8 +787,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># [map[linkTypes:[ether] name:rdma_shared_device_a]]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
@@ -754,8 +810,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
 <span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">       </span><span class="no">{</span><span class="w"></span>
@@ -776,22 +832,21 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">           </span><span class="no">}</span><span class="w"></span>
 <span class="w">         </span><span class="no">]</span><span class="w"></span>
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -813,7 +868,7 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <li><p>Secondary network</p></li>
 <li><p>Multus CNI</p></li>
 <li><p>IPoIB CNI</p></li>
-<li><p>NVIDIA IPAM Plugin</p></li>
+<li><p>Whereabouts IPAM CNI plugin</p></li>
 </ul>
 </dd>
 </dl>
@@ -824,8 +879,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -851,8 +906,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
 <span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
@@ -872,27 +927,26 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">           </span><span class="no">}</span><span class="w"></span>
 <span class="w">         </span><span class="no">]</span><span class="w"></span>
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipoib-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Following the deployment, the network operator should be configured, and K8s networking deployed to use it in the pod configuration.</p>
@@ -906,8 +960,19 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">master</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ibs1f0&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.5.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.6.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.6.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">],</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot; : &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot; : &quot;info&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;gateway&quot;: &quot;192.168.6.1&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -921,8 +986,12 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">master</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ibs1f0&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.5.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.6.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.6.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">]</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -985,8 +1054,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -1011,8 +1080,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">       </span><span class="no">{</span><span class="w"></span>
@@ -1033,22 +1102,21 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">           </span><span class="no">}</span><span class="w"></span>
 <span class="w">         </span><span class="no">]</span><span class="w"></span>
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1062,8 +1130,18 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">],</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot; : &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot; : &quot;info&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1077,8 +1155,12 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">]</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1146,8 +1228,8 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -1170,22 +1252,21 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">         </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 <span class="w">         </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
 <span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1222,8 +1303,14 @@ Deploying NFD from either NVIDIA Network Operator or NVIDIA GPU Operator will ha
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sriov_resource&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot;: &quot;/tmp/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot;: &quot;debug&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.101.0/24&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1271,10 +1358,8 @@ kube-multus-ds-5j6ns                            <span class="m">1</span>/1     R
 kube-multus-ds-mxgvl                            <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
 mofed-ubuntu20.04-ds-2zzf4                      <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
 mofed-ubuntu20.04-ds-rfnsw                      <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
-nv-ipam-controller-865f479547-6dkkg             <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
-nv-ipam-controller-865f479547-cbp4p             <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
-nv-ipam-node-4ghkj                              <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
-nv-ipam-node-p5kff                              <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
+whereabouts-nw7hn                               <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
+whereabouts-zvhrv                               <span class="m">1</span>/1     Running   <span class="m">0</span>          5d
 ...
 </pre></div>
 </div>
@@ -1402,8 +1487,8 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -1426,22 +1511,21 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w">         </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 <span class="w">         </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
 <span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1474,8 +1558,18 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.5.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.5.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.5.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">],</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot;: &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot;: &quot;info&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlnxnics</span><span class="w"></span>
 <span class="w">  </span><span class="nt">linkState</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enable</span><span class="w"></span>
@@ -1575,8 +1669,8 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
@@ -1601,28 +1695,28 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ibKubernetes</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ib-kubernetes</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">pKeyGUIDPoolRangeStart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">02:00:00:00:00:00:00:00</span><span class="w"></span>
 <span class="w">     </span><span class="nt">pKeyGUIDPoolRangeEnd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">02:FF:FF:FF:FF:FF:FF:FF</span><span class="w"></span>
 <span class="w">     </span><span class="nt">ufmSecret</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ib-kubernetes-ufm-secret&quot;</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1761,12 +1855,12 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
 <span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">config</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">       </span><span class="no">{</span><span class="w"></span>
 <span class="w">         </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
@@ -1781,21 +1875,19 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w">             </span><span class="no">}</span><span class="w"></span>
 <span class="w">         </span><span class="no">]</span><span class="w"></span>
 <span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
-<span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
+<span class="w">     </span><span class="nt">ipamPlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">whereabouts</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">host-device-net.yaml</span></code></p>
@@ -1808,8 +1900,18 @@ nv-ipam-node-p5kff                              <span class="m">1</span>/1     R
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rdma_host_dev&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
 <span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;whereabouts&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;datastore&quot;: &quot;kubernetes&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;kubernetes&quot;: {</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;kubeconfig&quot;: &quot;/etc/cni/net.d/whereabouts.d/whereabouts.kubeconfig&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">},</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;range&quot;: &quot;192.168.3.225/28&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;exclude&quot;: [</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.229/30&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;192.168.3.236/32&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">],</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_file&quot; : &quot;/var/log/whereabouts.log&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;log_level&quot; : &quot;info&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="no">}</span><span class="w"></span>
 </pre></div>
 </div>
@@ -1879,20 +1981,20 @@ which is detailed in a separate section of the documentation.</p>
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
@@ -2145,20 +2247,20 @@ The VF LAG and Open vSwitch should be preconfigured on the host.</p>
 <span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">   </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">     </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">     </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
-<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.3</span><span class="w"></span>
+<span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
+<span class="w">       </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.7.0</span><span class="w"></span>
 <span class="w">       </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 </pre></div>
 </div>
