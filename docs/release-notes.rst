@@ -36,7 +36,7 @@ Changes and New Features
 
    * - Version
      - Description
-   * - 25.7.0
+   * - 25.7.x
      - | - Added support for OpenShift v4.19.
        | - Added support for RHEL v9.6.
        | - Added support for optimized DOCA driver container handling on pod termination, reducing cleanup time and avoiding unnecessary reloads.
@@ -47,7 +47,7 @@ Changes and New Features
        | - Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade.
        | - Added support for OpenShift 4.18.
        | - Added support for ConnectX-8 SuperNIC.
-       | - Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview.       
+       | - Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview.
    * - 25.1.0
      - | - Added support for OpenShift Container Platform v4.17.
        | - Added support for SUSE Linux Enterprise Server 15 SP6 with Upstream K8s and Rancher.
