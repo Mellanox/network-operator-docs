@@ -75,6 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration-details.html"> Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html"> [TECH PREVIEW] Spectrum-X Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="crds.html"> CRD API Reference</a></li>
 </ul>
 </li>
@@ -244,16 +245,13 @@ node2-101d-mt1952x03327   1m
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareSource</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6-dx-firmware-22-44-1036</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">finalizers</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/nic-configuration-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># a list of firmware binaries zip archives from the Mellanox website, can point to any URL accessible from the cluster</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># a list of firmware binaries from mlnx website if they are zipped try to unzip before placing</span><span class="w"></span>
 <span class="w">  </span><span class="nt">binUrlSources</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># a URL to the BlueField Bundle (BFB) file, can point to any URL accessible from the cluster</span><span class="w"></span>
-<span class="w">  </span><span class="nt">bfbUrlSource</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://example.com/bf-fwbundle-3.1.0-77_25.07-prod.bfb</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -285,10 +283,10 @@ status:
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareTemplate</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">kubernetes.io/hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kubernetes.io/hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;101d&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
@@ -348,35 +346,42 @@ template:
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6-config</span><span class="w"></span>
-<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">   </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># nicType selector is mandatory the rest are optional. Only a single type can be specified.</span><span class="w"></span>
-<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101d</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciAddresses</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
-<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">“0000:04:00.0”</span><span class="w"></span>
-<span class="w">      </span><span class="nt">serialNumbers</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;mt1952x03327&quot;</span><span class="w"></span>
-<span class="w">   </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># if set, template is ignored, device configuration should reset</span><span class="w"></span>
-<span class="w">   </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># numVfs and linkType fields are mandatory, the rest are optional</span><span class="w"></span>
-<span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w"></span>
-<span class="w">      </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">qos</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dscp</span><span class="w"></span>
-<span class="w">            </span><span class="nt">pfc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0,0,0,1,0,0,0,0&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gpuDirectOptimized</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baremetal</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># nicType selector is mandatory the rest are optional. Only a single type can be specified.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101b</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pciAddresses</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">“0000:04:00.0”</span><span class="w"></span>
+<span class="w">    </span><span class="nt">serialNumbers</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;MT2116X09299&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># if set, template is ignored, device configuration should reset</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># default values for maxAccOutRead and maxReadRequest listed below, can be omitted</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxAccOutRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w"></span>
+<span class="w">    </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># default values for qos listed below, can be omitted</span><span class="w"></span>
+<span class="w">      </span><span class="nt">qos</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dscp</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pfc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0,0,0,1,0,0,0,0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gpuDirectOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baremetal</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rawNvConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">THIS_IS_A_SPECIAL_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;55&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOME_ADVANCED_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -446,7 +451,7 @@ template:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 22, 2025.
+      <span class="lastupdated">Last updated on Oct 23, 2025.
       </span></p>
   </div>
 
