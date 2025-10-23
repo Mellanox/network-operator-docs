@@ -146,22 +146,9 @@ Configure and apply the NICFirmwareSource CR
 
 Deploy the NICFirmwareSource CR:
 
-.. code-block:: yaml
-
-    apiVersion: configuration.net.nvidia.com/v1alpha1
-    kind: NicFirmwareSource
-    metadata:
-      name: connectx6-dx-firmware-22-44-1036
-      namespace: nvidia-network-operator
-      finalizers:
-        - configuration.net.nvidia.com/nic-configuration-operator
-    spec:
-      # a list of firmware binaries zip archives from the Mellanox website, can point to any URL accessible from the cluster
-      binUrlSources:
-        - https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip
-      # a URL to the BlueField Bundle (BFB) file, can point to any URL accessible from the cluster
-      bfbUrlSource:
-        - https://example.com/bf-fwbundle-3.1.0-77_25.07-prod.bfb
+.. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/example-nicfwsource-connectx6dx.yaml
+    :language: yaml
+    :lines: 18-
 
 .. note::
     The ConnectX firmware binaries can be downloaded from the `NVIDIA Networking Firmware Downloads page <https://network.nvidia.com/support/firmware/firmware-downloads/>`_.
@@ -190,21 +177,9 @@ Configure and apply the NicFirmwareTemplate CR
 
 Configure and apply the NicFirmwareTemplate CR:
 
-.. code-block:: yaml
-
-    apiVersion: configuration.net.nvidia.com/v1alpha1
-    kind: NicFirmwareTemplate
-    metadata:
-      name: connectx6dx-config
-      namespace: nvidia-network-operator
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: node1
-      nicSelector:
-        nicType: "101d"
-      template:
-        nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
-        updatePolicy: Update
+.. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/example-nicfirmwaretemplate-connectx6-dx.yaml
+    :language: yaml
+    :lines: 18-
 
 Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device
 
@@ -267,40 +242,9 @@ Configure NIC Firmware using the NIC Configuration Operator
 Configure and apply the NicConfigurationTemplate CR
 ---------------------------------------------------
 
-.. code-block:: yaml
-
-    apiVersion: configuration.net.nvidia.com/v1alpha1
-    kind: NicConfigurationTemplate
-    metadata:
-       name: connectx6-config
-       namespace: nvidia-network-operator
-    spec:
-       nodeSelector:
-          feature.node.kubernetes.io/network-sriov.capable: "true"
-       nicSelector:
-          # nicType selector is mandatory the rest are optional. Only a single type can be specified.
-          nicType: 101d
-          pciAddresses:
-             - "0000:03:00.0"
-             - “0000:04:00.0”
-          serialNumbers:
-             - "mt1952x03327"
-       resetToDefault: false # if set, template is ignored, device configuration should reset
-       template:
-          # numVfs and linkType fields are mandatory, the rest are optional
-          numVfs: 2
-          linkType: Ethernet
-          pciPerformanceOptimized:
-             enabled: true
-             maxReadRequest: 4096
-          roceOptimized:
-             enabled: true
-             qos:
-                trust: dscp
-                pfc: "0,0,0,1,0,0,0,0"
-          gpuDirectOptimized:
-             enabled: true
-             env: Baremetal
+.. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/example-nicconfigurationtemplate-connectx6dx.yaml
+    :language: yaml
+    :lines: 18-
 
 .. note:: It's not possible to apply more than one template of each kind (NICFirmwareTemplate or NICConfigurationTemplate) to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
 
