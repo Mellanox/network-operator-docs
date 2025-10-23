@@ -37,7 +37,8 @@ Changes and New Features
    * - Version
      - Description
    * - 25.7.0
-     - | - Added support for OpenShift v4.19.
+     - | - Added support for OpenShift v4.20.
+       | - Added support for OpenShift v4.19.
        | - Added support for RHEL v9.6.
        | - Added support for optimized DOCA driver container handling on pod termination, reducing cleanup time and avoiding unnecessary reloads.
        | - Added support for NIC Configuration Operator on Red Hat OpenShift.
