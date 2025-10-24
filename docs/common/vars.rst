@@ -45,3 +45,5 @@
 .. |rdma-cni-repository| replace:: nvcr.io/nvstaging/mellanox
 .. |spectrumxop-version| replace:: network-operator-v25.10.0-beta.3
 .. |spectrumxop-repository| replace:: nvcr.io/nvstaging/mellanox
+.. |k8s-launch-kit-version| replace:: v25.10.0
+.. |k8s-launch-kit-repository| replace:: nvcr.io/nvidia/cloud-native
