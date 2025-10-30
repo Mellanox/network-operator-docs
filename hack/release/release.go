@@ -64,6 +64,7 @@ type Release struct {
 	SriovCni                     *ReleaseImageSpec
 	SriovIbCni                   *ReleaseImageSpec
 	Mofed                        *ReleaseImageSpec
+	MofedStigFips                *ReleaseImageSpec
 	RdmaSharedDevicePlugin       *ReleaseImageSpec
 	SriovDevicePlugin            *ReleaseImageSpec
 	IbKubernetes                 *ReleaseImageSpec
@@ -117,6 +118,7 @@ func readEnvironmentVariables(release *Release) {
 	initWithEnvVariale("NETWORK_OPERATOR", release.NetworkOperator)
 	initWithEnvVariale("NETWORK_OPERATOR_INIT_CONTAINER", release.NetworkOperatorInitContainer)
 	initWithEnvVariale("MOFED", release.Mofed)
+	initWithEnvVariale("MOFED_STIG_FIPS", release.MofedStigFips)
 	initWithEnvVariale("RDMA_SHARED_DEVICE_PLUGIN", release.RdmaSharedDevicePlugin)
 	initWithEnvVariale("SRIOV_DEVICE_PLUGIN", release.SriovDevicePlugin)
 	initWithEnvVariale("IB_KUBERNEES", release.IbKubernetes)
