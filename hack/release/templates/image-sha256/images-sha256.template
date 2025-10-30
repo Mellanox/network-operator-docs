@@ -214,3 +214,39 @@ SLES
      - {{ .SHA256 }}
      {{- end }}
    {{- end }}
+
+
+=====================================================
+STIG FIPS Compliant DOCA-OFED Driver Container Images
+=====================================================
+
+.. list-table::
+   :header-rows: 1
+
+   * - Repository
+     - Image Name
+     - Version
+   * - {{ .MofedStigFips.Repository }}
+     - {{ .MofedStigFips.Image}}
+     - {{ .MofedStigFips.Version}}
+
+The followings tags are available for the above STIG FIPS Compliant DOCA-OFED Driver container version:
+
+------
+Ubuntu
+------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   {{- range .MofedStigFips.Shas }}
+     {{- if hasSubstring "ubuntu" .Tags }}
+   * - 
+     {{- range .Tags }}
+       | {{ . }}
+     {{- end }}
+     - {{ .SHA256 }}
+     {{- end }}
+   {{- end }}
