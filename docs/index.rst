@@ -26,6 +26,7 @@
    Getting Started with Kubernetes <getting-started-with-kubernetes.rst>
    Getting Started with Red Hat OpenShift <getting-started-with-openshift.rst>
    NIC Configuration Operator <nic-conf-operator/nic-configuration-operator.rst>
+   [TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit <k8s-launch-kit.rst>
    Customization Options and CRDs <customizations/customization.rst>
    Life Cycle Management <life-cycle-management.rst>
    Advanced Configurations <advanced/advanced.rst>
