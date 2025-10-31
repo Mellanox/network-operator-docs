@@ -180,7 +180,7 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># Can also be &quot;a2dc&quot; or &quot;a2d9&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"> </span><span class="c1"># BlueField-3 SuperNIC, Can also be &quot;1023&quot; for ConnectX-8</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicFirmwareSourceRef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-configuration</span><span class="w"></span>
 <span class="w">    </span><span class="nt">updatePolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update</span><span class="w"></span>
@@ -198,7 +198,7 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1023</span><span class="w"> </span><span class="c1"># Can also be &quot;a2dc&quot; or &quot;a2d9&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a2dc</span><span class="w"> </span><span class="c1"># BlueField-3 SuperNIC, Can also be &quot;1023&quot; for ConnectX-8</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
@@ -210,11 +210,11 @@ The package should be made available in the cluster and then its URL should be p
 <section id="id1">
 <h3>Configuration details<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>Following configuration parameters are applied with spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.0”:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nvConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC mode</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC mode</span><span class="w"></span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC</span><span class="w"></span>
 <span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/mode/config/mode</span><span class="w"></span>
 <span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<span class="w">    </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Adaptive Routing</span><span class="w"></span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/adaptive-routing</span><span class="w"></span>
@@ -383,7 +383,7 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="nt">docaCCVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.1.0</span><span class="w"></span>
+<span class="nt">docaCCVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.1.0105-1</span><span class="w"></span>
 <span class="nt">useSoftwareCCAlgorithm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
@@ -400,7 +400,7 @@ The package should be made available in the cluster and then its URL should be p
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 24, 2025.
+      <span class="lastupdated">Last updated on Oct 31, 2025.
       </span></p>
   </div>
 
