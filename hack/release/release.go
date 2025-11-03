@@ -62,6 +62,7 @@ type Release struct {
 	SriovNetworkOperator         *ReleaseImageSpec
 	SriovNetworkOperatorWebhook  *ReleaseImageSpec
 	SriovConfigDaemon            *ReleaseImageSpec
+	SriovConfigDaemonStigFips    *ReleaseImageSpec
 	SriovCni                     *ReleaseImageSpec
 	SriovIbCni                   *ReleaseImageSpec
 	Mofed                        *ReleaseImageSpec
