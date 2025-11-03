@@ -264,6 +264,7 @@ Limitations
    - Only ``generic`` kernel variant is tested and supported as a GA.
    - ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel variants are supported as a Tech Preview and have limited testing.
 
+.. _network-operator-component-matrix:
 
 =================================
 Network Operator Component Matrix
