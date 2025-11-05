@@ -158,7 +158,9 @@
 <p>When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the <a class="reference external" href="../customizations/helm.html#sr-iov-network-operator">Network Operator Helm chart values</a>.</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -174,7 +176,7 @@
 </div>
 </div></blockquote>
 <ol class="arabic simple" start="2">
-<li><p><code class="docutils literal notranslate"><span class="pre">mellanox</span></code> plugin should be disabled &lt;<a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins</a>&gt;`_ in the <cite>SriovOperatorConfig</cite> CR.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mellanox</span></code> plugin <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">should be disabled</a> in the <cite>SriovOperatorConfig</cite> CR.</p></li>
 </ol>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;disablePlugins&quot;: [&quot;mellanox&quot;]} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
@@ -193,7 +195,7 @@
 <p>To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
 To set up a persistent NFS storage in the cluster, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md">example from the CSI NFS Driver repository</a> might be used.
 After deploying the NFS server and NFS CSI driver, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml">storage class</a> should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
-To disable the Firmware upgrade and validation logic, do not define the <cite>nicFirmwareStorage</cite> section in the NicClusterPolicy CR.</p>
+To disable the Firmware upgrade and validation logic, do not define the <code class="docutils literal notranslate"><span class="pre">nicFirmwareStorage</span></code> section in the NicClusterPolicy CR.</p>
 </div>
 <p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
