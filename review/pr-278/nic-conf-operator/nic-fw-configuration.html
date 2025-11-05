@@ -148,24 +148,42 @@
 <section id="use-of-nic-configuration-operator-together-with-sr-iov-network-operator">
 <h2>Use of NIC Configuration Operator together with SR-IOV Network Operator<a class="headerlink" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator" title="Permalink to this headline"></a></h2>
 <p>NIC Configuration Operator can be used together with SR-IOV Network Operator to configure SR-IOV VFs on NVIDIA NICs. In this scenario, NIC Configuration Operator takes on the NIC FW Configuration, while SR-IOV Network Operator configures the SR-IOV VFs.</p>
-<dl>
-<dt>There are two requirements for the SR-IOV Network Operator to work together with NIC Configuration Operator:</dt><dd><ol class="arabic">
-<li><p>“mellanox” <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">plugin should be disabled</a> in the <cite>SriovOperatorConfig</cite> CR.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;disablePlugins&quot;: [&quot;mellanox&quot;]} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
-</pre></div>
-</div>
-</li>
-<li><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master/deployment/sriov-network-operator-chart#sr-iov-operator-configuration-parameters">NodeSelector</a> for the SR-IOV Config Daemon should include the <cite>network.nvidia.com/operator.nic-configuration.wait: “false”</cite> label. It’s managed by the NIC Configuration Operator and ensures that the SR-IOV Config Daemon is not started before the NIC Configuration is complete and ready.</p></li>
+<p>There are two requirements for the SR-IOV Network Operator to work together with NIC Configuration Operator:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master/deployment/sriov-network-operator-chart#sr-iov-operator-configuration-parameters">NodeSelector</a> for the SR-IOV Config Daemon should include the <code class="docutils literal notranslate"><span class="pre">network.nvidia.com/operator.nic-configuration.wait:</span> <span class="pre">&quot;false&quot;</span></code> label. It’s managed by the NIC Configuration Operator and ensures that the SR-IOV Config Daemon is not started before the NIC Configuration is complete and ready.</p></li>
 </ol>
-<div class="admonition note">
+<blockquote>
+<div><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the <a class="reference external" href="../customizations/helm.html#sr-iov-network-operator">Network Operator Helm chart values</a>.</p>
 </div>
-</dd>
-</dl>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">sriov-network-operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovOperatorConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">configDaemonNodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">beta.kubernetes.io/os</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;linux&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">network.nvidia.com/operator.mofed.wait</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Enable when using together with NIC Configuration Operator to wait until</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># all required FW parameters are successfully applied before configuring SR-IOV</span><span class="w"></span>
+<span class="w">      </span><span class="nt">network.nvidia.com/operator.nic-configuration.wait</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><code class="docutils literal notranslate"><span class="pre">mellanox</span></code> plugin should be disabled &lt;<a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins</a>&gt;`_ in the <cite>SriovOperatorConfig</cite> CR.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;disablePlugins&quot;: [&quot;mellanox&quot;]} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>SR-IOV Network Operator can work together with the NIC Configuration Operator only in <cite>daemon</cite> configuration mode. <cite>systemd</cite> configuration mode is not supported with this scenario.</p>
+<p>SR-IOV Network Operator can work together with the NIC Configuration Operator only in <code class="docutils literal notranslate"><span class="pre">daemon</span></code> configuration mode. <code class="docutils literal notranslate"><span class="pre">systemd</span></code> configuration mode is not supported with this scenario.</p>
 </div>
 </section>
 <section id="install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">
@@ -177,7 +195,7 @@ To set up a persistent NFS storage in the cluster, the <a class="reference exter
 After deploying the NFS server and NFS CSI driver, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml">storage class</a> should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
 To disable the Firmware upgrade and validation logic, do not define the <cite>nicFirmwareStorage</cite> section in the NicClusterPolicy CR.</p>
 </div>
-<p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:</p>
+<p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -204,6 +222,32 @@ To disable the Firmware upgrade and validation logic, do not define the <cite>ni
 <span class="w">      </span><span class="c1"># Name of the storage class is provided by the user</span><span class="w"></span>
 <span class="w">      </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfs-csi</span><span class="w"></span>
 <span class="w">      </span><span class="nt">availableStorageSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.1.7.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">safeLoad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">      </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">        </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:</p>
