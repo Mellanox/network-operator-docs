@@ -219,24 +219,24 @@ You can use this file as a starting point for your own configuration. Own config
     nvIpam:
       poolName: nv-ipam-pool
     subnets:
-    - subnet: 192.168.2.0/24
-      gateway: 192.168.2.1
-    - subnet: 192.168.3.0/24
-      gateway: 192.168.3.1
-    - subnet: 192.168.4.0/24
-      gateway: 192.168.4.1
-    - subnet: 192.168.5.0/24
-      gateway: 192.168.5.1
-    - subnet: 192.168.6.0/24
-      gateway: 192.168.6.1
-    - subnet: 192.168.7.0/24
-      gateway: 192.168.7.1
-    - subnet: 192.168.8.0/24
-      gateway: 192.168.8.1
-    - subnet: 192.168.9.0/24
-      gateway: 192.168.9.1
-    - subnet: 192.168.10.0/24
-      gateway: 192.168.10.1
+      - subnet: 192.168.2.0/24
+        gateway: 192.168.2.1
+      - subnet: 192.168.3.0/24
+        gateway: 192.168.3.1
+      - subnet: 192.168.4.0/24
+        gateway: 192.168.4.1
+      - subnet: 192.168.5.0/24
+        gateway: 192.168.5.1
+      - subnet: 192.168.6.0/24
+        gateway: 192.168.6.1
+      - subnet: 192.168.7.0/24
+        gateway: 192.168.7.1
+      - subnet: 192.168.8.0/24
+        gateway: 192.168.8.1
+      - subnet: 192.168.9.0/24
+        gateway: 192.168.9.1
+      - subnet: 192.168.10.0/24
+        gateway: 192.168.10.1
     sriov:
       mtu: 9000
       numVfs: 8
@@ -246,7 +246,7 @@ You can use this file as a starting point for your own configuration. Own config
     hostdev:
       resourceName: hostdev-resource
       networkName: hostdev-network
-      rdmaShared:
+    rdmaShared:
       resourceName: rdma_shared_resource
       hcaMax: 63
     ipoib:
@@ -256,22 +256,22 @@ You can use this file as a starting point for your own configuration. Own config
     clusterConfig:
       capabilities:
         nodes:
-        sriov: true
-        rdma: true
-        ib: true
-      pfs:
-      - rdmaDevice: mlx5_0
-        pciAddress: "0000:03:00.0"
-        networkInterface: enp3s0f0np0
-        traffic: east-west
-      - rdmaDevice: mlx5_1
-        pciAddress: "0000:03:00.1"
-        networkInterface: enp3s0f1np1
-        traffic: east-west
-      - rdmaDevice: mlx5_2
-        pciAddress: 0000:81:00.0
-        networkInterface: enp129s0np0
-        traffic: east-west
+          sriov: true
+          rdma: true
+          ib: true
+        pfs:
+          - rdmaDevice: mlx5_0
+            pciAddress: "0000:03:00.0"
+            networkInterface: enp3s0f0np0
+            traffic: east-west
+          - rdmaDevice: mlx5_1
+            pciAddress: "0000:03:00.1"
+            networkInterface: enp3s0f1np1
+            traffic: east-west
+          - rdmaDevice: mlx5_2
+            pciAddress: 0000:81:00.0
+            networkInterface: enp129s0np0
+            traffic: east-west
       workerNodes:
-      - cloud-dev-41
-      - cloud-dev-40  
+        - cloud-dev-41
+        - cloud-dev-40  
