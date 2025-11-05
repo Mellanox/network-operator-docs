@@ -55,10 +55,10 @@ Configuration details
       - ``CNP_DSCP_P1=4``, ``CNP_DSCP_P2=4``
       - ``CNP_802P_PRIO_P1=6``, ``CNP_802P_PRIO_P2=6``
 
-  - Configure pfc (Priority Flow Control) for priority 3 and set trust to dscp on each PF
+  - Configure pfc (Priority Flow Control) for priority 3, set trust to dscp on each PF, set ToS (Type of Service) to 0.
 
     - Non-persistent (need to be applied after each boot)
-    - Users can override values via ``trust`` and ``pfc`` parameters
+    - Users can override values via ``trust``, ``pfc`` and ``tos`` parameters
 
   - Can only be enabled with ``linkType=Ethernet``
 
