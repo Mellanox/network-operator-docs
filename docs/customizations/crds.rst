@@ -734,8 +734,8 @@ NicConfigurationOperatorSpec is the configuration for NIC Configuration Operator
       | ``configurationDaemon``                                                                           | Image information for nic-configuration-daemon                                                    |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nicFirmwareStorage``                                                                            | NicFirmwareStorage contains configuration for the NIC firmware storage                            |
-      | :ref:`NicFirmwareStorageSpec <NicFirmwareStorageSpec>`                                            |                                                                                                   |
+      | ``nicFirmwareStorage``                                                                            | NicFirmwareStorage contains configuration for the NIC firmware storage. If not provided, the NIC  |
+      | :ref:`NicFirmwareStorageSpec <NicFirmwareStorageSpec>`                                            | firmware storage will not be configured.                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``logLevel``                                                                                      | LogLevel sets the verbosity level of the logs. info|debug                                         |
       | string                                                                                            |                                                                                                   |
@@ -758,7 +758,8 @@ NicFirmwareStorageSpec contains configuration for the NIC firmware storage
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
       | ``create``                                                                                        | Create specifies whether to create a new PVC or use an existing one If create == false, the       |
-      | bool                                                                                              | existing PVC should be located in the same namespace as the operator                              |
+      | bool                                                                                              | existing PVC with the name specified in pvcName should be located in the same namespace as the    |
+      |                                                                                                   | operator                                                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pvcName``                                                                                       | PVCName is the name of the PVC to mount as NIC Firmware storage. Default value:                   |
       | string                                                                                            | “nic-fw-storage-pvc”                                                                              |
