@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIC Firmware Configuration &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration Details" href="configuration-details.html" />
+    <link rel="prev" title="NIC Configuration Operator" href="nic-configuration-operator.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> NIC Firmware Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator">Update NIC Firmware using the NIC Configuration Operator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr">Configure and apply the NICFirmwareSource CR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr">Configure and apply the NicFirmwareTemplate CR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nic-firmware-mismatch-notification">NIC Firmware Mismatch Notification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator">Configure NIC Firmware using the NIC Configuration Operator</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr">Configure and apply the NicConfigurationTemplate CR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#observe-the-status-of-the-configuration-update">Observe the status of the configuration update</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration-details.html"> Configuration Details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html"> [TECH PREVIEW] Spectrum-X Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html"> CRD API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="nic-configuration-operator.html">NIC Configuration Operator</a> &raquo;</li>
+<li>NIC Firmware Configuration</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nic-firmware-configuration">
+<h1>NIC Firmware Configuration<a class="headerlink" href="#nic-firmware-configuration" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator" id="id1">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></p></li>
+<li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id2">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
+<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id3">Update NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id4">Configure and apply the NICFirmwareSource CR</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id5">Configure and apply the NicFirmwareTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id6">NIC Firmware Mismatch Notification</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id7">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id8">Configure and apply the NicConfigurationTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id9">Observe the status of the configuration update</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.
+.. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check <a class="reference internal" href="../release-notes.html"><span class="doc">limitations</span></a>.</p>
+<p>For more information about the CRD API, refer to <a class="reference internal" href="crds.html"><span class="doc">CRD API Reference</span></a>.</p>
+<section id="use-of-nic-configuration-operator-together-with-sr-iov-network-operator">
+<h2>Use of NIC Configuration Operator together with SR-IOV Network Operator<a class="headerlink" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator" title="Permalink to this headline"></a></h2>
+<p>NIC Configuration Operator can be used together with SR-IOV Network Operator to configure SR-IOV VFs on NVIDIA NICs. In this scenario, NIC Configuration Operator takes on the NIC FW Configuration, while SR-IOV Network Operator configures the SR-IOV VFs.</p>
+<dl>
+<dt>There are two requirements for the SR-IOV Network Operator to work together with NIC Configuration Operator:</dt><dd><ol class="arabic">
+<li><p>“mellanox” <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins">plugin should be disabled</a> in the <cite>SriovOperatorConfig</cite> CR.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;disablePlugins&quot;: [&quot;mellanox&quot;]} }&#39;</span> --type<span class="o">=</span><span class="s1">&#39;merge&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p><a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master/deployment/sriov-network-operator-chart#sr-iov-operator-configuration-parameters">NodeSelector</a> for the SR-IOV Config Daemon should include the <cite>network.nvidia.com/operator.nic-configuration.wait: “false”</cite> label. It’s managed by the NIC Configuration Operator and ensures that the SR-IOV Config Daemon is not started before the NIC Configuration is complete and ready.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the <a class="reference external" href="../customizations/helm.html#sr-iov-network-operator">Network Operator Helm chart values</a>.</p>
+</div>
+</dd>
+</dl>
+</section>
+<section id="install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">
+<h2>Install the NIC Configuration Operator and observe NIC devices in the cluster<a class="headerlink" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" title="Permalink to this headline"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
+To set up a persistent NFS storage in the cluster, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md">example from the CSI NFS Driver repository</a> might be used.
+After deploying the NFS server and NFS CSI driver, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml">storage class</a> should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
+To disable the Firmware upgrade and valudation logic, do not define the <cite>nicFirmwareStorage</cite> section in the NicClusterPolicy CR.</p>
+</div>
+<p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">maintenanceOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">nicclusterpolicy.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicFirmwareStorage</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pvcName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-fw-storage-pvc</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Name of the storage class is provided by the user</span><span class="w"></span>
+<span class="w">      </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfs-csi</span><span class="w"></span>
+<span class="w">      </span><span class="nt">availableStorageSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevices -n nvidia-network-operator
+
+NAME                      AGE
+node1-1015-mt1627x08307   1m
+node1-101d-mt1952x03330   1m
+node2-1015-mt1627x08305   1m
+node2-101d-mt1952x03327   1m
+</pre></div>
+</div>
+<p>Discover more information about a specific device:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o yaml
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicDevice</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">creationTimestamp</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">generation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1-101d-mt1952x03327</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ownerReferences</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25c4f4e2-f7ba-4ba9-9a87-8056313ffc79</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1177095&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ac6763bf-67c6-4af5-81f8-1aad5da929bf</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FirmwareUpdateInProgress</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeviceFirmwareSpecEmpty</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device firmware spec is empty, cannot update or validate firmware</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:04Z&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigUpdateInProgress</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DeviceConfigSpecEmpty</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Device configuration spec is empty, cannot update configuration</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-09-21T08:43:08Z&quot;</span><span class="w"></span>
+<span class="nt">firmwareVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">22.39.1015</span><span class="w"></span>
+<span class="nt">node</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
+<span class="nt">partNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mcx623106ac-cdat</span><span class="w"></span>
+<span class="nt">ports</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pci</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pci</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
+<span class="nt">psid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mt_0000000436</span><span class="w"></span>
+<span class="nt">serialNumber</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mt1952x03327</span><span class="w"></span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101d</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="update-nic-firmware-using-the-nic-configuration-operator">
+<h2>Update NIC Firmware using the NIC Configuration Operator<a class="headerlink" href="#update-nic-firmware-using-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<section id="configure-and-apply-the-nicfirmwaresource-cr">
+<h3>Configure and apply the NICFirmwareSource CR<a class="headerlink" href="#configure-and-apply-the-nicfirmwaresource-cr" title="Permalink to this headline"></a></h3>
+<p>Deploy the NICFirmwareSource CR:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareSource</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6-dx-firmware-22-44-1036</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">finalizers</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/nic-configuration-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># a list of firmware binaries from mlnx website if they are zipped try to unzip before placing</span><span class="w"></span>
+<span class="w">  </span><span class="nt">binUrlSources</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://www.mellanox.com/downloads/firmware/fw-ConnectX6Dx-rel-22_44_1036-MCX623106AC-CDA_Ax-UEFI-14.37.14-FlexBoot-3.7.500.signed.bin.zip</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ConnectX firmware binaries can be downloaded from the <a class="reference external" href="https://network.nvidia.com/support/firmware/firmware-downloads/">NVIDIA Networking Firmware Downloads page</a>.
+The URLs of the firmware binaries from the website can be directly provided in the binUrlSources field of the NicFirmwareSource CR.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>BlueField Bundle (BFB) can be downloaded from the <a class="reference external" href="https://developer.nvidia.com/doca-downloads?deployment_platform=BlueField&amp;deployment_package=BF-FW-Bundle&amp;installer_type=BFB">NVIDIA DOCA Downloads page</a>.
+The file should first be made available in the cluster and then its URL should be provided in the bfbUrlSource field of the NicFirmwareSource CR.</p>
+</div>
+<p>Observe the NICFirmwareSource status:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicfirmwaresource -n nvidia-network-operator connectx6-dx-firmware-22-44-1036 -o yaml
+
+...
+status:
+  state: Success
+  versions:
+    <span class="m">22</span>.44.1036:
+    - mt_0000000436
+</pre></div>
+</div>
+</section>
+<section id="configure-and-apply-the-nicfirmwaretemplate-cr">
+<h3>Configure and apply the NicFirmwareTemplate CR<a class="headerlink" href="#configure-and-apply-the-nicfirmwaretemplate-cr" title="Permalink to this headline"></a></h3>
+<p>Configure and apply the NicFirmwareTemplate CR:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareTemplate</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">kubernetes.io/hostname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;101d&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicFirmwareSourceRef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-firmware-22-44-1036</span><span class="w"></span>
+<span class="w">    </span><span class="nt">updatePolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec}&#39;</span> <span class="p">|</span> yq -P
+
+template:
+  firmware:
+      nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+      updatePolicy: Update
+</pre></div>
+</div>
+<p>Status conditions of the NicDevice CR reflect the status of the firmware update and indicate any errors that might occur during the process</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- type: FirmwareUpdateInProgress
+  status: <span class="s2">&quot;False&quot;</span>
+  reason: DeviceFirmwareConfigMatch
+  message: Firmware matches the requested version
+  observedGeneration: <span class="m">4</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:42:23Z&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="nic-firmware-mismatch-notification">
+<h3>NIC Firmware Mismatch Notification<a class="headerlink" href="#nic-firmware-mismatch-notification" title="Permalink to this headline"></a></h3>
+<p>NIC Configuration Operator updates status conditions of the NicDevice CR to set <cite>FirmwareConfigMatch</cite> condition based on a current NIC firmware:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- type: FirmwareConfigMatch
+  status: <span class="s2">&quot;True&quot;</span>
+  reason: DeviceFirmwareConfigMatch
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:10Z&quot;</span>
+</pre></div>
+</div>
+<p><cite>FirmwareConfigMatch</cite> condition status is set to <cite>Unknown</cite> if DOCA-OFED Driver is not installed otherwise it notifies if current NIC firmware is recommended or not recommended by DOCA-OFED Driver. E.g.:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> &gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- type: FirmwareConfigMatch
+  status: <span class="s2">&quot;True&quot;</span>
+  reason: DeviceFirmwareConfigMatch
+  message: Device firmware <span class="s1">&#39;20.42.1000&#39;</span> matches to recommended version <span class="s1">&#39;20.42.1000&#39;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-11-08T09:19:41Z&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="configure-nic-firmware-using-the-nic-configuration-operator">
+<h2>Configure NIC Firmware using the NIC Configuration Operator<a class="headerlink" href="#configure-nic-firmware-using-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<section id="configure-and-apply-the-nicconfigurationtemplate-cr">
+<h3>Configure and apply the NicConfigurationTemplate CR<a class="headerlink" href="#configure-and-apply-the-nicconfigurationtemplate-cr" title="Permalink to this headline"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connectx6dx-config</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># nicType selector is mandatory the rest are optional. Only a single type can be specified.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101b</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pciAddresses</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">“0000:04:00.0”</span><span class="w"></span>
+<span class="w">    </span><span class="nt">serialNumbers</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;MT2116X09299&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"> </span><span class="c1"># if set, template is ignored, device configuration should reset</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pciPerformanceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># default values for maxAccOutRead and maxReadRequest listed below, can be omitted</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxAccOutRead</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">44</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxReadRequest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span><span class="w"></span>
+<span class="w">    </span><span class="nt">roceOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># default values for qos listed below, can be omitted</span><span class="w"></span>
+<span class="w">      </span><span class="nt">qos</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dscp</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pfc</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0,0,0,1,0,0,0,0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gpuDirectOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Baremetal</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rawNvConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">THIS_IS_A_SPECIAL_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;55&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SOME_ADVANCED_NVCONFIG_PARAM</span><span class="w"></span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It’s not possible to apply more than one template of each kind (NICFirmwareTemplate or NICConfigurationTemplate) to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.</p>
+</div>
+<p>For detailed information about firmware parameters and configuration settings, refer to <a class="reference internal" href="configuration-details.html"><span class="doc">Configuration Details</span></a>.</p>
+<p>Spec of the NicDevice CR is updated in accordance with the NICFirmwareTemplate and NicConfigurationTemplate CRs matching the device</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec}&#39;</span> <span class="p">|</span> yq -P
+
+template:
+  firmware:
+      nicFirmwareSourceRef: connectx6dx-firmware-22-44-1036
+      updatePolicy: Update
+  configuration:
+      numVfs: <span class="m">2</span>
+      linkType: Ethernet
+      pciPerformanceOptimized:
+        enabled: <span class="nb">true</span>
+      roceOptimized:
+        enabled: <span class="nb">true</span>
+        qos:
+            trust: dscp
+            pfc: <span class="s2">&quot;0,0,0,1,0,0,0,0&quot;</span>
+      gpuDirectOptimized:
+        enabled: <span class="nb">true</span>
+        env: Baremetal
+</pre></div>
+</div>
+</section>
+<section id="observe-the-status-of-the-configuration-update">
+<h3>Observe the status of the configuration update<a class="headerlink" href="#observe-the-status-of-the-configuration-update" title="Permalink to this headline"></a></h3>
+<p>Status conditions of the NicDevice CR reflect the status of the configuration update and indicate any errors that might occur during the process</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt; kubectl get nicdevice -n nvidia-network-operator node1-101d-mt1952x03327 -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> yq -P
+
+- type: FirmwareUpdateInProgress
+  status: <span class="s2">&quot;False&quot;</span>
+  reason: DeviceFirmwareConfigMatch
+  message: Firmware matches the requested version
+  observedGeneration: <span class="m">4</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:42:23Z&quot;</span>
+- type: ConfigUpdateInProgress
+  status: <span class="s2">&quot;True&quot;</span>
+  reason: UpdateStarted
+  message: <span class="s2">&quot;&quot;</span>
+  lastTransitionTime: <span class="s2">&quot;2024-09-21T08:43:08Z&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Nov 05, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
