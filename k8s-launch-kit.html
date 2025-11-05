@@ -183,7 +183,7 @@
 <p>Kubernetes Launch Kit is available as a docker container:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ~/cluster-configuration
 cp /etc/kubernetes/admin.conf ~/cluster-configuration/kubeconfig
-docker run -v ~/cluster-configuration:/cluster-configuration --net<span class="o">=</span>host nvcr.io/nvidia/cloud-native/k8s-launch-kit:v25.10.0 --discover-cluster-config --kubeconfig /cluster-configuration/kubeconfig --save-cluster-config /cluster-configuration/config.yaml --log-level debug  --save-deployment-files /cluster-configuration/deployments --fabric infiniband --deployment-type rdma_shared --multirail
+docker run -v ~/cluster-configuration:/cluster-configuration --net<span class="o">=</span>host nvcr.io/nvstaging/mellanox/k8s-launch-kit:v25.10.0-beta.5 --discover-cluster-config --kubeconfig /cluster-configuration/kubeconfig --save-cluster-config /cluster-configuration/config.yaml --log-level debug  --save-deployment-files /cluster-configuration/deployments --fabric infiniband --deployment-type rdma_shared --multirail
 </pre></div>
 </div>
 <p>Don’t forget to enable –net=host and mount the necessary directories for input and output files with -v.</p>
@@ -290,31 +290,31 @@ l8k --user-config ./config.yaml <span class="se">\</span>
 <p>After the cluster configuration is discovered, the tool will save the configuration to a file.
 You can use this file as a starting point for your own configuration. Own configuration file can be provided to the tool using <cite>–user-config</cite> flag.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v25.10.0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/cloud-native</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">poolName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam-pool</span><span class="w"></span>
 <span class="w">  </span><span class="nt">subnets</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.1</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.0/24</span><span class="w"></span>
-<span class="w">    </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.1</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.0/24</span><span class="w"></span>
+<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.1</span><span class="w"></span>
 <span class="w">  </span><span class="nt">sriov</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span><span class="w"></span>
 <span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
@@ -324,7 +324,7 @@ You can use this file as a starting point for your own configuration. Own config
 <span class="w">  </span><span class="nt">hostdev</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-resource</span><span class="w"></span>
 <span class="w">    </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-network</span><span class="w"></span>
-<span class="w">    </span><span class="nt">rdmaShared</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaShared</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_resource</span><span class="w"></span>
 <span class="w">    </span><span class="nt">hcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
@@ -334,25 +334,25 @@ You can use this file as a starting point for your own configuration. Own config
 <span class="w">  </span><span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">nodes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">        </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
+<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
+<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
+<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
+<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
+<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
+<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
+<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
 <span class="w">    </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-40</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-40</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -367,7 +367,7 @@ You can use this file as a starting point for your own configuration. Own config
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 02, 2025.
+      <span class="lastupdated">Last updated on Nov 05, 2025.
       </span></p>
   </div>
 

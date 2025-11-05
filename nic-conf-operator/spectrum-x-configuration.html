@@ -205,6 +205,7 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">      </span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.0&quot;</span><span class="w"> </span><span class="c1"># For Reference Architecture v1.3, use &quot;RA1.3&quot; value for this field.</span><span class="w"></span>
+<span class="w">          </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="c1"># For L3 overlay, use &quot;l3&quot; value for this field.</span><span class="w"></span>
 </pre></div>
 </div>
 <section id="id1">
@@ -284,10 +285,12 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
+<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
+<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w">  </span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/config/enabled</span><span class="w"></span>
@@ -400,7 +403,7 @@ The package should be made available in the cluster and then its URL should be p
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 02, 2025.
+      <span class="lastupdated">Last updated on Nov 05, 2025.
       </span></p>
   </div>
 
