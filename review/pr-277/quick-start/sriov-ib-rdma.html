@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deploy SR-IOV InfiniBand Network with RDMA &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NVIDIA Network Operator Deployment Guide with Kubernetes" href="../deployment-guide-kubernetes.html" />
+    <link rel="prev" title="Deploy MacVLAN Network with RDMA Shared Device" href="macvlan-rdma-shared.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="quick-start-k8s.html">Quick Start Guide</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quick-start-k8s.html#before-you-begin">Before You Begin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick-start-k8s.html#install-network-operator-helm-chart">Install Network Operator Helm Chart</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="quick-start-k8s.html#overview-of-quickstart-use-cases">Overview of Quickstart Use Cases</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sriov-network-rdma.html">SR-IOV Network with RDMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="host-device-rdma.html">Host Device Network with RDMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ipoib-rdma-shared.html">IP over InfiniBand with RDMA Shared Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN Network with RDMA Shared Device</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">SR-IOV InfiniBand Network with RDMA</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../deployment-guide-kubernetes.html">Deployment Guide with Kubernetes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a> &raquo;</li>
+    <li><a href="quick-start-k8s.html">Quick Start Guide for Kubernetes</a> &raquo;</li>
+<li>Deploy SR-IOV InfiniBand Network with RDMA</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="deploy-sr-iov-infiniband-network-with-rdma">
+<h1>Deploy SR-IOV InfiniBand Network with RDMA<a class="headerlink" href="#deploy-sr-iov-infiniband-network-with-rdma" title="Permalink to this headline"></a></h1>
+<p><strong>Step 1</strong>: Create NicClusterPolicy for InfiniBand</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.1.7.0-0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f nicclusterpolicy.yaml
+</pre></div>
+</div>
+<p><strong>Step 2</strong>: Create IPPool for nv-ipam</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-pool</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.1</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f ippool.yaml
+</pre></div>
+</div>
+<p><strong>Step 3</strong>: Configure SR-IOV for InfiniBand</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">infiniband-sriov</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">deviceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">netdevice</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">vendor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;15b3&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IB</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlnxnics</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f sriovnetworknodepolicy.yaml
+</pre></div>
+</div>
+<p><strong>Step 4</strong>: Create SriovIBNetwork</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovIBNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-network</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;sriov-ib-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlnxnics</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkState</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enable</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f sriovibnetwork.yaml
+</pre></div>
+</div>
+<p><strong>Step 5</strong>: Deploy test workload</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-test-pod</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-network</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-container</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox/rping-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/mlnxnics</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/mlnxnics</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f pod.yaml
+</pre></div>
+</div>
+<p>Verify the deployment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl <span class="nb">exec</span> -it sriov-ib-test-pod -- ibv_devices
+kubectl <span class="nb">exec</span> -it sriov-ib-test-pod -- ibstat
+</pre></div>
+</div>
+<p><strong>Complete Configuration</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.1.7.0-0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-beta.5</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-pool</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.1</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">infiniband-sriov</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">deviceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">netdevice</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">vendor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;15b3&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IB</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlnxnics</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovIBNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-network</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;sriov-ib-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlnxnics</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkState</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enable</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-test-pod</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-ib-network</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-container</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox/rping-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/mlnxnics</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/mlnxnics</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Nov 05, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
