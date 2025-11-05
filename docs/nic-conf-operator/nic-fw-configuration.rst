@@ -32,6 +32,47 @@ NIC Firmware Configuration
 
 For more information about the CRD API, refer to :doc:`CRD API Reference <crds>`.
 
+=======================================================================
+Use of NIC Configuration Operator together with SR-IOV Network Operator
+=======================================================================
+
+NIC Configuration Operator can be used together with SR-IOV Network Operator to configure SR-IOV VFs on NVIDIA NICs. In this scenario, NIC Configuration Operator takes on the NIC FW Configuration, while SR-IOV Network Operator configures the SR-IOV VFs.
+
+There are two requirements for the SR-IOV Network Operator to work together with NIC Configuration Operator:
+
+1. `NodeSelector <https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master/deployment/sriov-network-operator-chart#sr-iov-operator-configuration-parameters>`_ for the SR-IOV Config Daemon should include the ``network.nvidia.com/operator.nic-configuration.wait: "false"`` label. It's managed by the NIC Configuration Operator and ensures that the SR-IOV Config Daemon is not started before the NIC Configuration is complete and ready.
+
+  .. note::
+    When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the `Network Operator Helm chart values <../customizations/helm.html#sr-iov-network-operator>`_.
+
+  ``values.yaml``:
+
+  .. code-block:: yaml
+
+      nfd:
+        enabled: true
+      maintenanceOperator:
+        enabled: true
+      sriovNetworkOperator:
+        enabled: true
+      sriov-network-operator:
+        sriovOperatorConfig:
+          configDaemonNodeSelector:
+            beta.kubernetes.io/os: "linux"
+            network.nvidia.com/operator.mofed.wait: "false"
+            # Enable when using together with NIC Configuration Operator to wait until
+            # all required FW parameters are successfully applied before configuring SR-IOV
+            network.nvidia.com/operator.nic-configuration.wait: "false"
+
+2. ``mellanox`` plugin `should be disabled <https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins>`_ in the `SriovOperatorConfig` CR.
+
+  .. code-block:: bash
+
+    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "disablePlugins": ["mellanox"]} }' --type='merge'
+
+.. warning::
+   SR-IOV Network Operator can work together with the NIC Configuration Operator only in ``daemon`` configuration mode. ``systemd`` configuration mode is not supported with this scenario.
+
 =============================================================================
 Install the NIC Configuration Operator and observe NIC devices in the cluster
 =============================================================================
@@ -40,8 +81,9 @@ Install the NIC Configuration Operator and observe NIC devices in the cluster
     To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
     To set up a persistent NFS storage in the cluster, the `example from the CSI NFS Driver repository <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md>`_ might be used.
     After deploying the NFS server and NFS CSI driver, the `storage class <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml>`_ should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
+    To disable the Firmware upgrade and validation logic, do not define the ``nicFirmwareStorage`` section in the NicClusterPolicy CR.
 
-First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:
+First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:
 
 ``values.yaml``:
 
@@ -75,6 +117,32 @@ First install the Network Operator helm chart with the Maintenance Operator enab
           # Name of the storage class is provided by the user
           storageClassName: nfs-csi
           availableStorageSize: 1Gi
+      ofedDriver:
+        image: doca-driver
+        repository: |doca-driver-repository|
+        version: |doca-driver-version|
+        forcePrecompiled: false
+        imagePullSecrets: []
+        terminationGracePeriodSeconds: 300
+        startupProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        upgradePolicy:
+          autoUpgrade: true
+          maxParallelUpgrades: 1
+          safeLoad: false
+          drain:
+            enable: true
+            force: true
+            podSelector: ""
+            timeoutSeconds: 300
+            deleteEmptyDir: true
 
 Observe the NicDevice CRs detected in the cluster. The name of the CR is composed from the node name, NIC type and its serial number:
 
@@ -247,9 +315,6 @@ Configure and apply the NicConfigurationTemplate CR
     :lines: 18-
 
 .. note:: It's not possible to apply more than one template of each kind (NICFirmwareTemplate or NICConfigurationTemplate) to a single device. In this case, no template will be applied and an error event will be emitted for the corresponding NicDevice CR.
-
-.. note:: To use the NIC Configuration Operator functionality together with SR-IOV Network Operator, "mellanox" `plugin should be disabled <https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins>`_ in the SR-IOV Network Operator.
-
 
 For detailed information about firmware parameters and configuration settings, refer to :doc:`Configuration Details <configuration-details>`.
 
