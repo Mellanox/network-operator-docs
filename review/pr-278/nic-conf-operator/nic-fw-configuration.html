@@ -171,7 +171,7 @@
 <p>To perform Firmware validation and update on NIC devices, NIC Configuration Operator requires a persistent storage set up in the cluster.
 To set up a persistent NFS storage in the cluster, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/nfs-provisioner/README.md">example from the CSI NFS Driver repository</a> might be used.
 After deploying the NFS server and NFS CSI driver, the <a class="reference external" href="https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml">storage class</a> should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
-To disable the Firmware upgrade and valudation logic, do not define the <cite>nicFirmwareStorage</cite> section in the NicClusterPolicy CR.</p>
+To disable the Firmware upgrade and validation logic, do not define the <cite>nicFirmwareStorage</cite> section in the NicClusterPolicy CR.</p>
 </div>
 <p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
