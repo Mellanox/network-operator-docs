@@ -18,6 +18,8 @@
 
 .. include:: ../common/vars.rst
 
+.. _upgrade guide: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-upgrading-operators
+
 *******************************************************
 NVIDIA Network Operator Deployment Guide with OpenShift
 *******************************************************
@@ -209,6 +211,122 @@ Example output:
    nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    2/2     Running   0          1m
 
 A successful deployment shows a `Running` status.
+
+.. _network-operator-upgrade-openshift:
+
+-------------------------
+Network Operator Upgrade
+-------------------------
+
+This section describes how to upgrade the NVIDIA Network Operator on OpenShift Container Platform.
+
+.. note::
+   Updating the NVIDIA Network Operator will not automatically update the NicClusterPolicy components. You will need to manually update the NicClusterPolicy components to the new version.
+   
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Upgrade Using OpenShift Web Console
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- In the OpenShift Container Platform web console side menu, select Operators > Installed Operators, and search for the NVIDIA Network Operator.
+- In case that the NVIDIA Network Operator has a pending update, it will display a status with Upgrade available like in the following image:
+
+.. image:: ../images/ocp-upgrade-available.png
+
+- Click on the `Upgrade Available` link, then click `Preview Install Plan` button.
+- Review the install plan, and click `Approve` button to upgrade the NVIDIA Network Operator.
+- Navigate back to the Operators -> Installed Operators page to monitor the progress of the update. When complete, the status changes to `Succeeded` and `Up to date`.
+- For additional information, see the Red Hat OpenShift Container Platform Documentation `upgrade guide`_.
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Upgrade Using OpenShift OC CLI
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Check the current subscription status to see if an upgrade is available:
+
+   .. code-block:: bash
+
+      oc get subscription nvidia-network-operator -n nvidia-network-operator -o yaml
+
+   Look for the following fields in the output:
+
+   - `status.state`: Should show `UpgradePending` if an upgrade is available
+   - `status.installedCSV`: Shows the currently installed version
+   - `status.currentCSV`: Shows the available upgrade version
+   - `status.installPlanRef.name`: The name of the install plan that requires approval
+
+   Example output:
+
+   .. code-block:: yaml
+
+      status:
+        currentCSV: nvidia-network-operator.v25.7.0
+        installedCSV: nvidia-network-operator.v25.4.0
+        installPlanRef:
+          name: install-r4pvj
+        state: UpgradePending
+
+#. List the install plans to identify the pending one:
+
+   .. code-block:: bash
+
+      oc get installplan -n nvidia-network-operator
+
+   Example output:
+
+   .. code-block:: bash
+
+      NAME            CSV                               APPROVAL   APPROVED
+      install-lrwp2   nvidia-network-operator.v25.4.0   Manual     true
+      install-r4pvj   nvidia-network-operator.v25.7.0   Manual     false
+
+#. Review the install plan details before approving:
+
+   .. code-block:: bash
+
+      oc get installplan <install-plan-name> -n nvidia-network-operator -o yaml
+
+   Replace `<install-plan-name>` with the name from the previous step (e.g., `install-r4pvj`).
+
+#. Approve the install plan to proceed with the upgrade:
+
+   .. code-block:: bash
+
+      oc patch installplan <install-plan-name> -n nvidia-network-operator \
+        --type merge --patch '{"spec":{"approved":true}}'
+
+#. Monitor the upgrade progress by checking the ClusterServiceVersion:
+
+   .. code-block:: bash
+
+      oc get csv -n nvidia-network-operator
+
+   Wait until the new version shows `PHASE: Succeeded`:
+
+   .. code-block:: bash
+
+      NAME                              DISPLAY                   VERSION   REPLACES                          PHASE
+      nvidia-network-operator.v25.7.0   NVIDIA Network Operator   25.7.0    nvidia-network-operator.v25.4.0   Succeeded
+
+#. Verify the operator pods are running with the new version:
+
+   .. code-block:: bash
+
+      oc get pods -n nvidia-network-operator
+
+   Example output:
+
+   .. code-block:: bash
+
+      NAME                                                          READY   STATUS    RESTARTS   AGE
+      nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    1/1     Running   0          2m
+
+.. note::
+   After the upgrade is complete, remember to update the NicClusterPolicy components to match the new operator version if needed.
+
+
+
 
 ---------------------------------------------------------------------------------
 Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform

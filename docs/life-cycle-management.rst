@@ -457,6 +457,13 @@ Troubleshooting
      - Manually delete the pod by using ``kubectl delete -n <Network Operator Namespace> <pod name>``.
        If following the restart the pod still fails, change the NVIDIA DOCA-OFED Driver version in the NicClusterPolicy to the previous version or to another working version.
 
+--------------------------------------------------------  
+Network Operator Upgrade on OpenShift Container Platform
+--------------------------------------------------------
+
+See instructions in the :ref:`network-operator-upgrade-openshift` section.
+
+
 =================================
 Uninstalling the Network Operator
 =================================
