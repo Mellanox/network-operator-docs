@@ -69,7 +69,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform">Network Operator Upgrade on OpenShift Container Platform</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#downloading-a-new-helm-chart">Downloading a New Helm Chart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#upgrading-crds-for-a-specific-release">Upgrading CRDs for a Specific Release</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release">Preparing the Helm Values for the New Release</a></li>
@@ -93,7 +92,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Network Operator Upgrade on OpenShift Container Platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform">Network Operator Upgrade on OpenShift Container Platform</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#uninstalling-the-network-operator">Uninstalling the Network Operator</a><ul>
@@ -146,54 +145,53 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#network-operator-versioning" id="id3">Network Operator Versioning</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-life-cycle" id="id4">Network Operator Life Cycle</a></p></li>
-<li><p><a class="reference internal" href="#ensuring-deployment-readiness" id="id5">Ensuring Deployment Readiness</a></p>
+<li><p><a class="reference internal" href="#network-operator-versioning" id="id2">Network Operator Versioning</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-life-cycle" id="id3">Network Operator Life Cycle</a></p></li>
+<li><p><a class="reference internal" href="#ensuring-deployment-readiness" id="id4">Ensuring Deployment Readiness</a></p>
 <ul>
-<li><p><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance" id="id6">Status Field Example of a NICClusterPolicy Instance</a></p></li>
+<li><p><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance" id="id5">Status Field Example of a NICClusterPolicy Instance</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-upgrade" id="id7">Network Operator Upgrade</a></p>
+<li><p><a class="reference internal" href="#network-operator-upgrade" id="id6">Network Operator Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform" id="id8">Network Operator Upgrade on OpenShift Container Platform</a></p></li>
-<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id9">Downloading a New Helm Chart</a></p></li>
-<li><p><a class="reference internal" href="#upgrading-crds-for-a-specific-release" id="id10">Upgrading CRDs for a Specific Release</a></p></li>
-<li><p><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release" id="id11">Preparing the Helm Values for the New Release</a></p></li>
-<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id12">Applying the Helm Chart Update</a></p></li>
-<li><p><a class="reference internal" href="#doca-ofed-driver-manual-upgrade" id="id13">DOCA-OFED Driver Manual Upgrade</a></p>
+<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id7">Downloading a New Helm Chart</a></p></li>
+<li><p><a class="reference internal" href="#upgrading-crds-for-a-specific-release" id="id8">Upgrading CRDs for a Specific Release</a></p></li>
+<li><p><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release" id="id9">Preparing the Helm Values for the New Release</a></p></li>
+<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id10">Applying the Helm Chart Update</a></p></li>
+<li><p><a class="reference internal" href="#doca-ofed-driver-manual-upgrade" id="id11">DOCA-OFED Driver Manual Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-doca-ofed-driver" id="id14">Restarting Pods with a Containerized DOCA-OFED Driver</a></p></li>
-<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id15">Removing Pods with a Secondary Network from the Node</a></p></li>
-<li><p><a class="reference internal" href="#restarting-the-doca-ofed-driver-pod" id="id16">Restarting the DOCA-OFED Driver Pod</a></p></li>
-<li><p><a class="reference internal" href="#deleting-the-doca-ofed-driver-pod-from-the-node" id="id17">Deleting the DOCA-OFED Driver Pod from the Node</a></p>
+<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-doca-ofed-driver" id="id12">Restarting Pods with a Containerized DOCA-OFED Driver</a></p></li>
+<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id13">Removing Pods with a Secondary Network from the Node</a></p></li>
+<li><p><a class="reference internal" href="#restarting-the-doca-ofed-driver-pod" id="id14">Restarting the DOCA-OFED Driver Pod</a></p></li>
+<li><p><a class="reference internal" href="#deleting-the-doca-ofed-driver-pod-from-the-node" id="id15">Deleting the DOCA-OFED Driver Pod from the Node</a></p>
 <ul>
-<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id18">Returning Pods with a Secondary Network to the Node</a></p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade" id="id19">Automatic DOCA-OFED Driver Upgrade</a></p>
-<ul>
-<li><p><a class="reference internal" href="#node-upgrade-states" id="id20">Node Upgrade States</a></p></li>
-<li><p><a class="reference internal" href="#upgrade-modes" id="id21">Upgrade modes</a></p></li>
-<li><p><a class="reference internal" href="#safe-driver-loading" id="id22">Safe Driver Loading</a></p>
-<ul>
-<li><p><a class="reference internal" href="#troubleshooting" id="id23">Troubleshooting</a></p></li>
+<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id16">Returning Pods with a Secondary Network to the Node</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#id1" id="id24">Network Operator Upgrade on OpenShift Container Platform</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id25">Uninstalling the Network Operator</a></p>
+<li><p><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade" id="id17">Automatic DOCA-OFED Driver Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id26">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id27">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
-<li><p><a class="reference internal" href="#additional-steps" id="id28">Additional Steps</a></p></li>
+<li><p><a class="reference internal" href="#node-upgrade-states" id="id18">Node Upgrade States</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-modes" id="id19">Upgrade modes</a></p></li>
+<li><p><a class="reference internal" href="#safe-driver-loading" id="id20">Safe Driver Loading</a></p>
+<ul>
+<li><p><a class="reference internal" href="#troubleshooting" id="id21">Troubleshooting</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id29">NicClusterPolicy CRD Update</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform" id="id22">Network Operator Upgrade on OpenShift Container Platform</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id23">Uninstalling the Network Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id24">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id25">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
+<li><p><a class="reference internal" href="#additional-steps" id="id26">Additional Steps</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id27">NicClusterPolicy CRD Update</a></p></li>
 </ul>
 </div>
 <section id="network-operator-versioning">
@@ -210,8 +208,8 @@ Patch releases typically include critical bug and CVE fixes.</p>
 and only receives patch release updates for critical bug and CVE fixes.
 Prior maintance release enters EOL (end-of-life) and are no longer supported and do not receive patch release updates.</p>
 <p>The product life cycle and versioning are subject to change in the future.</p>
-<table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Support Status for Releases</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Support Status for Releases</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 50%" />
@@ -278,8 +276,6 @@ Prior maintance release enters EOL (end-of-life) and are no longer supported and
 </section>
 <section id="network-operator-upgrade">
 <h2>Network Operator Upgrade<a class="headerlink" href="#network-operator-upgrade" title="Permalink to this headline"></a></h2>
-<section id="network-operator-upgrade-on-openshift-container-platform">
-<h3>Network Operator Upgrade on OpenShift Container Platform<a class="headerlink" href="#network-operator-upgrade-on-openshift-container-platform" title="Permalink to this headline"></a></h3>
 <p>Before upgrading to Network Operator v24.10 or newer with SR-IOV Network Operator enabled, the following manual actions are required:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ kubectl -n nvidia-network-operator scale deployment network-operator-sriov-network-operator --replicas <span class="m">0</span>
 
@@ -292,7 +288,6 @@ $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwor
 <li><p>Upgrade the CRD to the latest version</p></li>
 <li><p>Apply Helm chart update</p></li>
 </ul>
-</section>
 <section id="downloading-a-new-helm-chart">
 <h3>Downloading a New Helm Chart<a class="headerlink" href="#downloading-a-new-helm-chart" title="Permalink to this headline"></a></h3>
 <p>To obtain new releases, run:</p>
@@ -615,8 +610,8 @@ If following the restart the pod still fails, change the NVIDIA DOCA-OFED Driver
 </section>
 </section>
 </section>
-<section id="id1">
-<h3>Network Operator Upgrade on OpenShift Container Platform<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<section id="network-operator-upgrade-on-openshift-container-platform">
+<h3>Network Operator Upgrade on OpenShift Container Platform<a class="headerlink" href="#network-operator-upgrade-on-openshift-container-platform" title="Permalink to this headline"></a></h3>
 <p>See instructions in the <a class="reference internal" href="openshift/deployment-guide-openshift.html#network-operator-upgrade-openshift"><span class="std std-ref">Network Operator Upgrade</span></a> section.</p>
 </section>
 </section>
