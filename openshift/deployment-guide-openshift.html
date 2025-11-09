@@ -71,6 +71,11 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#upgrade-using-openshift-web-console">Upgrade Using OpenShift Web Console</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#upgrade-using-openshift-oc-cli">Upgrade Using OpenShift OC CLI</a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#deployment-examples-for-openshift-container-platform">Deployment Examples For OpenShift Container Platform</a><ul>
 <li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp">Network Operator Deployment with a Host Device Network - OCP</a></li>
@@ -149,14 +154,20 @@
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform" id="id9">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a></p>
+<li><p><a class="reference internal" href="#network-operator-upgrade" id="id9">Network Operator Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#deployment-examples-for-openshift-container-platform" id="id10">Deployment Examples For OpenShift Container Platform</a></p>
+<li><p><a class="reference internal" href="#upgrade-using-openshift-web-console" id="id10">Upgrade Using OpenShift Web Console</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-using-openshift-oc-cli" id="id11">Upgrade Using OpenShift OC CLI</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform" id="id12">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp" id="id11">Network Operator Deployment with a Host Device Network - OCP</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp" id="id12">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp" id="id13">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp" id="id14">Network Operator Deployment for DPDK Workloads - OCP</a></p></li>
+<li><p><a class="reference internal" href="#deployment-examples-for-openshift-container-platform" id="id13">Deployment Examples For OpenShift Container Platform</a></p>
+<ul>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp" id="id14">Network Operator Deployment with a Host Device Network - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp" id="id15">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp" id="id16">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp" id="id17">Network Operator Deployment for DPDK Workloads - OCP</a></p></li>
 </ul>
 </li>
 </ul>
@@ -315,6 +326,101 @@ nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">2<
 </div>
 <p>A successful deployment shows a <cite>Running</cite> status.</p>
 </section>
+</section>
+</section>
+<section id="network-operator-upgrade">
+<span id="network-operator-upgrade-openshift"></span><h3>Network Operator Upgrade<a class="headerlink" href="#network-operator-upgrade" title="Permalink to this headline"></a></h3>
+<p>This section describes how to upgrade the NVIDIA Network Operator on OpenShift Container Platform.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Updating the NVIDIA Network Operator will not automatically update the NicClusterPolicy components. You will need to manually update the NicClusterPolicy components to the new version.</p>
+</div>
+<section id="upgrade-using-openshift-web-console">
+<h4>Upgrade Using OpenShift Web Console<a class="headerlink" href="#upgrade-using-openshift-web-console" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>In the OpenShift Container Platform web console side menu, select Operators &gt; Installed Operators, and search for the NVIDIA Network Operator.</p></li>
+<li><p>In case that the NVIDIA Network Operator has a pending update, it will display a status with Upgrade available like in the following image:</p></li>
+</ul>
+<img alt="../_images/ocp-upgrade-available.png" src="../_images/ocp-upgrade-available.png" />
+<ul class="simple">
+<li><p>Click on the <cite>Upgrade Available</cite> link, then click <cite>Preview Install Plan</cite> button.</p></li>
+<li><p>Review the install plan, and click <cite>Approve</cite> button to upgrade the NVIDIA Network Operator.</p></li>
+<li><p>Navigate back to the Operators -&gt; Installed Operators page to monitor the progress of the update. When complete, the status changes to <cite>Succeeded</cite> and <cite>Up to date</cite>.</p></li>
+<li><p>For additional information, see the Red Hat OpenShift Container Platform Documentation <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-upgrading-operators">upgrade guide</a>.</p></li>
+</ul>
+</section>
+<section id="upgrade-using-openshift-oc-cli">
+<h4>Upgrade Using OpenShift OC CLI<a class="headerlink" href="#upgrade-using-openshift-oc-cli" title="Permalink to this headline"></a></h4>
+<ol class="arabic">
+<li><p>Check the current subscription status to see if an upgrade is available:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get subscription nvidia-network-operator -n nvidia-network-operator -o yaml
+</pre></div>
+</div>
+<p>Look for the following fields in the output:</p>
+<ul class="simple">
+<li><p><cite>status.state</cite>: Should show <cite>UpgradePending</cite> if an upgrade is available</p></li>
+<li><p><cite>status.installedCSV</cite>: Shows the currently installed version</p></li>
+<li><p><cite>status.currentCSV</cite>: Shows the available upgrade version</p></li>
+<li><p><cite>status.installPlanRef.name</cite>: The name of the install plan that requires approval</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">currentCSV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator.v25.7.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">installedCSV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator.v25.4.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">installPlanRef</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install-r4pvj</span><span class="w"></span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UpgradePending</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>List the install plans to identify the pending one:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get installplan -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME            CSV                               APPROVAL   APPROVED
+install-lrwp2   nvidia-network-operator.v25.4.0   Manual     <span class="nb">true</span>
+install-r4pvj   nvidia-network-operator.v25.7.0   Manual     <span class="nb">false</span>
+</pre></div>
+</div>
+</li>
+<li><p>Review the install plan details before approving:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get installplan &lt;install-plan-name&gt; -n nvidia-network-operator -o yaml
+</pre></div>
+</div>
+<p>Replace <cite>&lt;install-plan-name&gt;</cite> with the name from the previous step (e.g., <cite>install-r4pvj</cite>).</p>
+</li>
+<li><p>Approve the install plan to proceed with the upgrade:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc patch installplan &lt;install-plan-name&gt; -n nvidia-network-operator <span class="se">\</span>
+  --type merge --patch <span class="s1">&#39;{&quot;spec&quot;:{&quot;approved&quot;:true}}&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Monitor the upgrade progress by checking the ClusterServiceVersion:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get csv -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Wait until the new version shows <cite>PHASE: Succeeded</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME                              DISPLAY                   VERSION   REPLACES                          PHASE
+nvidia-network-operator.v25.7.0   NVIDIA Network Operator   <span class="m">25</span>.7.0    nvidia-network-operator.v25.4.0   Succeeded
+</pre></div>
+</div>
+</li>
+<li><p>Verify the operator pods are running with the new version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get pods -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME                                                          READY   STATUS    RESTARTS   AGE
+nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">1</span>/1     Running   <span class="m">0</span>          2m
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After the upgrade is complete, remember to update the NicClusterPolicy components to match the new operator version if needed.</p>
+</div>
 </section>
 </section>
 <section id="using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">
@@ -653,7 +759,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 05, 2025.
+      <span class="lastupdated">Last updated on Nov 09, 2025.
       </span></p>
   </div>
 
