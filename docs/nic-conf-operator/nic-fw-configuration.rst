@@ -83,6 +83,9 @@ Install the NIC Configuration Operator and observe NIC devices in the cluster
     After deploying the NFS server and NFS CSI driver, the `storage class <https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/storageclass-nfs.yaml>`_ should become available in the cluster. The name of the storage class should then be passed when configuring the NIC Configuration Operator.
     To disable the Firmware upgrade and validation logic, do not define the ``nicFirmwareStorage`` section in the NicClusterPolicy CR.
 
+.. note::
+    On some DGX servers, the configuration update is not successfully applied after the warm reboot. In this case, it is recommended to explicitly reset the NIC's Firmware before the reboot and after updating its non-volatile configuration. This can be achieved by specifying the ``FW_RESET_AFTER_CONFIG_UPDATE`` environment variable in the NicClusterPolicy CR. Please see the commented section in the example below.
+
 First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:
 
 ``values.yaml``:
@@ -111,6 +114,11 @@ First install the Network Operator helm chart with the Maintenance Operator enab
           image: nic-configuration-operator-daemon
           repository: |nic-configuration-operator-repository|
           version: |nic-configuration-operator-version|
+        # Uncomment to explicitely reset the NIC's Firmware before the reboot and after updating its non-volatile configuration.
+        # Might be required on DGX servers where configuration update is not successfully applied after the warm reboot.
+        # env:
+        # - name: "FW_RESET_AFTER_CONFIG_UPDATE"
+        #   value: "true"
         nicFirmwareStorage:
           create: true
           pvcName: nic-fw-storage-pvc
