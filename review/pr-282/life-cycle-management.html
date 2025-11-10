@@ -70,8 +70,8 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#downloading-a-new-helm-chart">Downloading a New Helm Chart</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release">Preparing the Helm Values for the New Release</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#applying-the-helm-chart-update">Applying the Helm Chart Update</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updating-the-nicclusterpolicy">Updating the NicClusterPolicy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade">Automatic DOCA-OFED Driver Upgrade</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#node-upgrade-states">Node Upgrade States</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#upgrade-modes">Upgrade modes</a></li>
@@ -154,8 +154,8 @@
 <li><p><a class="reference internal" href="#network-operator-upgrade" id="id6">Network Operator Upgrade</a></p>
 <ul>
 <li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id7">Downloading a New Helm Chart</a></p></li>
-<li><p><a class="reference internal" href="#preparing-the-helm-values-for-the-new-release" id="id8">Preparing the Helm Values for the New Release</a></p></li>
-<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id9">Applying the Helm Chart Update</a></p></li>
+<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id8">Applying the Helm Chart Update</a></p></li>
+<li><p><a class="reference internal" href="#updating-the-nicclusterpolicy" id="id9">Updating the NicClusterPolicy</a></p></li>
 <li><p><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade" id="id10">Automatic DOCA-OFED Driver Upgrade</a></p>
 <ul>
 <li><p><a class="reference internal" href="#node-upgrade-states" id="id11">Node Upgrade States</a></p></li>
@@ -283,19 +283,30 @@ Prior maintance release enters EOL (end-of-life) and are no longer supported and
 </pre></div>
 </div>
 </section>
-<section id="preparing-the-helm-values-for-the-new-release">
-<h3>Preparing the Helm Values for the New Release<a class="headerlink" href="#preparing-the-helm-values-for-the-new-release" title="Permalink to this headline"></a></h3>
-<p>Edit the values-&lt;VERSION&gt;.yaml file as required for your cluster. The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.</p>
-<p>Known limitations:
-* If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.</p>
-<p>These limitations will be addressed in future releases.</p>
-</section>
 <section id="applying-the-helm-chart-update">
 <h3>Applying the Helm Chart Update<a class="headerlink" href="#applying-the-helm-chart-update" title="Permalink to this headline"></a></h3>
+<p>Edit the <cite>values-&lt;VERSION&gt;.yaml</cite> file as required for your cluster.</p>
 <p>To apply the Helm chart update, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ helm upgrade -n nvidia-network-operator network-operator nvidia/network-operator --version<span class="o">=</span>&lt;VERSION&gt; -f values-&lt;VERSION&gt;.yaml --force
 </pre></div>
 </div>
+</section>
+<section id="updating-the-nicclusterpolicy">
+<h3>Updating the NicClusterPolicy<a class="headerlink" href="#updating-the-nicclusterpolicy" title="Permalink to this headline"></a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Helm upgrade does not update components version in the NicClusterPolicy. It should be done manually after the upgrade is done.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.</p>
+<p>Known limitations:</p>
+<ul class="simple">
+<li><p>If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.</p></li>
+</ul>
+<p>These limitations will be addressed in future releases.</p>
+</div>
+<p>Update the components version in the NicClusterPolicy. Refer to the <a class="reference internal" href="customizations/cr-full-example.html#ncp-cr-example"><span class="std std-ref">NicClusterPolicy CRD Full Example</span></a> for more details and latest version of the components.</p>
 </section>
 <section id="automatic-doca-ofed-driver-upgrade">
 <h3>Automatic DOCA-OFED Driver Upgrade<a class="headerlink" href="#automatic-doca-ofed-driver-upgrade" title="Permalink to this headline"></a></h3>
@@ -342,7 +353,7 @@ Prior maintance release enters EOL (end-of-life) and are no longer supported and
 <span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Apply NicClusterPolicy CRD:</p>
+<p>Apply NicClusterPolicy CR:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ kubectl apply -f nicclusterpolicy.yaml
 </pre></div>
 </div>
