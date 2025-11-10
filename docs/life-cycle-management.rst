@@ -53,13 +53,13 @@ The product life cycle and versioning are subject to change in the future.
    * - Network Operator Version
      - Status
 
-   * - 25.1.x
+   * - |current-ga-version|
      - Generally Available
 
-   * - 24.10.x
+   * - |current-maintenance-version|
      - Maintenance
 
-   * - 24.7.x and lower
+   * - |current-eol-version| and lower
      - EOL
 
 
@@ -115,21 +115,6 @@ Get the NicClusterPolicy status:
 Network Operator Upgrade
 ========================
 
-Before upgrading to Network Operator v24.10 or newer with SR-IOV Network Operator enabled, the following manual actions are required:
-
-.. code-block:: bash
-
-  $ kubectl -n nvidia-network-operator scale deployment network-operator-sriov-network-operator --replicas 0
-
-  $ kubectl -n nvidia-network-operator delete sriovnetworknodepolicies.sriovnetwork.openshift.io default
-
-The network operator provides limited upgrade capabilities, which require additional manual actions if a containerized DOCA-OFED Driver is used. Future releases of the network operator will provide an automatic upgrade flow for the containerized driver.
-
-Since Helm does not support auto-upgrade of existing CRDs, the user must follow a two-step process to upgrade the network-operator release:
-
-* Upgrade the CRD to the latest version
-* Apply Helm chart update
-
 ----------------------------
 Downloading a New Helm Chart
 ----------------------------
@@ -143,37 +128,11 @@ To obtain new releases, run:
     $ helm fetch \https://helm.ngc.nvidia.com/nvidia/charts/network-operator-|helm-chart-version|.tgz
     $ ls network-operator-\*.tgz | xargs -n 1 tar xf
 
-
--------------------------------------
-Upgrading CRDs for a Specific Release
--------------------------------------
-
-It is possible to retrieve updated CRDs from the Helm chart or from the release branch on GitHub. The example below shows how to upgrade CRDs from the downloaded chart.
-
-.. code-block:: bash
-
-  $ kubectl apply \
-    -f network-operator/crds \
-    -f network-operator/charts/sriov-network-operator/crds
-
 ---------------------------------------------
-Preparing the Helm Values for the New Release
----------------------------------------------
-
-Edit the values-<VERSION>.yaml file as required for your cluster. The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.
-
-Known limitations:
-
-* If component configuration was removed from the NicClusterPolicy, manual clean up of the component's resources (DaemonSets, ConfigMaps, etc.) may be required.
-* If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.
-
-These limitations will be addressed in future releases.
-
-.. warning:: Changes that were made directly in the NicClusterPolicy CR (e.g. with kubectl edit) will be overwritten by the Helm upgrade due to the `force` flag.
-
-------------------------------
 Applying the Helm Chart Update
-------------------------------
+---------------------------------------------
+
+Edit the `values-<VERSION>.yaml` file as required for your cluster. 
 
 To apply the Helm chart update, run:
 
@@ -181,91 +140,25 @@ To apply the Helm chart update, run:
 
   $ helm upgrade -n nvidia-network-operator network-operator nvidia/network-operator --version=<VERSION> -f values-<VERSION>.yaml --force
 
-.. warning:: The --devel option is required if you wish to use the Beta release.
+-----------------------------
+Updating the NicClusterPolicy
+-----------------------------
 
--------------------------------
-DOCA-OFED Driver Manual Upgrade
--------------------------------
+.. note::
+  
+  Helm upgrade does not update components version in the NicClusterPolicy. It should be done manually after the upgrade is done.
 
-#####################################################
-Restarting Pods with a Containerized DOCA-OFED Driver
-#####################################################
+.. note::
+  
+  The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.
 
-.. warning:: This operation is required only if containerized DOCA-OFED Driver is in use.
+  Known limitations:
+  
+  * If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.
 
-When a containerized DOCA-OFED Driver is reloaded on the node, all pods that use a secondary network based on NVIDIA NICs will lose network interface in their containers. To prevent outage, remove all pods that use a secondary network from the node before you reload the driver pod on it.
+  These limitations will be addressed in future releases.
 
-The Helm upgrade command will only upgrade the DaemonSet spec of the DOCA-OFED Driver to point to the new driver version. The DOCA-OFED Driver's DaemonSet will not automatically restart pods with the driver on the nodes, as it uses "OnDelete" updateStrategy. The old DOCA-OFED Driver version will still run on the node until you explicitly remove the driver pod or reboot the node:
-
-.. code-block:: bash
-
-  $ kubectl delete pod -l app=mofed-<OS_NAME> -n nvidia-network-operator
-
-It is possible to remove all pods with secondary networks from all cluster nodes, and then restart the DOCA-OFED Driver pods on all nodes at once.
-
-The alternative option is to perform an upgrade in a rolling manner to reduce the impact of the driver upgrade on the cluster. The driver pod restart can be done on each node individually. In this case, pods with secondary networks should be removed from the single node only. There is no need to stop pods on all nodes.
-
-For each node, follow these steps to reload the driver on the node:
-
-1. Remove pods with a secondary network from the node.
-2. Restart the DOCA-OFED Driver pod.
-3. Return the pods with a secondary network to the node.
-
-When the DOCA-OFED Driver is ready, proceed with the same steps for other nodes.
-
-####################################################
-Removing Pods with a Secondary Network from the Node
-####################################################
-
-To remove pods with a secondary network from the node with node drain, run the following command:
-
-.. code-block:: bash
-
-  $ kubectl drain <NODE_NAME> --pod-selector=<SELECTOR_FOR_PODS>
-
-.. warning:: Replace <NODE_NAME> with -l "network.nvidia.com/operator.mofed.wait=false" if you wish to drain all nodes at once.
-
-###################################
-Restarting the DOCA-OFED Driver Pod
-###################################
-
-Find the DOCA-OFED Driver pod name for the node:
-
-.. code-block:: bash
-
-  $ kubectl get pod -l app=mofed-<OS_NAME> -o wide -A
-
-Example for Ubuntu 20.04:
-
-.. code-block:: bash
-
-  kubectl get pod -l app=mofed-ubuntu20.04 -o wide -A
-
-###############################################
-Deleting the DOCA-OFED Driver Pod from the Node
-###############################################
-
-To delete the DOCA-OFED Driver pod from the node, run:
-
-.. code-block:: bash
-
-  $ kubectl delete pod -n <DRIVER_NAMESPACE> <DOCA_DRIVER_POD_NAME>
-
-.. warning:: Replace <DOCA_DRIVER_POD_NAME> with -l app=mofed-ubuntu20.04 if you wish to remove DOCA-OFED Driver pods on all nodes at once.
-
-A new version of the DOCA-OFED Driver pod will automatically start.
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Returning Pods with a Secondary Network to the Node
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-After the DOCA-OFED Driver pod is ready on the node, you can make the node schedulable again.
-
-The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSchedule taint) the node, and return the pods to it:
-
-.. code-block:: bash
-
-  $ kubectl uncordon -l "network.nvidia.com/operator.mofed.wait=false"
+Update the components version in the NicClusterPolicy. Refer to the :ref:`NicClusterPolicy CRD Full Example <ncp-cr-example>` for more details and latest version of the components.
 
 ----------------------------------
 Automatic DOCA-OFED Driver Upgrade
@@ -318,7 +211,7 @@ To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section f
             # specify if should continue even if there are pods using emptyDir
             deleteEmptyDir: false
 
-Apply NicClusterPolicy CRD:
+Apply NicClusterPolicy CR:
 
 .. code-block:: bash
 
@@ -456,6 +349,92 @@ Troubleshooting
    * - The updated NVIDIA DOCA-OFED Driver pod failed to start/ a new version of NVIDIA DOCA-OFED Driver cannot be installed on the node.
      - Manually delete the pod by using ``kubectl delete -n <Network Operator Namespace> <pod name>``.
        If following the restart the pod still fails, change the NVIDIA DOCA-OFED Driver version in the NicClusterPolicy to the previous version or to another working version.
+
+-------------------------------
+DOCA-OFED Driver Manual Upgrade
+-------------------------------
+
+Automatic DOCA-OFED Driver upgrade is the preferred method for upgrading the DOCA-OFED Driver. However, if you need to manually upgrade the DOCA-OFED Driver, you can follow the steps below.
+
+#####################################################
+Restarting Pods with a Containerized DOCA-OFED Driver
+#####################################################
+
+.. warning:: This operation is required only if containerized DOCA-OFED Driver is in use.
+
+When a containerized DOCA-OFED Driver is reloaded on the node, all pods that use a secondary network based on NVIDIA NICs will lose network interface in their containers. To prevent outage, remove all pods that use a secondary network from the node before you reload the driver pod on it.
+
+The Helm upgrade command will only upgrade the DaemonSet spec of the DOCA-OFED Driver to point to the new driver version. The DOCA-OFED Driver's DaemonSet will not automatically restart pods with the driver on the nodes, as it uses "OnDelete" updateStrategy. The old DOCA-OFED Driver version will still run on the node until you explicitly remove the driver pod or reboot the node:
+
+.. code-block:: bash
+
+  $ kubectl delete pod -l app=mofed-<OS_NAME> -n nvidia-network-operator
+
+It is possible to remove all pods with secondary networks from all cluster nodes, and then restart the DOCA-OFED Driver pods on all nodes at once.
+
+The alternative option is to perform an upgrade in a rolling manner to reduce the impact of the driver upgrade on the cluster. The driver pod restart can be done on each node individually. In this case, pods with secondary networks should be removed from the single node only. There is no need to stop pods on all nodes.
+
+For each node, follow these steps to reload the driver on the node:
+
+1. Remove pods with a secondary network from the node.
+2. Restart the DOCA-OFED Driver pod.
+3. Return the pods with a secondary network to the node.
+
+When the DOCA-OFED Driver is ready, proceed with the same steps for other nodes.
+
+####################################################
+Removing Pods with a Secondary Network from the Node
+####################################################
+
+To remove pods with a secondary network from the node with node drain, run the following command:
+
+.. code-block:: bash
+
+  $ kubectl drain <NODE_NAME> --pod-selector=<SELECTOR_FOR_PODS>
+
+.. warning:: Replace <NODE_NAME> with -l "network.nvidia.com/operator.mofed.wait=false" if you wish to drain all nodes at once.
+
+###################################
+Restarting the DOCA-OFED Driver Pod
+###################################
+
+Find the DOCA-OFED Driver pod name for the node:
+
+.. code-block:: bash
+
+  $ kubectl get pod -l app=mofed-<OS_NAME> -o wide -A
+
+Example for Ubuntu 20.04:
+
+.. code-block:: bash
+
+  kubectl get pod -l app=mofed-ubuntu20.04 -o wide -A
+
+###############################################
+Deleting the DOCA-OFED Driver Pod from the Node
+###############################################
+
+To delete the DOCA-OFED Driver pod from the node, run:
+
+.. code-block:: bash
+
+  $ kubectl delete pod -n <DRIVER_NAMESPACE> <DOCA_DRIVER_POD_NAME>
+
+.. warning:: Replace <DOCA_DRIVER_POD_NAME> with -l app=mofed-ubuntu20.04 if you wish to remove DOCA-OFED Driver pods on all nodes at once.
+
+A new version of the DOCA-OFED Driver pod will automatically start.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Returning Pods with a Secondary Network to the Node
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After the DOCA-OFED Driver pod is ready on the node, you can make the node schedulable again.
+
+The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSchedule taint) the node, and return the pods to it:
+
+.. code-block:: bash
+
+  $ kubectl uncordon -l "network.nvidia.com/operator.mofed.wait=false"
 
 --------------------------------------------------------  
 Network Operator Upgrade on OpenShift Container Platform
