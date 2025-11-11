@@ -49,3 +49,6 @@
 .. |k8s-launch-kit-component-version| replace:: v25.10.0-beta.5
 .. |k8s-launch-kit-repository| replace:: nvcr.io/nvstaging/mellanox
 .. |k8s-launch-kit-network-operator-repository| replace:: nvcr.io/nvstaging/mellanox
+.. |current-ga-version| replace:: 25.10.x
+.. |current-maintenance-version| replace:: 25.7.x
+.. |current-eol-version| replace:: 25.4.x

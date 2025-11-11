@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 	"text/template"
@@ -82,6 +83,9 @@ type Release struct {
 	NicConfigurationConfigDaemon *ReleaseImageSpec
 	MaintenanceOperator          *ReleaseImageSpec
 	SpectrumXOperator            *ReleaseImageSpec
+	CurrentGAVersionMajorMinor   string
+	CurrentMaintenanceMajorMinor string
+	CurrentEOLMajorMinor         string
 }
 
 func readDefaults(releaseDefaults string) Release {
@@ -136,6 +140,7 @@ func readEnvironmentVariables(release *Release) {
 func main() {
 	templateDir := flag.String("templateDir", ".", "Directory with templates to render")
 	outputDir := flag.String("outputDir", ".", "Destination directory to render templates to")
+	releaseVersions := flag.String("releaseVersions", "", "File with release versions to use for the templates. Won't be used if not provided")
 	releaseDefaults := flag.String("releaseDefaults", "release.yaml", "Destination of the release defaults definition")
 	retrieveSha := flag.Bool("with-sha256", false, "retrieve SHA256 for container images references")
 	flag.Parse()
@@ -145,6 +150,13 @@ func main() {
 	retrieveDocaDriverBuildCommit(&release)
 	if *retrieveSha {
 		err := resolveImagesSha(&release)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	}
+	if *releaseVersions != "" {
+		err := handleReleaseVersions(&release, *releaseVersions)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
@@ -375,4 +387,49 @@ func getAuth(repo string) remote.Option {
 	} else {
 		return remote.WithAuthFromKeychain(authn.DefaultKeychain)
 	}
+}
+
+// handleReleaseVersions updates the release versions file with the current major.minor version
+// and fills the CurrentGAVersionMajorMinor, CurrentMaintenanceMajorMinor, and CurrentEOLMajorMinor fields.
+func handleReleaseVersions(release *Release, releaseVersionsPath string) error {
+	content, err := os.ReadFile(filepath.Clean(releaseVersionsPath))
+	if err != nil {
+		return err
+	}
+
+	rawLines := strings.Split(string(content), "\n")
+	lines := make([]string, 0, len(rawLines))
+	for _, l := range rawLines {
+		trimmed := strings.TrimSpace(l)
+		if trimmed != "" {
+			lines = append(lines, trimmed)
+		}
+	}
+
+	// Parse version using regex: supports values like "v25.10.0-beta.5" or "25.10.0"
+	re := regexp.MustCompile(`^v?(\d+)\.(\d+)\.\d+(?:[-+].*)?$`)
+	matches := re.FindStringSubmatch(release.NetworkOperator.Version)
+	if matches == nil {
+		return fmt.Errorf("failed to parse version %q", release.NetworkOperator.Version)
+	}
+	currentMajorMinor := fmt.Sprintf("%s.%s.x", matches[1], matches[2])
+
+	// If top line doesn't match, prepend the extracted major.minor
+	if len(lines) == 0 || lines[0] != currentMajorMinor {
+		lines = append([]string{currentMajorMinor}, lines...)
+		// Write back to the file; ensure trailing newline
+		newContent := strings.Join(lines, "\n") + "\n"
+		if err := os.WriteFile(releaseVersionsPath, []byte(newContent), 0o644); err != nil {
+			return err
+		}
+	}
+
+	// After update, take three top lines
+	if len(lines) < 3 {
+		return fmt.Errorf("versions file %q has fewer than 3 lines after update", releaseVersionsPath)
+	}
+	release.CurrentGAVersionMajorMinor = lines[0]
+	release.CurrentMaintenanceMajorMinor = lines[1]
+	release.CurrentEOLMajorMinor = lines[2]
+	return nil
 }
