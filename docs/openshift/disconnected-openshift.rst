@@ -384,11 +384,59 @@ Once the instance creation will completed you can find it in "Operators > Instal
 NVIDIA DOCA OFED driver container in disconnected environment
 -------------------------------------------------------------
 
-In case you want to use the NVIDIA DOCA OFED driver container in the disconnected environment, the following steps are required:
+In case you want to use the NVIDIA DOCA OFED driver container in the disconnected environment, there are two options:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Option 1: Use the NVIDIA DOCA OFED driver container from NGC
+
+  - This container builds the DOCA OFED driver from source code dynamically, therefore requires mirroring needed dependencies.
+
+- Option 2: Create a precompiled container for the DOCA OFED driver
+
+  - With this option it is not required to mirror dependencies, but it will support only a specific kernel version.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Option 1: Use the NVIDIA DOCA OFED driver container from NGC
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+""""""""""""""""""""""""""""""""""""
+Mirroring DOCA OFED Driver Container
+""""""""""""""""""""""""""""""""""""
+
+Navigate to the NVIDIA catalog and looking for the right <os-version>-<architecture> suffix tag, such as `doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64`.
+
+The mirrored image must be tagged `<driver-version>-<os-version>-<architecture>`, such as `doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64` for example.
+
+Note that since OCP 4.19, the os version is now `rhel9.6` instead of `rhcos4.x`.
+
+
+"""""""""""""""""""""""""""""""""
 Create Local Package Repositories
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""
+
+The DOCA-OFED Driver container requires certain packages to be available for the driver installation.
+The following packages are required:
+
+.. code-block::
+
+   kernel-headers-${KERNEL_VERSION}
+   kernel-devel-${KERNEL_VERSION}
+   kernel-core-${KERNEL_VERSION}
+   createrepo
+   elfutils-libelf-devel
+   kernel-rpm-macros
+   umactl-libs
+   lsof
+   rpm-build
+   patch
+   hostname
+
+For RT kernels following packages should be available:
+
+.. code-block::
+
+    kernel-rt-devel-${KERNEL_VERSION}
+    kernel-rt-modules-${KERNEL_VERSION}
+
 
 Create the Local Package Repository required:
 
@@ -406,13 +454,15 @@ redhat.repo:
   [baseos]
   name=rhel-9-for-x86_64-baseos-rpms
   baseurl=http://srv01.air-gapped.local/redhat/9.4/el-9-for-x86_64-baseos-rpms
-  gpgcheck=0
+  gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+  gpgcheck = 1
   enabled=1
 
   [apstream]
   name=rhel-9-for-x86_64-appstream-rpms
   baseurl=http://srv01.air-gapped.local/redhat/rhel-9-for-x86_64-appstream-rpms
-  gpgcheck=0
+  gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+  gpgcheck = 1
   enabled=1
 
 
@@ -424,12 +474,14 @@ ubi.repo:
   name = Red Hat Universal Base Image 9 (RPMs) - BaseOS
   baseurl = http://srv01.air-gapped.local/redhat/ubi-9-baseos-rpms
   enabled = 1
-  gpgcheck = 0
+  gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+  gpgcheck = 1
   [ubi-9-appstream]
   name = Red Hat Universal Base Image 9 (RPMs) - AppStream
   baseurl = http://srv01.air-gapped.local/redhat/ubi-9-appstream-rpms
   enabled = 1
-  gpgcheck = 0
+  gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+  gpgcheck = 1
 
 cuda.repo:
 
@@ -439,7 +491,8 @@ cuda.repo:
   name=cuda
   baseurl=http://srv01.air-gapped.local/nvidia/cuda
   priority=0
-  gpgcheck=0
+  gpgcheck=1
+  gpgkey=http://srv01.air-gapped.local/nvidia/cuda/D42D0685.pub
   enabled=1
 
 
@@ -456,11 +509,69 @@ If self-signed certificates are used for an HTTPS based local repository, a Conf
   
   oc create configmap cert-config -n nvidia-network-operator --from-file=<path-to-pem-file>
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Create a precompiled container for the DOCA OFED driver
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We will use the mirror server to build the precompiled container for the DOCA OFED driver.
+""""""""""""""""""""""""""""""""""""""
+Create the NIC Cluster Policy instance
+""""""""""""""""""""""""""""""""""""""
+
+In the web console, click "Operators > Installed Operators", and then "NVIDIA Network Operator > NicClusterPolicy > Create NicClusterPolicy"
+
+You need to provide required parameters depending on your setup. After editing and overriding our nic-cluster-policy yaml looks like this:
+
+.. code-block:: yaml
+
+  apiVersion: mellanox.com/v1alpha1
+  kind: NicClusterPolicy
+  metadata:
+    name: nic-cluster-policy
+  spec:
+    ofedDriver:
+      certConfig:
+        name: cert-config
+      env:
+      - name: RESTORE_DRIVER_ON_POD_TERMINATION
+        value: "true"
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: CREATE_IFNAMES_UDEV
+        value: "true"
+      forcePrecompiled: false
+      image: doca-driver
+      imagePullSecrets:
+      - mirror-registry-ps
+      livenessProbe:
+        initialDelaySeconds: 30
+        periodSeconds: 30
+      readinessProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      repoConfig:
+        name: repo-config
+      repository: mirror.air-gapped.local:5000/mellanox
+      startupProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 20
+      terminationGracePeriodSeconds: 300
+      upgradePolicy:
+        autoUpgrade: true
+        drain:
+          deleteEmptyDir: true
+          enable: true
+          force: true
+          podSelector: ""
+          timeoutSeconds: 300
+        maxParallelUpgrades: 1
+        safeLoad: false
+        waitForCompletion:
+          timeoutSeconds: 0
+      version: doca3.1.0-25.07-0.9.7.0-0
+
+Note: Please be sure to provide configured ConfigMaps: `repo-config` and `cert-config`.
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Option 2: Create a precompiled container for the DOCA OFED driver
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Please verify that you have the following:
 
@@ -479,9 +590,9 @@ In order to get the sha256 of the image, you can use the following command:
 
   skopeo inspect docker://mirror.air-gapped.local:5000/mellanox/doca-driver:your-tag | jq -r '.Digest'
 
---------------------------------------
+""""""""""""""""""""""""""""""""""""""
 Create the NIC Cluster Policy instance
---------------------------------------
+""""""""""""""""""""""""""""""""""""""
 
 In the web console, click "Operators > Installed Operators", and then "NVIDIA Network Operator > NicClusterPolicy > Create NicClusterPolicy"
 
@@ -492,50 +603,49 @@ You need to provide required parameters depending on your setup. After editing a
   apiVersion: mellanox.com/v1alpha1
   kind: NicClusterPolicy
   metadata:
-	name: nic-cluster-policy
+    name: nic-cluster-policy
   spec:
-	ofedDriver:
-  	certConfig:
-    	name: cert-config
-  	env:
-  	- name: RESTORE_DRIVER_ON_POD_TERMINATION
-    	value: "true"
-  	- name: UNLOAD_STORAGE_MODULES
-    	value: "true"
-  	- name: CREATE_IFNAMES_UDEV
-    	value: "true"
-  	forcePrecompiled: true
-  	image: doca-driver
-  	imagePullSecrets:
-  	- mirror-registry-ps
-  	livenessProbe:
-    	initialDelaySeconds: 30
-    	periodSeconds: 30
-  	readinessProbe:
-    	initialDelaySeconds: 10
-    	periodSeconds: 30
-  	repoConfig:
-    	name: repo-config
-  	repository: mirror.air-gapped.local:5000/mellanox
-  	startupProbe:
-    	initialDelaySeconds: 10
-    	periodSeconds: 20
-  	terminationGracePeriodSeconds: 300
-  	upgradePolicy:
-    	autoUpgrade: true
-    	drain:
-      	deleteEmptyDir: true
-      	enable: true
-      	force: true
-      	podSelector: ""
-      	timeoutSeconds: 300
-    	maxParallelUpgrades: 1
-    	safeLoad: false
-    	waitForCompletion:
-      	timeoutSeconds: 0
-  	version: sha256:9a831bfdf85f313b1f5749b7c9b2673bb8fff18b4ff768c9242dabaa4468e449
+    ofedDriver:
+      env:
+      - name: RESTORE_DRIVER_ON_POD_TERMINATION
+        value: "true"
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: CREATE_IFNAMES_UDEV
+        value: "true"
+      forcePrecompiled: true
+      image: doca-driver
+      imagePullSecrets:
+      - mirror-registry-ps
+      livenessProbe:
+        initialDelaySeconds: 30
+        periodSeconds: 30
+      readinessProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 30
+      repository: mirror.air-gapped.local:5000/mellanox
+      startupProbe:
+        initialDelaySeconds: 10
+        periodSeconds: 20
+      terminationGracePeriodSeconds: 300
+      upgradePolicy:
+        autoUpgrade: true
+        drain:
+          deleteEmptyDir: true
+          enable: true
+          force: true
+          podSelector: ""
+          timeoutSeconds: 300
+        maxParallelUpgrades: 1
+        safeLoad: false
+        waitForCompletion:
+          timeoutSeconds: 0
+      version: sha256:9a831bfdf85f313b1f5749b7c9b2673bb8fff18b4ff768c9242dabaa4468e449
 
-Note: Please be sure to provide configured ConfigMaps: `repo-config` and `cert-config`.
+
+------------------
+Image Pull Secrets
+------------------
 
 If your local repository requires username and password for access you need to create imagePullSecrets and provide this parameter in nic-cluster-policy.yaml:
 
