@@ -82,11 +82,19 @@
 <li class="toctree-l3"><a class="reference internal" href="#create-the-instances">Create the instances</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#create-the-nfd-instance">Create the NFD instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nvidia-doca-ofed-driver-container-in-disconnected-environment">NVIDIA DOCA OFED driver container in disconnected environment</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#create-local-package-repositories">Create Local Package Repositories</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#create-a-precompiled-container-for-the-doca-ofed-driver">Create a precompiled container for the DOCA OFED driver</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#option-1-use-the-nvidia-doca-ofed-driver-container-from-ngc">Option 1: Use the NVIDIA DOCA OFED driver container from NGC</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#mirroring-doca-ofed-driver-container">Mirroring DOCA OFED Driver Container</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#create-local-package-repositories">Create Local Package Repositories</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#create-the-nic-cluster-policy-instance">Create the NIC Cluster Policy instance</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#create-the-nic-cluster-policy-instance">Create the NIC Cluster Policy instance</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#option-2-create-a-precompiled-container-for-the-doca-ofed-driver">Option 2: Create a precompiled container for the DOCA OFED driver</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#id1">Create the NIC Cluster Policy instance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#image-pull-secrets">Image Pull Secrets</a></li>
 </ul>
 </li>
 </ul>
@@ -139,38 +147,48 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p>
+<li><p><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></p>
 <ul>
-<li><p><a class="reference internal" href="#network-layout-and-server-roles" id="id2">Network Layout and Server Roles</a></p></li>
+<li><p><a class="reference internal" href="#network-layout-and-server-roles" id="id3">Network Layout and Server Roles</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#mirroring-images-from-public-registries" id="id3">Mirroring images from public registries</a></p>
+<li><p><a class="reference internal" href="#mirroring-images-from-public-registries" id="id4">Mirroring images from public registries</a></p>
 <ul>
-<li><p><a class="reference internal" href="#install-openshift-cli" id="id4">Install OpenShift CLI</a></p></li>
-<li><p><a class="reference internal" href="#install-oc-mirror-plugin" id="id5">Install oc-mirror plugin</a></p></li>
-<li><p><a class="reference internal" href="#configure-the-oc-mirror-credentials" id="id6">Configure the oc-mirror credentials</a></p></li>
-<li><p><a class="reference internal" href="#create-the-oc-mirror-isc-imagesourceconfiguration" id="id7">Create the oc-mirror ISC (ImageSourceConfiguration)</a></p></li>
-<li><p><a class="reference internal" href="#create-the-operators-images-tar-file" id="id8">Create the operators’ images TAR file</a></p></li>
+<li><p><a class="reference internal" href="#install-openshift-cli" id="id5">Install OpenShift CLI</a></p></li>
+<li><p><a class="reference internal" href="#install-oc-mirror-plugin" id="id6">Install oc-mirror plugin</a></p></li>
+<li><p><a class="reference internal" href="#configure-the-oc-mirror-credentials" id="id7">Configure the oc-mirror credentials</a></p></li>
+<li><p><a class="reference internal" href="#create-the-oc-mirror-isc-imagesourceconfiguration" id="id8">Create the oc-mirror ISC (ImageSourceConfiguration)</a></p></li>
+<li><p><a class="reference internal" href="#create-the-operators-images-tar-file" id="id9">Create the operators’ images TAR file</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#upload-the-container-images-to-the-private-registry" id="id9">Upload the container images to the private registry</a></p>
+<li><p><a class="reference internal" href="#upload-the-container-images-to-the-private-registry" id="id10">Upload the container images to the private registry</a></p>
 <ul>
-<li><p><a class="reference internal" href="#move-the-tar-file-to-the-disconnected-environment" id="id10">Move the TAR file to the disconnected environment</a></p></li>
-<li><p><a class="reference internal" href="#mirroring-the-operator-from-disk-to-private-registry" id="id11">Mirroring the operator from disk to private registry</a></p></li>
+<li><p><a class="reference internal" href="#move-the-tar-file-to-the-disconnected-environment" id="id11">Move the TAR file to the disconnected environment</a></p></li>
+<li><p><a class="reference internal" href="#mirroring-the-operator-from-disk-to-private-registry" id="id12">Mirroring the operator from disk to private registry</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configure-the-openshift-catalog" id="id12">Configure the Openshift catalog</a></p></li>
-<li><p><a class="reference internal" href="#installing-operators-in-the-disconnected-environment" id="id13">Installing Operators in the disconnected environment</a></p></li>
-<li><p><a class="reference internal" href="#create-the-instances" id="id14">Create the instances</a></p>
+<li><p><a class="reference internal" href="#configure-the-openshift-catalog" id="id13">Configure the Openshift catalog</a></p></li>
+<li><p><a class="reference internal" href="#installing-operators-in-the-disconnected-environment" id="id14">Installing Operators in the disconnected environment</a></p></li>
+<li><p><a class="reference internal" href="#create-the-instances" id="id15">Create the instances</a></p>
 <ul>
-<li><p><a class="reference internal" href="#create-the-nfd-instance" id="id15">Create the NFD instance</a></p></li>
-<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-in-disconnected-environment" id="id16">NVIDIA DOCA OFED driver container in disconnected environment</a></p>
+<li><p><a class="reference internal" href="#create-the-nfd-instance" id="id16">Create the NFD instance</a></p></li>
+<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-in-disconnected-environment" id="id17">NVIDIA DOCA OFED driver container in disconnected environment</a></p>
 <ul>
-<li><p><a class="reference internal" href="#create-local-package-repositories" id="id17">Create Local Package Repositories</a></p></li>
-<li><p><a class="reference internal" href="#create-a-precompiled-container-for-the-doca-ofed-driver" id="id18">Create a precompiled container for the DOCA OFED driver</a></p></li>
+<li><p><a class="reference internal" href="#option-1-use-the-nvidia-doca-ofed-driver-container-from-ngc" id="id18">Option 1: Use the NVIDIA DOCA OFED driver container from NGC</a></p>
+<ul>
+<li><p><a class="reference internal" href="#mirroring-doca-ofed-driver-container" id="id19">Mirroring DOCA OFED Driver Container</a></p></li>
+<li><p><a class="reference internal" href="#create-local-package-repositories" id="id20">Create Local Package Repositories</a></p></li>
+<li><p><a class="reference internal" href="#create-the-nic-cluster-policy-instance" id="id21">Create the NIC Cluster Policy instance</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#create-the-nic-cluster-policy-instance" id="id19">Create the NIC Cluster Policy instance</a></p></li>
+<li><p><a class="reference internal" href="#option-2-create-a-precompiled-container-for-the-doca-ofed-driver" id="id22">Option 2: Create a precompiled container for the DOCA OFED driver</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id23">Create the NIC Cluster Policy instance</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#image-pull-secrets" id="id24">Image Pull Secrets</a></p></li>
 </ul>
 </li>
 </ul>
@@ -458,9 +476,49 @@ In Details &gt; Provided API’s look for (NFD) NodeFeatureDiscovery “Create i
 </section>
 <section id="nvidia-doca-ofed-driver-container-in-disconnected-environment">
 <h3>NVIDIA DOCA OFED driver container in disconnected environment<a class="headerlink" href="#nvidia-doca-ofed-driver-container-in-disconnected-environment" title="Permalink to this headline"></a></h3>
-<p>In case you want to use the NVIDIA DOCA OFED driver container in the disconnected environment, the following steps are required:</p>
+<p>In case you want to use the NVIDIA DOCA OFED driver container in the disconnected environment, there are two options:</p>
+<ul class="simple">
+<li><p>Option 1: Use the NVIDIA DOCA OFED driver container from NGC</p>
+<ul>
+<li><p>This container builds the DOCA OFED driver from source code dynamically, therefore requires mirroring needed dependencies.</p></li>
+</ul>
+</li>
+<li><p>Option 2: Create a precompiled container for the DOCA OFED driver</p>
+<ul>
+<li><p>With this option it is not required to mirror dependencies, but it will support only a specific kernel version.</p></li>
+</ul>
+</li>
+</ul>
+<section id="option-1-use-the-nvidia-doca-ofed-driver-container-from-ngc">
+<h4>Option 1: Use the NVIDIA DOCA OFED driver container from NGC<a class="headerlink" href="#option-1-use-the-nvidia-doca-ofed-driver-container-from-ngc" title="Permalink to this headline"></a></h4>
+<section id="mirroring-doca-ofed-driver-container">
+<h5>Mirroring DOCA OFED Driver Container<a class="headerlink" href="#mirroring-doca-ofed-driver-container" title="Permalink to this headline"></a></h5>
+<p>Navigate to the NVIDIA catalog and looking for the right &lt;os-version&gt;-&lt;architecture&gt; suffix tag, such as <cite>doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64</cite>.</p>
+<p>The mirrored image must be tagged <cite>&lt;driver-version&gt;-&lt;os-version&gt;-&lt;architecture&gt;</cite>, such as <cite>doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64</cite> for example.</p>
+<p>Note that since OCP 4.19, the os version is now <cite>rhel9.6</cite> instead of <cite>rhcos4.x</cite>.</p>
+</section>
 <section id="create-local-package-repositories">
-<h4>Create Local Package Repositories<a class="headerlink" href="#create-local-package-repositories" title="Permalink to this headline"></a></h4>
+<h5>Create Local Package Repositories<a class="headerlink" href="#create-local-package-repositories" title="Permalink to this headline"></a></h5>
+<p>The DOCA-OFED Driver container requires certain packages to be available for the driver installation.
+The following packages are required:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="o">-</span><span class="n">headers</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+<span class="n">kernel</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+<span class="n">kernel</span><span class="o">-</span><span class="n">core</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+<span class="n">createrepo</span><span class="w"></span>
+<span class="n">elfutils</span><span class="o">-</span><span class="n">libelf</span><span class="o">-</span><span class="n">devel</span><span class="w"></span>
+<span class="n">kernel</span><span class="o">-</span><span class="n">rpm</span><span class="o">-</span><span class="n">macros</span><span class="w"></span>
+<span class="n">umactl</span><span class="o">-</span><span class="n">libs</span><span class="w"></span>
+<span class="n">lsof</span><span class="w"></span>
+<span class="n">rpm</span><span class="o">-</span><span class="n">build</span><span class="w"></span>
+<span class="n">patch</span><span class="w"></span>
+<span class="n">hostname</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For RT kernels following packages should be available:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">kernel</span><span class="o">-</span><span class="n">rt</span><span class="o">-</span><span class="n">devel</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+<span class="n">kernel</span><span class="o">-</span><span class="n">rt</span><span class="o">-</span><span class="n">modules</span><span class="o">-</span><span class="n">$</span><span class="p">{</span><span class="n">KERNEL_VERSION</span><span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Create the Local Package Repository required:</p>
 <ul class="simple">
 <li><p>redhat.repo</p></li>
@@ -473,13 +531,15 @@ Instructions on how to create a repo file can be found <a class="reference exter
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>baseos<span class="o">]</span>
 <span class="nv">name</span><span class="o">=</span>rhel-9-for-x86_64-baseos-rpms
 <span class="nv">baseurl</span><span class="o">=</span>http://srv01.air-gapped.local/redhat/9.4/el-9-for-x86_64-baseos-rpms
-<span class="nv">gpgcheck</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">gpgkey</span> <span class="o">=</span> file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">1</span>
 <span class="nv">enabled</span><span class="o">=</span><span class="m">1</span>
 
 <span class="o">[</span>apstream<span class="o">]</span>
 <span class="nv">name</span><span class="o">=</span>rhel-9-for-x86_64-appstream-rpms
 <span class="nv">baseurl</span><span class="o">=</span>http://srv01.air-gapped.local/redhat/rhel-9-for-x86_64-appstream-rpms
-<span class="nv">gpgcheck</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">gpgkey</span> <span class="o">=</span> file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">1</span>
 <span class="nv">enabled</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
@@ -488,12 +548,14 @@ Instructions on how to create a repo file can be found <a class="reference exter
 <span class="nv">name</span> <span class="o">=</span> Red Hat Universal Base Image <span class="m">9</span> <span class="o">(</span>RPMs<span class="o">)</span> - BaseOS
 <span class="nv">baseurl</span> <span class="o">=</span> http://srv01.air-gapped.local/redhat/ubi-9-baseos-rpms
 <span class="nv">enabled</span> <span class="o">=</span> <span class="m">1</span>
-<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">gpgkey</span> <span class="o">=</span> file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">1</span>
 <span class="o">[</span>ubi-9-appstream<span class="o">]</span>
 <span class="nv">name</span> <span class="o">=</span> Red Hat Universal Base Image <span class="m">9</span> <span class="o">(</span>RPMs<span class="o">)</span> - AppStream
 <span class="nv">baseurl</span> <span class="o">=</span> http://srv01.air-gapped.local/redhat/ubi-9-appstream-rpms
 <span class="nv">enabled</span> <span class="o">=</span> <span class="m">1</span>
-<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">gpgkey</span> <span class="o">=</span> file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+<span class="nv">gpgcheck</span> <span class="o">=</span> <span class="m">1</span>
 </pre></div>
 </div>
 <p>cuda.repo:</p>
@@ -501,7 +563,8 @@ Instructions on how to create a repo file can be found <a class="reference exter
 <span class="nv">name</span><span class="o">=</span>cuda
 <span class="nv">baseurl</span><span class="o">=</span>http://srv01.air-gapped.local/nvidia/cuda
 <span class="nv">priority</span><span class="o">=</span><span class="m">0</span>
-<span class="nv">gpgcheck</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">gpgcheck</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">gpgkey</span><span class="o">=</span>http://srv01.air-gapped.local/nvidia/cuda/D42D0685.pub
 <span class="nv">enabled</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
@@ -514,9 +577,62 @@ Instructions on how to create a repo file can be found <a class="reference exter
 </pre></div>
 </div>
 </section>
-<section id="create-a-precompiled-container-for-the-doca-ofed-driver">
-<h4>Create a precompiled container for the DOCA OFED driver<a class="headerlink" href="#create-a-precompiled-container-for-the-doca-ofed-driver" title="Permalink to this headline"></a></h4>
-<p>We will use the mirror server to build the precompiled container for the DOCA OFED driver.</p>
+<section id="create-the-nic-cluster-policy-instance">
+<h5>Create the NIC Cluster Policy instance<a class="headerlink" href="#create-the-nic-cluster-policy-instance" title="Permalink to this headline"></a></h5>
+<p>In the web console, click “Operators &gt; Installed Operators”, and then “NVIDIA Network Operator &gt; NicClusterPolicy &gt; Create NicClusterPolicy”</p>
+<p>You need to provide required parameters depending on your setup. After editing and overriding our nic-cluster-policy yaml looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">certConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-config</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESTORE_DRIVER_ON_POD_TERMINATION</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNLOAD_STORAGE_MODULES</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CREATE_IFNAMES_UDEV</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror-registry-ps</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repoConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo-config</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror.air-gapped.local:5000/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">safeLoad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">      </span><span class="nt">waitForCompletion</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.1.0-25.07-0.9.7.0-0</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note: Please be sure to provide configured ConfigMaps: <cite>repo-config</cite> and <cite>cert-config</cite>.</p>
+</section>
+</section>
+<section id="option-2-create-a-precompiled-container-for-the-doca-ofed-driver">
+<h4>Option 2: Create a precompiled container for the DOCA OFED driver<a class="headerlink" href="#option-2-create-a-precompiled-container-for-the-doca-ofed-driver" title="Permalink to this headline"></a></h4>
 <p>Please verify that you have the following:</p>
 <ul class="simple">
 <li><p>Podman (RH) installed on your build system</p></li>
@@ -532,60 +648,58 @@ Working with container images is described in this <a class="reference external"
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>skopeo inspect docker://mirror.air-gapped.local:5000/mellanox/doca-driver:your-tag <span class="p">|</span> jq -r <span class="s1">&#39;.Digest&#39;</span>
 </pre></div>
 </div>
-</section>
-</section>
-<section id="create-the-nic-cluster-policy-instance">
-<h3>Create the NIC Cluster Policy instance<a class="headerlink" href="#create-the-nic-cluster-policy-instance" title="Permalink to this headline"></a></h3>
+<section id="id1">
+<h5>Create the NIC Cluster Policy instance<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h5>
 <p>In the web console, click “Operators &gt; Installed Operators”, and then “NVIDIA Network Operator &gt; NicClusterPolicy &gt; Create NicClusterPolicy”</p>
 <p>You need to provide required parameters depending on your setup. After editing and overriding our nic-cluster-policy yaml looks like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">certConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-config</span><span class="w"></span>
-<span class="w">      </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESTORE_DRIVER_ON_POD_TERMINATION</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESTORE_DRIVER_ON_POD_TERMINATION</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNLOAD_STORAGE_MODULES</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNLOAD_STORAGE_MODULES</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CREATE_IFNAMES_UDEV</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CREATE_IFNAMES_UDEV</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror-registry-ps</span><span class="w"></span>
-<span class="w">      </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">forcePrecompiled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror-registry-ps</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
 <span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
-<span class="w">      </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
 <span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
-<span class="w">      </span><span class="nt">repoConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">repo-config</span><span class="w"></span>
-<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror.air-gapped.local:5000/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror.air-gapped.local:5000/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
 <span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
-<span class="w">      </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
-<span class="w">      </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">        </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">podSelector</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
 <span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">      </span><span class="nt">safeLoad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">      </span><span class="nt">waitForCompletion</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:9a831bfdf85f313b1f5749b7c9b2673bb8fff18b4ff768c9242dabaa4468e449</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:9a831bfdf85f313b1f5749b7c9b2673bb8fff18b4ff768c9242dabaa4468e449</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Note: Please be sure to provide configured ConfigMaps: <cite>repo-config</cite> and <cite>cert-config</cite>.</p>
+</section>
+</section>
+</section>
+<section id="image-pull-secrets">
+<h3>Image Pull Secrets<a class="headerlink" href="#image-pull-secrets" title="Permalink to this headline"></a></h3>
 <p>If your local repository requires username and password for access you need to create imagePullSecrets and provide this parameter in nic-cluster-policy.yaml:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mirror-registry-ps</span><span class="w"></span>
@@ -612,7 +726,7 @@ mirror-registry-ps
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 11, 2025.
+      <span class="lastupdated">Last updated on Nov 12, 2025.
       </span></p>
   </div>
 
