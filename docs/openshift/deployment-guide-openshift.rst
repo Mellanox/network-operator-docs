@@ -342,6 +342,10 @@ In OCP, some components are deployed by default like Multus and CNI Plugins, whe
 
 In addition, since there is no use of the Helm chart, the configuration should be done via the NicClusterPolicy CRD.
 
+.. note::
+   In OCP, Multus is configured with `namespaceIsolation` enabled by default. This means that Pods using secondary networks should be deployed in the same namespace as the `network-attachment-definition` CR unless the NAD is in one of the following namespaces: `default`, `openshift-multus`, `openshift-sriov-network-operator` and `openshift-cnv`.
+   The namespace of the NAD can be set in the `networkNamespace` field in `HostDeviceNetwork`, `MacvlanNetwork`, `IPoIBNetwork`, `OVSNetwork` and `SriovNetwork`.
+
 Following are examples of NicClusterPolicy configuration for OCP.
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
