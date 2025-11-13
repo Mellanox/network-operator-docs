@@ -734,6 +734,9 @@ NicConfigurationOperatorSpec is the configuration for NIC Configuration Operator
       | ``configurationDaemon``                                                                           | Image information for nic-configuration-daemon                                                    |
       | :ref:`ImageSpec <ImageSpec>`                                                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``env``                                                                                           | List of environment variables to set in the NIC Configuration Operator and NIC Configuration      |
+      | `[]Kubernetes core/v1.EnvVar <https://godoc.org/k8s.io/api/core/v1#EnvVar>`__                     | Daemon containers.                                                                                |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``nicFirmwareStorage``                                                                            | NicFirmwareStorage contains configuration for the NIC firmware storage. If not provided, the NIC  |
       | :ref:`NicFirmwareStorageSpec <NicFirmwareStorageSpec>`                                            | firmware storage will not be configured.                                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
