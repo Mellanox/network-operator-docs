@@ -430,6 +430,11 @@ nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">1<
 <h4>Deployment Examples For OpenShift Container Platform<a class="headerlink" href="#deployment-examples-for-openshift-container-platform" title="Permalink to this headline"></a></h4>
 <p>In OCP, some components are deployed by default like Multus and CNI Plugins, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.</p>
 <p>In addition, since there is no use of the Helm chart, the configuration should be done via the NicClusterPolicy CRD.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In OCP, Multus is configured with <cite>namespaceIsolation</cite> enabled by default. This means that Pods using secondary networks should be deployed in the same namespace as the <cite>network-attachment-definition</cite> CR unless the NAD is in one of the following namespaces: <cite>default</cite>, <cite>openshift-multus</cite>, <cite>openshift-sriov-network-operator</cite> and <cite>openshift-cnv</cite>.
+The namespace of the NAD can be set in the <cite>networkNamespace</cite> field in <cite>HostDeviceNetwork</cite>, <cite>MacvlanNetwork</cite>, <cite>IPoIBNetwork</cite>, <cite>OVSNetwork</cite> and <cite>SriovNetwork</cite>.</p>
+</div>
 <p>Following are examples of NicClusterPolicy configuration for OCP.</p>
 <section id="network-operator-deployment-with-a-host-device-network-ocp">
 <h5>Network Operator Deployment with a Host Device Network - OCP<a class="headerlink" href="#network-operator-deployment-with-a-host-device-network-ocp" title="Permalink to this headline"></a></h5>
@@ -759,7 +764,7 @@ The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 13, 2025.
+      <span class="lastupdated">Last updated on Nov 16, 2025.
       </span></p>
   </div>
 
