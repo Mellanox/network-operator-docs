@@ -297,14 +297,12 @@ SLES
    * - Tags
      - Digest
    * -
-       | doca3.2.0-25.10-1.1.7.0-0-sles15.7
-     - sha256:745dd3b1cbadd95d14d2380701fd6fdf33063f59ffc97adb65f25c1d36445a2b
+       | doca3.2.0-25.10-1.2.8.0-0-sles15.7-amd64
+     - sha256:7383232338713ddb6c4156b2e67a217b3c819b0c03f590c703b657f37166ce46
    * -
-       | doca3.2.0-25.10-1.1.7.0-0-sles15.7-amd64
-     - sha256:7acc610a42faa91aedfc475df4004ba39f705b45af1681fe9456d05dbc3afafb
-   * -
-       | doca3.2.0-25.10-1.1.7.0-0-sles15.7-arm64
-     - sha256:45a7c8d21e9efdf59461862c964d30c05ddd86a303c4bbe2f89e75e2919e5a62
+       | doca3.2.0-25.10-1.2.8.0-0-sles15.7-arm64
+     - sha256:d78dea23c989a354a77d04a54f7a1efd391bd657ae33bc939b564f600e09db78
+
 
 =====================================================
 STIG FIPS Compliant DOCA-OFED Driver Container Images
