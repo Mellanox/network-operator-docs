@@ -63,9 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#validated-kubernetes-distributions">Validated Kubernetes Distributions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#install-government-ready-nvidia-network-operator">Install Government-Ready NVIDIA Network Operator</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#install-node-feature-discovery-nfd">Install Node Feature Discovery (NFD)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#create-ngc-api-pull-secret">Create NGC API Pull Secret</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#create-ubuntu-pro-token-secret">Create Ubuntu Pro Token Secret</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#install-nvidia-network-operator-government-ready-components">Install NVIDIA Network Operator Government-Ready Components</a></li>
 </ul>
 </li>
@@ -134,51 +132,49 @@ For more information on NVIDIA’s government-ready support, refer to the white 
 </thead>
 <tbody>
 <tr class="row-even"><td><p>NVIDIA Network Operator</p></td>
-<td><p>v25.10.0-beta.5</p></td>
+<td><p>v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-odd"><td><p>NVIDIA Network Operator Init Container</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>DOCA-OFED Driver Container</p></td>
 <td><p>doca3.2.0-25.10-1.2.2.0-0</p></td>
 </tr>
 <tr class="row-odd"><td><p>RDMA Shared Device Plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>IP Over Infiniband (IPoIB) CNI plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-odd"><td><p>SRIOV Network Operator Config</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>SRIOV Network Operator Config Config Daemon</p></td>
-<td><p>network-operator-v25.10.0-beta.5-stig-fips</p></td>
+<td><p>network-operator-v25.10.0-rc.1-stig-fips</p></td>
 </tr>
 <tr class="row-odd"><td><p>SR-IOV Network Device Plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>SR-IOV CNI plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-odd"><td><p>InfiniBand SR-IOV CNI plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>K8s CNI network plugins</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-odd"><td><p>Multus CNI</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 <tr class="row-even"><td><p>RDMA CNI plugin</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 </tr>
 <tr class="row-odd"><td><p>NVIDIA IPAM Plugin</p></td>
-<td><p>network-operator-v25.10.0-beta.5</p></td>
+<td><p>network-operator-v25.10.0-rc.1</p></td>
 </tr>
 </tbody>
 </table>
-<p><sup>1</sup>
-Hardened for STIG/FIPS compliance</p>
 <p>Artifacts for these components are available from the <a class="reference external" href="https://registry.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver-stig-fips">NVIDIA NGC Catalog</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -188,16 +184,14 @@ Hardened for STIG/FIPS compliance</p>
 <h3>Validated Kubernetes Distributions<a class="headerlink" href="#validated-kubernetes-distributions" title="Permalink to this headline"></a></h3>
 <p>The government-ready NVIDIA Network Operator has been validated on the following Kubernetes distributions:</p>
 <ul class="simple">
-<li><p>Canonical Kubernetes 1.34 with Ubuntu Pro 24.04 and FIPS-compliant kernel</p></li>
+<li><p>Canonical Kubernetes 1.34 with Ubuntu Pro 24.04 amd64 and FIPS-compliant kernel</p></li>
 </ul>
 </section>
 <section id="install-government-ready-nvidia-network-operator">
 <h3>Install Government-Ready NVIDIA Network Operator<a class="headerlink" href="#install-government-ready-nvidia-network-operator" title="Permalink to this headline"></a></h3>
 <p>Once you have your <a class="reference internal" href="#gov-ready-prerequisites"><span class="std std-ref">Prerequisites</span></a> configured, use the following steps to install the NVIDIA Network Operator on Canonical Kubernetes distributions:</p>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="#install-nfd"><span class="std std-ref">Install Node Feature Discovery (NFD)</span></a></p></li>
 <li><p><a class="reference internal" href="#create-ngc-api-pull-secret"><span class="std std-ref">Create NGC API Pull Secret</span></a></p></li>
-<li><p><a class="reference internal" href="#create-ubuntu-pro-token-secret"><span class="std std-ref">Create Ubuntu Pro Token Secret</span></a></p></li>
 <li><p><a class="reference internal" href="#deploy-nvidia-network-operator-gov-ready"><span class="std std-ref">Install NVIDIA Network Operator Government-Ready Components</span></a></p></li>
 </ol>
 <section id="prerequisites">
@@ -223,15 +217,6 @@ By default, the NVIDIA Network Operator does not encrypt traffic between its con
 If you wish to encrypt this communication, you should deploy and maintain a service mesh application within the Kubernetes cluster to enable secure traffic.</p></li>
 </ul>
 </section>
-<section id="install-node-feature-discovery-nfd">
-<span id="install-nfd"></span><h4>Install Node Feature Discovery (NFD)<a class="headerlink" href="#install-node-feature-discovery-nfd" title="Permalink to this headline"></a></h4>
-<p>NFD is an open-source project that is a dependency for the Operator on each node in your cluster.
-It must be deployed before installing the NVIDIA Network Operator.</p>
-<p>Network Operator does not maintain a government ready version of NFD, it is recommended that you install the upstream NFD version that aligns with the <a class="reference internal" href="platform-support.html#network-operator-component-matrix"><span class="std std-ref">Network Operator Component Matrix</span></a>.
-The NFD container is built on top of a scratch image, providing a highly secure container environment.
-For information on NFD CVEs and security updates, refer to the <a class="reference external" href="https://github.com/kubernetes-sigs/node-feature-discovery/security">NFD GitHub repository</a>.</p>
-<p>Refer to the NFD documentation for <a class="reference external" href="https://kubernetes-sigs.github.io/node-feature-discovery/stable/get-started/index.html">installation instructions</a>.</p>
-</section>
 <section id="create-ngc-api-pull-secret">
 <span id="id1"></span><h4>Create NGC API Pull Secret<a class="headerlink" href="#create-ngc-api-pull-secret" title="Permalink to this headline"></a></h4>
 <p>Add a Docker registry secret for downloading the Network Operator artifacts from NVIDIA NGC in the same namespace where you are planning to deploy the NVIDIA Network Operator.
@@ -242,12 +227,6 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
     --docker-password<span class="o">=</span>&lt;ngc-api-key&gt;
 </pre></div>
 </div>
-</section>
-<section id="create-ubuntu-pro-token-secret">
-<span id="id2"></span><h4>Create Ubuntu Pro Token Secret<a class="headerlink" href="#create-ubuntu-pro-token-secret" title="Permalink to this headline"></a></h4>
-<p>Create a Kubernetes secret to hold the value of your Ubuntu Pro token secret.
-This secret will be used in the install command in the next step.</p>
-<p>The Ubuntu Pro Token is required for the driver container to download kernel headers and other necessary packages from the Canonical repository when using the FIPS-enabled kernel on Ubuntu 24.04.</p>
 </section>
 <section id="install-nvidia-network-operator-government-ready-components">
 <span id="deploy-nvidia-network-operator-gov-ready"></span><h4>Install NVIDIA Network Operator Government-Ready Components<a class="headerlink" href="#install-nvidia-network-operator-government-ready-components" title="Permalink to this headline"></a></h4>
@@ -277,13 +256,23 @@ This secret will be used in the install command in the next step.</p>
 </section>
 </section>
 <section id="update-ubuntu-pro-token-in-nicclusterpolicy">
-<span id="id3"></span><h3>Update Ubuntu Pro Token in NicClusterPolicy<a class="headerlink" href="#update-ubuntu-pro-token-in-nicclusterpolicy" title="Permalink to this headline"></a></h3>
+<span id="id2"></span><h3>Update Ubuntu Pro Token in NicClusterPolicy<a class="headerlink" href="#update-ubuntu-pro-token-in-nicclusterpolicy" title="Permalink to this headline"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">UBUNTU_PRO_TOKEN</span></code> environment variable of the Network Operator NicClusterPolicy should be configured.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl edit nicclusterpolicy nic-cluster-policy
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver-stig-fips</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.2.2.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UBUNTU_PRO_TOKEN</span><span class="w"></span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;YOUR_UBUNTU_PRO_TOKEN&gt;&quot;</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Then update the secret with your new Ubuntu Pro Token.
-This token is required for the driver container to download kernel headers and other necessary packages from the Canonical repository when using the FIPS-enabled kernel on Ubuntu 24.04.</p>
+<p>This token is required for the driver container to download kernel headers and other necessary packages from the Canonical repository when using the FIPS-enabled kernel on Ubuntu 24.04.</p>
 </section>
 </section>
 </section>
@@ -297,7 +286,7 @@ This token is required for the driver container to download kernel headers and o
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 12, 2025.
+      <span class="lastupdated">Last updated on Nov 17, 2025.
       </span></p>
   </div>
 

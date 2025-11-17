@@ -1114,12 +1114,17 @@ string</p></td>
 <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
 <td><p>Image information for nic-configuration-daemon</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicFirmwareStorage</span></code>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#EnvVar">[]Kubernetes core/v1.EnvVar</a></p></td>
+<td><p>List of environment variables to set in the NIC Configuration Operator and NIC Configuration
+Daemon containers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nicFirmwareStorage</span></code>
 <a class="reference internal" href="#nicfirmwarestoragespec"><span class="std std-ref">NicFirmwareStorageSpec</span></a></p></td>
 <td><p>NicFirmwareStorage contains configuration for the NIC firmware storage. If not provided, the NIC
 firmware storage will not be configured.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">logLevel</span></code>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logLevel</span></code>
 string</p></td>
 <td><p>LogLevel sets the verbosity level of the logs. info|debug</p></td>
 </tr>
@@ -1429,7 +1434,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 12, 2025.
+      <span class="lastupdated">Last updated on Nov 17, 2025.
       </span></p>
   </div>
 
