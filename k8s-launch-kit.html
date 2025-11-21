@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+  <title>[TECH PREVIEW] Configuration Assistance with NVIDIA Kubernetes Launch Kit &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -104,7 +104,7 @@
 
 <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
   
-<li>[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</li>
+<li>[TECH PREVIEW] Configuration Assistance with NVIDIA Kubernetes Launch Kit</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -119,8 +119,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tech-preview-configuration-assistance-with-kubernetes-launch-kit">
-<h1>[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit<a class="headerlink" href="#tech-preview-configuration-assistance-with-kubernetes-launch-kit" title="Permalink to this headline"></a></h1>
+  <section id="tech-preview-configuration-assistance-with-nvidia-kubernetes-launch-kit">
+<h1>[TECH PREVIEW] Configuration Assistance with NVIDIA Kubernetes Launch Kit<a class="headerlink" href="#tech-preview-configuration-assistance-with-nvidia-kubernetes-launch-kit" title="Permalink to this headline"></a></h1>
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
@@ -146,7 +146,7 @@
 <li><p><a class="reference internal" href="#configuration-file-format" id="id16">Configuration File Format</a></p></li>
 </ul>
 </div>
-<p>Kubernetes Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.</p>
+<p>NVIDIA Kubernetes Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
 <p>For prerequisites, please refer to the <a class="reference internal" href="deployment-guide-kubernetes.html"><span class="doc">NVIDIA Network Operator Deployment Guide with Kubernetes</span></a> page.</p>
@@ -292,9 +292,13 @@ l8k --user-config ./config.yaml <span class="se">\</span>
 You can use this file as a starting point for your own configuration. Own configuration file can be provided to the tool using <cite>–user-config</cite> flag.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v25.10.0-rc.1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v25.10.0-rc.1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-rc.1</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.2.8.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">poolName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam-pool</span><span class="w"></span>
 <span class="w">  </span><span class="nt">subnets</span><span class="p">:</span><span class="w"></span>
@@ -338,19 +342,21 @@ You can use this file as a starting point for your own configuration. Own config
 <span class="w">        </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">        </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">        </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
-<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
-<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
-<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
-<span class="w">          </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
-<span class="w">          </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
-<span class="w">          </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
+<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
+<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-40</span><span class="w"></span>
