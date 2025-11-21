@@ -18,16 +18,16 @@
 .. include:: ./common/vars.rst
 
 
-******************************************************************
-[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit
-******************************************************************
+*************************************************************************
+[TECH PREVIEW] Configuration Assistance with NVIDIA Kubernetes Launch Kit
+*************************************************************************
 
 .. contents:: On this page
    :depth: 3
    :local:
    :backlinks: none
 
-Kubernetes Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.
+NVIDIA Kubernetes Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.
 
 -------------
 Prerequisites
@@ -216,6 +216,10 @@ You can use this file as a starting point for your own configuration. Own config
       componentVersion: |k8s-launch-kit-component-version|
       repository: |k8s-launch-kit-network-operator-repository|
       namespace: nvidia-network-operator
+    docaDriver:
+      version: |doca-driver-version|
+      unloadStorageModules: false
+      enableNFSRDMA: false
     nvIpam:
       poolName: nv-ipam-pool
     subnets:
@@ -259,19 +263,21 @@ You can use this file as a starting point for your own configuration. Own config
           sriov: true
           rdma: true
           ib: true
-        pfs:
-          - rdmaDevice: mlx5_0
-            pciAddress: "0000:03:00.0"
-            networkInterface: enp3s0f0np0
-            traffic: east-west
-          - rdmaDevice: mlx5_1
-            pciAddress: "0000:03:00.1"
-            networkInterface: enp3s0f1np1
-            traffic: east-west
-          - rdmaDevice: mlx5_2
-            pciAddress: 0000:81:00.0
-            networkInterface: enp129s0np0
-            traffic: east-west
+      pfs:
+        - rdmaDevice: mlx5_0
+          pciAddress: "0000:03:00.0"
+          networkInterface: enp3s0f0np0
+          traffic: east-west
+        - rdmaDevice: mlx5_1
+          pciAddress: "0000:03:00.1"
+          networkInterface: enp3s0f1np1
+          traffic: east-west
+        - rdmaDevice: mlx5_2
+          pciAddress: 0000:81:00.0
+          networkInterface: enp129s0np0
+          traffic: east-west
+      nodeSelector:
+        feature.node.kubernetes.io/pci-15b3.present: "true"     
       workerNodes:
         - cloud-dev-41
         - cloud-dev-40  
