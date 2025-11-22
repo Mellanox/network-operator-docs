@@ -6,18 +6,18 @@ spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.10.0-rc.1
+    version: network-operator-v25.10.0-rc.2
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.10.0-rc.1
+    version: network-operator-v25.10.0-rc.2
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.10.0-rc.1
+      version: network-operator-v25.10.0-rc.2
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v25.10.0-rc.1
+      version: network-operator-v25.10.0-rc.2
