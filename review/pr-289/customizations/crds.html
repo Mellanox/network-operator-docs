@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v25.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NicClusterPolicy Custom Resource Example" href="cr-full-example.html" />
+    <link rel="prev" title="Helm Chart Customization Options" href="helm.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="helm.html">Helm Chart</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CRDs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mellanox-com-v1alpha1">mellanox.com/v1alpha1</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#appliedstate">AppliedState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configmapnamereference">ConfigMapNameReference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docatelemetryserviceconfig">DOCATelemetryServiceConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#docatelemetryservicespec">DOCATelemetryServiceSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#devicepluginspec">DevicePluginSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#drainspec">DrainSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#driverupgradepolicyspec">DriverUpgradePolicySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetwork">HostDeviceNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetworkspec">HostDeviceNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hostdevicenetworkstatus">HostDeviceNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ibkubernetesspec">IBKubernetesSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetwork">IPoIBNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetworkspec">IPoIBNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipoibnetworkstatus">IPoIBNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#imagespec">ImageSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#imagespecwithconfig">ImageSpecWithConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetwork">MacvlanNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetworkspec">MacvlanNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#macvlannetworkstatus">MacvlanNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multusspec">MultusSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfeaturediscoveryspec">NICFeatureDiscoverySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nvipamspec">NVIPAMSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicy">NicClusterPolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicyspec">NicClusterPolicySpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicclusterpolicystatus">NicClusterPolicyStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicconfigurationoperatorspec">NicConfigurationOperatorSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicfirmwarestoragespec">NicFirmwareStorageSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ofeddriverspec">OFEDDriverSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#podprobespec">PodProbeSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resourcerequirements">ResourceRequirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#secondarynetworkspec">SecondaryNetworkSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumxoperatorspec">SpectrumXOperatorSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#state-string-alias">State (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#waitforcompletionspec">WaitForCompletionSpec</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cr-full-example.html">NicClusterPolicy Reference Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="customization.html">Customization Options</a> &raquo;</li>
+<li>Network Operator API reference v1alpha1</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="network-operator-api-reference-v1alpha1">
+<h1>Network Operator API reference v1alpha1<a class="headerlink" href="#network-operator-api-reference-v1alpha1" title="Permalink to this headline"></a></h1>
+<p>Packages:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#mellanox-com-v1alpha1"><span class="std std-ref">mellanox.com/v1alpha1</span></a></p></li>
+</ul>
+<section id="mellanox-com-v1alpha1">
+<span id="id1"></span><h2>mellanox.com/v1alpha1<a class="headerlink" href="#mellanox-com-v1alpha1" title="Permalink to this headline"></a></h2>
+<p>Package v1alpha1 contains API Schema definitions for the mellanox.com v1alpha1 API group</p>
+<p>Resource Types:</p>
+<section id="appliedstate">
+<span id="id2"></span><h3>AppliedState<a class="headerlink" href="#appliedstate" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#hostdevicenetworkstatus"><span class="std std-ref">HostDeviceNetworkStatus</span></a>, <a class="reference internal" href="#nicclusterpolicystatus"><span class="std std-ref">NicClusterPolicyStatus</span></a>)</p>
+<p>AppliedState defines a finer-grained view of the observed state of NicClusterPolicy</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code>
+string</p></td>
+<td><p>Name of the deployed component this state refers to</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+<a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
+<td><p>The state of the deployed component. (“ready”, “notReady”, “ignore”, “error”)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code>
+string</p></td>
+<td><p>Message is a human readable message indicating details about why the state is in this condition</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="configmapnamereference">
+<span id="id3"></span><h3>ConfigMapNameReference<a class="headerlink" href="#configmapnamereference" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
+<p>ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code>
+string</p></td>
+<td><p>Name of the ConfigMap</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="docatelemetryserviceconfig">
+<span id="id4"></span><h3>DOCATelemetryServiceConfig<a class="headerlink" href="#docatelemetryserviceconfig" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATelemetryServiceSpec</span></a>)</p>
+<p>DOCATelemetryServiceConfig contains configuration for the DOCATelemetryService.</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">fromConfigMap</span></code>
+string</p></td>
+<td><p><em>(Optional)</em>
+FromConfigMap sets the configMap the DOCATelemetryService gets its configuration from. The
+ConfigMap must be in the same namespace as the NICClusterPolicy.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="docatelemetryservicespec">
+<span id="id5"></span><h3>DOCATelemetryServiceSpec<a class="headerlink" href="#docatelemetryservicespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for DOCA Telemetry Service</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code>
+<a class="reference internal" href="#docatelemetryserviceconfig"><span class="std std-ref">DOCATelemetryServiceConfig</span></a></p></td>
+<td><p><em>(Optional)</em>
+Config contains custom config for the DOCATelemetryService. If set no default config will be
+deployed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="devicepluginspec">
+<span id="id6"></span><h3>DevicePluginSpec<a class="headerlink" href="#devicepluginspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>DevicePluginSpec describes configuration options for device plugin 1. Image information for device plugin 2. Device plugin configuration</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpecWithConfig</span></code>
+<a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a></p></td>
+<td><p>Image information for the device plugin and optional configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">useCdi</span></code>
+bool</p></td>
+<td><p>Enables use of container device interface (CDI) NOTE: NVIDIA Network Operator does not configure
+container runtime to enable CDI.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="drainspec">
+<span id="id7"></span><h3>DrainSpec<a class="headerlink" href="#drainspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a>)</p>
+<p>DrainSpec describes configuration for node drain during automatic upgrade</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+Enable indicates if node draining is allowed during upgrade</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">force</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+Force indicates if force draining is allowed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">podSelector</span></code>
+string</p></td>
+<td><p><em>(Optional)</em>
+PodSelector specifies a label selector to filter pods on the node that need to be drained For
+more details on label selectors, see:
+<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeoutSeconds</span></code>
+int</p></td>
+<td><p><em>(Optional)</em>
+TimeoutSecond specifies the length of time in seconds to wait before giving up drain, zero means
+infinite</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deleteEmptyDir</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+DeleteEmptyDir indicates if should continue even if there are pods using emptyDir (local data
+that will be deleted when the node is drained)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="driverupgradepolicyspec">
+<span id="id8"></span><h3>DriverUpgradePolicySpec<a class="headerlink" href="#driverupgradepolicyspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
+<p>DriverUpgradePolicySpec describes policy configuration for automatic upgrades</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">autoUpgrade</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+AutoUpgrade is a global switch for automatic upgrade feature if set to false all other options
+are ignored</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">maxParallelUpgrades</span></code>
+int</p></td>
+<td><p><em>(Optional)</em>
+MaxParallelUpgrades indicates how many nodes can be upgraded in parallel 0 means no limit, all
+nodes will be upgraded in parallel</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">waitForCompletion</span></code>
+<a class="reference internal" href="#waitforcompletionspec"><span class="std std-ref">WaitForCompletionSpec</span></a></p></td>
+<td><p>The configuration for waiting on pods completions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">drain</span></code>
+<a class="reference internal" href="#drainspec"><span class="std std-ref">DrainSpec</span></a></p></td>
+<td><p>The configuration for node drain during automatic upgrade</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">safeLoad</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hostdevicenetwork">
+<span id="id9"></span><h3>HostDeviceNetwork<a class="headerlink" href="#hostdevicenetwork" title="Permalink to this headline"></a></h3>
+<p>HostDeviceNetwork is the Schema for the hostdevicenetworks API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#hostdevicenetworkspec"><span class="std std-ref">HostDeviceNetworkSpec</span></a></p></td>
+<td><p>Defines the desired state of HostDeviceNetwork</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#hostdevicenetworkstatus"><span class="std std-ref">HostDeviceNetworkStatus</span></a></p></td>
+<td><p>Defines the observed state of HostDeviceNetwork</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hostdevicenetworkspec">
+<span id="id10"></span><h3>HostDeviceNetworkSpec<a class="headerlink" href="#hostdevicenetworkspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#hostdevicenetwork"><span class="std std-ref">HostDeviceNetwork</span></a>)</p>
+<p>HostDeviceNetworkSpec defines the desired state of HostDeviceNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
+string</p></td>
+<td><p>Namespace of the NetworkAttachmentDefinition custom resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">resourceName</span></code>
+string</p></td>
+<td><p>Host device resource pool name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
+string</p></td>
+<td><p>IPAM configuration to be used for this network</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hostdevicenetworkstatus">
+<span id="id11"></span><h3>HostDeviceNetworkStatus<a class="headerlink" href="#hostdevicenetworkstatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#hostdevicenetwork"><span class="std std-ref">HostDeviceNetwork</span></a>)</p>
+<p>HostDeviceNetworkStatus defines the observed state of HostDeviceNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+<a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
+<td><p>Reflects the state of the HostDeviceNetwork</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hostDeviceNetworkAttachmentDef</span></code>
+string</p></td>
+<td><p>Network attachment definition generated from HostDeviceNetworkSpec</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code>
+string</p></td>
+<td><p>Informative string in case the observed state is error</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">appliedStates</span></code>
+<a class="reference internal" href="#appliedstate"><span class="std std-ref">[]AppliedState</span></a></p></td>
+<td><p>AppliedStates provide a finer view of the observed state</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ibkubernetesspec">
+<span id="id12"></span><h3>IBKubernetesSpec<a class="headerlink" href="#ibkubernetesspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>IBKubernetesSpec describes configuration options for ib-kubernetes</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for ib-kubernetes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">periodicUpdateSeconds</span></code>
+int</p></td>
+<td><p><em>(Optional)</em>
+Interval of updates in seconds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pKeyGUIDPoolRangeStart</span></code>
+string</p></td>
+<td><p>The first guid in the pool</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pKeyGUIDPoolRangeEnd</span></code>
+string</p></td>
+<td><p>The last guid in the pool</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ufmSecret</span></code>
+string</p></td>
+<td><p>Secret containing credentials to UFM service</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ipoibnetwork">
+<span id="id13"></span><h3>IPoIBNetwork<a class="headerlink" href="#ipoibnetwork" title="Permalink to this headline"></a></h3>
+<p>IPoIBNetwork is the Schema for the ipoibnetworks API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#ipoibnetworkspec"><span class="std std-ref">IPoIBNetworkSpec</span></a></p></td>
+<td><p>Defines the desired state of IPoIBNetwork</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#ipoibnetworkstatus"><span class="std std-ref">IPoIBNetworkStatus</span></a></p></td>
+<td><p>Defines the observed state of IPoIBNetwork</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ipoibnetworkspec">
+<span id="id14"></span><h3>IPoIBNetworkSpec<a class="headerlink" href="#ipoibnetworkspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ipoibnetwork"><span class="std std-ref">IPoIBNetwork</span></a>)</p>
+<p>IPoIBNetworkSpec defines the desired state of IPoIBNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
+string</p></td>
+<td><p>Namespace of the NetworkAttachmentDefinition custom resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">master</span></code>
+string</p></td>
+<td><p>Name of the host interface to enslave. Defaults to default route interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
+string</p></td>
+<td><p>IPAM configuration to be used for this network.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ipoibnetworkstatus">
+<span id="id15"></span><h3>IPoIBNetworkStatus<a class="headerlink" href="#ipoibnetworkstatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ipoibnetwork"><span class="std std-ref">IPoIBNetwork</span></a>)</p>
+<p>IPoIBNetworkStatus defines the observed state of IPoIBNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+<a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
+<td><p>Reflects the state of the IPoIBNetwork</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipoibNetworkAttachmentDef</span></code>
+string</p></td>
+<td><p>Network attachment definition generated from IPoIBNetworkSpec</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code>
+string</p></td>
+<td><p>Informative string in case the observed state is error</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="imagespec">
+<span id="id16"></span><h3>ImageSpec<a class="headerlink" href="#imagespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATelemetryServiceSpec</span></a>, <a class="reference internal" href="#ibkubernetesspec"><span class="std std-ref">IBKubernetesSpec</span></a>, <a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a>,
+<a class="reference internal" href="#nicfeaturediscoveryspec"><span class="std std-ref">NICFeatureDiscoverySpec</span></a>, <a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a>, <a class="reference internal" href="#nicconfigurationoperatorspec"><span class="std std-ref">NicConfigurationOperatorSpec</span></a>, <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>,
+<a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a>, <a class="reference internal" href="#spectrumxoperatorspec"><span class="std std-ref">SpectrumXOperatorSpec</span></a>)</p>
+<p>ImageSpec Contains container image specifications</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">image</span></code>
+string</p></td>
+<td><p>Name of the image</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">repository</span></code>
+string</p></td>
+<td><p>Address of the registry that stores the image</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code>
+string</p></td>
+<td><p>Version of the image to use</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">imagePullSecrets</span></code>
+[]string</p></td>
+<td><p><em>(Optional)</em>
+ImagePullSecrets is an optional list of references to secrets in the same namespace to use for
+pulling the image</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">containerResources</span></code>
+<a class="reference internal" href="#resourcerequirements"><span class="std std-ref">[]ResourceRequirements</span></a></p></td>
+<td><p>ResourceRequirements describes the compute resource requirements</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="imagespecwithconfig">
+<span id="id17"></span><h3>ImageSpecWithConfig<a class="headerlink" href="#imagespecwithconfig" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a>, <a class="reference internal" href="#multusspec"><span class="std std-ref">MultusSpec</span></a>)</p>
+<p>ImageSpecWithConfig Contains ImageSpec and optional configuration</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for the component</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config</span></code>
+string</p></td>
+<td><p>Configuration for the component as a string</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="macvlannetwork">
+<span id="id18"></span><h3>MacvlanNetwork<a class="headerlink" href="#macvlannetwork" title="Permalink to this headline"></a></h3>
+<p>MacvlanNetwork is the Schema for the macvlannetworks API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#macvlannetworkspec"><span class="std std-ref">MacvlanNetworkSpec</span></a></p></td>
+<td><p>Defines the desired state of MacvlanNetworkSpec</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#macvlannetworkstatus"><span class="std std-ref">MacvlanNetworkStatus</span></a></p></td>
+<td><p>Defines the observed state of MacvlanNetwork</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="macvlannetworkspec">
+<span id="id19"></span><h3>MacvlanNetworkSpec<a class="headerlink" href="#macvlannetworkspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#macvlannetwork"><span class="std std-ref">MacvlanNetwork</span></a>)</p>
+<p>MacvlanNetworkSpec defines the desired state of MacvlanNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code>
+string</p></td>
+<td><p>Namespace of the NetworkAttachmentDefinition custom resource</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">master</span></code>
+string</p></td>
+<td><p>Name of the host interface to enslave. Defaults to default route interface</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mode</span></code>
+string</p></td>
+<td><p>Mode of interface one of “bridge”, “private”, “vepa”, “passthru”</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mtu</span></code>
+int</p></td>
+<td><p>MTU of interface to the specified value. 0 for master’s MTU</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
+string</p></td>
+<td><p>IPAM configuration to be used for this network.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="macvlannetworkstatus">
+<span id="id20"></span><h3>MacvlanNetworkStatus<a class="headerlink" href="#macvlannetworkstatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#macvlannetwork"><span class="std std-ref">MacvlanNetwork</span></a>)</p>
+<p>MacvlanNetworkStatus defines the observed state of MacvlanNetwork</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+<a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
+<td><p>Reflects the state of the MacvlanNetwork</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">macvlanNetworkAttachmentDef</span></code>
+string</p></td>
+<td><p>Network attachment definition generated from MacvlanNetworkSpec</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code>
+string</p></td>
+<td><p>Informative string in case the observed state is error</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="multusspec">
+<span id="id21"></span><h3>MultusSpec<a class="headerlink" href="#multusspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a>)</p>
+<p>MultusSpec describes configuration options for Multus CNI 1. Image information for Multus CNI 2. Multus CNI config if config is missing or empty then multus config will be automatically generated from
+the CNI configuration file of the master plugin (the first file in lexicographical order in cni-conf-dir)</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpecWithConfig</span></code>
+<a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a></p></td>
+<td><p>Image information for Multus and optional configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfeaturediscoveryspec">
+<span id="id22"></span><h3>NICFeatureDiscoverySpec<a class="headerlink" href="#nicfeaturediscoveryspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>NICFeatureDiscoverySpec describes configuration options for nic-feature-discovery</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for nic-feature-discovery</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nvipamspec">
+<span id="id23"></span><h3>NVIPAMSpec<a class="headerlink" href="#nvipamspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>NVIPAMSpec describes configuration options for nv-ipam 1. Image information for nv-ipam 2. Configuration for nv-ipam</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enableWebhook</span></code>
+bool</p></td>
+<td><p>Enable deployment of the validation webhook</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for nv-ipam</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicclusterpolicy">
+<span id="id24"></span><h3>NicClusterPolicy<a class="headerlink" href="#nicclusterpolicy" title="Permalink to this headline"></a></h3>
+<p>NicClusterPolicy is the Schema for the nicclusterpolicies API</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code>
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta">Kubernetes
+meta/v1.ObjectMeta</a></p></td>
+<td><p>Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code>
+<a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a></p></td>
+<td><p>Defines the desired state of NicClusterPolicy</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code>
+<a class="reference internal" href="#nicclusterpolicystatus"><span class="std std-ref">NicClusterPolicyStatus</span></a></p></td>
+<td><p>Defines the observed state of NicClusterPolicy</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicclusterpolicyspec">
+<span id="id25"></span><h3>NicClusterPolicySpec<a class="headerlink" href="#nicclusterpolicyspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicy"><span class="std std-ref">NicClusterPolicy</span></a>)</p>
+<p>NicClusterPolicySpec defines the desired state of NicClusterPolicy</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>
+<a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a></p></td>
+<td><p>OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes
+with an OS. See <a class="reference external" href="https://network.nvidia.com/support/mlnx-ofed-matrix/">https://network.nvidia.com/support/mlnx-ofed-matrix/</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>
+<a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
+<td><p>RdmaSharedDevicePlugin manages support IB and RoCE HCAs through the Kubernetes device plugin
+framework. The config field is a json representation of the RDMA shared device plugin
+configuration. See <a class="reference external" href="https://github.com/Mellanox/k8s-rdma-shared-dev-plugin">https://github.com/Mellanox/k8s-rdma-shared-dev-plugin</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>
+<a class="reference internal" href="#devicepluginspec"><span class="std std-ref">DevicePluginSpec</span></a></p></td>
+<td><p>SriovDevicePlugin manages SRIOV through the Kubernetes device plugin framework. The config field
+is a json representation of the RDMA shared device plugin configuration. See
+<a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin">https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ibKubernetes</span></code>
+<a class="reference internal" href="#ibkubernetesspec"><span class="std std-ref">IBKubernetesSpec</span></a></p></td>
+<td><p>IBKubernetes provides a daemon that works in conjunction with the SR-IOV Network Device Plugin.
+It acts on Kubernetes pod object changes and reads the pod’s network annotation. From there it
+fetches the corresponding network CRD and reads the PKey. This is done in order to add the newly
+generated GUID or the predefined GUID in the GUID field of the CRD. This is then passed in
+cni-args to that PKey for pods with mellanox.infiniband.app annotation. See:
+<a class="reference external" href="https://github.com/Mellanox/ib-kubernetes">https://github.com/Mellanox/ib-kubernetes</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">secondaryNetwork</span></code>
+<a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a></p></td>
+<td><p>SecondaryNetwork Specifies components to deploy in order to facilitate a secondary network in
+Kubernetes. It consists of the following optionally deployed components: - Multus-CNI: Delegate
+CNI plugin to support secondary networks in Kubernetes - CNI plugins: Currently only
+containernetworking-plugins is supported - IPoIB CNI: Allows the user to create IPoIB child link
+and move it to the pod</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>
+<a class="reference internal" href="#nvipamspec"><span class="std std-ref">NVIPAMSpec</span></a></p></td>
+<td><p>NvIpam is an IPAM provider that dynamically assigns IP addresses with speed and performance in
+mind. Note: NvIPam requires certificate management e.g. cert-manager or OpenShift cert
+management. See <a class="reference external" href="https://github.com/Mellanox/nvidia-k8s-ipam">https://github.com/Mellanox/nvidia-k8s-ipam</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicFeatureDiscovery</span></code>
+<a class="reference internal" href="#nicfeaturediscoveryspec"><span class="std std-ref">NICFeatureDiscoverySpec</span></a></p></td>
+<td><p>NicFeatureDiscovery works with NodeFeatureDiscovery to expose information about NVIDIA NICs.
+<a class="reference external" href="https://github.com/Mellanox/nic-feature-discovery">https://github.com/Mellanox/nic-feature-discovery</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">docaTelemetryService</span></code>
+<a class="reference internal" href="#docatelemetryservicespec"><span class="std std-ref">DOCATelemetryServiceSpec</span></a></p></td>
+<td><p>DOCATelemetryService exposes telemetry from NVIDIA networking components to prometheus. See:
+<a class="reference external" href="https://docs.nvidia.com/doca/sdk/doca+telemetry+service+guide/index.html">https://docs.nvidia.com/doca/sdk/doca+telemetry+service+guide/index.html</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator</span></code>
+<a class="reference internal" href="#nicconfigurationoperatorspec"><span class="std std-ref">NicConfigurationOperatorSpec</span></a></p></td>
+<td><p>NicConfigurationOperator provides Kubernetes CRD API to allow FW configuration on NVIDIA NICs in
+a coordinated manner See: <a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">https://github.com/Mellanox/nic-configuration-operator</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumXOperator</span></code>
+<a class="reference internal" href="#spectrumxoperatorspec"><span class="std std-ref">SpectrumXOperatorSpec</span></a></p></td>
+<td><p>SpectrumXOperator exposes NVIDIA Spectrum-X Operator. See:
+<a class="reference external" href="https://github.com/Mellanox/spectrum-x-operator/">https://github.com/Mellanox/spectrum-x-operator/</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeAffinity</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#NodeAffinity">Kubernetes core/v1.NodeAffinity</a></p></td>
+<td><p>NodeAffinity rules to inject to the DaemonSets objects that are managed by the operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tolerations</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#Toleration">[]Kubernetes core/v1.Toleration</a></p></td>
+<td><p>Tolerations to inject to the DaemonSets objects that are managed by the operator</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deploymentNodeAffinity</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#NodeAffinity">Kubernetes core/v1.NodeAffinity</a></p></td>
+<td><p>NodeAffinity rules to inject to the Deployments objects that are managed by the operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">deploymentTolerations</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#Toleration">[]Kubernetes core/v1.Toleration</a></p></td>
+<td><p>Tolerations to inject to the Deployments objects that are managed by the operator</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicclusterpolicystatus">
+<span id="id26"></span><h3>NicClusterPolicyStatus<a class="headerlink" href="#nicclusterpolicystatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicy"><span class="std std-ref">NicClusterPolicy</span></a>)</p>
+<p>NicClusterPolicyStatus defines the observed state of NicClusterPolicy</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">state</span></code>
+<a class="reference internal" href="#state"><span class="std std-ref">State</span></a></p></td>
+<td><p>Reflects the current state of the cluster policy</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code>
+string</p></td>
+<td><p>Informative string in case the observed state is error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">appliedStates</span></code>
+<a class="reference internal" href="#appliedstate"><span class="std std-ref">[]AppliedState</span></a></p></td>
+<td><p>AppliedStates provide a finer view of the observed state</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicconfigurationoperatorspec">
+<span id="id27"></span><h3>NicConfigurationOperatorSpec<a class="headerlink" href="#nicconfigurationoperatorspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>NicConfigurationOperatorSpec is the configuration for NIC Configuration Operator</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">operator</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for nic-configuration-operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">configurationDaemon</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for nic-configuration-daemon</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#EnvVar">[]Kubernetes core/v1.EnvVar</a></p></td>
+<td><p>List of environment variables to set in the NIC Configuration Operator and NIC Configuration
+Daemon containers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nicFirmwareStorage</span></code>
+<a class="reference internal" href="#nicfirmwarestoragespec"><span class="std std-ref">NicFirmwareStorageSpec</span></a></p></td>
+<td><p>NicFirmwareStorage contains configuration for the NIC firmware storage. If not provided, the NIC
+firmware storage will not be configured.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logLevel</span></code>
+string</p></td>
+<td><p>LogLevel sets the verbosity level of the logs. info|debug</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="nicfirmwarestoragespec">
+<span id="id28"></span><h3>NicFirmwareStorageSpec<a class="headerlink" href="#nicfirmwarestoragespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationoperatorspec"><span class="std std-ref">NicConfigurationOperatorSpec</span></a>)</p>
+<p>NicFirmwareStorageSpec contains configuration for the NIC firmware storage</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create</span></code>
+bool</p></td>
+<td><p>Create specifies whether to create a new PVC or use an existing one If create == false, the
+existing PVC with the name specified in pvcName should be located in the same namespace as the
+operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pvcName</span></code>
+string</p></td>
+<td><p>PVCName is the name of the PVC to mount as NIC Firmware storage. Default value:
+“nic-fw-storage-pvc”</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">storageClassName</span></code>
+string</p></td>
+<td><p>StorageClassName is the name of a storage class to be used to store NIC FW binaries during NIC FW
+upgrade. If not provided, the cluster-default storage class will be used</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">availableStorageSize</span></code>
+string</p></td>
+<td><p>AvailableStorageSize is storage size for the NIC Configuration Operator to request. Only applies
+if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ofeddriverspec">
+<span id="id29"></span><h3>OFEDDriverSpec<a class="headerlink" href="#ofeddriverspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>OFEDDriverSpec describes configuration options for DOCA-OFED Driver Container</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for DOCA-OFED driver container</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">startupProbe</span></code>
+<a class="reference internal" href="#podprobespec"><span class="std std-ref">PodProbeSpec</span></a></p></td>
+<td><p>Pod startup probe settings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">livenessProbe</span></code>
+<a class="reference internal" href="#podprobespec"><span class="std std-ref">PodProbeSpec</span></a></p></td>
+<td><p>Pod liveness probe settings</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">readinessProbe</span></code>
+<a class="reference internal" href="#podprobespec"><span class="std std-ref">PodProbeSpec</span></a></p></td>
+<td><p>Pod readiness probe settings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#EnvVar">[]Kubernetes core/v1.EnvVar</a></p></td>
+<td><p>List of environment variables to set in the DOCA-OFED driver container.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">upgradePolicy</span></code>
+<a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a></p></td>
+<td><p>DOCA-OFED driver auto-upgrade settings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">certConfig</span></code>
+<a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
+<td><p>Optional: Custom TLS certificates configuration for DOCA-OFED driver container</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">repoConfig</span></code>
+<a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
+<td><p>Optional: Custom package repository configuration for DOCA-OFED driver container</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">terminationGracePeriodSeconds</span></code>
+int64</p></td>
+<td><p><em>(Optional)</em>
+TerminationGracePeriodSeconds specifies the length of time in seconds to wait before killing the
+DOCA-OFED driver container pod on termination</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">forcePrecompiled</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+ForcePrecompiled specifies if only DOCA-OFED driver precompiled images are allowed If set to
+false and precompiled image does not exists, DOCA-OFED driver will be compiled on Nodes If set to
+true and precompiled image does not exists, OFED state will be Error.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="podprobespec">
+<span id="id30"></span><h3>PodProbeSpec<a class="headerlink" href="#podprobespec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
+<p>PodProbeSpec describes a pod probe.</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">initialDelaySeconds</span></code>
+int</p></td>
+<td><p>Number of seconds after the container has started before the probe is initiated</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">periodSeconds</span></code>
+int</p></td>
+<td><p>How often (in seconds) to perform the probe</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">failureThreshold</span></code>
+int</p></td>
+<td><p>Minimum consecutive failures for the probe to be considered failed after having succeeded</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeoutSeconds</span></code>
+int</p></td>
+<td><p>Number of seconds after which the probe times out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="resourcerequirements">
+<span id="id31"></span><h3>ResourceRequirements<a class="headerlink" href="#resourcerequirements" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a>)</p>
+<p>ResourceRequirements describes the compute resource requirements.</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code>
+string</p></td>
+<td><p>Name of the container the requirements are set for</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limits</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#ResourceList">Kubernetes core/v1.ResourceList</a></p></td>
+<td><p><em>(Optional)</em>
+Limits describes the maximum amount of compute resources allowed. More info:
+<a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">requests</span></code>
+<a class="reference external" href="https://godoc.org/k8s.io/api/core/v1#ResourceList">Kubernetes core/v1.ResourceList</a></p></td>
+<td><p><em>(Optional)</em>
+Requests describes the minimum amount of compute resources required. If Requests is omitted for a
+container, it defaults to Limits if that is explicitly specified, otherwise to an
+implementation-defined value. Requests cannot exceed Limits. More info:
+<a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="secondarynetworkspec">
+<span id="id32"></span><h3>SecondaryNetworkSpec<a class="headerlink" href="#secondarynetworkspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>SecondaryNetworkSpec describes configuration options for secondary network</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">multus</span></code>
+<a class="reference internal" href="#multusspec"><span class="std std-ref">MultusSpec</span></a></p></td>
+<td><p>Image and configuration information for multus</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cniPlugins</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for CNI plugins</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipoib</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for IPoIB CNI</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="spectrumxoperatorspec">
+<span id="id33"></span><h3>SpectrumXOperatorSpec<a class="headerlink" href="#spectrumxoperatorspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a>)</p>
+<p>SpectrumXOperatorSpec describes configuration options for NVIDIA Spectrum-X Operator</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpec</span></code>
+<a class="reference internal" href="#imagespec"><span class="std std-ref">ImageSpec</span></a></p></td>
+<td><p>Image information for NVIDIA Spectrum-X Operator</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="state-string-alias">
+<span id="state"></span><h3>State (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)<a class="headerlink" href="#state-string-alias" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#appliedstate"><span class="std std-ref">AppliedState</span></a>, <a class="reference internal" href="#hostdevicenetworkstatus"><span class="std std-ref">HostDeviceNetworkStatus</span></a>, <a class="reference internal" href="#ipoibnetworkstatus"><span class="std std-ref">IPoIBNetworkStatus</span></a>,
+<a class="reference internal" href="#macvlannetworkstatus"><span class="std std-ref">MacvlanNetworkStatus</span></a>, <a class="reference internal" href="#nicclusterpolicystatus"><span class="std std-ref">NicClusterPolicyStatus</span></a>)</p>
+<p>State represents reconcile state of the system.</p>
+</section>
+<section id="waitforcompletionspec">
+<span id="id34"></span><h3>WaitForCompletionSpec<a class="headerlink" href="#waitforcompletionspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#driverupgradepolicyspec"><span class="std std-ref">DriverUpgradePolicySpec</span></a>)</p>
+<p>WaitForCompletionSpec describes the configuration for waiting on pods completions</p>
+<div class="md-typeset-scrollwrap docutils container">
+<div class="md-typeset-table docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">podSelector</span></code>
+string</p></td>
+<td><p><em>(Optional)</em>
+PodSelector specifies a label selector for the pods to wait for completion For more details on
+label selectors, see:
+<a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timeoutSeconds</span></code>
+int</p></td>
+<td><p><em>(Optional)</em>
+TimeoutSecond specifies the length of time in seconds to wait before giving up on pod
+termination, zero means infinite</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, NVIDIA.
+      <span class="lastupdated">Last updated on Nov 23, 2025.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
