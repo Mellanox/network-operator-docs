@@ -95,10 +95,10 @@ Prerequisites
 Before you begin, ensure that you have the following prerequisites:
 
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
-- Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz <https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/MLNX_OFED_SRC-debian-25.01-0.6.0.0.tgz>`_
+- Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz <https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz>`_
 
 **NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
-For example, given a DOCA package version (e.g `2.10.0`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/2.10.0/SOURCES/MLNX_OFED/>`_ which is `25.01-0.6.0.0'`
+For example, given a DOCA package version (e.g `3.2.0`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/>`_ which is `25.10-1.2.8.0'`
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Download Docker files and scripts:
