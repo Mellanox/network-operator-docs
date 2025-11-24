@@ -225,6 +225,8 @@ Known Limitations
 
    * - Version
      - Description
+   * - 25.10.0
+     - | - NVIDIA Networking NIC Configuration Operator doesn't support Socket Direct Adapters.
    * - 25.7.0
      - | - NVIDIA DOCA-OFED Driver container can not start after kernel upgrade on OCP. To make Driver container work, please remove `/var/opt/mofed-container/inventory` directory on the host.
        | - DOCA driver container deployment may fail if NVIDIA drivers are in use by third-party kernel modules or user-space applications. The recommended workaround is to use non-containerized DOCA drivers deployed via the DOCA-Host package.

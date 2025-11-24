@@ -28,7 +28,12 @@ NIC Firmware Configuration
    :backlinks: none
 
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses `Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_ to prepare a node for maintenance before the actual configuration.
-.. warning:: NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check :doc:`limitations <../release-notes>`.
+
+.. warning::
+   NVIDIA NIC Configuration Operator does not support FW reset flow for DPU mode. Check :doc:`limitations <../release-notes>`.
+
+.. warning::
+   NVIDIA Networking NIC Configuration Operator doesn't support Socket Direct Adapters.
 
 For more information about the CRD API, refer to :doc:`CRD API Reference <crds>`.
 
