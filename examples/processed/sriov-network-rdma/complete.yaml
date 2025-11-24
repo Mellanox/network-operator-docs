@@ -3,10 +3,6 @@ kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
 spec:
-  sriovDevicePlugin:
-    image: sriov-network-device-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.10.0-rc.2
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
@@ -64,22 +60,72 @@ spec:
   networkNamespace: default
   resourceName: sriov_resource
 ---
+---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sriov-test-pod
+  name: sriov-rdma-server
+  namespace: default
+  labels:
+    app: sriov-rdma
+    role: server
   annotations:
     k8s.v1.cni.cncf.io/networks: sriov-rdma-network
 spec:
+  tolerations:
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  restartPolicy: Never
   containers:
-  - name: test-container
-    image: mellanox/rping-test
+  - name: rdma-test
+    image: nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host
     command: ["/bin/bash", "-c", "sleep infinity"]
     securityContext:
       capabilities:
         add: ["IPC_LOCK"]
+      privileged: true
     resources:
       requests:
-        nvidia.com/sriov_resource: '1'
+        nvidia.com/sriov_resource: "1"
       limits:
-        nvidia.com/sriov_resource: '1'
+        nvidia.com/sriov_resource: "1"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sriov-rdma-client
+  namespace: default
+  labels:
+    app: sriov-rdma
+    role: client
+  annotations:
+    k8s.v1.cni.cncf.io/networks: sriov-rdma-network
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - server
+        topologyKey: kubernetes.io/hostname
+  restartPolicy: Never
+  containers:
+  - name: rdma-test
+    image: nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+      privileged: true
+    resources:
+      requests:
+        nvidia.com/sriov_resource: "1"
+      limits:
+        nvidia.com/sriov_resource: "1"
