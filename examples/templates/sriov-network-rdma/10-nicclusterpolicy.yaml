@@ -3,10 +3,6 @@ kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
 spec:
-  sriovDevicePlugin:
-    image: sriov-network-device-plugin
-    repository: |sriovnetop-repository|
-    version: |sriovnetop-sriov-device-plugin-version|
   nvIpam:
     image: nvidia-k8s-ipam
     repository: |nvidia-ipam-repository|

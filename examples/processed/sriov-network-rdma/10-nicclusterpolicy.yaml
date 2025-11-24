@@ -3,10 +3,6 @@ kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
 spec:
-  sriovDevicePlugin:
-    image: sriov-network-device-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v25.10.0-rc.2
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
