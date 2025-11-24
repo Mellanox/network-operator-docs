@@ -296,7 +296,7 @@ kubectl -n default <span class="nb">exec</span> sriov-rdma-client -- ibv_devices
 </pre></div>
 </div>
 <p><strong>Step 7</strong>: Test RDMA connectivity</p>
-<p>Start the RDMA bandwidth test server with the correct GID index:</p>
+<p>Start the RDMA bandwidth test server:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n default <span class="nb">exec</span> -it sriov-rdma-server -- bash -lc <span class="s2">&quot;ib_write_bw -d </span><span class="nv">$SERVER_RDMA_DEV</span><span class="s2"> -R -a --report_gbits&quot;</span>
 </pre></div>
 </div>
