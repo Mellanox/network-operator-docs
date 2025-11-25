@@ -125,10 +125,6 @@
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-rc.2</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
@@ -205,34 +201,113 @@
 </pre></div>
 </div>
 <p><strong>Step 5</strong>: Deploy test workload</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-test-pod</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-server</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma</span><span class="w"></span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
 <span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-network</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">tolerations</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/control-plane&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span><span class="w"></span>
 <span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-container</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox/rping-test</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host</span><span class="w"></span>
 <span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-client</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma</span><span class="w"></span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">client</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-network</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">affinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">role</span><span class="w"></span>
+<span class="w">            </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">            </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
+<span class="w">        </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.io/hostname</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f pod.yaml
 </pre></div>
 </div>
-<p>Verify the deployment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl <span class="nb">exec</span> -it sriov-test-pod -- ip addr show
-kubectl <span class="nb">exec</span> -it sriov-test-pod -- ibv_devices
+<p><strong>Step 6</strong>: Verify the deployment</p>
+<p>Check that the pods are running on different nodes:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get pods -n default -o wide
 </pre></div>
+</div>
+<p>Verify RDMA devices are available in the pods:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n default <span class="nb">exec</span> sriov-rdma-server -- ibv_devices
+kubectl -n default <span class="nb">exec</span> sriov-rdma-client -- ibv_devices
+</pre></div>
+</div>
+<p>Capture the server IP and RDMA device names in environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SERVER_IP</span><span class="o">=</span><span class="k">$(</span>kubectl get pod sriov-rdma-server -n default -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.metadata.annotations.k8s\.v1\.cni\.cncf\.io/network-status}&#39;</span> <span class="p">|</span> jq -r <span class="s1">&#39;.[] | select(.name==&quot;default/sriov-rdma-network&quot;) | .ips[0]&#39;</span><span class="k">)</span>
+<span class="nb">export</span> <span class="nv">SERVER_RDMA_DEV</span><span class="o">=</span><span class="k">$(</span>kubectl -n default <span class="nb">exec</span> sriov-rdma-server -- ibv_devices <span class="p">|</span> awk <span class="s1">&#39;NR==3 {print $1}&#39;</span><span class="k">)</span>
+<span class="nb">export</span> <span class="nv">CLIENT_RDMA_DEV</span><span class="o">=</span><span class="k">$(</span>kubectl -n default <span class="nb">exec</span> sriov-rdma-client -- ibv_devices <span class="p">|</span> awk <span class="s1">&#39;NR==3 {print $1}&#39;</span><span class="k">)</span>
+
+<span class="nb">echo</span> <span class="s2">&quot;Server IP: </span><span class="nv">$SERVER_IP</span><span class="s2">&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Server RDMA Device: </span><span class="nv">$SERVER_RDMA_DEV</span><span class="s2">&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Client RDMA Device: </span><span class="nv">$CLIENT_RDMA_DEV</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Step 7</strong>: Test RDMA connectivity</p>
+<p>Start the RDMA bandwidth test server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n default <span class="nb">exec</span> -it sriov-rdma-server -- bash -lc <span class="s2">&quot;ib_write_bw -d </span><span class="nv">$SERVER_RDMA_DEV</span><span class="s2"> -R -a --report_gbits&quot;</span>
+</pre></div>
+</div>
+<p>In a separate terminal, run the RDMA bandwidth test client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n default <span class="nb">exec</span> -it sriov-rdma-client -- bash -lc <span class="s2">&quot;ib_write_bw -d </span><span class="nv">$CLIENT_RDMA_DEV</span><span class="s2"> -R -a --report_gbits </span><span class="nv">$SERVER_IP</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The commands above automatically use the first available RDMA device from each pod.
+If you need to use a different device, manually set the environment variables or replace them in the command.</p>
 </div>
 <p><strong>Complete Configuration</strong></p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
@@ -240,10 +315,6 @@ kubectl <span class="nb">exec</span> -it sriov-test-pod -- ibv_devices
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v25.10.0-rc.2</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
@@ -301,25 +372,75 @@ kubectl <span class="nb">exec</span> -it sriov-test-pod -- ibv_devices
 <span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov_resource</span><span class="w"></span>
 <span class="nn">---</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
 <span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-test-pod</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-server</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma</span><span class="w"></span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
 <span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-network</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">tolerations</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/control-plane&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoSchedule&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span><span class="w"></span>
 <span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-container</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox/rping-test</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host</span><span class="w"></span>
 <span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-client</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma</span><span class="w"></span>
+<span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">client</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-rdma-network</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">affinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">podAntiAffinity</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requiredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">role</span><span class="w"></span>
+<span class="w">            </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">In</span><span class="w"></span>
+<span class="w">            </span><span class="nt">values</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">server</span><span class="w"></span>
+<span class="w">        </span><span class="nt">topologyKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes.io/hostname</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Never</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma-test</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;/bin/bash&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;-c&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;sleep</span><span class="nv"> </span><span class="s">infinity&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/sriov_resource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
@@ -333,7 +454,7 @@ kubectl <span class="nb">exec</span> -it sriov-test-pod -- ibv_devices
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 24, 2025.
+      <span class="lastupdated">Last updated on Nov 25, 2025.
       </span></p>
   </div>
 

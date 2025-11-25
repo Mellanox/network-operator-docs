@@ -246,7 +246,7 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>helm install network-operator nvidia/network-operator <span class="se">\</span>
      --namespace nvidia-network-operator <span class="se">\</span>
      --set sriov-network-operator.images.sriovConfigDaemon<span class="o">=</span>sriov-network-operator-config-daemon-stig-fips <span class="se">\</span>
-     --set sriov-network-operator.imagePullSecrets<span class="o">={</span>ngc-secret<span class="o">}</span> <span class="se">\</span>
+     --set sriov-network-operator.imagePullSecrets<span class="o">=</span>ngc-secret <span class="se">\</span>
      --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span>
 <span class="go">     --set nfd.enabled=true</span>
 </pre></div>
@@ -268,7 +268,7 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.2.8.0-2</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nv">ngc-secret</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UBUNTU_PRO_TOKEN</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;YOUR_UBUNTU_PRO_TOKEN&gt;&quot;</span><span class="w"></span>
@@ -288,7 +288,7 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 24, 2025.
+      <span class="lastupdated">Last updated on Nov 25, 2025.
       </span></p>
   </div>
 
