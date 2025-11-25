@@ -158,8 +158,8 @@ Install NVIDIA Network Operator Government-Ready Components
 
       $  helm install network-operator nvidia/network-operator \
            --namespace nvidia-network-operator \
-           --set sriov-network-operator.images.sriovConfigDaemon=doca-driver-stig-fips \
-           --set sriov-network-operator.imagePullSecrets={ngc-secret} \
+           --set sriov-network-operator.images.sriovConfigDaemon=sriov-network-operator-config-daemon-stig-fips \
+           --set sriov-network-operator.imagePullSecrets=ngc-secret \
            --set sriovNetworkOperator.enabled=true
            --set nfd.enabled=true
 
@@ -182,6 +182,8 @@ Update Ubuntu Pro Token in NicClusterPolicy
        image: doca-driver-stig-fips
        repository: |doca-driver-repository-stig|
        version: |doca-driver-version-stig|
+       imagePullSecrets:
+         - ngc-secret
        env:
          - name: UBUNTU_PRO_TOKEN
            value: "<YOUR_UBUNTU_PRO_TOKEN>"
