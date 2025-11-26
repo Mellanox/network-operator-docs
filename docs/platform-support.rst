@@ -37,7 +37,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.29 and <=1.33
+     - >=1.30 and <=1.34
      -
    * - Helm
      - v3.5+
@@ -148,17 +148,17 @@ Supported Operating Systems and Kubernetes Platforms
      - Nutanix NKP
      - Notes
    * - Ubuntu 24.04 LTS
-     - 1.29–1.33
+     - 1.30–1.34
      - —
      - —
-     - 1.29–1.33
+     - 1.30–1.34
      - 2.12-2.15
      - —
    * - Ubuntu 22.04 LTS
-     - 1.29–1.33
+     - 1.30–1.34
      - —
      - —
-     - 1.29–1.33
+     - 1.30–1.34
      - 2.12-2.15
      - RT‑kernel support
    * - Red Hat CoreOS
@@ -169,23 +169,23 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - RT kernels support
    * - Red Hat Enterprise Linux 9.6 / 9.4
-     - 1.29–1.33
+     - 1.30–1.34
      - —
      - —
      - —
      - —
      - RT kernels support
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.29–1.33
+     - 1.30–1.34
      - —
      - —
      - —
      - —
      - RT‑kernel support
    * - SUSE Linux Enterprise Server 15 SP6
-     - 1.29–1.33
+     - 1.30–1.34
      - —
-     - 1.29–1.33
+     - 1.30–1.34
      - —
      - —
      - Kubernetes and Rancher
