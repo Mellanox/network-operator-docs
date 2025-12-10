@@ -36,6 +36,17 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 25.10.0
+     - | - Added support for OpenShift v4.20.
+       | - Added support for RHEL v10.0.
+       | - Added support for SUSE Linux Enterprise Server 15 SP7.
+       | - Added support for Government-Ready, STIG/FIPS hardening security requirements, for NVIDIA AI Enterprise customers.
+       | - Added support for Kubernetes node draining operation in Network Operator, to apply SR-IOV related configuration on host, by utilizing NVIDIA Maintenance Operator.
+       | - Added support for enabling secured mode in created OVS bridges.
+       | - Added support for OpenShift air-gapped environments.
+       | - Added support for non-volatile parameters in NIC Configuration Operator.
+       | - [TECH PREVIEW] Added NVIDIA Kubernetes Launch Kit - a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.
+       | - Removed support for Whereabouts IPAM in Network Operator (Removed from NIC Cluster Policy API).
    * - 25.7.0
      - | - Added support for OpenShift v4.19.
        | - Added support for RHEL v9.6.
