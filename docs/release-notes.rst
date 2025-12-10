@@ -45,6 +45,7 @@ Changes and New Features
        | - Added support for enabling secured mode in created OVS bridges.
        | - Added support for OpenShift air-gapped environments.
        | - Added support for non-volatile parameters in NIC Configuration Operator.
+       | - [TECH PREVIEW] Added NVIDIA Kubernetes Launch Kit - a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.
        | - Removed support for Whereabouts IPAM in Network Operator (Removed from NIC Cluster Policy API).
    * - 25.7.0
      - | - Added support for OpenShift v4.19.
