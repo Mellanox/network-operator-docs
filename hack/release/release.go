@@ -374,7 +374,7 @@ func listTags(repoName, imageName string) ([]string, error) {
 }
 
 func getAuth(repo string) remote.Option {
-	if strings.Contains(repo, "nvstaging") {
+	if strings.Contains(repo, "nvstaging") || strings.Contains(repo, "stig") {
 		nvcrToken := os.Getenv("NGC_CLI_API_KEY")
 		if nvcrToken == "" {
 			log.Fatalf("NGC_CLI_API_KEY is unset")
