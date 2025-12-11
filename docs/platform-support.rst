@@ -444,3 +444,10 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |maintenance-operator-version|
      - No
      - 
+   * - `NVIDIA Kubernetes Launch Kit <https://github.com/NVIDIA/k8s-launch-kit>`_
+     - NVIDIA (OSS)
+     - |k8s-launch-kit-repository|
+     - k8s-launch-kit
+     - |k8s-launch-kit-version|
+     - No
+     -
