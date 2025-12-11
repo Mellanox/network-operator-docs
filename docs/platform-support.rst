@@ -163,12 +163,12 @@ Supported Operating Systems and Kubernetes Platforms
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
-     - 4.15–4.19
+     - 4.17–4.20
      - —
      - —
      - —
      - RT kernels support
-   * - Red Hat Enterprise Linux 9.6 / 9.4
+   * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
      - 1.30–1.34
      - —
      - —
@@ -182,7 +182,7 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - RT‑kernel support
-   * - SUSE Linux Enterprise Server 15 SP6
+   * - SUSE Linux Enterprise Server 15 SP7
      - 1.30–1.34
      - —
      - 1.30–1.34
