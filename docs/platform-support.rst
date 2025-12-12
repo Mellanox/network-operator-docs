@@ -123,13 +123,19 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - Arm (NVIDIA Grace)
      - NVIDIA Blackwell
      - ConnectX-7
-     - Ubuntu 24.04 (ARM64)
+     - Ubuntu 24.04 (ARM64) / Red Hat OpenShift
      - GA
    * - NVIDIA DGX/HGX B200
      - x86
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
-     - Ubuntu 22.04 / 24.04 (x86)
+     - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
+     - GA
+   * - NVIDIA RTX PRO 6000 Blackwell Server
+     - x86
+     - NVIDIA Blackwell
+     - BlueField-3 SuperNIC (NIC mode) / ConnectX-8
+     - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
      - GA
 
 ====================================================
@@ -163,7 +169,7 @@ Supported Operating Systems and Kubernetes Platforms
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
-     - 4.15–4.19
+     - 4.15–4.20
      - —
      - —
      - —
@@ -182,7 +188,7 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - —
      - RT‑kernel support
-   * - SUSE Linux Enterprise Server 15 SP6
+   * - SUSE Linux Enterprise Server 15 SP7
      - 1.30–1.34
      - —
      - 1.30–1.34
