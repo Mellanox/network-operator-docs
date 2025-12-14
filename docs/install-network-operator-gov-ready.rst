@@ -155,12 +155,13 @@ Install NVIDIA Network Operator Government-Ready Components
 #. Install the NVIDIA Network Operator with SR-IOV Network Operator.
 
    .. code-block:: console
+      :substitutions:
 
       $  helm install network-operator nvidia/network-operator \
            --namespace nvidia-network-operator \
-           --set sriov-network-operator.images.sriovConfigDaemon=sriov-network-operator-config-daemon-stig-fips \
-           --set sriov-network-operator.imagePullSecrets=ngc-secret \
-           --set sriovNetworkOperator.enabled=true
+           --set sriov-network-operator.images.sriovConfigDaemon=|sriovnetop-config-daemon-stig-repository|/sriov-network-operator-config-daemon-stig-fips:|sriovnetop-config-daemon-stig-version| \
+           --set sriov-network-operator.imagePullSecrets={ngc-secret} \
+           --set sriovNetworkOperator.enabled=true \
            --set nfd.enabled=true
 
 .. _update-ubuntu-pro-token-in-nicclusterpolicy:
