@@ -245,10 +245,10 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
 <li><p>Install the NVIDIA Network Operator with SR-IOV Network Operator.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>helm install network-operator nvidia/network-operator <span class="se">\</span>
      --namespace nvidia-network-operator <span class="se">\</span>
-     --set sriov-network-operator.images.sriovConfigDaemon<span class="o">=</span>sriov-network-operator-config-daemon-stig-fips <span class="se">\</span>
-     --set sriov-network-operator.imagePullSecrets<span class="o">=</span>ngc-secret <span class="se">\</span>
-     --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span>
-<span class="go">     --set nfd.enabled=true</span>
+     --set sriov-network-operator.images.sriovConfigDaemon<span class="o">=</span>nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon-stig-fips:network-operator-v25.10.0-stig-fips <span class="se">\</span>
+     --set sriov-network-operator.imagePullSecrets<span class="o">={</span>ngc-secret<span class="o">}</span> <span class="se">\</span>
+     --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+     --set nfd.enabled<span class="o">=</span><span class="nb">true</span>
 </pre></div>
 </div>
 </li>
