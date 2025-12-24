@@ -377,16 +377,32 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/param[id=17]/config/value</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
 <span class="w">  </span><span class="nt">interPacketGap</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">pureL3</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Inter Packet Gap for no overlay</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pureL3</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Inter Packet Gap for no overlay</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">     </span><span class="nt">l3EVPN</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Inter Packet Gap for L3 EVPN overlay</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
+<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
+<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
+<span class="w">    </span><span class="nt">l3EVPN</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Inter Packet Gap for L3 EVPN overlay</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
+<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
+<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="nt">docaCCVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.1.0105-1</span><span class="w"></span>
 <span class="nt">useSoftwareCCAlgorithm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
@@ -404,7 +420,7 @@ The package should be made available in the cluster and then its URL should be p
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025, NVIDIA.
-      <span class="lastupdated">Last updated on Dec 23, 2025.
+      <span class="lastupdated">Last updated on Dec 24, 2025.
       </span></p>
   </div>
 
