@@ -57,7 +57,7 @@ ENABLE_NFSRDMA Environment Variable
 
 In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
 In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on `ib_core` which does not match (symbol error). Only NVME with local drive is supported.
- 
+
 
 
 ---------------------------
@@ -107,13 +107,9 @@ Download Docker files and scripts:
 .. code-block:: bash
     :substitutions:
 
-    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/RHEL_Dockerfile
-    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/Ubuntu_Dockerfile
-    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/SLES_Dockerfile
-    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/entrypoint.sh
-    wget https://raw.githubusercontent.com/Mellanox/doca-driver-build/|doca-driver-build-commit|/dtk_nic_driver_build.sh
-
-    chmod +x entrypoint.sh dtk_nic_driver_build.sh
+    git clone https://github.com/Mellanox/doca-driver-build.git
+    cd doca-driver-build
+    git checkout |doca-driver-build-commit|
 
 
 -------------------
