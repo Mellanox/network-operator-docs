@@ -250,3 +250,22 @@ Ubuntu
      - {{ .SHA256 }}
      {{- end }}
    {{- end }}
+
+----
+RHEL
+----
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   {{- range .MofedStigFips.Shas }}
+     {{- if hasSubstring "rhel" .Tags }}
+   * - 
+     {{- range .Tags }}
+       | {{ . }}
+     {{- end }}
+     - {{ .SHA256 }}
+     {{- end }}
+   {{- end }}

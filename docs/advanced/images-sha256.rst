@@ -353,3 +353,16 @@ Ubuntu
    * -
        | doca3.3.0-26.01-0.4.6.0-1-ubuntu24.04-amd64
      - sha256:99eb0a18d5621656bf2d2eff17d298573950161781692c2604054861d26936d1
+
+----
+RHEL
+----
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   * -
+       | doca3.3.0-26.01-0.4.6.0-1-rhel9.6-amd64
+     - sha256:0ab32f793725396fa5b60f99df5a8d4baad04855bea612b26946298259367e9b
