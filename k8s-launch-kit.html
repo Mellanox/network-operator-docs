@@ -184,7 +184,7 @@
 <p>Kubernetes Launch Kit is available as a docker container:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ~/cluster-configuration
 cp /etc/kubernetes/admin.conf ~/cluster-configuration/kubeconfig
-docker run -v ~/cluster-configuration:/cluster-configuration --net<span class="o">=</span>host nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.1.0-beta.1 --discover-cluster-config --kubeconfig /cluster-configuration/kubeconfig --save-cluster-config /cluster-configuration/config.yaml --log-level debug  --save-deployment-files /cluster-configuration/deployments --fabric infiniband --deployment-type rdma_shared --multirail
+docker run -v ~/cluster-configuration:/cluster-configuration --net<span class="o">=</span>host nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.1.0-beta.2 --discover-cluster-config --kubeconfig /cluster-configuration/kubeconfig --save-cluster-config /cluster-configuration/config.yaml --log-level debug  --save-deployment-files /cluster-configuration/deployments --fabric infiniband --deployment-type rdma_shared --multirail
 </pre></div>
 </div>
 <p>Don’t forget to enable –net=host and mount the necessary directories for input and output files with -v.</p>
@@ -291,12 +291,12 @@ l8k --user-config ./config.yaml <span class="se">\</span>
 <p>After the cluster configuration is discovered, the tool will save the configuration to a file.
 You can use this file as a starting point for your own configuration. Own configuration file can be provided to the tool using <cite>–user-config</cite> flag.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.1.0-beta.1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.1</span><span class="w"> </span><span class="c1"># TODO: update to NetworkOperator.ComponentVersion later</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.1.0-beta.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.2</span><span class="w"> </span><span class="c1"># TODO: update to NetworkOperator.ComponentVersion later</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.2.0-25.10-1.2.8.0-2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.4.6.0-1</span><span class="w"></span>
 <span class="w">    </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">    </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
