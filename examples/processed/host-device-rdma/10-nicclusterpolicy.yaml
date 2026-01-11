@@ -6,7 +6,7 @@ spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.1.0-beta.1
+    version: network-operator-v26.1.0-beta.2
     config: |
       {
         "resourceList": [
@@ -23,15 +23,15 @@ spec:
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.1.0-beta.1
+    version: network-operator-v26.1.0-beta.2
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.1.0-beta.1
+      version: network-operator-v26.1.0-beta.2
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.1.0-beta.1
+      version: network-operator-v26.1.0-beta.2
