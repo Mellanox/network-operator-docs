@@ -1635,7 +1635,7 @@ Wait for NVIDIA DOCA-OFED Driver to install and apply the following CRs:
     metadata:
       name: test-sriov-ib-pod
       annotations:
-        k8s.v1.cni.cncf.io/networks: ib-sriob-network
+        k8s.v1.cni.cncf.io/networks: ib-sriov-network
     spec:
       containers:
         - name: test-sriov-ib-pod
