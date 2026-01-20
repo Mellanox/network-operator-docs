@@ -214,6 +214,36 @@ NicDeviceConfigurationSpec contains desired configuration of the NIC
       | :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`                                      |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
+.. _NicDeviceInterfaceNameSpec:
+
+NicDeviceInterfaceNameSpec
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicDeviceSpec <NicDeviceSpec>`)
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``nicIndex``                                                                                      | NicIndex is the index of the NIC in the flattened list of NICs based on the Template              |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``railIndex``                                                                                     | RailIndex is the index of the rail where the given NIC belongs to based on the Template           |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``planeIndices``                                                                                  | PlaneIndices is the indices of the planes for the given NIC based on the Template                 |
+      | []int                                                                                             |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rdmaDevicePrefix``                                                                              | — Parameters from the NicInterfaceNameTemplate CR — RdmaDevicePrefix specifies the prefix for the |
+      | string                                                                                            | rdma device name                                                                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``netDevicePrefix``                                                                               | NetDevicePrefix specifies the prefix for the net device name                                      |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
 .. _NicDevicePortSpec:
 
 NicDevicePortSpec
@@ -261,6 +291,9 @@ NicDeviceSpec defines the desired state of NicDevice
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``firmware``                                                                                      | Firmware specifies the fw upgrade policy requested by NicFirmwareTemplate                         |
       | :ref:`FirmwareTemplateSpec <FirmwareTemplateSpec>`                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``interfaceNameTemplate``                                                                         | InterfaceNameTemplate specifies the interface name template to be applied to the NIC              |
+      | :ref:`NicDeviceInterfaceNameSpec <NicDeviceInterfaceNameSpec>`                                    |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicDeviceStatus:
@@ -448,6 +481,78 @@ NicFirmwareTemplateSpec defines the FW templates and node/nic selectors for it
       | ``template``                                                                                      | Firmware update template                                                                          |
       | :ref:`FirmwareTemplateSpec <FirmwareTemplateSpec>`                                                |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicInterfaceNameTemplate:
+
+NicInterfaceNameTemplate
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+NicInterfaceNameTemplate is the Schema for the nicinterfacenametemplates API
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                                           | Description                                                                                       |
+      +=================================================================================================================+===================================================================================================+
+      | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
+      | `Kubernetes                                                                                                     |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``spec``                                                                                                        |                                                                                                   |
+      | :ref:`NicInterfaceNameTemplateSpec <NicInterfaceNameTemplateSpec>`                                              |                                                                                                   |
+      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``status``                                                                                                      |                                                                                                   |
+      | :ref:`NicInterfaceNameTemplateStatus <NicInterfaceNameTemplateStatus>`                                          |                                                                                                   |
+      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicInterfaceNameTemplateSpec:
+
+NicInterfaceNameTemplateSpec
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicInterfaceNameTemplate <NicInterfaceNameTemplate>`)
+
+NicInterfaceNameTemplateSpec defines the desired state of NicInterfaceNameTemplate
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``nodeSelector``                                                                                  | NodeSelector contains labels required on the node. When empty, the template will be applied to    |
+      | map[string]string                                                                                 | matching devices on all nodes.                                                                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``pfsPerNic``                                                                                     | PfsPerNic specifies the number of PFs per NIC Used to calculate the number of planes per NIC      |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rdmaDevicePrefix``                                                                              | RdmaDevicePrefix specifies the prefix for the rdma device name %nic_id%, %plane_id% and %rail_id% |
+      | string                                                                                            | placeholders can be used to construct the device name %nic_id% is the index of the NIC in the     |
+      |                                                                                                   | flattened list of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the  |
+      |                                                                                                   | index of the rail where the given NIC belongs to                                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``netDevicePrefix``                                                                               | NetDevicePrefix specifies the prefix for the net device name %nic_id%, %plane_id% and %rail_id%   |
+      | string                                                                                            | placeholders can be used to construct the device name %nic_id% is the index of the NIC in the     |
+      |                                                                                                   | flattened list of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the  |
+      |                                                                                                   | index of the rail where the given NIC belongs to                                                  |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``railPciAddresses``                                                                              | RailPciAddresses defines the PCI address to rail mapping and order The first dimension is the     |
+      | []string                                                                                          | rail index, the second dimension is the PCI addresses of the NICs in the rail. The PCI addresses  |
+      |                                                                                                   | must be sorted in the order of the rails. Example: [[“0000:1a:00.0”, “0000:2a:00.0”],             |
+      |                                                                                                   | [“0000:3a:00.0”, “0000:4a:00.0”]] specifies 2 rails with 2 NICs each.                             |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _NicInterfaceNameTemplateStatus:
+
+NicInterfaceNameTemplateStatus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicInterfaceNameTemplate <NicInterfaceNameTemplate>`)
+
+NicInterfaceNameTemplateStatus defines the observed state of NicInterfaceNameTemplate
 
 .. _NicSelectorSpec:
 
