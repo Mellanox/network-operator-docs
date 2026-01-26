@@ -158,7 +158,7 @@ Updating the NicClusterPolicy
 
   These limitations will be addressed in future releases.
 
-Update the components version in the NicClusterPolicy. Refer to the :ref:`NicClusterPolicy CRD Full Example <ncp-cr-example>` for more details and latest version of the components.
+Update the components version in the NicClusterPolicy. Refer to the :ref:`nicclusterpolicy-custom-resource-example` for more details and latest version of the components.
 
 ----------------------------------
 Automatic DOCA-OFED Driver Upgrade
@@ -440,7 +440,7 @@ The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSched
 Network Operator Upgrade on OpenShift Container Platform
 --------------------------------------------------------
 
-See instructions in the :ref:`network-operator-upgrade-openshift` section.
+See instructions in the :ref:`Network Operator Upgrade <network-operator-upgrade-openshift>` section.
 
 
 =================================

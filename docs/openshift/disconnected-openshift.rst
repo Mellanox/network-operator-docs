@@ -578,7 +578,7 @@ Please verify that you have the following:
 * Podman (RH) installed on your build system
 * Web access to NVIDIA NIC drivers sources
 
-Follow the instructions in :ref:`advanced-configurations-precompiled` section to build the precompiled container.
+Follow the instructions in the :ref:`Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container <advanced-configurations-precompiled>` section to build the precompiled container.
 
 .. note::
    You need to make the created image accessible in your environment (on the local registry server).

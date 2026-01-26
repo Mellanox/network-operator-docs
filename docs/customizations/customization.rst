@@ -23,4 +23,4 @@ Customization Options
 .. toctree::
    Helm Chart <helm.rst>
    CRDs <crds.rst>
-   NicClusterPolicy Reference Example <cr-full-example.rst>
+   NicClusterPolicy Custom Resource Example <cr-full-example.rst>
