@@ -38,7 +38,7 @@
 Install and configure the NIC Configuration Operator
 ====================================================
 
-To install the operator and for more information about the CRDs follow the `NIC FW Configuration <nic-fw-configuration.rst>`_ and `Configuration Details <configuration-details.rst>`_ doc articles.
+To install the operator and for more information about the CRDs follow the :doc:`nic-fw-configuration` and :doc:`configuration-details` doc articles.
 
 =============================================
 Provision the DOCA SPC-X CC algorithm package
