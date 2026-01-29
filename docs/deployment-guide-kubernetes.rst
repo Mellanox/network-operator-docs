@@ -114,11 +114,11 @@ Install Network Operator from the NVIDIA NGC chart using the default values:
 .. code-block:: bash
    :substitutions:
 
-    helm install network-operator nvidia/network-operator \
-      -n nvidia-network-operator \
-      --create-namespace \
-      --version |network-operator-version| \
-      --wait
+   helm install network-operator nvidia/network-operator \
+     -n nvidia-network-operator \
+     --create-namespace \
+     --version |network-operator-version| \
+     --wait
 
 View deployed resources
 
@@ -142,12 +142,12 @@ Install with specifying the custom `values.yaml`
 .. code-block:: bash
    :substitutions:
 
-    helm install network-operator nvidia/network-operator \
-      -n nvidia-network-operator \
-      --create-namespace \
-      --version |network-operator-version| \
-      -f ./values.yaml \
-      --wait
+   helm install network-operator nvidia/network-operator \
+     -n nvidia-network-operator \
+     --create-namespace \
+     --version |network-operator-version| \
+     -f ./values.yaml \
+     --wait
 
 ===================
 Deployment Examples
@@ -186,61 +186,61 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      rdmaSharedDevicePlugin:
-        # [map[ifNames:[ens1f0] name:rdma_shared_device_a]]
-        image: k8s-rdma-shared-dev-plugin
-        repository: |k8s-rdma-shared-dev-plugin-repository|
-        version: |k8s-rdma-shared-dev-plugin-version|
-        imagePullSecrets: []
-        # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
-        # Replace 'devices' with your (RDMA capable) netdevice name.
-        config: |
-          {
-            "configList": [
-              {
-                "resourceName": "rdma_shared_device_a",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": [],
-                  "deviceIDs": [],
-                  "drivers": [],
-                  "ifNames": ["ens1f0"],
-                  "linkTypes": []
-                }
-              }
-            ]
-          }
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     rdmaSharedDevicePlugin:
+       # [map[ifNames:[ens1f0] name:rdma_shared_device_a]]
+       image: k8s-rdma-shared-dev-plugin
+       repository: |k8s-rdma-shared-dev-plugin-repository|
+       version: |k8s-rdma-shared-dev-plugin-version|
+       imagePullSecrets: []
+       # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+       # Replace 'devices' with your (RDMA capable) netdevice name.
+       config: |
+         {
+           "configList": [
+             {
+               "resourceName": "rdma_shared_device_a",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": [],
+                 "deviceIDs": [],
+                 "drivers": [],
+                 "ifNames": ["ens1f0"],
+                 "linkTypes": []
+               }
+             }
+           ]
+         }
 
 --------------------------------------------------------------------------------
 Network Operator Deployment with Multiple Resources in RDMA Shared Device Plugin
@@ -266,72 +266,72 @@ Note: You may need to change the interface names in the NicClusterPolicy to thos
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      rdmaSharedDevicePlugin:
-        # [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]
-        image: k8s-rdma-shared-dev-plugin
-        repository: |k8s-rdma-shared-dev-plugin-repository|
-        version: |k8s-rdma-shared-dev-plugin-version|
-        imagePullSecrets: []
-        # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
-        # Replace 'devices' with your (RDMA capable) netdevice name.
-        config: |
-          {
-            "configList": [
-              {
-                "resourceName": "rdma_shared_device_a",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": [],
-                  "deviceIDs": [],
-                  "drivers": [],
-                  "ifNames": ["ens1f0","ens1f1"],
-                  "linkTypes": []
-                }
-              },
-              {
-                "resourceName": "rdma_shared_device_b",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": [],
-                  "deviceIDs": [],
-                  "drivers": [],
-                  "ifNames": ["ens2f0","ens2f1"],
-                  "linkTypes": []
-                }
-              }
-            ]
-          }
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     rdmaSharedDevicePlugin:
+       # [map[ifNames:[ens1f0 ens1f1] name:rdma_shared_device_a] map[ifNames:[ens2f0 ens2f1] name:rdma_shared_device_b]]
+       image: k8s-rdma-shared-dev-plugin
+       repository: |k8s-rdma-shared-dev-plugin-repository|
+       version: |k8s-rdma-shared-dev-plugin-version|
+       imagePullSecrets: []
+       # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+       # Replace 'devices' with your (RDMA capable) netdevice name.
+       config: |
+         {
+           "configList": [
+             {
+               "resourceName": "rdma_shared_device_a",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": [],
+                 "deviceIDs": [],
+                 "drivers": [],
+                 "ifNames": ["ens1f0","ens1f1"],
+                 "linkTypes": []
+               }
+             },
+             {
+               "resourceName": "rdma_shared_device_b",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": [],
+                 "deviceIDs": [],
+                 "drivers": [],
+                 "ifNames": ["ens2f0","ens2f1"],
+                 "linkTypes": []
+               }
+             }
+           ]
+         }
 
 --------------------------------------------------------------------
 Network Operator Deployment with a Secondary Network and NVIDIA-IPAM
@@ -382,34 +382,34 @@ To create an NV-IPAM IPPool, apply:
 
 .. code-block:: yaml
 
-    apiVersion: nv-ipam.nvidia.com/v1alpha1
-    kind: IPPool
-    metadata:
-      name: my-pool
-      namespace: nvidia-network-operator
-    spec:
-      subnet: 192.168.0.0/24
-      perNodeBlockSize: 100
-      gateway: 192.168.0.1
+   apiVersion: nv-ipam.nvidia.com/v1alpha1
+   kind: IPPool
+   metadata:
+     name: my-pool
+     namespace: nvidia-network-operator
+   spec:
+     subnet: 192.168.0.0/24
+     perNodeBlockSize: 100
+     gateway: 192.168.0.1
 
 Example of a MacvlanNetwork that uses NVIDIA-IPAM:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: MacvlanNetwork
-    metadata:
-      name: example-macvlannetwork
-    spec:
-      networkNamespace: "default"
-      master: "ens2f0"
-      mode: "bridge"
-      mtu: 1500
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: MacvlanNetwork
+   metadata:
+     name: example-macvlannetwork
+   spec:
+     networkNamespace: "default"
+     master: "ens2f0"
+     mode: "bridge"
+     mtu: 1500
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 ------------------------------------------------------
 Network Operator Deployment with a Host Device Network
@@ -440,52 +440,52 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      sriovDevicePlugin:
-        image: sriov-network-device-plugin
-        repository: |sriovnetop-sriov-device-plugin-repository|
-        version: |sriovnetop-sriov-device-plugin-version|
-        imagePullSecrets: []
-        config: |
-          {
-            "resourceList": [
-              {
-                "resourcePrefix": "nvidia.com",
-                "resourceName": "hostdev",
-                "selectors": {
-                  "vendors": ["15b3"],
-                  "devices": [],
-                  "drivers": [],
-                  "pfNames": [],
-                  "pciAddresses": [],
-                  "rootDevices": [],
-                  "linkTypes": [],
-                  "isRdma": true
-                }
-              }
-            ]
-          }
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     sriovDevicePlugin:
+       image: sriov-network-device-plugin
+       repository: |sriovnetop-sriov-device-plugin-repository|
+       version: |sriovnetop-sriov-device-plugin-version|
+       imagePullSecrets: []
+       config: |
+         {
+           "resourceList": [
+             {
+               "resourcePrefix": "nvidia.com",
+               "resourceName": "hostdev",
+               "selectors": {
+                 "vendors": ["15b3"],
+                 "devices": [],
+                 "drivers": [],
+                 "pfNames": [],
+                 "pciAddresses": [],
+                 "rootDevices": [],
+                 "linkTypes": [],
+                 "isRdma": true
+               }
+             }
+           ]
+         }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 Following the deployment, the network operator should be configured, and K8s networking should be deployed to use it in pod configuration.
 
@@ -493,63 +493,63 @@ The ``host-device-net.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: HostDeviceNetwork
-    metadata:
-      name: hostdev-net
-    spec:
-      networkNamespace: "default"
-      resourceName: "hostdev"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: HostDeviceNetwork
+   metadata:
+     name: hostdev-net
+   spec:
+     networkNamespace: "default"
+     resourceName: "hostdev"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: HostDeviceNetwork
-    metadata:
-      name: hostdev-net
-    spec:
-      networkNamespace: "default"
-      resourceName: "hostdev"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "myPool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: HostDeviceNetwork
+   metadata:
+     name: hostdev-net
+   spec:
+     networkNamespace: "default"
+     resourceName: "hostdev"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "myPool"
+       }
 
 The ``pod.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: hostdev-test-pod
-      annotations:
-        k8s.v1.cni.cncf.io/networks: hostdev-net
-    spec:
-      restartPolicy: OnFailure
-      containers:
-      - image:
-        name: doca-test-ctr
-        securityContext:
-          capabilities:
-            add: [ "IPC_LOCK" ]
-        resources:
-          requests:
-            nvidia.com/hostdev: 1
-          limits:
-            nvidia.com/hostdev: 1
-        command:
-        - sh
-        - -c
-        - sleep inf
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: hostdev-test-pod
+     annotations:
+       k8s.v1.cni.cncf.io/networks: hostdev-net
+   spec:
+     restartPolicy: OnFailure
+     containers:
+     - image:
+       name: doca-test-ctr
+       securityContext:
+         capabilities:
+           add: [ "IPC_LOCK" ]
+       resources:
+         requests:
+           nvidia.com/hostdev: 1
+         limits:
+           nvidia.com/hostdev: 1
+       command:
+       - sh
+       - -c
+       - sleep inf
 
 --------------------------------------------------------------------------
 Network Operator Deployment with a Host Device Network and Macvlan Network
@@ -577,76 +577,76 @@ Once the Network Operator is installed deploy a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      rdmaSharedDevicePlugin:
-        # [map[linkTypes:[ether] name:rdma_shared_device_a]]
-        image: k8s-rdma-shared-dev-plugin
-        repository: |k8s-rdma-shared-dev-plugin-repository|
-        version: |k8s-rdma-shared-dev-plugin-version|
-        imagePullSecrets: []
-        # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
-        # Replace 'devices' with your (RDMA capable) netdevice name.
-        config: |
-          {
-            "configList": [
-              {
-                "resourceName": "rdma_shared_device_a",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": [],
-                  "deviceIDs": [],
-                  "drivers": [],
-                  "ifNames": [],
-                  "linkTypes": ["ether"]
-                }
-              }
-            ]
-          }
-      sriovDevicePlugin:
-        image: sriov-network-device-plugin
-        repository: |sriovnetop-sriov-device-plugin-repository|
-        version: |sriovnetop-sriov-device-plugin-version|
-        imagePullSecrets: []
-        config: |
-          {
-            "resourceList": [
-              {
-                "resourcePrefix": "nvidia.com",
-                "resourceName": "hostdev",
-                "selectors": {
-                  "vendors": [],
-                  "devices": [],
-                  "drivers": [],
-                  "pfNames": [],
-                  "pciAddresses": [],
-                  "rootDevices": [],
-                  "linkTypes": ["IB"],
-                  "isRdma": true
-                }
-              }
-            ]
-          }
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     rdmaSharedDevicePlugin:
+       # [map[linkTypes:[ether] name:rdma_shared_device_a]]
+       image: k8s-rdma-shared-dev-plugin
+       repository: |k8s-rdma-shared-dev-plugin-repository|
+       version: |k8s-rdma-shared-dev-plugin-version|
+       imagePullSecrets: []
+       # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+       # Replace 'devices' with your (RDMA capable) netdevice name.
+       config: |
+         {
+           "configList": [
+             {
+               "resourceName": "rdma_shared_device_a",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": [],
+                 "deviceIDs": [],
+                 "drivers": [],
+                 "ifNames": [],
+                 "linkTypes": ["ether"]
+               }
+             }
+           ]
+         }
+     sriovDevicePlugin:
+       image: sriov-network-device-plugin
+       repository: |sriovnetop-sriov-device-plugin-repository|
+       version: |sriovnetop-sriov-device-plugin-version|
+       imagePullSecrets: []
+       config: |
+         {
+           "resourceList": [
+             {
+               "resourcePrefix": "nvidia.com",
+               "resourceName": "hostdev",
+               "selectors": {
+                 "vendors": [],
+                 "devices": [],
+                 "drivers": [],
+                 "pfNames": [],
+                 "pciAddresses": [],
+                 "rootDevices": [],
+                 "linkTypes": ["IB"],
+                 "isRdma": true
+               }
+             }
+           ]
+         }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 For pods and network configuration examples please refer to the corresponding sections: Network Operator Deployment with the RDMA Shared Device Plugin and Network Operator Deployment with a Host Device Network.
 
@@ -676,82 +676,82 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      rdmaSharedDevicePlugin:
-        # [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]
-        image: k8s-rdma-shared-dev-plugin
-        repository: |k8s-rdma-shared-dev-plugin-repository|
-        version: |k8s-rdma-shared-dev-plugin-version|
-        imagePullSecrets: []
-        # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
-        # Replace 'devices' with your (RDMA capable) netdevice name.
-        config: |
-          {
-            "configList": [
-              {
-                "resourceName": "rdma_shared_device_a",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": [],
-                  "deviceIDs": [],
-                  "drivers": [],
-                  "ifNames": ["ibs1f0"],
-                  "linkTypes": []
-                }
-              }
-            ]
-          }
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
-        ipoib:
-          image: ipoib-cni
-          repository: |ipoib-cni-repository|
-          version: |ipoib-cni-version|
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     rdmaSharedDevicePlugin:
+       # [map[ifNames:[ibs1f0] name:rdma_shared_device_a]]
+       image: k8s-rdma-shared-dev-plugin
+       repository: |k8s-rdma-shared-dev-plugin-repository|
+       version: |k8s-rdma-shared-dev-plugin-version|
+       imagePullSecrets: []
+       # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+       # Replace 'devices' with your (RDMA capable) netdevice name.
+       config: |
+         {
+           "configList": [
+             {
+               "resourceName": "rdma_shared_device_a",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": [],
+                 "deviceIDs": [],
+                 "drivers": [],
+                 "ifNames": ["ibs1f0"],
+                 "linkTypes": []
+               }
+             }
+           ]
+         }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
+       ipoib:
+         image: ipoib-cni
+         repository: |ipoib-cni-repository|
+         version: |ipoib-cni-version|
 
 Following the deployment, the network operator should be configured, and K8s networking deployed to use it in the pod configuration.
 
@@ -759,63 +759,63 @@ The ``ipoib-net.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: IPoIBNetwork
-    metadata:
-      name: example-ipoibnetwork
-    spec:
-      networkNamespace: "default"
-      master: "ibs1f0"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: IPoIBNetwork
+   metadata:
+     name: example-ipoibnetwork
+   spec:
+     networkNamespace: "default"
+     master: "ibs1f0"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 The ``ipoib-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: IPoIBNetwork
-    metadata:
-      name: example-ipoibnetwork
-    spec:
-      networkNamespace: "default"
-      master: "ibs1f0"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: IPoIBNetwork
+   metadata:
+     name: example-ipoibnetwork
+   spec:
+     networkNamespace: "default"
+     master: "ibs1f0"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 The ``pod.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: iboip-test-pod
-      annotations:
-        k8s.v1.cni.cncf.io/networks: example-ipoibnetwork
-    spec:
-      restartPolicy: OnFailure
-      containers:
-      - image:
-        name: doca-test-ctr
-        securityContext:
-          capabilities:
-            add: [ "IPC_LOCK" ]
-        resources:
-          requests:
-            rdma/rdma_shared_device_a: 1
-          limits:
-            edma/rdma_shared_device_a: 1
-        command:
-        - sh
-        - -c
-        - sleep inf
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: iboip-test-pod
+     annotations:
+       k8s.v1.cni.cncf.io/networks: example-ipoibnetwork
+   spec:
+     restartPolicy: OnFailure
+     containers:
+     - image:
+       name: doca-test-ctr
+       securityContext:
+         capabilities:
+           add: [ "IPC_LOCK" ]
+       resources:
+         requests:
+           rdma/rdma_shared_device_a: 1
+         limits:
+           edma/rdma_shared_device_a: 1
+       command:
+       - sh
+       - -c
+       - sleep inf
 
 ---------------------------------------------------
 Network Operator Deployment for GPUDirect Workloads
@@ -847,142 +847,142 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      sriovDevicePlugin:
-        image: sriov-network-device-plugin
-        repository: |sriovnetop-sriov-device-plugin-repository|
-        version: |sriovnetop-sriov-device-plugin-version|
-        imagePullSecrets: []
-        config: |
-          {
-            "resourceList": [
-              {
-                "resourcePrefix": "nvidia.com",
-                "resourceName": "hostdev",
-                "selectors": {
-                  "vendors": ["15b3"],
-                  "devices": [],
-                  "drivers": [],
-                  "pfNames": [],
-                  "pciAddresses": [],
-                  "rootDevices": [],
-                  "linkTypes": [],
-                  "isRdma": true
-                }
-              }
-            ]
-          }
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     sriovDevicePlugin:
+       image: sriov-network-device-plugin
+       repository: |sriovnetop-sriov-device-plugin-repository|
+       version: |sriovnetop-sriov-device-plugin-version|
+       imagePullSecrets: []
+       config: |
+         {
+           "resourceList": [
+             {
+               "resourcePrefix": "nvidia.com",
+               "resourceName": "hostdev",
+               "selectors": {
+                 "vendors": ["15b3"],
+                 "devices": [],
+                 "drivers": [],
+                 "pfNames": [],
+                 "pciAddresses": [],
+                 "rootDevices": [],
+                 "linkTypes": [],
+                 "isRdma": true
+               }
+             }
+           ]
+         }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 ``host-device-net.yaml:``
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: HostDeviceNetwork
-    metadata:
-       name: hostdevice-net
-    spec:
-      networkNamespace: "default"
-      resourceName: "hostdev"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: HostDeviceNetwork
+   metadata:
+      name: hostdevice-net
+   spec:
+     networkNamespace: "default"
+     resourceName: "hostdev"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 The ``host-device-net-ocp.yaml`` configuration file for such a deployment in the OpenShift Platform:
 
 .. code-block:: yaml
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: HostDeviceNetwork
-    metadata:
-       name: hostdevice-net
-    spec:
-      networkNamespace: "default"
-      resourceName: "hostdev"
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: mellanox.com/v1alpha1
+   kind: HostDeviceNetwork
+   metadata:
+      name: hostdevice-net
+   spec:
+     networkNamespace: "default"
+     resourceName: "hostdev"
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 ``host-net-gpudirect-pod.yaml``
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: testpod1
-      annotations:
-         k8s.v1.cni.cncf.io/networks: hostdevice-net
-    spec:
-      containers:
-      - name: appcntr1
-        image: <image>
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          capabilities:
-            add: ["IPC_LOCK"]
-        command:
-          - sh
-          - -c
-          - sleep inf
-        resources:
-          requests:
-            nvidia.com/hostdev: '1'
-            nvidia.com/gpu: '1'
-          limits:
-            nvidia.com/hostdev: '1'
-            nvidia.com/gpu: '1'
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: testpod1
+     annotations:
+        k8s.v1.cni.cncf.io/networks: hostdevice-net
+   spec:
+     containers:
+     - name: appcntr1
+       image: <image>
+       imagePullPolicy: IfNotPresent
+       securityContext:
+         capabilities:
+           add: ["IPC_LOCK"]
+       command:
+         - sh
+         - -c
+         - sleep inf
+       resources:
+         requests:
+           nvidia.com/hostdev: '1'
+           nvidia.com/gpu: '1'
+         limits:
+           nvidia.com/hostdev: '1'
+           nvidia.com/gpu: '1'
 
 -------------------------------------------------
 Network Operator Deployment in SR-IOV Legacy Mode
@@ -1012,54 +1012,54 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 Following the deployment, the Network Operator should be configured, and sriovnetwork node policy and K8s networking should be deployed.
 
@@ -1067,42 +1067,42 @@ The ``sriovnetwork-node-policy.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkNodePolicy
-    metadata:
-      name: policy-1
-      namespace: nvidia-network-operator
-    spec:
-      deviceType: netdevice
-      mtu: 1500
-      nicSelector:
-        vendor: "15b3"
-        pfNames: ["ens2f0"]
-      nodeSelector:
-        feature.node.kubernetes.io/pci-15b3.present: "true"
-      numVfs: 8
-      priority: 90
-      isRdma: true
-      resourceName: sriov_resource
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetworkNodePolicy
+   metadata:
+     name: policy-1
+     namespace: nvidia-network-operator
+   spec:
+     deviceType: netdevice
+     mtu: 1500
+     nicSelector:
+       vendor: "15b3"
+       pfNames: ["ens2f0"]
+     nodeSelector:
+       feature.node.kubernetes.io/pci-15b3.present: "true"
+     numVfs: 8
+     priority: 90
+     isRdma: true
+     resourceName: sriov_resource
 
 The ``sriovnetwork.yaml`` configuration file for such a deployment:
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetwork
-    metadata:
-      name: "example-sriov-network"
-      namespace: nvidia-network-operator
-    spec:
-      vlan: 0
-      networkNamespace: "default"
-      resourceName: "sriov_resource"
-      ipam: |-
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetwork
+   metadata:
+     name: "example-sriov-network"
+     namespace: nvidia-network-operator
+   spec:
+     vlan: 0
+     networkNamespace: "default"
+     resourceName: "sriov_resource"
+     ipam: |-
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
 
 .. warning:: The ens2f0 network interface name has been chosen from the following command output: ``kubectl -n nvidia-network-operator get sriovnetworknodestates.sriovnetwork.openshift.io -o yaml``.
 
@@ -1196,43 +1196,43 @@ To apply SR-IOV configuration on several nodes in parallel, create a ``SriovNetw
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkPoolConfig
-    metadata:
-      name: pool-1
-      namespace: nvidia-network-operator
-    spec:
-      maxUnavailable: "20"
-      nodeSelector:
-        - matchExpressions:
-          - key: some-label
-            operator: In
-            values:
-              - val-2
-        - matchExpressions:
-          - key: other-label
-            operator: "Exists"
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetworkPoolConfig
+   metadata:
+     name: pool-1
+     namespace: nvidia-network-operator
+   spec:
+     maxUnavailable: "20"
+     nodeSelector:
+       - matchExpressions:
+         - key: some-label
+           operator: In
+           values:
+             - val-2
+       - matchExpressions:
+         - key: other-label
+           operator: "Exists"
 
 ``sriov-network-pool-config-percent.yaml``
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkPoolConfig
-    metadata:
-      name: pool-1
-      namespace: nvidia-network-operator
-    spec:
-      maxUnavailable: "10%"
-      nodeSelector:
-        - matchExpressions:
-          - key: some-label
-            operator: In
-            values:
-              - val-2
-        - matchExpressions:
-          - key: other-label
-            operator: "Exists"
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetworkPoolConfig
+   metadata:
+     name: pool-1
+     namespace: nvidia-network-operator
+   spec:
+     maxUnavailable: "10%"
+     nodeSelector:
+       - matchExpressions:
+         - key: some-label
+           operator: In
+           values:
+             - val-2
+       - matchExpressions:
+         - key: other-label
+           operator: "Exists"
 
 --------------------------------------------------------------------------
 SR-IOV Network Operator Deployment – Parallel NIC Configuration for SR-IOV
@@ -1286,123 +1286,123 @@ Once the Network Operator is installed create a NicClusterPolicy with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        forcePrecompiled: false
-        imagePullSecrets: []
-        terminationGracePeriodSeconds: 300
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 20
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        upgradePolicy:
-          autoUpgrade: true
-          maxParallelUpgrades: 1
-          safeLoad: false
-          drain:
-            enable: true
-            force: true
-            podSelector: ""
-            timeoutSeconds: 300
-            deleteEmptyDir: true
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       forcePrecompiled: false
+       imagePullSecrets: []
+       terminationGracePeriodSeconds: 300
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 20
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+       upgradePolicy:
+         autoUpgrade: true
+         maxParallelUpgrades: 1
+         safeLoad: false
+         drain:
+           enable: true
+           force: true
+           podSelector: ""
+           timeoutSeconds: 300
+           deleteEmptyDir: true
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 ``sriov-ib-network-node-policy.yaml``
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkNodePolicy
-    metadata:
-      name: infiniband-sriov
-      namespace: nvidia-network-operator
-    spec:
-      deviceType: netdevice
-      mtu: 1500
-      nodeSelector:
-        feature.node.kubernetes.io/pci-15b3.present: "true"
-      nicSelector:
-        vendor: "15b3"
-      linkType: IB
-      isRdma: true
-      numVfs: 8
-      priority: 90
-      resourceName: mlnxnics
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetworkNodePolicy
+   metadata:
+     name: infiniband-sriov
+     namespace: nvidia-network-operator
+   spec:
+     deviceType: netdevice
+     mtu: 1500
+     nodeSelector:
+       feature.node.kubernetes.io/pci-15b3.present: "true"
+     nicSelector:
+       vendor: "15b3"
+     linkType: IB
+     isRdma: true
+     numVfs: 8
+     priority: 90
+     resourceName: mlnxnics
 
 ``sriov-ib-network.yaml``
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovIBNetwork
-    metadata:
-      name: example-sriov-ib-network
-      namespace: nvidia-network-operator
-    spec:
-      ipam: |
-        {
-          "type": "nv-ipam",
-          "poolName": "my-pool"
-        }
-      resourceName: mlnxnics
-      linkState: enable
-      networkNamespace: default
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovIBNetwork
+   metadata:
+     name: example-sriov-ib-network
+     namespace: nvidia-network-operator
+   spec:
+     ipam: |
+       {
+         "type": "nv-ipam",
+         "poolName": "my-pool"
+       }
+     resourceName: mlnxnics
+     linkState: enable
+     networkNamespace: default
 
 ``sriov-ib-network-pod.yaml``
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: test-sriov-ib-pod
-      annotations:
-        k8s.v1.cni.cncf.io/networks: example-sriov-ib-network
-    spec:
-      containers:
-        - name: test-sriov-ib-pod
-          image: centos/tools
-          imagePullPolicy: IfNotPresent
-          command:
-            - sh
-            - -c
-            - sleep inf
-          securityContext:
-            capabilities:
-              add: [ "IPC_LOCK" ]
-          resources:
-            requests:
-              nvidia.com/mlnxics: "1"
-            limits:
-              nvidia.com/mlnxics: "1"
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: test-sriov-ib-pod
+     annotations:
+       k8s.v1.cni.cncf.io/networks: example-sriov-ib-network
+   spec:
+     containers:
+       - name: test-sriov-ib-pod
+         image: centos/tools
+         imagePullPolicy: IfNotPresent
+         command:
+           - sh
+           - -c
+           - sleep inf
+         securityContext:
+           capabilities:
+             add: [ "IPC_LOCK" ]
+         resources:
+           requests:
+             nvidia.com/mlnxics: "1"
+           limits:
+             nvidia.com/mlnxics: "1"
 
 ----------------------------------------------------------------------------------
 Network Operator Deployment with an SR-IOV InfiniBand Network with PKey Management
@@ -1434,19 +1434,19 @@ IB Kubernetes must access `NVIDIA UFM <https://www.nvidia.com/en-us/networking/i
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ib-kubernetes-ufm-secret
-      namespace: nvidia-network-operator
-    stringData:
-      UFM_USERNAME: "admin"
-      UFM_PASSWORD: "123456"
-      UFM_ADDRESS: "ufm-host"
-      UFM_HTTP_SCHEMA: ""
-      UFM_PORT: ""
-    data:
-      UFM_CERTIFICATE: ""
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: ib-kubernetes-ufm-secret
+     namespace: nvidia-network-operator
+   stringData:
+     UFM_USERNAME: "admin"
+     UFM_PASSWORD: "123456"
+     UFM_ADDRESS: "ufm-host"
+     UFM_HTTP_SCHEMA: ""
+     UFM_PORT: ""
+   data:
+     UFM_CERTIFICATE: ""
 
 First install the Network Operator with NFD enabled:
 ``values.yaml``
@@ -1531,20 +1531,20 @@ Create IPPool object for nv-ipam
 
 .. code-block:: yaml
 
-    apiVersion: nv-ipam.nvidia.com/v1alpha1
-    kind: IPPool
-    metadata:
-      name: pool1
-      namespace: nvidia-network-operator
-    spec:
-      subnet: 192.168.0.0/16
-      perNodeBlockSize: 100
-      gateway: 192.168.0.1
-      nodeSelector:
-        nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/worker
-              operator: Exists
+   apiVersion: nv-ipam.nvidia.com/v1alpha1
+   kind: IPPool
+   metadata:
+     name: pool1
+     namespace: nvidia-network-operator
+   spec:
+     subnet: 192.168.0.0/16
+     perNodeBlockSize: 100
+     gateway: 192.168.0.1
+     nodeSelector:
+       nodeSelectorTerms:
+       - matchExpressions:
+           - key: node-role.kubernetes.io/worker
+             operator: Exists
 
 Wait for NVIDIA DOCA-OFED Driver to install and apply the following CRs:
 
@@ -1552,23 +1552,23 @@ Wait for NVIDIA DOCA-OFED Driver to install and apply the following CRs:
 
 .. code-block:: yaml
 
-    apiVersion: sriovnetwork.openshift.io/v1
-    kind: SriovNetworkNodePolicy
-    metadata:
-      name: infiniband-sriov
-      namespace: nvidia-network-operator
-    spec:
-      deviceType: netdevice
-      mtu: 1500
-      nodeSelector:
-        feature.node.kubernetes.io/pci-15b3.present: "true"
-      nicSelector:
-        vendor: "15b3"
-      linkType: IB
-      isRdma: true
-      numVfs: 8
-      priority: 90
-      resourceName: mlnxnics
+   apiVersion: sriovnetwork.openshift.io/v1
+   kind: SriovNetworkNodePolicy
+   metadata:
+     name: infiniband-sriov
+     namespace: nvidia-network-operator
+   spec:
+     deviceType: netdevice
+     mtu: 1500
+     nodeSelector:
+       feature.node.kubernetes.io/pci-15b3.present: "true"
+     nicSelector:
+       vendor: "15b3"
+     linkType: IB
+     isRdma: true
+     numVfs: 8
+     priority: 90
+     resourceName: mlnxnics
 
 ``sriov-ib-network.yaml``
 
@@ -1630,29 +1630,29 @@ Wait for NVIDIA DOCA-OFED Driver to install and apply the following CRs:
 
 .. code-block:: yaml
 
-    apiVersion: v1
-    kind: Pod
-    metadata:
-      name: test-sriov-ib-pod
-      annotations:
-        k8s.v1.cni.cncf.io/networks: ib-sriov-network
-    spec:
-      containers:
-        - name: test-sriov-ib-pod
-          image: centos/tools
-          imagePullPolicy: IfNotPresent
-          command:
-            - sh
-            - -c
-            - sleep inf
-          securityContext:
-            capabilities:
-              add: [ "IPC_LOCK" ]
-          resources:
-            requests:
-              nvidia.com/mlnxics: "1"
-            limits:
-              nvidia.com/mlnxics: "1"
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: test-sriov-ib-pod
+     annotations:
+       k8s.v1.cni.cncf.io/networks: ib-sriov-network
+   spec:
+     containers:
+       - name: test-sriov-ib-pod
+         image: centos/tools
+         imagePullPolicy: IfNotPresent
+         command:
+           - sh
+           - -c
+           - sleep inf
+         securityContext:
+           capabilities:
+             add: [ "IPC_LOCK" ]
+         resources:
+           requests:
+             nvidia.com/mlnxics: "1"
+           limits:
+             nvidia.com/mlnxics: "1"
 
 --------------------------------------------------------------------
 Network Operator Deployment for DPDK Workloads with NicClusterPolicy
@@ -1672,48 +1672,48 @@ Network Operator deployment with:
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-      sriovDevicePlugin:
-        image: sriov-network-device-plugin
-        repository: |sriov-device-plugin-repository|
-        version: |sriov-device-plugin-version|
-         config: |
-          {
-            "resourceList": [
-                {
-                    "resourcePrefix": "nvidia.com",
-                    "resourceName": "rdma_host_dev",
-                    "selectors": {
-                        "vendors": ["15b3"],
-                        "devices": ["1018"],
-                        "drivers": ["mlx5_core"]
-                    }
-                }
-            ]
-          }
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+     sriovDevicePlugin:
+       image: sriov-network-device-plugin
+       repository: |sriov-device-plugin-repository|
+       version: |sriov-device-plugin-version|
+        config: |
+         {
+           "resourceList": [
+               {
+                   "resourcePrefix": "nvidia.com",
+                   "resourceName": "rdma_host_dev",
+                   "selectors": {
+                       "vendors": ["15b3"],
+                       "devices": ["1018"],
+                       "drivers": ["mlx5_core"]
+                   }
+               }
+           ]
+         }
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
 
 ``host-device-net.yaml``
 
@@ -1800,28 +1800,28 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 
 Enable ``manageSoftwareBridges`` featureGate for sriov-network-operator
@@ -1834,20 +1834,20 @@ Create IPPool object for nv-ipam
 
 .. code-block:: yaml
 
-    apiVersion: nv-ipam.nvidia.com/v1alpha1
-    kind: IPPool
-    metadata:
-      name: pool1
-      namespace: nvidia-network-operator
-    spec:
-      subnet: 192.168.0.0/16
-      perNodeBlockSize: 100
-      gateway: 192.168.0.1
-      nodeSelector:
-        nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/worker
-              operator: Exists
+   apiVersion: nv-ipam.nvidia.com/v1alpha1
+   kind: IPPool
+   metadata:
+     name: pool1
+     namespace: nvidia-network-operator
+   spec:
+     subnet: 192.168.0.0/16
+     perNodeBlockSize: 100
+     gateway: 192.168.0.1
+     nodeSelector:
+       nodeSelectorTerms:
+       - matchExpressions:
+           - key: node-role.kubernetes.io/worker
+             operator: Exists
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2120,28 +2120,28 @@ Once the Network Operator has been installed create a NicClusterPolicy with nv-i
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      nvIpam:
-        image: nvidia-k8s-ipam
-        repository: |nvidia-ipam-repository|
-        version: |nvidia-ipam-version|
-        imagePullSecrets: []
-        enableWebhook: false
-      secondaryNetwork:
-        cniPlugins:
-          image: plugins
-          repository: |cni-plugins-repository|
-          version: |cni-plugins-version|
-          imagePullSecrets: []
-        multus:
-          image: multus-cni
-          repository: |multus-repository|
-          version: |multus-version|
-          imagePullSecrets: []
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     nvIpam:
+       image: nvidia-k8s-ipam
+       repository: |nvidia-ipam-repository|
+       version: |nvidia-ipam-version|
+       imagePullSecrets: []
+       enableWebhook: false
+     secondaryNetwork:
+       cniPlugins:
+         image: plugins
+         repository: |cni-plugins-repository|
+         version: |cni-plugins-version|
+         imagePullSecrets: []
+       multus:
+         image: multus-cni
+         repository: |multus-repository|
+         version: |multus-version|
+         imagePullSecrets: []
 
 Switch sriov-network-operator to `systemd` configuration mode.
 
@@ -2154,20 +2154,20 @@ Create IPPool object for nv-ipam
 
 .. code-block:: yaml
 
-    apiVersion: nv-ipam.nvidia.com/v1alpha1
-    kind: IPPool
-    metadata:
-      name: pool1
-      namespace: nvidia-network-operator
-    spec:
-      subnet: 192.168.0.0/16
-      perNodeBlockSize: 100
-      gateway: 192.168.0.1
-      nodeSelector:
-        nodeSelectorTerms:
-        - matchExpressions:
-            - key: node-role.kubernetes.io/worker
-              operator: Exists
+   apiVersion: nv-ipam.nvidia.com/v1alpha1
+   kind: IPPool
+   metadata:
+     name: pool1
+     namespace: nvidia-network-operator
+   spec:
+     subnet: 192.168.0.0/16
+     perNodeBlockSize: 100
+     gateway: 192.168.0.1
+     nodeSelector:
+       nodeSelectorTerms:
+       - matchExpressions:
+           - key: node-role.kubernetes.io/worker
+             operator: Exists
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

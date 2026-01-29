@@ -82,7 +82,7 @@ These variables can be set in the NicClusterPolicy. For example:
           value: "true"
 
 
-.. _advanced-configurations-precompiled:
+.. _precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container:
 
 ==============================================================================
 Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container
