@@ -171,45 +171,45 @@ To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section f
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-      namespace: nvidia-network-operator
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        upgradePolicy:
-          # autoUpgrade is a global switch for automatic upgrade feature
-          # if set to false all other options are ignored
-          autoUpgrade: true
-          # maxParallelUpgrades indicates how many nodes can be upgraded in parallel
-          # 0 means no limit, all nodes will be upgraded in parallel
-          maxParallelUpgrades: 0
-          # cordon and drain (if enabled) a node before loading the driver on it
-          safeLoad: false
-          # describes the configuration for waiting on job completions
-          waitForCompletion:
-            # specifies a label selector for the pods to wait for completion
-            podSelector: "app=myapp"
-            # specify the length of time in seconds to wait before giving up for workload to finish, zero means infinite
-            # if not specified, the default is 300 seconds
-            timeoutSeconds: 300
-          # describes configuration for node drain during automatic upgrade
-          drain:
-            # allow node draining during upgrade
-            enable: true
-            # allow force draining
-            force: false
-            # specify a label selector to filter pods on the node that need to be drained
-            podSelector: ""
-            # specify the length of time in seconds to wait before giving up drain, zero means infinite
-            # if not specified, the default is 300 seconds
-            timeoutSeconds: 300
-            # specify if should continue even if there are pods using emptyDir
-            deleteEmptyDir: false
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+     namespace: nvidia-network-operator
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       upgradePolicy:
+         # autoUpgrade is a global switch for automatic upgrade feature
+         # if set to false all other options are ignored
+         autoUpgrade: true
+         # maxParallelUpgrades indicates how many nodes can be upgraded in parallel
+         # 0 means no limit, all nodes will be upgraded in parallel
+         maxParallelUpgrades: 0
+         # cordon and drain (if enabled) a node before loading the driver on it
+         safeLoad: false
+         # describes the configuration for waiting on job completions
+         waitForCompletion:
+           # specifies a label selector for the pods to wait for completion
+           podSelector: "app=myapp"
+           # specify the length of time in seconds to wait before giving up for workload to finish, zero means infinite
+           # if not specified, the default is 300 seconds
+           timeoutSeconds: 300
+         # describes configuration for node drain during automatic upgrade
+         drain:
+           # allow node draining during upgrade
+           enable: true
+           # allow force draining
+           force: false
+           # specify a label selector to filter pods on the node that need to be drained
+           podSelector: ""
+           # specify the length of time in seconds to wait before giving up drain, zero means infinite
+           # if not specified, the default is 300 seconds
+           timeoutSeconds: 300
+           # specify if should continue even if there are pods using emptyDir
+           deleteEmptyDir: false
 
 Apply NicClusterPolicy CR:
 
@@ -258,24 +258,24 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
   .. code-block:: yaml
     :substitutions:
 
-      apiVersion: mellanox.com/v1alpha1
-      kind: NicClusterPolicy
-      metadata:
-        name: nic-cluster-policy
-        namespace: nvidia-network-operator
-      spec:
-        ofedDriver:
-          image: doca-driver
-          repository: |doca-driver-repository|
-          version: |doca-driver-version|
-          upgradePolicy:
-            autoUpgrade: true
-            maxParallelUpgrades: 1
-            drain:
-              enable: true
-              force: false
-              deleteEmptyDir: true
-              podSelector: ""
+    apiVersion: mellanox.com/v1alpha1
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+      namespace: nvidia-network-operator
+    spec:
+      ofedDriver:
+        image: doca-driver
+        repository: |doca-driver-repository|
+        version: |doca-driver-version|
+        upgradePolicy:
+          autoUpgrade: true
+          maxParallelUpgrades: 1
+          drain:
+            enable: true
+            force: false
+            deleteEmptyDir: true
+            podSelector: ""
 
 #############
 Upgrade modes
@@ -440,7 +440,7 @@ The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSched
 Network Operator Upgrade on OpenShift Container Platform
 --------------------------------------------------------
 
-See instructions in the :ref:`Network Operator Upgrade <network-operator-upgrade-openshift>` section.
+See instructions in the :ref:`Network Operator Upgrade <network-operator-upgrade>` section.
 
 
 =================================
