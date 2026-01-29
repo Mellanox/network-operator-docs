@@ -212,7 +212,7 @@ Example output:
 
 A successful deployment shows a `Running` status.
 
-.. _network-operator-upgrade-openshift:
+.. _network-operator-upgrade:
 
 -------------------------
 Network Operator Upgrade
@@ -360,7 +360,7 @@ SR-IOV device plugin, single SR-IOV resource pool:
 
 .. code-block:: yaml
    :substitutions:
-   
+
    apiVersion: mellanox.com/v1alpha1
    kind: NicClusterPolicy
    metadata:
@@ -370,7 +370,7 @@ SR-IOV device plugin, single SR-IOV resource pool:
        image: doca-driver
        repository: |doca-driver-repository|
        version: |doca-driver-version|
-        startupProbe:
+       startupProbe:
          initialDelaySeconds: 10
          periodSeconds: 20
        livenessProbe:
@@ -380,22 +380,22 @@ SR-IOV device plugin, single SR-IOV resource pool:
          initialDelaySeconds: 10
          periodSeconds: 30
      sriovDevicePlugin:
-         image: sriov-network-device-plugin
-         repository: |sriov-device-plugin-repository|
-         version: |sriov-device-plugin-version|
-         config: |
-           {
-             "resourceList": [
-                 {
-                     "resourcePrefix": "nvidia.com",
-                     "resourceName": "hostdev",
-                     "selectors": {
-                         "vendors": ["15b3"],
-                         "isRdma": true
-                     }
-                 }
-             ]
-           }
+       image: sriov-network-device-plugin
+       repository: |sriov-device-plugin-repository|
+       version: |sriov-device-plugin-version|
+       config: |
+         {
+           "resourceList": [
+               {
+                   "resourcePrefix": "nvidia.com",
+                   "resourceName": "hostdev",
+                   "selectors": {
+                       "vendors": ["15b3"],
+                       "isRdma": true
+                   }
+               }
+           ]
+         }
      nvIpam:
        image: nvidia-k8s-ipam
        repository: |nvidia-ipam-repository|
@@ -473,17 +473,17 @@ Note that the SR-IOV Network Operator is required as described in the Deployment
 
 .. code-block:: yaml
    :substitutions:
-   
+
    apiVersion: mellanox.com/v1alpha1
    kind: NicClusterPolicy
    metadata:
      name: nic-cluster-policy
    spec:
-     ofedDriver:
+     ofedDriver:     
        image: doca-driver
        repository: |doca-driver-repository|
        version: |doca-driver-version|
-        startupProbe:
+       startupProbe:
          initialDelaySeconds: 10
          periodSeconds: 20
        livenessProbe:

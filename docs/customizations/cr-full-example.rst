@@ -31,68 +31,68 @@ This example should serve as a reference, it is not recommended to apply it as i
 .. code-block:: yaml
    :substitutions:
 
-    apiVersion: mellanox.com/v1alpha1
-    kind: NicClusterPolicy
-    metadata:
-      name: nic-cluster-policy
-    spec:
-      ofedDriver:
-        image: doca-driver
-        repository: |doca-driver-repository|
-        version: |doca-driver-version|
-        upgradePolicy:
-          autoUpgrade: true
-          drain:
-            deleteEmptyDir: true
-            enable: true
-            force: true
-            timeoutSeconds: 300
-          maxParallelUpgrades: 1
-        startupProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 30
-      rdmaSharedDevicePlugin:
-        image: k8s-rdma-shared-dev-plugin
-        repository: |k8s-rdma-shared-dev-plugin-repository|
-        version: |k8s-rdma-shared-dev-plugin-version|
-        # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
-        # Replace 'devices' with your (RDMA capable) netdevice name.
-        config: |
-          {
-            "configList": [
-              {
-                "resourceName": "rdma_shared_device_a",
-                "rdmaHcaMax": 63,
-                "selectors": {
-                  "vendors": ["15b3"],
-                  "deviceIDs": ["101b"]
-                }
-              }
-            ]
-          }
-      sriovDevicePlugin:
-        image: sriov-network-device-plugin
-        repository: |sriov-device-plugin-repository|
-        version: |sriov-device-plugin-version|
-        config: |
-          {
-            "resourceList": [
-              {
-                "resourcePrefix": "nvidia.com",
-                "resourceName": "hostdev",
-                "selectors": {
-                  "vendors": ["15b3"],
-                  "isRdma": true
-                }
-              }
-            ]
-          }
+   apiVersion: mellanox.com/v1alpha1
+   kind: NicClusterPolicy
+   metadata:
+     name: nic-cluster-policy
+   spec:
+     ofedDriver:
+       image: doca-driver
+       repository: |doca-driver-repository|
+       version: |doca-driver-version|
+       upgradePolicy:
+         autoUpgrade: true
+         drain:
+           deleteEmptyDir: true
+           enable: true
+           force: true
+           timeoutSeconds: 300
+         maxParallelUpgrades: 1
+       startupProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 10
+       livenessProbe:
+         initialDelaySeconds: 30
+         periodSeconds: 30
+       readinessProbe:
+         initialDelaySeconds: 10
+         periodSeconds: 30
+     rdmaSharedDevicePlugin:
+       image: k8s-rdma-shared-dev-plugin
+       repository: |k8s-rdma-shared-dev-plugin-repository|
+       version: |k8s-rdma-shared-dev-plugin-version|
+       # The config below directly propagates to k8s-rdma-shared-device-plugin configuration.
+       # Replace 'devices' with your (RDMA capable) netdevice name.
+       config: |
+         {
+           "configList": [
+             {
+               "resourceName": "rdma_shared_device_a",
+               "rdmaHcaMax": 63,
+               "selectors": {
+                 "vendors": ["15b3"],
+                 "deviceIDs": ["101b"]
+               }
+             }
+           ]
+         }
+     sriovDevicePlugin:
+       image: sriov-network-device-plugin
+       repository: |sriov-device-plugin-repository|
+       version: |sriov-device-plugin-version|
+       config: |
+         {
+           "resourceList": [
+             {
+               "resourcePrefix": "nvidia.com",
+               "resourceName": "hostdev",
+               "selectors": {
+                 "vendors": ["15b3"],
+                 "isRdma": true
+               }
+             }
+           ]
+         }
       secondaryNetwork:
         cniPlugins:
           image: plugins

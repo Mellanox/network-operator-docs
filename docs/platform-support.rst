@@ -264,7 +264,7 @@ Limitations
 - NVIDIA supports precompiled driver containers for the most recently released DOCA-OFED GA drivers.
 - NVIDIA builds precompiled driver containers for ``generic``, ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel flavors.
 - Precompiled driver containers are currently unsigned.
-- If your hosts use a different kernel variant, you can create a custom precompiled driver container and host it in your own container registry. Please refer to the :ref:`Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container <advanced-configurations-precompiled>` section.
+- If your hosts use a different kernel variant, you can create a custom precompiled driver container and host it in your own container registry. Please refer to the :ref:`Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container <precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container>` section.
 
 .. warning::
    - Only ``generic`` kernel variant is tested and supported as a GA.
