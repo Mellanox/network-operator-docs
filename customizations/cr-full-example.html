@@ -110,69 +110,69 @@
 <p>The following NIC Cluster Policy example contains all the sub-components that NVIDA Network Operator can deploy.
 This example should serve as a reference, it is not recommended to apply it as is to your cluster.</p>
 <p><strong>NOTE:</strong> Edit the example to contain only the required components for the target environment.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
-<span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
-<span class="w"> </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
-<span class="w"> </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.6.8.0-0</span><span class="w"></span>
-<span class="w">     </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
-<span class="w">       </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">       </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
-<span class="w">         </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">         </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
-<span class="w">       </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">     </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
-<span class="w">       </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">     </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
-<span class="w">       </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
-<span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
-<span class="w">     </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
-<span class="w">       </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">       </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
-<span class="w">   </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.5</span><span class="w"></span>
-<span class="w">     </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
-<span class="w">     </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
-<span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">       </span><span class="no">{</span><span class="w"></span>
-<span class="w">         </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
-<span class="w">           </span><span class="no">{</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;rdmaHcaMax&quot;: 63,</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
-<span class="w">               </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
-<span class="w">               </span><span class="no">&quot;deviceIDs&quot;: [&quot;101b&quot;]</span><span class="w"></span>
-<span class="w">             </span><span class="no">}</span><span class="w"></span>
-<span class="w">           </span><span class="no">}</span><span class="w"></span>
-<span class="w">         </span><span class="no">]</span><span class="w"></span>
-<span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
-<span class="w">     </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
-<span class="w">     </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">     </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.5</span><span class="w"></span>
-<span class="w">     </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">       </span><span class="no">{</span><span class="w"></span>
-<span class="w">         </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
-<span class="w">           </span><span class="no">{</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;resourceName&quot;: &quot;hostdev&quot;,</span><span class="w"></span>
-<span class="w">             </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
-<span class="w">               </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
-<span class="w">               </span><span class="no">&quot;isRdma&quot;: true</span><span class="w"></span>
-<span class="w">             </span><span class="no">}</span><span class="w"></span>
-<span class="w">           </span><span class="no">}</span><span class="w"></span>
-<span class="w">         </span><span class="no">]</span><span class="w"></span>
-<span class="w">       </span><span class="no">}</span><span class="w"></span>
-<span class="w">   </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.6.8.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">drain</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">deleteEmptyDir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># The config below directly propagates to k8s-rdma-shared-device-plugin configuration.</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Replace &#39;devices&#39; with your (RDMA capable) netdevice name.</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;rdmaHcaMax&quot;: 63,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;deviceIDs&quot;: [&quot;101b&quot;]</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;hostdev&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;isRdma&quot;: true</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="w w-Error"> </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">     </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
 <span class="w">       </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
