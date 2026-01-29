@@ -80,7 +80,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#dockerfile-overview">Dockerfile Overview</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#common-mandatory-build-parameters">Common mandatory build parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#rhcos">RHCOS</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#id1">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id2">Prerequisites</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#specific-build-parameters">Specific build parameters</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#rhcos-example">RHCOS example</a></li>
 </ul>
@@ -90,7 +90,7 @@
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="#sles">SLES</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#id2">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#id3">Prerequisites</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#sles-example">SLES example</a></li>
 </ul>
 </li>
@@ -143,21 +143,21 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables" id="id3">NVIDIA DOCA-OFED Driver Container Environment Variables</a></p>
+<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables" id="id4">NVIDIA DOCA-OFED Driver Container Environment Variables</a></p>
 <ul>
-<li><p><a class="reference internal" href="#create-ifnames-udev-environment-variable" id="id4">CREATE_IFNAMES_UDEV Environment Variable</a></p></li>
-<li><p><a class="reference internal" href="#enable-nfsrdma-environment-variable" id="id5">ENABLE_NFSRDMA Environment Variable</a></p></li>
-<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id6">Example of NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#create-ifnames-udev-environment-variable" id="id5">CREATE_IFNAMES_UDEV Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#enable-nfsrdma-environment-variable" id="id6">ENABLE_NFSRDMA Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id7">Example of NicClusterPolicy</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id7">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id8">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
 <ul>
-<li><p><a class="reference internal" href="#prerequisites" id="id8">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#dockerfile-overview" id="id9">Dockerfile Overview</a></p></li>
-<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id10">Common mandatory build parameters</a></p></li>
-<li><p><a class="reference internal" href="#rhcos" id="id11">RHCOS</a></p></li>
-<li><p><a class="reference internal" href="#ubuntu" id="id12">Ubuntu</a></p></li>
-<li><p><a class="reference internal" href="#sles" id="id13">SLES</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id9">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id10">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id11">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhcos" id="id12">RHCOS</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id13">Ubuntu</a></p></li>
+<li><p><a class="reference internal" href="#sles" id="id14">SLES</a></p></li>
 </ul>
 </li>
 </ul>
@@ -244,7 +244,7 @@ In this case, NVME over RDMA cannot be used. It is not possible to load inbox mo
 </section>
 </section>
 <section id="precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container">
-<span id="advanced-configurations-precompiled"></span><h2>Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container<a class="headerlink" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" title="Permalink to this headline"></a></h2>
+<span id="id1"></span><h2>Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container<a class="headerlink" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" title="Permalink to this headline"></a></h2>
 <section id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
 <p>Before you begin, ensure that you have the following prerequisites:</p>
@@ -258,7 +258,7 @@ For example, given a DOCA package version (e.g <cite>3.2.0</cite>) you can find 
 <h4>Download Docker files and scripts:<a class="headerlink" href="#download-docker-files-and-scripts" title="Permalink to this headline"></a></h4>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Mellanox/doca-driver-build.git
 <span class="nb">cd</span> doca-driver-build
-git checkout 839b59722301701e56a7d264684b50d85ba20356
+git checkout 27ddd82c084d1bf5125b42d09dcd00fce1d816e2
 </pre></div>
 </div>
 </section>
@@ -296,8 +296,8 @@ This approach is used to optimize the resulting container image size and reduce 
 </section>
 <section id="rhcos">
 <h3>RHCOS<a class="headerlink" href="#rhcos" title="Permalink to this headline"></a></h3>
-<section id="id1">
-<h4>Prerequisites<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h4>
+<section id="id2">
+<h4>Prerequisites<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
 <ul class="simple">
 <li><p>Install <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/cli_tools/openshift-cli-oc">oc</a> CLI tool.</p></li>
 <li><p>Download OpenShift <a class="reference external" href="https://console.redhat.com/openshift/install/pull-secret">pull secret</a>.</p></li>
@@ -372,8 +372,8 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 </section>
 <section id="sles">
 <h3>SLES<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h3>
-<section id="id2">
-<h4>Prerequisites<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
+<section id="id3">
+<h4>Prerequisites<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h4>
 <p>Active subscription. After registering, make sure to run <cite>zypper refresh &amp;&amp; zypper update -y</cite>.</p>
 </section>
 <section id="sles-example">
