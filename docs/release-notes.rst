@@ -236,6 +236,8 @@ Known Limitations
 
    * - Version
      - Description
+   * - 26.1.0
+     - | - There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted
    * - 25.10.0
      - | - NVIDIA Networking NIC Configuration Operator doesn't support Socket Direct Adapters
    * - 25.7.0
