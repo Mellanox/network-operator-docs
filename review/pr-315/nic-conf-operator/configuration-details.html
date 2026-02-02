@@ -61,7 +61,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="nic-fw-configuration.html"> NIC Firmware Configuration</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"> Configuration Details</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Configuration Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Configuration details</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html"> [TECH PREVIEW] Spectrum-X Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="crds.html"> CRD API Reference</a></li>
 </ul>
@@ -108,6 +111,68 @@
              
   <section id="configuration-details">
 <h1>Configuration Details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>Configuration details<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numVFs</span></code>: if provided, configure SR-IOV VFs via nvconfig.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g: if <code class="docutils literal notranslate"><span class="pre">numVFs=2</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=1</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=2</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">numVFs=0</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=0</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=0</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code>: if provided configure <code class="docutils literal notranslate"><span class="pre">linkType</span></code> for the NIC for all NIC ports.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g <code class="docutils literal notranslate"><span class="pre">linkType</span> <span class="pre">=</span> <span class="pre">Infiniband</span></code> then set <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P1=IB</span></code> and <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P2=IB</span></code> if second PCI function is present</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code>: performs PCI performance optimizations. If enabled then by default the following will happen:</p>
+<ul>
+<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> nvconfig parameter to <code class="docutils literal notranslate"><span class="pre">0</span></code> (use device defaults)</p></li>
+<li><p>Set PCI max read request size for each PF to <code class="docutils literal notranslate"><span class="pre">4096</span></code> (note: this is a runtime config and is not persistent)</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> and <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
+<li><p><strong>IMPORTANT</strong> :</p>
+<ul>
+<li><p>According to the PRM, setting <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> to zero enables the auto mode, which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.</p></li>
+<li><p>In this case, until the fix is available, <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> will not be set and a warning event will be emitted for this device’s CR.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>: performs RoCE related optimizations. If enabled performs the following by default:</p>
+<ul>
+<li><p>Nvconfig set for both ports (can be applied from PF0)</p>
+<ul>
+<li><p>Conditionally applied for second port if present</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P1=255</span></code>, <code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P2=255</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P1=4</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P2=4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P1=6</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P2=6</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Configure pfc (Priority Flow Control) for priority 3, set trust to dscp on each PF, set ToS (Type of Service) to 0.</p>
+<ul>
+<li><p>Non-persistent (need to be applied after each boot)</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">trust</span></code>, <code class="docutils literal notranslate"><span class="pre">pfc</span></code> and <code class="docutils literal notranslate"><span class="pre">tos</span></code> parameters</p></li>
+</ul>
+</li>
+<li><p>Can only be enabled with <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpuDirectOptimized</span></code>: performs gpu direct optimizations. ATM only optimizations for Baremetal environment are supported. If enabled perform the following:</p>
+<ul>
+<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">ATS_ENABLED=0</span></code></p></li>
+<li><p>Can only be enabled when <code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code> is enabled</p></li>
+<li><p>Both the numeric values and their string aliases, supported by NVConfig, are allowed (e.g. <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=False</span></code>, <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=0</span></code>).</p></li>
+<li><p>For per port parameters (suffix <code class="docutils literal notranslate"><span class="pre">_P1</span></code>, <code class="docutils literal notranslate"><span class="pre">_P2</span></code>) parameters with <code class="docutils literal notranslate"><span class="pre">_P2</span></code> suffix are ignored if the device is single port.</p></li>
+</ul>
+</li>
+<li><p>If a configuration is not set in spec, its non-volatile configuration parameters (if any) should be set to device default.</p></li>
+</ul>
+</section>
 </section>
 
 
