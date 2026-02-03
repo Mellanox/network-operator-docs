@@ -347,11 +347,13 @@ Use a FIPS-capable version of the installation program and set <code class="docu
 </section>
 <section id="verify-fips-mode">
 <h3>Verify FIPS Mode<a class="headerlink" href="#verify-fips-mode" title="Permalink to this headline"></a></h3>
-<p>Before proceeding with the Network Operator configuration, verify that your OpenShift cluster is running in FIPS mode:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>oc get nodes -o json <span class="p">|</span> jq -r <span class="s1">&#39;.items[] | select(.status.nodeInfo.kubeletVersion != null) | .metadata.name + &quot;: FIPS &quot; + (.status.nodeInfo.osImage | contains(&quot;fips&quot;) | tostring)&#39;</span>
+<p>Before proceeding with the Network Operator configuration, verify that your OpenShift cluster is running in FIPS mode.</p>
+<p>You can check FIPS mode by running the following command on any node:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>oc debug node/&lt;node-name&gt; -- chroot /host cat /proc/sys/crypto/fips_enabled
 </pre></div>
 </div>
-<p>All nodes should report FIPS mode enabled.</p>
+<p>The output should be <code class="docutils literal notranslate"><span class="pre">1</span></code> if FIPS mode is enabled.</p>
+<p>All nodes should report <code class="docutils literal notranslate"><span class="pre">1</span></code> when checking <code class="docutils literal notranslate"><span class="pre">/proc/sys/crypto/fips_enabled</span></code>.</p>
 </section>
 <section id="install-network-operator">
 <h3>Install Network Operator<a class="headerlink" href="#install-network-operator" title="Permalink to this headline"></a></h3>
@@ -444,7 +446,7 @@ Ensure any additional network policies are compatible with your FIPS requirement
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 02, 2026.
+      <span class="lastupdated">Last updated on Feb 03, 2026.
       </span></p>
   </div>
 
