@@ -34,92 +34,92 @@ NVIDIA Network Operator Container Images
      - Digest
    * - nvcr.io/nvstaging/mellanox
      - network-operator
-     - v26.1.0-beta.5
-     - sha256:cf98f1f4fae164ebaf73ccf36aa1c7e51928392339bad1620c12899d162fe633
+     - v26.1.0-beta.6
+     - sha256:01836dde738f49ab3ad63937a782385334c436504e3e589783882607f58fe8e8
    * - nvcr.io/nvstaging/mellanox
      - network-operator-init-container
-     - network-operator-v26.1.0-beta.5
-     - sha256:1f8ae6643bda7ae2af9a77b2f5c9036b629532744961a5d06d9c5109e98c4fda
+     - network-operator-v26.1.0-beta.6
+     - sha256:d3e968c1df128b8fc8639f1a657508be3bcb7a3d5d4ab4850255c66c1b1711df
    * - nvcr.io/nvstaging/mellanox
      - k8s-rdma-shared-dev-plugin
-     - network-operator-v26.1.0-beta.5
-     - sha256:434168aaa0a5802e9c1236bd6b89962084dfb45ec96e6cac9d74f976d42d09e3
+     - network-operator-v26.1.0-beta.6
+     - sha256:8af65de6e37a2bcabcfaddabb674029392be17f40361baf18d26f2beccf8b63a
    * - nvcr.io/nvstaging/mellanox
      - ib-kubernetes
-     - network-operator-v26.1.0-beta.5
-     - sha256:eb304f04b61157ee590b8b950e9d9791dad5d9736c21d433025b57650665086f
+     - network-operator-v26.1.0-beta.6
+     - sha256:769ae704a4b729b7b47e62c18eaf44bfbeea11970883006f964d7d66fc8fbf1d
    * - nvcr.io/nvstaging/mellanox
      - ipoib-cni
-     - network-operator-v26.1.0-beta.5
-     - sha256:ff73d32d9857ed0c507df07e396b776324a9d83a6377789ca510a9911e223007
+     - network-operator-v26.1.0-beta.6
+     - sha256:c8a63bf6a8a12b8732b8b5a71f5784e70e24178311490636dbe837ef4875b86c
    * - nvcr.io/nvstaging/mellanox
      - nvidia-k8s-ipam
-     - network-operator-v26.1.0-beta.5
-     - sha256:9f926de88e184c58c1135ba7a9c236388aee02828d895c626e213fb11615c162
+     - network-operator-v26.1.0-beta.6
+     - sha256:27dfece94d94154870f29a5d7bd6511e861dee651246e5dee8b8a71bf459c040
    * - nvcr.io/nvstaging/mellanox
      - nic-feature-discovery
-     - network-operator-v26.1.0-beta.5
-     - sha256:86ff1328a2233cb7aa56563f095dcd7dea4974f252af8416ff1a89d0d6628082
+     - network-operator-v26.1.0-beta.6
+     - sha256:d9d73fffee22eb0b89b029e07459b5e893b33fe5c71a74421c0c20e00e9ae810
    * - nvcr.io/nvidia/doca
      - doca_telemetry
      - 1.23.4-doca3.2.0-host
      - sha256:b628647c87715087888a687bc86887eb9675566558d863b4e43f227cf649f83b
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
-     - network-operator-v26.1.0-beta.5
-     - sha256:ec76a6d47cef715caac96fb04ca81c938f9efab028d3cef510bd5149fe500370
+     - network-operator-v26.1.0-beta.6
+     - sha256:5a3909d37694edccf78e2c6394d7c4d436abf455805756b0c345b9763fba8093
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
-     - network-operator-v26.1.0-beta.5
-     - sha256:f03998316d7f0f0b226e5bfc6e6ceb8decc95fa75f9e86355bf7e289deba8190
+     - network-operator-v26.1.0-beta.6
+     - sha256:f31e9c672fea27164ac1673006207e9743cff1f46c4fab28328977233815abe3
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-v26.1.0-beta.5
-     - sha256:7fafec5d804814e349a7544f33706c77cea9c9618a74cc03a5684cdcfb28f5d8
+     - network-operator-v26.1.0-beta.6
+     - sha256:459b471ea5e71b3e27c8bc236229b0ba324b1551318d6fb4a2afc67358e80fc4
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-device-plugin
-     - network-operator-v26.1.0-beta.5
-     - sha256:84c5f4b9d25831e3fd7dcee86e35c1c615fbe0e6d9c02d5b1ee98857e05f8312
+     - network-operator-v26.1.0-beta.6
+     - sha256:2f0a7ee2c68575382f36cfe87625035fd46ef3dbc0390880ce6c19ada4cb3225
    * - nvcr.io/nvstaging/mellanox
      - sriov-cni
-     - network-operator-v26.1.0-beta.5
-     - sha256:f57370a9ff976ac041d58c2cc235c3081cb7391fc734a32c678cdcbab1b3d8f4
+     - network-operator-v26.1.0-beta.6
+     - sha256:64c41d2d42c6ec84fba7e315dad60e73cf929b7e71166ed9f3bd7967676f1a05
    * - nvcr.io/nvstaging/mellanox
      - ib-sriov-cni
-     - network-operator-v26.1.0-beta.5
-     - sha256:1c596cf05d390732255bcc3bd804742498ec4e627cb9a9141f3837662ebfbb2b
+     - network-operator-v26.1.0-beta.6
+     - sha256:1e1f00c56d94034fd278d31a7826f9158f251747675abe992830668592915ca9
    * - nvcr.io/nvstaging/mellanox
      - plugins
-     - network-operator-v26.1.0-beta.5
-     - sha256:3c6171a23c4c208204de9bb44c873c8af59bb67279ef1304d9b207bb2f15610c
+     - network-operator-v26.1.0-beta.6
+     - sha256:eab89563a85bdb5a9df0b893e93f857f36a29747962b5c9cae4df8441e281136
    * - nvcr.io/nvstaging/mellanox
      - multus-cni
-     - network-operator-v26.1.0-beta.5
-     - sha256:4405c7779467c8a0c448003241be60790e1f3a01c639341f7655481276cf4ea8
+     - network-operator-v26.1.0-beta.6
+     - sha256:69b4b73d862b2e2420148b6537dc8e29acf4b2fb47c3748be4d044f4bc37d2e9
    * - nvcr.io/nvstaging/mellanox
      - ovs-cni-plugin
-     - network-operator-v26.1.0-beta.5
-     - sha256:1a28b7fa1c697b71352d6fe721dfb5d5d7d7fa7a4a7fada3f2309232316d7a2d
+     - network-operator-v26.1.0-beta.6
+     - sha256:ddd0887ea56b2654fe93c5b4029679cf9c102d51974899f6f451c07f2d87df56
    * - nvcr.io/nvstaging/mellanox
      - rdma-cni
-     - network-operator-v26.1.0-beta.5
-     - sha256:e476e002c04a0272874579d84bdc2c9a6f27ccc633675e112468a99b7b95d682
+     - network-operator-v26.1.0-beta.6
+     - sha256:7f01d1c05ac7b1c6ec7a9a5e84bc43ac7a535e5128e186018831e3e395583377
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator
-     - network-operator-v26.1.0-beta.5
-     - sha256:8848706f0264d7607e2d8971722dd950935b4168ed57d7c738d06dee0952a3c3
+     - network-operator-v26.1.0-beta.6
+     - sha256:536f6ca99876c9ff97d0fd805a1e07543361fab0767e7688a01c0a7bcc548dfa
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator-daemon
-     - network-operator-v26.1.0-beta.5
-     - sha256:22ded2a0922914ec8b921c5536b3ebe19c061ead65a1aa574ee02661815cbc98
+     - network-operator-v26.1.0-beta.6
+     - sha256:5ff693d53847ef4eecf3b6a18599c6a5381038a260079ce6b7cf5029603cc94b
    * - nvcr.io/nvstaging/mellanox
      - maintenance-operator
-     - network-operator-v26.1.0-beta.5
-     - sha256:22fbbe3e6fadd750d02da2e386991e5896082442b1e03444b8cd828c299ceaf2
+     - network-operator-v26.1.0-beta.6
+     - sha256:92b9e85e7ac07be4fffa68ef5e57ec56a170a3c91718e96c53f3398c518793ea
    * - nvcr.io/nvstaging/mellanox
      - spectrum-x-operator
-     - network-operator-v26.1.0-beta.5
-     - sha256:559963ea45b56c23f2f1dc8d322c56a39983b1f9e8101397a76c97c6a68a7526
+     - network-operator-v26.1.0-beta.6
+     - sha256:63142ed36b2ae5f8c6b7f9070b20a6210a6bc48701e8b4541a1539eb3b220a2c
 
 =================================
 DOCA-OFED Driver Container Images
