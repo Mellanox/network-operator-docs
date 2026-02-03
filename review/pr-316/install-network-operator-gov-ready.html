@@ -428,7 +428,7 @@ This example should be adapted to your specific environment. You can add other c
 <li><p><strong>Security Context Constraints (SCC)</strong>: The Network Operator requires privileged access.
 OpenShift will automatically apply the appropriate SCCs when the operator is deployed in the <code class="docutils literal notranslate"><span class="pre">nvidia-network-operator</span></code> namespace.</p></li>
 <li><p><strong>etcd Encryption</strong>: For enhanced security in FIPS mode, consider enabling etcd encryption using the FIPS-approved AES CBC cryptographic algorithm.
-Refer to the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/security_and_compliance/encrypting-etcd">OpenShift documentation on encrypting etcd data</a>.</p></li>
+Refer to the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html-single/etcd/index#enabling-etcd-encryption">OpenShift documentation on encrypting etcd data</a>.</p></li>
 <li><p><strong>Storage</strong>: If using persistent storage, ensure it uses RHEL-provided disk encryption for data at rest protection in FIPS environments.</p></li>
 <li><p><strong>Network Policy</strong>: OpenShift’s OVN-Kubernetes network plugin is FIPS-compliant.
 Ensure any additional network policies are compatible with your FIPS requirements.</p></li>
