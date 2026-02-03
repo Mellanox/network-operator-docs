@@ -55,38 +55,44 @@ type SHA256ImageRef struct {
 
 // Release contains versions for operator release templates.
 type Release struct {
-	HelmChartVersion             string
-	DocaDriverBuildCommitHash    string
-	NetworkOperator              *ReleaseImageSpec
-	NetworkOperatorInitContainer *ReleaseImageSpec
-	SriovNetworkOperator         *ReleaseImageSpec
-	SriovNetworkOperatorWebhook  *ReleaseImageSpec
-	SriovConfigDaemon            *ReleaseImageSpec
-	SriovConfigDaemonStigFips    *ReleaseImageSpec
-	SriovCni                     *ReleaseImageSpec
-	SriovIbCni                   *ReleaseImageSpec
-	Mofed                        *ReleaseImageSpec
-	MofedStigFips                *ReleaseImageSpec
-	RdmaSharedDevicePlugin       *ReleaseImageSpec
-	SriovDevicePlugin            *ReleaseImageSpec
-	IbKubernetes                 *ReleaseImageSpec
-	CniPlugins                   *ReleaseImageSpec
-	Multus                       *ReleaseImageSpec
-	Ipoib                        *ReleaseImageSpec
-	NvIPAM                       *ReleaseImageSpec
-	NicFeatureDiscovery          *ReleaseImageSpec
-	NodeFeatureDiscovery         *ReleaseImageSpec
-	DOCATelemetryService         *ReleaseImageSpec
-	OVSCni                       *ReleaseImageSpec
-	RDMACni                      *ReleaseImageSpec
-	Nfd                          *ReleaseImageSpec
-	NicConfigurationOperator     *ReleaseImageSpec
-	NicConfigurationConfigDaemon *ReleaseImageSpec
-	MaintenanceOperator          *ReleaseImageSpec
-	SpectrumXOperator            *ReleaseImageSpec
-	CurrentGAVersionMajorMinor   string
-	CurrentMaintenanceMajorMinor string
-	CurrentEOLMajorMinor         string
+	HelmChartVersion                           string
+	DocaDriverBuildCommitHash                  string
+	NetworkOperator                            *ReleaseImageSpec
+	NetworkOperatorInitContainer               *ReleaseImageSpec
+	SriovNetworkOperator                       *ReleaseImageSpec
+	SriovNetworkOperatorWebhook                *ReleaseImageSpec
+	SriovConfigDaemon                          *ReleaseImageSpec
+	SriovConfigDaemonStigFips                  *ReleaseImageSpec
+	SriovCni                                   *ReleaseImageSpec
+	SriovIbCni                                 *ReleaseImageSpec
+	Mofed                                      *ReleaseImageSpec
+	MofedStigFips                              *ReleaseImageSpec
+	RdmaSharedDevicePlugin                     *ReleaseImageSpec
+	SriovDevicePlugin                          *ReleaseImageSpec
+	IbKubernetes                               *ReleaseImageSpec
+	CniPlugins                                 *ReleaseImageSpec
+	Multus                                     *ReleaseImageSpec
+	Ipoib                                      *ReleaseImageSpec
+	NvIPAM                                     *ReleaseImageSpec
+	NicFeatureDiscovery                        *ReleaseImageSpec
+	NodeFeatureDiscovery                       *ReleaseImageSpec
+	DOCATelemetryService                       *ReleaseImageSpec
+	OVSCni                                     *ReleaseImageSpec
+	RDMACni                                    *ReleaseImageSpec
+	Nfd                                        *ReleaseImageSpec
+	NicConfigurationOperator                   *ReleaseImageSpec
+	NicConfigurationConfigDaemon               *ReleaseImageSpec
+	NicConfigurationOperatorStigFipsUbuntu     *ReleaseImageSpec
+	NicConfigurationConfigDaemonStigFipsUbuntu *ReleaseImageSpec
+	NicConfigurationOperatorStigFipsRhel       *ReleaseImageSpec
+	NicConfigurationConfigDaemonStigFipsRhel   *ReleaseImageSpec
+	MaintenanceOperator                        *ReleaseImageSpec
+	SpectrumXOperator                          *ReleaseImageSpec
+	SpectrumXOperatorStigFipsRhel              *ReleaseImageSpec
+	SpectrumXOperatorStigFipsUbuntu            *ReleaseImageSpec
+	CurrentGAVersionMajorMinor                 string
+	CurrentMaintenanceMajorMinor               string
+	CurrentEOLMajorMinor                       string
 }
 
 func readDefaults(releaseDefaults string) Release {
