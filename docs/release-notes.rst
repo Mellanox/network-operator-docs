@@ -36,8 +36,16 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.1.0
+     - | - Added support for Government-Ready, STIG/FIPS hardening security requirements, in OpenShift deployments for NVIDIA AI Enterprise customers
+       | - Added support for NIC multiport firmware parameter (esw_multiport) using devlinkParams in SR-IOV Network Operator
+       | - Added support for setting OVS bridges grouping configuration in SR-IOV Network Operator, grouping per NIC PFs to a single OVS bridge
+       | - Added support for Network Operator SOS report script, to collect system information for troubleshooting purposes       
+       | - Added support for SW/HW multi-plane Spectrum-X topologies in Spectrum-X Operator and NIC Configuration Operator
+       | - Added support for NicInterfaceNameTemplate allowing users to define custom naming schemes for network and RDMA interfaces on NIC devices in NIC Configuration Operator - Tech Preview
+       | - Added support for ConnectX-9 SuperNIC
    * - 25.10.0
-     - | - Added support for OpenShift v4.20
+     - | - Added support for OpenShift v4.20, v4.21
        | - Added support for RHEL v10.0
        | - Added support for SUSE Linux Enterprise Server 15 SP7
        | - Added support for Government-Ready, STIG/FIPS hardening security requirements, for NVIDIA AI Enterprise customers
@@ -236,6 +244,8 @@ Known Limitations
 
    * - Version
      - Description
+   * - 26.1.0
+     - | - There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted 
    * - 25.10.0
      - | - NVIDIA Networking NIC Configuration Operator doesn't support Socket Direct Adapters
    * - 25.7.0
