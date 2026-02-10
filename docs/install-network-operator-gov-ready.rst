@@ -79,7 +79,7 @@ Validated Kubernetes Distributions
 
 The government-ready NVIDIA Network Operator has been validated on the following Kubernetes distributions:
 
-- Canonical Kubernetes 1.34 with Ubuntu Pro 24.04 amd64 and FIPS-compliant kernel
+- Canonical Kubernetes 1.35 with Ubuntu Pro 24.04 amd64 and FIPS-compliant kernel
 - Red Hat OpenShift Container Platform (OCP) 4.20 or newer with FIPS mode enabled
 
 Common Prerequisites

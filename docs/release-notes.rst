@@ -45,7 +45,7 @@ Changes and New Features
        | - Added support for NicInterfaceNameTemplate allowing users to define custom naming schemes for network and RDMA interfaces on NIC devices in NIC Configuration Operator - Tech Preview
        | - Added support for ConnectX-9 SuperNIC
    * - 25.10.0
-     - | - Added support for OpenShift v4.20, v4.21
+     - | - Added support for OpenShift v4.20
        | - Added support for RHEL v10.0
        | - Added support for SUSE Linux Enterprise Server 15 SP7
        | - Added support for Government-Ready, STIG/FIPS hardening security requirements, for NVIDIA AI Enterprise customers
