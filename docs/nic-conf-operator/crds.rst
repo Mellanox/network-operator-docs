@@ -123,7 +123,7 @@ NicConfigurationTemplate is the Schema for the nicconfigurationtemplates API
       +=================================================================================================================+===================================================================================================+
       | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
       | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
       +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                                        | Defines the desired state of NICs                                                                 |
       | :ref:`NicConfigurationTemplateSpec <NicConfigurationTemplateSpec>`                                              |                                                                                                   |
@@ -180,7 +180,7 @@ NicDevice is the Schema for the nicdevices API
       +=================================================================================================================+===================================================================================================+
       | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
       | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
       +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                                        |                                                                                                   |
       | :ref:`NicDeviceSpec <NicDeviceSpec>`                                                                            |                                                                                                   |
@@ -344,7 +344,7 @@ NicDeviceStatus defines the observed state of NicDevice
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``conditions``                                                                                                | List of conditions observed for the device                                                        |
       | `[]Kubernetes                                                                                                 |                                                                                                   |
-      | meta/v1.Condition <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#condition-v1-meta>`__ |                                                                                                   |
+      | meta/v1.Condition <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#condition-v1-meta>`__ |                                                                                                   |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareSource:
@@ -363,7 +363,7 @@ NicFirmwareSource is the Schema for the nicfirmwaresources API
       +=================================================================================================================+===================================================================================================+
       | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
       | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
       +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                                        |                                                                                                   |
       | :ref:`NicFirmwareSourceSpec <NicFirmwareSourceSpec>`                                                            |                                                                                                   |
@@ -447,7 +447,7 @@ NicFirmwareTemplate is the Schema for the nicfirmwaretemplates API
       +=================================================================================================================+===================================================================================================+
       | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
       | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
       +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                                        |                                                                                                   |
       | :ref:`NicFirmwareTemplateSpec <NicFirmwareTemplateSpec>`                                                        |                                                                                                   |
@@ -498,7 +498,7 @@ NicInterfaceNameTemplate is the Schema for the nicinterfacenametemplates API
       +=================================================================================================================+===================================================================================================+
       | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
       | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#objectmeta-v1-meta>`__ |                                                                                                   |
+      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
       +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spec``                                                                                                        |                                                                                                   |
       | :ref:`NicInterfaceNameTemplateSpec <NicInterfaceNameTemplateSpec>`                                              |                                                                                                   |
