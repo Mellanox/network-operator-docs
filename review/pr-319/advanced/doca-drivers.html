@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NVIDIA DOCA-OFED Driver Container &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Configurations" href="advanced-configurations.html" />
+    <link rel="prev" title="Proxy &amp; Air-Gapped Environments" href="proxy-airgapped.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="proxy-airgapped.html">Proxy &amp; Air-gapped</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DOCA-OFED Driver Container</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables">NVIDIA DOCA-OFED Driver Container Environment Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-ifnames-udev-environment-variable">CREATE_IFNAMES_UDEV Environment Variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enable-nfsrdma-environment-variable">ENABLE_NFSRDMA Environment Variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-of-nicclusterpolicy">Example of NicClusterPolicy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#download-docker-files-and-scripts">Download Docker files and scripts:</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#dockerfile-overview">Dockerfile Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-mandatory-build-parameters">Common mandatory build parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rhcos">RHCOS</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id2">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#specific-build-parameters">Specific build parameters</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#rhcos-example">RHCOS example</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#ubuntu">Ubuntu</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#ubuntu-example">Ubuntu example</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#sles">SLES</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#id3">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#sles-example">SLES example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="images-sha256.html">Container Images Digests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="advanced.html">Advanced Configurations</a> &raquo;</li>
+<li>NVIDIA DOCA-OFED Driver Container</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nvidia-doca-ofed-driver-container">
+<h1>NVIDIA DOCA-OFED Driver Container<a class="headerlink" href="#nvidia-doca-ofed-driver-container" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables" id="id4">NVIDIA DOCA-OFED Driver Container Environment Variables</a></p>
+<ul>
+<li><p><a class="reference internal" href="#create-ifnames-udev-environment-variable" id="id5">CREATE_IFNAMES_UDEV Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#enable-nfsrdma-environment-variable" id="id6">ENABLE_NFSRDMA Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id7">Example of NicClusterPolicy</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id8">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id9">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id10">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id11">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhcos" id="id12">RHCOS</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id13">Ubuntu</a></p></li>
+<li><p><a class="reference internal" href="#sles" id="id14">SLES</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="nvidia-doca-ofed-driver-container-environment-variables">
+<h2>NVIDIA DOCA-OFED Driver Container Environment Variables<a class="headerlink" href="#nvidia-doca-ofed-driver-container-environment-variables" title="Permalink to this headline"></a></h2>
+<p>The following are special environment variables supported by the NVIDIA DOCA-OFED Driver container to configure its behavior:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CREATE_IFNAMES_UDEV</p></td>
+<td><div class="line-block">
+<div class="line">* “true” for Ubuntu 20.04, RHEL v8.x and OCP &lt;= v4.13.</div>
+<div class="line">* “false” for newer OS.</div>
+</div>
+</td>
+<td><p>Create an udev rule to preserve “old-style” path based netdev names e.g enp3s0f0</p></td>
+</tr>
+<tr class="row-odd"><td><p>UNLOAD_STORAGE_MODULES</p></td>
+<td><p>“false”</p></td>
+<td><div class="line-block">
+<div class="line">Unload host storage modules prior to loading NVIDIA DOCA-OFED Driver modules:</div>
+<div class="line-block">
+<div class="line">* ib_isert</div>
+<div class="line">* nvme_rdma</div>
+<div class="line">* nvmet_rdma</div>
+<div class="line">* rpcrdma</div>
+<div class="line">* xprtrdma</div>
+<div class="line">* ib_srpt</div>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>ENABLE_NFSRDMA</p></td>
+<td><p>“false”</p></td>
+<td><p>Enable loading of NFS related storage modules from a NVIDIA DOCA-OFED Driver container</p></td>
+</tr>
+<tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
+<td><p>“false”</p></td>
+<td><p>Restore host drivers when a container</p></td>
+</tr>
+</tbody>
+</table>
+<p>In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard “HTTP_PROXY”, “HTTPS_PROXY”, “NO_PROXY”.</p>
+<section id="create-ifnames-udev-environment-variable">
+<h3>CREATE_IFNAMES_UDEV Environment Variable<a class="headerlink" href="#create-ifnames-udev-environment-variable" title="Permalink to this headline"></a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).</p>
+</div>
+</section>
+<section id="enable-nfsrdma-environment-variable">
+<h3>ENABLE_NFSRDMA Environment Variable<a class="headerlink" href="#enable-nfsrdma-environment-variable" title="Permalink to this headline"></a></h3>
+<p>In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
+In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on <cite>ib_core</cite> which does not match (symbol error). Only NVME with local drive is supported.</p>
+</section>
+<section id="example-of-nicclusterpolicy">
+<h3>Example of NicClusterPolicy<a class="headerlink" href="#example-of-nicclusterpolicy" title="Permalink to this headline"></a></h3>
+<p>These variables can be set in the NicClusterPolicy. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RESTORE_DRIVER_ON_POD_TERMINATION</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;false&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UNLOAD_STORAGE_MODULES</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CREATE_IFNAMES_UDEV</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container">
+<span id="id1"></span><h2>Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container<a class="headerlink" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" title="Permalink to this headline"></a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
+<p>Before you begin, ensure that you have the following prerequisites:</p>
+<ul class="simple">
+<li><p>Docker (Ubuntu) / Podman (RH) installed on your build system.</p></li>
+<li><p>Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at <a class="reference external" href="https://developer.nvidia.com/doca-downloads">NVIDIA DOCA Downloads</a>, for example: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz">https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz</a></p></li>
+</ul>
+<p><strong>NOTE:</strong> NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
+For example, given a DOCA package version (e.g <cite>3.2.0</cite>) you can find the corresponding MLNX_OFED version at the link: <a class="reference external" href="https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/">https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/</a> which is <cite>25.10-1.2.8.0’</cite></p>
+<section id="download-docker-files-and-scripts">
+<h4>Download Docker files and scripts:<a class="headerlink" href="#download-docker-files-and-scripts" title="Permalink to this headline"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Mellanox/doca-driver-build.git
+<span class="nb">cd</span> doca-driver-build
+git checkout 1e5a0e36874e7f92c5653d72cf61359d75fe4396
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dockerfile-overview">
+<h3>Dockerfile Overview<a class="headerlink" href="#dockerfile-overview" title="Permalink to this headline"></a></h3>
+<p>To build the precompiled container, the Dockerfile is constructed in a multistage fashion.
+This approach is used to optimize the resulting container image size and reduce the number of dependencies included in the final image.</p>
+<p>The Dockerfile consists of the following stages:</p>
+<ol class="arabic simple">
+<li><p><strong>Base Image Update</strong>: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.</p></li>
+<li><p><strong>Download Driver Sources</strong>: This stage downloads the NVIDIA DOCA-OFED Driver sources to the specified path. It prepares the necessary files for the driver build process.</p></li>
+<li><p><strong>Build Driver</strong>: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.</p></li>
+<li><p><strong>Install precompiled driver</strong>: Finally, the precompiled driver is installed on clean container. This stage sets up the environment to run the NVIDIA NIC drivers on the target system.</p></li>
+</ol>
+</section>
+<section id="common-mandatory-build-parameters">
+<h3>Common mandatory build parameters<a class="headerlink" href="#common-mandatory-build-parameters" title="Permalink to this headline"></a></h3>
+<p>Before building the container, you need to provide following parameters as <cite>build-arg</cite> for container build:</p>
+<ol class="arabic simple">
+<li><p><cite>D_OS</cite>: The Linux distribution (e.g., ubuntu22.04 / rhel9.2)</p></li>
+<li><p><cite>D_ARCH</cite>: Compiled Architecture</p></li>
+<li><p><cite>D_BASE_IMAGE</cite>: Base container image (e.g., ubuntu:22.04)</p></li>
+<li><p><cite>D_KERNEL_VER</cite>: The target kernel version (e.g., 5.15.0-25-generic / 5.14.0-284.32.1.el9_2.x86_64)</p></li>
+<li><p><cite>D_DOCA_VERSION</cite>: NVIDIA DOCA version (e.g., 2.9.1)</p></li>
+<li><p><cite>D_OFED_VERSION</cite>: NVIDIA NIC drivers version (e.g., 24.10-1.1.4.0)</p></li>
+</ol>
+<p><strong>NOTE:</strong> Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized</p>
+<p><strong>NOTE:</strong> For proper Network Operator functionality container tag name must be in following pattern: <strong>doca&lt;doca_version&gt;-&lt;driver_ver&gt;-&lt;container_ver&gt;-&lt;kernel_ver-os-arch&gt;</strong>. For example: doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64</p>
+<p><strong>NOTE:</strong> Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Modification of <cite>D_OFED_SRC_DOWNLOAD_PATH</cite> must be tighdly coupled with corresponding update to entrypoint.sh script.</p>
+</div>
+</section>
+<section id="rhcos">
+<h3>RHCOS<a class="headerlink" href="#rhcos" title="Permalink to this headline"></a></h3>
+<section id="id2">
+<h4>Prerequisites<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>Install <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/cli_tools/openshift-cli-oc">oc</a> CLI tool.</p></li>
+<li><p>Download OpenShift <a class="reference external" href="https://console.redhat.com/openshift/install/pull-secret">pull secret</a>.</p></li>
+</ul>
+</section>
+<section id="specific-build-parameters">
+<h4>Specific build parameters<a class="headerlink" href="#specific-build-parameters" title="Permalink to this headline"></a></h4>
+<ol class="arabic">
+<li><p><cite>D_BASE_IMAGE</cite>: DriverToolKit container image</p>
+<p><strong>NOTE:</strong> DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+In order to get the specific DTK container image for a specific OpenShift release, run:</p>
+</li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info &lt;OCP_VERSION&gt; --image-for<span class="o">=</span>driver-toolkit
+</pre></div>
+</div>
+<p>For example, for OpenShift 4.16.0:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info <span class="m">4</span>.16.0 --image-for<span class="o">=</span>driver-toolkit
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+</pre></div>
+</div>
+<p>Then pull the DTK image locally using your pull-secret:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman pull --authfile<span class="o">=</span>/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
+<li><p><cite>D_ARCH</cite>: Target architecture: <cite>x86_64</cite> or <cite>aarch64</cite>.</p></li>
+<li><p><cite>D_KERNEL_VER</cite>: CoreOS kernel versions for OpenShift are listed <a class="reference external" href="https://access.redhat.com/solutions/7077108">here</a>.</p></li>
+</ol>
+<p>Kernel version can also be found with the DTK image using the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:47ba8a10d5938c41f907ee7f70d74aecb9c2dfd7afae4cea2942fc8f47256612 cat /etc/driver-toolkit-release.json <span class="p">|</span> jq -r <span class="s1">&#39;.KERNEL_VERSION&#39;</span>
+<span class="m">5</span>.14.0-427.22.1.el9_4.x86_64
+</pre></div>
+</div>
+</section>
+<section id="rhcos-example">
+<h4>RHCOS example<a class="headerlink" href="#rhcos-example" title="Permalink to this headline"></a></h4>
+<p><strong>NOTE:</strong> Since OCP 4.19, RHCOS is based on RHEL 9.6, therefore the tag should include the RHEL version instead of the OCP version.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhcos4.16 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-427.22.1.el9_4.x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f&quot;</span> <span class="se">\</span>
+ --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:9.4 <span class="se">\</span>
+ --tag doca2.9.1-24.10-1.1.4.0-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 <span class="se">\</span>
+ -f RHEL_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
+</section>
+</section>
+<section id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline"></a></h3>
+<section id="ubuntu-example">
+<h4>Ubuntu example<a class="headerlink" href="#ubuntu-example" title="Permalink to this headline"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>ubuntu22.04 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>ubuntu:22.04 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.15.0-25-generic <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
+ --tag doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64 <span class="se">\</span>
+ -f Ubuntu_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sles">
+<h3>SLES<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h3>
+<section id="id3">
+<h4>Prerequisites<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h4>
+<p>Active subscription. After registering, make sure to run <cite>zypper refresh &amp;&amp; zypper update -y</cite>.</p>
+</section>
+<section id="sles-example">
+<h4>SLES example<a class="headerlink" href="#sles-example" title="Permalink to this headline"></a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>sles15.5 <span class="se">\</span>
+ --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span>registry.suse.com/suse/sle15:15.5 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.21-150500.55.83-default <span class="se">\</span>
+ --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">2</span>.9.1 <span class="se">\</span>
+ --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">24</span>.10-1.1.4.0 <span class="se">\</span>
+ --tag doca2.9.1-24.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 <span class="se">\</span>
+ -f SLES_Dockerfile <span class="se">\</span>
+ --target precompiled .
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Feb 10, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
