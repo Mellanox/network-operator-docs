@@ -173,27 +173,27 @@ However, the following STIG-FIPS certified components require an NGC API key and
 <tr class="row-even"><td><p>DOCA-OFED Driver Container</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 <td><p>doca-driver-stig-fips</p></td>
-<td><p>doca3.3.0-26.01-0.7.1.0-0</p></td>
+<td><p>doca3.3.0-26.01-0.9.2.0-0</p></td>
 </tr>
 <tr class="row-odd"><td><p>SR-IOV Network Operator Config Daemon</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 <td><p>sriov-network-operator-config-daemon-stig-fips</p></td>
-<td><p>network-operator-v26.1.0-beta.6-stig-fips</p></td>
+<td><p>network-operator-v26.1.0-beta.7-stig-fips</p></td>
 </tr>
 <tr class="row-even"><td><p>NIC Configuration Operator</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 <td><p>nic-configuration-operator-stig-fips</p></td>
-<td><p>network-operator-v26.1.0-beta.6-stig-fips-ubuntu / network-operator-v26.1.0-beta.6-stig-fips-rhel</p></td>
+<td><p>network-operator-v26.1.0-beta.7-stig-fips-ubuntu / network-operator-v26.1.0-beta.7-stig-fips-rhel</p></td>
 </tr>
 <tr class="row-odd"><td><p>NIC Configuration Operator Daemon</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 <td><p>nic-configuration-operator-daemon-stig-fips</p></td>
-<td><p>network-operator-v26.1.0-beta.6-stig-fips-ubuntu / network-operator-v26.1.0-beta.6-stig-fips-rhel</p></td>
+<td><p>network-operator-v26.1.0-beta.7-stig-fips-ubuntu / network-operator-v26.1.0-beta.7-stig-fips-rhel</p></td>
 </tr>
 <tr class="row-even"><td><p>Spectrum X Operator</p></td>
 <td><p>nvcr.io/nvstaging/mellanox</p></td>
 <td><p>spectrumx-operator-stig-fips</p></td>
-<td><p>network-operator-v26.1.0-beta.6-stig-fips-ubuntu / network-operator-v26.1.0-beta.6-stig-fips-rhel</p></td>
+<td><p>network-operator-v26.1.0-beta.7-stig-fips-ubuntu / network-operator-v26.1.0-beta.7-stig-fips-rhel</p></td>
 </tr>
 </tbody>
 </table>
@@ -269,7 +269,7 @@ Update <code class="docutils literal notranslate"><span class="pre">ngc-api-key<
 <li><p>Install the NVIDIA Network Operator with SR-IOV Network Operator.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$  </span>helm install network-operator nvidia/network-operator <span class="se">\</span>
      --namespace nvidia-network-operator <span class="se">\</span>
-     --set sriov-network-operator.images.sriovConfigDaemon<span class="o">=</span>nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon-stig-fips:network-operator-v26.1.0-beta.6-stig-fips <span class="se">\</span>
+     --set sriov-network-operator.images.sriovConfigDaemon<span class="o">=</span>nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon-stig-fips:network-operator-v26.1.0-beta.7-stig-fips <span class="se">\</span>
      --set sriov-network-operator.imagePullSecrets<span class="o">={</span>ngc-secret<span class="o">}</span> <span class="se">\</span>
      --set sriovNetworkOperator.enabled<span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
      --set nfd.enabled<span class="o">=</span><span class="nb">true</span>
@@ -295,7 +295,7 @@ This example should be adapted to your specific environment. You can add other c
 <span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver-stig-fips</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.7.1.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.9.2.0-0</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
@@ -304,20 +304,20 @@ This example should be adapted to your specific environment. You can add other c
 <span class="w">  </span><span class="nt">spectrumXOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-operator-stig-fips</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-ubuntu</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-ubuntu</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-stig-fips</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-ubuntu</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-ubuntu</span><span class="w"></span>
 <span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon-stig-fips</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-ubuntu</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-ubuntu</span><span class="w"></span>
 <span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicFirmwareStorage</span><span class="p">:</span><span class="w"></span>
@@ -391,26 +391,26 @@ This example should be adapted to your specific environment. You can add other c
 <span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver-stig-fips</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.7.1.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-0.9.2.0-0</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">  </span><span class="nt">spectrumXOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-operator-stig-fips</span><span class="w"></span>
 <span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-rhel</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-rhel</span><span class="w"></span>
 <span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-stig-fips</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-rhel</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-rhel</span><span class="w"></span>
 <span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon-stig-fips</span><span class="w"></span>
 <span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.6-stig-fips-rhel</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-beta.7-stig-fips-rhel</span><span class="w"></span>
 <span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ngc-secret</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicFirmwareStorage</span><span class="p">:</span><span class="w"></span>
@@ -446,7 +446,7 @@ Ensure any additional network policies are compatible with your FIPS requirement
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 04, 2026.
+      <span class="lastupdated">Last updated on Feb 11, 2026.
       </span></p>
   </div>
 
