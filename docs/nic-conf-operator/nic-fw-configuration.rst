@@ -378,3 +378,13 @@ Status conditions of the NicDevice CR reflect the status of the configuration up
       lastTransitionTime: "2024-09-21T08:43:08Z"
 
 .. note:: If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.
+
+=============================================================
+Configure custom interface names (NicInterfaceNameTemplate)
+=============================================================
+
+The ``NicInterfaceNameTemplate`` CRD allows you to define custom naming patterns for RDMA and network device interfaces on NVIDIA NICs. This is useful in Spectrum-X multiplane and multi-rail deployments where predictable interface naming is required.
+
+The operator deploys udev rules to the host to rename network and RDMA interfaces according to the specified naming template. The template uses placeholders (``%nic_id%``, ``%plane_id%``, ``%rail_id%``) to construct device names based on the NIC topology.
+
+For full details on NicInterfaceNameTemplate configuration, including multiplane modes and example udev rules, refer to :doc:`Spectrum-X Configuration <spectrum-x-configuration>`.
