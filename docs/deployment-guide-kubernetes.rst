@@ -1773,7 +1773,6 @@ Network Operator Deployment and OpenvSwitch offload - managed OpenvSwitch
 
 .. warning:: To use DOCA-OFED Driver container with this mode of operation, set the `RESTORE_DRIVER_ON_POD_TERMINATION` environment variable to `false` in the driver configuration section in the NicClusterPolicy. Restoration to the inbox driver is not supported for this feature.
 
-.. warning:: Tech Preview feature.
 
 
 In this mode, the sriov-network-operator automatically creates and configures OpenvSwitch bridges.
@@ -2095,7 +2094,6 @@ Network Operator Deployment and OpenvSwitch offload - externally managed OpenvSw
 
 .. warning:: This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
 
-.. warning:: Tech Preview feature.
 
 
 In this mode, the sriov-network-operator is responsible for configuring the physical and virtual functions but will not manage the configuration of the software bridge.

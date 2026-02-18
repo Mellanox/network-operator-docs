@@ -32,7 +32,6 @@
 
 .. note:: Currently, only ConnectX-8 (device ID 1023) and BlueField-3 SuperNIC (device ID a2dc) devices are supported for this configuration.
 
-.. warning:: Tech Preview feature.
 
 ====================================================
 Install and configure the NIC Configuration Operator
