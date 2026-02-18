@@ -34,24 +34,24 @@
 
 
 ====================================================
-Install and configure the NIC Configuration Operator
+Install and Configure the NIC Configuration Operator
 ====================================================
 
-To install the operator and for more information about the CRDs follow the :doc:`nic-fw-configuration` and :doc:`configuration-details` doc articles.
+To install the operator and for more information on the CRDs, see :doc:`nic-fw-configuration` and :doc:`configuration-details`.
 
 =============================================
-Provision the DOCA SPC-X CC algorithm package
+Provision the DOCA SPC-X CC Algorithm Package
 =============================================
 
-To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm will be publicly available.
+To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm is publicly available.
 To access the package, contact your NVIDIA CPM.
-The package should be made available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.
+The package should be available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.
 
 .. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/spectrum-x/example-nicfirmwaresource-spectrum-x-cc-only.yaml
     :language: yaml
     :lines: 18-
 
-If firmware on the devices also needs to be updated, extend the NicFirmwareSource CR with fields for ConnectX and BlueField firmware. Please, use the correct firmware for your devices.
+If the firmware on the devices needs to be updated, extend the NicFirmwareSource CR with fields for ConnectX and BlueField firmware. Make sure to use the correct firmware for your devices.
 
 .. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/spectrum-x/example-nicfirmwaresource-spectrum-x-full.yaml
     :language: yaml
@@ -64,7 +64,7 @@ Configure and apply the NicFirmwareTemplate CR:
     :lines: 18-
 
 ======================================
-Enable SPC-X optimizations for devices
+Enable SPC-X Optimizations for Devices
 ======================================
 
 .. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x.yaml
@@ -72,10 +72,10 @@ Enable SPC-X optimizations for devices
     :lines: 18-
 
 ---------------------
-Configuration details
+Configuration Details
 ---------------------
 
-Following configuration parameters are applied with spectrumXOptimized.enabled == true and spectrumXOptimized.version == "RA2.0":
+When spectrumXOptimized.enabled == true and spectrumXOptimized.version == "RA2.0" the following configuration parameters are applied:
 
 .. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/bindata/spectrum-x/RA2.0.yaml
     :language: yaml
