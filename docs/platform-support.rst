@@ -37,7 +37,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.30 and <=1.34
+     - >=1.31 and <=1.35
      -
    * - Helm
      - v3.5+
@@ -81,6 +81,10 @@ The following adapters have been tested and validated with **NVIDIA Network Op
      - 400 Gb/s
      - IB RDMA and RoCE
    * - NVIDIA ConnectX-8 SuperNIC
+     - Ethernet & InfiniBand
+     - 800 Gb/s
+     - IB RDMA and RoCE
+   * - NVIDIA ConnectX-9 SuperNIC
      - Ethernet & InfiniBand
      - 800 Gb/s
      - IB RDMA and RoCE
@@ -154,17 +158,17 @@ Supported Operating Systems and Kubernetes Platforms
      - Nutanix NKP
      - Notes
    * - Ubuntu 24.04 LTS
-     - 1.30–1.34
+     - 1.31–1.35
      - —
      - —
-     - 1.30–1.34
+     - 1.31–1.35
      - 2.12-2.15
      - —
    * - Ubuntu 22.04 LTS
-     - 1.30–1.34
+     - 1.31–1.35
      - —
      - —
-     - 1.30–1.34
+     - 1.31–1.35
      - 2.12-2.15
      - RT‑kernel support
    * - Red Hat CoreOS
@@ -175,23 +179,23 @@ Supported Operating Systems and Kubernetes Platforms
      - —
      - RT kernels support
    * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
-     - 1.30–1.34
+     - 1.31–1.35
      - —
      - —
      - —
      - —
      - RT kernels support
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.30–1.34
+     - 1.31–1.35
      - —
      - —
      - —
      - —
      - RT‑kernel support
    * - SUSE Linux Enterprise Server 15 SP7
-     - 1.30–1.34
+     - 1.31–1.35
      - —
-     - 1.30–1.34
+     - 1.31–1.35
      - —
      - —
      - Kubernetes and Rancher
