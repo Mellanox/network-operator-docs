@@ -63,10 +63,10 @@
 <li class="toctree-l2"><a class="reference internal" href="nic-fw-configuration.html"> NIC Firmware Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration-details.html"> Configuration Details</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> [TECH PREVIEW] Spectrum-X Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator">Install and configure the NIC Configuration Operator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#provision-the-doca-spc-x-cc-algorithm-package">Provision the DOCA SPC-X CC algorithm package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enable-spc-x-optimizations-for-devices">Enable SPC-X optimizations for devices</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#configuration-details">Configuration details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator">Install and Configure the NIC Configuration Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#provision-the-doca-spc-x-cc-algorithm-package">Provision the DOCA SPC-X CC Algorithm Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-spc-x-optimizations-for-devices">Enable SPC-X Optimizations for Devices</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-details">Configuration Details</a></li>
 </ul>
 </li>
 </ul>
@@ -119,11 +119,11 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator" id="id1">Install and configure the NIC Configuration Operator</a></p></li>
-<li><p><a class="reference internal" href="#provision-the-doca-spc-x-cc-algorithm-package" id="id2">Provision the DOCA SPC-X CC algorithm package</a></p></li>
-<li><p><a class="reference internal" href="#enable-spc-x-optimizations-for-devices" id="id3">Enable SPC-X optimizations for devices</a></p>
+<li><p><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator" id="id1">Install and Configure the NIC Configuration Operator</a></p></li>
+<li><p><a class="reference internal" href="#provision-the-doca-spc-x-cc-algorithm-package" id="id2">Provision the DOCA SPC-X CC Algorithm Package</a></p></li>
+<li><p><a class="reference internal" href="#enable-spc-x-optimizations-for-devices" id="id3">Enable SPC-X Optimizations for Devices</a></p>
 <ul>
-<li><p><a class="reference internal" href="#configuration-details" id="id4">Configuration details</a></p></li>
+<li><p><a class="reference internal" href="#configuration-details" id="id4">Configuration Details</a></p></li>
 </ul>
 </li>
 </ul>
@@ -134,14 +134,14 @@
 <p>Currently, only ConnectX-8 (device ID 1023) and BlueField-3 SuperNIC (device ID a2dc) devices are supported for this configuration.</p>
 </div>
 <section id="install-and-configure-the-nic-configuration-operator">
-<h2>Install and configure the NIC Configuration Operator<a class="headerlink" href="#install-and-configure-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
-<p>To install the operator and for more information about the CRDs follow the <a class="reference internal" href="nic-fw-configuration.html"><span class="doc">NIC Firmware Configuration</span></a> and <a class="reference internal" href="configuration-details.html"><span class="doc">Configuration Details</span></a> doc articles.</p>
+<h2>Install and Configure the NIC Configuration Operator<a class="headerlink" href="#install-and-configure-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
+<p>To install the operator and for more information on the CRDs, see <a class="reference internal" href="nic-fw-configuration.html"><span class="doc">NIC Firmware Configuration</span></a> and <a class="reference internal" href="configuration-details.html"><span class="doc">Configuration Details</span></a>.</p>
 </section>
 <section id="provision-the-doca-spc-x-cc-algorithm-package">
-<h2>Provision the DOCA SPC-X CC algorithm package<a class="headerlink" href="#provision-the-doca-spc-x-cc-algorithm-package" title="Permalink to this headline"></a></h2>
-<p>To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm will be publicly available.
+<h2>Provision the DOCA SPC-X CC Algorithm Package<a class="headerlink" href="#provision-the-doca-spc-x-cc-algorithm-package" title="Permalink to this headline"></a></h2>
+<p>To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm is publicly available.
 To access the package, contact your NVIDIA CPM.
-The package should be made available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.</p>
+The package should be available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareSource</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -152,7 +152,7 @@ The package should be made available in the cluster and then its URL should be p
 <span class="w">  </span><span class="nt">docaSpcXCCUrlSource</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://example.com/doca-spcx-cc_3.1.0105-1_amd64.deb&quot;</span><span class="w"></span>
 </pre></div>
 </div>
-<p>If firmware on the devices also needs to be updated, extend the NicFirmwareSource CR with fields for ConnectX and BlueField firmware. Please, use the correct firmware for your devices.</p>
+<p>If the firmware on the devices needs to be updated, extend the NicFirmwareSource CR with fields for ConnectX and BlueField firmware. Make sure to use the correct firmware for your devices.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicFirmwareSource</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -185,7 +185,7 @@ The package should be made available in the cluster and then its URL should be p
 </div>
 </section>
 <section id="enable-spc-x-optimizations-for-devices">
-<h2>Enable SPC-X optimizations for devices<a class="headerlink" href="#enable-spc-x-optimizations-for-devices" title="Permalink to this headline"></a></h2>
+<h2>Enable SPC-X Optimizations for Devices<a class="headerlink" href="#enable-spc-x-optimizations-for-devices" title="Permalink to this headline"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -206,8 +206,8 @@ The package should be made available in the cluster and then its URL should be p
 </pre></div>
 </div>
 <section id="configuration-details">
-<h3>Configuration details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h3>
-<p>Following configuration parameters are applied with spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.0”:</p>
+<h3>Configuration Details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h3>
+<p>When spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.0” the following configuration parameters are applied:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet mode</span><span class="w"></span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
 <span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LINK_TYPE_P1&quot;</span><span class="w"></span>
