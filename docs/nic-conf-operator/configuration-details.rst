@@ -69,4 +69,65 @@ Configuration details
   - Both the numeric values and their string aliases, supported by NVConfig, are allowed (e.g. ``REAL_TIME_CLOCK_ENABLE=False``, ``REAL_TIME_CLOCK_ENABLE=0``).
   - For per port parameters (suffix ``_P1``, ``_P2``) parameters with ``_P2`` suffix are ignored if the device is single port.
 
+- ``spectrumXOptimized``: enables Spectrum-X specific NIC optimizations. When enabled:
+
+  - Requires ``linkType=Ethernet`` and ``numVfs=1``
+  - Cannot be combined with ``roceOptimized`` (RoCE settings are included automatically)
+  - Cannot be combined with ``rawNvConfig``
+  - Only supported on ConnectX-8 (``nicType: 1023``) and BlueField-3 SuperNIC (``nicType: a2dc``)
+  - ``version``: Required. Reference Architecture version (``RA1.3``, ``RA2.0``, or ``RA2.1``)
+  - ``overlay``: Optional, default ``none``. Set to ``l3`` for L3 EVPN overlay
+  - ``multiplaneMode``: Optional, default ``none``. Only available with RA2.1. Options: ``none``, ``swplb``, ``hwplb``, ``uniplane``
+  - ``numberOfPlanes``: Optional, default ``1``. Only available with RA2.1. Options: ``1``, ``2``, or ``4``
+
 - If a configuration is not set in spec, its non-volatile configuration parameters (if any) should be set to device default.
+
+Spectrum-X Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The NIC Configuration Operator supports Spectrum-X-specific NIC configuration for different versions of the NVIDIA Spectrum-X Reference Architecture (RA1.3, RA2.0, and RA2.1).
+
+Supported NIC types for Spectrum-X: \* ConnectX-8 (device ID ``1023``) – supports all multiplane modes \* BlueField-3 SuperNIC (device ID ``a2dc``) – supports all multiplane modes except ``hwplb``
+
+RA2.1 introduces multiplane mode support, allowing NICs to be configured with multiple data planes. Available modes:
+
++--------------+--------------------------------+--------------------------+------------+
+| Mode         | Description                    | Supported NICs           | Planes     |
++==============+================================+==========================+============+
+| ``none``     | Single plane (default)         | ConnectX-8, BF3 SuperNIC | 1          |
++--------------+--------------------------------+--------------------------+------------+
+| ``swplb``    | Software Packet Load Balancing | ConnectX-8, BF3 SuperNIC | 2, 4       |
++--------------+--------------------------------+--------------------------+------------+
+| ``hwplb``    | Hardware Packet Load Balancing | ConnectX-8 only          | 2, 4       |
++--------------+--------------------------------+--------------------------+------------+
+| ``uniplane`` | Uniplane mode                  | ConnectX-8, BF3 SuperNIC | 2          |
++--------------+--------------------------------+--------------------------+------------+
+
+..
+
+   **Note:** Multiplane modes are only available with RA2.1. For RA1.3 and RA2.0, ``multiplaneMode`` must be ``none`` and ``numberOfPlanes`` must be ``1``.
+
+`Example Spectrum-X NicConfigurationTemplate with multiplane <docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml>`__:
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. code:: yaml
+
+   apiVersion: configuration.net.nvidia.com/v1alpha1
+   kind: NicConfigurationTemplate
+   metadata:
+     name: spectrum-x-multiplane-configuration
+     namespace: nvidia-network-operator
+   spec:
+     nodeSelector:
+         feature.node.kubernetes.io/network-sriov.capable: "true"
+     nicSelector:
+         nicType: "1023" # ConnectX-8. Use "a2dc" for BlueField-3 SuperNIC (hwplb not supported on BF3)
+     template:
+         numVfs: 1
+         linkType: Ethernet
+         spectrumXOptimized:
+             enabled: true
+             version: "RA2.1"
+             overlay: "none"
+             multiplaneMode: "hwplb" # Hardware Packet Load Balancing, ConnectX-8 only
+             numberOfPlanes: 4
