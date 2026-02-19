@@ -66,16 +66,42 @@
 <li class="toctree-l3"><a class="reference internal" href="#discover-cluster-configuration">Discover Cluster Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#select-the-deployment-profile">Select the Deployment Profile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#generate-deployment-files">Generate Deployment Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-to-cluster">Deploy to Cluster</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#supported-use-cases">Supported Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-deployment-profiles">Supported Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#heterogeneous-cluster-support">Heterogeneous Cluster Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#north-south-traffic-detection">North-South Traffic Detection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-reference">CLI Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-flags">General Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cluster-discovery-flags">Cluster Discovery Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profile-selection-flags">Profile Selection Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrum-x-flags">Spectrum-X Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#llm-flags">LLM Flags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-flags">Deployment Flags</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#usage-examples">Usage Examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#complete-workflow">Complete Workflow</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Discover Cluster Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Discover Cluster Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#discovery-with-user-provided-base-config">Discovery with User-Provided Base Config</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#use-existing-configuration">Use Existing Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Generate Deployment Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#generate-deployment-files-using-natural-language-prompt">Generate Deployment Files using Natural Language Prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Generate Deployment Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-deployment-files-for-a-specific-node-group">Generate Deployment Files for a Specific Node Group</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrum-x-deployment">Spectrum-X Deployment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hwplb-mode">HWPLB Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#swplb-mode">SWPLB Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#uniplane-mode">Uniplane Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#single-plane-none">Single Plane (None)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#llm-assisted-profile-selection">LLM-Assisted Profile Selection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#non-interactive-mode">Non-Interactive Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interactive-chat-mode">Interactive Chat Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#html-overview-generation">HTML Overview Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#configuration-file-format">Configuration File Format</a></li>
@@ -124,26 +150,55 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites" id="id3">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#operation-phases" id="id4">Operation Phases</a></p>
+<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#operation-phases" id="id5">Operation Phases</a></p>
 <ul>
-<li><p><a class="reference internal" href="#discover-cluster-configuration" id="id5">Discover Cluster Configuration</a></p></li>
-<li><p><a class="reference internal" href="#select-the-deployment-profile" id="id6">Select the Deployment Profile</a></p></li>
-<li><p><a class="reference internal" href="#generate-deployment-files" id="id7">Generate Deployment Files</a></p></li>
+<li><p><a class="reference internal" href="#discover-cluster-configuration" id="id6">Discover Cluster Configuration</a></p></li>
+<li><p><a class="reference internal" href="#select-the-deployment-profile" id="id7">Select the Deployment Profile</a></p></li>
+<li><p><a class="reference internal" href="#generate-deployment-files" id="id8">Generate Deployment Files</a></p></li>
+<li><p><a class="reference internal" href="#deploy-to-cluster" id="id9">Deploy to Cluster</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#supported-use-cases" id="id8">Supported Use Cases</a></p></li>
-<li><p><a class="reference internal" href="#usage" id="id9">Usage</a></p></li>
-<li><p><a class="reference internal" href="#usage-examples" id="id10">Usage Examples</a></p>
+<li><p><a class="reference internal" href="#supported-deployment-profiles" id="id10">Supported Deployment Profiles</a></p></li>
+<li><p><a class="reference internal" href="#heterogeneous-cluster-support" id="id11">Heterogeneous Cluster Support</a></p></li>
+<li><p><a class="reference internal" href="#north-south-traffic-detection" id="id12">North-South Traffic Detection</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id13">Usage</a></p></li>
+<li><p><a class="reference internal" href="#cli-reference" id="id14">CLI Reference</a></p>
 <ul>
-<li><p><a class="reference internal" href="#complete-workflow" id="id11">Complete Workflow</a></p></li>
-<li><p><a class="reference internal" href="#id1" id="id12">Discover Cluster Configuration</a></p></li>
-<li><p><a class="reference internal" href="#use-existing-configuration" id="id13">Use Existing Configuration</a></p></li>
-<li><p><a class="reference internal" href="#id2" id="id14">Generate Deployment Files</a></p></li>
-<li><p><a class="reference internal" href="#generate-deployment-files-using-natural-language-prompt" id="id15">Generate Deployment Files using Natural Language Prompt</a></p></li>
+<li><p><a class="reference internal" href="#general-flags" id="id15">General Flags</a></p></li>
+<li><p><a class="reference internal" href="#cluster-discovery-flags" id="id16">Cluster Discovery Flags</a></p></li>
+<li><p><a class="reference internal" href="#profile-selection-flags" id="id17">Profile Selection Flags</a></p></li>
+<li><p><a class="reference internal" href="#spectrum-x-flags" id="id18">Spectrum-X Flags</a></p></li>
+<li><p><a class="reference internal" href="#llm-flags" id="id19">LLM Flags</a></p></li>
+<li><p><a class="reference internal" href="#deployment-flags" id="id20">Deployment Flags</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configuration-file-format" id="id16">Configuration File Format</a></p></li>
+<li><p><a class="reference internal" href="#usage-examples" id="id21">Usage Examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#complete-workflow" id="id22">Complete Workflow</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id23">Discover Cluster Configuration</a></p></li>
+<li><p><a class="reference internal" href="#discovery-with-user-provided-base-config" id="id24">Discovery with User-Provided Base Config</a></p></li>
+<li><p><a class="reference internal" href="#use-existing-configuration" id="id25">Use Existing Configuration</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id26">Generate Deployment Files</a></p></li>
+<li><p><a class="reference internal" href="#generate-deployment-files-for-a-specific-node-group" id="id27">Generate Deployment Files for a Specific Node Group</a></p></li>
+<li><p><a class="reference internal" href="#spectrum-x-deployment" id="id28">Spectrum-X Deployment</a></p>
+<ul>
+<li><p><a class="reference internal" href="#hwplb-mode" id="id29">HWPLB Mode</a></p></li>
+<li><p><a class="reference internal" href="#swplb-mode" id="id30">SWPLB Mode</a></p></li>
+<li><p><a class="reference internal" href="#uniplane-mode" id="id31">Uniplane Mode</a></p></li>
+<li><p><a class="reference internal" href="#single-plane-none" id="id32">Single Plane (None)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#llm-assisted-profile-selection" id="id33">LLM-Assisted Profile Selection</a></p>
+<ul>
+<li><p><a class="reference internal" href="#non-interactive-mode" id="id34">Non-Interactive Mode</a></p></li>
+<li><p><a class="reference internal" href="#interactive-chat-mode" id="id35">Interactive Chat Mode</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#html-overview-generation" id="id36">HTML Overview Generation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#configuration-file-format" id="id37">Configuration File Format</a></p></li>
 </ul>
 </div>
 <p>NVIDIA Kubernetes Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.</p>
@@ -166,78 +221,295 @@
 <h3>Generate Deployment Files<a class="headerlink" href="#generate-deployment-files" title="Permalink to this headline"></a></h3>
 <p>Based on the discovered/provided configuration, generate a complete set of YAML deployment files tailored to your selected network profile.</p>
 </section>
+<section id="deploy-to-cluster">
+<h3>Deploy to Cluster<a class="headerlink" href="#deploy-to-cluster" title="Permalink to this headline"></a></h3>
+<p>Apply the generated deployment files to your Kubernetes cluster. This phase uses the <code class="docutils literal notranslate"><span class="pre">--deploy</span></code> flag and requires <code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code> to be specified. This phase is optional and can be skipped if <code class="docutils literal notranslate"><span class="pre">--deploy</span></code> is not provided.</p>
 </section>
-<section id="supported-use-cases">
-<h2>Supported Use Cases<a class="headerlink" href="#supported-use-cases" title="Permalink to this headline"></a></h2>
-<p>Kubernetes Launch Kit supports the following use cases:</p>
-<ul class="simple">
-<li><p>SR-IOV Network with RDMA</p></li>
-<li><p>Host Device Network with RDMA</p></li>
-<li><p>IP over InfiniBand with RDMA Shared Device</p></li>
-<li><p>MacVLAN Network with RDMA Shared Device</p></li>
-<li><p>SR-IOV InfiniBand Network with RDMA</p></li>
-</ul>
+</section>
+<section id="supported-deployment-profiles">
+<h2>Supported Deployment Profiles<a class="headerlink" href="#supported-deployment-profiles" title="Permalink to this headline"></a></h2>
+<p>Kubernetes Launch Kit supports the following deployment profiles:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Profile</strong></p></th>
+<th class="head"><p><strong>Fabric</strong></p></th>
+<th class="head"><p><strong>Deployment Type</strong></p></th>
+<th class="head"><p><strong>Notes</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SR-IOV Ethernet RDMA</p></td>
+<td><p>ethernet</p></td>
+<td><p>sriov</p></td>
+<td><p>High-performance networking with hardware acceleration and dedicated VF resources.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SR-IOV InfiniBand RDMA</p></td>
+<td><p>infiniband</p></td>
+<td><p>sriov</p></td>
+<td><p>Virtualized InfiniBand with hardware acceleration and isolated IB partitions.</p></td>
+</tr>
+<tr class="row-even"><td><p>IP over InfiniBand with RDMA Shared Device</p></td>
+<td><p>infiniband</p></td>
+<td><p>rdma_shared</p></td>
+<td><p>InfiniBand networking with shared RDMA resources for parallel I/O workloads.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Host Device RDMA</p></td>
+<td><p>any</p></td>
+<td><p>host_device</p></td>
+<td><p>Direct hardware access for legacy applications requiring exclusive device control.</p></td>
+</tr>
+<tr class="row-even"><td><p>MacVLAN with RDMA Shared Device</p></td>
+<td><p>ethernet</p></td>
+<td><p>rdma_shared</p></td>
+<td><p>Network isolation with shared RDMA capabilities for multi-tenant environments.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Spectrum-X</p></td>
+<td><p>ethernet</p></td>
+<td><p>sriov</p></td>
+<td><p>Spectrum-X networking with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> flag. Supports <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, and <code class="docutils literal notranslate"><span class="pre">none</span></code> multiplane modes.</p></td>
+</tr>
+</tbody>
+</table>
 <p>Please refer to the <a class="reference internal" href="quick-start/quick-start-k8s.html"><span class="doc">Quick Start Guide for Kubernetes</span></a> page for more details.</p>
+<p>For Spectrum-X configuration, refer to the <a class="reference internal" href="nic-conf-operator/spectrum-x-configuration.html"><span class="doc">[TECH PREVIEW] NVIDIA Spectrum-X NIC Configuration</span></a> page.</p>
+</section>
+<section id="heterogeneous-cluster-support">
+<span id="id1"></span><h2>Heterogeneous Cluster Support<a class="headerlink" href="#heterogeneous-cluster-support" title="Permalink to this headline"></a></h2>
+<p>During cluster discovery, nodes are automatically grouped by their NIC configuration. Nodes with identical PCI addresses and device IDs (the same PF fingerprint) are placed in the same group. Each group receives:</p>
+<ul class="simple">
+<li><p>A unique <code class="docutils literal notranslate"><span class="pre">identifier</span></code> (empty string for single-group clusters, <code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, etc. for multi-group)</p></li>
+<li><p>An auto-computed <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> based on labels that distinguish the group from others</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">productType</span></code> extracted from <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.machine</span></code> and <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.product</span></code> node labels</p></li>
+</ul>
+<p>Templates that reference cluster configuration are rendered once per group, producing separate output files per group (e.g., <code class="docutils literal notranslate"><span class="pre">30-sriovnetworknodepolicy-group-0.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">30-sriovnetworknodepolicy-group-1.yaml</span></code>).</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">--group</span></code> flag to generate manifests for a single group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
+    --fabric infiniband --deployment-type sriov --multirail <span class="se">\</span>
+    --group group-0 <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="north-south-traffic-detection">
+<h2>North-South Traffic Detection<a class="headerlink" href="#north-south-traffic-detection" title="Permalink to this headline"></a></h2>
+<p>During cluster discovery, the tool automatically identifies BlueField DPU devices by matching each device’s part number against a known list of DPU product codes. Devices matching a DPU product code are classified as <strong>north-south</strong> traffic (management/external), while all other devices (SuperNICs, ConnectX NICs) are classified as <strong>east-west</strong> traffic (GPU interconnect).</p>
+<p>North-south PFs are included in the saved cluster configuration for visibility, but are automatically filtered out during template rendering so that only east-west PFs appear in the generated deployment manifests.</p>
+<p>Each east-west PF is assigned a sequential rail number (<code class="docutils literal notranslate"><span class="pre">rail:</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">rail:</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">rail:</span> <span class="pre">2</span></code>, …) used for naming resources such as SriovNetworkNodePolicy and IPPool entries.</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
 <p>Kubernetes Launch Kit is available as a docker container:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ~/cluster-configuration
 cp /etc/kubernetes/admin.conf ~/cluster-configuration/kubeconfig
-docker run -v ~/cluster-configuration:/cluster-configuration --net<span class="o">=</span>host nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.1.0-rc.2 --discover-cluster-config --kubeconfig /cluster-configuration/kubeconfig --save-cluster-config /cluster-configuration/config.yaml --log-level debug  --save-deployment-files /cluster-configuration/deployments --fabric infiniband --deployment-type rdma_shared --multirail
+docker run -v ~/cluster-configuration:/cluster-configuration <span class="se">\</span>
+    --net<span class="o">=</span>host <span class="se">\</span>
+    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.1.0-rc.2 <span class="se">\</span>
+    --discover-cluster-config <span class="se">\</span>
+    --kubeconfig /cluster-configuration/kubeconfig <span class="se">\</span>
+    --save-cluster-config /cluster-configuration/config.yaml <span class="se">\</span>
+    --log-level debug <span class="se">\</span>
+    --save-deployment-files /cluster-configuration/deployments <span class="se">\</span>
+    --fabric infiniband --deployment-type rdma_shared --multirail
 </pre></div>
 </div>
-<p>Don’t forget to enable –net=host and mount the necessary directories for input and output files with -v.</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>K8s Launch Kit (l8k) is a CLI tool for deploying and managing NVIDIA cloud-native solutions on Kubernetes. The tool helps provide flexible deployment workflows for optimal network performance with SR-IOV, RDMA, and other networking technologies.
-
-### Discover Cluster Configuration
-Deploy a minimal Network Operator profile to automatically discover your cluster&#39;s
-network capabilities and hardware configuration by using --discover-cluster-config.
-This phase can be skipped if you provide your own configuration file by using --user-config.
-This phase requires --kubeconfig to be specified.
-
-### Generate Deployment Files
-Based on the discovered or provided configuration,
-generate a complete set of YAML deployment files for the selected network profile.
-Files can be saved to disk using --save-deployment-files.
-The profile can be defined manually with --fabric, --deployment-type and --multirail flags,
-OR generated by an LLM-assisted profile generator with --prompt (requires --llm-api-key and --llm-vendor).
-
-### Deploy to Cluster
-Apply the generated deployment files to your Kubernetes cluster by using --deploy. This phase requires --kubeconfig and can be skipped if --deploy is not specified.
-
-Usage:
-l8k [flags]
-l8k [command]
-
-Available Commands:
-completion  Generate the autocompletion script for the specified shell
-help        Help about any command
-version     Print the version number
-
-Flags:
-    --ai                             Enable AI deployment
-    --deploy                         Deploy the generated files to the Kubernetes cluster
-    --deployment-type string         Select the deployment type (sriov, rdma_shared, host_device)
-    --discover-cluster-config        Deploy a thin Network Operator profile to discover cluster capabilities
-    --enabled-plugins string         Comma-separated list of plugins to enable (default &quot;network-operator&quot;)
-    --fabric string                  Select the fabric type to deploy (infiniband, ethernet)
--h, --help                           help for l8k
-    --kubeconfig string              Path to kubeconfig file for cluster deployment (required when using --deploy)
-    --llm-api-key string             API key for the LLM API (required when using --prompt)
-    --llm-api-url string             API URL for the LLM API (required when using --prompt)
-    --llm-vendor string              Vendor of the LLM API (required when using --prompt) (default &quot;openai-azure&quot;)
-    --log-level string               Log level (debug, info, warn, error) (default &quot;info&quot;)
-    --multirail                      Enable multirail deployment
-    --prompt string                  Path to file with a prompt to use for LLM-assisted profile generation
-    --save-cluster-config string     Save discovered cluster configuration to the specified path (default &quot;/opt/nvidia/k8s-launch-kit/cluster-config.yaml&quot;)
-    --save-deployment-files string   Save generated deployment files to the specified directory (default &quot;/opt/nvidia/k8s-launch-kit/deployment&quot;)
-    --spectrum-x                     Enable Spectrum X deployment
-    --user-config string             Use provided cluster configuration file instead of auto-discovery (skips cluster discovery)
-
-Use &quot;l8k [command] --help&quot; for more information about a command.
-</pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You must enable <code class="docutils literal notranslate"><span class="pre">--net=host</span></code> and mount the necessary directories for input and output files with <code class="docutils literal notranslate"><span class="pre">-v</span></code>.</p>
 </div>
+</section>
+<section id="cli-reference">
+<h2>CLI Reference<a class="headerlink" href="#cli-reference" title="Permalink to this headline"></a></h2>
+<section id="general-flags">
+<h3>General Flags<a class="headerlink" href="#general-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--enabled-plugins</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Comma-separated list of plugins to enable (default: <code class="docutils literal notranslate"><span class="pre">network-operator</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--log-level</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Log level: debug, info, warn, error</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--log-file</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Write logs to file instead of stderr</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-h,</span> <span class="pre">--help</span></code></p></td>
+<td><p>Show help</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cluster-discovery-flags">
+<h3>Cluster Discovery Flags<a class="headerlink" href="#cluster-discovery-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--discover-cluster-config</span></code></p></td>
+<td><p>Deploy a thin Network Operator profile to discover cluster capabilities</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--save-cluster-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Save discovered cluster configuration to the specified path (defaults to <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> path if set, otherwise <code class="docutils literal notranslate"><span class="pre">/opt/nvidia/k8s-launch-kit/cluster-config.yaml</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Use provided cluster configuration file (as base config for discovery or as full config without discovery)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig file for cluster operations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--label-selector</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Filter nodes for discovery by label (default: <code class="docutils literal notranslate"><span class="pre">feature.node.kubernetes.io/pci-15b3.present=true</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-namespace</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Override the network operator namespace from the config file</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="profile-selection-flags">
+<h3>Profile Selection Flags<a class="headerlink" href="#profile-selection-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--fabric</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Select the fabric type to deploy (infiniband, ethernet)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-type</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Select the deployment type (sriov, rdma_shared, host_device)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multirail</span></code></p></td>
+<td><p>Enable multirail deployment</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code></p></td>
+<td><p>Enable Spectrum-X deployment</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ai</span></code></p></td>
+<td><p>Enable AI deployment</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Generate templates for a specific node group only (e.g., <code class="docutils literal notranslate"><span class="pre">group-0</span></code>). See <a class="reference internal" href="#heterogeneous-cluster-support"><span class="std std-ref">Heterogeneous Cluster Support</span></a>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the configuration file provided via <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> already contains a complete <code class="docutils literal notranslate"><span class="pre">profile:</span></code> section, the <code class="docutils literal notranslate"><span class="pre">--fabric</span></code>, <code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code>, and other profile selection flags are not required. CLI flags override values from the configuration file when both are provided.</p>
+</div>
+</section>
+<section id="spectrum-x-flags">
+<h3>Spectrum-X Flags<a class="headerlink" href="#spectrum-x-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--spcx-version</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Spectrum-X version (default: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">&lt;int&gt;</span></code></p></td>
+<td><p>Number of planes for multiplane deployment (required when mode is not <code class="docutils literal notranslate"><span class="pre">none</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is specified, <code class="docutils literal notranslate"><span class="pre">--fabric</span></code>, <code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code>, and <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> are automatically set to <code class="docutils literal notranslate"><span class="pre">ethernet</span></code>, <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, and <code class="docutils literal notranslate"><span class="pre">true</span></code> respectively. The <code class="docutils literal notranslate"><span class="pre">--spcx-version</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>.</p>
+</div>
+</section>
+<section id="llm-flags">
+<h3>LLM Flags<a class="headerlink" href="#llm-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--prompt</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to file with a prompt to use for LLM-assisted profile generation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--llm-interactive</span></code></p></td>
+<td><p>Enable interactive chat mode with the LLM agent</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--llm-api-key</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>API key for the LLM API</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--llm-api-url</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>API URL for the LLM API</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--llm-vendor</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Vendor of the LLM API (openai, openai-azure, anthropic, gemini). Default: <code class="docutils literal notranslate"><span class="pre">openai-azure</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--llm-model</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Custom model name for the LLM API</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="deployment-flags">
+<h3>Deployment Flags<a class="headerlink" href="#deployment-flags" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--save-deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Save generated deployment files to the specified directory (default: <code class="docutils literal notranslate"><span class="pre">/opt/nvidia/k8s-launch-kit/deployment</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deploy</span></code></p></td>
+<td><p>Deploy the generated files to the Kubernetes cluster</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="usage-examples">
 <h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this headline"></a></h2>
@@ -245,15 +517,36 @@ Use &quot;l8k [command] --help&quot; for more information about a command.
 <h3>Complete Workflow<a class="headerlink" href="#complete-workflow" title="Permalink to this headline"></a></h3>
 <p>Discover cluster config, generate files, and deploy:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --discover-cluster-config --save-cluster-config ./cluster-config.yaml <span class="se">\</span>
---fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
---save-deployment-files ./deployments <span class="se">\</span>
---deploy --kubeconfig ~/.kube/config
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments <span class="se">\</span>
+    --deploy --kubeconfig ~/.kube/config
 </pre></div>
 </div>
 </section>
-<section id="id1">
-<h3>Discover Cluster Configuration<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --discover-cluster-config --save-cluster-config ./my-cluster-config.yaml
+<section id="id2">
+<h3>Discover Cluster Configuration<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --discover-cluster-config --save-cluster-config ./my-cluster-config.yaml <span class="se">\</span>
+    --kubeconfig ~/.kube/config
+</pre></div>
+</div>
+<p>Filter discovery to specific nodes using a label selector:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --discover-cluster-config --save-cluster-config ./my-cluster-config.yaml <span class="se">\</span>
+    --label-selector <span class="s2">&quot;feature.node.kubernetes.io/pci-15b3.present=true&quot;</span> <span class="se">\</span>
+    --kubeconfig ~/.kube/config
+</pre></div>
+</div>
+</section>
+<section id="discovery-with-user-provided-base-config">
+<h3>Discovery with User-Provided Base Config<a class="headerlink" href="#discovery-with-user-provided-base-config" title="Permalink to this headline"></a></h3>
+<p>Use your own config file (with custom network operator version, subnets, etc.) as the base for discovery. Without <code class="docutils literal notranslate"><span class="pre">--save-cluster-config</span></code>, the file is rewritten in place with discovery results:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./my-config.yaml --discover-cluster-config <span class="se">\</span>
+    --kubeconfig ~/.kube/config
+</pre></div>
+</div>
+<p>Save discovery results to a separate file instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./my-config.yaml --discover-cluster-config <span class="se">\</span>
+    --save-cluster-config ./discovered-config.yaml <span class="se">\</span>
+    --kubeconfig ~/.kube/config
 </pre></div>
 </div>
 </section>
@@ -266,101 +559,261 @@ Use &quot;l8k [command] --help&quot; for more information about a command.
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h3>Generate Deployment Files<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<section id="id3">
+<h3>Generate Deployment Files<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
     --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
     --save-deployment-files ./deployments
 </pre></div>
 </div>
 </section>
-<section id="generate-deployment-files-using-natural-language-prompt">
-<h3>Generate Deployment Files using Natural Language Prompt<a class="headerlink" href="#generate-deployment-files-using-natural-language-prompt" title="Permalink to this headline"></a></h3>
-<p>Kubernetes Launch Kit supports a LLM-assisted profile generation. You can provide a natural language prompt to the tool and it will generate a deployment profile for you.
-To configure the LLM, you need to provide the API key to OpenAI Azure backend.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;I want to enable multirail networking in my AI cluster&quot;</span> &gt; requirements.txt
-l8k --user-config ./config.yaml <span class="se">\</span>
-    --prompt requirements.txt --llm-vendor openai-azure --llm-api-key &lt;OPENAI_AZURE_KEY&gt; <span class="se">\</span>
+<section id="generate-deployment-files-for-a-specific-node-group">
+<h3>Generate Deployment Files for a Specific Node Group<a class="headerlink" href="#generate-deployment-files-for-a-specific-node-group" title="Permalink to this headline"></a></h3>
+<p>In heterogeneous clusters, discovery produces multiple node groups. Use <code class="docutils literal notranslate"><span class="pre">--group</span></code> to generate manifests for a single group:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
+    --fabric infiniband --deployment-type sriov --multirail <span class="se">\</span>
+    --group group-0 <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="spectrum-x-deployment">
+<h3>Spectrum-X Deployment<a class="headerlink" href="#spectrum-x-deployment" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> flag automatically sets <code class="docutils literal notranslate"><span class="pre">--fabric</span></code> to <code class="docutils literal notranslate"><span class="pre">ethernet</span></code>, <code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code> to <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, and <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>. You must specify <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code> to select the multiplane mode, and <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code> when the mode is not <code class="docutils literal notranslate"><span class="pre">none</span></code>. The <code class="docutils literal notranslate"><span class="pre">--spcx-version</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>.</p>
+<p>For more information on Spectrum-X configuration, refer to the <a class="reference internal" href="nic-conf-operator/spectrum-x-configuration.html"><span class="doc">[TECH PREVIEW] NVIDIA Spectrum-X NIC Configuration</span></a> page.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NIC type constraints for multiplane modes:</p>
+<ul class="simple">
+<li><p>ConnectX-8 (device ID 1023): supports <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">uniplane</span></code> modes</p></li>
+<li><p>BlueField-3 SuperNIC (device ID a2dc): only supports <code class="docutils literal notranslate"><span class="pre">none</span></code> mode</p></li>
+</ul>
+</div>
+<section id="hwplb-mode">
+<h4>HWPLB Mode<a class="headerlink" href="#hwplb-mode" title="Permalink to this headline"></a></h4>
+<p>Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml --spectrum-x <span class="se">\</span>
+    --multiplane-mode hwplb --number-of-planes <span class="m">4</span> <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="swplb-mode">
+<h4>SWPLB Mode<a class="headerlink" href="#swplb-mode" title="Permalink to this headline"></a></h4>
+<p>Software Plane Load Balancing generates separate resources per-rail per-plane. Suitable for smaller-scale clusters.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml --spectrum-x <span class="se">\</span>
+    --multiplane-mode swplb --number-of-planes <span class="m">2</span> <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="uniplane-mode">
+<h4>Uniplane Mode<a class="headerlink" href="#uniplane-mode" title="Permalink to this headline"></a></h4>
+<p>Unified plane mode with no plane separation. Simplest topology for ConnectX-8. Forces <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml --spectrum-x <span class="se">\</span>
+    --multiplane-mode uniplane <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="single-plane-none">
+<h4>Single Plane (None)<a class="headerlink" href="#single-plane-none" title="Permalink to this headline"></a></h4>
+<p>No multiplane separation. Use with BlueField-3 SuperNIC or simple topologies.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml --spectrum-x <span class="se">\</span>
+    --multiplane-mode none <span class="se">\</span>
     --save-deployment-files ./deployments
 </pre></div>
 </div>
 </section>
 </section>
+<section id="llm-assisted-profile-selection">
+<h3>LLM-Assisted Profile Selection<a class="headerlink" href="#llm-assisted-profile-selection" title="Permalink to this headline"></a></h3>
+<p>Kubernetes Launch Kit supports LLM-assisted profile generation. An AI agent analyzes your cluster configuration and requirements to recommend the optimal deployment profile.</p>
+<p>Supported LLM vendors:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">openai</span></code> — OpenAI API</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">openai-azure</span></code> — Azure OpenAI Service</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">anthropic</span></code> — Anthropic API</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gemini</span></code> — Google Gemini API</p></li>
+</ul>
+<section id="non-interactive-mode">
+<h4>Non-Interactive Mode<a class="headerlink" href="#non-interactive-mode" title="Permalink to this headline"></a></h4>
+<p>Provide a prompt file with <code class="docutils literal notranslate"><span class="pre">--prompt</span></code> for single-shot profile generation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s2">&quot;I want to enable multirail networking in my AI cluster&quot;</span> &gt; requirements.txt
+l8k --user-config ./config.yaml <span class="se">\</span>
+    --prompt requirements.txt --llm-vendor openai-azure <span class="se">\</span>
+    --llm-api-key &lt;OPENAI_API_KEY&gt; --llm-api-url &lt;OPENAI_API_URL&gt; <span class="se">\</span>
+    --llm-model &lt;OPENAI_MODEL&gt; <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+<p>Using Anthropic:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
+    --prompt requirements.txt --llm-vendor anthropic <span class="se">\</span>
+    --llm-api-key &lt;ANTHROPIC_API_KEY&gt; --llm-api-url &lt;ANTHROPIC_API_URL&gt; <span class="se">\</span>
+    --llm-model &lt;ANTHROPIC_MODEL&gt; <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+<p>Using Gemini:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
+    --prompt requirements.txt --llm-vendor gemini <span class="se">\</span>
+    --llm-api-key &lt;GEMINI_API_KEY&gt; --llm-api-url &lt;GEMINI_API_URL&gt; <span class="se">\</span>
+    --llm-model &lt;GEMINI_MODEL&gt; <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+<section id="interactive-chat-mode">
+<h4>Interactive Chat Mode<a class="headerlink" href="#interactive-chat-mode" title="Permalink to this headline"></a></h4>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--llm-interactive</span></code> for a back-and-forth conversation with the AI agent. The agent will ask clarifying questions and help you select the optimal profile. Type <code class="docutils literal notranslate"><span class="pre">generate</span></code> to confirm and generate manifests.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">--prompt</span></code> and <code class="docutils literal notranslate"><span class="pre">--llm-interactive</span></code> cannot be used together.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k --user-config ./config.yaml <span class="se">\</span>
+    --llm-interactive --llm-vendor anthropic <span class="se">\</span>
+    --llm-api-key &lt;KEY&gt; --llm-api-url &lt;API_URL&gt; <span class="se">\</span>
+    --llm-model &lt;LLM_MODEL&gt; <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+</section>
+</section>
+<section id="html-overview-generation">
+<h3>HTML Overview Generation<a class="headerlink" href="#html-overview-generation" title="Permalink to this headline"></a></h3>
+<p>An <code class="docutils literal notranslate"><span class="pre">overview.html</span></code> file is generated alongside the YAML deployment files. It contains the profile description, notes, collapsible file contents, and a link to the deployment guide. The path to the generated HTML file is automatically printed to the console.</p>
+</section>
+</section>
 <section id="configuration-file-format">
 <h2>Configuration File Format<a class="headerlink" href="#configuration-file-format" title="Permalink to this headline"></a></h2>
 <p>After the cluster configuration is discovered, the tool will save the configuration to a file.
-You can use this file as a starting point for your own configuration. Own configuration file can be provided to the tool using <cite>–user-config</cite> flag.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.1.0-rc.2</span><span class="w"></span>
-<span class="w">    </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"> </span><span class="c1"># TODO: update to NetworkOperator.ComponentVersion later</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
-<span class="w">  </span><span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">    </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">poolName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam-pool</span><span class="w"></span>
-<span class="w">  </span><span class="nt">subnets</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.6.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.7.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.8.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.9.1</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.0/24</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.10.1</span><span class="w"></span>
-<span class="w">  </span><span class="nt">sriov</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span><span class="w"></span>
-<span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
-<span class="w">    </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span><span class="w"></span>
-<span class="w">    </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov_resource</span><span class="w"></span>
-<span class="w">    </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov_network</span><span class="w"></span>
-<span class="w">  </span><span class="nt">hostdev</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-resource</span><span class="w"></span>
-<span class="w">    </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-network</span><span class="w"></span>
-<span class="w">  </span><span class="nt">rdmaShared</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_resource</span><span class="w"></span>
-<span class="w">    </span><span class="nt">hcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipoib-network</span><span class="w"></span>
-<span class="w">  </span><span class="nt">macvlan</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">macvlan-network</span><span class="w"></span>
-<span class="w">  </span><span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">nodes</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.0&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f0np0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:03:00.1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp3s0f1np1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mlx5_2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0000:81:00.0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp129s0np0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
-<span class="w">    </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-41</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloud-dev-40</span><span class="w"></span>
+You can use this file as a starting point for your own configuration. A custom configuration file can be provided to the tool using the <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> flag — either as a standalone config (skipping discovery) or as a base config combined with <code class="docutils literal notranslate"><span class="pre">--discover-cluster-config</span></code> (discovery takes network operator parameters from the file and adds discovered cluster config).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">   </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">   </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">   </span><span class="nt">docsBaseURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://docs.nvidia.com/networking/display/kubernetes2610</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">   </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">   </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">poolName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam-pool</span><span class="w"></span>
+<span class="w">   </span><span class="nt">subnets</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.0/24</span><span class="w"></span>
+<span class="w">     </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.2.1</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.0/24</span><span class="w"></span>
+<span class="w">     </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.3.1</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.0/24</span><span class="w"></span>
+<span class="w">     </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.4.1</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.0/24</span><span class="w"></span>
+<span class="w">     </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.5.1</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">sriov</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ethernetMtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9000</span><span class="w"></span>
+<span class="w">   </span><span class="nt">infinibandMtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4000</span><span class="w"></span>
+<span class="w">   </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
+<span class="w">   </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov_resource</span><span class="w"></span>
+<span class="w">   </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">hostdev</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-resource</span><span class="w"></span>
+<span class="w">   </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-network</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">rdmaShared</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma_shared_resource</span><span class="w"></span>
+<span class="w">   </span><span class="nt">hcaMax</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">63</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">ipoib</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipoib-network</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">macvlan</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">macvlan-network</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w">    </span><span class="c1"># &quot;1023&quot; for ConnectX-8, &quot;a2dc&quot; for BlueField-3 SuperNIC</span><span class="w"></span>
+<span class="w">   </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;roce_p%plane%_r%rail%&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_p%plane%_r%rail%&quot;</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">profile</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="nt">fabric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ethernet</span><span class="w">   </span><span class="c1"># infiniband, ethernet</span><span class="w"></span>
+<span class="w">   </span><span class="nt">deployment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov</span><span class="w">  </span><span class="c1"># rdma_shared, sriov, host_device</span><span class="w"></span>
+<span class="w">   </span><span class="nt">multirail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">   </span><span class="nt">spectrumX</span><span class="p">:</span><span class="w">          </span><span class="c1"># Spectrum-X configuration (set to null or omit if not using Spectrum-X)</span><span class="w"></span>
+<span class="w">     </span><span class="nt">spcxVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.1&quot;</span><span class="w">        </span><span class="c1"># CLI override: --spcx-version</span><span class="w"></span>
+<span class="w">     </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w">       </span><span class="c1"># CLI override: --multiplane-mode (swplb, hwplb, uniplane, none)</span><span class="w"></span>
+<span class="w">     </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w">           </span><span class="c1"># CLI override: --number-of-planes</span><span class="w"></span>
+<span class="w">   </span><span class="nt">ai</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+
+<span class="w"> </span><span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;group-0&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">machineType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">productType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-B200&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">nodes</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">       </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">       </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">   </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;worker-0&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;worker-1&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">nvidia.com/gpu.machine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:05:00.0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mlx5_0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;net1&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:75:00.0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mlx5_1&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;net2&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:6a:00.0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mlx5_4&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;net5&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">north-south</span><span class="w"></span>
+<span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;group-1&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">machineType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PowerEdge-XE9680&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">productType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-H100&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">labelSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">nodes</span><span class="p">:</span><span class="w"></span>
+<span class="w">       </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">       </span><span class="nt">rdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">       </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">   </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;worker-2&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;worker-3&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">   </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">     </span><span class="nt">nvidia.com/gpu.machine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PowerEdge-XE9680&quot;</span><span class="w"></span>
+<span class="w">   </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:1a:00.0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:3c:00.0&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rdmaDevice</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">networkInterface</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">     </span><span class="nt">traffic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">east-west</span><span class="w"></span>
+<span class="w">     </span><span class="nt">rail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code> section is an array of node groups. In heterogeneous clusters, each group contains nodes with identical NIC configurations (same PCI addresses and device IDs). Each PF entry includes a <code class="docutils literal notranslate"><span class="pre">traffic</span></code> field (<code class="docutils literal notranslate"><span class="pre">east-west</span></code> or <code class="docutils literal notranslate"><span class="pre">north-south</span></code>) and a <code class="docutils literal notranslate"><span class="pre">rail</span></code> field (sequential index for east-west PFs). North-south PFs do not have a <code class="docutils literal notranslate"><span class="pre">rail</span></code> field. See <a class="reference internal" href="#heterogeneous-cluster-support"><span class="std std-ref">Heterogeneous Cluster Support</span></a> for details.</p>
 </div>
 </section>
 </section>

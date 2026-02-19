@@ -74,6 +74,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#observe-the-status-of-the-configuration-update">Observe the status of the configuration update</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate">Configure custom interface names (NicInterfaceNameTemplate)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration-details.html"> Configuration Details</a></li>
@@ -141,6 +142,7 @@
 <li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id9">Observe the status of the configuration update</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id10">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
@@ -525,6 +527,12 @@ template:
 <p>If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.</p>
 </div>
 </section>
+</section>
+<section id="configure-custom-interface-names-nicinterfacenametemplate">
+<h2>Configure custom interface names (NicInterfaceNameTemplate)<a class="headerlink" href="#configure-custom-interface-names-nicinterfacenametemplate" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRD allows you to define custom naming patterns for RDMA and network device interfaces on NVIDIA NICs. This is useful in Spectrum-X multiplane and multi-rail deployments where predictable interface naming is required.</p>
+<p>The operator deploys udev rules to the host to rename network and RDMA interfaces according to the specified naming template. The template uses placeholders (<code class="docutils literal notranslate"><span class="pre">%nic_id%</span></code>, <code class="docutils literal notranslate"><span class="pre">%plane_id%</span></code>, <code class="docutils literal notranslate"><span class="pre">%rail_id%</span></code>) to construct device names based on the NIC topology.</p>
+<p>For full details on NicInterfaceNameTemplate configuration, including multiplane modes and example udev rules, refer to <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
 </section>
 </section>
 
