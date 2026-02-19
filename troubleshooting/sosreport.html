@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOS-Report Collection Script &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Legal Notices and 3rd Party Licenses" href="../licenses.html" />
+    <link rel="prev" title="Troubleshooting" href="troubleshooting.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SOS-Report Collection Script</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#as-a-kubectl-plugin-recommended">As a kubectl Plugin (Recommended)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#as-a-standalone-script">As a Standalone Script</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-line-options">Command-Line Options</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#what-s-collected">What’s Collected</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#custom-resources">Custom Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#operator-resources">Operator Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#components">Components</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-information">Node Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#diagnostic-commands">Diagnostic Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#html-report">HTML Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-structure">Output Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-considerations">Security Considerations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-workflows">Example Workflows</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting-pod-failures">Troubleshooting Pod Failures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quick-health-check">Quick Health Check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#preparing-for-a-support-case">Preparing for a Support Case</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="troubleshooting.html">Troubleshooting</a> &raquo;</li>
+<li>SOS-Report Collection Script</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sos-report-collection-script">
+<h1>SOS-Report Collection Script<a class="headerlink" href="#sos-report-collection-script" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p></li>
+<li><p><a class="reference internal" href="#installation" id="id2">Installation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#as-a-kubectl-plugin-recommended" id="id3">As a kubectl Plugin (Recommended)</a></p></li>
+<li><p><a class="reference internal" href="#as-a-standalone-script" id="id4">As a Standalone Script</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#requirements" id="id5">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id6">Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-usage" id="id7">Basic Usage</a></p></li>
+<li><p><a class="reference internal" href="#command-line-options" id="id8">Command-Line Options</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#what-s-collected" id="id9">What’s Collected</a></p>
+<ul>
+<li><p><a class="reference internal" href="#custom-resources" id="id10">Custom Resources</a></p></li>
+<li><p><a class="reference internal" href="#operator-resources" id="id11">Operator Resources</a></p></li>
+<li><p><a class="reference internal" href="#components" id="id12">Components</a></p></li>
+<li><p><a class="reference internal" href="#node-information" id="id13">Node Information</a></p></li>
+<li><p><a class="reference internal" href="#diagnostic-commands" id="id14">Diagnostic Commands</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#html-report" id="id15">HTML Report</a></p></li>
+<li><p><a class="reference internal" href="#output-structure" id="id16">Output Structure</a></p></li>
+<li><p><a class="reference internal" href="#exit-codes" id="id17">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#security-considerations" id="id18">Security Considerations</a></p></li>
+<li><p><a class="reference internal" href="#example-workflows" id="id19">Example Workflows</a></p>
+<ul>
+<li><p><a class="reference internal" href="#troubleshooting-pod-failures" id="id20">Troubleshooting Pod Failures</a></p></li>
+<li><p><a class="reference internal" href="#quick-health-check" id="id21">Quick Health Check</a></p></li>
+<li><p><a class="reference internal" href="#preparing-for-a-support-case" id="id22">Preparing for a Support Case</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h2>
+<p>The Network Operator SOS-report script collects comprehensive diagnostic data from a Kubernetes cluster running the NVIDIA Network Operator.
+It gathers all relevant configuration, logs, status information, and diagnostic output into a single archive, making it easier to troubleshoot issues and share context with support teams.</p>
+<p>The script is fully backward compatible and is designed to work with any version of the Network Operator, including all previous releases.
+Components or resources that are not present in a given release are gracefully skipped without errors.</p>
+<p>The script and full README are available on GitHub at <a class="reference external" href="https://github.com/Mellanox/network-operator/tree/master/scripts/sosreport">scripts/sosreport</a>.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<section id="as-a-kubectl-plugin-recommended">
+<h3>As a kubectl Plugin (Recommended)<a class="headerlink" href="#as-a-kubectl-plugin-recommended" title="Permalink to this headline"></a></h3>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code>, <code class="docutils literal notranslate"><span class="pre">generate-report.py</span></code>, and <code class="docutils literal notranslate"><span class="pre">report-template.html</span></code> to a directory in your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install system-wide</span>
+sudo cp kubectl-netop_sosreport generate-report.py report-template.html /usr/local/bin/
+
+<span class="c1"># Or install for the current user only</span>
+mkdir -p ~/.local/bin
+cp kubectl-netop_sosreport generate-report.py report-template.html ~/.local/bin/
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Once installed, the script is available as a kubectl subcommand:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl netop-sosreport <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate-report.py</span></code> and <code class="docutils literal notranslate"><span class="pre">report-template.html</span></code> must be in the same directory as <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code> for HTML report generation.
+If these files are not present locally, the script will attempt to download them from GitHub.
+If download fails, the collection still works but the HTML report is skipped.</p>
+</div>
+</section>
+<section id="as-a-standalone-script">
+<h3>As a Standalone Script<a class="headerlink" href="#as-a-standalone-script" title="Permalink to this headline"></a></h3>
+<p>Run the script directly from the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./kubectl-netop_sosreport <span class="o">[</span>OPTIONS<span class="o">]</span>
+
+<span class="c1"># Or use the backward-compatible symlink</span>
+./network-operator-sosreport.sh <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> binary installed and in <code class="docutils literal notranslate"><span class="pre">PATH</span></code></p></li>
+<li><p>Valid kubeconfig with cluster access</p></li>
+<li><p>Permissions to read cluster resources (<code class="docutils literal notranslate"><span class="pre">cluster-admin</span></code> recommended)</p></li>
+<li><p>Bash 4.0 or later</p></li>
+<li><p>Python 3.6+ (for HTML report generation)</p></li>
+<li><p>Standard Unix utilities (<code class="docutils literal notranslate"><span class="pre">tar</span></code>, <code class="docutils literal notranslate"><span class="pre">gzip</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256sum</span></code>)</p></li>
+</ul>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run with auto-detection (recommended)</span>
+./network-operator-sosreport.sh
+
+<span class="c1"># Specify kubeconfig explicitly</span>
+./network-operator-sosreport.sh --kubeconfig /path/to/kubeconfig
+
+<span class="c1"># Specify operator namespace</span>
+./network-operator-sosreport.sh --namespace nvidia-network-operator
+</pre></div>
+</div>
+<p>The script automatically detects the Network Operator namespace and the cluster platform (Kubernetes or OpenShift).</p>
+</section>
+<section id="command-line-options">
+<h3>Command-Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">PATH</span></code></p></td>
+<td><p>Path to kubeconfig file. Default: <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--namespace</span> <span class="pre">NAMESPACE</span></code></p></td>
+<td><p>Network Operator namespace. Default: auto-detect.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span> <span class="pre">PATH</span></code></p></td>
+<td><p>Output directory. Default: <code class="docutils literal notranslate"><span class="pre">./network-operator-sosreport-&lt;timestamp&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--no-compress</span></code></p></td>
+<td><p>Do not create a tarball; leave output as a directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--log-lines</span> <span class="pre">N</span></code></p></td>
+<td><p>Number of log lines to collect per pod. Default: <code class="docutils literal notranslate"><span class="pre">5000</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--skip-diagnostics</span></code></p></td>
+<td><p>Skip running diagnostic commands in OFED pods (<code class="docutils literal notranslate"><span class="pre">lsmod</span></code>, <code class="docutils literal notranslate"><span class="pre">ibstat</span></code>, <code class="docutils literal notranslate"><span class="pre">ibv_devinfo</span></code>, <code class="docutils literal notranslate"><span class="pre">mst</span> <span class="pre">status</span></code>, <code class="docutils literal notranslate"><span class="pre">dmesg</span></code>, <code class="docutils literal notranslate"><span class="pre">ip</span></code> commands). Use this for faster collection when driver-level diagnostics are not needed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--skip-report</span></code></p></td>
+<td><p>Skip HTML report generation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--kubectl-path</span> <span class="pre">PATH</span></code></p></td>
+<td><p>Path to the <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> binary. Default: <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> from <code class="docutils literal notranslate"><span class="pre">PATH</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code></p></td>
+<td><p>Enable verbose output during collection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--help</span></code></p></td>
+<td><p>Show the help message.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="what-s-collected">
+<h2>What’s Collected<a class="headerlink" href="#what-s-collected" title="Permalink to this headline"></a></h2>
+<section id="custom-resources">
+<h3>Custom Resources<a class="headerlink" href="#custom-resources" title="Permalink to this headline"></a></h3>
+<p>All custom resources managed by the Network Operator are collected, including their definitions and instances.
+For a full reference of available CRDs, see <a class="reference internal" href="../customizations/crds.html"><span class="doc">Customization Options and CRDs</span></a>.</p>
+</section>
+<section id="operator-resources">
+<h3>Operator Resources<a class="headerlink" href="#operator-resources" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>Deployment, Pods, ConfigMaps</p></li>
+<li><p>Secrets (metadata only, no secret data)</p></li>
+<li><p>RBAC resources (ServiceAccounts, Roles, RoleBindings)</p></li>
+<li><p>Events in the operator namespace</p></li>
+<li><p>Webhook configurations (validating and mutating)</p></li>
+</ul>
+</section>
+<section id="components">
+<h3>Components<a class="headerlink" href="#components" title="Permalink to this headline"></a></h3>
+<p>The script collects data from all Network Operator components.
+Components that are not deployed in the cluster are automatically skipped.
+For the full list of components, see <a class="reference internal" href="../platform-support.html#network-operator-component-matrix"><span class="std std-ref">Network Operator Component Matrix</span></a>.</p>
+<p>For each component, the script collects:</p>
+<ul class="simple">
+<li><p>DaemonSet or Deployment specifications</p></li>
+<li><p>All pod details and status</p></li>
+<li><p>Current and previous container logs (if the container has restarted)</p></li>
+<li><p>Related ConfigMaps and Services</p></li>
+</ul>
+</section>
+<section id="node-information">
+<h3>Node Information<a class="headerlink" href="#node-information" title="Permalink to this headline"></a></h3>
+<ul class="simple">
+<li><p>All node details with labels and annotations</p></li>
+<li><p>Node conditions and status</p></li>
+<li><p>Allocatable resources (RDMA, SR-IOV, GPU)</p></li>
+<li><p>Node-specific feature discovery labels</p></li>
+</ul>
+</section>
+<section id="diagnostic-commands">
+<h3>Diagnostic Commands<a class="headerlink" href="#diagnostic-commands" title="Permalink to this headline"></a></h3>
+<p>The following commands are executed inside OFED driver pods on each node:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lsmod</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">mlx</span></code> — loaded Mellanox kernel modules</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibstat</span></code> — InfiniBand device status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibv_devinfo</span></code> — RDMA device information</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mst</span> <span class="pre">status</span></code> — Mellanox Software Tools status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uname</span> <span class="pre">-r</span></code> — kernel version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dmesg</span></code> (last 200 lines) — recent kernel messages</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">link</span></code> / <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">addr</span></code> — network interface information</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--skip-diagnostics</span></code> to skip these commands for faster collection when driver-level diagnostics are not needed.</p>
+</div>
+</section>
+</section>
+<section id="html-report">
+<h2>HTML Report<a class="headerlink" href="#html-report" title="Permalink to this headline"></a></h2>
+<p>The collection script automatically generates a self-contained HTML report (<code class="docutils literal notranslate"><span class="pre">report.html</span></code>) that provides an interactive, navigable view of all collected data.
+The report is included in the output archive alongside the raw files.</p>
+<img alt="SOS-Report HTML Report" src="../_images/sos-report-html.png" />
+<p>The report includes the following sections:</p>
+<ul class="simple">
+<li><p>Executive dashboard with overall NicClusterPolicy status, node count, pod health, and error summary</p></li>
+<li><p>NicClusterPolicy applied states with color-coded status badges</p></li>
+<li><p>Component health grid showing all components with desired/ready replicas, pod counts, and restart counts</p></li>
+<li><p>Per-component detail panels with workload YAML, pod status, and log viewers with error/warning highlighting</p></li>
+<li><p>OFED diagnostics per node</p></li>
+<li><p>Node overview with summary table, resource allocation, and labels</p></li>
+<li><p>Events timeline with warning highlighting</p></li>
+<li><p>CRD inventory with definitions and instances</p></li>
+<li><p>RBAC overview, network configuration, and webhook configuration</p></li>
+<li><p>Collection errors and warnings</p></li>
+</ul>
+<p>The report can also be generated standalone from an existing sosreport directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 generate-report.py ./network-operator-sosreport-20260218-143000/ --template report-template.html
+
+<span class="c1"># Custom output path</span>
+python3 generate-report.py ./network-operator-sosreport-20260218-143000/ --template report-template.html --output /tmp/report.html
+</pre></div>
+</div>
+<p>To skip report generation during collection, use the <code class="docutils literal notranslate"><span class="pre">--skip-report</span></code> flag.</p>
+</section>
+<section id="output-structure">
+<h2>Output Structure<a class="headerlink" href="#output-structure" title="Permalink to this headline"></a></h2>
+<p>The script creates a timestamped directory with the following structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>network-operator-sosreport-&lt;timestamp&gt;/
+├── metadata/
+│   ├── collection-info.txt
+│   ├── cluster-version.yaml
+│   ├── namespaces.txt
+│   └── api-resources.txt
+├── crds/
+│   ├── definitions/
+│   └── instances/
+├── operator/
+│   ├── namespace.yaml
+│   ├── configmaps.yaml
+│   ├── secrets-metadata.txt
+│   ├── rbac/
+│   ├── events.yaml
+│   ├── validatingwebhookconfigurations.yaml
+│   ├── mutatingwebhookconfigurations.yaml
+│   └── components/
+│       ├── network-operator/
+│       ├── ofed-driver/
+│       │   ├── daemonset.yaml
+│       │   ├── pods/
+│       │   └── diagnostics/
+│       └── ...
+├── nodes/
+│   ├── all-nodes.yaml
+│   ├── nodes-summary.txt
+│   ├── node-labels.txt
+│   └── node-resources.txt
+├── network/
+│   └── services.yaml
+├── related-operators/
+├── diagnostic-summary.txt
+├── report.html
+└── collection-errors.log
+</pre></div>
+</div>
+<p>By default, the output is compressed into a tarball with a SHA256 checksum:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">network-operator-sosreport-&lt;timestamp&gt;.tar.gz</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">network-operator-sosreport-&lt;timestamp&gt;.tar.gz.sha256</span></code></p></li>
+</ul>
+</section>
+<section id="exit-codes">
+<h2>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>Success — all data collected.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Critical error — <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> not found or no cluster access.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Partial success — some resources failed to collect.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="security-considerations">
+<h2>Security Considerations<a class="headerlink" href="#security-considerations" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><strong>Secrets</strong>: only metadata (names and types) is collected. Secret data is never included.</p></li>
+<li><p><strong>Logs</strong>: may contain IP addresses, hostnames, and other environment-specific information.</p></li>
+<li><p><strong>Review</strong>: always review the collected data before sharing it externally.</p></li>
+</ul>
+</section>
+<section id="example-workflows">
+<h2>Example Workflows<a class="headerlink" href="#example-workflows" title="Permalink to this headline"></a></h2>
+<section id="troubleshooting-pod-failures">
+<h3>Troubleshooting Pod Failures<a class="headerlink" href="#troubleshooting-pod-failures" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Collect full diagnostics with verbose output</span>
+./network-operator-sosreport.sh --verbose
+
+<span class="c1"># Extract and check the diagnostic summary</span>
+tar -xzf network-operator-sosreport-*.tar.gz
+cat network-operator-sosreport-*/diagnostic-summary.txt
+
+<span class="c1"># Look at specific component logs</span>
+cat network-operator-sosreport-*/operator/components/ofed-driver/pods/*.log
+</pre></div>
+</div>
+</section>
+<section id="quick-health-check">
+<h3>Quick Health Check<a class="headerlink" href="#quick-health-check" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fast collection without driver diagnostics</span>
+./network-operator-sosreport.sh --skip-diagnostics --log-lines <span class="m">1000</span>
+
+<span class="c1"># Extract and check summary</span>
+tar -xzf network-operator-sosreport-*.tar.gz
+less network-operator-sosreport-*/diagnostic-summary.txt
+</pre></div>
+</div>
+</section>
+<section id="preparing-for-a-support-case">
+<h3>Preparing for a Support Case<a class="headerlink" href="#preparing-for-a-support-case" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comprehensive collection with verbose output</span>
+./network-operator-sosreport.sh --verbose --log-lines <span class="m">10000</span>
+
+<span class="c1"># Verify the archive integrity</span>
+sha256sum -c network-operator-sosreport-*.tar.gz.sha256
+
+<span class="c1"># The archive is ready to attach to a support case</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Feb 19, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

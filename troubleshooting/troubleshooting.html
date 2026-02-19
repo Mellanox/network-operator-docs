@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+  <title>Troubleshooting &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -26,6 +26,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SOS-Report Collection Script" href="sosreport.html" />
+    <link rel="prev" title="NVIDIA Network Operator Container Images" href="../advanced/images-sha256.html" />
  
 
 
@@ -51,7 +53,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
@@ -62,7 +64,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html">SOS-Report Collection Script</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
 </ul>
 
@@ -83,7 +88,7 @@
 
 <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
   
-<li>&lt;no title&gt;</li>
+<li>Troubleshooting</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -98,7 +103,47 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sosreport.html">SOS-Report Collection Script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#as-a-kubectl-plugin-recommended">As a kubectl Plugin (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#as-a-standalone-script">As a Standalone Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#basic-usage">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#command-line-options">Command-Line Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#what-s-collected">What’s Collected</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#custom-resources">Custom Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#operator-resources">Operator Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#components">Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#node-information">Node Information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#diagnostic-commands">Diagnostic Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#html-report">HTML Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#output-structure">Output Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#exit-codes">Exit Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sosreport.html#example-workflows">Example Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#troubleshooting-pod-failures">Troubleshooting Pod Failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#quick-health-check">Quick Health Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sosreport.html#preparing-for-a-support-case">Preparing for a Support Case</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
 
            </div>
           </div>
