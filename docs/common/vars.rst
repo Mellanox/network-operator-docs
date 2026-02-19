@@ -50,9 +50,10 @@
 .. |spectrumxop-version| replace:: network-operator-v26.1.0-rc.2
 .. |spectrumxop-repository| replace:: nvcr.io/nvstaging/mellanox
 .. |k8s-launch-kit-version| replace:: v26.1.0-rc.2
-.. |k8s-launch-kit-component-version| replace:: network-operator-v26.1.0-rc.2 # TODO: update to NetworkOperator.ComponentVersion later
+.. |k8s-launch-kit-component-version| replace:: network-operator-v26.1.0-rc.2
 .. |k8s-launch-kit-repository| replace:: nvcr.io/nvstaging/mellanox
 .. |k8s-launch-kit-network-operator-repository| replace:: nvcr.io/nvstaging/mellanox
+.. |k8s-launch-kit-docs-base-url| replace:: https://docs.nvidia.com/networking/display/kubernetes2610
 .. |current-ga-version| replace:: 26.1.x
 .. |current-maintenance-version| replace:: 25.10.x
 .. |current-eol-version| replace:: 25.7.x
