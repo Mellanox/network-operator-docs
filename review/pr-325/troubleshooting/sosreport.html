@@ -189,13 +189,13 @@ Components or resources that are not present in a given release are gracefully s
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
 <section id="as-a-kubectl-plugin-recommended">
 <h3>As a kubectl Plugin (Recommended)<a class="headerlink" href="#as-a-kubectl-plugin-recommended" title="Permalink to this headline"></a></h3>
-<p>Copy <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code> and <code class="docutils literal notranslate"><span class="pre">generate-report.sh</span></code> to a directory in your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code>, <code class="docutils literal notranslate"><span class="pre">generate-report.py</span></code>, and <code class="docutils literal notranslate"><span class="pre">report-template.html</span></code> to a directory in your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install system-wide</span>
-sudo cp kubectl-netop_sosreport generate-report.sh /usr/local/bin/
+sudo cp kubectl-netop_sosreport generate-report.py report-template.html /usr/local/bin/
 
 <span class="c1"># Or install for the current user only</span>
 mkdir -p ~/.local/bin
-cp kubectl-netop_sosreport generate-report.sh ~/.local/bin/
+cp kubectl-netop_sosreport generate-report.py report-template.html ~/.local/bin/
 <span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.local/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
@@ -205,8 +205,9 @@ cp kubectl-netop_sosreport generate-report.sh ~/.local/bin/
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">generate-report.sh</span></code> must be in the same directory as <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code> for HTML report generation.
-If only the main script is copied, the collection still works but the HTML report is skipped.</p>
+<p><code class="docutils literal notranslate"><span class="pre">generate-report.py</span></code> and <code class="docutils literal notranslate"><span class="pre">report-template.html</span></code> must be in the same directory as <code class="docutils literal notranslate"><span class="pre">kubectl-netop_sosreport</span></code> for HTML report generation.
+If these files are not present locally, the script will attempt to download them from GitHub.
+If download fails, the collection still works but the HTML report is skipped.</p>
 </div>
 </section>
 <section id="as-a-standalone-script">
@@ -227,6 +228,7 @@ If only the main script is copied, the collection still works but the HTML repor
 <li><p>Valid kubeconfig with cluster access</p></li>
 <li><p>Permissions to read cluster resources (<code class="docutils literal notranslate"><span class="pre">cluster-admin</span></code> recommended)</p></li>
 <li><p>Bash 4.0 or later</p></li>
+<li><p>Python 3.6+ (for HTML report generation)</p></li>
 <li><p>Standard Unix utilities (<code class="docutils literal notranslate"><span class="pre">tar</span></code>, <code class="docutils literal notranslate"><span class="pre">gzip</span></code>, <code class="docutils literal notranslate"><span class="pre">sha256sum</span></code>)</p></li>
 </ul>
 </section>
@@ -369,10 +371,10 @@ The report is included in the output archive alongside the raw files.</p>
 <li><p>Collection errors and warnings</p></li>
 </ul>
 <p>The report can also be generated standalone from an existing sosreport directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./generate-report.sh ./network-operator-sosreport-20260218-143000/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 generate-report.py ./network-operator-sosreport-20260218-143000/ --template report-template.html
 
 <span class="c1"># Custom output path</span>
-./generate-report.sh ./network-operator-sosreport-20260218-143000/ --output /tmp/report.html
+python3 generate-report.py ./network-operator-sosreport-20260218-143000/ --template report-template.html --output /tmp/report.html
 </pre></div>
 </div>
 <p>To skip report generation during collection, use the <code class="docutils literal notranslate"><span class="pre">--skip-report</span></code> flag.</p>
