@@ -41,7 +41,7 @@ Changes and New Features
        | - Added support for NIC multiport firmware parameter (esw_multiport) using devlinkParams in SR-IOV Network Operator
        | - Added support for setting OVS bridges grouping configuration in SR-IOV Network Operator, grouping per NIC PFs to a single OVS bridge
        | - Added support for Network Operator SOS report script, to collect system information for troubleshooting purposes       
-       | - Added support for SW/HW multi-plane Spectrum-X topologies in Spectrum-X Operator and NIC Configuration Operator
+       | - Added support for SW multi-plane Spectrum-X topology in Spectrum-X Operator and NIC Configuration Operator
        | - Added support for NicInterfaceNameTemplate allowing users to define custom naming schemes for network and RDMA interfaces on NIC devices in NIC Configuration Operator - Tech Preview
        | - Added support for ConnectX-9 SuperNIC
    * - 25.10.0
