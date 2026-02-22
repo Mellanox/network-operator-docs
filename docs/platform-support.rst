@@ -233,7 +233,7 @@ Supported Container Runtimes
      - Yes
      - Yes
      - 
-   * - SUSE Linux Enterprise Server 15 SP6
+   * - SUSE Linux Enterprise Server 15 SP7
      - Yes
      - No
      - 
