@@ -416,45 +416,7 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <h2>Configuration Details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h2>
 <p>The Spectrum-X configuration parameters depend on the Reference Architecture version. The operator applies the following NVConfig and runtime parameters based on the selected version.</p>
 <p>When spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.1” the following configuration parameters are applied:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">none</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">1</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">      </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..3&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1,2,3]&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">      </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..15&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7,8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">      </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># BF3-specific parameters  </span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1]&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">      </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2..7&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[2,3,4,5,6,7]&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">      </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">swplb</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">swplb</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
@@ -1401,7 +1363,7 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Feb 20, 2026.
+      <span class="lastupdated">Last updated on Feb 22, 2026.
       </span></p>
   </div>
 
