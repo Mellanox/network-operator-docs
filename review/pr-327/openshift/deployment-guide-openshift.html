@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NVIDIA Network Operator Deployment Guide with OpenShift &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NVIDIA Network Operator Deployment on Disconnected OpenShift" href="disconnected-openshift.html" />
+    <link rel="prev" title="Getting Started with OpenShift" href="../getting-started-with-openshift.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Deployment Guide with OpenShift</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-deployment-on-an-openshift-container-platform">Network Operator Deployment on an OpenShift Container Platform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#node-feature-discovery">Node Feature Discovery</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator">SR-IOV Network Operator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gpu-operator">GPU Operator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-installation">Network Operator Installation</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-installation-using-openshift-catalog">Network Operator Installation Using OpenShift Catalog</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-installation-using-openshift-oc-cli">Network Operator Installation using OpenShift OC CLI</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#verification">Verification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#upgrade-using-openshift-web-console">Upgrade Using OpenShift Web Console</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#upgrade-using-openshift-oc-cli">Upgrade Using OpenShift OC CLI</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#deployment-examples-for-openshift-container-platform">Deployment Examples For OpenShift Container Platform</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp">Network Operator Deployment with a Host Device Network - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp">Network Operator Deployment for DPDK Workloads - OCP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="disconnected-openshift.html">Deployment in Disconnected OpenShift</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../getting-started-with-openshift.html">Getting Started with OpenShift</a> &raquo;</li>
+<li>NVIDIA Network Operator Deployment Guide with OpenShift</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nvidia-network-operator-deployment-guide-with-openshift">
+<h1>NVIDIA Network Operator Deployment Guide with OpenShift<a class="headerlink" href="#nvidia-network-operator-deployment-guide-with-openshift" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#network-operator-deployment-on-an-openshift-container-platform" id="id2">Network Operator Deployment on an OpenShift Container Platform</a></p>
+<ul>
+<li><p><a class="reference internal" href="#node-feature-discovery" id="id3">Node Feature Discovery</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator" id="id4">SR-IOV Network Operator</a></p></li>
+<li><p><a class="reference internal" href="#gpu-operator" id="id5">GPU Operator</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-installation" id="id6">Network Operator Installation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#network-operator-installation-using-openshift-catalog" id="id7">Network Operator Installation Using OpenShift Catalog</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-installation-using-openshift-oc-cli" id="id8">Network Operator Installation using OpenShift OC CLI</a></p>
+<ul>
+<li><p><a class="reference internal" href="#verification" id="id9">Verification</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-operator-upgrade" id="id10">Network Operator Upgrade</a></p>
+<ul>
+<li><p><a class="reference internal" href="#upgrade-using-openshift-web-console" id="id11">Upgrade Using OpenShift Web Console</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-using-openshift-oc-cli" id="id12">Upgrade Using OpenShift OC CLI</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform" id="id13">Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform</a></p>
+<ul>
+<li><p><a class="reference internal" href="#deployment-examples-for-openshift-container-platform" id="id14">Deployment Examples For OpenShift Container Platform</a></p>
+<ul>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-a-host-device-network-ocp" id="id15">Network Operator Deployment with a Host Device Network - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp" id="id16">Network Operator Deployment with SR-IOV Legacy Mode - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp" id="id17">Network Operator Deployment with the RDMA Shared Device Plugin - OCP</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-deployment-for-dpdk-workloads-ocp" id="id18">Network Operator Deployment for DPDK Workloads - OCP</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="network-operator-deployment-on-an-openshift-container-platform">
+<h2>Network Operator Deployment on an OpenShift Container Platform<a class="headerlink" href="#network-operator-deployment-on-an-openshift-container-platform" title="Permalink to this headline"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is recommended to have dedicated control plane nodes for OpenShift deployments with NVIDIA Network Operator.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Automatic DOCA-OFED Driver Upgrade doesn’t work on Single Node OpenShift (SNO) deployments.</p>
+</div>
+<section id="node-feature-discovery">
+<h3>Node Feature Discovery<a class="headerlink" href="#node-feature-discovery" title="Permalink to this headline"></a></h3>
+<p>To enable Node Feature Discovery, please follow the official <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator">guide</a>.
+A single instance of Node Feature Discovery is expected to be used in the cluster.</p>
+<p>An example of Node Feature Discovery configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfd.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NodeFeatureDiscovery</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nfd-instance</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-nfd</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">operand</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9:v4.16</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
+<span class="w">  </span><span class="nt">workerConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">configData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">sources:</span><span class="w"></span>
+<span class="w">        </span><span class="no">pci:</span><span class="w"></span>
+<span class="w">          </span><span class="no">deviceClassWhitelist:</span><span class="w"></span>
+<span class="w">            </span><span class="no">- &quot;02&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="no">- &quot;03&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="no">- &quot;0200&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="no">- &quot;0207&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="no">deviceLabelFields:</span><span class="w"></span>
+<span class="w">            </span><span class="no">- vendor</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verify that the following label is present on the nodes containing NVIDIA networking hardware: <cite>feature.node.kubernetes.io/pci-15b3.present=true</cite></p>
+<p>For more details please read official NFD <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#creating-nfd-cr-cli_psap-node-feature-discovery-operator">documentation</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc describe node <span class="p">|</span> grep -E <span class="s1">&#39;Roles|pci&#39;</span> <span class="p">|</span> grep -v <span class="s2">&quot;control-plane&quot;</span>
+
+Roles:              worker
+                    cpu-feature.node.kubevirt.io/invpcid<span class="o">=</span><span class="nb">true</span>
+                    cpu-feature.node.kubevirt.io/pcid<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-102b.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-10de.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-10de.sriov.capable<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-14e4.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-15b3.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-15b3.sriov.capable<span class="o">=</span><span class="nb">true</span>
+Roles:              worker
+                    cpu-feature.node.kubevirt.io/invpcid<span class="o">=</span><span class="nb">true</span>
+                    cpu-feature.node.kubevirt.io/pcid<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-102b.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-10de.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-10de.sriov.capable<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-14e4.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-15b3.present<span class="o">=</span><span class="nb">true</span>
+                    feature.node.kubernetes.io/pci-15b3.sriov.capable<span class="o">=</span><span class="nb">true</span>
+</pre></div>
+</div>
+</section>
+<section id="sr-iov-network-operator">
+<h3>SR-IOV Network Operator<a class="headerlink" href="#sr-iov-network-operator" title="Permalink to this headline"></a></h3>
+<p>If you are planning to use SR-IOV, follow these <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#installing-sriov-operator">instructions</a> to install SR-IOV Network Operator on an OpenShift Container Platform.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The SR-IOV resources created will have the <cite>openshift.io</cite> prefix.</p>
+</div>
+<p>For the default SriovOperatorConfig CR to work with the NVIDIA DOCA-OFED Driver container, please run this command to update the following values:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc patch sriovoperatorconfig default <span class="se">\</span>
+  --type<span class="o">=</span>merge -n openshift-sriov-network-operator <span class="se">\</span>
+  --patch <span class="s1">&#39;{ &quot;spec&quot;: { &quot;configDaemonNodeSelector&quot;: { &quot;network.nvidia.com/operator.mofed.wait&quot;: &quot;false&quot;, &quot;node-role.kubernetes.io/worker&quot;: &quot;&quot;, &quot;feature.node.kubernetes.io/pci-15b3.sriov.capable&quot;: &quot;true&quot; } } }&#39;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>SR-IOV Network Operator configuration documentation can be found on the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator">Official Website</a>.</p>
+</div>
+</section>
+<section id="gpu-operator">
+<h3>GPU Operator<a class="headerlink" href="#gpu-operator" title="Permalink to this headline"></a></h3>
+<p>If you plan to use GPUDirect, follow <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/openshift/contents.html">this</a> to install GPU Operator on an OpenShift Container Platform.</p>
+<p>Make sure to enable RDMA and disable useHostMofed in the driver section in the spec of the ClusterPolicy CR.</p>
+</section>
+<section id="network-operator-installation">
+<h3>Network Operator Installation<a class="headerlink" href="#network-operator-installation" title="Permalink to this headline"></a></h3>
+<section id="network-operator-installation-using-openshift-catalog">
+<h4>Network Operator Installation Using OpenShift Catalog<a class="headerlink" href="#network-operator-installation-using-openshift-catalog" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>In the OpenShift Container Platform web console side menu, select Operators &gt; OperatorHub, and search for the NVIDIA Network Operator.</p></li>
+<li><p>Select NVIDIA Network Operator, and click Install in the first screen and in the subsequent one.</p></li>
+<li><p>For additional information, see the <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-adding-operators-to-a-cluster">Red Hat OpenShift Container Platform Documentation</a>.</p></li>
+</ul>
+</section>
+<section id="network-operator-installation-using-openshift-oc-cli">
+<h4>Network Operator Installation using OpenShift OC CLI<a class="headerlink" href="#network-operator-installation-using-openshift-oc-cli" title="Permalink to this headline"></a></h4>
+<ol class="arabic">
+<li><p>Create a namespace for the Network Operator.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc create namespace nvidia-network-operator
+</pre></div>
+</div>
+</li>
+<li><p>Install the Network Operator in the namespace created in the previous step by creating the below objects. Run the following command to get the channel value required for the next step:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get packagemanifest nvidia-network-operator -n openshift-marketplace -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.defaultChannel}&#39;</span>
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>stable
+</pre></div>
+</div>
+</li>
+<li><p>Create the following Subscription CR, and save the YAML in the network-operator-sub.yaml file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.coreos.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Subscription</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stable</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">certified-operators</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sourceNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-marketplace</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Create the subscription object by running the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc create -f network-operator-sub.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Change to the network-operator project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc project nvidia-network-operator
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="verification">
+<h5>Verification<a class="headerlink" href="#verification" title="Permalink to this headline"></a></h5>
+<p>To verify that the operator deployment is successful, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get pods -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME                                                          READY   STATUS    RESTARTS   AGE
+nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">2</span>/2     Running   <span class="m">0</span>          1m
+</pre></div>
+</div>
+<p>A successful deployment shows a <cite>Running</cite> status.</p>
+</section>
+</section>
+</section>
+<section id="network-operator-upgrade">
+<span id="id1"></span><h3>Network Operator Upgrade<a class="headerlink" href="#network-operator-upgrade" title="Permalink to this headline"></a></h3>
+<p>This section describes how to upgrade the NVIDIA Network Operator on OpenShift Container Platform.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Updating the NVIDIA Network Operator will not automatically update the NicClusterPolicy components. You will need to manually update the NicClusterPolicy components to the new version.</p>
+</div>
+<section id="upgrade-using-openshift-web-console">
+<h4>Upgrade Using OpenShift Web Console<a class="headerlink" href="#upgrade-using-openshift-web-console" title="Permalink to this headline"></a></h4>
+<ul class="simple">
+<li><p>In the OpenShift Container Platform web console side menu, select Operators &gt; Installed Operators, and search for the NVIDIA Network Operator.</p></li>
+<li><p>In case that the NVIDIA Network Operator has a pending update, it will display a status with Upgrade available like in the following image:</p></li>
+</ul>
+<img alt="../_images/ocp-upgrade-available.png" src="../_images/ocp-upgrade-available.png" />
+<ul class="simple">
+<li><p>Click on the <cite>Upgrade Available</cite> link, then click <cite>Preview Install Plan</cite> button.</p></li>
+<li><p>Review the install plan, and click <cite>Approve</cite> button to upgrade the NVIDIA Network Operator.</p></li>
+<li><p>Navigate back to the Operators -&gt; Installed Operators page to monitor the progress of the update. When complete, the status changes to <cite>Succeeded</cite> and <cite>Up to date</cite>.</p></li>
+<li><p>For additional information, see the Red Hat OpenShift Container Platform Documentation <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-upgrading-operators">upgrade guide</a>.</p></li>
+</ul>
+</section>
+<section id="upgrade-using-openshift-oc-cli">
+<h4>Upgrade Using OpenShift OC CLI<a class="headerlink" href="#upgrade-using-openshift-oc-cli" title="Permalink to this headline"></a></h4>
+<ol class="arabic">
+<li><p>Check the current subscription status to see if an upgrade is available:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get subscription nvidia-network-operator -n nvidia-network-operator -o yaml
+</pre></div>
+</div>
+<p>Look for the following fields in the output:</p>
+<ul class="simple">
+<li><p><cite>status.state</cite>: Should show <cite>UpgradePending</cite> if an upgrade is available</p></li>
+<li><p><cite>status.installedCSV</cite>: Shows the currently installed version</p></li>
+<li><p><cite>status.currentCSV</cite>: Shows the available upgrade version</p></li>
+<li><p><cite>status.installPlanRef.name</cite>: The name of the install plan that requires approval</p></li>
+</ul>
+<p>Example output:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">currentCSV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator.v25.7.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">installedCSV</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator.v25.4.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">installPlanRef</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install-r4pvj</span><span class="w"></span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UpgradePending</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>List the install plans to identify the pending one:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get installplan -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME            CSV                               APPROVAL   APPROVED
+install-lrwp2   nvidia-network-operator.v25.4.0   Manual     <span class="nb">true</span>
+install-r4pvj   nvidia-network-operator.v25.7.0   Manual     <span class="nb">false</span>
+</pre></div>
+</div>
+</li>
+<li><p>Review the install plan details before approving:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get installplan &lt;install-plan-name&gt; -n nvidia-network-operator -o yaml
+</pre></div>
+</div>
+<p>Replace <cite>&lt;install-plan-name&gt;</cite> with the name from the previous step (e.g., <cite>install-r4pvj</cite>).</p>
+</li>
+<li><p>Approve the install plan to proceed with the upgrade:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc patch installplan &lt;install-plan-name&gt; -n nvidia-network-operator <span class="se">\</span>
+  --type merge --patch <span class="s1">&#39;{&quot;spec&quot;:{&quot;approved&quot;:true}}&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Monitor the upgrade progress by checking the ClusterServiceVersion:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get csv -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Wait until the new version shows <cite>PHASE: Succeeded</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME                              DISPLAY                   VERSION   REPLACES                          PHASE
+nvidia-network-operator.v25.7.0   NVIDIA Network Operator   <span class="m">25</span>.7.0    nvidia-network-operator.v25.4.0   Succeeded
+</pre></div>
+</div>
+</li>
+<li><p>Verify the operator pods are running with the new version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc get pods -n nvidia-network-operator
+</pre></div>
+</div>
+<p>Example output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME                                                          READY   STATUS    RESTARTS   AGE
+nvidia-network-operator-controller-manager-8f8ccf45c-zgfsq    <span class="m">1</span>/1     Running   <span class="m">0</span>          2m
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After the upgrade is complete, remember to update the NicClusterPolicy components to match the new operator version if needed.</p>
+</div>
+</section>
+</section>
+<section id="using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform">
+<h3>Using Network Operator to Create NicClusterPolicy in OpenShift Container Platform<a class="headerlink" href="#using-network-operator-to-create-nicclusterpolicy-in-openshift-container-platform" title="Permalink to this headline"></a></h3>
+<p>See Deployment Examples for OCP:</p>
+<section id="deployment-examples-for-openshift-container-platform">
+<h4>Deployment Examples For OpenShift Container Platform<a class="headerlink" href="#deployment-examples-for-openshift-container-platform" title="Permalink to this headline"></a></h4>
+<p>In OCP, some components are deployed by default like Multus and CNI Plugins, whereas others, such as NFD and SR-IOV Network Operator must be deployed manually, as described in the Installation section.</p>
+<p>In addition, since there is no use of the Helm chart, the configuration should be done via the NicClusterPolicy CRD.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In OCP, Multus is configured with <cite>namespaceIsolation</cite> enabled by default. This means that Pods using secondary networks should be deployed in the same namespace as the <cite>network-attachment-definition</cite> CR unless the NAD is in one of the following namespaces: <cite>default</cite>, <cite>openshift-multus</cite>, <cite>openshift-sriov-network-operator</cite> and <cite>openshift-cnv</cite>.
+The namespace of the NAD can be set in the <cite>networkNamespace</cite> field in <cite>HostDeviceNetwork</cite>, <cite>MacvlanNetwork</cite>, <cite>IPoIBNetwork</cite>, <cite>OVSNetwork</cite> and <cite>SriovNetwork</cite>.</p>
+</div>
+<p>Following are examples of NicClusterPolicy configuration for OCP.</p>
+<section id="network-operator-deployment-with-a-host-device-network-ocp">
+<h5>Network Operator Deployment with a Host Device Network - OCP<a class="headerlink" href="#network-operator-deployment-with-a-host-device-network-ocp" title="Permalink to this headline"></a></h5>
+<p>Network Operator deployment with:</p>
+<p>SR-IOV device plugin, single SR-IOV resource pool:</p>
+<ul class="simple">
+<li><p>There is no need for a secondary network configuration, as it is installed by default in OCP.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
+<span class="w">            </span><span class="no">{</span><span class="w"></span>
+<span class="w">                </span><span class="no">&quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,</span><span class="w"></span>
+<span class="w">                </span><span class="no">&quot;resourceName&quot;: &quot;hostdev&quot;,</span><span class="w"></span>
+<span class="w">                </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">                    </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
+<span class="w">                    </span><span class="no">&quot;isRdma&quot;: true</span><span class="w"></span>
+<span class="w">                </span><span class="no">}</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Following the deployment, the Network Operator should be configured, and K8s networking deployed to use it in pod configuration.</p>
+<p>To create an NV-IPAM IPPool, apply:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>host-device-net.yaml`</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HostDeviceNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-net</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hostdev&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-test-pod</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hostdev-net</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OnFailure</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;rdma image&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-test-ctr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&quot;IPC_LOCK&quot;</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/hostdev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">nvidia.com/hostdev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-c</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep inf</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="network-operator-deployment-with-sr-iov-legacy-mode-ocp">
+<h5>Network Operator Deployment with SR-IOV Legacy Mode - OCP<a class="headerlink" href="#network-operator-deployment-with-sr-iov-legacy-mode-ocp" title="Permalink to this headline"></a></h5>
+<p>This deployment mode supports SR-IOV in legacy mode.
+Note that the SR-IOV Network Operator is required as described in the Deployment for OCP section.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>SriovNetworkNodePolicy and K8s networking should be deployed.</p>
+<p>NV-IPAM IPPool should be created before SriovNetwork:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openshift-sriov-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+</pre></div>
+</div>
+<p><cite>sriovnetwork-node-policy.yaml</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">policy-1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">openshift-sriov-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">deviceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">netdevice</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">vendor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;15b3&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pfNames</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;ens2f0&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/pci-15b3.present</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovlegacy</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>sriovnetwork.yaml</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">openshift-sriov-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">vlan</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;default&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sriovlegacy&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note that the resource prefix in this case will be <cite>openshift.io</cite>.
+The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testpod1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">appcntr1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;image&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;IPC_LOCK&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sh</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-c</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sleep inf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">openshift.io/sriovlegacy</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">openshift.io/sriovlegacy</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="network-operator-deployment-with-the-rdma-shared-device-plugin-ocp">
+<h5>Network Operator Deployment with the RDMA Shared Device Plugin - OCP<a class="headerlink" href="#network-operator-deployment-with-the-rdma-shared-device-plugin-ocp" title="Permalink to this headline"></a></h5>
+<p>The following is an example of RDMA Shared with MacVlanNetwork:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">     </span><span class="l l-Scalar l-Scalar-Plain">startupProbe</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span><span class="w"></span>
+<span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">    </span><span class="nt">readinessProbe</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;rdmashared&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;rdmaHcaMax&quot;: 1000,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;ifNames&quot;: [&quot;enp4s0f0np0&quot;]</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0-rc.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>To create an NV-IPAM IPPool, apply:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-pool</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>macvlan-net-ocp.yaml</cite> configuration file for such a deployment in an OpenShift Platform:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MacvlanNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdmashared-net</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">master</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enp4s0f0np0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mtu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">{</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
+<span class="w">       </span><span class="no">&quot;poolName&quot;: &quot;my-pool&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <cite>pod.yaml</cite> configuration file for such a deployment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pod</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test-rdma-shared-1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdmashared-net</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myimage</span><span class="w"></span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rdma-shared-1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">add</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPC_LOCK</span><span class="w"></span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">rdma/rdmashared</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">rdma/rdmashared</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OnFailure</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="network-operator-deployment-for-dpdk-workloads-ocp">
+<h5>Network Operator Deployment for DPDK Workloads - OCP<a class="headerlink" href="#network-operator-deployment-for-dpdk-workloads-ocp" title="Permalink to this headline"></a></h5>
+<p>In order to configure <cite>HUGEPAGES</cite> in OpenShift, refer to this <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/scalability_and_performance/what-huge-pages-do-and-how-they-are-consumed">steps</a>.</p>
+<p>For SR-IOV Network Operator configuration instructions, visit the Official <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/networking_operators/sr-iov-operator#configuring-sriov-operator">Website</a>.</p>
+</section>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Feb 22, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
