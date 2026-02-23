@@ -2488,9 +2488,7 @@ To configure RDMA exclusive mode  apply ``SriovNetworkPoolConfig`` CR and specif
       namespace: nvidia-network-operator
     spec:
       nodeSelector:
-        - matchExpressions:
-          - key: feature.node.kubernetes.io/pci-15b3.present
-            operator: "Exists"
+        feature.node.kubernetes.io/pci-15b3.present: "true"
       rdmaMode: exclusive
 
 
