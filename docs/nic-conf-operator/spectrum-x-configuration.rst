@@ -86,6 +86,9 @@ RA2.1 configuration with multiplane support
 
 Reference Architecture 2.1 introduces multiplane mode support, allowing NICs to be configured with multiple data planes for enhanced network performance.
 
+.. note::
+   It is recommended to perform a NIC configuration reset before applying or switching between multiplane configurations to ensure a clean and consistent initial state. See :doc:`Reset NIC Configuration to Default <nic-fw-configuration>` for details.
+
 To enable multiplane support, set ``spectrumXOptimized.version`` to ``RA2.1`` and configure the ``multiplaneMode`` and ``numberOfPlanes`` fields.
 
 .. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml

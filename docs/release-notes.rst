@@ -247,6 +247,7 @@ Known Limitations
    * - 26.1.0
      - | - There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted
        | - Multus CNI does not use a service account token after the Kubernetes API rotates it. The recommended workaround is to edit the Multus CNI DaemonSet manually to remove ``--skip-config-watch`` CLI argument.
+       | - The DOCA driver container is validated with host kernel versions up to 6.8.0-100. Compatibility with newer kernel versions is not guaranteed and may require a newer DOCA driver container release
    * - 25.10.0
      - | - NVIDIA Networking NIC Configuration Operator doesn't support Socket Direct Adapters
    * - 25.7.0

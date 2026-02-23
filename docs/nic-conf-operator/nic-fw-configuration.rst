@@ -379,6 +379,41 @@ Status conditions of the NicDevice CR reflect the status of the configuration up
 
 .. note:: If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.
 
+======================================
+Reset NIC Configuration to Default
+======================================
+
+The NIC Configuration Operator supports resetting NIC non-volatile configuration to factory defaults using the ``resetToDefault`` field in the ``NicConfigurationTemplate`` CR. When enabled, the operator performs the following operations:
+
+- Resets all non-volatile configurations (``mstconfig -d <device> reset`` for each PF)
+- Sets ``ADVANCED_PCI_SETTINGS=1``
+- Reboots the node to apply the new NIC NV configuration and undo any runtime configuration previously performed for the device or driver
+
+.. warning::
+   A configuration reset triggers a node reboot. Ensure that workloads are drained or that the Maintenance Operator is configured to handle the node maintenance automatically.
+
+To reset the NIC configuration, create a ``NicConfigurationTemplate`` CR with ``resetToDefault: true``:
+
+.. code-block:: yaml
+
+    apiVersion: configuration.net.nvidia.com/v1alpha1
+    kind: NicConfigurationTemplate
+    metadata:
+      name: reset-nic-config
+      namespace: nvidia-network-operator
+    spec:
+      nicSelector:
+        nicType: "1023"
+      resetToDefault: true
+      template:
+        numVfs: 0
+        linkType: Ethernet
+
+.. note::
+   When ``resetToDefault`` is set to ``true``, the ``template`` section is ignored. The device configuration is reset to factory defaults regardless of the template contents.
+
+After the reset is complete and the node has rebooted, you can remove the reset CR and apply the desired configuration template.
+
 =============================================================
 Configure custom interface names (NicInterfaceNameTemplate)
 =============================================================
