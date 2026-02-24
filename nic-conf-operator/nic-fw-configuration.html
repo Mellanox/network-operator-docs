@@ -74,6 +74,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#observe-the-status-of-the-configuration-update">Observe the status of the configuration update</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#reset-nic-configuration-to-default">Reset NIC Configuration to Default</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate">Configure custom interface names (NicInterfaceNameTemplate)</a></li>
 </ul>
 </li>
@@ -143,7 +144,8 @@
 <li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id9">Observe the status of the configuration update</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id10">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
+<li><p><a class="reference internal" href="#reset-nic-configuration-to-default" id="id10">Reset NIC Configuration to Default</a></p></li>
+<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id11">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
@@ -528,6 +530,39 @@ template:
 <p>If both Firmware update and configuration are applied to a single device, the firmware update should be performed first. The configuration update will be applied after the firmware update is completed.</p>
 </div>
 </section>
+</section>
+<section id="reset-nic-configuration-to-default">
+<h2>Reset NIC Configuration to Default<a class="headerlink" href="#reset-nic-configuration-to-default" title="Permalink to this headline"></a></h2>
+<p>The NIC Configuration Operator supports resetting NIC non-volatile configuration to factory defaults using the <code class="docutils literal notranslate"><span class="pre">resetToDefault</span></code> field in the <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> CR. When enabled, the operator performs the following operations:</p>
+<ul class="simple">
+<li><p>Resets all non-volatile configurations (<code class="docutils literal notranslate"><span class="pre">mstconfig</span> <span class="pre">-d</span> <span class="pre">&lt;device&gt;</span> <span class="pre">reset</span></code> for each PF)</p></li>
+<li><p>Sets <code class="docutils literal notranslate"><span class="pre">ADVANCED_PCI_SETTINGS=1</span></code></p></li>
+<li><p>Reboots the node to apply the new NIC NV configuration and undo any runtime configuration previously performed for the device or driver</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A configuration reset triggers a node reboot. Ensure that workloads are drained or that the Maintenance Operator is configured to handle the node maintenance automatically.</p>
+</div>
+<p>To reset the NIC configuration, create a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> CR with <code class="docutils literal notranslate"><span class="pre">resetToDefault:</span> <span class="pre">true</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reset-nic-config</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resetToDefault</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">resetToDefault</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, the <code class="docutils literal notranslate"><span class="pre">template</span></code> section is ignored. The device configuration is reset to factory defaults regardless of the template contents.</p>
+</div>
+<p>After the reset is complete and the node has rebooted, you can remove the reset CR and apply the desired configuration template.</p>
 </section>
 <section id="configure-custom-interface-names-nicinterfacenametemplate">
 <h2>Configure custom interface names (NicInterfaceNameTemplate)<a class="headerlink" href="#configure-custom-interface-names-nicinterfacenametemplate" title="Permalink to this headline"></a></h2>

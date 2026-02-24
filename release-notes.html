@@ -508,6 +508,7 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 <td><div class="line-block">
 <div class="line">- There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted</div>
 <div class="line">- Multus CNI does not use a service account token after the Kubernetes API rotates it. The recommended workaround is to edit the Multus CNI DaemonSet manually to remove <code class="docutils literal notranslate"><span class="pre">--skip-config-watch</span></code> CLI argument.</div>
+<div class="line">- The DOCA driver container is validated with host kernel versions up to 6.8.0-100. Compatibility with newer kernel versions is not guaranteed and may require a newer DOCA driver container release</div>
 </div>
 </td>
 </tr>

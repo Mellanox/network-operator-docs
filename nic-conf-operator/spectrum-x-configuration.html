@@ -245,6 +245,10 @@ The package should be available in the cluster and then its URL should be provid
 <section id="ra2-1-configuration-with-multiplane-support">
 <h3>RA2.1 configuration with multiplane support<a class="headerlink" href="#ra2-1-configuration-with-multiplane-support" title="Permalink to this headline"></a></h3>
 <p>Reference Architecture 2.1 introduces multiplane mode support, allowing NICs to be configured with multiple data planes for enhanced network performance.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is recommended to perform a NIC configuration reset before applying or switching between multiplane configurations to ensure a clean and consistent initial state. See <a class="reference internal" href="nic-fw-configuration.html"><span class="doc">Reset NIC Configuration to Default</span></a> for details.</p>
+</div>
 <p>To enable multiplane support, set <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> to <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> and configure the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> and <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> fields.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
