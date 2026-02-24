@@ -461,3 +461,20 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |k8s-launch-kit-version|
      - No
      -
+
+===========================================
+Additional Supported Tools and Integrations
+===========================================
+
+Container management tools:
+
+* `Helm v3 <https://helm.sh/>`_
+* `Red Hat Operator Lifecycle Manager (OLM) <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/understanding-operators#operator-lifecycle-manager-olm>`_
+
+Orchestration & resource scheduling:
+
+* `Run:ai <https://run-ai-docs.nvidia.com/>`_
+
+.. note::
+
+   Run:ai requires the NVIDIA Network Operator as a prerequisite. To configure NVIDIA Network Operator refer to the Run:ai `cluster requirements documentation <https://run-ai-docs.nvidia.com/self-hosted/getting-started/installation/install-using-helm/system-requirements#nvidia-network-operator>`_ for more information.
