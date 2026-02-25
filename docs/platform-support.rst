@@ -232,7 +232,11 @@ Supported Container Runtimes
    * - Red Hat Enterprise Linux 8
      - Yes
      - Yes
-     - 
+     -
+   * - Red Hat Enterprise Linux 10
+     - Yes
+     - Yes
+     -
    * - SUSE Linux Enterprise Server 15 SP7
      - Yes
      - No
