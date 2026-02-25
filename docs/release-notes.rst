@@ -37,13 +37,16 @@ Changes and New Features
    * - Version
      - Description
    * - 26.1.0
-     - | - Added support for Government-Ready, STIG/FIPS hardening security requirements, in OpenShift deployments for NVIDIA AI Enterprise customers
+     - | Added support for ConnectX-9 SuperNIC
+       | - Added support for Spectrum-X Ethernet Networking Platform with Kubernetes [GA]
+       | - Added support for Spectrum-X Single-plane and SW Multi-plane topologies in Spectrum-X Operator and NIC Configuration Operator
+       | - Added Spectrum-X support for NVIDIA Kubernetes Launch Kit
+       | - Added support for Azure AKS with Azure Linux
+       | - Added support for Government-Ready, STIG/FIPS hardening security requirements, in OpenShift deployments for NVIDIA AI Enterprise customers
+       | - Added support for Network Operator SOS report script, to collect system information for troubleshooting purposes
        | - Added support for NIC multiport firmware parameter (esw_multiport) using devlinkParams in SR-IOV Network Operator
        | - Added support for setting OVS bridges grouping configuration in SR-IOV Network Operator, grouping per NIC PFs to a single OVS bridge
-       | - Added support for Network Operator SOS report script, to collect system information for troubleshooting purposes       
-       | - Added support for SW multi-plane Spectrum-X topology in Spectrum-X Operator and NIC Configuration Operator
-       | - Added support for NicInterfaceNameTemplate allowing users to define custom naming schemes for network and RDMA interfaces on NIC devices in NIC Configuration Operator - Tech Preview
-       | - Added support for ConnectX-9 SuperNIC
+       | - [TECH PREVIEW] Added support for NicInterfaceNameTemplate allowing users to define custom naming schemes for network and RDMA interfaces on NIC devices in NIC Configuration Operator
    * - 25.10.0
      - | - Added support for OpenShift v4.20
        | - Added support for RHEL v10.0
