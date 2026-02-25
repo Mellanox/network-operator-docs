@@ -32,31 +32,31 @@ NVIDIA Network Operator Container Images
      - Image Name
      - Tag
      - Digest
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/cloud-native
      - network-operator
      - v26.1.0
      - sha256:92d1f0ea939b42005f619e5cbe51be50025e1c1ff3425f913bdf4a237df8551d
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - network-operator-init-container
      - network-operator-v26.1.0
      - sha256:4d75f5a1159b34785d55c4273f87397075883f998cd1b51d0419fa4e441ebf8f
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - k8s-rdma-shared-dev-plugin
      - network-operator-v26.1.0
      - sha256:cd489dfcddeb8ef67284d177cabc347f01d6b4fba0a44335a2026f6b6e11c847
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - ib-kubernetes
      - network-operator-v26.1.0
      - sha256:7a970fb650a29dfed285ba888c6b3e31a29af09e68f9f6fecf8a9336a73b0b9c
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - ipoib-cni
      - network-operator-v26.1.0
      - sha256:742f85dda7cc55c6a1133c7f27e70dc96cb95302b37c27e389a81299841fb1ee
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - nvidia-k8s-ipam
      - network-operator-v26.1.0
      - sha256:0fc97437f145a921cc8d4f6655b49d95399c4572545ac9f7d9bd42056da79a3e
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - nic-feature-discovery
      - network-operator-v26.1.0
      - sha256:b6a73d4c44a14a62bd8c9f2d396cf3213d5ff99ca73abc4da1a36bb3a1006ff5
@@ -64,59 +64,59 @@ NVIDIA Network Operator Container Images
      - doca_telemetry
      - 1.23.4-doca3.2.0-host
      - sha256:b628647c87715087888a687bc86887eb9675566558d863b4e43f227cf649f83b
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator
      - network-operator-v26.1.0
      - sha256:deeab00987df7ef6be5a8ebcd654303227b296aa78c965c50dd68ac563743469
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator-webhook
      - network-operator-v26.1.0
      - sha256:84f022066332a93e9499458d473bc4387a8e584a3448186de2588e50d58c1ec3
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-operator-config-daemon
      - network-operator-v26.1.0
      - sha256:09e9ff485385ea7b3919dd9ac1acc4320e2093d900374818ef4e26ebe421b6ca
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-network-device-plugin
      - network-operator-v26.1.0
      - sha256:d132293243745f301c0c5176416c7b3fedd8693a63591328a98c4dae5abda9fe
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - sriov-cni
      - network-operator-v26.1.0
      - sha256:51456f88b7b891667263399b35f5e96120da7cf9c97e2b8823e9627328d50310
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - ib-sriov-cni
      - network-operator-v26.1.0
      - sha256:c27d6dbe2597b86f50c32371d10faacd7f5fe6dac3e794e0fed10d8fcfcb45b0
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - plugins
      - network-operator-v26.1.0
      - sha256:e6aade334dc03018705af5a2ba8ef3302a5e27519fe9f71a93627375511541a1
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - multus-cni
      - network-operator-v26.1.0
      - sha256:078a663ced2784470130ec0685d9320319e27eff7e54b703f142ad41e91a8276
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - ovs-cni-plugin
      - network-operator-v26.1.0
      - sha256:90bffacd4419e8a58a0ca9a1c74361580fa005c7c1d8167f93db536a2fbc3219
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - rdma-cni
      - network-operator-v26.1.0
      - sha256:bfe01ef671e30c4b98d50a6959fe0697e2498cda3b80860a7b9a06f750e967fb
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - nic-configuration-operator
      - network-operator-v26.1.0
      - sha256:a57208fe6b617edc21e929dff95d332ae2b50e05cf8e8166de979997dc5e9bc1
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - nic-configuration-operator-daemon
      - network-operator-v26.1.0
      - sha256:968a74cb0803643ba8ecca18bb2fbec3c044c29bd7a5b3527602a863aa64d71d
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - maintenance-operator
      - network-operator-v26.1.0
      - sha256:c18b945d55a5df71b79436ceaa03e7c0eb7c2dacb3af2be19eaf5fdac305e185
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - spectrum-x-operator
      - network-operator-v26.1.0
      - sha256:5881ddef1d31a769209ae7bc30b3bc7d58c7362a31a646ff70b822880ba287b9
@@ -132,7 +132,7 @@ DOCA-OFED Driver Container Images
    * - Repository
      - Image Name
      - Version
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - doca-driver
      - doca3.3.0-26.01-1.0.0.0-0
 
@@ -209,17 +209,11 @@ Ubuntu
        | doca3.3.0-26.01-1.0.0.0-0-6.8.0-1046-nvidia-ubuntu22.04-arm64
      - sha256:b7a2932e3cc83c08d50b6c860c6d6db6c9669f5bb9dca08cdf4b4b17b5233962
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-ubuntu22.04
-     - sha256:46fe5465039b492c9da06f1f5888345278bcc1b062fdfcbcb9d49c5796f00597
-   * -
        | doca3.3.0-26.01-1.0.0.0-0-ubuntu22.04-amd64
      - sha256:d21a60774040cfefcf834bec5dbfd4c1a1992ce8b5d9a9ff30a33924fdc73068
    * -
        | doca3.3.0-26.01-1.0.0.0-0-ubuntu22.04-arm64
      - sha256:f7c3746b46348468ee8a46958a17bcbcb7a4dcd801199e9b5e57c65e3f787f89
-   * -
-       | doca3.3.0-26.01-1.0.0.0-0-ubuntu24.04
-     - sha256:2ecd7469b23ce1a3a15bf69842dbc1f75d93704f8f2dadc5300165a9a698e1de
    * -
        | doca3.3.0-26.01-1.0.0.0-0-ubuntu24.04-amd64
      - sha256:ec3f771597a821c1ce2eb16e3e5be53df067d91429d22c1db34ee4257f174c96
@@ -237,20 +231,13 @@ RHCOS
    * - Tags
      - Digest
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhcos4.16-amd64
        | doca3.3.0-26.01-1.0.0.0-0-rhcos4.17-amd64
        | doca3.3.0-26.01-1.0.0.0-0-rhcos4.18-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhcos4.19-amd64
      - sha256:ac7f091b20c9c7cd5af5bad8d5f78f8109b3f62bc748a846f2a377beb05023eb
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhcos4.16-arm64
        | doca3.3.0-26.01-1.0.0.0-0-rhcos4.17-arm64
        | doca3.3.0-26.01-1.0.0.0-0-rhcos4.18-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhcos4.19-arm64
      - sha256:8f49ba149d43e117f21ee753a65c4a735b43bb1c57f316bb08e2f0f6e9fa108f
-   * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhcos4.19
-     - sha256:8f0364d7b1f01d7a4c5c640e014d32f52839c9757e28059e9402790030e007f2
 
 ----
 RHEL
@@ -262,48 +249,25 @@ RHEL
    * - Tags
      - Digest
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhel10.0
-     - sha256:d49f8a1cd0482c6d9e49ab637f04dd634065470e1d8245640144c3e13636ceeb
-   * -
        | doca3.3.0-26.01-1.0.0.0-0-rhel10.0-amd64
      - sha256:10e0430eaca9ea1f8528f810641e6ef42901ba6e757e4ec2ba9854e916c3b467
    * -
        | doca3.3.0-26.01-1.0.0.0-0-rhel10.0-arm64
      - sha256:a8bc5110e3d5c32738446b53809deb220dc8d71b37f5bd11c87e5af6887aace3
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.10
-     - sha256:8eaff502d4cc3319f3335c9548869fa3fd344e79b3e3eff096eba2251284040a
-   * -
        | doca3.3.0-26.01-1.0.0.0-0-rhel8.10-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.6-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.8-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.9-amd64
      - sha256:5999eb7175e0804fe9b48a9156932e4a657aecaa9c4315591abcc29d1c339a82
    * -
        | doca3.3.0-26.01-1.0.0.0-0-rhel8.10-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.6-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.8-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel8.9-arm64
      - sha256:04e8293e45d7d1f518952be3f6a902d53b5cd6ae14c684dd36f4acbb51178ac9
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.0-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.2-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.3-amd64
        | doca3.3.0-26.01-1.0.0.0-0-rhel9.4-amd64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.5-amd64
        | doca3.3.0-26.01-1.0.0.0-0-rhel9.6-amd64
      - sha256:3bfd0a24859c3e8c0e9697d6f128855e2ab6b3731eb79ef5603673fc678c82c4
    * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.0-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.2-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.3-arm64
        | doca3.3.0-26.01-1.0.0.0-0-rhel9.4-arm64
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.5-arm64
        | doca3.3.0-26.01-1.0.0.0-0-rhel9.6-arm64
      - sha256:3a6629d09fdc431594d399e1a5106920ed5b9fc42cecd501fd69664bd7e9a62c
-   * -
-       | doca3.3.0-26.01-1.0.0.0-0-rhel9.6
-     - sha256:c83c2424d503ec67424f94a75dbf3e138b7f73bedd7cdfd784e0bdea43b924bd
 
 ----
 SLES
@@ -314,9 +278,6 @@ SLES
 
    * - Tags
      - Digest
-   * -
-       | doca3.3.0-26.01-1.0.0.0-0-sles15.7
-     - sha256:e05875a3fc3333f6abaec0eac83614c27ef0e1022dd7b75628b49b1a0bce9893
    * -
        | doca3.3.0-26.01-1.0.0.0-0-sles15.7-amd64
      - sha256:990f81022eb0fd213d823ecedb821f83145a9db7e708b365d3f063259fb0c4dc
@@ -335,7 +296,7 @@ STIG FIPS Compliant DOCA-OFED Driver Container Images
    * - Repository
      - Image Name
      - Version
-   * - nvcr.io/nvstaging/mellanox
+   * - nvcr.io/nvidia/mellanox
      - doca-driver-stig-fips
      - doca3.3.0-26.01-1.0.0.0-0
 
