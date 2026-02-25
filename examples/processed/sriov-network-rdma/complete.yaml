@@ -5,17 +5,17 @@ metadata:
 spec:
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
+    repository: nvcr.io/nvidia/mellanox
     version: network-operator-v26.1.0
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
+      repository: nvcr.io/nvidia/mellanox
       version: network-operator-v26.1.0
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
+      repository: nvcr.io/nvidia/mellanox
       version: network-operator-v26.1.0
 
 ---
