@@ -1868,7 +1868,7 @@ Supported OpenvSwitch dataplanes:
 
 * OVS-doca
 
-Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload+(ovs+in+doca)/index.html>`_ document to know about differences.
+Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch-acceleration---ovs-in-doca/index.html>`_ document to know about differences.
 
 ^^^^^^^^^^^
 OVS-kernel
@@ -2081,9 +2081,9 @@ Troubleshooting OVS
 
 Please see the following DOCA documentation for OVS hardware offload verification and troubleshooting steps:
 
-* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
+* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel-hardware-acceleration/index.html>`_
 
-* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
+* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca-hardware-acceleration/index.html>`_
 
 
 ------------------------------------------------------------------------------------------------
@@ -2187,7 +2187,7 @@ Supported OpenvSwitch dataplanes:
 
 * OVS-doca
 
-Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch+offload+(ovs+in+doca)/index.html>`_ document to know about differences.
+Check `OpenvSwitch Offload <https://docs.nvidia.com/doca/sdk/openvswitch-acceleration---ovs-in-doca/index.html>`_ document to know about differences.
 
 """"""""""""""""""""""""""""""""""""""
 Configure Bond interface with netplan
@@ -2443,9 +2443,9 @@ Troubleshooting OVS
 
 Please see the following DOCA documentation for OVS hardware offload verification and troubleshooting steps:
 
-* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel+hardware+offloads/index.html>`_
+* `OVS-Kernel Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-kernel-hardware-acceleration/index.html>`_
 
-* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca+hardware+offloads/index.html>`_
+* `OVS-DOCA Hardware Offloads <https://docs.nvidia.com/doca/sdk/ovs-doca-hardware-acceleration/index.html>`_
 
 -------------------------------------------------------------
 Network Operator Deployment and RDMA exclusive subsystem mode
