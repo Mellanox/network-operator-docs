@@ -41,9 +41,9 @@ Patch releases typically include critical bug and CVE fixes.
 Network Operator Life Cycle
 ===========================
 
-When a major version of NVIDIA Network Operator is released, the previous major version enters maintenance support
-and only receives patch release updates for critical bug and CVE fixes.
-Prior maintance release enters EOL (end-of-life) and are no longer supported and do not receive patch release updates.
+When a new major version of NVIDIA Network Operator is released, it becomes the supported release and the previous major version enters a deprecated
+(maintenance) state, receiving only patch updates for critical bug and CVE fixes. Once a subsequent major version is released, the deprecated version
+reaches End of Support (EOS) and no longer receives any updates.
 
 The product life cycle and versioning are subject to change in the future.
 
@@ -55,15 +55,19 @@ The product life cycle and versioning are subject to change in the future.
 
    * - Network Operator Version
      - Status
+     - Comment
 
    * - |current-ga-version|
-     - Generally Available
+     - Supported
+     - GA version (full support)
 
    * - |current-maintenance-version|
-     - Maintenance
+     - Deprecated
+     - Maintenance version (critical bug and CVE fixes only)
 
    * - |current-eol-version| and lower
-     - EOL
+     - End of Support
+     - Unsupported versions (no updates, including bug and CVE fixes)
 
 
 =============================
