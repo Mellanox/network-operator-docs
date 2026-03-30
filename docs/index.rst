@@ -27,6 +27,7 @@
    Getting Started with Red Hat OpenShift <getting-started-with-openshift.rst>
    NVIDIA Network Operator Government Ready <install-network-operator-gov-ready.rst>
    NIC Configuration Operator <nic-conf-operator/nic-configuration-operator.rst>
+   DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver.rst>
    [TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit <k8s-launch-kit.rst>
    Customization Options and CRDs <customizations/customization.rst>
    Life Cycle Management <life-cycle-management.rst>
