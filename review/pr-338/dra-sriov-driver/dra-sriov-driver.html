@@ -424,7 +424,9 @@ constrained to share the same PCIe root:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is an <strong>alpha feature</strong> in Kubernetes v1.34 (disabled by default). It requires enabling the
-<code class="docutils literal notranslate"><span class="pre">DRAExtendedResource</span></code> feature gate in the kube-apiserver, kube-scheduler, and kubelet.</p>
+<code class="docutils literal notranslate"><span class="pre">DRAExtendedResource</span></code> feature gate in the kube-apiserver, kube-scheduler, and kubelet.
+See <a class="reference external" href="https://kubernetes.io/docs/tasks/administer-cluster/configure-feature-gates/">Enable Or Disable Feature Gates</a>
+for instructions on how to enable feature gates in your cluster.</p>
 </div>
 <p>Extended resource allocation by DRA allows a <code class="docutils literal notranslate"><span class="pre">DeviceClass</span></code> to specify an <code class="docutils literal notranslate"><span class="pre">extendedResourceName</span></code>.
 The scheduler then selects DRA devices matching the class for extended resource requests, enabling
