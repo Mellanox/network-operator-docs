@@ -226,15 +226,15 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>26.1.x</p></td>
+<tr class="row-even"><td><p>26.4.x</p></td>
 <td><p>Supported</p></td>
 <td><p>GA version (full support)</p></td>
 </tr>
-<tr class="row-odd"><td><p>25.10.x</p></td>
+<tr class="row-odd"><td><p>26.1.x</p></td>
 <td><p>Deprecated</p></td>
 <td><p>Maintenance version (critical bug and CVE fixes only)</p></td>
 </tr>
-<tr class="row-even"><td><p>25.7.x and lower</p></td>
+<tr class="row-even"><td><p>25.10.x and lower</p></td>
 <td><p>End of Support</p></td>
 <td><p>Unsupported versions (no updates, including bug and CVE fixes)</p></td>
 </tr>
@@ -289,7 +289,7 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 <h3>Downloading a New Helm Chart<a class="headerlink" href="#downloading-a-new-helm-chart" title="Permalink to this headline"></a></h3>
 <p>To obtain new releases, run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span> <span class="c1"># Download Helm chart</span>
- $ helm fetch <span class="se">\h</span>ttps://helm.ngc.nvidia.com/nvidia/charts/network-operator-26.1.0.tgz
+ $ helm fetch <span class="se">\h</span>ttps://helm.ngc.nvidia.com/nvidia/charts/network-operator-26.4.0-beta.1.tgz
  $ ls network-operator-<span class="se">\*</span>.tgz <span class="p">|</span> xargs -n <span class="m">1</span> tar xf
 </pre></div>
 </div>
@@ -331,8 +331,8 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.1.1.0-0</span><span class="w"></span>
 <span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># autoUpgrade is a global switch for automatic upgrade feature</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># if set to false all other options are ignored</span><span class="w"></span>
@@ -430,8 +430,8 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.1.1.0-0</span><span class="w"></span>
 <span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>

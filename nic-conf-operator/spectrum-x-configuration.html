@@ -214,6 +214,8 @@ The package should be available in the cluster and then its URL should be provid
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"> </span><span class="c1"># BlueField-3 SuperNIC, Can also be &quot;1023&quot; for ConnectX-8</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># partNumbers:</span><span class="w"></span>
+<span class="w">    </span><span class="c1">#   - &quot;MCX713106AEHEA_QP1&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nicFirmwareSourceRef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-configuration</span><span class="w"></span>
 <span class="w">    </span><span class="nt">updatePolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Update</span><span class="w"></span>
@@ -233,6 +235,8 @@ The package should be available in the cluster and then its URL should be provid
 <span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">a2dc</span><span class="w"> </span><span class="c1"># BlueField-3 SuperNIC, Can also be &quot;1023&quot; for ConnectX-8</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># partNumbers:</span><span class="w"></span>
+<span class="w">      </span><span class="c1">#   - &quot;MCX713106AEHEA_QP1&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
@@ -260,6 +264,8 @@ The package should be available in the cluster and then its URL should be provid
 <span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8. Use &quot;a2dc&quot; for BlueField-3 SuperNIC (hwplb not supported on BF3)</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># partNumbers:</span><span class="w"></span>
+<span class="w">      </span><span class="c1">#   - &quot;MCX713106AEHEA_QP1&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
@@ -421,334 +427,284 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <p>The Spectrum-X configuration parameters depend on the Reference Architecture version. The operator applies the following NVConfig and runtime parameters based on the selected version.</p>
 <p>When spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.1” the following configuration parameters are applied:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">swplb</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1,2,3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..7&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># BF3-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[2,3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7,8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">4</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[2,3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 3</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..5&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 4</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;6..7&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[6,7]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w">  </span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># BF3-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..0&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1..1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[1]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 3</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2..2&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[2]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=3]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 4</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=4]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7,8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">breakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">4</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x3&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x3&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">breakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">4</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x3&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">hwplb</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..7&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1,2,3,4,5,6,7]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">4</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..7&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1,2,3,4,5,6,7]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w">  </span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">breakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">4</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;48&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">FLEX_PARSER_PROFILE_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">RDE_DISABLE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">VF_LOG_BAR_SIZE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;48&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">FLEX_PARSER_PROFILE_ENABLE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">RDE_DISABLE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">VF_LOG_BAR_SIZE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">uniplane</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of PFs</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/physical-functions/config/num-of-pf</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes P1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P1&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of Planes P2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_PLANES_P2&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LAG Resource Allocation</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">        </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LAG_RESOURCE_ALLOCATION&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># CX8-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1,2,3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..7&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;8..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="c1"># BF3-specific parameters  </span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 1</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0..1&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[0,1]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=1]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2..3&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[2,3]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=2]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Lanes for Module 0 and Port 255</span><span class="w"></span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4..15&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;[4,5,6,7,8,9,10,11,12,13,14,15]&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/device/config/module[module-id=0]/port[port-id=255]/lanes</span><span class="w"></span>
-<span class="w">        </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="nt">nvConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LINK_TYPE_P1&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable SR-IOV</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SRIOV_EN&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set NUM_OF_VFS</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_VFS&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/mode/config/mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Adaptive Routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/adaptive-routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Programmable Congestion Control</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/cc/config/user-programmable</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE TX Scheduling Locality Mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TX_SCHED_LOCALITY_ACCUMULATIVE</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/tx-sched-locality-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE CC Steering Ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENABLED</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/cc-steering-ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># swplb/uniplane/none-specific settings (via DMS)</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uniplane</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RTT_RESP_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RTT_RESP_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uniplane</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RTT_RESP_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Multipath DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTIPATH_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/multipath-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unknown&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">ignoreError</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Multipath DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTIPATH_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/multipath-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unknown&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">ignoreError</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uniplane</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Multipath DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTIPATH_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/multipath-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;unknown&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">ignoreError</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># hwplb-specific settings (via mlxconfig)</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">48</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ROCE_RTT_RESP_DSCP_P1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ROCE_RTT_RESP_DSCP_MODE_P1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Flex Parser Profile</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FLEX_PARSER_PROFILE_ENABLE&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disable RDE</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RDE_DISABLE&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VF LOG BAR size</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;VF_LOG_BAR_SIZE&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">breakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">breakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">2</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PF</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">NUM_OF_PLANES_P2</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">LAG_RESOURCE_ALLOCATION</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[0]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[1]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[2]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[3]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0x2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[4]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[5]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[6]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[7]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[8]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[9]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[10]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[11]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[12]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[13]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[14]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">MODULE_SPLIT_M0[15]</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;0xff&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">none</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
 <span class="nt">runtimeConfig</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">roce</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Trust</span><span class="w"></span>
@@ -760,11 +716,6 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00010000&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/qos/config/pfc</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># TODO: figure out if NIC operator or RDMA cni needs to set the tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># - name: Type of Service</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   value: 96</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   dmsPath: /interfaces/interface/nvidia/roce/config/tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   valueType: int</span><span class="w"></span>
 <span class="w">  </span><span class="nt">adaptiveRouting</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable CC per plane</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -787,11 +738,6 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/slow-restart-idle</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CC Probe MP mode</span><span class="w"></span>
-<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/cc-probe-mp-mode</span><span class="w"></span>
-<span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">      </span><span class="nt">multiplane</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hwplb</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Adaptive Routing Force</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/adaptive-routing-force</span><span class="w"></span>
@@ -799,15 +745,15 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">  </span><span class="nt">congestionControl</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on RP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w">  </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/config/enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -819,7 +765,6 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=15]/config/enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># Bandwidth configuration for different cases</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bandwidth</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/param[id=0]/config/value</span><span class="w"></span>
@@ -944,48 +889,33 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 </pre></div>
 </div>
 <p>When spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA2.0” the following configuration parameters are applied:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LINK_TYPE_P1&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable SR-IOV</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SRIOV_EN&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set NUM_OF_VFS</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_VFS&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/mode/config/mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Adaptive Routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/adaptive-routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Programmable Congestion Control</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/cc/config/user-programmable</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE TX Scheduling Locality Mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TX_SCHED_LOCALITY_ACCUMULATIVE</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/tx-sched-locality-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Multipath DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTIPATH_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/multipath-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RTT_RESP_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE CC Steering Ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENABLED</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/cc-steering-ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">none</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
 <span class="nt">runtimeConfig</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">roce</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Trust</span><span class="w"></span>
@@ -997,11 +927,6 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00010000&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/qos/config/pfc</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># TODO: figure out if NIC operator or RDMA cni needs to set the tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># - name: Type of Service</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   value: 96</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   dmsPath: /interfaces/interface/nvidia/roce/config/tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   valueType: int</span><span class="w"></span>
 <span class="w">  </span><span class="nt">adaptiveRouting</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Adaptive Retransmission</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -1026,15 +951,15 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">  </span><span class="nt">congestionControl</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on RP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w">  </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/config/enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -1124,11 +1049,11 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -1137,11 +1062,11 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -1150,48 +1075,33 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 </pre></div>
 </div>
 <p>When spectrumXOptimized.enabled == true and spectrumXOptimized.version == “RA1.3” the following configuration parameters are applied:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LINK_TYPE_P1&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enable SR-IOV</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SRIOV_EN&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set NUM_OF_VFS</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
-<span class="w">    </span><span class="nt">mlxconfig</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NUM_OF_VFS&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NIC</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/mode/config/mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="nt">deviceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Adaptive Routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/adaptive-routing</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Programmable Congestion Control</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/cc/config/user-programmable</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE TX Scheduling Locality Mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TX_SCHED_LOCALITY_ACCUMULATIVE</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/tx-sched-locality-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE Multipath DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MULTIPATH_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/multipath-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CNP DSCP mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RTT_RESP_DSCP_DEFAULT</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/roce/config/rtt-resp-dscp-mode</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RoCE CC Steering Ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENABLED</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/nvidia/roce/config/cc-steering-ext</span><span class="w"></span>
-<span class="w">    </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">none</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;1023&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;a2dc&quot;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">postBreakout</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">LINK_TYPE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">SRIOV_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">NUM_OF_VFS</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_MODEL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">INTERNAL_CPU_OFFLOAD_ENGINE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_ADAPTIVE_ROUTING_EN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">USER_PROGRAMMABLE_CC</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">TX_SCHEDULER_LOCALITY_MODE</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_CC_STEERING_EXT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">MULTIPATH_DSCP</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">ROCE_RTT_RESP_DSCP_MODE_P1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
 <span class="nt">runtimeConfig</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">roce</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Trust</span><span class="w"></span>
@@ -1203,11 +1113,6 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;00010000&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/qos/config/pfc</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># TODO: figure out if NIC operator or RDMA cni needs to set the tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># - name: Type of Service</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   value: 96</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   dmsPath: /interfaces/interface/nvidia/roce/config/tos</span><span class="w"></span>
-<span class="w">    </span><span class="c1">#   valueType: int</span><span class="w"></span>
 <span class="w">  </span><span class="nt">adaptiveRouting</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Adaptive Retransmission</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -1232,15 +1137,15 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">  </span><span class="nt">congestionControl</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on RP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/rp_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control on NP points</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"> </span><span class="c1"># priority[id=0..7]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/config/priority/np_enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
 <span class="w">      </span><span class="nt">alternativeValue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w">  </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Congestion Control</span><span class="w"></span>
 <span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="w">      </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/nvidia/cc/slot[id=0]/config/enabled</span><span class="w"></span>
 <span class="w">      </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -1330,11 +1235,11 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">25</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
@@ -1343,11 +1248,11 @@ ACTION==&quot;add&quot;, KERNELS==&quot;0000:3a:00.1&quot;, SUBSYSTEM==&quot;inf
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/ethernet/nvidia/config/inter-packet-gap</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shut down interface</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Bring up interface to apply IPG settings</span><span class="w"></span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">        </span><span class="nt">dmsPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/interfaces/interface/config/enabled</span><span class="w"></span>
 <span class="w">        </span><span class="nt">valueType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span><span class="w"></span>

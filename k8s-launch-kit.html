@@ -310,7 +310,7 @@
 cp /etc/kubernetes/admin.conf ~/cluster-configuration/kubeconfig
 docker run -v ~/cluster-configuration:/cluster-configuration <span class="se">\</span>
     --net<span class="o">=</span>host <span class="se">\</span>
-    nvcr.io/nvidia/cloud-native/k8s-launch-kit:v26.1.0 <span class="se">\</span>
+    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.1 <span class="se">\</span>
     --discover-cluster-config <span class="se">\</span>
     --kubeconfig /cluster-configuration/kubeconfig <span class="se">\</span>
     --save-cluster-config /cluster-configuration/config.yaml <span class="se">\</span>
@@ -691,14 +691,14 @@ l8k --user-config ./config.yaml <span class="se">\</span>
 <p>After the cluster configuration is discovered, the tool will save the configuration to a file.
 You can use this file as a starting point for your own configuration. A custom configuration file can be provided to the tool using the <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> flag — either as a standalone config (skipping discovery) or as a base config combined with <code class="docutils literal notranslate"><span class="pre">--discover-cluster-config</span></code> (discovery takes network operator parameters from the file and adds discovered cluster config).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.1.0</span><span class="w"></span>
-<span class="w">   </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.1.0</span><span class="w"></span>
-<span class="w">   </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvidia/cloud-native</span><span class="w"></span>
+<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.4.0-beta.1</span><span class="w"></span>
+<span class="w">   </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.1</span><span class="w"></span>
+<span class="w">   </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">   </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">   </span><span class="nt">docsBaseURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://docs.nvidia.com/networking/display/kubernetes2610</span><span class="w"></span>
 
 <span class="w"> </span><span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
-<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.3.0-26.01-1.0.0.0-0</span><span class="w"></span>
+<span class="w">   </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.1.1.0-0</span><span class="w"></span>
 <span class="w">   </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">   </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 
