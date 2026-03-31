@@ -711,6 +711,9 @@ NicClusterPolicyStatus defines the observed state of NicClusterPolicy
       | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
       | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``conditions``                                                                                    | Standard Kubernetes conditions representing per-component and aggregate health.                   |
+      | []metav1.Condition                                                                                | See :ref:`NicClusterPolicy Status Conditions <ncp-conditions>` for details.                       |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicConfigurationOperatorSpec:
 
