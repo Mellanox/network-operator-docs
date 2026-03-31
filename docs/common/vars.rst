@@ -69,3 +69,4 @@
 .. |spectrum-x-operator-stig-rhel-repository| replace:: nvcr.io/nvidia/mellanox
 .. |spectrum-x-operator-stig-ubuntu-version| replace:: network-operator-v26.1.0-stig-fips-ubuntu
 .. |spectrum-x-operator-stig-ubuntu-repository| replace:: nvcr.io/nvidia/mellanox
+.. |ncp-conditions-version| replace:: 26.1.0
