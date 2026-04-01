@@ -198,32 +198,6 @@ DriverUpgradePolicySpec describes policy configuration for automatic upgrades
       | bool                                                                                              | SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)        |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _GlobalConfig:
-
-GlobalConfig
-~~~~~~~~~~~~
-
-(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
-
-GlobalConfig contains global configuration for all components
-
-.. container:: md-typeset__scrollwrap
-
-   .. container:: md-typeset__table
-
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                             | Description                                                                                       |
-      +===================================================================================================+===================================================================================================+
-      | ``repository``                                                                                    | *(Optional)*                                                                                      |
-      | string                                                                                            | Repository is the default container image repository for all components                           |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | *(Optional)*                                                                                      |
-      | string                                                                                            | Version is the default version tag for all component images                                       |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
-      | []string                                                                                          | ImagePullSecrets is a list of secret names for pulling component images                           |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-
 .. _HostDeviceNetwork:
 
 HostDeviceNetwork
@@ -434,11 +408,11 @@ ImageSpec Contains container image specifications
       | ``image``                                                                                         | Name of the image                                                                                 |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``repository``                                                                                    | *(Optional)*                                                                                      |
-      | string                                                                                            | Address of the registry that stores the image                                                     |
+      | ``repository``                                                                                    | Address of the registry that stores the image                                                     |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | *(Optional)*                                                                                      |
-      | string                                                                                            | Version of the image to use                                                                       |
+      | ``version``                                                                                       | Version of the image to use                                                                       |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
       | []string                                                                                          | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for    |
@@ -659,9 +633,6 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``global``                                                                                        | *(Optional)*                                                                                      |
-      | :ref:`GlobalConfig <GlobalConfig>`                                                                | Global contains global configuration for all components                                           |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ofedDriver``                                                                                    | OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes  |
       | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            | with an OS. See https://network.nvidia.com/support/mlnx-ofed-matrix/                              |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
