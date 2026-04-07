@@ -19,7 +19,7 @@ Resource Types:
 AppliedState
 ~~~~~~~~~~~~
 
-(*Appears on:* :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`, :ref:`NicNodePolicyStatus <NicNodePolicyStatus>`)
+(*Appears on:* :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
 
 AppliedState defines a finer-grained view of the observed state of NicClusterPolicy
 
@@ -110,7 +110,7 @@ DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
 DevicePluginSpec
 ~~~~~~~~~~~~~~~~
 
-(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`, :ref:`NicNodePolicySpec <NicNodePolicySpec>`)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 DevicePluginSpec describes configuration options for device plugin 1. Image information for device plugin 2. Device plugin configuration
 
@@ -196,32 +196,6 @@ DriverUpgradePolicySpec describes policy configuration for automatic upgrades
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``safeLoad``                                                                                      | *(Optional)*                                                                                      |
       | bool                                                                                              | SafeLoad turn on safe driver loading (cordon and drain the node before loading the driver)        |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-
-.. _GlobalConfig:
-
-GlobalConfig
-~~~~~~~~~~~~
-
-(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
-
-GlobalConfig contains global configuration for all components
-
-.. container:: md-typeset__scrollwrap
-
-   .. container:: md-typeset__table
-
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                             | Description                                                                                       |
-      +===================================================================================================+===================================================================================================+
-      | ``repository``                                                                                    | *(Optional)*                                                                                      |
-      | string                                                                                            | Repository is the default container image repository for all components                           |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | *(Optional)*                                                                                      |
-      | string                                                                                            | Version is the default version tag for all component images                                       |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
-      | []string                                                                                          | ImagePullSecrets is a list of secret names for pulling component images                           |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _HostDeviceNetwork:
@@ -434,11 +408,11 @@ ImageSpec Contains container image specifications
       | ``image``                                                                                         | Name of the image                                                                                 |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``repository``                                                                                    | *(Optional)*                                                                                      |
-      | string                                                                                            | Address of the registry that stores the image                                                     |
+      | ``repository``                                                                                    | Address of the registry that stores the image                                                     |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | *(Optional)*                                                                                      |
-      | string                                                                                            | Version of the image to use                                                                       |
+      | ``version``                                                                                       | Version of the image to use                                                                       |
+      | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``imagePullSecrets``                                                                              | *(Optional)*                                                                                      |
       | []string                                                                                          | ImagePullSecrets is an optional list of references to secrets in the same namespace to use for    |
@@ -659,9 +633,6 @@ NicClusterPolicySpec defines the desired state of NicClusterPolicy
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``global``                                                                                        | *(Optional)*                                                                                      |
-      | :ref:`GlobalConfig <GlobalConfig>`                                                                | Global contains global configuration for all components                                           |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ofedDriver``                                                                                    | OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes  |
       | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            | with an OS. See https://network.nvidia.com/support/mlnx-ofed-matrix/                              |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -803,112 +774,12 @@ NicFirmwareStorageSpec contains configuration for the NIC firmware storage
       | string                                                                                            | if nicFirmwareStorage.create == true. Default value: 1Gi                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
-.. _NicNodePolicy:
-
-NicNodePolicy
-~~~~~~~~~~~~~
-
-NicNodePolicy is the Schema for the NicNodePolicies API
-
-.. container:: md-typeset__scrollwrap
-
-   .. container:: md-typeset__table
-
-      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                                           | Description                                                                                       |
-      +=================================================================================================================+===================================================================================================+
-      | ``metadata``                                                                                                    | Refer to the Kubernetes API documentation for the fields of the ``metadata`` field.               |
-      | `Kubernetes                                                                                                     |                                                                                                   |
-      | meta/v1.ObjectMeta <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#objectmeta-v1-meta>`__ |                                                                                                   |
-      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spec``                                                                                                        | Defines the desired state of NicNodePolicy                                                        |
-      | :ref:`NicNodePolicySpec <NicNodePolicySpec>`                                                                    |                                                                                                   |
-      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``status``                                                                                                      | Defines the observed state of NicNodePolicy                                                       |
-      | :ref:`NicNodePolicyStatus <NicNodePolicyStatus>`                                                                |                                                                                                   |
-      +-----------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-
-.. _NicNodePolicySpec:
-
-NicNodePolicySpec
-~~~~~~~~~~~~~~~~~
-
-(*Appears on:* :ref:`NicNodePolicy <NicNodePolicy>`)
-
-NicNodePolicySpec defines the desired state of NIC drivers and device plugin
-
-.. container:: md-typeset__scrollwrap
-
-   .. container:: md-typeset__table
-
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                             | Description                                                                                       |
-      +===================================================================================================+===================================================================================================+
-      | ``ofedDriver``                                                                                    | OFEDDriver is a specialized driver for NVIDIA NICs which can replace the inbox driver that comes  |
-      | :ref:`OFEDDriverSpec <OFEDDriverSpec>`                                                            | with an OS. See https://network.nvidia.com/support/mlnx-ofed-matrix/                              |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``rdmaSharedDevicePlugin``                                                                        | RdmaSharedDevicePlugin manages support IB and RoCE HCAs through the Kubernetes device plugin      |
-      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        | framework. The config field is a json representation of the RDMA shared device plugin             |
-      |                                                                                                   | configuration. See https://github.com/Mellanox/k8s-rdma-shared-dev-plugin                         |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``sriovDevicePlugin``                                                                             | SriovDevicePlugin manages SRIOV through the Kubernetes device plugin framework. The config field  |
-      | :ref:`DevicePluginSpec <DevicePluginSpec>`                                                        | is a json representation of the RDMA shared device plugin configuration. See                      |
-      |                                                                                                   | https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin                               |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``nodeSelector``                                                                                  | NodeSelector specifies a selector for the nodes this policy applies to                            |
-      | map[string]string                                                                                 |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``labels``                                                                                        | Optional: Map of string keys and values that can be used to organize and categorize (scope and    |
-      | map[string]string                                                                                 | select) objects. May match selectors of replication controllers and services.                     |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``annotations``                                                                                   | Optional: Annotations is an unstructured key value map stored with a resource that may be set by  |
-      | map[string]string                                                                                 | external tools to store and retrieve arbitrary metadata. They are not queryable and should be     |
-      |                                                                                                   | preserved when modifying objects.                                                                 |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``tolerations``                                                                                   | Optional: Set tolerations                                                                         |
-      | `[]Kubernetes core/v1.Toleration <https://godoc.org/k8s.io/api/core/v1#Toleration>`__             |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-
-.. _NicNodePolicyStatus:
-
-NicNodePolicyStatus
-~~~~~~~~~~~~~~~~~~~
-
-(*Appears on:* :ref:`NicNodePolicy <NicNodePolicy>`)
-
-NicNodePolicyStatus defines the observed state of NicNodePolicy
-
-.. container:: md-typeset__scrollwrap
-
-   .. container:: md-typeset__table
-
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                             | Description                                                                                       |
-      +===================================================================================================+===================================================================================================+
-      | ``state``                                                                                         | Reflects the current state of the cluster policy                                                  |
-      | :ref:`State <State>`                                                                              |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``reason``                                                                                        | Informative string in case the observed state is error                                            |
-      | string                                                                                            |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``appliedStates``                                                                                 | AppliedStates provide a finer view of the observed state                                          |
-      | :ref:`[]AppliedState <AppliedState>`                                                              |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-
-.. _NicPolicyCR:
-
-NicPolicyCR
-~~~~~~~~~~~
-
-NicPolicyCR is the common interface satisfied by NicClusterPolicy and NicNodePolicy. State sync methods use it to access the desired NIC configuration and set owner references without depending on a
-concrete CRD type.
-
 .. _OFEDDriverSpec:
 
 OFEDDriverSpec
 ~~~~~~~~~~~~~~
 
-(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`, :ref:`NicNodePolicySpec <NicNodePolicySpec>`)
+(*Appears on:* :ref:`NicClusterPolicySpec <NicClusterPolicySpec>`)
 
 OFEDDriverSpec describes configuration options for DOCA-OFED Driver Container
 
@@ -1064,7 +935,7 @@ State (``string`` alias)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 (*Appears on:* :ref:`AppliedState <AppliedState>`, :ref:`HostDeviceNetworkStatus <HostDeviceNetworkStatus>`, :ref:`IPoIBNetworkStatus <IPoIBNetworkStatus>`,
-:ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`, :ref:`NicNodePolicyStatus <NicNodePolicyStatus>`)
+:ref:`MacvlanNetworkStatus <MacvlanNetworkStatus>`, :ref:`NicClusterPolicyStatus <NicClusterPolicyStatus>`)
 
 State represents reconcile state of the system.
 
