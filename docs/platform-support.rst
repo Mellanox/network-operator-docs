@@ -155,7 +155,7 @@ Supported Operating Systems and Kubernetes Platforms
 
 .. note::
 
-   Kubernetes support for NVIDIA Spectrum-X Reference Architesture (RA) support is available for a limited set of OS / platform combinations. Please refer to the NVIDIA Spectrum-X RA documentation for more details.
+   Kubernetes support for NVIDIA Spectrum-X Reference Architecture (RA) is currently available for a limited set of OS and platform combinations. For more details, please refer to the NVIDIA Spectrum-X RA documentation.
 
 .. list-table::
    :header-rows: 1
