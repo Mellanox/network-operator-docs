@@ -79,10 +79,7 @@ Install the Network Operator with NFD and SR-IOV Network Operator enabled:
 Create a NicClusterPolicy
 -------------------------
 
-Once the Network Operator is installed, create a NicClusterPolicy with:
-
-- NV-IPAM
-- Secondary network (Multus CNI and CNI plugins)
+Once the Network Operator is installed, create a NicClusterPolicy with Multus CNI and CNI plugins:
 
 .. code-block:: yaml
    :substitutions:
@@ -92,12 +89,6 @@ Once the Network Operator is installed, create a NicClusterPolicy with:
    metadata:
      name: nic-cluster-policy
    spec:
-     nvIpam:
-       image: nvidia-k8s-ipam
-       repository: |nvidia-ipam-repository|
-       version: |nvidia-ipam-version|
-       imagePullSecrets: []
-       enableWebhook: false
      secondaryNetwork:
        cniPlugins:
          image: plugins
@@ -159,34 +150,14 @@ Wait for the policy to be applied:
 The output should show ``Succeeded`` for all nodes.
 
 
-================================
-Step 2: Create an NV-IPAM IPPool
-================================
-
-Create an IPPool object for NV-IPAM to manage IP address allocation for the SR-IOV network:
-
-.. code-block:: yaml
-
-   apiVersion: nv-ipam.nvidia.com/v1alpha1
-   kind: IPPool
-   metadata:
-     name: kubevirt-pool
-     namespace: nvidia-network-operator
-   spec:
-     subnet: 192.168.0.0/24
-     perNodeBlockSize: 100
-     gateway: 192.168.0.1
-
-.. code-block:: bash
-
-   kubectl apply -f ippool.yaml
-
-
 ==============================
-Step 3: Create an SriovNetwork
+Step 2: Create an SriovNetwork
 ==============================
 
 Create an ``SriovNetwork`` CR that references the ``resourceName`` from the policy. This generates a ``NetworkAttachmentDefinition`` that KubeVirt VMs can consume.
+
+.. note::
+   With VFIO passthrough, the VF is passed directly into the guest VM. The host kernel does not see the network interface, so pod-level CNI IPAM cannot assign IPs to the VF. IP addresses must be configured inside the guest (e.g. via cloud-init or DHCP from an external server on the L2 network).
 
 .. code-block:: yaml
 
@@ -198,11 +169,6 @@ Create an ``SriovNetwork`` CR that references the ``resourceName`` from the poli
    spec:
      resourceName: kubevirt_sriov
      networkNamespace: default
-     ipam: |
-       {
-         "type": "nv-ipam",
-         "poolName": "kubevirt-pool"
-       }
      spoofChk: "off"
      trust: "on"
 
@@ -214,10 +180,10 @@ Verify the ``NetworkAttachmentDefinition`` was created:
 
 
 ===============================
-Step 4: Create a VirtualMachine
+Step 3: Create a VirtualMachine
 ===============================
 
-Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the network attachment definition.
+Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the network attachment definition. Since IPAM is handled inside the guest, use cloud-init to configure a static IP on the SR-IOV interface.
 
 .. code-block:: yaml
 
@@ -227,11 +193,8 @@ Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the netw
      name: vm-sriov
      namespace: default
    spec:
-     running: true
+     runStrategy: Always
      template:
-       metadata:
-         annotations:
-           k8s.v1.cni.cncf.io/networks: sriov-kubevirt-net
        spec:
          domain:
            devices:
@@ -240,6 +203,11 @@ Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the netw
                  masquerade: {}
                - name: sriov-net
                  sriov: {}
+             disks:
+               - name: containerdisk
+                 disk: {bus: virtio}
+               - name: cloudinit
+                 disk: {bus: virtio}
            resources:
              requests:
                memory: "4Gi"
@@ -250,11 +218,32 @@ Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the netw
              multus:
                networkName: sriov-kubevirt-net
          volumes:
-           - name: rootdisk
+           - name: containerdisk
              containerDisk:
                image: quay.io/containerdisks/fedora:latest
+           - name: cloudinit
+             cloudInitNoCloud:
+               userData: |-
+                 #cloud-config
+                 password: password123
+                 chpasswd: {expire: false}
+                 ssh_pwauth: true
+                 runcmd:
+                   - |
+                     for i in $(seq 1 30); do
+                       SRIOV_IF=$(ls -1 /sys/class/net/ | grep -v ^lo$ | grep -v ^enp1s0$ | head -1)
+                       [ -n "$SRIOV_IF" ] && break
+                       sleep 1
+                     done
+                     if [ -n "$SRIOV_IF" ]; then
+                       nmcli con add type ethernet ifname $SRIOV_IF con-name sriov \
+                         ipv4.addresses 192.168.0.1/24 ipv4.method manual
+                       nmcli con up sriov
+                     fi
 
-The ``sriov: {}`` interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt's resource injector automatically adds the extended resource request (e.g. ``openshift.io/kubevirt_sriov: "1"``) to the virt-launcher pod.
+The ``sriov: {}`` interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt's resource injector automatically adds the extended resource request (e.g. ``nvidia.com/kubevirt_sriov: "1"``) to the virt-launcher pod.
+
+The cloud-init ``runcmd`` script waits for the SR-IOV interface to appear (the ``mlx5_core`` driver must load first), then configures a static IP using ``nmcli``. Adjust the IP address for each VM accordingly.
 
 
 ============
@@ -271,25 +260,21 @@ Check the VMI is Running
 Verify the VF Inside the Guest
 -------------------------------
 
-Connect to the VM console and check for the SR-IOV device:
+Connect to the VM console:
 
 .. code-block:: bash
 
    virtctl console vm-sriov
 
-Inside the guest:
+Inside the guest, verify the SR-IOV interface and IP configuration:
 
 .. code-block:: bash
 
-   ip link show
+   ip a
+   lspci | grep -i mellanox
 
 .. note::
-   NVIDIA NICs require the ``mlx5_core`` driver inside the guest. Verify the module is loaded:
-
-   .. code-block:: bash
-
-      lsmod | grep mlx5
-      lspci | grep -i mellanox
+   NVIDIA NICs require the ``mlx5_core`` driver inside the guest. If no network interface appears but ``lspci`` shows the device, run ``modprobe mlx5_core``.
 
 
 ==================
@@ -312,11 +297,30 @@ Limitations
 **No live migration**
   VFIO passthrough gives the VM direct access to hardware PCI resources. Live migration is not possible because hardware state cannot be serialized.
 
-**RDMA not available**
-  ``deviceType: vfio-pci`` is incompatible with ``isRdma: true``. RDMA requires the host kernel driver to remain bound to the VF.
+**Host-side RDMA not available**
+  ``deviceType: vfio-pci`` is incompatible with ``isRdma: true`` on the ``SriovNetworkNodePolicy``. RDMA works inside the guest VM because ``mlx5_core`` provides both ethernet and RDMA capabilities. To enable RDMA inside the guest, install the required packages and load the kernel modules:
+
+  .. code-block:: bash
+
+     sudo dnf install -y kernel-modules-extra-$(uname -r) rdma-core
+     sudo modprobe ib_uverbs mlx5_ib
 
 **IOMMU required**
-  Nodes without IOMMU support cannot use VFIO passthrough. Verify with ``dmesg | grep -i iommu`` on the host.
+  Nodes without IOMMU support cannot use VFIO passthrough. Run ``virt-host-validate qemu`` on the worker nodes to check hardware virtualization and IOMMU:
+
+  .. code-block:: bash
+
+     virt-host-validate qemu
+
+  All checks should show ``PASS``, including ``Checking for device assignment IOMMU support`` and ``Checking if IOMMU is enabled by kernel``.
+
+  Confirm IOMMU groups are populated:
+
+  .. code-block:: bash
+
+     ls /sys/kernel/iommu_groups/
+
+  If IOMMU checks fail, enable it on the worker nodes via kernel parameter (``intel_iommu=on iommu=pt`` or ``amd_iommu=on iommu=pt``) and reboot.
 
 
 ===============
