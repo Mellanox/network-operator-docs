@@ -151,7 +151,10 @@ The following NVIDIA Data Center systems have been tested and validated with **N
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
 ====================================================
-**NVIDIA Network Operator** has been validated on the following OS / platform combinations:
+**NVIDIA Network Operator** has been validated on the following OS / platform combinations for Ethernet (RoCE) and InfiniBand (IB RDMA) networking technologies:
+.. note::
+
+   NVIDIA Spectrum-X Reference Architesture (RA) support for Kubernetes is available for a limited set of OS / platform combinations. Please refer to the NVIDIA Spectrum-X RA documentation for more details.
 
 .. list-table::
    :header-rows: 1
@@ -247,6 +250,32 @@ Supported Container Runtimes
      - Yes
      - No
      - 
+
+
+============================
+NVIDIA Spectrum-X RA Support
+============================
+**NVIDIA Network Operator** has been validated in the following versions of NVIDIA Spectrum-X Reference Architecture (RA):
+
+.. note::
+
+    Please refer to the NVIDIA Spectrum-X RA documentation for more details on supported topologies, NIC hardware, software components, and other notes related to each RA version.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Spectrum-X RA Version
+     - Topologies and NIC Hardware
+     - Kubernetes Versions
+     - Operation Systems
+     - Notes
+   * - 2.1
+     - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
+       * Dual/Quad-Plane (NVIDIA ConnectX-8 SuperNIC)
+     - Upstream Kubernetes 1.31–1.35
+     - * Ubuntu 24.04 LTS
+       * Ubuntu 22.04 LTS
+     - Small RA, Software Multi-Plane
 
 ============================================================
 Supported Precompiled Container Images for DOCA-OFED Drivers
