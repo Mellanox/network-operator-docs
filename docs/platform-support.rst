@@ -256,11 +256,11 @@ Supported Container Runtimes
 ============================
 NVIDIA Spectrum-X RA Support
 ============================
-**NVIDIA Network Operator** has been validated in the following versions of NVIDIA Spectrum-X Reference Architecture (RA):
+**NVIDIA Network Operator** has been validated with the following NVIDIA Spectrum-X Reference Architecture (RA) versions:
 
 .. note::
 
-   Please refer to the NVIDIA Spectrum-X RA documentation for more details on supported topologies, NIC hardware, software components, and other notes related to each RA version.
+   For details on supported topologies, NIC hardware, software components, and version-specific notes, refer to the NVIDIA Spectrum-X RA documentation.
 
 .. list-table::
    :header-rows: 1
@@ -268,12 +268,12 @@ NVIDIA Spectrum-X RA Support
    * - Spectrum-X RA Version
      - Topologies and NIC Hardware
      - Kubernetes Versions
-     - Operation Systems
+     - Operating Systems
      - Notes
    * - 2.1
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
-       * Dual/Quad-Plane (NVIDIA ConnectX-8 SuperNIC)
-     - Upstream Kubernetes 1.31–1.35
+       * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
+     - Upstream Kubernetes (v1.31–1.35)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
