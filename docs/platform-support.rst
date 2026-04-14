@@ -152,6 +152,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
 Supported Operating Systems and Kubernetes Platforms
 ====================================================
 **NVIDIA Network Operator** has been validated on the following OS / platform combinations for Ethernet (RoCE) and InfiniBand (IB RDMA) networking technologies:
+
 .. note::
 
    NVIDIA Spectrum-X Reference Architesture (RA) support for Kubernetes is available for a limited set of OS / platform combinations. Please refer to the NVIDIA Spectrum-X RA documentation for more details.
@@ -259,7 +260,7 @@ NVIDIA Spectrum-X RA Support
 
 .. note::
 
-    Please refer to the NVIDIA Spectrum-X RA documentation for more details on supported topologies, NIC hardware, software components, and other notes related to each RA version.
+   Please refer to the NVIDIA Spectrum-X RA documentation for more details on supported topologies, NIC hardware, software components, and other notes related to each RA version.
 
 .. list-table::
    :header-rows: 1
