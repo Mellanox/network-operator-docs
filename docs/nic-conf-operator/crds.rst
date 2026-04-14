@@ -45,8 +45,8 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | ``gpuDirectOptimized``                                                                            | GPU Direct optimization settings                                                                  |
       | :ref:`GpuDirectOptimizedSpec <GpuDirectOptimizedSpec>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==0. Other          |
-      | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | optimizations must be skipped or disabled. RawNvConfig must be empty.                             |
+      | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==1. RawNvConfig    |
+      | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | parameters, if provided, are merged as overrides on top of Spectrum-X calculated params.          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rawNvConfig``                                                                                   | List of arbitrary nv config parameters                                                            |
       | :ref:`[]NvConfigParam <NvConfigParam>`                                                            |                                                                                                   |
