@@ -181,9 +181,9 @@
 <ul>
 <li><p>Requires <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">numVfs=1</span></code></p></li>
 <li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> (RoCE settings are included automatically)</p></li>
-<li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code></p></li>
-<li><p>Only supported on ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Reference Architecture version (<code class="docutils literal notranslate"><span class="pre">RA1.3</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.0</span></code>, or <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>)</p></li>
+<li><p>Can be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> — raw params are merged as overrides on top of Spectrum-X calculated params</p></li>
+<li><p>Only supported on ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Reference Architecture version (<code class="docutils literal notranslate"><span class="pre">RA1.3</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.0</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>, or <code class="docutils literal notranslate"><span class="pre">RA3.0</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Set to <code class="docutils literal notranslate"><span class="pre">l3</span></code> for L3 EVPN overlay</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Only available with RA2.1. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Only available with RA2.1. Options: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
@@ -195,14 +195,14 @@
 <section id="spectrum-x-configuration">
 <h2>Spectrum-X Configuration<a class="headerlink" href="#spectrum-x-configuration" title="Permalink to this headline"></a></h2>
 <p>The NIC Configuration Operator supports Spectrum-X-specific NIC configuration for different versions of the NVIDIA Spectrum-X Reference Architecture (RA1.3, RA2.0, and RA2.1).</p>
-<p>Supported NIC types for Spectrum-X: * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports all multiplane modes * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports all multiplane modes except <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p>
+<p>Supported NIC types for Spectrum-X: * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports all multiplane modes * ConnectX-9 (device ID <code class="docutils literal notranslate"><span class="pre">1025</span></code>) – supports all multiplane modes (same configuration as ConnectX-8) * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports all multiplane modes except <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p>
 <p>RA2.1 introduces multiplane mode support, allowing NICs to be configured with multiple data planes. Available modes:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 38%" />
-<col style="width: 31%" />
-<col style="width: 14%" />
+<col style="width: 15%" />
+<col style="width: 33%" />
+<col style="width: 40%" />
+<col style="width: 13%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Mode</p></th>
@@ -214,22 +214,22 @@
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
 <td><p>Single plane (default)</p></td>
-<td><p>ConnectX-8, BF3 SuperNIC</p></td>
+<td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
 <td><p>Software Packet Load Balancing</p></td>
-<td><p>ConnectX-8, BF3 SuperNIC</p></td>
+<td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
 <td><p>2, 4</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
 <td><p>Hardware Packet Load Balancing</p></td>
-<td><p>ConnectX-8 only</p></td>
+<td><p>ConnectX-8, ConnectX-9 only</p></td>
 <td><p>2, 4</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></td>
 <td><p>Uniplane mode</p></td>
-<td><p>ConnectX-8, BF3 SuperNIC</p></td>
+<td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
 <td><p>2</p></td>
 </tr>
 </tbody>
@@ -248,7 +248,7 @@
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8. Use &quot;a2dc&quot; for BlueField-3 SuperNIC (hwplb not supported on BF3)</span><span class="w"></span>
+<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8. Use &quot;1025&quot; for ConnectX-9, or &quot;a2dc&quot; for BlueField-3 SuperNIC (hwplb not supported on BF3)</span><span class="w"></span>
 <span class="w">      </span><span class="c1"># partNumbers:</span><span class="w"></span>
 <span class="w">      </span><span class="c1">#   - &quot;MCX713106AEHEA_QP1&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
@@ -275,7 +275,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 05, 2026.
+      <span class="lastupdated">Last updated on Apr 14, 2026.
       </span></p>
   </div>
 
