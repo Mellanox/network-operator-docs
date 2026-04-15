@@ -253,9 +253,9 @@ Supported Container Runtimes
      - 
 
 
-============================
-NVIDIA Spectrum-X RA Support
-============================
+==============================================
+NVIDIA Spectrum-X Ethernet Networking Platform
+==============================================
 **NVIDIA Network Operator** has been validated with the following NVIDIA Spectrum-X Reference Architecture (RA) versions:
 
 .. note::
