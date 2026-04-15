@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heterogeneous Clusters with NicNodePolicy &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Life Cycle Management" href="../life-cycle-management.html" />
+    <link rel="prev" title="NicClusterPolicy Custom Resource Example" href="cr-full-example.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="customization.html">Customization Options and CRDs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="helm.html">Helm Chart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html">CRDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cr-full-example.html">NicClusterPolicy Custom Resource Example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Heterogeneous Clusters with NicNodePolicy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-to-use-nicnodepolicy">When to Use NicNodePolicy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-nicclusterpolicy-and-nicnodepolicy-work-together">How NicClusterPolicy and NicNodePolicy Work Together</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ncp-only-deployment-flow">NCP-Only Deployment Flow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ncp-nnp-deployment-flow">NCP + NNP Deployment Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#doca-ofed-driver-upgrades-with-nicnodepolicy">DOCA-OFED Driver Upgrades with NicNodePolicy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-rules-and-restrictions">Deployment Rules and Restrictions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#section-exclusivity">Section Exclusivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#node-selector-overlap-prevention">Node Selector Overlap Prevention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#naming-requirements">Naming Requirements</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#verifying-the-deployment">Verifying the Deployment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="customization.html">Customization Options</a> &raquo;</li>
+<li>Heterogeneous Clusters with NicNodePolicy</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="heterogeneous-clusters-with-nicnodepolicy">
+<h1>Heterogeneous Clusters with NicNodePolicy<a class="headerlink" href="#heterogeneous-clusters-with-nicnodepolicy" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#when-to-use-nicnodepolicy" id="id3">When to Use NicNodePolicy</a></p></li>
+<li><p><a class="reference internal" href="#how-nicclusterpolicy-and-nicnodepolicy-work-together" id="id4">How NicClusterPolicy and NicNodePolicy Work Together</a></p>
+<ul>
+<li><p><a class="reference internal" href="#overview" id="id5">Overview</a></p></li>
+<li><p><a class="reference internal" href="#ncp-only-deployment-flow" id="id6">NCP-Only Deployment Flow</a></p></li>
+<li><p><a class="reference internal" href="#ncp-nnp-deployment-flow" id="id7">NCP + NNP Deployment Flow</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#doca-ofed-driver-upgrades-with-nicnodepolicy" id="id8">DOCA-OFED Driver Upgrades with NicNodePolicy</a></p></li>
+<li><p><a class="reference internal" href="#deployment-rules-and-restrictions" id="id9">Deployment Rules and Restrictions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#section-exclusivity" id="id10">Section Exclusivity</a></p></li>
+<li><p><a class="reference internal" href="#node-selector-overlap-prevention" id="id11">Node Selector Overlap Prevention</a></p></li>
+<li><p><a class="reference internal" href="#naming-requirements" id="id12">Naming Requirements</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id13">Prerequisites</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#verifying-the-deployment" id="id14">Verifying the Deployment</a></p></li>
+</ul>
+</div>
+<p>By default, the NVIDIA Network Operator uses a single NicClusterPolicy (NCP) resource to manage all NIC-related components cluster-wide.
+In heterogeneous clusters, where different groups of nodes require different DOCA-OFED driver versions or device plugin configurations, this single-policy model is not sufficient.
+NicNodePolicy (NNP) addresses this by allowing you to create multiple per-node-group policies, each targeting specific nodes via <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> labels.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>NicNodePolicy is recommended for <strong>new deployments only</strong>. There is no automated migration path
+to transition an existing NicClusterPolicy-only deployment to use NicNodePolicies. Migrating
+an existing cluster requires manually removing per-node sections from NicClusterPolicy and
+creating corresponding NicNodePolicy resources, which causes temporary disruption to affected
+components.</p>
+</div>
+<section id="when-to-use-nicnodepolicy">
+<h2>When to Use NicNodePolicy<a class="headerlink" href="#when-to-use-nicnodepolicy" title="Permalink to this headline"></a></h2>
+<p>For new deployments, NicNodePolicy is the <strong>recommended</strong> approach for managing per-node NIC components (DOCA-OFED driver, RDMA shared device plugin, SR-IOV device plugin), even in homogeneous clusters. Using NicNodePolicy from the start provides a consistent deployment model and makes it straightforward to support heterogeneous configurations in the future without re-architecting your policies.</p>
+<p>NicNodePolicy is especially valuable when:</p>
+<ul class="simple">
+<li><p>Different groups of nodes need different DOCA-OFED driver versions (e.g., GPU nodes on the latest DOCA release, storage nodes on an LTS release).</p></li>
+<li><p>Different node groups need different SR-IOV device plugin configurations.</p></li>
+<li><p>Different node groups need different RDMA shared device plugin configurations.</p></li>
+<li><p>You need independent DOCA-OFED driver upgrade schedules per node group.</p></li>
+</ul>
+<p>NicClusterPolicy alone is sufficient when you have an existing deployment that already manages per-node components through NCP and does not require heterogeneous configurations. Cluster-wide components such as Multus, NV-IPAM, and NIC Configuration Operator are always managed exclusively by NicClusterPolicy regardless of whether NicNodePolicy is used.</p>
+</section>
+<section id="how-nicclusterpolicy-and-nicnodepolicy-work-together">
+<h2>How NicClusterPolicy and NicNodePolicy Work Together<a class="headerlink" href="#how-nicclusterpolicy-and-nicnodepolicy-work-together" title="Permalink to this headline"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h3>
+<p>NicClusterPolicy is a singleton resource (always named <code class="docutils literal notranslate"><span class="pre">nic-cluster-policy</span></code>) that manages up to 12 component types cluster-wide.
+NicNodePolicy allows creating multiple instances, each targeting a specific set of nodes via <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, but only for a subset of 3 components.</p>
+<p>The following table shows which components can be managed by each policy type.
+See the <a class="reference internal" href="crds.html#nicclusterpolicyspec"><span class="std std-ref">NicClusterPolicySpec</span></a> and <a class="reference internal" href="crds.html#nicnodepolicyspec"><span class="std std-ref">NicNodePolicySpec</span></a> API references for full field details.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Component Ownership</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 60%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Component</strong></p></th>
+<th class="head"><p><strong>NCP</strong></p></th>
+<th class="head"><p><strong>NNP</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#ofeddriverspec">DOCA-OFED Driver</a></p></td>
+<td><p>•</p></td>
+<td><p>•</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#devicepluginspec">RDMA Shared Device Plugin</a></p></td>
+<td><p>•</p></td>
+<td><p>•</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#devicepluginspec">SR-IOV Device Plugin</a></p></td>
+<td><p>•</p></td>
+<td><p>•</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#secondarynetworkspec">Multus CNI</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#secondarynetworkspec">CNI Plugins</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#secondarynetworkspec">IPoIB CNI</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#nvipamspec">NV-IPAM</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#nicconfigurationoperatorspec">NIC Configuration Operator</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#docatelemetryservicespec">DOCA Telemetry Service</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#spectrumxoperatorspec">Spectrum-X Operator</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="crds.html#ibkubernetesspec">IB Kubernetes</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="crds.html#nicfeaturediscoveryspec">NIC Feature Discovery</a></p></td>
+<td><p>•</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Cluster-wide infrastructure components (Multus, NV-IPAM, NIC Configuration Operator, etc.) always remain in NicClusterPolicy.
+Per-node components (DOCA-OFED driver and device plugins) can be moved to NicNodePolicy instances to support heterogeneous configurations.</p>
+</section>
+<section id="ncp-only-deployment-flow">
+<h3>NCP-Only Deployment Flow<a class="headerlink" href="#ncp-only-deployment-flow" title="Permalink to this headline"></a></h3>
+<p>In a homogeneous cluster, NicClusterPolicy manages everything. All nodes run the same DOCA-OFED driver version and device plugin configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.1.1.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;rdmaHcaMax&quot;: 63,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;]</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="ncp-nnp-deployment-flow">
+<h3>NCP + NNP Deployment Flow<a class="headerlink" href="#ncp-nnp-deployment-flow" title="Permalink to this headline"></a></h3>
+<p>In a heterogeneous cluster, NicClusterPolicy retains only cluster-wide components.
+Per-node components move to NicNodePolicy instances, each targeting a specific node group:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cluster-wide components only</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># GPU nodes: latest DOCA driver with RDMA</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gpu-nodes</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">node-role.kubernetes.io/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.1.1.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaSharedDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s-rdma-shared-dev-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;configList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;rdma_shared_device_a&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;rdmaHcaMax&quot;: 63,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;]</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># Storage nodes: LTS DOCA driver with SR-IOV</span><span class="w"></span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">storage-nodes</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">node-role.kubernetes.io/storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ofedDriver</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca-driver</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24.10-0.7.0.0-0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">upgradePolicy</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">autoUpgrade</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">      </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovDevicePlugin</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-network-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">      </span><span class="no">{</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;resourceList&quot;: [</span><span class="w"></span>
+<span class="w">          </span><span class="no">{</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourcePrefix&quot;: &quot;nvidia.com&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;resourceName&quot;: &quot;sriov_rdma&quot;,</span><span class="w"></span>
+<span class="w">            </span><span class="no">&quot;selectors&quot;: {</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;vendors&quot;: [&quot;15b3&quot;],</span><span class="w"></span>
+<span class="w">              </span><span class="no">&quot;isRdma&quot;: true</span><span class="w"></span>
+<span class="w">            </span><span class="no">}</span><span class="w"></span>
+<span class="w">          </span><span class="no">}</span><span class="w"></span>
+<span class="w">        </span><span class="no">]</span><span class="w"></span>
+<span class="w">      </span><span class="no">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Notice that the <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> section is absent from NicClusterPolicy and present in both NicNodePolicy instances.
+Each NNP targets a distinct set of nodes with different DOCA-OFED versions and device plugin types.</p>
+</section>
+</section>
+<section id="doca-ofed-driver-upgrades-with-nicnodepolicy">
+<h2>DOCA-OFED Driver Upgrades with NicNodePolicy<a class="headerlink" href="#doca-ofed-driver-upgrades-with-nicnodepolicy" title="Permalink to this headline"></a></h2>
+<p>Each NicNodePolicy with an <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> section gets its own independent upgrade state manager.
+Upgrading the DOCA-OFED driver on one node group does not affect other node groups.</p>
+<p>Key behaviors:</p>
+<ul class="simple">
+<li><p>Each NicNodePolicy has a separate <code class="docutils literal notranslate"><span class="pre">maxParallelUpgrades</span></code> setting.</p></li>
+<li><p>In maintenance-operator mode, each NicNodePolicy creates its own <code class="docutils literal notranslate"><span class="pre">NodeMaintenance</span></code> custom resources with a policy-specific requestor ID.</p></li>
+<li><p>Upgrade progress is tracked independently per policy via the <code class="docutils literal notranslate"><span class="pre">nvidia.com/ofed-driver-upgrade-state</span></code> node label.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For general DOCA-OFED driver upgrade configuration, see the
+<a class="reference external" href="../life-cycle-management.html#automatic-doca-ofed-driver-upgrade">Automatic DOCA-OFED Driver Upgrade</a>
+section in the Life Cycle Management page.</p>
+</div>
+</section>
+<section id="deployment-rules-and-restrictions">
+<h2>Deployment Rules and Restrictions<a class="headerlink" href="#deployment-rules-and-restrictions" title="Permalink to this headline"></a></h2>
+<section id="section-exclusivity">
+<h3>Section Exclusivity<a class="headerlink" href="#section-exclusivity" title="Permalink to this headline"></a></h3>
+<p>A given section (<code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>, <code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>, <code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>) can exist in <strong>either</strong> NicClusterPolicy or NicNodePolicy instances, but <strong>not both simultaneously</strong>.
+This rule is enforced by the admission webhook and prevents conflicting configurations.</p>
+<p>For example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>VALID configuration:
+  NicClusterPolicy:  secondaryNetwork, nvIpam
+  NicNodePolicy &quot;gpu-nodes&quot;:      ofedDriver, rdmaSharedDevicePlugin
+  NicNodePolicy &quot;storage-nodes&quot;:  ofedDriver, sriovDevicePlugin
+
+INVALID configuration (rejected by webhook):
+  NicClusterPolicy:  ofedDriver            &lt;-- conflict
+  NicNodePolicy &quot;gpu-nodes&quot;:  ofedDriver   &lt;-- same section in both
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Section exclusivity is enforced per section, not per NicNodePolicy instance. If <strong>any</strong> NicNodePolicy
+defines <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>, then NicClusterPolicy must <strong>not</strong> define <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>, and vice versa.</p>
+</div>
+</section>
+<section id="node-selector-overlap-prevention">
+<h3>Node Selector Overlap Prevention<a class="headerlink" href="#node-selector-overlap-prevention" title="Permalink to this headline"></a></h3>
+<p>Two NicNodePolicy instances must not select overlapping sets of nodes. This is validated at two points:</p>
+<ol class="arabic simple">
+<li><p><strong>At admission time</strong> – the validating webhook resolves node selectors against actual cluster nodes and checks for intersection. If overlap is found, the create or update request is rejected.</p></li>
+<li><p><strong>At runtime</strong> – the NicNodePolicy controller re-checks for overlap on every reconciliation to catch cases where nodes are re-labeled after the initial admission check. If overlap is detected, the affected NicNodePolicy status is set to <code class="docutils literal notranslate"><span class="pre">Error</span></code> with a message describing which nodes overlap, and no DaemonSet changes are applied until the overlap is resolved.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># VALID: non-overlapping node selectors</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># NicNodePolicy &quot;gpu-nodes&quot;</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">node-role.kubernetes.io/gpu</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># NicNodePolicy &quot;storage-nodes&quot;</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">node-role.kubernetes.io/storage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># INVALID: if any node has BOTH labels, overlap is detected</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># NicNodePolicy &quot;pool-a&quot;</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">datacenter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># NicNodePolicy &quot;pool-b&quot;</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rack</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">row-1</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The overlap check resolves selectors against the actual nodes in the cluster. Two NicNodePolicies
+with different label keys can still overlap if any node happens to match both selectors.</p>
+</div>
+</section>
+<section id="naming-requirements">
+<h3>Naming Requirements<a class="headerlink" href="#naming-requirements" title="Permalink to this headline"></a></h3>
+<p>NicNodePolicy names must be <strong>at most 30 characters</strong> long. This limit exists because derived resource names (such as DaemonSet names and label values) incorporate the policy name and must stay within the Kubernetes 63-character label value limit.</p>
+<p>Kubernetes short names for NicNodePolicy: <code class="docutils literal notranslate"><span class="pre">nicnode</span></code>, <code class="docutils literal notranslate"><span class="pre">nnp</span></code>.</p>
+<p>Each NicNodePolicy creates uniquely-named DaemonSets by appending the policy name as a suffix:</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">DaemonSet Naming</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Policy</strong></p></th>
+<th class="head"><p><strong>DaemonSet Name Pattern</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NicClusterPolicy</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mofed-&lt;os&gt;&lt;version&gt;-&lt;hash&gt;-ds</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>NicNodePolicy <code class="docutils literal notranslate"><span class="pre">gpu-nodes</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mofed-&lt;os&gt;&lt;version&gt;-&lt;hash&gt;-gpu-nodes-ds</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
+<p>The admission controller must be enabled for the section exclusivity and node overlap validation rules to be enforced.
+Set <code class="docutils literal notranslate"><span class="pre">operator.admissionController.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the Helm chart values.
+See <a class="reference internal" href="../advanced/advanced-configurations.html"><span class="doc">Advanced Configurations</span></a> for admission controller deployment details.</p>
+</section>
+</section>
+<section id="verifying-the-deployment">
+<h2>Verifying the Deployment<a class="headerlink" href="#verifying-the-deployment" title="Permalink to this headline"></a></h2>
+<p>List all NicNodePolicy resources:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicnodepolicies
+</pre></div>
+</div>
+<p>Check the status of a specific NicNodePolicy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nnp gpu-nodes -o yaml
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">ready</span></code> status indicates that the NicNodePolicy has been successfully applied.
+An <code class="docutils literal notranslate"><span class="pre">state:</span> <span class="pre">error</span></code> status with a <code class="docutils literal notranslate"><span class="pre">reason</span></code> field indicates a problem, such as a node selector overlap.</p>
+<p>Verify the DaemonSets created by a NicNodePolicy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get ds -n nvidia-network-operator -l nvidia.com/ofed-driver<span class="o">=</span>
+</pre></div>
+</div>
+<p>Check for policy errors across all NicNodePolicies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nnp -o custom-columns<span class="o">=</span>NAME:.metadata.name,STATE:.status.state,REASON:.status.reason
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Apr 15, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
