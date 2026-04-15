@@ -71,9 +71,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy">Step 1: Create an SriovNetworkNodePolicy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-2-create-an-nv-ipam-ippool">Step 2: Create an NV-IPAM IPPool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-3-create-an-sriovnetwork">Step 3: Create an SriovNetwork</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-4-create-a-virtualmachine">Step 4: Create a VirtualMachine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-an-sriovnetwork">Step 2: Create an SriovNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-a-virtualmachine">Step 3: Create a VirtualMachine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#check-the-vmi-is-running">Check the VMI is Running</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#verify-the-vf-inside-the-guest">Verify the VF Inside the Guest</a></li>
@@ -138,22 +137,21 @@
 </ul>
 </li>
 <li><p><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy" id="id4">Step 1: Create an SriovNetworkNodePolicy</a></p></li>
-<li><p><a class="reference internal" href="#step-2-create-an-nv-ipam-ippool" id="id5">Step 2: Create an NV-IPAM IPPool</a></p></li>
-<li><p><a class="reference internal" href="#step-3-create-an-sriovnetwork" id="id6">Step 3: Create an SriovNetwork</a></p></li>
-<li><p><a class="reference internal" href="#step-4-create-a-virtualmachine" id="id7">Step 4: Create a VirtualMachine</a></p></li>
-<li><p><a class="reference internal" href="#verification" id="id8">Verification</a></p>
+<li><p><a class="reference internal" href="#step-2-create-an-sriovnetwork" id="id5">Step 2: Create an SriovNetwork</a></p></li>
+<li><p><a class="reference internal" href="#step-3-create-a-virtualmachine" id="id6">Step 3: Create a VirtualMachine</a></p></li>
+<li><p><a class="reference internal" href="#verification" id="id7">Verification</a></p>
 <ul>
-<li><p><a class="reference internal" href="#check-the-vmi-is-running" id="id9">Check the VMI is Running</a></p></li>
-<li><p><a class="reference internal" href="#verify-the-vf-inside-the-guest" id="id10">Verify the VF Inside the Guest</a></p></li>
+<li><p><a class="reference internal" href="#check-the-vmi-is-running" id="id8">Check the VMI is Running</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-vf-inside-the-guest" id="id9">Verify the VF Inside the Guest</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#guest-driver-note" id="id11">Guest Driver Note</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id12">Limitations</a></p></li>
-<li><p><a class="reference internal" href="#troubleshooting" id="id13">Troubleshooting</a></p>
+<li><p><a class="reference internal" href="#guest-driver-note" id="id10">Guest Driver Note</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id12">Troubleshooting</a></p>
 <ul>
-<li><p><a class="reference internal" href="#vf-not-available-on-node" id="id14">VF Not Available on Node</a></p></li>
-<li><p><a class="reference internal" href="#vmi-fails-to-start" id="id15">VMI Fails to Start</a></p></li>
-<li><p><a class="reference internal" href="#no-network-interface-in-guest" id="id16">No Network Interface in Guest</a></p></li>
+<li><p><a class="reference internal" href="#vf-not-available-on-node" id="id13">VF Not Available on Node</a></p></li>
+<li><p><a class="reference internal" href="#vmi-fails-to-start" id="id14">VMI Fails to Start</a></p></li>
+<li><p><a class="reference internal" href="#no-network-interface-in-guest" id="id15">No Network Interface in Guest</a></p></li>
 </ul>
 </li>
 </ul>
@@ -205,22 +203,12 @@ The VM gets near-native network performance because the data path bypasses the h
 </section>
 <section id="create-a-nicclusterpolicy">
 <h3>Create a NicClusterPolicy<a class="headerlink" href="#create-a-nicclusterpolicy" title="Permalink to this headline"></a></h3>
-<p>Once the Network Operator is installed, create a NicClusterPolicy with:</p>
-<ul class="simple">
-<li><p>NV-IPAM</p></li>
-<li><p>Secondary network (Multus CNI and CNI plugins)</p></li>
-</ul>
+<p>Once the Network Operator is installed, create a NicClusterPolicy with Multus CNI and CNI plugins:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">nvIpam</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-k8s-ipam</span><span class="w"></span>
-<span class="w">    </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
-<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.3</span><span class="w"></span>
-<span class="w">    </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">enableWebhook</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
@@ -272,27 +260,13 @@ The VM gets near-native network performance because the data path bypasses the h
 </div>
 <p>The output should show <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code> for all nodes.</p>
 </section>
-<section id="step-2-create-an-nv-ipam-ippool">
-<h2>Step 2: Create an NV-IPAM IPPool<a class="headerlink" href="#step-2-create-an-nv-ipam-ippool" title="Permalink to this headline"></a></h2>
-<p>Create an IPPool object for NV-IPAM to manage IP address allocation for the SR-IOV network:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IPPool</span><span class="w"></span>
-<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt-pool</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/24</span><span class="w"></span>
-<span class="w">  </span><span class="nt">perNodeBlockSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span><span class="w"></span>
-<span class="w">  </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.1</span><span class="w"></span>
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f ippool.yaml
-</pre></div>
-</div>
-</section>
-<section id="step-3-create-an-sriovnetwork">
-<h2>Step 3: Create an SriovNetwork<a class="headerlink" href="#step-3-create-an-sriovnetwork" title="Permalink to this headline"></a></h2>
+<section id="step-2-create-an-sriovnetwork">
+<h2>Step 2: Create an SriovNetwork<a class="headerlink" href="#step-2-create-an-sriovnetwork" title="Permalink to this headline"></a></h2>
 <p>Create an <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code> CR that references the <code class="docutils literal notranslate"><span class="pre">resourceName</span></code> from the policy. This generates a <code class="docutils literal notranslate"><span class="pre">NetworkAttachmentDefinition</span></code> that KubeVirt VMs can consume.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With VFIO passthrough, the VF is passed directly into the guest VM. The host kernel does not see the network interface, so pod-level CNI IPAM cannot assign IPs to the VF. IP addresses must be configured inside the guest (e.g. via cloud-init or DHCP from an external server on the L2 network).</p>
+</div>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetwork</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
@@ -301,11 +275,6 @@ The VM gets near-native network performance because the data path bypasses the h
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt_sriov</span><span class="w"></span>
 <span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ipam</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">    </span><span class="no">{</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;type&quot;: &quot;nv-ipam&quot;,</span><span class="w"></span>
-<span class="w">      </span><span class="no">&quot;poolName&quot;: &quot;kubevirt-pool&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="no">}</span><span class="w"></span>
 <span class="w">  </span><span class="nt">spoofChk</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;off&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span><span class="w"></span>
 </pre></div>
@@ -315,20 +284,17 @@ The VM gets near-native network performance because the data path bypasses the h
 </pre></div>
 </div>
 </section>
-<section id="step-4-create-a-virtualmachine">
-<h2>Step 4: Create a VirtualMachine<a class="headerlink" href="#step-4-create-a-virtualmachine" title="Permalink to this headline"></a></h2>
-<p>Define a <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code> with an <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface pointing at the network attachment definition.</p>
+<section id="step-3-create-a-virtualmachine">
+<h2>Step 3: Create a VirtualMachine<a class="headerlink" href="#step-3-create-a-virtualmachine" title="Permalink to this headline"></a></h2>
+<p>Define a <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code> with an <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface pointing at the network attachment definition. Since IPAM is handled inside the guest, use cloud-init to configure a static IP on the SR-IOV interface.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VirtualMachine</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm-sriov</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
 <span class="nt">spec</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">running</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">runStrategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-kubevirt-net</span><span class="w"></span>
 <span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">domain</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="nt">devices</span><span class="p">:</span><span class="w"></span>
@@ -337,6 +303,11 @@ The VM gets near-native network performance because the data path bypasses the h
 <span class="w">              </span><span class="nt">masquerade</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-net</span><span class="w"></span>
 <span class="w">              </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">          </span><span class="nt">disks</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span><span class="w"></span>
+<span class="w">              </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="nv">virtio</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinit</span><span class="w"></span>
+<span class="w">              </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="nv">virtio</span><span class="p p-Indicator">}</span><span class="w"></span>
 <span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span><span class="w"></span>
@@ -347,12 +318,32 @@ The VM gets near-native network performance because the data path bypasses the h
 <span class="w">          </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-kubevirt-net</span><span class="w"></span>
 <span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rootdisk</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span><span class="w"></span>
 <span class="w">          </span><span class="nt">containerDisk</span><span class="p">:</span><span class="w"></span>
 <span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quay.io/containerdisks/fedora:latest</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinit</span><span class="w"></span>
+<span class="w">          </span><span class="nt">cloudInitNoCloud</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">userData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span><span class="w"></span>
+<span class="w">              </span><span class="no">#cloud-config</span><span class="w"></span>
+<span class="w">              </span><span class="no">password: password123</span><span class="w"></span>
+<span class="w">              </span><span class="no">chpasswd: {expire: false}</span><span class="w"></span>
+<span class="w">              </span><span class="no">ssh_pwauth: true</span><span class="w"></span>
+<span class="w">              </span><span class="no">runcmd:</span><span class="w"></span>
+<span class="w">                </span><span class="no">- |</span><span class="w"></span>
+<span class="w">                  </span><span class="no">for i in $(seq 1 30); do</span><span class="w"></span>
+<span class="w">                    </span><span class="no">SRIOV_IF=$(ls -1 /sys/class/net/ | grep -v ^lo$ | grep -v ^enp1s0$ | head -1)</span><span class="w"></span>
+<span class="w">                    </span><span class="no">[ -n &quot;$SRIOV_IF&quot; ] &amp;&amp; break</span><span class="w"></span>
+<span class="w">                    </span><span class="no">sleep 1</span><span class="w"></span>
+<span class="w">                  </span><span class="no">done</span><span class="w"></span>
+<span class="w">                  </span><span class="no">if [ -n &quot;$SRIOV_IF&quot; ]; then</span><span class="w"></span>
+<span class="w">                    </span><span class="no">nmcli con add type ethernet ifname $SRIOV_IF con-name sriov \</span><span class="w"></span>
+<span class="w">                      </span><span class="no">ipv4.addresses 192.168.0.1/24 ipv4.method manual</span><span class="w"></span>
+<span class="w">                    </span><span class="no">nmcli con up sriov</span><span class="w"></span>
+<span class="w">                  </span><span class="no">fi</span><span class="w"></span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt’s resource injector automatically adds the extended resource request (e.g. <code class="docutils literal notranslate"><span class="pre">openshift.io/kubevirt_sriov:</span> <span class="pre">&quot;1&quot;</span></code>) to the virt-launcher pod.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt’s resource injector automatically adds the extended resource request (e.g. <code class="docutils literal notranslate"><span class="pre">nvidia.com/kubevirt_sriov:</span> <span class="pre">&quot;1&quot;</span></code>) to the virt-launcher pod.</p>
+<p>The cloud-init <code class="docutils literal notranslate"><span class="pre">runcmd</span></code> script waits for the SR-IOV interface to appear (the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver must load first), then configures a static IP using <code class="docutils literal notranslate"><span class="pre">nmcli</span></code>. Adjust the IP address for each VM accordingly.</p>
 </section>
 <section id="verification">
 <h2>Verification<a class="headerlink" href="#verification" title="Permalink to this headline"></a></h2>
@@ -364,21 +355,18 @@ The VM gets near-native network performance because the data path bypasses the h
 </section>
 <section id="verify-the-vf-inside-the-guest">
 <h3>Verify the VF Inside the Guest<a class="headerlink" href="#verify-the-vf-inside-the-guest" title="Permalink to this headline"></a></h3>
-<p>Connect to the VM console and check for the SR-IOV device:</p>
+<p>Connect to the VM console:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtctl console vm-sriov
 </pre></div>
 </div>
-<p>Inside the guest:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ip link show
+<p>Inside the guest, verify the SR-IOV interface and IP configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ip a
+lspci <span class="p">|</span> grep -i mellanox
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NVIDIA NICs require the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver inside the guest. Verify the module is loaded:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsmod <span class="p">|</span> grep mlx5
-lspci <span class="p">|</span> grep -i mellanox
-</pre></div>
-</div>
+<p>NVIDIA NICs require the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver inside the guest. If no network interface appears but <code class="docutils literal notranslate"><span class="pre">lspci</span></code> shows the device, run <code class="docutils literal notranslate"><span class="pre">modprobe</span> <span class="pre">mlx5_core</span></code>.</p>
 </div>
 </section>
 </section>
@@ -396,12 +384,25 @@ lspci <span class="p">|</span> grep -i mellanox
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline"></a></h2>
-<dl class="simple">
+<dl>
 <dt><strong>No live migration</strong></dt><dd><p>VFIO passthrough gives the VM direct access to hardware PCI resources. Live migration is not possible because hardware state cannot be serialized.</p>
 </dd>
-<dt><strong>RDMA not available</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code> is incompatible with <code class="docutils literal notranslate"><span class="pre">isRdma:</span> <span class="pre">true</span></code>. RDMA requires the host kernel driver to remain bound to the VF.</p>
+<dt><strong>Host-side RDMA not available</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code> is incompatible with <code class="docutils literal notranslate"><span class="pre">isRdma:</span> <span class="pre">true</span></code> on the <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code>. RDMA works inside the guest VM because <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> provides both ethernet and RDMA capabilities. To enable RDMA inside the guest, install the required packages and load the kernel modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo dnf install -y kernel-modules-extra-<span class="k">$(</span>uname -r<span class="k">)</span> rdma-core
+sudo modprobe ib_uverbs mlx5_ib
+</pre></div>
+</div>
 </dd>
-<dt><strong>IOMMU required</strong></dt><dd><p>Nodes without IOMMU support cannot use VFIO passthrough. Verify with <code class="docutils literal notranslate"><span class="pre">dmesg</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">-i</span> <span class="pre">iommu</span></code> on the host.</p>
+<dt><strong>IOMMU required</strong></dt><dd><p>Nodes without IOMMU support cannot use VFIO passthrough. Run <code class="docutils literal notranslate"><span class="pre">virt-host-validate</span> <span class="pre">qemu</span></code> on the worker nodes to check hardware virtualization and IOMMU:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virt-host-validate qemu
+</pre></div>
+</div>
+<p>All checks should show <code class="docutils literal notranslate"><span class="pre">PASS</span></code>, including <code class="docutils literal notranslate"><span class="pre">Checking</span> <span class="pre">for</span> <span class="pre">device</span> <span class="pre">assignment</span> <span class="pre">IOMMU</span> <span class="pre">support</span></code> and <code class="docutils literal notranslate"><span class="pre">Checking</span> <span class="pre">if</span> <span class="pre">IOMMU</span> <span class="pre">is</span> <span class="pre">enabled</span> <span class="pre">by</span> <span class="pre">kernel</span></code>.</p>
+<p>Confirm IOMMU groups are populated:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls /sys/kernel/iommu_groups/
+</pre></div>
+</div>
+<p>If IOMMU checks fail, enable it on the worker nodes via kernel parameter (<code class="docutils literal notranslate"><span class="pre">intel_iommu=on</span> <span class="pre">iommu=pt</span></code> or <code class="docutils literal notranslate"><span class="pre">amd_iommu=on</span> <span class="pre">iommu=pt</span></code>) and reboot.</p>
 </dd>
 </dl>
 </section>
@@ -455,7 +456,7 @@ lspci <span class="p">|</span> grep -i mellanox
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 14, 2026.
+      <span class="lastupdated">Last updated on Apr 15, 2026.
       </span></p>
   </div>
 
