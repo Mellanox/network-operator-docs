@@ -168,7 +168,6 @@ build-cache:
 	else \
 		echo "Creating $(CACHE_DIR)..."; \
 		mkdir -p $(CACHE_DIR); \
-		# Add commands to populate the cache here \
 		export PM_PACKAGES_ROOT=${CACHE_DIR}; \
 		${CURDIR}/repo.sh docs || true; \
 		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions sphinxext-remoteliteralinclude; \
@@ -219,6 +218,16 @@ generate-docs-versions-var: | $(BUILDDIR)
 .PHONY: release-build
 release-build: api-docs helm-docs generate-docs-versions-var nic-conf-docs process-examples
 	@echo "Completed release build with all documentation targets"
+
+# Build documentation inside a Docker container (works on any platform).
+# Runs the full repoman/packman pipeline in linux-x86_64 as expected by the toolchain.
+DOCS_DOCKER_IMAGE ?= network-operator-docs-builder
+
+.PHONY: gen-docs-docker
+gen-docs-docker:
+	docker build -t $(DOCS_DOCKER_IMAGE) -f Dockerfile.docs .
+	docker run --rm -v $(CURDIR)/_build:/out $(DOCS_DOCKER_IMAGE)
+	@echo "Build complete. Output in _build/"
 
 .PHONY: clean
 clean:

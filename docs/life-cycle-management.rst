@@ -173,6 +173,13 @@ Automatic DOCA-OFED Driver Upgrade
 
 To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section for the ofedDriver in the NicClusterPolicy spec, and change the DOCA-OFED Driver version.
 
+.. note::
+
+   When using NicNodePolicy for heterogeneous clusters, each NicNodePolicy with an
+   ``ofedDriver`` section manages its own independent upgrade lifecycle with separate
+   ``maxParallelUpgrades`` settings and upgrade state tracking.
+   See :doc:`customizations/nic-node-policy` for details.
+
 ``nicclusterpolicy.yaml``:
 
 .. code-block:: yaml

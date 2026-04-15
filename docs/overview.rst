@@ -45,6 +45,9 @@ Networking Features
 **Driver Management**
   Automated deployment and management of NVIDIA DOCA-OFED networking drivers across cluster nodes with version control and updates.
 
+**Heterogeneous Cluster Support**
+  Per-node-group NIC driver and device plugin configurations via NicNodePolicy, enabling different DOCA-OFED versions for different node roles.
+
 ==================
 Supported Hardware
 ==================

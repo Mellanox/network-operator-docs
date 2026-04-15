@@ -1,0 +1,38 @@
+# Packman only publishes linux-x86_64 packages, so force amd64.
+FROM --platform=linux/amd64 ubuntu:24.04
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        bash \
+        ca-certificates \
+        curl \
+        git \
+        make \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /docs
+
+ENV PM_PACKAGES_ROOT=/tmp/packman-cache
+
+# --- Cached layer: bootstrap packman and install all dependencies. ---
+# These files rarely change, so this layer stays cached across doc edits.
+COPY tools/ tools/
+COPY deps/ deps/
+COPY repo.toml repo.toml
+
+# Bootstrap packman, pull repo_man + repo_docs + sphinx.
+# Needs a minimal docs/ dir to satisfy repo.sh, but the real content comes later.
+RUN mkdir -p docs && touch docs/index.rst \
+    && ./tools/packman/python.sh tools/repoman/repoman.py docs || true
+
+# Install extra Sphinx extensions into the packman Sphinx site-packages.
+RUN tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U \
+        -t ${PM_PACKAGES_ROOT}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ \
+        Sphinx-Substitution-Extensions sphinxext-remoteliteralinclude
+
+# --- Uncached layer: copy actual doc sources and build. ---
+COPY . .
+
+RUN ./repo.sh docs
+
+# On 'docker run' copy the build output to /out (bind-mounted from host).
+CMD ["cp", "-a", "_build/.", "/out/"]
