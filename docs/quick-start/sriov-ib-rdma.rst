@@ -21,6 +21,11 @@
 Deploy SR-IOV InfiniBand Network with RDMA
 *************************************************
 
+.. note::
+
+   You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+   For more details, see :doc:`Configuration Assistance with Kubernetes Launch Kit <../k8s-launch-kit>`.
+
 **Step 1**: Create NicClusterPolicy for InfiniBand
 
 .. literalinclude:: ../../examples/processed/sriov-ib-rdma/10-nicclusterpolicy.yaml
