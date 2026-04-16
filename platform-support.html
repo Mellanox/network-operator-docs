@@ -62,6 +62,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#supported-nvidia-data-center-systems">Supported NVIDIA Data Center Systems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms">Supported Operating Systems and Kubernetes Platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-container-runtimes">Supported Container Runtimes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#nvidia-spectrum-x-ethernet-networking-platform">NVIDIA Spectrum-X Ethernet Networking Platform</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#supported-precompiled-container-images-for-doca-ofed-drivers">Supported Precompiled Container Images for DOCA-OFED Drivers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#supported-operating-systems">Supported Operating Systems</a></li>
@@ -129,15 +130,16 @@
 <li><p><a class="reference internal" href="#supported-nvidia-data-center-systems" id="id9">Supported NVIDIA Data Center Systems</a></p></li>
 <li><p><a class="reference internal" href="#supported-operating-systems-and-kubernetes-platforms" id="id10">Supported Operating Systems and Kubernetes Platforms</a></p></li>
 <li><p><a class="reference internal" href="#supported-container-runtimes" id="id11">Supported Container Runtimes</a></p></li>
-<li><p><a class="reference internal" href="#supported-precompiled-container-images-for-doca-ofed-drivers" id="id12">Supported Precompiled Container Images for DOCA-OFED Drivers</a></p>
+<li><p><a class="reference internal" href="#nvidia-spectrum-x-ethernet-networking-platform" id="id12">NVIDIA Spectrum-X Ethernet Networking Platform</a></p></li>
+<li><p><a class="reference internal" href="#supported-precompiled-container-images-for-doca-ofed-drivers" id="id13">Supported Precompiled Container Images for DOCA-OFED Drivers</a></p>
 <ul>
-<li><p><a class="reference internal" href="#overview" id="id13">Overview</a></p></li>
-<li><p><a class="reference internal" href="#supported-operating-systems" id="id14">Supported Operating Systems</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id15">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id14">Overview</a></p></li>
+<li><p><a class="reference internal" href="#supported-operating-systems" id="id15">Supported Operating Systems</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id16">Limitations</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#network-operator-component-matrix" id="id16">Network Operator Component Matrix</a></p></li>
-<li><p><a class="reference internal" href="#additional-supported-tools-and-integrations" id="id17">Additional Supported Tools and Integrations</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-component-matrix" id="id17">Network Operator Component Matrix</a></p></li>
+<li><p><a class="reference internal" href="#additional-supported-tools-and-integrations" id="id18">Additional Supported Tools and Integrations</a></p></li>
 </ul>
 </div>
 <section id="prerequisites">
@@ -309,7 +311,11 @@
 </section>
 <section id="supported-operating-systems-and-kubernetes-platforms">
 <h2>Supported Operating Systems and Kubernetes Platforms<a class="headerlink" href="#supported-operating-systems-and-kubernetes-platforms" title="Permalink to this headline"></a></h2>
-<p><strong>NVIDIA Network Operator</strong> has been validated on the following OS / platform combinations:</p>
+<p><strong>NVIDIA Network Operator</strong> has been validated on the following OS and platform combinations for Ethernet (RoCE) and InfiniBand (IB RDMA):</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Kubernetes support for the NVIDIA Spectrum-X Reference Architecture (RA) is limited to a subset of OS and platform combinations. For details, refer to the NVIDIA Spectrum-X RA documentation.</p>
+</div>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 14%" />
@@ -321,7 +327,7 @@
 <col style="width: 14%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Operating System</p></th>
+<tr class="row-odd"><th class="head"><p>Operating Systems</p></th>
 <th class="head"><p>Upstream Kubernetes</p></th>
 <th class="head"><p>Red Hat OpenShift</p></th>
 <th class="head"><p>Rancher RKE2</p></th>
@@ -434,6 +440,47 @@
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="nvidia-spectrum-x-ethernet-networking-platform">
+<h2>NVIDIA Spectrum-X Ethernet Networking Platform<a class="headerlink" href="#nvidia-spectrum-x-ethernet-networking-platform" title="Permalink to this headline"></a></h2>
+<p><strong>NVIDIA Network Operator</strong> has been validated with the following NVIDIA Spectrum-X Reference Architecture (RA) versions:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For details on supported topologies, NIC hardware, software components, and version-specific notes, refer to the NVIDIA Spectrum-X RA documentation.</p>
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Spectrum-X RA Version</p></th>
+<th class="head"><p>Topologies and NIC Hardware</p></th>
+<th class="head"><p>Kubernetes Versions</p></th>
+<th class="head"><p>Operating Systems</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2.1</p></td>
+<td><ul class="simple">
+<li><p>Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)</p></li>
+<li><p>Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)</p></li>
+</ul>
+</td>
+<td><p>Upstream Kubernetes (1.31–1.35)</p></td>
+<td><ul class="simple">
+<li><p>Ubuntu 24.04 LTS</p></li>
+<li><p>Ubuntu 22.04 LTS</p></li>
+</ul>
+</td>
+<td><p>Small RA, Software Multi-Plane</p></td>
 </tr>
 </tbody>
 </table>
@@ -717,7 +764,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 15, 2026.
+      <span class="lastupdated">Last updated on Apr 16, 2026.
       </span></p>
   </div>
 
