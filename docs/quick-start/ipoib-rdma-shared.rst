@@ -21,6 +21,11 @@
 Deploy IP over InfiniBand with RDMA Shared Device
 *************************************************
 
+.. note::
+
+   You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+   For more details, see :doc:`Configuration Assistance with Kubernetes Launch Kit <../k8s-launch-kit>`.
+
 **Step 1**: Create NicClusterPolicy with IPoIB support and 3 RDMA shared device pools
 
 .. literalinclude:: ../../examples/processed/ipoib-rdma-shared/10-nicclusterpolicy.yaml

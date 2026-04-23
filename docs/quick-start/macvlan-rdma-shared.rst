@@ -23,6 +23,11 @@ Deploy MacVLAN Network with RDMA Shared Device
 
 .. _macvlan-rdma-shared-deployment:
 
+.. note::
+
+   You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+   For more details, see :doc:`Configuration Assistance with Kubernetes Launch Kit <../k8s-launch-kit>`.
+
 **Step 1**: Create NicClusterPolicy with RDMA shared device
 
 .. literalinclude:: ../../examples/processed/macvlan-rdma-shared/10-nicclusterpolicy.yaml
