@@ -24,3 +24,4 @@ Customization Options
    Helm Chart <helm.rst>
    CRDs <crds.rst>
    NicClusterPolicy Custom Resource Example <cr-full-example.rst>
+   Heterogeneous Clusters with NicNodePolicy <nic-node-policy.rst>

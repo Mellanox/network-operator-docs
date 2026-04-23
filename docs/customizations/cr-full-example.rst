@@ -145,3 +145,8 @@ This example should serve as a reference, it is not recommended to apply it as i
           storageClassName: nic-fw-storage-class
           availableStorageSize: 1Gi
         logLevel: info
+
+.. note::
+
+   For heterogeneous clusters where different node groups require different DOCA-OFED driver
+   versions or device plugin configurations, see :doc:`nic-node-policy`.

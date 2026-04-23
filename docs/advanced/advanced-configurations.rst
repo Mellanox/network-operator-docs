@@ -15,8 +15,14 @@ Advanced Configurations
 Network Operator Deployment with Admission Controller
 =====================================================
 
-The Admission Controller can be optionally included as part of the Network Operator installation process. It has the capability to validate supported Custom Resource Definitions (CRDs), which currently include NicClusterPolicy and HostDeviceNetwork.
+The Admission Controller can be optionally included as part of the Network Operator installation process. It has the capability to validate supported Custom Resource Definitions (CRDs), which currently include NicClusterPolicy, NicNodePolicy, and HostDeviceNetwork.
 By default, the deployment of the admission controller is disabled. To enable it, you must set ``operator.admissionController.enabled`` to ``true``.
+
+.. note::
+
+   The admission controller is **required** when using NicNodePolicy for heterogeneous cluster configurations.
+   It enforces section exclusivity between NicClusterPolicy and NicNodePolicy, and prevents node selector
+   overlap between NicNodePolicy instances. See :doc:`../customizations/nic-node-policy` for details.
 
 Enabling the admission controller provides you with two options for managing certificates. You can either utilize the `cert-manager <https://cert-manager.io/docs/installation/>`_ for generating a self-signed certificate automatically, or, alternatively, provide your own self-signed certificate.
 
