@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KubeVirt SR-IOV Integration &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/mermaid-init.js"></script>
+        <script src="_static/design-tabs.js"></script>
+        <script src="_static/version.js"></script>
+        <script src="_static/social-media.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced Configurations" href="advanced/advanced.html" />
+    <link rel="prev" title="Life Cycle Management" href="life-cycle-management.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="index.html">
+  <img src="_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">KubeVirt SR-IOV Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-the-network-operator">Install the Network Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-nicclusterpolicy">Create a NicClusterPolicy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy">Step 1: Create an SriovNetworkNodePolicy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-an-sriovnetwork">Step 2: Create an SriovNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-a-virtualmachine">Step 3: Create a VirtualMachine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#check-the-vmi-is-running">Check the VMI is Running</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verify-the-vf-inside-the-guest">Verify the VF Inside the Guest</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#guest-driver-note">Guest Driver Note</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vf-not-available-on-node">VF Not Available on Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vmi-fails-to-start">VMI Fails to Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#no-network-interface-in-guest">No Network Interface in Guest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+  
+<li>KubeVirt SR-IOV Integration</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kubevirt-sr-iov-integration">
+<h1>KubeVirt SR-IOV Integration<a class="headerlink" href="#kubevirt-sr-iov-integration" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p>
+<ul>
+<li><p><a class="reference internal" href="#install-the-network-operator" id="id2">Install the Network Operator</a></p></li>
+<li><p><a class="reference internal" href="#create-a-nicclusterpolicy" id="id3">Create a NicClusterPolicy</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy" id="id4">Step 1: Create an SriovNetworkNodePolicy</a></p></li>
+<li><p><a class="reference internal" href="#step-2-create-an-sriovnetwork" id="id5">Step 2: Create an SriovNetwork</a></p></li>
+<li><p><a class="reference internal" href="#step-3-create-a-virtualmachine" id="id6">Step 3: Create a VirtualMachine</a></p></li>
+<li><p><a class="reference internal" href="#verification" id="id7">Verification</a></p>
+<ul>
+<li><p><a class="reference internal" href="#check-the-vmi-is-running" id="id8">Check the VMI is Running</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-vf-inside-the-guest" id="id9">Verify the VF Inside the Guest</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#guest-driver-note" id="id10">Guest Driver Note</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id12">Troubleshooting</a></p>
+<ul>
+<li><p><a class="reference internal" href="#vf-not-available-on-node" id="id13">VF Not Available on Node</a></p></li>
+<li><p><a class="reference internal" href="#vmi-fails-to-start" id="id14">VMI Fails to Start</a></p></li>
+<li><p><a class="reference internal" href="#no-network-interface-in-guest" id="id15">No Network Interface in Guest</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This guide explains how to attach SR-IOV Virtual Functions (VFs) to KubeVirt virtual machines using VFIO PCI passthrough.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code>, a VF’s PCI device is passed directly into the guest VM via the <a class="reference external" href="https://www.kernel.org/doc/Documentation/vfio.txt">VFIO</a> userspace interface.
+The VM gets near-native network performance because the data path bypasses the host kernel entirely.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>KubeVirt installed on the cluster:</p>
+<ul>
+<li><p>Kubernetes: <a class="reference external" href="https://kubevirt.io/user-guide/cluster_admin/installation/">KubeVirt installation guide</a></p></li>
+<li><p>Red Hat OpenShift: <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/installing">OpenShift Virtualization installation guide</a></p></li>
+</ul>
+</li>
+<li><p>IOMMU enabled on worker nodes:</p>
+<ul>
+<li><p>Intel: kernel parameter <code class="docutils literal notranslate"><span class="pre">intel_iommu=on</span> <span class="pre">iommu=pt</span></code></p></li>
+<li><p>AMD: kernel parameter <code class="docutils literal notranslate"><span class="pre">amd_iommu=on</span> <span class="pre">iommu=pt</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code> kernel module available on worker nodes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">virtctl</span></code> CLI tool installed:</p>
+<ul>
+<li><p>Kubernetes: <a class="reference external" href="https://kubevirt.io/user-guide/user_workloads/virtctl_client_tool/">virtctl client tool</a></p></li>
+<li><p>Red Hat OpenShift: <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/getting-started#installing-virtctl_virt-using-the-cli-tools">Installing virtctl on OpenShift</a></p></li>
+</ul>
+</li>
+</ul>
+<section id="install-the-network-operator">
+<h3>Install the Network Operator<a class="headerlink" href="#install-the-network-operator" title="Permalink to this headline"></a></h3>
+<p>Install the Network Operator with NFD and SR-IOV Network Operator enabled:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nfd</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install network-operator nvidia/network-operator <span class="se">\</span>
+  -n nvidia-network-operator <span class="se">\</span>
+  --create-namespace <span class="se">\</span>
+  --version v26.4.0-beta.5 <span class="se">\</span>
+  -f values.yaml <span class="se">\</span>
+  --wait
+</pre></div>
+</div>
+</section>
+<section id="create-a-nicclusterpolicy">
+<h3>Create a NicClusterPolicy<a class="headerlink" href="#create-a-nicclusterpolicy" title="Permalink to this headline"></a></h3>
+<p>Once the Network Operator is installed, create a NicClusterPolicy with Multus CNI and CNI plugins:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">plugins</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.5</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">multus-cni</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.5</span><span class="w"></span>
+<span class="w">      </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f nicclusterpolicy.yaml
+</pre></div>
+</div>
+<p>Verify that the NicClusterPolicy is ready:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicclusterpolicy nic-cluster-policy
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">state</span></code> should show <code class="docutils literal notranslate"><span class="pre">ready</span></code> before proceeding.</p>
+</section>
+</section>
+<section id="step-1-create-an-sriovnetworknodepolicy">
+<h2>Step 1: Create an SriovNetworkNodePolicy<a class="headerlink" href="#step-1-create-an-sriovnetworknodepolicy" title="Permalink to this headline"></a></h2>
+<p>Configure VFs with <code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code>. The operator creates the VFs and binds them to the <code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code> driver, making them available as allocatable extended resources on the node.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">isRdma:</span> <span class="pre">false</span></code> (RDMA is not compatible with <code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code>). The guest VM must have the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> kernel module available.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetworkNodePolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt-policy</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt_sriov</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">vendor</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;15b3&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pfNames</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ens1f0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">deviceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vfio-pci</span><span class="w"></span>
+<span class="w">  </span><span class="nt">isRdma</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Wait for the policy to be applied:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get sriovnetworknodestates -n nvidia-network-operator -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[*].status.syncStatus}&#39;</span>
+</pre></div>
+</div>
+<p>The output should show <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code> for all nodes.</p>
+</section>
+<section id="step-2-create-an-sriovnetwork">
+<h2>Step 2: Create an SriovNetwork<a class="headerlink" href="#step-2-create-an-sriovnetwork" title="Permalink to this headline"></a></h2>
+<p>Create an <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code> CR that references the <code class="docutils literal notranslate"><span class="pre">resourceName</span></code> from the policy. This generates a <code class="docutils literal notranslate"><span class="pre">NetworkAttachmentDefinition</span></code> that KubeVirt VMs can consume.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>With VFIO passthrough, the VF is passed directly into the guest VM. The host kernel does not see the network interface, so pod-level CNI IPAM cannot assign IPs to the VF. IP addresses must be configured inside the guest (e.g. via cloud-init or DHCP from an external server on the L2 network).</p>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SriovNetwork</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-kubevirt-net</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">resourceName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt_sriov</span><span class="w"></span>
+<span class="w">  </span><span class="nt">networkNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">  </span><span class="nt">spoofChk</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;off&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">trust</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;on&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Verify the <code class="docutils literal notranslate"><span class="pre">NetworkAttachmentDefinition</span></code> was created:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get net-attach-def -n default sriov-kubevirt-net
+</pre></div>
+</div>
+</section>
+<section id="step-3-create-a-virtualmachine">
+<h2>Step 3: Create a VirtualMachine<a class="headerlink" href="#step-3-create-a-virtualmachine" title="Permalink to this headline"></a></h2>
+<p>Define a <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code> with an <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface pointing at the network attachment definition. Since IPAM is handled inside the guest, use cloud-init to configure a static IP on the SR-IOV interface.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt.io/v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VirtualMachine</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm-sriov</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">runStrategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">domain</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">devices</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">              </span><span class="nt">masquerade</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-net</span><span class="w"></span>
+<span class="w">              </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">          </span><span class="nt">disks</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span><span class="w"></span>
+<span class="w">              </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="nv">virtio</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinit</span><span class="w"></span>
+<span class="w">              </span><span class="nt">disk</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="nv">virtio</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;4Gi&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">networks</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span><span class="w"></span>
+<span class="w">          </span><span class="nt">pod</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-net</span><span class="w"></span>
+<span class="w">          </span><span class="nt">multus</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov-kubevirt-net</span><span class="w"></span>
+<span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span><span class="w"></span>
+<span class="w">          </span><span class="nt">containerDisk</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">quay.io/containerdisks/fedora:latest</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinit</span><span class="w"></span>
+<span class="w">          </span><span class="nt">cloudInitNoCloud</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">userData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span><span class="w"></span>
+<span class="w">              </span><span class="no">#cloud-config</span><span class="w"></span>
+<span class="w">              </span><span class="no">password: password123</span><span class="w"></span>
+<span class="w">              </span><span class="no">chpasswd: {expire: false}</span><span class="w"></span>
+<span class="w">              </span><span class="no">ssh_pwauth: true</span><span class="w"></span>
+<span class="w">              </span><span class="no">runcmd:</span><span class="w"></span>
+<span class="w">                </span><span class="no">- |</span><span class="w"></span>
+<span class="w">                  </span><span class="no">for i in $(seq 1 30); do</span><span class="w"></span>
+<span class="w">                    </span><span class="no">SRIOV_IF=$(ls -1 /sys/class/net/ | grep -v ^lo$ | grep -v ^enp1s0$ | head -1)</span><span class="w"></span>
+<span class="w">                    </span><span class="no">[ -n &quot;$SRIOV_IF&quot; ] &amp;&amp; break</span><span class="w"></span>
+<span class="w">                    </span><span class="no">sleep 1</span><span class="w"></span>
+<span class="w">                  </span><span class="no">done</span><span class="w"></span>
+<span class="w">                  </span><span class="no">if [ -n &quot;$SRIOV_IF&quot; ]; then</span><span class="w"></span>
+<span class="w">                    </span><span class="no">nmcli con add type ethernet ifname $SRIOV_IF con-name sriov \</span><span class="w"></span>
+<span class="w">                      </span><span class="no">ipv4.addresses 192.168.0.1/24 ipv4.method manual</span><span class="w"></span>
+<span class="w">                    </span><span class="no">nmcli con up sriov</span><span class="w"></span>
+<span class="w">                  </span><span class="no">fi</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt’s resource injector automatically adds the extended resource request (e.g. <code class="docutils literal notranslate"><span class="pre">nvidia.com/kubevirt_sriov:</span> <span class="pre">&quot;1&quot;</span></code>) to the virt-launcher pod.</p>
+<p>The cloud-init <code class="docutils literal notranslate"><span class="pre">runcmd</span></code> script waits for the SR-IOV interface to appear (the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver must load first), then configures a static IP using <code class="docutils literal notranslate"><span class="pre">nmcli</span></code>. Adjust the IP address for each VM accordingly.</p>
+</section>
+<section id="verification">
+<h2>Verification<a class="headerlink" href="#verification" title="Permalink to this headline"></a></h2>
+<section id="check-the-vmi-is-running">
+<h3>Check the VMI is Running<a class="headerlink" href="#check-the-vmi-is-running" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get vmi vm-sriov
+</pre></div>
+</div>
+</section>
+<section id="verify-the-vf-inside-the-guest">
+<h3>Verify the VF Inside the Guest<a class="headerlink" href="#verify-the-vf-inside-the-guest" title="Permalink to this headline"></a></h3>
+<p>Connect to the VM console:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virtctl console vm-sriov
+</pre></div>
+</div>
+<p>Inside the guest, verify the SR-IOV interface and IP configuration:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ip a
+lspci <span class="p">|</span> grep -i mellanox
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>NVIDIA NICs require the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver inside the guest. If no network interface appears but <code class="docutils literal notranslate"><span class="pre">lspci</span></code> shows the device, run <code class="docutils literal notranslate"><span class="pre">modprobe</span> <span class="pre">mlx5_core</span></code>.</p>
+</div>
+</section>
+</section>
+<section id="guest-driver-note">
+<h2>Guest Driver Note<a class="headerlink" href="#guest-driver-note" title="Permalink to this headline"></a></h2>
+<p>NVIDIA VFs passed via VFIO require the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver inside the guest VM. If the guest image does not include it, you need to either:</p>
+<ul class="simple">
+<li><p>Use a guest image with NVIDIA DOCA-OFED or inbox <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> drivers pre-installed</p></li>
+<li><p>Install the driver via cloud-init at first boot</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Without the driver, the VF PCI device appears in <code class="docutils literal notranslate"><span class="pre">lspci</span></code> output but no network interface is created.</p>
+</div>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline"></a></h2>
+<dl>
+<dt><strong>No live migration</strong></dt><dd><p>VFIO passthrough gives the VM direct access to hardware PCI resources. Live migration is not possible because hardware state cannot be serialized.</p>
+</dd>
+<dt><strong>Host-side RDMA not available</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code> is incompatible with <code class="docutils literal notranslate"><span class="pre">isRdma:</span> <span class="pre">true</span></code> on the <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code>. RDMA works inside the guest VM because <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> provides both ethernet and RDMA capabilities. To enable RDMA inside the guest, install the required packages and load the kernel modules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo dnf install -y kernel-modules-extra-<span class="k">$(</span>uname -r<span class="k">)</span> rdma-core
+sudo modprobe ib_uverbs mlx5_ib
+</pre></div>
+</div>
+</dd>
+<dt><strong>IOMMU required</strong></dt><dd><p>Nodes without IOMMU support cannot use VFIO passthrough. Run <code class="docutils literal notranslate"><span class="pre">virt-host-validate</span> <span class="pre">qemu</span></code> on the worker nodes to check hardware virtualization and IOMMU:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>virt-host-validate qemu
+</pre></div>
+</div>
+<p>All checks should show <code class="docutils literal notranslate"><span class="pre">PASS</span></code>, including <code class="docutils literal notranslate"><span class="pre">Checking</span> <span class="pre">for</span> <span class="pre">device</span> <span class="pre">assignment</span> <span class="pre">IOMMU</span> <span class="pre">support</span></code> and <code class="docutils literal notranslate"><span class="pre">Checking</span> <span class="pre">if</span> <span class="pre">IOMMU</span> <span class="pre">is</span> <span class="pre">enabled</span> <span class="pre">by</span> <span class="pre">kernel</span></code>.</p>
+<p>Confirm IOMMU groups are populated:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls /sys/kernel/iommu_groups/
+</pre></div>
+</div>
+<p>If IOMMU checks fail, enable it on the worker nodes via kernel parameter (<code class="docutils literal notranslate"><span class="pre">intel_iommu=on</span> <span class="pre">iommu=pt</span></code> or <code class="docutils literal notranslate"><span class="pre">amd_iommu=on</span> <span class="pre">iommu=pt</span></code>) and reboot.</p>
+</dd>
+</dl>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline"></a></h2>
+<section id="vf-not-available-on-node">
+<h3>VF Not Available on Node<a class="headerlink" href="#vf-not-available-on-node" title="Permalink to this headline"></a></h3>
+<p>Check node allocatable resources:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl describe node &lt;node&gt; <span class="p">|</span> grep kubevirt_sriov
+</pre></div>
+</div>
+<p>Verify the VFs are bound to <code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl <span class="nb">exec</span> -n nvidia-network-operator &lt;config-daemon-pod&gt; -- lspci -k -s &lt;vf-pci-addr&gt;
+</pre></div>
+</div>
+</section>
+<section id="vmi-fails-to-start">
+<h3>VMI Fails to Start<a class="headerlink" href="#vmi-fails-to-start" title="Permalink to this headline"></a></h3>
+<p>Check virt-launcher pod events:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl describe pod virt-launcher-vm-sriov-xxxxx
+</pre></div>
+</div>
+<p>Check KubeVirt logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl logs virt-launcher-vm-sriov-xxxxx -c compute
+</pre></div>
+</div>
+<p>Common causes:</p>
+<ul class="simple">
+<li><p>IOMMU not enabled on the host</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code> module not loaded</p></li>
+<li><p>No VFs available (all allocated to other workloads)</p></li>
+</ul>
+</section>
+<section id="no-network-interface-in-guest">
+<h3>No Network Interface in Guest<a class="headerlink" href="#no-network-interface-in-guest" title="Permalink to this headline"></a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">lspci</span></code> inside the guest shows the device but no interface appears in <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">link</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>modprobe mlx5_core
+</pre></div>
+</div>
+<p>If the module is not available, install NVIDIA DOCA-OFED drivers in the guest image.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Apr 23, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
