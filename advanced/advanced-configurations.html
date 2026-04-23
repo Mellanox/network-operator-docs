@@ -126,8 +126,14 @@
 </div>
 <section id="network-operator-deployment-with-admission-controller">
 <h2>Network Operator Deployment with Admission Controller<a class="headerlink" href="#network-operator-deployment-with-admission-controller" title="Permalink to this headline"></a></h2>
-<p>The Admission Controller can be optionally included as part of the Network Operator installation process. It has the capability to validate supported Custom Resource Definitions (CRDs), which currently include NicClusterPolicy and HostDeviceNetwork.
+<p>The Admission Controller can be optionally included as part of the Network Operator installation process. It has the capability to validate supported Custom Resource Definitions (CRDs), which currently include NicClusterPolicy, NicNodePolicy, and HostDeviceNetwork.
 By default, the deployment of the admission controller is disabled. To enable it, you must set <code class="docutils literal notranslate"><span class="pre">operator.admissionController.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The admission controller is <strong>required</strong> when using NicNodePolicy for heterogeneous cluster configurations.
+It enforces section exclusivity between NicClusterPolicy and NicNodePolicy, and prevents node selector
+overlap between NicNodePolicy instances. See <a class="reference internal" href="../customizations/nic-node-policy.html"><span class="doc">Heterogeneous Clusters with NicNodePolicy</span></a> for details.</p>
+</div>
 <p>Enabling the admission controller provides you with two options for managing certificates. You can either utilize the <a class="reference external" href="https://cert-manager.io/docs/installation/">cert-manager</a> for generating a self-signed certificate automatically, or, alternatively, provide your own self-signed certificate.</p>
 <p>To use cert-manager, ensure that <code class="docutils literal notranslate"><span class="pre">operator.admissionController.useCertManager</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>. Additionally, make sure that you deploy the cert-manager before initiating the Network Operator deployment.</p>
 <p>If you prefer not to use the cert-manager, set <code class="docutils literal notranslate"><span class="pre">operator.admissionController.useCertManager</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>, and then provide your custom certificate and key using <code class="docutils literal notranslate"><span class="pre">operator.admissionController.certificate.tlsCrt</span></code> and <code class="docutils literal notranslate"><span class="pre">operator.admissionController.certificate.tlsKey</span></code>.</p>

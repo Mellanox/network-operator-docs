@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="KubeVirt SR-IOV Integration" href="kubevirt.html" />
-    <link rel="prev" title="NicClusterPolicy Custom Resource Example" href="customizations/cr-full-example.html" />
+    <link rel="prev" title="Heterogeneous Clusters with NicNodePolicy" href="customizations/nic-node-policy.html" />
  
 
 
@@ -324,6 +324,13 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 <section id="automatic-doca-ofed-driver-upgrade">
 <h3>Automatic DOCA-OFED Driver Upgrade<a class="headerlink" href="#automatic-doca-ofed-driver-upgrade" title="Permalink to this headline"></a></h3>
 <p>To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section for the ofedDriver in the NicClusterPolicy spec, and change the DOCA-OFED Driver version.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using NicNodePolicy for heterogeneous clusters, each NicNodePolicy with an
+<code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> section manages its own independent upgrade lifecycle with separate
+<code class="docutils literal notranslate"><span class="pre">maxParallelUpgrades</span></code> settings and upgrade state tracking.
+See <a class="reference internal" href="customizations/nic-node-policy.html"><span class="doc">Heterogeneous Clusters with NicNodePolicy</span></a> for details.</p>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">nicclusterpolicy.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
