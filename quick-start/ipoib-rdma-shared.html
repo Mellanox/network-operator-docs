@@ -77,7 +77,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">[TECH PREVIEW] Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
@@ -122,6 +122,11 @@
              
   <section id="deploy-ip-over-infiniband-with-rdma-shared-device">
 <h1>Deploy IP over InfiniBand with RDMA Shared Device<a class="headerlink" href="#deploy-ip-over-infiniband-with-rdma-shared-device" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+For more details, see <a class="reference internal" href="../k8s-launch-kit.html"><span class="doc">Configuration Assistance with Kubernetes Launch Kit</span></a>.</p>
+</div>
 <p><strong>Step 1</strong>: Create NicClusterPolicy with IPoIB support and 3 RDMA shared device pools</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
