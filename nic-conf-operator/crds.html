@@ -442,7 +442,7 @@ int</p></td>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaDevicePrefix</span></code>
 string</p></td>
 <td><p>— Parameters from the NicInterfaceNameTemplate CR — RdmaDevicePrefix specifies the prefix for the
-rdma device name</p></td>
+rdma device name. Empty means RDMA naming is skipped.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">netDevicePrefix</span></code>
 string</p></td>
@@ -835,10 +835,12 @@ int</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaDevicePrefix</span></code>
 string</p></td>
-<td><p>RdmaDevicePrefix specifies the prefix for the rdma device name %nic_id%, %plane_id% and %rail_id%
-placeholders can be used to construct the device name %nic_id% is the index of the NIC in the
-flattened list of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the
-index of the rail where the given NIC belongs to</p></td>
+<td><p><em>(Optional)</em>
+RdmaDevicePrefix specifies the prefix for the rdma device name. When empty, no RDMA udev rules
+are generated and RDMA device naming is skipped. %nic_id%, %plane_id% and %rail_id% placeholders
+can be used to construct the device name %nic_id% is the index of the NIC in the flattened list
+of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the index of the
+rail where the given NIC belongs to</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">netDevicePrefix</span></code>
 string</p></td>
@@ -1112,7 +1114,7 @@ Number of planes to be configured</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 16, 2026.
+      <span class="lastupdated">Last updated on Apr 23, 2026.
       </span></p>
   </div>
 
