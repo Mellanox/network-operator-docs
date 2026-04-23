@@ -238,7 +238,7 @@ NicDeviceInterfaceNameSpec
       | []int                                                                                             |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rdmaDevicePrefix``                                                                              | — Parameters from the NicInterfaceNameTemplate CR — RdmaDevicePrefix specifies the prefix for the |
-      | string                                                                                            | rdma device name                                                                                  |
+      | string                                                                                            | rdma device name. Empty means RDMA naming is skipped.                                             |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``netDevicePrefix``                                                                               | NetDevicePrefix specifies the prefix for the net device name                                      |
       | string                                                                                            |                                                                                                   |
@@ -529,10 +529,12 @@ NicInterfaceNameTemplateSpec defines the desired state of NicInterfaceNameTempla
       | ``pfsPerNic``                                                                                     | PfsPerNic specifies the number of PFs per NIC Used to calculate the number of planes per NIC      |
       | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``rdmaDevicePrefix``                                                                              | RdmaDevicePrefix specifies the prefix for the rdma device name %nic_id%, %plane_id% and %rail_id% |
-      | string                                                                                            | placeholders can be used to construct the device name %nic_id% is the index of the NIC in the     |
-      |                                                                                                   | flattened list of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the  |
-      |                                                                                                   | index of the rail where the given NIC belongs to                                                  |
+      | ``rdmaDevicePrefix``                                                                              | *(Optional)*                                                                                      |
+      | string                                                                                            | RdmaDevicePrefix specifies the prefix for the rdma device name. When empty, no RDMA udev rules    |
+      |                                                                                                   | are generated and RDMA device naming is skipped. %nic_id%, %plane_id% and %rail_id% placeholders  |
+      |                                                                                                   | can be used to construct the device name %nic_id% is the index of the NIC in the flattened list   |
+      |                                                                                                   | of NICs %plane_id% is the index of the plane of the specific NIC %rail_id% is the index of the    |
+      |                                                                                                   | rail where the given NIC belongs to                                                               |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``netDevicePrefix``                                                                               | NetDevicePrefix specifies the prefix for the net device name %nic_id%, %plane_id% and %rail_id%   |
       | string                                                                                            | placeholders can be used to construct the device name %nic_id% is the index of the NIC in the     |

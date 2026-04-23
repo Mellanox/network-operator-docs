@@ -34,92 +34,92 @@ NVIDIA Network Operator Container Images
      - Digest
    * - nvcr.io/nvstaging/mellanox
      - network-operator
-     - v26.4.0-beta.3
-     - sha256:1f9ff88131e9f7ec0607df04c55d5544d9f1efa72184c6d9668191f6e689e4c1
+     - v26.4.0-beta.5
+     - sha256:2b09e00adbbe11183535fa7c246ca95ffc3dea8f4e423a07667eb04a47dc09f9
    * - nvcr.io/nvstaging/mellanox
      - network-operator-init-container
-     - network-operator-v26.4.0-beta.3
-     - sha256:8546fd3fa018a59a0f6da610e79e2fd163f34925905fe8fcd2c52281cbcafdf5
+     - network-operator-v26.4.0-beta.5
+     - sha256:e74611fcfccdbb1bb4bf958bb9f8c9374410f51bab74d2ef673c94e97537a367
    * - nvcr.io/nvstaging/mellanox
      - k8s-rdma-shared-dev-plugin
-     - network-operator-v26.4.0-beta.3
-     - sha256:189c19d882a5b5332842b40f5c12ffe7756722538ade4c9c4957481e40be4f5a
+     - network-operator-v26.4.0-beta.5
+     - sha256:9b77d9044003d1562e06928d995ffd43f023dcf1926951d62760d42ea28bfcac
    * - nvcr.io/nvstaging/mellanox
      - ib-kubernetes
-     - network-operator-v26.4.0-beta.3
-     - sha256:21b0f3da16a1fde0c748b14b4319a0f8ce5ec3d194a4a97f48d65a00b31c8aec
+     - network-operator-v26.4.0-beta.5
+     - sha256:80126d31ad39342d82d94b6a7edd828c99acd93b7e84d832bc95a56c4f5e1f37
    * - nvcr.io/nvstaging/mellanox
      - ipoib-cni
-     - network-operator-v26.4.0-beta.3
-     - sha256:7da6081cee66977f1165dbc0c6e25a4ae423771d50a5009cbaf9c30382c4add7
+     - network-operator-v26.4.0-beta.5
+     - sha256:b8a3a737c5966b820582c8751ce9cf1a73a737d94a5ad431ead46535feed4511
    * - nvcr.io/nvstaging/mellanox
      - nvidia-k8s-ipam
-     - network-operator-v26.4.0-beta.3
-     - sha256:8d8f4df60cbc8c8fd34ca16af453c4c2a371f3f2dab6570713229d01cef73a20
+     - network-operator-v26.4.0-beta.5
+     - sha256:a43385bf27c18e912588627cb4e184530b6ca94a4232c8d30da579d31e03c27e
    * - nvcr.io/nvstaging/mellanox
      - nic-feature-discovery
-     - network-operator-v26.4.0-beta.3
-     - sha256:5036e2150cc074f347da3004ec11f0cd62075d0bdd15060b58866db4d40788e2
+     - network-operator-v26.4.0-beta.5
+     - sha256:583370edf4c061931fcab7d0162db5ebe686689c8538d63574843ad2064aea27
    * - nvcr.io/nvidia/doca
      - doca_telemetry
      - 1.24.3-doca3.3.0-host
      - sha256:d561707f58be0470121c8dbe31b2576caffd92c6a6533a5ddaf37e3f6d1479d6
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
-     - network-operator-v26.4.0-beta.3
-     - sha256:8b441976871e73e16e47b16389d05af56d17679c6c5f52a25a215f9dd91f6a51
+     - network-operator-v26.4.0-beta.5
+     - sha256:bd9ba4f200a454b9f6cafe8f7c74b59d156e3aee2263a5b991e00afc1b318d70
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
-     - network-operator-v26.4.0-beta.3
-     - sha256:359c6c5479bcef3556a374e5281c0a8acc20498c8894e6d06a5dbe19e907ca21
+     - network-operator-v26.4.0-beta.5
+     - sha256:7e602a83164b40d9147938c0b372431b025e4a6cb844c48d981048dc0b957d2f
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-v26.4.0-beta.3
-     - sha256:08e53eb7679f4e758b85678a7eeed4744ed026c2ea1e92f5e09756889d82abc3
+     - network-operator-v26.4.0-beta.5
+     - sha256:e05210429ce9c69e0702218b027e90ac283f9b3215d20f1697b4657e70cfdd47
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-device-plugin
-     - network-operator-v26.4.0-beta.3
-     - sha256:d0913d3941c07fb98df5d08363346953da0efbd5a2c70491002e8ed3f3f3b7e5
+     - network-operator-v26.4.0-beta.5
+     - sha256:541af85314e6482278c349246012a7cd13e17770ad3e41b4f3c4727f9de11e8d
    * - nvcr.io/nvstaging/mellanox
      - sriov-cni
-     - network-operator-v26.4.0-beta.3
-     - sha256:fab78cfb3e9a2f1eadda3f6ec5a82ab67f592a8ac98b73ffe67c33b2278fe77f
+     - network-operator-v26.4.0-beta.5
+     - sha256:69994ad04a366e6c864d33dc9cd16f44d8dc8974f8bda2df77658fa872137b87
    * - nvcr.io/nvstaging/mellanox
      - ib-sriov-cni
-     - network-operator-v26.4.0-beta.3
-     - sha256:3949482cdf2371bc5038541c850da039f5d76a853ab656e48d15f2415d6c139e
+     - network-operator-v26.4.0-beta.5
+     - sha256:62371ab1a6e97dbde08f117f781ce9819b10b49996c4dce0607e61faa5d2baf0
    * - nvcr.io/nvstaging/mellanox
      - plugins
-     - network-operator-v26.4.0-beta.3
-     - sha256:1b022edbcef855ddf824bfded45e71869800c1442f0c527a9cce898a0063c66c
+     - network-operator-v26.4.0-beta.5
+     - sha256:78ff1fad75416b98deaed8f362cdf480932735e67f9acd32376ad19f43d85876
    * - nvcr.io/nvstaging/mellanox
      - multus-cni
-     - network-operator-v26.4.0-beta.3
-     - sha256:80c3d1611d4761ea8142f9480ee21bab6af3326c6a03bf6bb6aa43656499b097
+     - network-operator-v26.4.0-beta.5
+     - sha256:ac68a25eac6104bf9d9f1d3585d5e23ad717f1b166a87b6fc6636648b557cb01
    * - nvcr.io/nvstaging/mellanox
      - ovs-cni-plugin
-     - network-operator-v26.4.0-beta.3
-     - sha256:e19bebf3bbbfb7b3e747d5d22efe0f80c759df5ccf7436ca69abce663139e393
+     - network-operator-v26.4.0-beta.5
+     - sha256:16780dd89ff4d11db7f844dc7ef741a0ca86440ef3d5441a4dd27bc18cab8df9
    * - nvcr.io/nvstaging/mellanox
      - rdma-cni
-     - network-operator-v26.4.0-beta.3
-     - sha256:a06d92be3293729a7b90ec70926255a50664a49a83b5ec1a7126b7ebb0a51d70
+     - network-operator-v26.4.0-beta.5
+     - sha256:5fccebc12674a63be7f21e16c71f2f558abf72ff07314665f9f0341c795ab29c
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator
-     - network-operator-v26.4.0-beta.3
-     - sha256:26cba1bcb602dce528733366db2e8ea221ac7cc395e651be01525b00782dfbe7
+     - network-operator-v26.4.0-beta.5
+     - sha256:c56b762602a0dc3306eba30cf207ab981ec37ee0408f11b5b958cb48cf003733
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator-daemon
-     - network-operator-v26.4.0-beta.3
-     - sha256:ebe5a315193baf81a2e7febe84027a3d026857c027bfd147a8b026810c286076
+     - network-operator-v26.4.0-beta.5
+     - sha256:6f63fa21881c61d0d8161f19104d4329a53b0e54db4f49cac0a69e782f58bb8d
    * - nvcr.io/nvstaging/mellanox
      - maintenance-operator
-     - network-operator-v26.4.0-beta.3
-     - sha256:c64ca9d6514dfe082246f3087cdfb5667917588429760fcad1cf8f62f96b64f0
+     - network-operator-v26.4.0-beta.5
+     - sha256:f2542b73927fce332f3837614d2236f1e3784995633da8f8c6150783babb11ce
    * - nvcr.io/nvstaging/mellanox
      - spectrum-x-operator
-     - network-operator-v26.4.0-beta.3
-     - sha256:f31f887cbe3efd7c9220aeed32cec332f4294a8677f6394c45fa5a89af5c2eb7
+     - network-operator-v26.4.0-beta.5
+     - sha256:45749b5b389446c71957ab99f1e21b1462120d4343c5891af2011010822f6f07
 
 =================================
 DOCA-OFED Driver Container Images
@@ -134,7 +134,7 @@ DOCA-OFED Driver Container Images
      - Version
    * - nvcr.io/nvstaging/mellanox
      - doca-driver
-     - doca3.4.0-26.04-0.1.1.0-0
+     - doca3.4.0-26.04-0.4.2.0-0
 
 
 The followings tags are available for the above DOCA-OFED Driver container version:
@@ -149,17 +149,17 @@ Ubuntu
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-ubuntu22.04-amd64
-     - sha256:541a8219674cca8747cf51b79e16cbcf6f6311f07a67569bc7f3a61b7e2fc5b8
+       | doca3.4.0-26.04-0.4.2.0-0-ubuntu22.04-amd64
+     - sha256:335d8ec00a8ccd6fad24d39bb1dc33df0e3fd8b8cea209a0bb4d173247b64d7d
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-ubuntu22.04-arm64
-     - sha256:09a21489b85119d98a37bb4896c642f3e135c3e120365df183eec3364d87ac1b
+       | doca3.4.0-26.04-0.4.2.0-0-ubuntu22.04-arm64
+     - sha256:7c2694f3b66dc3bd6d768061f403bdfc9557a3aed0b8f32ea5b2788dadb6072c
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-ubuntu24.04-amd64
-     - sha256:e63004536f9ab67ee083f056a09a53fb69f8dbdb941b58d5c8cc982fea792f8c
+       | doca3.4.0-26.04-0.4.2.0-0-ubuntu24.04-amd64
+     - sha256:e47b32112ddfd543f49b9d3fb815ba72132afb9fd85761b50da318bc78657dd1
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-ubuntu24.04-arm64
-     - sha256:d36f6e637c433d5edc20ad44b1d466ee3ec0f9f5162a409d084c8a88fe2bb7f9
+       | doca3.4.0-26.04-0.4.2.0-0-ubuntu24.04-arm64
+     - sha256:6c848c6a5be317b438041c927458003ffad0d93d59c96ba182bf2001d59203a6
 
 -----
 RHCOS
@@ -171,17 +171,17 @@ RHCOS
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.16-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.17-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.18-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.19-amd64
-     - sha256:2f2b23f312f896ac7f89ef496bb9905ceeb24e012549ec7af6a246578c5806ad
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.16-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.17-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.18-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.19-amd64
+     - sha256:ab15d903f4a8fe88ab66eba7953562f9d182f8587dcb978fbeb42eb2a3da00f7
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.16-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.17-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.18-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhcos4.19-arm64
-     - sha256:089e0260e148ebc9b315433e7bacee64f0527575da22618017aa4122e39346fc
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.16-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.17-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.18-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhcos4.19-arm64
+     - sha256:8aa2ff3b937704c3f4e7922bd2f5279e675868b0b48292d106e77b2b159e11ce
 
 ----
 RHEL
@@ -193,39 +193,39 @@ RHEL
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel10.0-amd64
-     - sha256:77bd9b53203f3a1d8cf5f80ec9e684580d92fb0198dc37eea4b5f4fb7e7e8ddb
+       | doca3.4.0-26.04-0.4.2.0-0-rhel10.0-amd64
+     - sha256:891088ebf4a0de578d1e209372840346e24b57df079afd120897f0e4eb09446f
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel10.0-arm64
-     - sha256:f2f23bb1395c589d725ecb1062585d09522ca5f1f57607c11340d8e24dbacf5f
+       | doca3.4.0-26.04-0.4.2.0-0-rhel10.0-arm64
+     - sha256:d8f0e69338a65128ff84a6b88a86fb0291d615800488facfb194745a58f35771
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.10-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.6-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.8-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.9-amd64
-     - sha256:f3e8a6c86c103aa023f86d5a2d885c0467ccb1188ebd21d0804959044bda819a
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.10-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.6-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.8-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.9-amd64
+     - sha256:bd1845c36c74284f49646a43473a7283274174c57a4d71e973fb8c4dab5a0753
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.10-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.6-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.8-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel8.9-arm64
-     - sha256:76130b4d862b9f609e33cd7383021217cf6eb08c7179b2df9b1d885706e370c0
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.10-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.6-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.8-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel8.9-arm64
+     - sha256:f435b8ab0592c4a76762829018b9631fba222dce118b3b67779a64fc73b3a73f
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.0-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.2-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.3-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.4-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.5-amd64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.6-amd64
-     - sha256:9971e28c60c0b84df6c16a73a936b2502c4c9ed774be65e797784ba69b658c14
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.0-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.2-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.3-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.4-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.5-amd64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.6-amd64
+     - sha256:fe09b135969f6dd7811917670e6e081d323ff78dc046f178cd05c58b612e969e
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.0-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.2-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.3-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.4-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.5-arm64
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.6-arm64
-     - sha256:bd4edeeba6652ea31571d377225ecdacba457f5173bc4b98f55901f281c99efd
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.0-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.2-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.3-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.4-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.5-arm64
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.6-arm64
+     - sha256:94634b88e3110e6c20a174b20b903d394db7268f95170bbd2a5b3c97e4adaac5
 
 ----
 SLES
@@ -237,11 +237,11 @@ SLES
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-sles15.7-amd64
-     - sha256:9ff141221c8d83a4a9ba3205f7be86ad43724f239ec2ec54e31cb36682a99c46
+       | doca3.4.0-26.04-0.4.2.0-0-sles15.7-amd64
+     - sha256:5d114189da3e6a2793b80a991070f1c66caf92d962a5cbf6eea9c2a741c486f5
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-sles15.7-arm64
-     - sha256:f337641ff82b061757f195afaa9a751850bb8bf6a1da0e8692c5dd79c00fda6d
+       | doca3.4.0-26.04-0.4.2.0-0-sles15.7-arm64
+     - sha256:965b8a8843040a533d51ca6b00b1e75dfd94d70ac34faf7c783ea2f85dbbbf03
 
 
 =====================================================
@@ -256,7 +256,7 @@ STIG FIPS Compliant DOCA-OFED Driver Container Images
      - Version
    * - nvcr.io/nvstaging/mellanox
      - doca-driver-stig-fips
-     - doca3.4.0-26.04-0.1.1.0-0
+     - doca3.4.0-26.04-0.4.2.0-0
 
 The followings tags are available for the above STIG FIPS Compliant DOCA-OFED Driver container version:
 
@@ -270,8 +270,8 @@ Ubuntu
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-ubuntu24.04-amd64
-     - sha256:8f4a35982d170660333fd95afe0930545cc3cd67aa2ec1a47321ab8da1b2f978
+       | doca3.4.0-26.04-0.4.2.0-0-ubuntu24.04-amd64
+     - sha256:74a70f75a4b6d4189f432c29b59b6141396842a30929d55e2f725213e56e2c68
 
 ----
 RHEL
@@ -283,5 +283,5 @@ RHEL
    * - Tags
      - Digest
    * -
-       | doca3.4.0-26.04-0.1.1.0-0-rhel9.6-amd64
-     - sha256:fded6a5c1d7a74fa3fbcae9f7c68a8fff0412611e688ac574fd36241bdc0be0d
+       | doca3.4.0-26.04-0.4.2.0-0-rhel9.6-amd64
+     - sha256:d36b110c5572290071c66a50b471993bbd1f8e3a369eadb37c6bf9c792e42d91
