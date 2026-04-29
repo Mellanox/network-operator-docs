@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.1.1
+     - | - CVEs fixes
    * - 26.1.0
      - | Added support for ConnectX-9 SuperNIC
        | - Added support for Spectrum-X Ethernet Networking Platform with Kubernetes [GA]
@@ -248,7 +250,7 @@ Known Limitations
    * - Version
      - Description
    * - 26.1.1
-     - | - CVEs fixes
+     - | - There is a known limitation in SR-IOV OVSNetwork, opposed of using SriovNetwork or SriovIBNetwork. When using OVSNetwork, setting VF link state to follow its PF link state is not supported
    * - 26.1.0
      - | - There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted
        | - Multus CNI does not use a service account token after the Kubernetes API rotates it. The recommended workaround is to edit the Multus CNI DaemonSet manually to remove ``--skip-config-watch`` CLI argument.
