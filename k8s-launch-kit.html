@@ -315,7 +315,7 @@
 <section id="install-the-cli-from-the-container-image">
 <h3>Install the CLI from the Container Image<a class="headerlink" href="#install-the-cli-from-the-container-image" title="Permalink to this headline"></a></h3>
 <p>Extract the tool from the container image and run the included <code class="docutils literal notranslate"><span class="pre">install.sh</span></code> script, which installs the binary, profile templates, and default configuration:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker create --name l8k-extract nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.5
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker create --name l8k-extract nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.6
 docker cp l8k-extract:/src /tmp/l8k
 docker rm l8k-extract
 mkdir -p /tmp/l8k/build <span class="o">&amp;&amp;</span> cp /tmp/l8k/l8k /tmp/l8k/build/l8k
@@ -339,7 +339,7 @@ sudo /tmp/l8k/scripts/install.sh
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --net<span class="o">=</span>host <span class="se">\</span>
     -v ~/.kube:/kube:ro <span class="se">\</span>
     -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/output:/output <span class="se">\</span>
-    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.5 <span class="se">\</span>
+    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.6 <span class="se">\</span>
     discover --kubeconfig /kube/config <span class="se">\</span>
     --save-cluster-config /output/cluster-config.yaml
 </pre></div>
@@ -535,8 +535,8 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 <p>You can also provide a pre-configured file directly to <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> without running discovery.</p>
 <p>The full configuration file format:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.4.0-beta.5</span><span class="w"></span>
-<span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.5</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.4.0-beta.6</span><span class="w"></span>
+<span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.6</span><span class="w"></span>
 <span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
@@ -544,7 +544,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
 <span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.4.2.0-0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.5.3.0-0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">unloadThirdPartyRDMAModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
@@ -1277,7 +1277,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 23, 2026.
+      <span class="lastupdated">Last updated on Apr 29, 2026.
       </span></p>
   </div>
 

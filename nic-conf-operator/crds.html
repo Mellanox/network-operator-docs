@@ -548,7 +548,11 @@ string</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">serialNumber</span></code>
 string</p></td>
-<td><p>Serial number of the device, e.g. MT2116X09299</p></td>
+<td><p>SerialNumber of the device, e.g. MT2116X09299. Informational only — not guaranteed unique across
+all cards on a host: on systems with embedded NICs sharing a flashed VPD image (e.g. HGX B300)
+multiple cards will report the same serial number. The operator identifies NICs uniquely by their
+PCI device address (the <code class="docutils literal notranslate"><span class="pre">pci</span></code> field on the first entry in <code class="docutils literal notranslate"><span class="pre">ports</span></code>, with the function digit
+stripped).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">partNumber</span></code>
 string</p></td>
@@ -893,7 +897,10 @@ string</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">serialNumbers</span></code>
 []string</p></td>
-<td><p>Serial numbers of the NICs to be selected, e.g. MT2116X09299</p></td>
+<td><p>Serial numbers of the NICs to be selected, e.g. MT2116X09299. Note: serial numbers are not
+guaranteed unique — on systems with embedded NICs that share a flashed VPD image (e.g. HGX B300),
+multiple physical cards report the same serial, and this selector will match all of them. Use
+<code class="docutils literal notranslate"><span class="pre">pciAddresses</span></code> for precise per-card selection on such systems.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">partNumbers</span></code>
 []string</p></td>
@@ -1114,7 +1121,7 @@ Number of planes to be configured</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 23, 2026.
+      <span class="lastupdated">Last updated on Apr 29, 2026.
       </span></p>
   </div>
 
