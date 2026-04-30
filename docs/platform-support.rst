@@ -128,13 +128,13 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - NVIDIA Blackwell
      - ConnectX-7
      - Ubuntu 24.04 (ARM64) / Red Hat OpenShift
-     - GA
+     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
    * - NVIDIA DGX/HGX B200
      - x86
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
      - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
-     - GA
+     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
    * - NVIDIA RTX PRO 6000 Blackwell Server
      - x86
      - NVIDIA Blackwell
@@ -146,7 +146,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - NVIDIA Blackwell
      - ConnectX-8 SuperNIC
      - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
-     - GA
+     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
