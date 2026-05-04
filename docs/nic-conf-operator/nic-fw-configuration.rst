@@ -78,6 +78,76 @@ There are two requirements for the SR-IOV Network Operator to work together with
 .. warning::
    SR-IOV Network Operator can work together with the NIC Configuration Operator only in ``daemon`` configuration mode. ``systemd`` configuration mode is not supported with this scenario.
 
+.. _fw-reset-external-bmc:
+
+=====================================================================
+Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)
+=====================================================================
+
+On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX and HGX systems (GB200 NVL72, B200, B300) and the Vera Rubin GB family — an OS-level node reboot does **not** reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with ``mlxconfig`` are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.
+
+To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (``mlxfwreset`` / ``mstfwreset``) **before** the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.
+
+.. note::
+   ``NicConfigurationTemplate`` and ``SriovNetworkNodePolicy`` resources do not require any platform-specific changes. The firmware-reset behavior is controlled at the operator level only.
+
+-------------------------------------------------------------
+NIC Configuration Operator (``FW_RESET_AFTER_CONFIG_UPDATE``)
+-------------------------------------------------------------
+
+Set the ``FW_RESET_AFTER_CONFIG_UPDATE`` environment variable to ``"true"`` on the ``nicConfigurationOperator`` section of your ``NicClusterPolicy``. The configuration daemon will then run ``mlxfwreset`` on each managed NIC after applying non-volatile configuration, before draining and rebooting the node.
+
+.. code-block:: yaml
+    :substitutions:
+
+    apiVersion: mellanox.com/v1alpha1
+    kind: NicClusterPolicy
+    metadata:
+      name: nic-cluster-policy
+    spec:
+      nicConfigurationOperator:
+        operator:
+          image: nic-configuration-operator
+          repository: |nic-configuration-operator-repository|
+          version: |nic-configuration-operator-version|
+        configurationDaemon:
+          image: nic-configuration-operator-daemon
+          repository: |nic-configuration-operator-repository|
+          version: |nic-configuration-operator-version|
+        env:
+        - name: "FW_RESET_AFTER_CONFIG_UPDATE"
+          value: "true"
+
+----------------------------------------------------------------
+SR-IOV Network Operator (``mellanoxFirmwareReset`` feature gate)
+----------------------------------------------------------------
+
+Enable the ``mellanoxFirmwareReset`` feature gate on the ``SriovOperatorConfig``. The SR-IOV config daemon will then invoke ``mstfwreset`` against the Mellanox NIC before triggering the reboot, so that firmware parameters changed by the SR-IOV plugin (for example ``SRIOV_EN``, ``NUM_OF_VFS``) take effect on external-BMC platforms.
+
+When deploying via the Network Operator Helm chart, set the feature gate via Helm values:
+
+``values.yaml``:
+
+.. code-block:: yaml
+
+    sriovNetworkOperator:
+      enabled: true
+    sriov-network-operator:
+      sriovOperatorConfig:
+        featureGates:
+          mellanoxFirmwareReset: true
+
+For an already-installed cluster, patch the ``SriovOperatorConfig`` directly:
+
+.. code-block:: bash
+
+   kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io \
+     -n nvidia-network-operator default \
+     --patch '{"spec":{"featureGates":{"mellanoxFirmwareReset":true}}}' \
+     --type=merge
+
+The ``mellanoxFirmwareReset`` feature gate is documented as Beta in the upstream SR-IOV Network Operator project — see the `SR-IOV Network Operator API documentation <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/doc/api/operator-config-api.md>`_ for details.
+
 =============================================================================
 Install the NIC Configuration Operator and observe NIC devices in the cluster
 =============================================================================
@@ -89,7 +159,7 @@ Install the NIC Configuration Operator and observe NIC devices in the cluster
     To disable the Firmware upgrade and validation logic, do not define the ``nicFirmwareStorage`` section in the NicClusterPolicy CR.
 
 .. note::
-    On some DGX servers, the configuration update is not successfully applied after the warm reboot. In this case, it is recommended to explicitly reset the NIC's Firmware before the reboot and after updating its non-volatile configuration. This can be achieved by specifying the ``FW_RESET_AFTER_CONFIG_UPDATE`` environment variable in the NicClusterPolicy CR. Please see the commented section in the example below.
+    On platforms where the NIC is controlled by an external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB), additional configuration is required so that firmware updates are applied without a reboot loop — see :ref:`fw-reset-external-bmc`. The example below shows the relevant ``FW_RESET_AFTER_CONFIG_UPDATE`` knob commented out for reference.
 
 First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:
 

@@ -209,6 +209,39 @@ gen-docs: build-cache
     export PM_PACKAGES_ROOT=${CACHE_DIR}; \
 	${CURDIR}/repo.sh docs
 
+DOCKER_DOCS_IMAGE ?= network-operator-docs-builder:local
+DOCKER_DOCS_DOCKERFILE ?= hack/Dockerfile.docs
+
+# Build (or refresh) the docs-builder image. Docker's layer cache keeps this
+# fast on no-op runs; edits to the Dockerfile trigger a rebuild automatically.
+.PHONY: gen-docs-docker-image
+gen-docs-docker-image:
+	docker build --platform=linux/amd64 \
+		-t $(DOCKER_DOCS_IMAGE) \
+		-f $(DOCKER_DOCS_DOCKERFILE) hack/
+
+# Run gen-docs inside a Linux container. Required on macOS where NVIDIA's
+# Packman/repoman tooling rejects the host platform. Pinned to linux/amd64
+# because Packman ships sphinx for linux-x86_64 only (arm64 Python exists
+# but not arm64 sphinx). On Apple Silicon this runs under emulation.
+#
+# State retained between builds:
+#   - apt-installed system deps live in the docker image ($(DOCKER_DOCS_IMAGE))
+#   - Packman cache persists in $(CACHE_DIR) via the bind-mount
+#   - Sphinx output persists in _build/ via the bind-mount
+# To force a clean rebuild of the image: docker rmi $(DOCKER_DOCS_IMAGE)
+.PHONY: gen-docs-docker
+gen-docs-docker: gen-docs-docker-image
+	docker run --rm \
+		--platform=linux/amd64 \
+		--volume "$(CURDIR):/work" \
+		--workdir /work \
+		--env HOME=/tmp \
+		--env HOST_UID=$(shell id -u) \
+		--env HOST_GID=$(shell id -g) \
+		$(DOCKER_DOCS_IMAGE) \
+		bash -lc 'trap "chown -R $$HOST_UID:$$HOST_GID /work" EXIT; make gen-docs'
+
 .PHONY: generate-docs-versions-var
 generate-docs-versions-var: | $(BUILDDIR)
 	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
