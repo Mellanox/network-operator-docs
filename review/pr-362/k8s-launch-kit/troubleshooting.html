@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Troubleshooting &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="reference/reference.html" />
+    <link rel="prev" title="AI-Assisted Workflows" href="ai-skills.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="heterogeneous-clusters.html">Heterogeneous Clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="presets.html">Cluster Topology Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html">Automation and CI/CD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sos-report-collection">SOS-Report Collection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#troubleshooting-with-ai-skills">Troubleshooting with AI Skills</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-failures">Common Failures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+<li>Troubleshooting</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#sos-report-collection" id="id1">SOS-Report Collection</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting-with-ai-skills" id="id2">Troubleshooting with AI Skills</a></p></li>
+<li><p><a class="reference internal" href="#common-failures" id="id3">Common Failures</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id4">See Also</a></p></li>
+</ul>
+</div>
+<section id="sos-report-collection">
+<h2>SOS-Report Collection<a class="headerlink" href="#sos-report-collection" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span></code> command collects diagnostic data from the cluster, including pod logs, CRD statuses, OFED diagnostics, and node information:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k sosreport --kubeconfig ~/.kube/config
+</pre></div>
+</div>
+<p>The output is saved to a directory (default: <code class="docutils literal notranslate"><span class="pre">./sosreport</span></code>) that can be shared for offline analysis.</p>
+<p>For the broader Network Operator sosreport workflow (parsing, web UI, what to look for), see <a class="reference internal" href="../troubleshooting/sosreport.html"><span class="doc">Troubleshooting — SOS Report</span></a>.</p>
+</section>
+<section id="troubleshooting-with-ai-skills">
+<h2>Troubleshooting with AI Skills<a class="headerlink" href="#troubleshooting-with-ai-skills" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code> skill (see <a class="reference internal" href="ai-skills.html"><span class="doc">AI-Assisted Workflows</span></a>) can analyze sosreport data when invoked from Claude Code. Collect a sosreport and then ask Claude Code to investigate issues such as OFED driver crashes, SR-IOV VF allocation failures, pods stuck in <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>, or NIC configuration errors.</p>
+</section>
+<section id="common-failures">
+<h2>Common Failures<a class="headerlink" href="#common-failures" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 35%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Symptom</strong></p></th>
+<th class="head"><p><strong>Likely Cause</strong></p></th>
+<th class="head"><p><strong>Where to look</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> exits with code 3</p></td>
+<td><p>API server unreachable or RBAC missing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">auth</span> <span class="pre">can-i</span></code> and the kubeconfig</p></td>
+</tr>
+<tr class="row-odd"><td><p>Discovery completes with empty <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code></p></td>
+<td><p>Default <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> excludes all nodes</p></td>
+<td><p>Pass <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> matching a label on your nodes (see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Generation fails with “RA2.1 requires –network-operator-release in [26.1]”</p></td>
+<td><p>Spectrum-X version and Network Operator release mismatch</p></td>
+<td><p>Set <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> to match the Spectrum-X version (see <a class="reference internal" href="profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--deploy</span></code> exits with code 4</p></td>
+<td><p>Apply failed; an earlier resource is not Ready</p></td>
+<td><p>Inspect <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">nicclusterpolicy</span></code> and <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">nicnodepolicy</span></code>; collect a sosreport</p></td>
+</tr>
+<tr class="row-even"><td><p>OFED driver pods CrashLoopBackOff after deploy</p></td>
+<td><p>Storage or third-party RDMA modules block driver reload</p></td>
+<td><p>Verify <code class="docutils literal notranslate"><span class="pre">unloadStorageModules</span></code> / <code class="docutils literal notranslate"><span class="pre">unloadThirdPartyRDMAModules</span></code> settings in your config (see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SR-IOV pods stuck in <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code></p></td>
+<td><p>VF allocation failure or device plugin not ready</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">describe</span> <span class="pre">pod</span></code> and SR-IOV operator logs</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../troubleshooting/sosreport.html"><span class="doc">Troubleshooting — SOS Report</span></a> — the upstream sosreport workflow for the Network Operator</p></li>
+<li><p><a class="reference internal" href="ai-skills.html"><span class="doc">AI-Assisted Workflows</span></a> — the troubleshoot skill</p></li>
+<li><p><a class="reference internal" href="automation.html"><span class="doc">Automation and CI/CD</span></a> — exit codes and structured errors</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

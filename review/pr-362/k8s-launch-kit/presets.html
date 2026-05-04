@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cluster Topology Presets &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Automation and CI/CD" href="automation.html" />
+    <link rel="prev" title="Heterogeneous Clusters" href="heterogeneous-clusters.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="heterogeneous-clusters.html">Heterogeneous Clusters</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Cluster Topology Presets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#listing-presets">Listing Presets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-presets">Updating Presets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#offline-manifest-generation">Offline Manifest Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#discovery-overlay">Discovery Overlay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html">Automation and CI/CD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+<li>Cluster Topology Presets</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cluster-topology-presets">
+<h1>Cluster Topology Presets<a class="headerlink" href="#cluster-topology-presets" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#listing-presets" id="id1">Listing Presets</a></p></li>
+<li><p><a class="reference internal" href="#updating-presets" id="id2">Updating Presets</a></p></li>
+<li><p><a class="reference internal" href="#offline-manifest-generation" id="id3">Offline Manifest Generation</a></p></li>
+<li><p><a class="reference internal" href="#discovery-overlay" id="id4">Discovery Overlay</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Use this when:</strong> you want to generate manifests without running discovery against a live cluster — for offline manifest generation, CI pipelines, or known machine types where the topology is fixed.</p>
+</div>
+<p>A <strong>preset</strong> is a pre-recorded hardware topology for a known machine type (e.g., <code class="docutils literal notranslate"><span class="pre">ThinkSystem-SR680a-V3</span></code>, <code class="docutils literal notranslate"><span class="pre">PowerEdge-XE9680</span></code>). Each preset records expected PCI addresses, traffic class, NUMA affinity, and rail assignments for a specific machine + GPU pairing.</p>
+<p>Launch Kit uses presets in two ways:</p>
+<ul class="simple">
+<li><p><strong>Discovery overlay</strong> — when discovery detects a matching machine type, the preset’s topology is overlaid for consistency.</p></li>
+<li><p><strong>Offline generation</strong> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code> skips discovery entirely.</p></li>
+</ul>
+<section id="listing-presets">
+<h2>Listing Presets<a class="headerlink" href="#listing-presets" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k preset list
+</pre></div>
+</div>
+<p>Lists every preset known to the local installation.</p>
+</section>
+<section id="updating-presets">
+<h2>Updating Presets<a class="headerlink" href="#updating-presets" title="Permalink to this headline"></a></h2>
+<p>Download the latest presets from a Git repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k preset update
+</pre></div>
+</div>
+<p>Optional flags:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--repo</span> <span class="pre">&lt;url&gt;</span></code> — override the repository URL.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--branch</span> <span class="pre">&lt;name&gt;</span></code> — fetch from a specific branch or tag.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">&lt;path&gt;</span></code> — subdirectory within the repo containing presets.</p></li>
+</ul>
+<p>Presets are optional. Discovery and <code class="docutils literal notranslate"><span class="pre">--for</span></code> generation work without them; presets simply add machine-specific topology defaults.</p>
+</section>
+<section id="offline-manifest-generation">
+<h2>Offline Manifest Generation<a class="headerlink" href="#offline-manifest-generation" title="Permalink to this headline"></a></h2>
+<p>Generate manifests for a known preset without cluster access:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --for ThinkSystem-SR680a-V3 <span class="se">\</span>
+    --node-selector <span class="s2">&quot;nvidia.com/gpu.product=NVIDIA-H200&quot;</span> <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+<p>The generated manifests will target nodes matching the supplied selector when applied. This is the recommended path for CI pipelines that produce deployment artefacts ahead of cluster availability.</p>
+</section>
+<section id="discovery-overlay">
+<h2>Discovery Overlay<a class="headerlink" href="#discovery-overlay" title="Permalink to this headline"></a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> detects a machine type that matches a known preset, the preset’s PCI topology, NUMA affinity, and rail assignments are overlaid on the discovery output. This ensures consistent rail numbering and PCI ordering across discovery runs.</p>
+<p>If no preset matches, discovery proceeds with the values it derives directly from hardware — see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a> — <code class="docutils literal notranslate"><span class="pre">--for</span></code> flag in context</p></li>
+<li><p><a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a> — discovery without presets</p></li>
+<li><p><a class="reference internal" href="reference/cli.html"><span class="doc">CLI Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">preset</span> <span class="pre">list</span></code> / <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">preset</span> <span class="pre">update</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

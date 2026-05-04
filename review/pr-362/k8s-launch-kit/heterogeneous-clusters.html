@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heterogeneous Clusters &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-QdTG1YTLLTwD3b95jLqFxpQX9uYuJMNAtVZgwKX4oYU=" src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+        <script>initMermaid();</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cluster Topology Presets" href="presets.html" />
+    <link rel="prev" title="Advanced Topics" href="advanced-topics.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Heterogeneous Clusters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology">Discovery: Initial Grouping by PCI Topology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#strategy-1-automatic-combination-at-generation">Strategy 1 — Automatic Combination at Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#strategy-2-separate-configs-per-group">Strategy 2 — Separate Configs per Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#per-group-manifest-layout">Per-Group Manifest Layout</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nic-interface-name-templates">NIC Interface Name Templates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#north-south-vs-east-west-traffic">North-South vs East-West Traffic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="presets.html">Cluster Topology Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html">Automation and CI/CD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+<li>Heterogeneous Clusters</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="heterogeneous-clusters">
+<h1>Heterogeneous Clusters<a class="headerlink" href="#heterogeneous-clusters" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology" id="id2">Discovery: Initial Grouping by PCI Topology</a></p></li>
+<li><p><a class="reference internal" href="#strategy-1-automatic-combination-at-generation" id="id3">Strategy 1 — Automatic Combination at Generation</a></p></li>
+<li><p><a class="reference internal" href="#strategy-2-separate-configs-per-group" id="id4">Strategy 2 — Separate Configs per Group</a></p></li>
+<li><p><a class="reference internal" href="#per-group-manifest-layout" id="id5">Per-Group Manifest Layout</a></p></li>
+<li><p><a class="reference internal" href="#nic-interface-name-templates" id="id6">NIC Interface Name Templates</a></p></li>
+<li><p><a class="reference internal" href="#north-south-vs-east-west-traffic" id="id7">North-South vs East-West Traffic</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Use this when:</strong> your cluster contains multiple node types — e.g., different GPU SKUs (H100 + H200), different NIC SKUs (ConnectX-7 + BF3 SuperNIC), or different OFED requirements.</p>
+</div>
+<p>The node-grouping mapping when generating a single config covering multiple groups:</p>
+<div data-mermaid="flowchart LR
+    subgraph Cluster[Kubernetes cluster]
+        direction TB
+        subgraph G1[Group: H100 + ConnectX-7]
+            N1[node-h100-1]
+            N2[node-h100-2]
+        end
+        subgraph G2[Group: H200 + BF3 SuperNIC]
+            N3[node-h200-1]
+            N4[node-h200-2]
+        end
+    end
+
+    subgraph Manifests[Generated by l8k generate]
+        direction TB
+        NCP[NicClusterPolicy&lt;br/&gt;cluster-wide]
+        NNP1[NicNodePolicy h100&lt;br/&gt;nodeSelector: gpu=H100]
+        NNP2[NicNodePolicy h200&lt;br/&gt;nodeSelector: gpu=H200]
+        SR1[SriovNetworkNodePolicy h100]
+        SR2[SriovNetworkNodePolicy h200]
+    end
+
+    NCP --&gt; G1
+    NCP --&gt; G2
+    NNP1 --&gt; G1
+    SR1 --&gt; G1
+    NNP2 --&gt; G2
+    SR2 --&gt; G2"><div class="mermaid">
+            flowchart LR
+    subgraph Cluster[Kubernetes cluster]
+        direction TB
+        subgraph G1[Group: H100 + ConnectX-7]
+            N1[node-h100-1]
+            N2[node-h100-2]
+        end
+        subgraph G2[Group: H200 + BF3 SuperNIC]
+            N3[node-h200-1]
+            N4[node-h200-2]
+        end
+    end
+
+    subgraph Manifests[Generated by l8k generate]
+        direction TB
+        NCP[NicClusterPolicy&lt;br/&gt;cluster-wide]
+        NNP1[NicNodePolicy h100&lt;br/&gt;nodeSelector: gpu=H100]
+        NNP2[NicNodePolicy h200&lt;br/&gt;nodeSelector: gpu=H200]
+        SR1[SriovNetworkNodePolicy h100]
+        SR2[SriovNetworkNodePolicy h200]
+    end
+
+    NCP --&gt; G1
+    NCP --&gt; G2
+    NNP1 --&gt; G1
+    SR1 --&gt; G1
+    NNP2 --&gt; G2
+    SR2 --&gt; G2
+        </div></div><section id="discovery-initial-grouping-by-pci-topology">
+<h2>Discovery: Initial Grouping by PCI Topology<a class="headerlink" href="#discovery-initial-grouping-by-pci-topology" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> places nodes into groups by their PCI topology — the set of PCI addresses and device IDs across each node’s PFs. Nodes with identical PCI topology land in the same group. Each group carries:</p>
+<ul class="simple">
+<li><p>A unique <code class="docutils literal notranslate"><span class="pre">identifier</span></code> (<code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, …).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">ThinkSystem-SR680a-V3</span></code> / <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>), populated from GPU operator labels or probed from hardware.</p></li>
+<li><p>An auto-computed <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> that distinguishes the group from others.</p></li>
+<li><p>The list of east-west PFs with their <code class="docutils literal notranslate"><span class="pre">rail</span></code> indices.</p></li>
+</ul>
+<p>The resulting groups are written to <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> as separate entries. From there you have two strategies for handling more than one group.</p>
+</section>
+<section id="strategy-1-automatic-combination-at-generation">
+<h2>Strategy 1 — Automatic Combination at Generation<a class="headerlink" href="#strategy-1-automatic-combination-at-generation" title="Permalink to this headline"></a></h2>
+<p>The groups in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> stay separate — they’re written as distinct entries with their own <code class="docutils literal notranslate"><span class="pre">identifier</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and PF lists. When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> runs, groups that share the same <strong>GPU product type</strong> <em>and</em> the same <strong>east-west rail count</strong> are automatically combined into a single render group at generation time:</p>
+<ul class="simple">
+<li><p>The combined render group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> is derived from the GPU type (e.g., <code class="docutils literal notranslate"><span class="pre">nvidia-h100-nvl</span></code>).</p></li>
+<li><p>Its effective <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{nvidia.com/gpu.product:</span> <span class="pre">&lt;gpuType&gt;}</span></code> — targeting every node of that GPU type, regardless of source group.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">workerNodes</span></code> and OFED-dependent module lists are taken as the union of the source groups.</p></li>
+<li><p>One set of manifests is produced that covers all source groups with that GPU type.</p></li>
+</ul>
+<p>The source groups in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> are not mutated; the combination happens in memory while rendering. This is the right strategy when your cluster has multiple node SKUs with the same GPU product type (e.g., two server vendors both running H100s) — the generator produces a single deployment driven by the GPU product label.</p>
+<p>When source groups share a GPU type but have <strong>conflicting PCI topologies</strong> (the same PCI address appears at different rail positions across source groups, or rail-to-PCI mappings differ), the generator deploys <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRs to normalize interface names via udev rules. Pods then reference rail-stable names (e.g., <code class="docutils literal notranslate"><span class="pre">rdma_r0</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r1</span></code>) instead of PCI addresses, so a single manifest set works across all source groups despite the underlying PCI differences. See <a class="reference internal" href="#nic-interface-name-templates"><span class="std std-ref">NIC Interface Name Templates</span></a> below.</p>
+<p>Combination happens automatically with no flags required. Groups with different GPU types remain separate; groups without a discoverable GPU type are never combined.</p>
+</section>
+<section id="strategy-2-separate-configs-per-group">
+<h2>Strategy 2 — Separate Configs per Group<a class="headerlink" href="#strategy-2-separate-configs-per-group" title="Permalink to this headline"></a></h2>
+<p>Use this strategy when groups need genuinely different configurations — different Network Operator releases, different fabric, different deployment types, different DOCA driver versions, or different profile selections.</p>
+<p>A single <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> invocation produces one set of manifests with one Network Operator version, one fabric, one deployment type, etc. To deploy different configs to different groups, run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> separately for each group with <code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">&lt;identifier&gt;</span></code> and a distinct output directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># First group: SR-IOV Ethernet on Network Operator 26.4</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --group group-0 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-group-0
+
+<span class="c1"># Second group: Host Device on Network Operator 26.1</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --group group-1 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.1 <span class="se">\</span>
+    --deployment-type host_device --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-group-1
+</pre></div>
+</div>
+<p>Each run produces an independent manifest set scoped to one group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>. The two sets can be applied to the same cluster — they target disjoint nodes.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">--group</span></code> is set, automatic combination is skipped and only the requested group is rendered.</p>
+</section>
+<section id="per-group-manifest-layout">
+<h2>Per-Group Manifest Layout<a class="headerlink" href="#per-group-manifest-layout" title="Permalink to this headline"></a></h2>
+<p>Within a single <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> run, manifests split between cluster-wide and per-group resources:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">10-nicclusterpolicy.yaml</span></code> — cluster-wide components (Multus, CNI plugins, NV-IPAM, NIC Configuration Operator, Spectrum-X Operator). Rendered once.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">11-nicnodepolicy.yaml</span></code> — per-group components (OFED driver, device plugins). Rendered once per group with that group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">30-*.yaml</span></code> — network resources, per-group when needed (e.g., <code class="docutils literal notranslate"><span class="pre">30-sriovnetworknodepolicy-group-0.yaml</span></code>).</p></li>
+</ul>
+<p>The per-group split ensures node selectors are correctly scoped within a single deployment. <code class="docutils literal notranslate"><span class="pre">imagePullSecrets</span></code> set on the NicClusterPolicy propagate into per-group NicNodePolicy sub-specs.</p>
+<p>This is a packaging mechanism inside one config — not a way to deploy different driver versions per group. To vary the OFED driver, Network Operator release, or fabric across groups, use Strategy 2.</p>
+<p>The deployment ordering ensures dependency resolution: NicClusterPolicy first (wait for readiness), then each NicNodePolicy (wait for readiness), then the remaining manifests.</p>
+</section>
+<section id="nic-interface-name-templates">
+<span id="id1"></span><h2>NIC Interface Name Templates<a class="headerlink" href="#nic-interface-name-templates" title="Permalink to this headline"></a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator.deployNicInterfaceNameTemplate</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the configuration, Launch Kit deploys <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRs to rename NIC interfaces to predictable, rail-based names using udev rules. This setting means “enable when needed” rather than “always enable” — templates are deployed only when:</p>
+<ul class="simple">
+<li><p>Combined groups have cross-rail PCI address conflicts (the same PCI address appears at different rail positions across source groups). PCI addresses alone cannot identify which interface corresponds to which rail in this case, so the template provides a consistent rail-based mapping.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code> profile is used and PFs have empty <code class="docutils literal notranslate"><span class="pre">networkInterface</span></code> fields (the shared device plugin needs interface names).</p></li>
+<li><p>Spectrum-X is enabled (always).</p></li>
+</ul>
+<p>Naming conventions:</p>
+<ul class="simple">
+<li><p>Standard profiles: <code class="docutils literal notranslate"><span class="pre">rdma_r%rail%</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r%rail%</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">rdma_r0</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r1</span></code>).</p></li>
+<li><p>Spectrum-X profiles: <code class="docutils literal notranslate"><span class="pre">roce_p%plane%_r%rail%</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_p%plane%_r%rail%</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">roce_p0_r2</span></code>).</p></li>
+</ul>
+<p>When all machines in a group have identical PCI addresses per rail, name templates are not deployed and PCI addresses identify interfaces directly.</p>
+</section>
+<section id="north-south-vs-east-west-traffic">
+<h2>North-South vs East-West Traffic<a class="headerlink" href="#north-south-vs-east-west-traffic" title="Permalink to this headline"></a></h2>
+<p>During discovery, each PF is classified by traffic direction:</p>
+<ul class="simple">
+<li><p><strong>East-west</strong> — GPU-to-GPU interconnect (ConnectX, BlueField-3 SuperNIC). Included in generated manifests and assigned a sequential <code class="docutils literal notranslate"><span class="pre">rail</span></code> index.</p></li>
+<li><p><strong>North-south</strong> — management or out-of-band (BlueField DPUs). Saved in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> for visibility but <strong>filtered out</strong> of generated manifests.</p></li>
+</ul>
+<p>The classification uses an embedded list of DPU product codes. BlueField-3 SuperNICs are explicitly classified as east-west even though they share a part-number prefix with BlueField DPUs. PFs that match no known east-west or north-south signature are treated as out-of-band and excluded from generated manifests.</p>
+<div data-mermaid="flowchart LR
+    Mgmt[(Management /&lt;br/&gt;OOB network)]
+    Mesh[(GPU mesh&lt;br/&gt;other cluster nodes)]
+
+    subgraph Node[Compute node]
+        direction TB
+        BF3[BF3 DPU&lt;br/&gt;north-south]
+        SUPER[ConnectX-7 / BF3 SuperNIC&lt;br/&gt;east-west]
+        GPU[GPUs]
+        GPU --- SUPER
+    end
+
+    Mgmt &lt;--&gt; BF3
+    SUPER &lt;--&gt;|RDMA / GPUDirect| Mesh
+
+    NS_NOTE[N-S PFs are filtered out&lt;br/&gt;of generated manifests]
+    NS_NOTE -.-&gt; BF3
+
+    classDef ns fill:#ffd6a5,stroke:#fd7e14,color:#000
+    classDef ew fill:#a2efb6,stroke:#28a745,color:#000
+    class BF3 ns
+    class SUPER ew"><div class="mermaid">
+            flowchart LR
+    Mgmt[(Management /&lt;br/&gt;OOB network)]
+    Mesh[(GPU mesh&lt;br/&gt;other cluster nodes)]
+
+    subgraph Node[Compute node]
+        direction TB
+        BF3[BF3 DPU&lt;br/&gt;north-south]
+        SUPER[ConnectX-7 / BF3 SuperNIC&lt;br/&gt;east-west]
+        GPU[GPUs]
+        GPU --- SUPER
+    end
+
+    Mgmt &lt;--&gt; BF3
+    SUPER &lt;--&gt;|RDMA / GPUDirect| Mesh
+
+    NS_NOTE[N-S PFs are filtered out&lt;br/&gt;of generated manifests]
+    NS_NOTE -.-&gt; BF3
+
+    classDef ns fill:#ffd6a5,stroke:#fd7e14,color:#000
+    classDef ew fill:#a2efb6,stroke:#28a745,color:#000
+    class BF3 ns
+    class SUPER ew
+        </div></div></section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="concepts.html"><span class="doc">Concepts</span></a> — the node-group / fabric / traffic vocabulary</p></li>
+<li><p><a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a> — how groups are formed</p></li>
+<li><p><a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a> — <code class="docutils literal notranslate"><span class="pre">--group</span></code> flag in context</p></li>
+<li><p><a class="reference internal" href="reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code> and <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator</span></code> schemas</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

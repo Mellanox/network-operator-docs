@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concepts &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-QdTG1YTLLTwD3b95jLqFxpQX9uYuJMNAtVZgwKX4oYU=" src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+        <script>initMermaid();</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="NVIDIA Kubernetes Launch Kit" href="k8s-launch-kit.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Concepts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#workflow-phases">Workflow Phases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#profiles">Profiles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network-operator-releases">Network Operator Releases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#node-groups-and-heterogeneity">Node Groups and Heterogeneity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fabrics-and-traffic-direction">Fabrics and Traffic Direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrum-x-multiplane-modes">Spectrum-X Multiplane Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cluster-topology-presets">Cluster Topology Presets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#glossary">Glossary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+<li>Concepts</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="concepts">
+<h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#workflow-phases" id="id1">Workflow Phases</a></p></li>
+<li><p><a class="reference internal" href="#profiles" id="id2">Profiles</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-releases" id="id3">Network Operator Releases</a></p></li>
+<li><p><a class="reference internal" href="#node-groups-and-heterogeneity" id="id4">Node Groups and Heterogeneity</a></p></li>
+<li><p><a class="reference internal" href="#fabrics-and-traffic-direction" id="id5">Fabrics and Traffic Direction</a></p></li>
+<li><p><a class="reference internal" href="#spectrum-x-multiplane-modes" id="id6">Spectrum-X Multiplane Modes</a></p></li>
+<li><p><a class="reference internal" href="#cluster-topology-presets" id="id7">Cluster Topology Presets</a></p></li>
+<li><p><a class="reference internal" href="#glossary" id="id8">Glossary</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id9">See Also</a></p></li>
+</ul>
+</div>
+<p>This page explains the Launch Kit mental model. New users should read this once before working through the <a class="reference internal" href="quick-start.html"><span class="doc">Quick Start</span></a>. Returning users can skip it.</p>
+<section id="workflow-phases">
+<h2>Workflow Phases<a class="headerlink" href="#workflow-phases" title="Permalink to this headline"></a></h2>
+<p>Launch Kit operates in three phases:</p>
+<ol class="arabic simple">
+<li><p><strong>Discover</strong> — Probe the cluster’s network hardware (NICs, PCI addresses, RDMA capability, OFED-dependent kernel modules, GPU topology) and write a <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> describing what was found.</p></li>
+<li><p><strong>Generate</strong> — Take a cluster configuration plus a deployment profile selection and render a complete set of numbered Kubernetes YAML manifests to a directory.</p></li>
+<li><p><strong>Deploy</strong> — Apply the generated manifests to the cluster in dependency order. Optional: <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> previews what would be applied without touching the cluster.</p></li>
+</ol>
+<p>Each phase has a dedicated CLI subcommand — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code>, <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>, <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--deploy</span></code> — and a dedicated how-to page (<a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>, <a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a>, <a class="reference internal" href="workflows/deploy.html"><span class="doc">Deploy Workflow</span></a>).</p>
+<p>The artifact pipeline:</p>
+<div data-mermaid="flowchart LR
+    KC[kubeconfig]
+    BC[base config&lt;br/&gt;optional]
+    D([l8k discover])
+    CC[cluster-config.yaml]
+    FLAGS[--fabric&lt;br/&gt;--deployment-type&lt;br/&gt;--network-operator-release]
+    G([l8k generate])
+    MAN[./deployment/*.yaml]
+    APPLY([deploy])
+    CLUSTER[(running cluster)]
+
+    KC --&gt; D
+    BC -.-&gt; D
+    D --&gt; CC
+    CC --&gt; G
+    FLAGS -.-&gt; G
+    G --&gt; MAN
+    MAN --&gt; APPLY
+    APPLY --&gt; CLUSTER
+
+    classDef artifact fill:#fff,stroke:#888,stroke-dasharray: 4 3
+    classDef action fill:#79b8ff,stroke:#005cc5,color:#fff
+    classDef state fill:#a2efb6,stroke:#28a745,color:#000
+    class KC,BC,CC,MAN,FLAGS artifact
+    class D,G,APPLY action
+    class CLUSTER state"><div class="mermaid">
+            flowchart LR
+    KC[kubeconfig]
+    BC[base config&lt;br/&gt;optional]
+    D([l8k discover])
+    CC[cluster-config.yaml]
+    FLAGS[--fabric&lt;br/&gt;--deployment-type&lt;br/&gt;--network-operator-release]
+    G([l8k generate])
+    MAN[./deployment/*.yaml]
+    APPLY([deploy])
+    CLUSTER[(running cluster)]
+
+    KC --&gt; D
+    BC -.-&gt; D
+    D --&gt; CC
+    CC --&gt; G
+    FLAGS -.-&gt; G
+    G --&gt; MAN
+    MAN --&gt; APPLY
+    APPLY --&gt; CLUSTER
+
+    classDef artifact fill:#fff,stroke:#888,stroke-dasharray: 4 3
+    classDef action fill:#79b8ff,stroke:#005cc5,color:#fff
+    classDef state fill:#a2efb6,stroke:#28a745,color:#000
+    class KC,BC,CC,MAN,FLAGS artifact
+    class D,G,APPLY action
+    class CLUSTER state
+        </div></div></section>
+<section id="profiles">
+<h2>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline"></a></h2>
+<p>A <strong>profile</strong> is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit ships seven profiles:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sriov-ethernet</span></code> — SR-IOV with Ethernet</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sriov-infiniband</span></code> — SR-IOV with InfiniBand</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">host-device</span></code> — direct passthrough to host network devices</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">macvlan-rdma-shared</span></code> — Ethernet with shared RDMA device plugin and MacVLAN</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipoib-rdma-shared</span></code> — InfiniBand with shared RDMA device plugin and IPoIB</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spectrum-x</span></code> — Spectrum-X multi-rail AI interconnect (RA2.2 on Network Operator 26.4)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spectrum-x-ra2.1</span></code> — Spectrum-X for the RA2.1 reference architecture (Network Operator 26.1)</p></li>
+</ul>
+<p>Profiles are selected by flag combinations on <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>: <code class="docutils literal notranslate"><span class="pre">--fabric</span></code>, <code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code>, <code class="docutils literal notranslate"><span class="pre">--multirail</span></code>, and <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. See <a class="reference internal" href="profiles/profiles.html"><span class="doc">Deployment Profiles</span></a> for the decision matrix.</p>
+</section>
+<section id="network-operator-releases">
+<h2>Network Operator Releases<a class="headerlink" href="#network-operator-releases" title="Permalink to this headline"></a></h2>
+<p>Launch Kit pins to specific NVIDIA Network Operator releases. The <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> flag (and the <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> config key) selects between supported release lines:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">25.10</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">26.1</span></code> — required for <code class="docutils literal notranslate"><span class="pre">spectrum-x-ra2.1</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">26.4</span></code> — required for <code class="docutils literal notranslate"><span class="pre">spectrum-x</span></code> (RA2.2).</p></li>
+</ul>
+<p>The selected release auto-fills versions and image tags from an embedded catalog. Version mismatches (for example, requesting RA2.1 with release 26.4) error out with a specific message.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Launch Kit is backward compatible with older Network Operator releases — a single <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary supports every release line in the catalog above. Always install the <strong>latest</strong> <code class="docutils literal notranslate"><span class="pre">l8k</span></code> release; pick the target Network Operator line via <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code>. New releases of l8k add new lines to the catalog and pick up patch bumps for existing ones, so an older l8k binary will miss them.</p>
+</div>
+</section>
+<section id="node-groups-and-heterogeneity">
+<h2>Node Groups and Heterogeneity<a class="headerlink" href="#node-groups-and-heterogeneity" title="Permalink to this headline"></a></h2>
+<p>During discovery, nodes are placed into <strong>groups</strong> by their PCI topology (the set of PCI addresses and device IDs across each node’s PFs). Each group is identified as <code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, etc., and carries a <code class="docutils literal notranslate"><span class="pre">machineType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">DGX-B200</span></code>), a <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>), an auto-computed <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and a list of physical functions (PFs).</p>
+<p>When the cluster has multiple groups, you have two strategies:</p>
+<ul class="simple">
+<li><p><strong>Automatic combination at generation</strong> — groups stay separate in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, but <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> automatically combines groups sharing the same GPU type and east-west rail count into a single render group keyed by GPU type. One <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> run produces a single set of manifests covering all matching source groups.</p></li>
+<li><p><strong>Separate configs per group</strong> — run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--group</span> <span class="pre">&lt;id&gt;</span></code> per group, producing independent manifest sets. Use this when groups need different Network Operator releases, fabrics, deployment types, or driver versions.</p></li>
+</ul>
+<p>See <a class="reference internal" href="heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a> for the full picture.</p>
+</section>
+<section id="fabrics-and-traffic-direction">
+<h2>Fabrics and Traffic Direction<a class="headerlink" href="#fabrics-and-traffic-direction" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">--fabric</span></code> flag selects between <code class="docutils literal notranslate"><span class="pre">ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>. Fabric is the physical transport; deployment type (<code class="docutils literal notranslate"><span class="pre">sriov</span></code> / <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code> / <code class="docutils literal notranslate"><span class="pre">host_device</span></code>) is the kubelet-facing networking model.</p>
+<p>During discovery, Launch Kit also classifies each PF by <strong>traffic direction</strong>:</p>
+<ul class="simple">
+<li><p><strong>East-west</strong> — GPU-to-GPU interconnect (ConnectX, BlueField-3 SuperNIC). These PFs appear in generated manifests.</p></li>
+<li><p><strong>North-south</strong> — management / out-of-band (BlueField DPUs). These PFs are saved in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> for visibility but <strong>filtered out</strong> of generated manifests.</p></li>
+</ul>
+<p>Each east-west PF is assigned a sequential <code class="docutils literal notranslate"><span class="pre">rail</span></code> index (<code class="docutils literal notranslate"><span class="pre">rail:</span> <span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">rail:</span> <span class="pre">1</span></code>, …) used in resource and network names.</p>
+</section>
+<section id="spectrum-x-multiplane-modes">
+<h2>Spectrum-X Multiplane Modes<a class="headerlink" href="#spectrum-x-multiplane-modes" title="Permalink to this headline"></a></h2>
+<p>Spectrum-X profiles add a <strong>multiplane mode</strong> dimension on top of profile selection:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — hardware plane load balancing (large 2- or 3-tier switch topologies)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code> — software plane load balancing (smaller-scale Spectrum-X clusters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uniplane</span></code> — single unified plane (forces <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code> — no plane separation (BlueField-3 SuperNIC; simple topologies)</p></li>
+</ul>
+<p>NIC type constrains available modes (ConnectX-8 supports <code class="docutils literal notranslate"><span class="pre">swplb</span></code>/<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>/<code class="docutils literal notranslate"><span class="pre">uniplane</span></code>; BF3 SuperNIC supports <code class="docutils literal notranslate"><span class="pre">none</span></code> only). See <a class="reference internal" href="profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p>
+</section>
+<section id="cluster-topology-presets">
+<h2>Cluster Topology Presets<a class="headerlink" href="#cluster-topology-presets" title="Permalink to this headline"></a></h2>
+<p>A <strong>preset</strong> is a pre-recorded hardware topology for a known machine type (e.g., <code class="docutils literal notranslate"><span class="pre">ThinkSystem-SR680a-V3</span></code>, <code class="docutils literal notranslate"><span class="pre">PowerEdge-XE9680</span></code>). Presets list expected PCI addresses, traffic class, NUMA affinity, and rail assignments.</p>
+<p>Two ways presets are used:</p>
+<ul class="simple">
+<li><p><strong>Discovery overlay</strong> — if the discovered machine type matches a known preset, the preset’s topology is overlaid on discovery output for consistency.</p></li>
+<li><p><strong>Offline generation</strong> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code> skips discovery entirely and produces manifests for any cluster matching the preset’s hardware.</p></li>
+</ul>
+<p>See <a class="reference internal" href="presets.html"><span class="doc">Cluster Topology Presets</span></a>.</p>
+</section>
+<section id="glossary">
+<h2>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Term</strong></p></th>
+<th class="head"><p><strong>Definition</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>PF</strong></p></td>
+<td><p>Physical Function. A physical NIC interface, identified by PCI address.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>VF</strong></p></td>
+<td><p>Virtual Function. An SR-IOV-virtualised slice of a PF.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Rail</strong></p></td>
+<td><p>A sequential index assigned to each east-west PF. Used in resource and network names.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Fabric</strong></p></td>
+<td><p>The physical transport layer: <code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Deployment type</strong></p></td>
+<td><p>The kubelet-facing networking model: <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code>, or <code class="docutils literal notranslate"><span class="pre">host_device</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Profile</strong></p></td>
+<td><p>A named (fabric, deployment type, options) combination. See <a class="reference internal" href="profiles/profiles.html"><span class="doc">Deployment Profiles</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Group</strong></p></td>
+<td><p>A set of nodes sharing the same PCI topology. See <a class="reference internal" href="heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>East-west</strong></p></td>
+<td><p>GPU-to-GPU interconnect traffic.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>North-south</strong></p></td>
+<td><p>Management or out-of-band traffic. Filtered out of generated manifests.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Preset</strong></p></td>
+<td><p>A pre-recorded hardware topology for a known machine type. See <a class="reference internal" href="presets.html"><span class="doc">Cluster Topology Presets</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Multiplane mode</strong></p></td>
+<td><p>Spectrum-X load-balancing mode: <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="quick-start.html"><span class="doc">Quick Start</span></a> — the canonical end-to-end walkthrough</p></li>
+<li><p><a class="reference internal" href="profiles/profiles.html"><span class="doc">Deployment Profiles</span></a> — decision matrix</p></li>
+<li><p><a class="reference internal" href="heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a> — mixed-hardware deep dive</p></li>
+<li><p><a class="reference internal" href="reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> schema</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

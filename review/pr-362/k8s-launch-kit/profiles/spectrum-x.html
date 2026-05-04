@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spectrum-X &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/mermaid-init.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-QdTG1YTLLTwD3b95jLqFxpQX9uYuJMNAtVZgwKX4oYU=" src="https://cdn.jsdelivr.net/npm/mermaid@9.3.0/dist/mermaid.min.js"></script>
+        <script src="../../_static/mermaid-init.js"></script>
+        <script src="../../_static/version.js"></script>
+        <script src="../../_static/social-media.js"></script>
+        <script>initMermaid();</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Workflows" href="../workflows/workflows.html" />
+    <link rel="prev" title="MacVLAN (RDMA Shared)" href="macvlan-rdma-shared.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../../index.html">
+  <img src="../../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="profiles.html">Deployment Profiles</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="profiles.html#decision-tree">Decision Tree</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sriov-ethernet.html">SR-IOV Ethernet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sriov-infiniband.html">SR-IOV InfiniBand</a></li>
+<li class="toctree-l4"><a class="reference internal" href="host-device.html">Host Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ipoib-rdma-shared.html">IP over InfiniBand (RDMA Shared)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN (RDMA Shared)</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Spectrum-X</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#use-case">Use Case</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#multiplane-modes">Multiplane Modes</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#hwplb">HWPLB</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#swplb">SWPLB</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#uniplane">Uniplane</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#none-single-plane">None (Single Plane)</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="#nic-type-constraints">NIC Type Constraints</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#pinning-to-ra2-1">Pinning to RA2.1</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="profiles.html#decision-matrix">Decision Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="profiles.html">Deployment Profiles</a> &raquo;</li>
+<li>Spectrum-X</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spectrum-x">
+<h1>Spectrum-X<a class="headerlink" href="#spectrum-x" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#use-case" id="id1">Use Case</a></p></li>
+<li><p><a class="reference internal" href="#multiplane-modes" id="id2">Multiplane Modes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#hwplb" id="id3">HWPLB</a></p></li>
+<li><p><a class="reference internal" href="#swplb" id="id4">SWPLB</a></p></li>
+<li><p><a class="reference internal" href="#uniplane" id="id5">Uniplane</a></p></li>
+<li><p><a class="reference internal" href="#none-single-plane" id="id6">None (Single Plane)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nic-type-constraints" id="id7">NIC Type Constraints</a></p></li>
+<li><p><a class="reference internal" href="#pinning-to-ra2-1" id="id8">Pinning to RA2.1</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id9">See Also</a></p></li>
+</ul>
+</div>
+<section id="use-case">
+<h2>Use Case<a class="headerlink" href="#use-case" title="Permalink to this headline"></a></h2>
+<p>NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.</p>
+<p>Two reference architectures are supported, selected by Network Operator release:</p>
+<ul class="simple">
+<li><p><strong>RA2.2</strong> (current) — requires <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">26.4</span></code>. Uses <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> (v1alpha2 CRD).</p></li>
+<li><p><strong>RA2.1</strong> (previous) — requires <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">26.1</span></code>. Uses <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code> + <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> + <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code> with NV-IPAM glue.</p></li>
+</ul>
+<p>For deeper Spectrum-X background, see <a class="reference internal" href="../../nic-conf-operator/spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
+</section>
+<section id="multiplane-modes">
+<h2>Multiplane Modes<a class="headerlink" href="#multiplane-modes" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code> flag selects how planes are mapped onto NICs. <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> takes the SPC-X RA version as its value (<code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>); <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code>, <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code>, and <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> are all required alongside it. <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> implies ethernet fabric, sriov deployment, and multirail.</p>
+<section id="hwplb">
+<h3>HWPLB<a class="headerlink" href="#hwplb" title="Permalink to this headline"></a></h3>
+<p>Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --multiplane-mode hwplb --number-of-planes <span class="m">4</span>
+</pre></div>
+</div>
+</section>
+<section id="swplb">
+<h3>SWPLB<a class="headerlink" href="#swplb" title="Permalink to this headline"></a></h3>
+<p>Software Plane Load Balancing for smaller-scale Spectrum-X clusters. Generates separate resources per-rail per-plane:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --multiplane-mode swplb --number-of-planes <span class="m">2</span>
+</pre></div>
+</div>
+</section>
+<section id="uniplane">
+<h3>Uniplane<a class="headerlink" href="#uniplane" title="Permalink to this headline"></a></h3>
+<p>Unified plane mode with no plane separation. Use with <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --multiplane-mode uniplane --number-of-planes <span class="m">1</span>
+</pre></div>
+</div>
+</section>
+<section id="none-single-plane">
+<h3>None (Single Plane)<a class="headerlink" href="#none-single-plane" title="Permalink to this headline"></a></h3>
+<p>No multiplane separation. Use with BlueField-3 SuperNIC or simple topologies. <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --multiplane-mode none --number-of-planes <span class="m">1</span>
+</pre></div>
+</div>
+<p>Side-by-side comparison of the four modes:</p>
+<div data-mermaid="flowchart TB
+    subgraph HWPLB[HWPLB - hardware load balancing]
+        H_NIC[NIC]
+        H_NIC --&gt;|HW LB| H_P1[Plane 1]
+        H_NIC --&gt;|HW LB| H_P2[Plane 2]
+        H_NIC --&gt;|HW LB| H_P3[Plane 3]
+    end
+    subgraph SWPLB[SWPLB - software load balancing]
+        S_NIC[NIC] --&gt; S_OVS[OVS]
+        S_OVS --&gt;|SW LB| S_P1[Plane 1]
+        S_OVS --&gt;|SW LB| S_P2[Plane 2]
+        S_OVS --&gt;|SW LB| S_P3[Plane 3]
+    end
+    subgraph UNI[Uniplane]
+        U_NIC[NIC] --&gt; U_P[Single plane]
+    end
+    subgraph NONE[None]
+        N_NIC[NIC] --&gt; N_NET[Standard network]
+    end"><div class="mermaid">
+            flowchart TB
+    subgraph HWPLB[HWPLB - hardware load balancing]
+        H_NIC[NIC]
+        H_NIC --&gt;|HW LB| H_P1[Plane 1]
+        H_NIC --&gt;|HW LB| H_P2[Plane 2]
+        H_NIC --&gt;|HW LB| H_P3[Plane 3]
+    end
+    subgraph SWPLB[SWPLB - software load balancing]
+        S_NIC[NIC] --&gt; S_OVS[OVS]
+        S_OVS --&gt;|SW LB| S_P1[Plane 1]
+        S_OVS --&gt;|SW LB| S_P2[Plane 2]
+        S_OVS --&gt;|SW LB| S_P3[Plane 3]
+    end
+    subgraph UNI[Uniplane]
+        U_NIC[NIC] --&gt; U_P[Single plane]
+    end
+    subgraph NONE[None]
+        N_NIC[NIC] --&gt; N_NET[Standard network]
+    end
+        </div></div></section>
+</section>
+<section id="nic-type-constraints">
+<h2>NIC Type Constraints<a class="headerlink" href="#nic-type-constraints" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 15%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>NIC Type</strong></p></th>
+<th class="head"><p><strong>Device ID</strong></p></th>
+<th class="head"><p><strong>Supported Modes</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ConnectX-8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>BlueField-3 SuperNIC</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">a2dc</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> only</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="pinning-to-ra2-1">
+<h2>Pinning to RA2.1<a class="headerlink" href="#pinning-to-ra2-1" title="Permalink to this headline"></a></h2>
+<p>For Network Operator 26.1 deployments, select the Spectrum-X RA2.1 profile by passing <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> as the value of <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.1 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.1 <span class="se">\</span>
+    --multiplane-mode swplb --number-of-planes <span class="m">2</span>
+</pre></div>
+</div>
+<p>If the release and Spectrum-X version are mismatched (for example, <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span> <span class="pre">RA2.1</span></code> with <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">26.4</span></code>), Launch Kit errors out with an explicit message.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="profiles.html"><span class="doc">Deployment Profiles</span></a> — decision matrix</p></li>
+<li><p><a class="reference internal" href="../../nic-conf-operator/spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a> — background and CRD details</p></li>
+<li><p><a class="reference internal" href="../workflows/generate.html"><span class="doc">Generate Workflow</span></a> — generation details</p></li>
+<li><p><a class="reference internal" href="../reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">spectrumX</span></code> config section</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

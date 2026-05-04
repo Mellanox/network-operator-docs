@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automation and CI/CD &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="AI-Assisted Workflows" href="ai-skills.html" />
+    <link rel="prev" title="Cluster Topology Presets" href="presets.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="heterogeneous-clusters.html">Heterogeneous Clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="presets.html">Cluster Topology Presets</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Automation and CI/CD</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#json-output-mode">JSON Output Mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#non-interactive-flags">Non-Interactive Flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#structured-errors">Structured Errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#schema-discovery">Schema Discovery</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+<li>Automation and CI/CD</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="automation-and-ci-cd">
+<h1>Automation and CI/CD<a class="headerlink" href="#automation-and-ci-cd" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#json-output-mode" id="id1">JSON Output Mode</a></p></li>
+<li><p><a class="reference internal" href="#non-interactive-flags" id="id2">Non-Interactive Flags</a></p></li>
+<li><p><a class="reference internal" href="#exit-codes" id="id3">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#structured-errors" id="id4">Structured Errors</a></p></li>
+<li><p><a class="reference internal" href="#schema-discovery" id="id5">Schema Discovery</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id6">See Also</a></p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Use this when:</strong> you are wiring Launch Kit into a CI/CD pipeline, an automation framework, or an AI agent that needs structured output and exit-code-driven retry logic.</p>
+</div>
+<p>Launch Kit is designed for both interactive use and automated pipelines. Every subcommand supports a JSON output mode, well-defined exit codes, and a programmatic capability discovery endpoint.</p>
+<section id="json-output-mode">
+<h2>JSON Output Mode<a class="headerlink" href="#json-output-mode" title="Permalink to this headline"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> for machine-readable output. In JSON mode, structured data goes to stdout and human-readable logs go to stderr:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments <span class="se">\</span>
+    --output json --yes <span class="m">2</span>&gt;/dev/null <span class="p">|</span> jq .
+</pre></div>
+</div>
+</section>
+<section id="non-interactive-flags">
+<h2>Non-Interactive Flags<a class="headerlink" href="#non-interactive-flags" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--yes</span></code> / <code class="docutils literal notranslate"><span class="pre">-y</span></code> — auto-confirm all prompts (implied by <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--quiet</span></code> / <code class="docutils literal notranslate"><span class="pre">-q</span></code> — suppress informational output</p></li>
+</ul>
+</section>
+<section id="exit-codes">
+<h2>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Code</strong></p></th>
+<th class="head"><p><strong>Meaning</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Success.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>General error.</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Validation error (invalid flags or configuration).</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Cluster error (API unreachable, discovery failed).</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Deployment error (apply failed).</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>Partial success (discovery completed but deployment failed).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="structured-errors">
+<h2>Structured Errors<a class="headerlink" href="#structured-errors" title="Permalink to this headline"></a></h2>
+<p>In JSON mode, errors include structured fields (<code class="docutils literal notranslate"><span class="pre">code</span></code>, <code class="docutils literal notranslate"><span class="pre">category</span></code>, <code class="docutils literal notranslate"><span class="pre">transient</span></code>, <code class="docutils literal notranslate"><span class="pre">suggestion</span></code>) to help automation decide whether to retry or fix input. <code class="docutils literal notranslate"><span class="pre">transient:</span> <span class="pre">true</span></code> indicates a temporary condition (e.g., API unreachable) where retry is appropriate; <code class="docutils literal notranslate"><span class="pre">transient:</span> <span class="pre">false</span></code> indicates a permanent failure (e.g., invalid flag) requiring input changes.</p>
+</section>
+<section id="schema-discovery">
+<h2>Schema Discovery<a class="headerlink" href="#schema-discovery" title="Permalink to this headline"></a></h2>
+<p>AI agents and automation tools can programmatically discover Launch Kit’s capabilities:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k schema
+</pre></div>
+</div>
+<p>Outputs a JSON description of available commands, phases, fabrics, deployment types, flags, exit codes, and output formats. Tools that need to know what l8k can do (without parsing <code class="docutils literal notranslate"><span class="pre">--help</span></code> text) use this endpoint.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="ai-skills.html"><span class="doc">AI-Assisted Workflows</span></a> — using l8k from Claude Code</p></li>
+<li><p><a class="reference internal" href="reference/cli.html"><span class="doc">CLI Reference</span></a> — complete flag reference</p></li>
+<li><p><a class="reference internal" href="troubleshooting.html"><span class="doc">Troubleshooting</span></a> — diagnosing failed pipelines</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

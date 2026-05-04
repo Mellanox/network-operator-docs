@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLI Reference &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/mermaid-init.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/version.js"></script>
+        <script src="../../_static/social-media.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Configuration Reference" href="config.html" />
+    <link rel="prev" title="Reference" href="reference.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../../index.html">
+  <img src="../../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CLI Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#global-flags">Global Flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-discover">l8k discover</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-generate">l8k generate</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#profile-selection">Profile Selection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#output-and-deployment">Output and Deployment</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#customization">Customization</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-deploy">l8k deploy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-preset-list">l8k preset list</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-preset-update">l8k preset update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-sosreport">l8k sosreport</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-schema">l8k schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-version">l8k version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="config.html">Configuration Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="reference.html">Reference</a> &raquo;</li>
+<li>CLI Reference</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cli-reference">
+<h1>CLI Reference<a class="headerlink" href="#cli-reference" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#global-flags" id="id1">Global Flags</a></p></li>
+<li><p><a class="reference internal" href="#l8k-discover" id="id2">l8k discover</a></p></li>
+<li><p><a class="reference internal" href="#l8k-generate" id="id3">l8k generate</a></p>
+<ul>
+<li><p><a class="reference internal" href="#profile-selection" id="id4">Profile Selection</a></p></li>
+<li><p><a class="reference internal" href="#output-and-deployment" id="id5">Output and Deployment</a></p></li>
+<li><p><a class="reference internal" href="#customization" id="id6">Customization</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#l8k-deploy" id="id7">l8k deploy</a></p></li>
+<li><p><a class="reference internal" href="#l8k-preset-list" id="id8">l8k preset list</a></p></li>
+<li><p><a class="reference internal" href="#l8k-preset-update" id="id9">l8k preset update</a></p></li>
+<li><p><a class="reference internal" href="#l8k-sosreport" id="id10">l8k sosreport</a></p></li>
+<li><p><a class="reference internal" href="#l8k-schema" id="id11">l8k schema</a></p></li>
+<li><p><a class="reference internal" href="#l8k-version" id="id12">l8k version</a></p></li>
+<li><p><a class="reference internal" href="#exit-codes" id="id13">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id14">See Also</a></p></li>
+</ul>
+</div>
+<p>The Launch Kit binary is invoked as <code class="docutils literal notranslate"><span class="pre">l8k</span></code> and exposes a set of subcommands. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">--help</span></code> and <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">&lt;subcommand&gt;</span> <span class="pre">--help</span></code> print labelled flag groups identical to the sections below.</p>
+<section id="global-flags">
+<h2>Global Flags<a class="headerlink" href="#global-flags" title="Permalink to this headline"></a></h2>
+<p>Available on all subcommands:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Output format: <code class="docutils literal notranslate"><span class="pre">text</span></code> (default, human-readable) or <code class="docutils literal notranslate"><span class="pre">json</span></code> (structured for automation, see <a class="reference internal" href="../automation.html"><span class="doc">Automation and CI/CD</span></a>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-y,</span> <span class="pre">--yes</span></code></p></td>
+<td><p>Auto-confirm all prompts. Implied by <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">-q,</span> <span class="pre">--quiet</span></code></p></td>
+<td><p>Suppress informational output.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--log-level</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Log level: <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">warn</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--log-file</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Write logs to file instead of stderr.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-h,</span> <span class="pre">--help</span></code></p></td>
+<td><p>Show help.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l8k-discover">
+<h2>l8k discover<a class="headerlink" href="#l8k-discover" title="Permalink to this headline"></a></h2>
+<p>Probes cluster hardware and writes a <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig file (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Base config to merge with discovered hardware. If <code class="docutils literal notranslate"><span class="pre">--save-cluster-config</span></code> is omitted, the file is updated in place.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--save-cluster-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Output path for the discovered cluster configuration. Defaults to <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> if set, otherwise <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-namespace</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Override the Network Operator namespace (default: <code class="docutils literal notranslate"><span class="pre">nvidia-network-operator</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Pin discovery to a Network Operator release line. Supported: <code class="docutils literal notranslate"><span class="pre">25.10</span></code>, <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--node-selector</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Filter nodes for discovery by label. Default: <code class="docutils literal notranslate"><span class="pre">feature.node.kubernetes.io/pci-15b3.present=true</span></code> (Mellanox NICs).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--image-pull-secrets</span> <span class="pre">&lt;strings&gt;</span></code></p></td>
+<td><p>Image pull secret names for NicClusterPolicy (comma-separated).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--enabled-plugins</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Comma-separated list of plugins to enable (default: <code class="docutils literal notranslate"><span class="pre">network-operator</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l8k-generate">
+<h2>l8k generate<a class="headerlink" href="#l8k-generate" title="Permalink to this headline"></a></h2>
+<p>Renders Kubernetes manifests from a cluster configuration and a profile selection. Optionally deploys them.</p>
+<section id="profile-selection">
+<h3>Profile Selection<a class="headerlink" href="#profile-selection" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Cluster configuration file. Auto-detected from <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> (or the installed default) if omitted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code></p></td>
+<td><p>Generate for a hardware preset without running discovery. Requires <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code>. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--fabric</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Fabric type: <code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-type</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Deployment type: <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code>, or <code class="docutils literal notranslate"><span class="pre">host_device</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multirail</span></code></p></td>
+<td><p>Enable multirail deployment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--spectrum-x</span> <span class="pre">&lt;RA-version&gt;</span></code></p></td>
+<td><p>Enable Spectrum-X. Value is the SPC-X RA version: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>. Implies ethernet fabric, sriov deployment, and multirail. When set, <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code>, <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code>, and <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> are all required.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, or <code class="docutils literal notranslate"><span class="pre">none</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">&lt;int&gt;</span></code></p></td>
+<td><p>Number of planes: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Pin to a Network Operator release line. Supported: <code class="docutils literal notranslate"><span class="pre">25.10</span></code>, <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> requires <code class="docutils literal notranslate"><span class="pre">26.1</span></code>; <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code> requires <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. See <a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Generate for a specific node group only (e.g., <code class="docutils literal notranslate"><span class="pre">group-0</span></code>). See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--node-selector</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Node selector for the synthesized <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code> when <code class="docutils literal notranslate"><span class="pre">--for</span></code> is used (e.g., <code class="docutils literal notranslate"><span class="pre">key=value,key2=value2</span></code>). Required with <code class="docutils literal notranslate"><span class="pre">--for</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="output-and-deployment">
+<h3>Output and Deployment<a class="headerlink" href="#output-and-deployment" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--save-deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Output directory for generated YAML files (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deploy</span></code></p></td>
+<td><p>Apply generated manifests to the cluster.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code></p></td>
+<td><p>Preview deployment without applying (requires <code class="docutils literal notranslate"><span class="pre">--deploy</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig (required with <code class="docutils literal notranslate"><span class="pre">--deploy</span></code>; falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="customization">
+<h3>Customization<a class="headerlink" href="#customization" title="Permalink to this headline"></a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--enable-doca-driver</span></code></p></td>
+<td><p>Enable DOCA driver deployment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--workload-manifest</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to a custom workload manifest. Launch Kit patches network annotations, resource requests, and node affinity. See <a class="reference internal" href="../workflows/generate.html"><span class="doc">Generate Workflow</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--image-pull-secrets</span> <span class="pre">&lt;strings&gt;</span></code></p></td>
+<td><p>Image pull secret names for NicClusterPolicy (comma-separated). Propagates to per-group NicNodePolicy sub-specs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-namespace</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Override the Network Operator namespace.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--pod-namespace</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Namespace for pods and network resources.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--enabled-plugins</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Comma-separated list of plugins to enable (default: <code class="docutils literal notranslate"><span class="pre">network-operator</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="l8k-deploy">
+<h2>l8k deploy<a class="headerlink" href="#l8k-deploy" title="Permalink to this headline"></a></h2>
+<p>Applies previously generated manifests to the cluster in dependency order (NicClusterPolicy first, then per-group NicNodePolicy, then networks and workloads).</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Directory containing the manifests to apply (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code></p></td>
+<td><p>Preview what would be applied without changing the cluster.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l8k-preset-list">
+<h2>l8k preset list<a class="headerlink" href="#l8k-preset-list" title="Permalink to this headline"></a></h2>
+<p>Lists locally available cluster topology presets.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k preset list
+</pre></div>
+</div>
+</section>
+<section id="l8k-preset-update">
+<h2>l8k preset update<a class="headerlink" href="#l8k-preset-update" title="Permalink to this headline"></a></h2>
+<p>Downloads the latest presets from a Git repository.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--repo</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Git repository URL.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--branch</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Branch or tag to fetch from.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Subdirectory within the repo containing presets.</p></td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> for usage.</p>
+</section>
+<section id="l8k-sosreport">
+<h2>l8k sosreport<a class="headerlink" href="#l8k-sosreport" title="Permalink to this headline"></a></h2>
+<p>Collects diagnostic data from the cluster.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Directory to save the sosreport (default: <code class="docutils literal notranslate"><span class="pre">./sosreport</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference internal" href="../troubleshooting.html"><span class="doc">Troubleshooting</span></a> for analysis guidance.</p>
+</section>
+<section id="l8k-schema">
+<h2>l8k schema<a class="headerlink" href="#l8k-schema" title="Permalink to this headline"></a></h2>
+<p>Outputs a JSON description of l8k’s capabilities — supported commands, fabrics, deployment types, exit codes, and output formats. Used by AI agents and automation tooling to discover <code class="docutils literal notranslate"><span class="pre">l8k</span></code> capabilities programmatically. See <a class="reference internal" href="../automation.html"><span class="doc">Automation and CI/CD</span></a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k schema
+</pre></div>
+</div>
+</section>
+<section id="l8k-version">
+<h2>l8k version<a class="headerlink" href="#l8k-version" title="Permalink to this headline"></a></h2>
+<p>Prints the version. Supports <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> for structured output.</p>
+</section>
+<section id="exit-codes">
+<h2>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Code</strong></p></th>
+<th class="head"><p><strong>Meaning</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Success.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>General error.</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Validation error (invalid flags or configuration).</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Cluster error (API unreachable, discovery failed).</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Deployment error (apply failed).</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>Partial success (discovery completed but deployment failed).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> schema</p></li>
+<li><p><a class="reference internal" href="../automation.html"><span class="doc">Automation and CI/CD</span></a> — JSON output and exit-code-driven retries</p></li>
+<li><p><a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a> — the meaning behind the flags</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Host Device &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/mermaid-init.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/version.js"></script>
+        <script src="../../_static/social-media.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="IP over InfiniBand (RDMA Shared)" href="ipoib-rdma-shared.html" />
+    <link rel="prev" title="SR-IOV InfiniBand" href="sriov-infiniband.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../../index.html">
+  <img src="../../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="profiles.html">Deployment Profiles</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="profiles.html#decision-tree">Decision Tree</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sriov-ethernet.html">SR-IOV Ethernet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sriov-infiniband.html">SR-IOV InfiniBand</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Host Device</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#use-case">Use Case</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#discover">Discover</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#generate">Generate</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#deploy">Deploy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#verify">Verify</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ipoib-rdma-shared.html">IP over InfiniBand (RDMA Shared)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN (RDMA Shared)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spectrum-x.html">Spectrum-X</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="profiles.html#decision-matrix">Decision Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="profiles.html#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../workflows/workflows.html">Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="profiles.html">Deployment Profiles</a> &raquo;</li>
+<li>Host Device</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="host-device">
+<h1>Host Device<a class="headerlink" href="#host-device" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#use-case" id="id1">Use Case</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#discover" id="id3">Discover</a></p></li>
+<li><p><a class="reference internal" href="#generate" id="id4">Generate</a></p></li>
+<li><p><a class="reference internal" href="#deploy" id="id5">Deploy</a></p></li>
+<li><p><a class="reference internal" href="#verify" id="id6">Verify</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id7">See Also</a></p></li>
+</ul>
+</div>
+<section id="use-case">
+<h2>Use Case<a class="headerlink" href="#use-case" title="Permalink to this headline"></a></h2>
+<p>Direct passthrough to host network devices, with no virtualization layer. Each pod gets exclusive access to a physical NIC. Minimal CPU overhead — best for legacy HPC codes, specialized protocols, and DPDK applications. Works with both Ethernet and InfiniBand fabrics.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Network Operator Helm chart installed (see <a class="reference internal" href="../installation.html"><span class="doc">Installation</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary on your PATH.</p></li>
+<li><p>One or more Mellanox NICs per node not used by the host.</p></li>
+</ul>
+</section>
+<section id="discover">
+<h2>Discover<a class="headerlink" href="#discover" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover --kubeconfig ~/.kube/config <span class="se">\</span>
+    --save-cluster-config ./cluster-config.yaml
+</pre></div>
+</div>
+</section>
+<section id="generate">
+<h2>Generate<a class="headerlink" href="#generate" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --deployment-type host_device --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments
+</pre></div>
+</div>
+<p>Add <code class="docutils literal notranslate"><span class="pre">--fabric</span> <span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">--fabric</span> <span class="pre">infiniband</span></code> if you need to constrain the fabric explicitly.</p>
+</section>
+<section id="deploy">
+<h2>Deploy<a class="headerlink" href="#deploy" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy
+</pre></div>
+</div>
+</section>
+<section id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
+kubectl get hostdevicenetwork
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="profiles.html"><span class="doc">Deployment Profiles</span></a> — decision matrix</p></li>
+<li><p><a class="reference internal" href="../workflows/generate.html"><span class="doc">Generate Workflow</span></a> — generation details</p></li>
+<li><p><a class="reference internal" href="../reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">hostdev</span></code> config section</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 04, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
