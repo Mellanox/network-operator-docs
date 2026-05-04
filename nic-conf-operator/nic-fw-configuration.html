@@ -62,6 +62,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> NIC Firmware Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator">Update NIC Firmware using the NIC Configuration Operator</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr">Configure and apply the NICFirmwareSource CR</a></li>
@@ -132,22 +137,28 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator" id="id1">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></p></li>
-<li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id2">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
-<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id3">Update NIC Firmware using the NIC Configuration Operator</a></p>
+<li><p><a class="reference internal" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb" id="id2">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id4">Configure and apply the NICFirmwareSource CR</a></p></li>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id5">Configure and apply the NicFirmwareTemplate CR</a></p></li>
-<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id6">NIC Firmware Mismatch Notification</a></p></li>
+<li><p><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update" id="id3">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate" id="id4">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id7">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id5">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
+<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id6">Update NIC Firmware using the NIC Configuration Operator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id8">Configure and apply the NicConfigurationTemplate CR</a></p></li>
-<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id9">Observe the status of the configuration update</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id7">Configure and apply the NICFirmwareSource CR</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id8">Configure and apply the NicFirmwareTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id9">NIC Firmware Mismatch Notification</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#reset-nic-configuration-to-default" id="id10">Reset NIC Configuration to Default</a></p></li>
-<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id11">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
+<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id10">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id11">Configure and apply the NicConfigurationTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id12">Observe the status of the configuration update</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reset-nic-configuration-to-default" id="id13">Reset NIC Configuration to Default</a></p></li>
+<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id14">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
@@ -203,6 +214,60 @@
 <p>SR-IOV Network Operator can work together with the NIC Configuration Operator only in <code class="docutils literal notranslate"><span class="pre">daemon</span></code> configuration mode. <code class="docutils literal notranslate"><span class="pre">systemd</span></code> configuration mode is not supported with this scenario.</p>
 </div>
 </section>
+<section id="platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb">
+<span id="fw-reset-external-bmc"></span><h2>Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)<a class="headerlink" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb" title="Permalink to this headline"></a></h2>
+<p>On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX and HGX systems (GB200 NVL72, B200, B300) and the Vera Rubin GB family — an OS-level node reboot does <strong>not</strong> reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with <code class="docutils literal notranslate"><span class="pre">mlxconfig</span></code> are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.</p>
+<p>To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (<code class="docutils literal notranslate"><span class="pre">mlxfwreset</span></code> / <code class="docutils literal notranslate"><span class="pre">mstfwreset</span></code>) <strong>before</strong> the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> resources do not require any platform-specific changes. The firmware-reset behavior is controlled at the operator level only.</p>
+</div>
+<section id="nic-configuration-operator-fw-reset-after-config-update">
+<h3>NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)<a class="headerlink" href="#nic-configuration-operator-fw-reset-after-config-update" title="Permalink to this headline"></a></h3>
+<p>Set the <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code> environment variable to <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code> on the <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator</span></code> section of your <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>. The configuration daemon will then run <code class="docutils literal notranslate"><span class="pre">mlxfwreset</span></code> on each managed NIC after applying non-volatile configuration, before draining and rebooting the node.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mellanox.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicClusterPolicy</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-cluster-policy</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">configurationDaemon</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nic-configuration-operator-daemon</span><span class="w"></span>
+<span class="w">      </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FW_RESET_AFTER_CONFIG_UPDATE&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="sr-iov-network-operator-mellanoxfirmwarereset-feature-gate">
+<h3>SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)<a class="headerlink" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate" title="Permalink to this headline"></a></h3>
+<p>Enable the <code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate on the <code class="docutils literal notranslate"><span class="pre">SriovOperatorConfig</span></code>. The SR-IOV config daemon will then invoke <code class="docutils literal notranslate"><span class="pre">mstfwreset</span></code> against the Mellanox NIC before triggering the reboot, so that firmware parameters changed by the SR-IOV plugin (for example <code class="docutils literal notranslate"><span class="pre">SRIOV_EN</span></code>, <code class="docutils literal notranslate"><span class="pre">NUM_OF_VFS</span></code>) take effect on external-BMC platforms.</p>
+<p>When deploying via the Network Operator Helm chart, set the feature gate via Helm values:</p>
+<p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">sriov-network-operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovOperatorConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">featureGates</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">mellanoxFirmwareReset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For an already-installed cluster, patch the <code class="docutils literal notranslate"><span class="pre">SriovOperatorConfig</span></code> directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io <span class="se">\</span>
+  -n nvidia-network-operator default <span class="se">\</span>
+  --patch <span class="s1">&#39;{&quot;spec&quot;:{&quot;featureGates&quot;:{&quot;mellanoxFirmwareReset&quot;:true}}}&#39;</span> <span class="se">\</span>
+  --type<span class="o">=</span>merge
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate is documented as Beta in the upstream SR-IOV Network Operator project — see the <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/doc/api/operator-config-api.md">SR-IOV Network Operator API documentation</a> for details.</p>
+</section>
+</section>
 <section id="install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">
 <h2>Install the NIC Configuration Operator and observe NIC devices in the cluster<a class="headerlink" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" title="Permalink to this headline"></a></h2>
 <div class="admonition note">
@@ -214,7 +279,7 @@ To disable the Firmware upgrade and validation logic, do not define the <code cl
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On some DGX servers, the configuration update is not successfully applied after the warm reboot. In this case, it is recommended to explicitly reset the NIC’s Firmware before the reboot and after updating its non-volatile configuration. This can be achieved by specifying the <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code> environment variable in the NicClusterPolicy CR. Please see the commented section in the example below.</p>
+<p>On platforms where the NIC is controlled by an external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB), additional configuration is required so that firmware updates are applied without a reboot loop — see <a class="reference internal" href="#fw-reset-external-bmc"><span class="std std-ref">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</span></a>. The example below shows the relevant <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code> knob commented out for reference.</p>
 </div>
 <p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
@@ -591,7 +656,7 @@ template:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Apr 29, 2026.
+      <span class="lastupdated">Last updated on May 04, 2026.
       </span></p>
   </div>
 
