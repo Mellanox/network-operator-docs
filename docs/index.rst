@@ -28,7 +28,8 @@
    NVIDIA Network Operator Government Ready <install-network-operator-gov-ready.rst>
    NIC Configuration Operator <nic-conf-operator/nic-configuration-operator.rst>
    DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver.rst>
-   Configuration Assistance with Kubernetes Launch Kit <k8s-launch-kit.rst>
+   Configuration Assistance with Kubernetes Launch Kit <k8s-launch-kit/k8s-launch-kit.rst>
+   AI Skills <ai-skills.rst>
    Customization Options and CRDs <customizations/customization.rst>
    Life Cycle Management <life-cycle-management.rst>
    KubeVirt SR-IOV Integration <kubevirt.rst>
