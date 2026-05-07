@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
@@ -79,6 +79,7 @@
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="#l8k-deploy">l8k deploy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#l8k-validate">l8k validate</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#l8k-preset-list">l8k preset list</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#l8k-preset-update">l8k preset update</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#l8k-sosreport">l8k sosreport</a></li>
@@ -152,13 +153,14 @@
 </ul>
 </li>
 <li><p><a class="reference internal" href="#l8k-deploy" id="id7">l8k deploy</a></p></li>
-<li><p><a class="reference internal" href="#l8k-preset-list" id="id8">l8k preset list</a></p></li>
-<li><p><a class="reference internal" href="#l8k-preset-update" id="id9">l8k preset update</a></p></li>
-<li><p><a class="reference internal" href="#l8k-sosreport" id="id10">l8k sosreport</a></p></li>
-<li><p><a class="reference internal" href="#l8k-schema" id="id11">l8k schema</a></p></li>
-<li><p><a class="reference internal" href="#l8k-version" id="id12">l8k version</a></p></li>
-<li><p><a class="reference internal" href="#exit-codes" id="id13">Exit Codes</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id14">See Also</a></p></li>
+<li><p><a class="reference internal" href="#l8k-validate" id="id8">l8k validate</a></p></li>
+<li><p><a class="reference internal" href="#l8k-preset-list" id="id9">l8k preset list</a></p></li>
+<li><p><a class="reference internal" href="#l8k-preset-update" id="id10">l8k preset update</a></p></li>
+<li><p><a class="reference internal" href="#l8k-sosreport" id="id11">l8k sosreport</a></p></li>
+<li><p><a class="reference internal" href="#l8k-schema" id="id12">l8k schema</a></p></li>
+<li><p><a class="reference internal" href="#l8k-version" id="id13">l8k version</a></p></li>
+<li><p><a class="reference internal" href="#exit-codes" id="id14">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id15">See Also</a></p></li>
 </ul>
 </div>
 <p>The Launch Kit binary is invoked as <code class="docutils literal notranslate"><span class="pre">l8k</span></code> and exposes a set of subcommands. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">--help</span></code> and <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">&lt;subcommand&gt;</span> <span class="pre">--help</span></code> print labelled flag groups identical to the sections below.</p>
@@ -261,30 +263,33 @@
 <td><p>Generate for a hardware preset without running discovery. Requires <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code>. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--fabric</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Fabric type: <code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>.</p></td>
+<td><p>Fabric type: <code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>. Auto-defaults from the cluster’s unanimous <code class="docutils literal notranslate"><span class="pre">linkType</span></code> (Unit 5 fabric probe) when not supplied.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-type</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Deployment type: <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code>, or <code class="docutils literal notranslate"><span class="pre">host_device</span></code>.</p></td>
+<td><p>Deployment type: <code class="docutils literal notranslate"><span class="pre">sriov</span></code>, <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code>, or <code class="docutils literal notranslate"><span class="pre">host_device</span></code>. Auto-defaults to <code class="docutils literal notranslate"><span class="pre">sriov</span></code> when not supplied.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multirail</span></code></p></td>
-<td><p>Enable multirail deployment.</p></td>
+<td><p>Enable multirail deployment. Auto-defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>. Opt out with <code class="docutils literal notranslate"><span class="pre">--multirail=false</span></code> (YAML cannot express explicit-false).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--spectrum-x</span> <span class="pre">&lt;RA-version&gt;</span></code></p></td>
-<td><p>Enable Spectrum-X. Value is the SPC-X RA version: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>. Implies ethernet fabric, sriov deployment, and multirail. When set, <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code>, <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code>, and <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> are all required.</p></td>
+<td><p>Enable Spectrum-X. Value is the SPC-X RA version: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>. Implies ethernet fabric, sriov deployment, and multirail.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, or <code class="docutils literal notranslate"><span class="pre">none</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>.</p></td>
+<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, or <code class="docutils literal notranslate"><span class="pre">none</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>; auto-defaulted from east-west PF deviceID when omitted (CX7/BF3 → <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, CX8 → <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, CX9 → <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>). <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">&lt;int&gt;</span></code></p></td>
-<td><p>Number of planes: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>.</p></td>
+<td><p>Number of planes: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>; auto-defaulted from deviceID (CX7/BF3 → 1, CX8 → 2, CX9 → 4).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Pin to a Network Operator release line. Supported: <code class="docutils literal notranslate"><span class="pre">25.10</span></code>, <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. Required with <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>: <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> requires <code class="docutils literal notranslate"><span class="pre">26.1</span></code>; <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code> requires <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. See <a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a>.</p></td>
+<td><p>Pin to a Network Operator release line. Supported: <code class="docutils literal notranslate"><span class="pre">25.10</span></code>, <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. Auto-defaulted under <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> (<code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> → <code class="docutils literal notranslate"><span class="pre">26.1</span></code>; <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code> → <code class="docutils literal notranslate"><span class="pre">26.4</span></code>). See <a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Generate for a specific node group only (e.g., <code class="docutils literal notranslate"><span class="pre">group-0</span></code>). See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--groups</span> <span class="pre">&lt;a,b,...&gt;</span></code></p></td>
+<td><p>Restrict output to the named source groups (comma-separated, matched case-sensitively against <code class="docutils literal notranslate"><span class="pre">clusterConfig[].identifier</span></code>). Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code>. Empty match is a validation error. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--node-selector</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--gpu-type</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Restrict output to source groups whose <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> matches (case-insensitive). Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">--groups</span></code>. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--node-selector</span> <span class="pre">&lt;string&gt;</span></code></p></td>
 <td><p>Node selector for the synthesized <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code> when <code class="docutils literal notranslate"><span class="pre">--for</span></code> is used (e.g., <code class="docutils literal notranslate"><span class="pre">key=value,key2=value2</span></code>). Required with <code class="docutils literal notranslate"><span class="pre">--for</span></code>.</p></td>
 </tr>
 </tbody>
@@ -379,6 +384,32 @@
 </tbody>
 </table>
 </section>
+<section id="l8k-validate">
+<h2>l8k validate<a class="headerlink" href="#l8k-validate" title="Permalink to this headline"></a></h2>
+<p>Verifies a deployment matches the selected Network Operator release: compares the deployed Helm chart’s appVersion with the version expected by <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, then confirms every YAML manifest under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> is present in the cluster (skipping example workloads). Exits 4 on any missing manifest or version mismatch. See <a class="reference internal" href="../workflows/validate.html"><span class="doc">Validate Workflow</span></a> for full details.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Path to kubeconfig (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Cluster config file (default: <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code>). Read for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and operator namespace.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Directory containing the manifests to verify (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="l8k-preset-list">
 <h2>l8k preset list<a class="headerlink" href="#l8k-preset-list" title="Permalink to this headline"></a></h2>
 <p>Lists locally available cluster topology presets.</p>
@@ -404,7 +435,7 @@
 <td><p>Git repository URL.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--branch</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Branch or tag to fetch from.</p></td>
+<td><p>Branch or tag to fetch from (default: <code class="docutils literal notranslate"><span class="pre">main</span></code>).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">&lt;string&gt;</span></code></p></td>
 <td><p>Subdirectory within the repo containing presets.</p></td>
@@ -487,7 +518,7 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> schema</p></li>
 <li><p><a class="reference internal" href="../automation.html"><span class="doc">Automation and CI/CD</span></a> — JSON output and exit-code-driven retries</p></li>
-<li><p><a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a> — the meaning behind the flags</p></li>
+<li><p><a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a> — the meaning behind the flags</p></li>
 </ul>
 </section>
 </section>
@@ -501,7 +532,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

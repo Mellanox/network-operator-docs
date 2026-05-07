@@ -65,7 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Deployment Profiles</a><ul>
@@ -141,45 +141,58 @@
 </ul>
 </div>
 <p>A <strong>profile</strong> is a named combination of fabric and deployment type. Each profile maps to a complete set of Kubernetes manifests produced by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>. Pick a profile from the decision tree or table below, then follow the link.</p>
-<p>For the conceptual difference between fabric and deployment type, see <a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a>.</p>
+<p>For the conceptual difference between fabric and deployment type, see <a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a>.</p>
 <section id="decision-tree">
 <h2>Decision Tree<a class="headerlink" href="#decision-tree" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
+<p>Fabric is determined by the underlying hardware topology (Spectrum-X clusters are detected as a distinct fabric, not as a flavour of Ethernet). Pick the deployment type for each fabric:</p>
 <div data-mermaid="flowchart TD
-    Start{What fabric?}
-    Start --&gt;|Ethernet| EthQ{Multi-rail&lt;br/&gt;Spectrum-X cluster?}
-    Start --&gt;|InfiniBand| IBQ{Need SR-IOV&lt;br/&gt;isolation per pod?}
+    Start{Fabric}
+    Start --&gt;|Ethernet| EthDT{Deployment type}
+    Start --&gt;|InfiniBand| IBDT{Deployment type}
+    Start --&gt;|Spectrum-X&lt;br/&gt;HW topology| SPCXRA{RA version}
 
-    EthQ --&gt;|Yes| SX([Spectrum-X])
-    EthQ --&gt;|No| EthRDMA{Per-pod isolation&lt;br/&gt;or shared RDMA?}
+    EthDT --&gt;|sriov| SRIOVE([SR-IOV Ethernet])
+    EthDT --&gt;|host_device| HDE([Host Device])
+    EthDT --&gt;|rdma_shared + MacVLAN| MV([MacVLAN RDMA Shared])
 
-    EthRDMA --&gt;|Per-pod VFs| SRIOVE([SR-IOV Ethernet])
-    EthRDMA --&gt;|Direct passthrough&lt;br/&gt;exclusive access| HD([Host Device])
-    EthRDMA --&gt;|Multi-tenant&lt;br/&gt;shared RDMA| MV([MacVLAN RDMA Shared])
+    IBDT --&gt;|sriov| SRIOVIB([SR-IOV InfiniBand])
+    IBDT --&gt;|host_device| HDI([Host Device])
+    IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
-    IBQ --&gt;|Yes virtualized IB| SRIOVIB([SR-IOV InfiniBand])
-    IBQ --&gt;|No IPoIB shared| IPOIB([IPoIB RDMA Shared])
+    SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
+    SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
+    SX1 --&gt; MPM[multiplane mode&lt;br/&gt;swplb / hwplb / uniplane / none&lt;br/&gt;+ number of planes]
+    SX2 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
-    class SX,SRIOVE,HD,MV,SRIOVIB,IPOIB profile"><div class="mermaid">
+    classDef params fill:#fff3cd,stroke:#ffc107,color:#000
+    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2 profile
+    class MPM params"><div class="mermaid">
             flowchart TD
-    Start{What fabric?}
-    Start --&gt;|Ethernet| EthQ{Multi-rail&lt;br/&gt;Spectrum-X cluster?}
-    Start --&gt;|InfiniBand| IBQ{Need SR-IOV&lt;br/&gt;isolation per pod?}
+    Start{Fabric}
+    Start --&gt;|Ethernet| EthDT{Deployment type}
+    Start --&gt;|InfiniBand| IBDT{Deployment type}
+    Start --&gt;|Spectrum-X&lt;br/&gt;HW topology| SPCXRA{RA version}
 
-    EthQ --&gt;|Yes| SX([Spectrum-X])
-    EthQ --&gt;|No| EthRDMA{Per-pod isolation&lt;br/&gt;or shared RDMA?}
+    EthDT --&gt;|sriov| SRIOVE([SR-IOV Ethernet])
+    EthDT --&gt;|host_device| HDE([Host Device])
+    EthDT --&gt;|rdma_shared + MacVLAN| MV([MacVLAN RDMA Shared])
 
-    EthRDMA --&gt;|Per-pod VFs| SRIOVE([SR-IOV Ethernet])
-    EthRDMA --&gt;|Direct passthrough&lt;br/&gt;exclusive access| HD([Host Device])
-    EthRDMA --&gt;|Multi-tenant&lt;br/&gt;shared RDMA| MV([MacVLAN RDMA Shared])
+    IBDT --&gt;|sriov| SRIOVIB([SR-IOV InfiniBand])
+    IBDT --&gt;|host_device| HDI([Host Device])
+    IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
-    IBQ --&gt;|Yes virtualized IB| SRIOVIB([SR-IOV InfiniBand])
-    IBQ --&gt;|No IPoIB shared| IPOIB([IPoIB RDMA Shared])
+    SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
+    SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
+    SX1 --&gt; MPM[multiplane mode&lt;br/&gt;swplb / hwplb / uniplane / none&lt;br/&gt;+ number of planes]
+    SX2 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
-    class SX,SRIOVE,HD,MV,SRIOVIB,IPOIB profile
+    classDef params fill:#fff3cd,stroke:#ffc107,color:#000
+    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2 profile
+    class MPM params
         </div></div></section>
 <section id="decision-matrix">
 <h2>Decision Matrix<a class="headerlink" href="#decision-matrix" title="Permalink to this headline"></a></h2>
@@ -234,7 +247,7 @@
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a> — profile selection vocabulary</p></li>
+<li><p><a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a> — profile selection vocabulary</p></li>
 <li><p><a class="reference internal" href="../workflows/generate.html"><span class="doc">Generate Workflow</span></a> — how profile flags are consumed</p></li>
 <li><p><a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a> — mixing profiles per node group</p></li>
 </ul>
@@ -250,7 +263,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

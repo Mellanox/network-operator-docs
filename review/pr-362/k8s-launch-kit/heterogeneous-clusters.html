@@ -65,7 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
@@ -75,6 +75,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology">Discovery: Initial Grouping by PCI Topology</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#strategy-1-automatic-combination-at-generation">Strategy 1 — Automatic Combination at Generation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#strategy-2-separate-configs-per-group">Strategy 2 — Separate Configs per Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#strategy-3-filter-by-gpu-type">Strategy 3 — Filter by GPU Type</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-renders-per-group-vs-per-bucket-under-filter">What Renders Per Group vs. Per Bucket Under Filter</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#per-group-manifest-layout">Per-Group Manifest Layout</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nic-interface-name-templates">NIC Interface Name Templates</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#north-south-vs-east-west-traffic">North-South vs East-West Traffic</a></li>
@@ -142,10 +144,12 @@
 <li><p><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology" id="id2">Discovery: Initial Grouping by PCI Topology</a></p></li>
 <li><p><a class="reference internal" href="#strategy-1-automatic-combination-at-generation" id="id3">Strategy 1 — Automatic Combination at Generation</a></p></li>
 <li><p><a class="reference internal" href="#strategy-2-separate-configs-per-group" id="id4">Strategy 2 — Separate Configs per Group</a></p></li>
-<li><p><a class="reference internal" href="#per-group-manifest-layout" id="id5">Per-Group Manifest Layout</a></p></li>
-<li><p><a class="reference internal" href="#nic-interface-name-templates" id="id6">NIC Interface Name Templates</a></p></li>
-<li><p><a class="reference internal" href="#north-south-vs-east-west-traffic" id="id7">North-South vs East-West Traffic</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
+<li><p><a class="reference internal" href="#strategy-3-filter-by-gpu-type" id="id5">Strategy 3 — Filter by GPU Type</a></p></li>
+<li><p><a class="reference internal" href="#what-renders-per-group-vs-per-bucket-under-filter" id="id6">What Renders Per Group vs. Per Bucket Under Filter</a></p></li>
+<li><p><a class="reference internal" href="#per-group-manifest-layout" id="id7">Per-Group Manifest Layout</a></p></li>
+<li><p><a class="reference internal" href="#nic-interface-name-templates" id="id8">NIC Interface Name Templates</a></p></li>
+<li><p><a class="reference internal" href="#north-south-vs-east-west-traffic" id="id9">North-South vs East-West Traffic</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id10">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -213,19 +217,24 @@
 <h2>Discovery: Initial Grouping by PCI Topology<a class="headerlink" href="#discovery-initial-grouping-by-pci-topology" title="Permalink to this headline"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> places nodes into groups by their PCI topology — the set of PCI addresses and device IDs across each node’s PFs. Nodes with identical PCI topology land in the same group. Each group carries:</p>
 <ul class="simple">
-<li><p>A unique <code class="docutils literal notranslate"><span class="pre">identifier</span></code> (<code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, …).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">ThinkSystem-SR680a-V3</span></code> / <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>), populated from GPU operator labels or probed from hardware.</p></li>
-<li><p>An auto-computed <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> that distinguishes the group from others.</p></li>
+<li><p>A machine label written to every node in the group: <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> (sanitised — lowercase, spaces and slashes replaced with hyphens).</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">identifier</span></code> equal to the sanitised label value (e.g., <code class="docutils literal notranslate"><span class="pre">thinksystem-sr680a-v3-nvidia-h100-nvl</span></code>). When <code class="docutils literal notranslate"><span class="pre">machineType</span></code> or <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> couldn’t be resolved, a fallback <code class="docutils literal notranslate"><span class="pre">group-N</span></code> identifier is used and the label is <strong>not</strong> written.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> keyed by the same label: <code class="docutils literal notranslate"><span class="pre">{nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;value&gt;}</span></code>. This is the per-source-group selector — selecting on it picks exactly the nodes in that one group, even when several groups share a GPU type.</p></li>
 <li><p>The list of east-west PFs with their <code class="docutils literal notranslate"><span class="pre">rail</span></code> indices.</p></li>
 </ul>
 <p>The resulting groups are written to <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> as separate entries. From there you have two strategies for handling more than one group.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The label is l8k state, not GPU operator state. Discovery patches each node with a strategic-merge <code class="docutils literal notranslate"><span class="pre">client.RawPatch</span></code> after the group’s <code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> are determined. Migrated configs (loaded with old-style differential nodeSelectors from previous l8k versions) keep working unchanged — the label is only written on a fresh discovery run.</p>
+</div>
 </section>
 <section id="strategy-1-automatic-combination-at-generation">
 <h2>Strategy 1 — Automatic Combination at Generation<a class="headerlink" href="#strategy-1-automatic-combination-at-generation" title="Permalink to this headline"></a></h2>
-<p>The groups in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> stay separate — they’re written as distinct entries with their own <code class="docutils literal notranslate"><span class="pre">identifier</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and PF lists. When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> runs, groups that share the same <strong>GPU product type</strong> <em>and</em> the same <strong>east-west rail count</strong> are automatically combined into a single render group at generation time:</p>
+<p>The groups in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> stay separate — they’re written as distinct entries with their own machine-label <code class="docutils literal notranslate"><span class="pre">identifier</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and PF lists. When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> runs, groups that share the same <strong>GPU product type</strong> <em>and</em> the same <strong>east-west rail count</strong> are automatically combined into a single render group at generation time:</p>
 <ul class="simple">
-<li><p>The combined render group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> is derived from the GPU type (e.g., <code class="docutils literal notranslate"><span class="pre">nvidia-h100-nvl</span></code>).</p></li>
-<li><p>Its effective <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{nvidia.com/gpu.product:</span> <span class="pre">&lt;gpuType&gt;}</span></code> — targeting every node of that GPU type, regardless of source group.</p></li>
+<li><p>The combined render group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> follows the resource-name convention (lowercase form of the gpuType, e.g., <code class="docutils literal notranslate"><span class="pre">nvidia-h100-nvl</span></code>). Source machine-labels can differ across the merged groups, so a single per-source label can’t represent the merged set.</p></li>
+<li><p>Its effective <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> becomes <code class="docutils literal notranslate"><span class="pre">{nvidia.kubernetes-launch-kit.gpu:</span> <span class="pre">&lt;gpuType&gt;}</span></code> — targeting every node of that GPU type, regardless of source machine type. The <code class="docutils literal notranslate"><span class="pre">.gpu</span></code> label is also written by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> (alongside the per-source <code class="docutils literal notranslate"><span class="pre">.machine</span></code> label), and its value matches <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.product</span></code> verbatim by construction.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">workerNodes</span></code> and OFED-dependent module lists are taken as the union of the source groups.</p></li>
 <li><p>One set of manifests is produced that covers all source groups with that GPU type.</p></li>
 </ul>
@@ -236,24 +245,68 @@
 <section id="strategy-2-separate-configs-per-group">
 <h2>Strategy 2 — Separate Configs per Group<a class="headerlink" href="#strategy-2-separate-configs-per-group" title="Permalink to this headline"></a></h2>
 <p>Use this strategy when groups need genuinely different configurations — different Network Operator releases, different fabric, different deployment types, different DOCA driver versions, or different profile selections.</p>
-<p>A single <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> invocation produces one set of manifests with one Network Operator version, one fabric, one deployment type, etc. To deploy different configs to different groups, run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> separately for each group with <code class="docutils literal notranslate"><span class="pre">--group</span> <span class="pre">&lt;identifier&gt;</span></code> and a distinct output directory:</p>
+<p>A single <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> invocation produces one set of manifests with one Network Operator version, one fabric, one deployment type, etc. To deploy different configs to different groups, run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> separately for each group (or compatible subset) with <code class="docutils literal notranslate"><span class="pre">--groups</span> <span class="pre">&lt;comma-separated-identifiers&gt;</span></code> and a distinct output directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># First group: SR-IOV Ethernet on Network Operator 26.4</span>
 l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
-    --group group-0 <span class="se">\</span>
+    --groups dgx-b200-nvidia-h100-nvl <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
     --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
-    --save-deployment-files ./deployments-group-0
+    --save-deployment-files ./deployments-h100
 
 <span class="c1"># Second group: Host Device on Network Operator 26.1</span>
 l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
-    --group group-1 <span class="se">\</span>
+    --groups poweredge-xe9680-nvidia-h200 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.1 <span class="se">\</span>
     --deployment-type host_device --multirail <span class="se">\</span>
-    --save-deployment-files ./deployments-group-1
+    --save-deployment-files ./deployments-h200
 </pre></div>
 </div>
-<p>Each run produces an independent manifest set scoped to one group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>. The two sets can be applied to the same cluster — they target disjoint nodes.</p>
-<p>When <code class="docutils literal notranslate"><span class="pre">--group</span></code> is set, automatic combination is skipped and only the requested group is rendered.</p>
+<p>Each run produces an independent manifest set scoped to its source groups’ <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>. The two sets can be applied to the same cluster — they target disjoint nodes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--groups</span></code> accepts a comma-separated list of source-group identifiers (<code class="docutils literal notranslate"><span class="pre">--groups</span> <span class="pre">a,b,c</span></code>); identifiers come from <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>’s <code class="docutils literal notranslate"><span class="pre">clusterConfig[].identifier</span></code>. Match is case-sensitive; an empty match is a validation error.</p>
+</section>
+<section id="strategy-3-filter-by-gpu-type">
+<h2>Strategy 3 — Filter by GPU Type<a class="headerlink" href="#strategy-3-filter-by-gpu-type" title="Permalink to this headline"></a></h2>
+<p>For declarative pipelines and CI/CD, <code class="docutils literal notranslate"><span class="pre">--gpu-type</span> <span class="pre">&lt;X&gt;</span></code> filters source groups by their <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (matched case-insensitively):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --gpu-type NVIDIA-H200 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-h200
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> and <code class="docutils literal notranslate"><span class="pre">--groups</span></code> are mutually exclusive. <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> is the right choice when “deploy this manifest to every node of GPU type X regardless of vendor” is the intent. <code class="docutils literal notranslate"><span class="pre">--groups</span></code> is the right choice when the cohort of source groups must be enumerated explicitly.</p>
+</section>
+<section id="what-renders-per-group-vs-per-bucket-under-filter">
+<h2>What Renders Per Group vs. Per Bucket Under Filter<a class="headerlink" href="#what-renders-per-group-vs-per-bucket-under-filter" title="Permalink to this headline"></a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">--groups</span></code> selects a strict subset of a compatible (gpuType, rail-count) bucket, l8k cannot use a single flat <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> to identify exactly that subset (the bucket-level GPU label would over-select). The renderer dispatches each Kubernetes Kind by scope:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Scope</strong></p></th>
+<th class="head"><p><strong>Behaviour under a strict-subset ``–groups`` filter</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Cluster-wide (<code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>)</p></td>
+<td><p>One CR per cluster, unchanged.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Aggregate (<code class="docutils literal notranslate"><span class="pre">IPPool</span></code>, example <code class="docutils literal notranslate"><span class="pre">DaemonSet</span></code>)</p></td>
+<td><p>One CR per bucket. <code class="docutils literal notranslate"><span class="pre">nodeSelectorTerms</span></code> emits <code class="docutils literal notranslate"><span class="pre">In:</span> <span class="pre">[machine-label-a,</span> <span class="pre">machine-label-b]</span></code> covering exactly the filtered sources.</p></td>
+</tr>
+<tr class="row-even"><td><p>Bucketed (<code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>, <code class="docutils literal notranslate"><span class="pre">HostDeviceNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">IPoIBNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">MacvlanNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code>)</p></td>
+<td><p>One CR per bucket, named with the merged-bucket identifier. No node selector — referenced by name from companion CRs and bound to nodes via the kubelet resource that the per-source NodePolicies register.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simple-selector (<code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code>, <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code>, <code class="docutils literal notranslate"><span class="pre">SriovNetworkPoolConfig</span></code>, <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>, <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>)</p></td>
+<td><p>One CR per filtered source group, each with its own machine-label flat <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>. All N CRs register the same bucket-shared kubelet resource so the Bucketed companions can reference one stable name.</p></td>
+</tr>
+<tr class="row-even"><td><p>Per-source (<code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code>)</p></td>
+<td><p>One CR per source group, always (regardless of merge or filter). PCI addresses are machine-specific and never aggregate.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For default unfiltered runs and <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> runs, every bucket selects exactly its full source set, so the Aggregate and Simple-selector CRs render once per bucket against a single flat <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> keyed by the bucket’s GPU label.</p>
 </section>
 <section id="per-group-manifest-layout">
 <h2>Per-Group Manifest Layout<a class="headerlink" href="#per-group-manifest-layout" title="Permalink to this headline"></a></h2>
@@ -338,7 +391,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="concepts.html"><span class="doc">Concepts</span></a> — the node-group / fabric / traffic vocabulary</p></li>
+<li><p><a class="reference internal" href="overview.html"><span class="doc">Overview</span></a> — the node-group / fabric / traffic vocabulary</p></li>
 <li><p><a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a> — how groups are formed</p></li>
 <li><p><a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a> — <code class="docutils literal notranslate"><span class="pre">--group</span></code> flag in context</p></li>
 <li><p><a class="reference internal" href="reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code> and <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator</span></code> schemas</p></li>
@@ -355,7 +408,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

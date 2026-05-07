@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validate Workflow &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/mermaid-init.js"></script>
+        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/version.js"></script>
+        <script src="../../_static/social-media.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Advanced Topics" href="../advanced-topics.html" />
+    <link rel="prev" title="Deploy Workflow" href="deploy.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../../index.html">
+  <img src="../../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="workflows.html">Workflows</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="discover.html">Discover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generate.html">Generate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Validate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#run-validation">Run Validation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-it-checks">What It Checks</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#network-operator-helm-release-version">Network Operator Helm release version</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#manifest-presence">Manifest presence</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#preset-deviations">Preset deviations</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sample-output">Sample Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../reference/reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../k8s-launch-kit.html#where-to-start">Where to Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="../k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
+    <li><a href="workflows.html">Workflows</a> &raquo;</li>
+<li>Validate Workflow</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="validate-workflow">
+<h1>Validate Workflow<a class="headerlink" href="#validate-workflow" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#run-validation" id="id1">Run Validation</a></p></li>
+<li><p><a class="reference internal" href="#what-it-checks" id="id2">What It Checks</a></p>
+<ul>
+<li><p><a class="reference internal" href="#network-operator-helm-release-version" id="id3">Network Operator Helm release version</a></p></li>
+<li><p><a class="reference internal" href="#manifest-presence" id="id4">Manifest presence</a></p></li>
+<li><p><a class="reference internal" href="#preset-deviations" id="id5">Preset deviations</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#exit-codes" id="id6">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#sample-output" id="id7">Sample Output</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
+</ul>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Use this when:</strong> you’ve applied a deployment and want to confirm the cluster matches the configuration that produced it. Three things are reported: Network Operator Helm release version, per-manifest presence in the cluster, and any preset deviations recorded in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>.</p>
+</div>
+<section id="run-validation">
+<h2>Run Validation<a class="headerlink" href="#run-validation" title="Permalink to this headline"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k validate
+</pre></div>
+</div>
+<p>No flags required when defaults apply. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> reads <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and the operator namespace, then checks <code class="docutils literal notranslate"><span class="pre">./deployment/</span></code> against the cluster reachable via <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k validate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --deployment-files ./deployment <span class="se">\</span>
+    --kubeconfig ~/.kube/config
+</pre></div>
+</div>
+</section>
+<section id="what-it-checks">
+<h2>What It Checks<a class="headerlink" href="#what-it-checks" title="Permalink to this headline"></a></h2>
+<section id="network-operator-helm-release-version">
+<h3>Network Operator Helm release version<a class="headerlink" href="#network-operator-helm-release-version" title="Permalink to this headline"></a></h3>
+<p>Launch Kit reads any Helm release Secret in the operator namespace whose release name contains <code class="docutils literal notranslate"><span class="pre">network-operator</span></code> (Secret name format <code class="docutils literal notranslate"><span class="pre">sh.helm.release.v1.&lt;release&gt;.v&lt;N&gt;</span></code>, type <code class="docutils literal notranslate"><span class="pre">helm.sh/release.v1</span></code>), parses the chart’s <code class="docutils literal notranslate"><span class="pre">appVersion</span></code>, and compares it against the version expected for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> in the user’s config (looked up in the embedded release catalog).</p>
+<p>The check is <strong>skipped</strong> (with a clear reason in the output) when:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> is missing or doesn’t declare <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code>.</p></li>
+<li><p>The selected release is not in the embedded catalog.</p></li>
+<li><p>No matching Helm release Secret is found in the operator namespace (e.g., the operator was installed via Argo CD or kubectl rather than Helm).</p></li>
+</ul>
+</section>
+<section id="manifest-presence">
+<h3>Manifest presence<a class="headerlink" href="#manifest-presence" title="Permalink to this headline"></a></h3>
+<p>Every YAML document under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> is fetched from the cluster via the Kubernetes API. Each document is reported:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FOUND</span></code> — the named object exists in the cluster.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MISSING</span></code> — the named object is not present.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code> — the API returned a non-NotFound error (RBAC, transient connectivity, …).</p></li>
+</ul>
+<p>Files matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">50-example-daemonset.yaml</span></code>) are skipped — those are demo workloads, not part of the operator surface.</p>
+</section>
+<section id="preset-deviations">
+<h3>Preset deviations<a class="headerlink" href="#preset-deviations" title="Permalink to this headline"></a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> records preset deviations (any group has a non-empty <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> list), they’re surfaced under a “Preset deviations” section. Each entry shows the field (<code class="docutils literal notranslate"><span class="pre">pfCount</span></code> / <code class="docutils literal notranslate"><span class="pre">pciAddress</span></code> / <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>), the expected value, the discovered value, and a short detail. Deviations are reported for visibility — they do <strong>not</strong> affect the exit code, since the deployment can still run correctly while diverging from the matched preset. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> “Validation and Deviations”.</p>
+</section>
+</section>
+<section id="exit-codes">
+<h2>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><strong>0</strong> — every manifest is FOUND and the version check matched (or was skipped).</p></li>
+<li><p><strong>4</strong> — at least one manifest is MISSING or ERROR, or the deployed Helm release version doesn’t match the selected release.</p></li>
+<li><p>Other codes — see <a class="reference internal" href="../reference/cli.html"><span class="doc">CLI Reference</span></a> “Exit Codes”.</p></li>
+</ul>
+</section>
+<section id="sample-output">
+<h2>Sample Output<a class="headerlink" href="#sample-output" title="Permalink to this headline"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Network Operator release
+  selectedRelease: 26.4
+  expected version: v26.4.0-beta.6
+  deployed: network-operator (chart=26.4.0-beta.6 app=v26.4.0-beta.6 rev=3 status=deployed)
+  result: MATCH
+
+Manifests
+  [FOUND] NicClusterPolicy/nic-cluster-policy in (cluster-scoped)
+  [FOUND] NicNodePolicy/nicnodepolicy-h100 in (cluster-scoped)
+  [MISSING] SriovNetwork/sriov-network-rail-0 in default --- not found in cluster
+
+Preset deviations (cluster differs from matched preset)
+  group-0 (PowerEdge-XE9680/NVIDIA-H200) --- 2 deviation(s):
+    [pciAddress] expected=- got=0000:bd:00.0 --- discovered PCI address not present in preset
+    [deviceID] expected=a2dc@0000:5e:00.0 got=1023@0000:5e:00.0 --- device ID at PCI address differs from preset
+
+Summary: 12 manifests, 1 missing/error; version: match; preset deviations: 1 group(s)
+</pre></div>
+</div>
+<p>For programmatic use, <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> emits a single object on stdout with <code class="docutils literal notranslate"><span class="pre">versionCheck</span></code>, <code class="docutils literal notranslate"><span class="pre">manifests</span></code>, <code class="docutils literal notranslate"><span class="pre">presetDeviations</span></code>, and <code class="docutils literal notranslate"><span class="pre">summary</span></code> fields. Logs go to stderr.</p>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="deploy.html"><span class="doc">Deploy Workflow</span></a> — the writer side of the contract validate checks</p></li>
+<li><p><a class="reference internal" href="../troubleshooting.html"><span class="doc">Troubleshooting</span></a> — diagnose missing or failing manifests</p></li>
+<li><p><a class="reference internal" href="../reference/cli.html"><span class="doc">CLI Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> flag reference</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 07, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

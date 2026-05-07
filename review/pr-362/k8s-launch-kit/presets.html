@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="profiles/profiles.html">Deployment Profiles</a></li>
@@ -74,6 +74,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#updating-presets">Updating Presets</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#offline-manifest-generation">Offline Manifest Generation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#discovery-overlay">Discovery Overlay</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#validation-and-deviations">Validation and Deviations</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -138,7 +139,8 @@
 <li><p><a class="reference internal" href="#updating-presets" id="id2">Updating Presets</a></p></li>
 <li><p><a class="reference internal" href="#offline-manifest-generation" id="id3">Offline Manifest Generation</a></p></li>
 <li><p><a class="reference internal" href="#discovery-overlay" id="id4">Discovery Overlay</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#validation-and-deviations" id="id5">Validation and Deviations</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id6">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -188,6 +190,36 @@
 <p>When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> detects a machine type that matches a known preset, the preset’s PCI topology, NUMA affinity, and rail assignments are overlaid on the discovery output. This ensures consistent rail numbering and PCI ordering across discovery runs.</p>
 <p>If no preset matches, discovery proceeds with the values it derives directly from hardware — see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>.</p>
 </section>
+<section id="validation-and-deviations">
+<h2>Validation and Deviations<a class="headerlink" href="#validation-and-deviations" title="Permalink to this headline"></a></h2>
+<p>When a matched preset’s PFs don’t exactly match the discovered hardware, Launch Kit <strong>records the deviations</strong> instead of refusing to apply the preset. There are no fatal validation errors — every discrepancy is soft:</p>
+<ul class="simple">
+<li><p><strong>PF count mismatch</strong> — the preset and the cluster expose different numbers of PFs.</p></li>
+<li><p><strong>PCI address drift</strong> — a PCI address present in the preset is missing on the cluster, or vice versa.</p></li>
+<li><p><strong>Device-ID drift</strong> — the device ID at a matching PCI address differs from the preset.</p></li>
+</ul>
+<p>Whenever any of these is detected, the matched preset is still applied on a best-effort basis (so rail/NUMA/GPU-affinity fields populate for whichever PFs do line up), and the discrepancies are written to <code class="docutils literal notranslate"><span class="pre">ClusterConfig.presetDeviation</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. Whenever a config with non-empty <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> is loaded by any l8k subcommand, a warning is re-emitted listing each deviation. The deployment proceeds, but the operator is reminded each run that the cluster differs from the matched preset.</p>
+<p>Part numbers and PSIDs are not strict criteria (firmware variants are expected) so they’re not checked.</p>
+<p>Example <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> block in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;group-0&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">machineType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PowerEdge-XE9680&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gpuType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-H200&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">presetDeviation</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pfCount</span><span class="w"></span>
+<span class="w">    </span><span class="nt">expected</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">got</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;9&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">detail</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PF</span><span class="nv"> </span><span class="s">count</span><span class="nv"> </span><span class="s">differs</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">preset&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pciAddress</span><span class="w"></span>
+<span class="w">    </span><span class="nt">got</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:bd:00.0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">detail</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;discovered</span><span class="nv"> </span><span class="s">PCI</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">present</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">preset&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deviceID</span><span class="w"></span>
+<span class="w">    </span><span class="nt">expected</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;a2dc@0000:5e:00.0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">got</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023@0000:5e:00.0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">detail</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;device</span><span class="nv"> </span><span class="s">ID</span><span class="nv"> </span><span class="s">at</span><span class="nv"> </span><span class="s">PCI</span><span class="nv"> </span><span class="s">address</span><span class="nv"> </span><span class="s">differs</span><span class="nv"> </span><span class="s">from</span><span class="nv"> </span><span class="s">preset&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
@@ -207,7 +239,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

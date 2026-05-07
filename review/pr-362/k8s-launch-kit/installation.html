@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Quick Start" href="quick-start.html" />
-    <link rel="prev" title="Concepts" href="concepts.html" />
+    <link rel="prev" title="Overview" href="overview.html" />
  
 
 
@@ -62,14 +62,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-script">Install Script</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#homebrew">Homebrew</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#verify">Verify</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-from-the-container-image">Install from the Container Image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#run-inside-the-container">Run Inside the Container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#script">Script</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#verify">Verify</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#uninstall">Uninstall</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#homebrew">Homebrew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Verify</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Uninstall</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#container">Container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Verify</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Uninstall</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#layout-script-and-homebrew">Layout (Script and Homebrew)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -128,13 +142,30 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#install-script" id="id2">Install Script</a></p></li>
-<li><p><a class="reference internal" href="#homebrew" id="id3">Homebrew</a></p></li>
-<li><p><a class="reference internal" href="#verify" id="id4">Verify</a></p></li>
-<li><p><a class="reference internal" href="#install-from-the-container-image" id="id5">Install from the Container Image</a></p></li>
-<li><p><a class="reference internal" href="#run-inside-the-container" id="id6">Run Inside the Container</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id7">See Also</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id7">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#script" id="id8">Script</a></p>
+<ul>
+<li><p><a class="reference internal" href="#install" id="id9">Install</a></p></li>
+<li><p><a class="reference internal" href="#verify" id="id10">Verify</a></p></li>
+<li><p><a class="reference internal" href="#uninstall" id="id11">Uninstall</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#homebrew" id="id12">Homebrew</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id13">Install</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id14">Verify</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id15">Uninstall</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#container" id="id16">Container</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id17">Install</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id18">Verify</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id19">Uninstall</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#layout-script-and-homebrew" id="id20">Layout (Script and Homebrew)</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id21">See Also</a></p></li>
 </ul>
 </div>
 <section id="prerequisites">
@@ -143,12 +174,14 @@
 <ul class="simple">
 <li><p><strong>Kubernetes cluster</strong> with the NVIDIA Network Operator Helm chart installed, including the SR-IOV Network Operator, Maintenance Operator, and Node Feature Discovery (NFD). For installation instructions, see <a class="reference internal" href="../getting-started-with-kubernetes.html"><span class="doc">Getting Started with Kubernetes</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> configured with access to the target cluster.</p></li>
-<li><p>(For container-based installation methods only) Docker or Podman on the machine where you will run <code class="docutils literal notranslate"><span class="pre">l8k</span></code>.</p></li>
+<li><p>Docker or Podman on the machine where you will run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> (only for the container scenario).</p></li>
 </ul>
 </section>
-<section id="install-script">
-<h2>Install Script<a class="headerlink" href="#install-script" title="Permalink to this headline"></a></h2>
-<p>The recommended path. Downloads the latest release from GitHub and installs the <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary, profile templates, and presets to <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>:</p>
+<section id="script">
+<h2>Script<a class="headerlink" href="#script" title="Permalink to this headline"></a></h2>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h3>
+<p>Downloads the latest release from GitHub and installs the <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary, profile templates, and presets to <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh
 </pre></div>
 </div>
@@ -157,64 +190,97 @@
 curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh -s -- -d ~/local
 </pre></div>
 </div>
-<p>Uninstall:</p>
+</section>
+<section id="verify">
+<h3>Verify<a class="headerlink" href="#verify" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
+</pre></div>
+</div>
+</section>
+<section id="uninstall">
+<h3>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh -s -- --uninstall
 </pre></div>
 </div>
 </section>
+</section>
 <section id="homebrew">
 <h2>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this headline"></a></h2>
+<section id="id1">
+<h3>Install<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
 <p>For macOS and Linux systems with Homebrew:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew tap nvidia/l8k https://github.com/nvidia/k8s-launch-kit
 brew install l8k
 </pre></div>
 </div>
 </section>
-<section id="verify">
-<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline"></a></h2>
+<section id="id2">
+<h3>Verify<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
 </pre></div>
 </div>
-<p>The installed layout (under the install prefix, default <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>):</p>
+</section>
+<section id="id3">
+<h3>Uninstall<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew uninstall l8k
+brew untap nvidia/l8k
+</pre></div>
+</div>
+</section>
+</section>
+<section id="container">
+<h2>Container<a class="headerlink" href="#container" title="Permalink to this headline"></a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> directly from the published container image without copying any binary or assets to the host filesystem. The image stays in the local Docker cache; everything else (kubeconfig, output directory) is mounted at runtime.</p>
+<section id="id4">
+<h3>Install<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
+<p>Pull the image once:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7
+</pre></div>
+</div>
+<p>Define a shell alias so <code class="docutils literal notranslate"><span class="pre">l8k</span></code> invokes the container with kubeconfig + working directory mounted:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">alias</span> <span class="nv">l8k</span><span class="o">=</span><span class="s1">&#39;docker run --rm --net=host \</span>
+<span class="s1">    -v ~/.kube:/kube:ro \</span>
+<span class="s1">    -v $(pwd):/work -w /work \</span>
+<span class="s1">    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7&#39;</span>
+</pre></div>
+</div>
+<p>Add the line to your <code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code> to make it persistent. With this alias in place, every <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">&lt;subcommand&gt;</span> <span class="pre">...</span></code> invocation creates a fresh container, runs the command, and removes the container — nothing is written outside the current working directory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">--net=host</span></code> is required so the container can reach the Kubernetes API server. The <code class="docutils literal notranslate"><span class="pre">--rm</span></code> flag ensures no stopped containers accumulate. Mount the kubeconfig directory read-only.</p>
+</div>
+</section>
+<section id="id5">
+<h3>Verify<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Uninstall<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<p>Drop the alias and remove the cached image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">unalias</span> l8k
+docker image rm nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7
+</pre></div>
+</div>
+<p>Also remove the alias line from your shell rc file if you added it.</p>
+</section>
+</section>
+<section id="layout-script-and-homebrew">
+<h2>Layout (Script and Homebrew)<a class="headerlink" href="#layout-script-and-homebrew" title="Permalink to this headline"></a></h2>
+<p>The script and Homebrew scenarios install the following under the install prefix (default: <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/bin/l8k</span></code> — CLI binary</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/profiles/</span></code> — profile templates</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/presets/</span></code> — cluster topology presets</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/l8k-config.yaml</span></code> — default configuration</p></li>
 </ul>
-</section>
-<section id="install-from-the-container-image">
-<h2>Install from the Container Image<a class="headerlink" href="#install-from-the-container-image" title="Permalink to this headline"></a></h2>
-<p>If your environment doesn’t allow downloading binaries from GitHub directly, extract the binary from the published container image and run the bundled <code class="docutils literal notranslate"><span class="pre">install.sh</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker create --name l8k-extract nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.6
-docker cp l8k-extract:/src /tmp/l8k
-docker rm l8k-extract
-mkdir -p /tmp/l8k/build <span class="o">&amp;&amp;</span> cp /tmp/l8k/l8k /tmp/l8k/build/l8k
-sudo /tmp/l8k/scripts/install.sh
-</pre></div>
-</div>
-<p>Override the install prefix with <code class="docutils literal notranslate"><span class="pre">--prefix</span></code>.</p>
-</section>
-<section id="run-inside-the-container">
-<h2>Run Inside the Container<a class="headerlink" href="#run-inside-the-container" title="Permalink to this headline"></a></h2>
-<p>To skip installation entirely, run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> directly from the container image. Mount your kubeconfig and an output directory:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --net<span class="o">=</span>host <span class="se">\</span>
-    -v ~/.kube:/kube:ro <span class="se">\</span>
-    -v <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/output:/output <span class="se">\</span>
-    nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.6 <span class="se">\</span>
-    discover --kubeconfig /kube/config <span class="se">\</span>
-    --save-cluster-config /output/cluster-config.yaml
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">--net=host</span></code> is required so the container can reach the Kubernetes API server. Mount the kubeconfig directory read-only and an output directory for generated files.</p>
-</div>
+<p>The container scenario does not write anything outside your working directory; profiles, presets, and the default config are baked into the image.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="quick-start.html"><span class="doc">Quick Start</span></a> — end-to-end walkthrough using the installed binary</p></li>
+<li><p><a class="reference internal" href="quick-start.html"><span class="doc">Quick Start</span></a> — end-to-end walkthrough using <code class="docutils literal notranslate"><span class="pre">l8k</span></code></p></li>
 <li><p><a class="reference internal" href="reference/cli.html"><span class="doc">CLI Reference</span></a> — full flag reference</p></li>
 </ul>
 </section>
@@ -229,7 +295,7 @@ sudo /tmp/l8k/scripts/install.sh
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

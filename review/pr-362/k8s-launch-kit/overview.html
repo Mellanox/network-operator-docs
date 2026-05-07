@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Concepts &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+  <title>Overview &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -65,7 +65,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Concepts</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#workflow-phases">Workflow Phases</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#profiles">Profiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#network-operator-releases">Network Operator Releases</a></li>
@@ -113,7 +113,7 @@
 <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
   
     <li><a href="k8s-launch-kit.html">NVIDIA Kubernetes Launch Kit</a> &raquo;</li>
-<li>Concepts</li>
+<li>Overview</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -128,8 +128,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="concepts">
-<h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline"></a></h1>
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline"></a></h1>
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
@@ -238,11 +238,12 @@
 </section>
 <section id="node-groups-and-heterogeneity">
 <h2>Node Groups and Heterogeneity<a class="headerlink" href="#node-groups-and-heterogeneity" title="Permalink to this headline"></a></h2>
-<p>During discovery, nodes are placed into <strong>groups</strong> by their PCI topology (the set of PCI addresses and device IDs across each node’s PFs). Each group is identified as <code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, etc., and carries a <code class="docutils literal notranslate"><span class="pre">machineType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">DGX-B200</span></code>), a <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>), an auto-computed <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and a list of physical functions (PFs).</p>
+<p>During discovery, nodes are placed into <strong>groups</strong> by their PCI topology (the set of PCI addresses and device IDs across each node’s PFs). Each group carries a <code class="docutils literal notranslate"><span class="pre">machineType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">DGX-B200</span></code>), a <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>), and a list of physical functions (PFs). Discovery writes a label <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> (sanitised) to every node in the group; the group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> and <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> are both keyed by that label.</p>
 <p>When the cluster has multiple groups, you have two strategies:</p>
 <ul class="simple">
 <li><p><strong>Automatic combination at generation</strong> — groups stay separate in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, but <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> automatically combines groups sharing the same GPU type and east-west rail count into a single render group keyed by GPU type. One <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> run produces a single set of manifests covering all matching source groups.</p></li>
-<li><p><strong>Separate configs per group</strong> — run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--group</span> <span class="pre">&lt;id&gt;</span></code> per group, producing independent manifest sets. Use this when groups need different Network Operator releases, fabrics, deployment types, or driver versions.</p></li>
+<li><p><strong>Filter by group identifiers</strong> — run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--groups</span> <span class="pre">&lt;a,b,...&gt;</span></code> to restrict output to a named set of source groups. Use this when groups need different Network Operator releases, fabrics, deployment types, or driver versions per cohort.</p></li>
+<li><p><strong>Filter by GPU type</strong> — run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--gpu-type</span> <span class="pre">&lt;X&gt;</span></code> to restrict output to all source groups whose <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> matches (case-insensitive). Best for declarative pipelines and CI/CD.</p></li>
 </ul>
 <p>See <a class="reference internal" href="heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a> for the full picture.</p>
 </section>
@@ -346,7 +347,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
@@ -70,6 +70,7 @@
 <li class="toctree-l3"><a class="reference internal" href="discover.html">Discover</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Generate</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#profile-selection-via-cli-flags">Profile Selection via CLI Flags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hardware-derived-defaults">Hardware-Derived Defaults</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#network-operator-release">Network Operator Release</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#generation-without-a-live-cluster">Generation without a Live Cluster</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#output-directory-structure">Output Directory Structure</a></li>
@@ -79,6 +80,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Validate</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
@@ -135,12 +137,13 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#profile-selection-via-cli-flags" id="id1">Profile Selection via CLI Flags</a></p></li>
-<li><p><a class="reference internal" href="#network-operator-release" id="id2">Network Operator Release</a></p></li>
-<li><p><a class="reference internal" href="#generation-without-a-live-cluster" id="id3">Generation without a Live Cluster</a></p></li>
-<li><p><a class="reference internal" href="#output-directory-structure" id="id4">Output Directory Structure</a></p></li>
-<li><p><a class="reference internal" href="#group-specific-generation" id="id5">Group-Specific Generation</a></p></li>
-<li><p><a class="reference internal" href="#custom-workload-manifests" id="id6">Custom Workload Manifests</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id7">See Also</a></p></li>
+<li><p><a class="reference internal" href="#hardware-derived-defaults" id="id2">Hardware-Derived Defaults</a></p></li>
+<li><p><a class="reference internal" href="#network-operator-release" id="id3">Network Operator Release</a></p></li>
+<li><p><a class="reference internal" href="#generation-without-a-live-cluster" id="id4">Generation without a Live Cluster</a></p></li>
+<li><p><a class="reference internal" href="#output-directory-structure" id="id5">Output Directory Structure</a></p></li>
+<li><p><a class="reference internal" href="#group-specific-generation" id="id6">Group-Specific Generation</a></p></li>
+<li><p><a class="reference internal" href="#custom-workload-manifests" id="id7">Custom Workload Manifests</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -160,6 +163,51 @@
 <p class="admonition-title">Note</p>
 <p>If the configuration file already contains a <code class="docutils literal notranslate"><span class="pre">profile</span></code> section, CLI flags are optional. CLI flags override configuration file values when both are provided.</p>
 </div>
+</section>
+<section id="hardware-derived-defaults">
+<h2>Hardware-Derived Defaults<a class="headerlink" href="#hardware-derived-defaults" title="Permalink to this headline"></a></h2>
+<p>When a flag is unset on both the CLI and in the configuration file, <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> fills it from the discovered cluster:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 35%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Default</strong></p></th>
+<th class="head"><p><strong>Trigger</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--fabric</span></code></p></td>
+<td><p>the cluster’s fabric (<code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>)</p></td>
+<td><p>every group’s <code class="docutils literal notranslate"><span class="pre">linkType</span></code> (Unit 5 fabric probe) agrees; skipped+warned otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sriov</span></code></p></td>
+<td><p>always</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multirail</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>always; opt out via <code class="docutils literal notranslate"><span class="pre">--multirail=false</span></code> (YAML cannot express explicit-false)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uniplane</span></code> (CX7 / BF3 SuperNIC), <code class="docutils literal notranslate"><span class="pre">swplb</span></code> (CX8), <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (CX9)</p></td>
+<td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set; per east-west PF deviceID, skipped+warned when groups have mixed deviceIDs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code></p></td>
+<td><p>1 (CX7 / BF3 SuperNIC), 2 (CX8), 4 (CX9)</p></td>
+<td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code></p></td>
+<td><p>matching release for the chosen RA (RA2.1 → 26.1, RA2.2 → 26.4)</p></td>
+<td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each applied default is logged at info level (<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(ConnectX-8</span> <span class="pre">(deviceID</span> <span class="pre">1023))</span></code>); the full reasoning trail is at debug level (<code class="docutils literal notranslate"><span class="pre">--log-level</span> <span class="pre">debug</span></code>).</p>
+<p>Resolution precedence (lowest → highest): hardware default &lt; config-file &lt; CLI flag. The Spectrum-X cohort rules (RA-to-release pairing, <code class="docutils literal notranslate"><span class="pre">multiplane-mode=none</span></code> requiring <code class="docutils literal notranslate"><span class="pre">number-of-planes=1</span></code>, etc.) are enforced after defaults run, so a partial CLI input plus defaults must still resolve to a consistent whole.</p>
 <p>For the full profile decision matrix, see <a class="reference internal" href="../profiles/profiles.html"><span class="doc">Deployment Profiles</span></a>.</p>
 </section>
 <section id="network-operator-release">
@@ -225,14 +273,22 @@
 </section>
 <section id="group-specific-generation">
 <h2>Group-Specific Generation<a class="headerlink" href="#group-specific-generation" title="Permalink to this headline"></a></h2>
-<p>In heterogeneous clusters, use <code class="docutils literal notranslate"><span class="pre">--group</span></code> to generate manifests for a single node group:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+<p>In heterogeneous clusters, two flags scope the output to a subset of source groups:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># By identifier (comma-separated; case-sensitive match against</span>
+<span class="c1"># cluster-config.yaml&#39;s clusterConfig[].identifier):</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
     --fabric infiniband --deployment-type sriov --multirail <span class="se">\</span>
-    --group group-0 <span class="se">\</span>
+    --groups dgx-b200-nvidia-h100-nvl,poweredge-xe9680-nvidia-h200 <span class="se">\</span>
+    --save-deployment-files ./deployments
+
+<span class="c1"># By GPU type (case-insensitive match against gpuType):</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --gpu-type NVIDIA-H200 <span class="se">\</span>
     --save-deployment-files ./deployments
 </pre></div>
 </div>
-<p>This is useful for staged rollouts and per-group testing. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--groups</span></code> and <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> are mutually exclusive. An empty match is a validation error. <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> is best for declarative pipelines; <code class="docutils literal notranslate"><span class="pre">--groups</span></code> is best for staged rollouts where the cohort is enumerated explicitly. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a> for the per-Kind rendering rules under filter.</p>
 </section>
 <section id="custom-workload-manifests">
 <h2>Custom Workload Manifests<a class="headerlink" href="#custom-workload-manifests" title="Permalink to this headline"></a></h2>
@@ -330,7 +386,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

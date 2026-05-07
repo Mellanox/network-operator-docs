@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
@@ -155,8 +155,8 @@
 <h2>Full Schema<a class="headerlink" href="#full-schema" title="Permalink to this headline"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">selectedRelease</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;26.4&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.4.0-beta.6</span><span class="w"></span>
-<span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.6</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.4.0-beta.7</span><span class="w"></span>
+<span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.4.0-beta.7</span><span class="w"></span>
 <span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
@@ -164,7 +164,7 @@
 
 <span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.5.3.0-0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doca3.4.0-26.04-0.6.1.0-0</span><span class="w"></span>
 <span class="w">  </span><span class="nt">unloadStorageModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enableNFSRDMA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">unloadThirdPartyRDMAModules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
@@ -223,7 +223,7 @@
 <span class="w">  </span><span class="nt">ai</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 
 <span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;group-0&quot;</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dgx-b200-nvidia-b200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">machineType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">productType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-B200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
@@ -233,9 +233,10 @@
 <span class="w">      </span><span class="nt">ib</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">workerNodes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;worker-0&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;worker-1&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">nvidia.com/gpu.machine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nvidia.kubernetes-launch-kit.machine</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200-NVIDIA-B200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">thirdPartyRDMAModules</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
 <span class="w">  </span><span class="nt">storageModules</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
 <span class="w">  </span><span class="nt">pfs</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">deviceID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="nt">pciAddress</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0000:05:00.0&quot;</span><span class="w"></span>
@@ -286,7 +287,7 @@
 </section>
 <section id="docadriver">
 <h2>docaDriver<a class="headerlink" href="#docadriver" title="Permalink to this headline"></a></h2>
-<p>OFED driver configuration and module pre-flight handling.</p>
+<p>OFED driver configuration and kernel driver dependencies validation.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 35%" />
@@ -314,7 +315,7 @@
 <td><p>Enable NFS-over-RDMA support.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">skipPreflightChecks</span></code></p></td>
-<td><p>Skip the OFED driver pre-flight checks. Useful for environments where pre-flight is known-good.</p></td>
+<td><p>Skip the kernel driver dependencies validation. Useful for environments where it’s known-good.</p></td>
 </tr>
 </tbody>
 </table>
@@ -531,7 +532,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">identifier</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">group-0</span></code>, <code class="docutils literal notranslate"><span class="pre">group-1</span></code>, etc.</p></td>
+<td><p>Sanitised <code class="docutils literal notranslate"><span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">dgx-b200-nvidia-h100-nvl</span></code>) when both fields are resolved; <code class="docutils literal notranslate"><span class="pre">group-0</span></code> / <code class="docutils literal notranslate"><span class="pre">group-1</span></code> fallback when they aren’t. Used as the NicNodePolicy / SriovNetworkNodePolicy name suffix.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> / <code class="docutils literal notranslate"><span class="pre">productType</span></code></p></td>
 <td><p>Hardware type strings (e.g., <code class="docutils literal notranslate"><span class="pre">DGX-B200</span></code> / <code class="docutils literal notranslate"><span class="pre">NVIDIA-B200</span></code>).</p></td>
@@ -543,17 +544,26 @@
 <td><p>List of node names in this group.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code></p></td>
-<td><p>Auto-computed selector that distinguishes this group from others.</p></td>
+<td><p>Per-group selector. After <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code>, this is <code class="docutils literal notranslate"><span class="pre">{nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;}</span></code> — a label discovery writes onto every node in the group. When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> auto-merges groups sharing a GPU type, the merged group falls back to <code class="docutils literal notranslate"><span class="pre">{nvidia.kubernetes-launch-kit.gpu:</span> <span class="pre">&lt;gpuType&gt;}</span></code> instead (different source machineTypes can’t share a single machine label). Discovery writes both labels onto every node, so the merged selector has a value to bind to. Configs from earlier l8k versions with old-style differential nodeSelectors are preserved as-is.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">thirdPartyRDMAModules</span></code> / <code class="docutils literal notranslate"><span class="pre">storageModules</span></code></p></td>
 <td><p>OFED-dependent modules detected on the group.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pfs</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">presetApplied</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code> when a topology preset matched <code class="docutils literal notranslate"><span class="pre">(machineType,</span> <span class="pre">gpuType)</span></code> and was applied.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code></p></td>
+<td><p>List of field-level discrepancies between the matched preset and discovered hardware. Non-empty means the preset was applied but the cluster differs from the preset. Each entry has <code class="docutils literal notranslate"><span class="pre">field</span></code> (<code class="docutils literal notranslate"><span class="pre">pciAddress</span></code> / <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>), <code class="docutils literal notranslate"><span class="pre">expected</span></code>, <code class="docutils literal notranslate"><span class="pre">got</span></code>, and <code class="docutils literal notranslate"><span class="pre">detail</span></code>. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> “Validation and Deviations”.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code></p></td>
+<td><p>The discovered fabric for the group: <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code>. Populated by the fabric probe only when <strong>every</strong> east-west port produces a confirmed verdict (port ACTIVE plus, for IB, a subnet manager is present) and they agree. When omitted, discovery couldn’t prove the cluster’s fabric — downstream code should treat the absence as “unknown”. See <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a> “Fabric Type Detection”.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pfs</span></code></p></td>
 <td><p>List of physical functions. Each entry has <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>, <code class="docutils literal notranslate"><span class="pre">pciAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">rdmaDevice</span></code>, <code class="docutils literal notranslate"><span class="pre">networkInterface</span></code>, <code class="docutils literal notranslate"><span class="pre">traffic</span></code> (<code class="docutils literal notranslate"><span class="pre">east-west</span></code> or <code class="docutils literal notranslate"><span class="pre">north-south</span></code>), and <code class="docutils literal notranslate"><span class="pre">rail</span></code> (sequential index for east-west PFs).</p></td>
 </tr>
 </tbody>
 </table>
-<p>North-south PFs are listed for visibility but filtered out of generated manifests. See <a class="reference internal" href="../concepts.html"><span class="doc">Concepts</span></a> and <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a>.</p>
+<p>North-south PFs are listed for visibility but filtered out of generated manifests. See <a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a> and <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a>.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
@@ -574,7 +584,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 

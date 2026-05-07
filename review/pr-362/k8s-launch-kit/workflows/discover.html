@@ -62,7 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../concepts.html">Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../quick-start.html">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../profiles/profiles.html">Deployment Profiles</a></li>
@@ -72,14 +72,18 @@
 <li class="toctree-l4"><a class="reference internal" href="#discovery-with-a-base-configuration">Discovery with a Base Configuration</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#filtering-nodes">Filtering Nodes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pf-topology-and-hardware-detection">PF Topology and Hardware Detection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#group-labelling">Group Labelling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fabric-type-detection">Fabric Type Detection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#north-south-filtering">North-South Filtering</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#doca-driver-and-module-pre-flight">DOCA Driver and Module Pre-Flight</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kernel-driver-dependencies-validation">Kernel Driver Dependencies Validation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#discovery-output">Discovery Output</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#debug-logging">Debug Logging</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="generate.html">Generate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate.html">Validate</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../advanced-topics.html">Advanced Topics</a></li>
@@ -139,10 +143,13 @@
 <li><p><a class="reference internal" href="#discovery-with-a-base-configuration" id="id2">Discovery with a Base Configuration</a></p></li>
 <li><p><a class="reference internal" href="#filtering-nodes" id="id3">Filtering Nodes</a></p></li>
 <li><p><a class="reference internal" href="#pf-topology-and-hardware-detection" id="id4">PF Topology and Hardware Detection</a></p></li>
-<li><p><a class="reference internal" href="#north-south-filtering" id="id5">North-South Filtering</a></p></li>
-<li><p><a class="reference internal" href="#doca-driver-and-module-pre-flight" id="id6">DOCA Driver and Module Pre-Flight</a></p></li>
-<li><p><a class="reference internal" href="#discovery-output" id="id7">Discovery Output</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
+<li><p><a class="reference internal" href="#group-labelling" id="id5">Group Labelling</a></p></li>
+<li><p><a class="reference internal" href="#fabric-type-detection" id="id6">Fabric Type Detection</a></p></li>
+<li><p><a class="reference internal" href="#north-south-filtering" id="id7">North-South Filtering</a></p></li>
+<li><p><a class="reference internal" href="#kernel-driver-dependencies-validation" id="id8">Kernel Driver Dependencies Validation</a></p></li>
+<li><p><a class="reference internal" href="#discovery-output" id="id9">Discovery Output</a></p></li>
+<li><p><a class="reference internal" href="#debug-logging" id="id10">Debug Logging</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id11">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -155,7 +162,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover
 </pre></div>
 </div>
-<p>No flags required. <code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code> falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> (or <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>), and the output is written to <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> by default. Discovery groups nodes by PCI topology (PCI addresses + device IDs across each node’s PFs), computes a <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> per group, and writes the result.</p>
+<p>No flags required. <code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code> falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> (or <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>), and the output is written to <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> by default. Discovery groups nodes by PCI topology (PCI addresses + device IDs across each node’s PFs), labels each node with <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code>, and writes a <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> keyed by that label per group.</p>
 </section>
 <section id="discovery-with-a-base-configuration">
 <h2>Discovery with a Base Configuration<a class="headerlink" href="#discovery-with-a-base-configuration" title="Permalink to this headline"></a></h2>
@@ -186,6 +193,32 @@
 <p>For each NIC, Launch Kit derives PCI topology, NUMA affinity, and the connected GPU. The primary signal is <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> (queried via the NIC Configuration Daemon). When <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> is unavailable, Launch Kit falls back to sysfs and an embedded <code class="docutils literal notranslate"><span class="pre">pci.ids</span></code> database.</p>
 <p>When GPU operator labels (<code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.machine</span></code>, <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.product</span></code>) are not present, Launch Kit additionally execs into a NIC Configuration Daemon pod to read DMI data and <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> output directly, deriving the machine type and GPU product from hardware.</p>
 </section>
+<section id="group-labelling">
+<h2>Group Labelling<a class="headerlink" href="#group-labelling" title="Permalink to this headline"></a></h2>
+<p>After discovery resolves <code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> for a group, every node in the group is patched with two l8k-specific labels via a strategic-merge patch:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> — per-source-group identity. Used as the source group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.gpu:</span> <span class="pre">&lt;gpuType&gt;</span></code> — written alongside the machine label so auto-merged groups (different machineTypes sharing a GPU type) have a stable selector. Same value as <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.product</span></code> by construction.</p></li>
+</ul>
+<p>Label values keep their original case (e.g. <code class="docutils literal notranslate"><span class="pre">DGX-B200-NVIDIA-H100-NVL</span></code>, <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>); upstream parsing already trims whitespace and replaces spaces with hyphens. Values that would exceed Kubernetes’ 63-char label limit are skipped (logged at debug).</p>
+<p>The labels drive two pieces of downstream behaviour:</p>
+<ul class="simple">
+<li><p><strong>Group identity</strong>: each group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> (lowercase, RFC 1123 resource-name form) and <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> are keyed by the label. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--groups</span> <span class="pre">&lt;id1,id2,...&gt;</span></code> targets exactly the nodes that carry the matching machine label(s); <code class="docutils literal notranslate"><span class="pre">--gpu-type</span> <span class="pre">&lt;X&gt;</span></code> selects every node whose <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> matches.</p></li>
+<li><p><strong>Auto-merge selection</strong>: when <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> merges groups sharing a GPU type, the merged group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code> keys on <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.gpu</span></code> so it covers every source machineType in the merged set.</p></li>
+</ul>
+<p>Both labels are l8k state, not GPU operator state. Configs loaded from an earlier l8k version that used differential nodeSelectors keep working unchanged — the labels are only written on a fresh discovery run.</p>
+<p>Groups whose <code class="docutils literal notranslate"><span class="pre">machineType</span></code> or <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> could not be resolved keep a fallback <code class="docutils literal notranslate"><span class="pre">group-N</span></code> identifier. The machine label is skipped in that case, but the GPU label is still written when <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> alone is resolved.</p>
+</section>
+<section id="fabric-type-detection">
+<h2>Fabric Type Detection<a class="headerlink" href="#fabric-type-detection" title="Permalink to this headline"></a></h2>
+<p>For each group’s east-west PFs that have an RDMA device, Launch Kit reads <code class="docutils literal notranslate"><span class="pre">/sys/class/infiniband/&lt;rdmaDevice&gt;/ports/1/{state,phys_state,link_layer,sm_lid}</span></code> from inside the NIC Configuration Daemon pod. A port contributes to the group’s fabric verdict when:</p>
+<ul class="simple">
+<li><p>Port is <code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code> and <code class="docutils literal notranslate"><span class="pre">link_layer=Ethernet</span></code> — contributes <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code>.</p></li>
+<li><p>Port is <code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code>, <code class="docutils literal notranslate"><span class="pre">link_layer=InfiniBand</span></code>, and a subnet manager is present (<code class="docutils literal notranslate"><span class="pre">sm_lid</span></code> non-zero) — contributes <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code>.</p></li>
+</ul>
+<p>If every contributing port agrees on a single value, that value is recorded as <code class="docutils literal notranslate"><span class="pre">linkType</span></code> on the group in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. If no port produced a contribution (all down, IB without SM, probes failed), or different ports contribute different values, the field is <strong>left empty</strong> — discovery couldn’t prove the cluster is using a specific fabric, and downstream code treats the absence as “unknown”.</p>
+<p>This is more reliable than reading <code class="docutils literal notranslate"><span class="pre">link_layer</span></code> alone: that file just reflects firmware config and may be a default rather than the cluster’s actual fabric.</p>
+</section>
 <section id="north-south-filtering">
 <h2>North-South Filtering<a class="headerlink" href="#north-south-filtering" title="Permalink to this headline"></a></h2>
 <p>Each PF is classified by <strong>traffic direction</strong>:</p>
@@ -196,8 +229,8 @@
 <p>BlueField-3 SuperNICs are explicitly classified as east-west even though they share a part-number prefix with BlueField DPUs — see the SuperNIC entry in the embedded DPU exclusion list.</p>
 <p>For a traffic-directions diagram, see <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p>
 </section>
-<section id="doca-driver-and-module-pre-flight">
-<h2>DOCA Driver and Module Pre-Flight<a class="headerlink" href="#doca-driver-and-module-pre-flight" title="Permalink to this headline"></a></h2>
+<section id="kernel-driver-dependencies-validation">
+<h2>Kernel Driver Dependencies Validation<a class="headerlink" href="#kernel-driver-dependencies-validation" title="Permalink to this headline"></a></h2>
 <p>During discovery, Launch Kit detects kernel modules that depend on OFED drivers. It execs into <code class="docutils literal notranslate"><span class="pre">nic-configuration-daemon</span></code> pods and builds a reverse dependency graph from <code class="docutils literal notranslate"><span class="pre">/sys/module/*/holders/</span></code> for the core MLX and OFED kernel modules.</p>
 <p>The discovered modules are classified into two categories:</p>
 <table class="colwidths-given docutils align-default">
@@ -225,7 +258,7 @@
 </table>
 <p>Storage and third-party RDMA module lists are sourced from the <code class="docutils literal notranslate"><span class="pre">doca-driver-build</span></code> project to keep them in sync with the driver container itself. <code class="docutils literal notranslate"><span class="pre">mlx5</span></code>-prefixed modules (the OFED stack itself) are excluded from classification.</p>
 <p>After discovery, the config reflects the auto-enabled flags and the discovered modules are saved per group as <code class="docutils literal notranslate"><span class="pre">storageModules</span></code> and <code class="docutils literal notranslate"><span class="pre">thirdPartyRDMAModules</span></code> lists.</p>
-<p>To skip pre-flight entirely (for environments where pre-flight is known-good), set <code class="docutils literal notranslate"><span class="pre">docaDriver.skipPreflightChecks:</span> <span class="pre">true</span></code> in your config.</p>
+<p>To skip the kernel driver dependencies validation entirely (for environments where it’s known-good), set <code class="docutils literal notranslate"><span class="pre">docaDriver.skipPreflightChecks:</span> <span class="pre">true</span></code> in your config.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Verify that no running workloads depend on modules that will be unloaded. To disable automatic unloading, set <code class="docutils literal notranslate"><span class="pre">unloadStorageModules</span></code> and <code class="docutils literal notranslate"><span class="pre">unloadThirdPartyRDMAModules</span></code> back to <code class="docutils literal notranslate"><span class="pre">false</span></code> in your config after discovery.</p>
@@ -241,6 +274,14 @@
 </ol>
 <p>You can also provide a pre-configured file directly to <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> without running discovery, or skip discovery entirely with <code class="docutils literal notranslate"><span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code>.</p>
 <p>For the full configuration schema, see <a class="reference internal" href="../reference/config.html"><span class="doc">Configuration Reference</span></a>.</p>
+</section>
+<section id="debug-logging">
+<h2>Debug Logging<a class="headerlink" href="#debug-logging" title="Permalink to this headline"></a></h2>
+<p>Every probe and decision in discovery emits a structured-field debug line. To see them:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover --log-level debug
+</pre></div>
+</div>
+<p>Logged probes include the GPU operator label read and hardware-fallback path, the DMI machine-type cat, the <code class="docutils literal notranslate"><span class="pre">nvidia-smi</span></code> and sysfs fallback, OFED-dependent module discovery and classification, preset matching with hit/miss, the PCI-fingerprint per-node bucketing, and the east-west / north-south traffic classification per PF. Phase summary lines (<code class="docutils literal notranslate"><span class="pre">Discovery</span> <span class="pre">summary</span></code>, <code class="docutils literal notranslate"><span class="pre">Group</span> <span class="pre">merge</span> <span class="pre">complete</span></code>) are emitted at info level by default. The same convention applies to <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> for the group-merge logs.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
@@ -262,7 +303,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 04, 2026.
+      <span class="lastupdated">Last updated on May 07, 2026.
       </span></p>
   </div>
 
