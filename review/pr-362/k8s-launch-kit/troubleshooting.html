@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Reference" href="reference/reference.html" />
-    <link rel="prev" title="AI-Assisted Workflows" href="ai-skills.html" />
+    <link rel="prev" title="Automation and CI/CD" href="automation.html" />
  
 
 
@@ -71,7 +71,6 @@
 <li class="toctree-l3"><a class="reference internal" href="heterogeneous-clusters.html">Heterogeneous Clusters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="presets.html">Cluster Topology Presets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="automation.html">Automation and CI/CD</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Troubleshooting</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#sos-report-collection">SOS-Report Collection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#troubleshooting-with-ai-skills">Troubleshooting with AI Skills</a></li>
@@ -86,6 +85,7 @@
 <li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
@@ -150,7 +150,7 @@
 </section>
 <section id="troubleshooting-with-ai-skills">
 <h2>Troubleshooting with AI Skills<a class="headerlink" href="#troubleshooting-with-ai-skills" title="Permalink to this headline"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code> skill (see <a class="reference internal" href="ai-skills.html"><span class="doc">AI-Assisted Workflows</span></a>) can analyze sosreport data when invoked from Claude Code. Collect a sosreport and then ask Claude Code to investigate issues such as OFED driver crashes, SR-IOV VF allocation failures, pods stuck in <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>, or NIC configuration errors.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code> skill (see <a class="reference internal" href="../ai-skills.html"><span class="doc">AI Skills</span></a>) can analyze sosreport data when invoked from any AI agent (Claude Code, Cursor, Codex CLI, or other agents that load Markdown context). Collect a sosreport and then ask the agent to investigate issues such as OFED driver crashes, SR-IOV VF allocation failures, pods stuck in <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>, or NIC configuration errors.</p>
 </section>
 <section id="common-failures">
 <h2>Common Failures<a class="headerlink" href="#common-failures" title="Permalink to this headline"></a></h2>
@@ -198,7 +198,7 @@
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../troubleshooting/sosreport.html"><span class="doc">Troubleshooting — SOS Report</span></a> — the upstream sosreport workflow for the Network Operator</p></li>
-<li><p><a class="reference internal" href="ai-skills.html"><span class="doc">AI-Assisted Workflows</span></a> — the troubleshoot skill</p></li>
+<li><p><a class="reference internal" href="../ai-skills.html"><span class="doc">AI Skills</span></a> — the <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code> skill</p></li>
 <li><p><a class="reference internal" href="automation.html"><span class="doc">Automation and CI/CD</span></a> — exit codes and structured errors</p></li>
 </ul>
 </section>

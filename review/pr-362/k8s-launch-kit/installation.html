@@ -65,22 +65,17 @@
 <li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#script">Script</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#install">Install</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#verify">Verify</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#uninstall">Uninstall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install">Install</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#script">Script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#homebrew">Homebrew</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#container">Container</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#homebrew">Homebrew</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id1">Install</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id2">Verify</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">Uninstall</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#container">Container</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id4">Install</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id5">Verify</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id6">Uninstall</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verify">Verify</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uninstall">Uninstall</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Script</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Homebrew</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Container</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#layout-script-and-homebrew">Layout (Script and Homebrew)</a></li>
@@ -96,6 +91,7 @@
 <li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
@@ -142,30 +138,24 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#prerequisites" id="id7">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#script" id="id8">Script</a></p>
+<li><p><a class="reference internal" href="#prerequisites" id="id4">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#install" id="id5">Install</a></p>
 <ul>
-<li><p><a class="reference internal" href="#install" id="id9">Install</a></p></li>
-<li><p><a class="reference internal" href="#verify" id="id10">Verify</a></p></li>
-<li><p><a class="reference internal" href="#uninstall" id="id11">Uninstall</a></p></li>
+<li><p><a class="reference internal" href="#script" id="id6">Script</a></p></li>
+<li><p><a class="reference internal" href="#homebrew" id="id7">Homebrew</a></p></li>
+<li><p><a class="reference internal" href="#container" id="id8">Container</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#homebrew" id="id12">Homebrew</a></p>
+<li><p><a class="reference internal" href="#verify" id="id9">Verify</a></p></li>
+<li><p><a class="reference internal" href="#uninstall" id="id10">Uninstall</a></p>
 <ul>
-<li><p><a class="reference internal" href="#id1" id="id13">Install</a></p></li>
-<li><p><a class="reference internal" href="#id2" id="id14">Verify</a></p></li>
-<li><p><a class="reference internal" href="#id3" id="id15">Uninstall</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id11">Script</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id12">Homebrew</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id13">Container</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#container" id="id16">Container</a></p>
-<ul>
-<li><p><a class="reference internal" href="#id4" id="id17">Install</a></p></li>
-<li><p><a class="reference internal" href="#id5" id="id18">Verify</a></p></li>
-<li><p><a class="reference internal" href="#id6" id="id19">Uninstall</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#layout-script-and-homebrew" id="id20">Layout (Script and Homebrew)</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id21">See Also</a></p></li>
+<li><p><a class="reference internal" href="#layout-script-and-homebrew" id="id14">Layout (Script and Homebrew)</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id15">See Also</a></p></li>
 </ul>
 </div>
 <section id="prerequisites">
@@ -177,10 +167,11 @@
 <li><p>Docker or Podman on the machine where you will run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> (only for the container scenario).</p></li>
 </ul>
 </section>
-<section id="script">
-<h2>Script<a class="headerlink" href="#script" title="Permalink to this headline"></a></h2>
 <section id="install">
-<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h3>
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h2>
+<p>Choose one of the methods below. The script and Homebrew methods install a binary plus profile templates and presets to a local prefix; the container method runs <code class="docutils literal notranslate"><span class="pre">l8k</span></code> from a published image and writes nothing outside your working directory.</p>
+<section id="script">
+<h3>Script<a class="headerlink" href="#script" title="Permalink to this headline"></a></h3>
 <p>Downloads the latest release from GitHub and installs the <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary, profile templates, and presets to <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh
 </pre></div>
@@ -191,48 +182,17 @@ curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/
 </pre></div>
 </div>
 </section>
-<section id="verify">
-<h3>Verify<a class="headerlink" href="#verify" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
-</pre></div>
-</div>
-</section>
-<section id="uninstall">
-<h3>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh -s -- --uninstall
-</pre></div>
-</div>
-</section>
-</section>
 <section id="homebrew">
-<h2>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this headline"></a></h2>
-<section id="id1">
-<h3>Install<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<h3>Homebrew<a class="headerlink" href="#homebrew" title="Permalink to this headline"></a></h3>
 <p>For macOS and Linux systems with Homebrew:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew tap nvidia/l8k https://github.com/nvidia/k8s-launch-kit
 brew install l8k
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h3>Verify<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
-</pre></div>
-</div>
-</section>
-<section id="id3">
-<h3>Uninstall<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew uninstall l8k
-brew untap nvidia/l8k
-</pre></div>
-</div>
-</section>
-</section>
 <section id="container">
-<h2>Container<a class="headerlink" href="#container" title="Permalink to this headline"></a></h2>
+<h3>Container<a class="headerlink" href="#container" title="Permalink to this headline"></a></h3>
 <p>Run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> directly from the published container image without copying any binary or assets to the host filesystem. The image stays in the local Docker cache; everything else (kubeconfig, output directory) is mounted at runtime.</p>
-<section id="id4">
-<h3>Install<a class="headerlink" href="#id4" title="Permalink to this headline"></a></h3>
 <p>Pull the image once:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7
 </pre></div>
@@ -250,14 +210,32 @@ brew untap nvidia/l8k
 <p><code class="docutils literal notranslate"><span class="pre">--net=host</span></code> is required so the container can reach the Kubernetes API server. The <code class="docutils literal notranslate"><span class="pre">--rm</span></code> flag ensures no stopped containers accumulate. Mount the kubeconfig directory read-only.</p>
 </div>
 </section>
-<section id="id5">
-<h3>Verify<a class="headerlink" href="#id5" title="Permalink to this headline"></a></h3>
+</section>
+<section id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline"></a></h2>
+<p>The same command works for all installation methods:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k version
 </pre></div>
 </div>
 </section>
-<section id="id6">
-<h3>Uninstall<a class="headerlink" href="#id6" title="Permalink to this headline"></a></h3>
+<section id="uninstall">
+<h2>Uninstall<a class="headerlink" href="#uninstall" title="Permalink to this headline"></a></h2>
+<p>Use the method that matches how you installed.</p>
+<section id="id1">
+<h3>Script<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh -s -- --uninstall
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Homebrew<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew uninstall l8k
+brew untap nvidia/l8k
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>Container<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <p>Drop the alias and remove the cached image:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">unalias</span> l8k
 docker image rm nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7
@@ -268,14 +246,14 @@ docker image rm nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.4.0-beta.7
 </section>
 <section id="layout-script-and-homebrew">
 <h2>Layout (Script and Homebrew)<a class="headerlink" href="#layout-script-and-homebrew" title="Permalink to this headline"></a></h2>
-<p>The script and Homebrew scenarios install the following under the install prefix (default: <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>):</p>
+<p>The script and Homebrew methods install the following under the install prefix (default: <code class="docutils literal notranslate"><span class="pre">/usr/local</span></code>):</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/bin/l8k</span></code> — CLI binary</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/profiles/</span></code> — profile templates</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/presets/</span></code> — cluster topology presets</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;/share/l8k/l8k-config.yaml</span></code> — default configuration</p></li>
 </ul>
-<p>The container scenario does not write anything outside your working directory; profiles, presets, and the default config are baked into the image.</p>
+<p>The container method does not write anything outside your working directory; profiles, presets, and the default config are baked into the image.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skills &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/mermaid-init.js"></script>
+        <script src="_static/design-tabs.js"></script>
+        <script src="_static/version.js"></script>
+        <script src="_static/social-media.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Customization Options" href="customizations/customization.html" />
+    <link rel="prev" title="Configuration Reference" href="k8s-launch-kit/reference/config.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="index.html">
+  <img src="_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AI Skills</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-skills-provide">What Skills Provide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#claude-code">Claude Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cursor">Cursor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openai-codex-cli">OpenAI Codex CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-agents">Other Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#real-world-scenarios">Real-World Scenarios</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#discovery-on-a-heterogeneous-cluster">Discovery on a Heterogeneous Cluster</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-a-deployment-profile-spectrum-x">Choosing a Deployment Profile (Spectrum-X)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triaging-a-stuck-deployment">Triaging a Stuck Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-skills-don-t-do">What Skills Don’t Do</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kubevirt.html">KubeVirt SR-IOV Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+  
+<li>AI Skills</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ai-skills">
+<h1>AI Skills<a class="headerlink" href="#ai-skills" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#what-skills-provide" id="id1">What Skills Provide</a></p></li>
+<li><p><a class="reference internal" href="#installation" id="id2">Installation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#claude-code" id="id3">Claude Code</a></p></li>
+<li><p><a class="reference internal" href="#cursor" id="id4">Cursor</a></p></li>
+<li><p><a class="reference internal" href="#openai-codex-cli" id="id5">OpenAI Codex CLI</a></p></li>
+<li><p><a class="reference internal" href="#other-agents" id="id6">Other Agents</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#real-world-scenarios" id="id7">Real-World Scenarios</a></p>
+<ul>
+<li><p><a class="reference internal" href="#discovery-on-a-heterogeneous-cluster" id="id8">Discovery on a Heterogeneous Cluster</a></p></li>
+<li><p><a class="reference internal" href="#choosing-a-deployment-profile-spectrum-x" id="id9">Choosing a Deployment Profile (Spectrum-X)</a></p></li>
+<li><p><a class="reference internal" href="#triaging-a-stuck-deployment" id="id10">Triaging a Stuck Deployment</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#what-skills-don-t-do" id="id11">What Skills Don’t Do</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id12">See Also</a></p></li>
+</ul>
+</div>
+<p>NVIDIA ships a set of <strong>AI agent skills</strong> that drive Network Operator configuration on Kubernetes through the deterministic <code class="docutils literal notranslate"><span class="pre">l8k</span></code> CLI (Kubernetes Launch Kit). The skills are plain Markdown files with light YAML frontmatter — agent-agnostic by design. They give an LLM agent the vocabulary, decision tree, and command idioms to discover cluster hardware, pick a deployment profile, render manifests, deploy them, and triage failures, without the operator having to memorize <code class="docutils literal notranslate"><span class="pre">l8k</span></code> flags or NVIDIA networking conventions.</p>
+<p>Skills do not embed an LLM. <code class="docutils literal notranslate"><span class="pre">l8k</span></code> itself remains a self-contained binary — it is fully usable without any AI agent. The skills are an <em>interface layer</em> that lets agents call <code class="docutils literal notranslate"><span class="pre">l8k</span></code> correctly.</p>
+<section id="what-skills-provide">
+<h2>What Skills Provide<a class="headerlink" href="#what-skills-provide" title="Permalink to this headline"></a></h2>
+<p>Each skill is a self-contained Markdown document in the <a class="reference external" href="https://github.com/NVIDIA/k8s-launch-kit">k8s-launch-kit repository</a> under <code class="docutils literal notranslate"><span class="pre">skills/</span></code>. The bundled set:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Skill</strong></p></th>
+<th class="head"><p><strong>Purpose</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-network-engineer</span></code></p></td>
+<td><p>Top-level persona. Embodies a senior NVIDIA networking engineer; activates on any Kubernetes networking question (SR-IOV, RDMA, Spectrum-X, BlueField, ConnectX, DOCA, multirail). Loads every utility skill below.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-shared</span></code></p></td>
+<td><p>Shared CLI patterns: install paths, global flags, output modes, exit-code semantics. Required by every other skill.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-discover</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code>: cluster hardware probing, label patching, <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> interpretation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-config</span></code></p></td>
+<td><p>Reads / explains / edits <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> — profile fields, group identifiers, OFED module lists.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-generate</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>: profile selection (fabric × deployment-type), Spectrum-X cohort flags, group filters, hardware-derived defaults.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-dryrun</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code>: previews what would land on the cluster without applying.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-deploy</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>: applies pre-generated manifests in dependency order.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-validate</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code>: confirms the deployed Network Operator matches the selected release and every rendered manifest is present.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-pipeline</span></code></p></td>
+<td><p>End-to-end orchestration (discover → generate → deploy) for greenfield clusters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span></code> plus a triage checklist for OFED crashes, SR-IOV VF allocation failures, <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>-stuck pods, and NIC firmware misconfiguration.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The skills know which <code class="docutils literal notranslate"><span class="pre">l8k</span></code> flags exist on which subcommand, when <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> is required, when <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> should auto-default, which Spectrum-X RA pairs with which Network Operator release, and how to interpret a sosreport. They tell the agent to <strong>start every deployment task with</strong> <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> <strong>and every troubleshooting task with</strong> <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span></code> — not with raw <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>The skills are agent-agnostic Markdown. The right install location depends on which AI agent you’re using.</p>
+<p>All paths assume the repository has been cloned:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/NVIDIA/k8s-launch-kit.git
+<span class="nb">cd</span> k8s-launch-kit
+</pre></div>
+</div>
+<section id="claude-code">
+<h3>Claude Code<a class="headerlink" href="#claude-code" title="Permalink to this headline"></a></h3>
+<p>Claude Code discovers skills under <code class="docutils literal notranslate"><span class="pre">~/.claude/skills/</span></code> (user-scoped) or <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/.claude/skills/</span></code> (project-scoped):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># User-scoped (available in every Claude Code session)</span>
+mkdir -p ~/.claude/skills
+ln -s <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/skills/&quot;</span>k8s-launch-kit-* ~/.claude/skills/
+ln -s <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/skills/k8s-network-engineer&quot;</span> ~/.claude/skills/
+
+<span class="c1"># Or project-scoped (available only in this project)</span>
+mkdir -p .claude/skills
+ln -s <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/skills/&quot;</span>k8s-launch-kit-* .claude/skills/
+ln -s <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/skills/k8s-network-engineer&quot;</span> .claude/skills/
+</pre></div>
+</div>
+<p>Verify by typing <code class="docutils literal notranslate"><span class="pre">/skills</span></code> in a Claude Code session — the <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-*</span></code> and <code class="docutils literal notranslate"><span class="pre">k8s-network-engineer</span></code> entries should appear.</p>
+</section>
+<section id="cursor">
+<h3>Cursor<a class="headerlink" href="#cursor" title="Permalink to this headline"></a></h3>
+<p>Cursor reads project-scoped rule files from <code class="docutils literal notranslate"><span class="pre">.cursor/rules/</span></code>. Symlink the skill directories or copy the <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> files into <code class="docutils literal notranslate"><span class="pre">.mdc</span></code> rules:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your Kubernetes / l8k project</span>
+mkdir -p .cursor/rules
+<span class="k">for</span> skill <span class="k">in</span> &lt;path-to-k8s-launch-kit&gt;/skills/*/SKILL.md<span class="p">;</span> <span class="k">do</span>
+    <span class="nv">name</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="k">$(</span>dirname <span class="s2">&quot;</span><span class="nv">$skill</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="k">)</span>
+    cp <span class="s2">&quot;</span><span class="nv">$skill</span><span class="s2">&quot;</span> <span class="s2">&quot;.cursor/rules/</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="s2">.mdc&quot;</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>The YAML frontmatter on each <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> is compatible with Cursor’s rule metadata (<code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">alwaysApply</span></code>-equivalent semantics handled by activation prompts). For user-wide rules, place them under <code class="docutils literal notranslate"><span class="pre">~/.cursor/rules/</span></code> instead.</p>
+</section>
+<section id="openai-codex-cli">
+<h3>OpenAI Codex CLI<a class="headerlink" href="#openai-codex-cli" title="Permalink to this headline"></a></h3>
+<p>Codex CLI loads project-level instructions from an <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> file at the repository root. Concatenate the persona skill plus its dependencies into <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your Kubernetes / l8k project</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;# Agent Instructions&quot;</span>
+    <span class="nb">echo</span>
+    cat &lt;path-to-k8s-launch-kit&gt;/skills/k8s-network-engineer/SKILL.md
+    <span class="k">for</span> skill <span class="k">in</span> &lt;path-to-k8s-launch-kit&gt;/skills/k8s-launch-kit-*/SKILL.md<span class="p">;</span> <span class="k">do</span>
+        <span class="nb">echo</span>
+        <span class="nb">echo</span> <span class="s2">&quot;---&quot;</span>
+        <span class="nb">echo</span>
+        cat <span class="s2">&quot;</span><span class="nv">$skill</span><span class="s2">&quot;</span>
+    <span class="k">done</span>
+<span class="o">}</span> &gt; AGENTS.md
+</pre></div>
+</div>
+<p>For machine-wide instructions, write to <code class="docutils literal notranslate"><span class="pre">~/.codex/AGENTS.md</span></code> instead. Codex CLI will pick up the file automatically on each <code class="docutils literal notranslate"><span class="pre">codex</span></code> invocation.</p>
+</section>
+<section id="other-agents">
+<h3>Other Agents<a class="headerlink" href="#other-agents" title="Permalink to this headline"></a></h3>
+<p>Any agent that supports loading external Markdown context (Continue.dev, Aider, custom MCP servers, etc.) can use the skills. Two integration patterns work:</p>
+<ul class="simple">
+<li><p><strong>As a system / project prompt</strong>: concatenate <code class="docutils literal notranslate"><span class="pre">skills/k8s-network-engineer/SKILL.md</span></code> plus the <code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-*/SKILL.md</span></code> files into the agent’s persistent context.</p></li>
+<li><p><strong>As MCP server resources</strong>: serve the <code class="docutils literal notranslate"><span class="pre">skills/</span></code> directory through any filesystem MCP server; the agent reads the relevant skill on demand.</p></li>
+</ul>
+<p>The skill content is the contract. Frontmatter (<code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">metadata.requires</span></code>) is metadata for skill-aware agents and is safely ignored by agents that don’t parse it.</p>
+</section>
+</section>
+<section id="real-world-scenarios">
+<h2>Real-World Scenarios<a class="headerlink" href="#real-world-scenarios" title="Permalink to this headline"></a></h2>
+<p>The examples below show prompts an operator would type in any of the agents above, plus the actions the skills would orchestrate.</p>
+<section id="discovery-on-a-heterogeneous-cluster">
+<h3>Discovery on a Heterogeneous Cluster<a class="headerlink" href="#discovery-on-a-heterogeneous-cluster" title="Permalink to this headline"></a></h3>
+<p><strong>Operator prompt:</strong></p>
+<blockquote>
+<div><p><em>“I have a new cluster with mixed DGX-B200 and Lenovo ThinkSystem nodes, both running H100 GPUs. The GPU operator is installed. Help me discover the network topology and tell me what I’m working with.”</em></p>
+</div></blockquote>
+<p><strong>Skill-driven flow:</strong></p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">k8s-network-engineer</span></code> activates and loads the discovery skills.</p></li>
+<li><p>The agent runs <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span> <span class="pre">--output</span> <span class="pre">json</span> <span class="pre">2&gt;/dev/null</span></code> and parses the result.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-config</span></code> interprets the resulting <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>: identifies two source groups (<code class="docutils literal notranslate"><span class="pre">dgx-b200-nvidia-h100-nvl</span></code> and <code class="docutils literal notranslate"><span class="pre">thinksystem-sr680a-v3-nvidia-h100-nvl</span></code>), confirms east-west PFs are ConnectX-7 (deviceID <code class="docutils literal notranslate"><span class="pre">1021</span></code>), counts 8 rails per node, and notes that both groups share a <code class="docutils literal notranslate"><span class="pre">railNumber</span></code> — so <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> will auto-default to true.</p></li>
+<li><p>The agent reports back: GPU type, NIC topology, fabric verdict (<code class="docutils literal notranslate"><span class="pre">linkType:</span> <span class="pre">Ethernet</span></code> confirmed via active port + <code class="docutils literal notranslate"><span class="pre">link_layer</span></code>), discovered OFED-dependent kernel modules (any storage modules trigger an “unloadStorageModules will be enabled” warning), and any preset deviations.</p></li>
+<li><p>The agent suggests the next step: <em>“Both groups share GPU type and rail count, so a single ``l8k generate`` will produce one combined bundle covering both. Want me to render manifests for SR-IOV Ethernet?”</em></p></li>
+</ol>
+<p>The operator never reads <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> directly — the skill explains the contents in natural language and surfaces the decisions that matter.</p>
+</section>
+<section id="choosing-a-deployment-profile-spectrum-x">
+<h3>Choosing a Deployment Profile (Spectrum-X)<a class="headerlink" href="#choosing-a-deployment-profile-spectrum-x" title="Permalink to this headline"></a></h3>
+<p><strong>Operator prompt:</strong></p>
+<blockquote>
+<div><p><em>“This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we’re targeting Network Operator 26.4. Generate the manifests.”</em></p>
+</div></blockquote>
+<p><strong>Skill-driven flow:</strong></p>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-generate</span></code> recognizes Spectrum-X intent.</p></li>
+<li><p>The skill verifies the cohort: ConnectX-8 → <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">2</span></code> are the hardware defaults; RA2.2 pairs with Network Operator 26.4.</p></li>
+<li><p>Before running <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>, the skill asks the operator to confirm the <strong>switch-side</strong> Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) — because <code class="docutils literal notranslate"><span class="pre">l8k</span></code> does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.</p></li>
+<li><p>Once confirmed, the agent runs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate <span class="se">\</span>
+    --spectrum-x RA2.2 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --save-deployment-files ./deployments-spectrum-x <span class="se">\</span>
+    --output json <span class="m">2</span>&gt;/dev/null
+</pre></div>
+</div>
+</li>
+<li><p>The agent reports the auto-defaulted flags (”<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(ConnectX-8</span> <span class="pre">deviceID</span> <span class="pre">1023)</span></code>”, “<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--number-of-planes=2</span></code>”) and recommends <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code> before applying.</p></li>
+</ol>
+<p>The skill knows the per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite — the operator only needs to state intent.</p>
+</section>
+<section id="triaging-a-stuck-deployment">
+<h3>Triaging a Stuck Deployment<a class="headerlink" href="#triaging-a-stuck-deployment" title="Permalink to this headline"></a></h3>
+<p><strong>Operator prompt:</strong></p>
+<blockquote>
+<div><p><em>“My OFED driver pods have been stuck in CrashLoopBackOff for the last hour. Some of my GPU workload pods are stuck in ContainerCreating. Figure out what’s wrong.”</em></p>
+</div></blockquote>
+<p><strong>Skill-driven flow:</strong></p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code> activates.</p></li>
+<li><p>The agent runs <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span> <span class="pre">--output-dir</span> <span class="pre">./sosreport</span></code> first — one command captures all CRDs, operator logs, per-node NIC info, and module status. The skill explicitly tells the agent <strong>not</strong> to start with raw <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">logs</span></code> until the sosreport bundle is read.</p></li>
+<li><p>The skill walks the triage checklist against the bundle:</p>
+<ul class="simple">
+<li><p>Is the right Network Operator release installed? (<code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> against <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>)</p></li>
+<li><p>Are storage / third-party RDMA modules loaded that would block MOFED reload? (<code class="docutils literal notranslate"><span class="pre">unloadStorageModules</span></code> / <code class="docutils literal notranslate"><span class="pre">unloadThirdPartyRDMAModules</span></code> flags)</p></li>
+<li><p>Does the firmware preflight check pass on every node?</p></li>
+<li><p>Are there NicNodePolicy resources for every group, with matching <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>?</p></li>
+<li><p>Are any pods scheduled on nodes that don’t carry the <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine</span></code> label?</p></li>
+</ul>
+</li>
+<li><p>The agent finds the root cause — e.g. <em>“The OFED container is being killed by the kernel because ``nvme_rdma`` was loaded by an early-boot service and is holding ``mlx5_ib``. ``unloadStorageModules`` is set to ``false`` in the rendered NicNodePolicy. Re-run ``l8k discover`` to re-detect storage modules and apply, or set ``docaDriver.unloadStorageModules: true`` manually.”</em></p></li>
+<li><p>The agent offers to apply the fix and watch the rollout.</p></li>
+</ol>
+<p>The skill turns “the cluster is broken” into a structured investigation that always starts from the same evidence baseline (the sosreport).</p>
+</section>
+</section>
+<section id="what-skills-don-t-do">
+<h2>What Skills Don’t Do<a class="headerlink" href="#what-skills-don-t-do" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><strong>No autonomous deploys.</strong> Skills are designed to recommend <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> before any <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span></code> / <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> and surface the exact command for operator approval. The operator stays in the loop.</p></li>
+<li><p><strong>No switch-side configuration.</strong> Spectrum-X fabric setup, BGP / EVPN, and physical cabling are out of scope. The skills will warn before suggesting Spectrum-X profiles.</p></li>
+<li><p><strong>No replacement for review.</strong> Skills produce the <em>most likely</em> configuration based on discovered hardware. For production rollouts, the operator should still inspect the rendered <code class="docutils literal notranslate"><span class="pre">./deployments/*.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> before applying.</p></li>
+</ul>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="k8s-launch-kit/k8s-launch-kit.html"><span class="doc">Configuration Assistance with Kubernetes Launch Kit</span></a> — the underlying CLI</p></li>
+<li><p><a class="reference internal" href="k8s-launch-kit/automation.html"><span class="doc">Automation and CI/CD</span></a> — using <code class="docutils literal notranslate"><span class="pre">l8k</span></code> from scripts and pipelines without an agent</p></li>
+<li><p><a class="reference internal" href="k8s-launch-kit/troubleshooting.html"><span class="doc">Troubleshooting</span></a> — the underlying <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span></code> workflow</p></li>
+<li><p><a class="reference internal" href="k8s-launch-kit/profiles/profiles.html"><span class="doc">Deployment Profiles</span></a> — the decision matrix the skills consult</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on May 07, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

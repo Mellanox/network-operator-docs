@@ -72,6 +72,12 @@
 <li class="toctree-l2"><a class="reference internal" href="workflows/workflows.html">Workflows</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Heterogeneous Clusters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#supported-configurations">Supported Configurations</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#two-groups-different-gpus-gpu-type">Two Groups, Different GPUs (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code>)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#three-groups-same-gpu-different-servers-groups">Three Groups, Same GPU, Different Servers (<code class="docutils literal notranslate"><span class="pre">--groups</span></code>)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#mixed-cluster-gpu-type-and-groups-together">Mixed Cluster (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> and <code class="docutils literal notranslate"><span class="pre">--groups</span></code> Together)</a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology">Discovery: Initial Grouping by PCI Topology</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#strategy-1-automatic-combination-at-generation">Strategy 1 — Automatic Combination at Generation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#strategy-2-separate-configs-per-group">Strategy 2 — Separate Configs per Group</a></li>
@@ -85,7 +91,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="presets.html">Cluster Topology Presets</a></li>
 <li class="toctree-l3"><a class="reference internal" href="automation.html">Automation and CI/CD</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ai-skills.html">AI-Assisted Workflows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 </ul>
 </li>
@@ -94,6 +99,7 @@
 <li class="toctree-l2"><a class="reference internal" href="k8s-launch-kit.html#where-to-start">Where to Start</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kubevirt.html">KubeVirt SR-IOV Integration</a></li>
@@ -141,79 +147,196 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology" id="id2">Discovery: Initial Grouping by PCI Topology</a></p></li>
-<li><p><a class="reference internal" href="#strategy-1-automatic-combination-at-generation" id="id3">Strategy 1 — Automatic Combination at Generation</a></p></li>
-<li><p><a class="reference internal" href="#strategy-2-separate-configs-per-group" id="id4">Strategy 2 — Separate Configs per Group</a></p></li>
-<li><p><a class="reference internal" href="#strategy-3-filter-by-gpu-type" id="id5">Strategy 3 — Filter by GPU Type</a></p></li>
-<li><p><a class="reference internal" href="#what-renders-per-group-vs-per-bucket-under-filter" id="id6">What Renders Per Group vs. Per Bucket Under Filter</a></p></li>
-<li><p><a class="reference internal" href="#per-group-manifest-layout" id="id7">Per-Group Manifest Layout</a></p></li>
-<li><p><a class="reference internal" href="#nic-interface-name-templates" id="id8">NIC Interface Name Templates</a></p></li>
-<li><p><a class="reference internal" href="#north-south-vs-east-west-traffic" id="id9">North-South vs East-West Traffic</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id10">See Also</a></p></li>
+<li><p><a class="reference internal" href="#supported-configurations" id="id2">Supported Configurations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#two-groups-different-gpus-gpu-type" id="id3">Two Groups, Different GPUs (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#three-groups-same-gpu-different-servers-groups" id="id4">Three Groups, Same GPU, Different Servers (<code class="docutils literal notranslate"><span class="pre">--groups</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#mixed-cluster-gpu-type-and-groups-together" id="id5">Mixed Cluster (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> and <code class="docutils literal notranslate"><span class="pre">--groups</span></code> Together)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#discovery-initial-grouping-by-pci-topology" id="id6">Discovery: Initial Grouping by PCI Topology</a></p></li>
+<li><p><a class="reference internal" href="#strategy-1-automatic-combination-at-generation" id="id7">Strategy 1 — Automatic Combination at Generation</a></p></li>
+<li><p><a class="reference internal" href="#strategy-2-separate-configs-per-group" id="id8">Strategy 2 — Separate Configs per Group</a></p></li>
+<li><p><a class="reference internal" href="#strategy-3-filter-by-gpu-type" id="id9">Strategy 3 — Filter by GPU Type</a></p></li>
+<li><p><a class="reference internal" href="#what-renders-per-group-vs-per-bucket-under-filter" id="id10">What Renders Per Group vs. Per Bucket Under Filter</a></p></li>
+<li><p><a class="reference internal" href="#per-group-manifest-layout" id="id11">Per-Group Manifest Layout</a></p></li>
+<li><p><a class="reference internal" href="#nic-interface-name-templates" id="id12">NIC Interface Name Templates</a></p></li>
+<li><p><a class="reference internal" href="#north-south-vs-east-west-traffic" id="id13">North-South vs East-West Traffic</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id14">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><strong>Use this when:</strong> your cluster contains multiple node types — e.g., different GPU SKUs (H100 + H200), different NIC SKUs (ConnectX-7 + BF3 SuperNIC), or different OFED requirements.</p>
 </div>
-<p>The node-grouping mapping when generating a single config covering multiple groups:</p>
+<section id="supported-configurations">
+<h2>Supported Configurations<a class="headerlink" href="#supported-configurations" title="Permalink to this headline"></a></h2>
+<p>Each configuration shows a discovered cluster shape, the <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> invocation, and which manifests get rendered.</p>
+<section id="two-groups-different-gpus-gpu-type">
+<h3>Two Groups, Different GPUs (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code>)<a class="headerlink" href="#two-groups-different-gpus-gpu-type" title="Permalink to this headline"></a></h3>
+<p>A cluster with two GPU types — H100 and H200, each on its own server SKU. <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> filters generation to a single GPU type so a manifest set lands on exactly that subset.</p>
 <div data-mermaid="flowchart LR
-    subgraph Cluster[Kubernetes cluster]
+    subgraph Generate[&quot;l8k generate --gpu-type NVIDIA-H200&quot;]
         direction TB
-        subgraph G1[Group: H100 + ConnectX-7]
-            N1[node-h100-1]
-            N2[node-h100-2]
-        end
-        subgraph G2[Group: H200 + BF3 SuperNIC]
-            N3[node-h200-1]
-            N4[node-h200-2]
-        end
+        NCP[&quot;NicClusterPolicy&quot;]
+        NNP[&quot;NicNodePolicy&lt;br/&gt;nodeSelector: gpu=NVIDIA-H200&quot;]
+        SR[&quot;SriovNetwork&lt;br/&gt;nodeSelector: gpu=NVIDIA-H200&quot;]
     end
 
-    subgraph Manifests[Generated by l8k generate]
+    subgraph Cluster[&quot;Kubernetes cluster&quot;]
         direction TB
-        NCP[NicClusterPolicy&lt;br/&gt;cluster-wide]
-        NNP1[NicNodePolicy h100&lt;br/&gt;nodeSelector: gpu=H100]
-        NNP2[NicNodePolicy h200&lt;br/&gt;nodeSelector: gpu=H200]
-        SR1[SriovNetworkNodePolicy h100]
-        SR2[SriovNetworkNodePolicy h200]
+        G1[&quot;Group A: DGX-B200 + H100&lt;br/&gt;(filtered out)&quot;]
+        G2[&quot;Group B: PowerEdge-XE9680 + H200&lt;br/&gt;(selected)&quot;]
     end
 
-    NCP --&gt; G1
     NCP --&gt; G2
-    NNP1 --&gt; G1
-    SR1 --&gt; G1
-    NNP2 --&gt; G2
-    SR2 --&gt; G2"><div class="mermaid">
+    NNP --&gt; G2
+    SR --&gt; G2
+
+    classDef included fill:#a2efb6,stroke:#28a745,color:#000
+    classDef excluded fill:#f0f0f0,stroke:#999,color:#666
+    class G2,NCP,NNP,SR included
+    class G1 excluded"><div class="mermaid">
             flowchart LR
-    subgraph Cluster[Kubernetes cluster]
+    subgraph Generate[&quot;l8k generate --gpu-type NVIDIA-H200&quot;]
         direction TB
-        subgraph G1[Group: H100 + ConnectX-7]
-            N1[node-h100-1]
-            N2[node-h100-2]
-        end
-        subgraph G2[Group: H200 + BF3 SuperNIC]
-            N3[node-h200-1]
-            N4[node-h200-2]
-        end
+        NCP[&quot;NicClusterPolicy&quot;]
+        NNP[&quot;NicNodePolicy&lt;br/&gt;nodeSelector: gpu=NVIDIA-H200&quot;]
+        SR[&quot;SriovNetwork&lt;br/&gt;nodeSelector: gpu=NVIDIA-H200&quot;]
     end
 
-    subgraph Manifests[Generated by l8k generate]
+    subgraph Cluster[&quot;Kubernetes cluster&quot;]
         direction TB
-        NCP[NicClusterPolicy&lt;br/&gt;cluster-wide]
-        NNP1[NicNodePolicy h100&lt;br/&gt;nodeSelector: gpu=H100]
-        NNP2[NicNodePolicy h200&lt;br/&gt;nodeSelector: gpu=H200]
-        SR1[SriovNetworkNodePolicy h100]
-        SR2[SriovNetworkNodePolicy h200]
+        G1[&quot;Group A: DGX-B200 + H100&lt;br/&gt;(filtered out)&quot;]
+        G2[&quot;Group B: PowerEdge-XE9680 + H200&lt;br/&gt;(selected)&quot;]
     end
 
-    NCP --&gt; G1
     NCP --&gt; G2
-    NNP1 --&gt; G1
-    SR1 --&gt; G1
-    NNP2 --&gt; G2
-    SR2 --&gt; G2
-        </div></div><section id="discovery-initial-grouping-by-pci-topology">
+    NNP --&gt; G2
+    SR --&gt; G2
+
+    classDef included fill:#a2efb6,stroke:#28a745,color:#000
+    classDef excluded fill:#f0f0f0,stroke:#999,color:#666
+    class G2,NCP,NNP,SR included
+    class G1 excluded
+        </div></div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --gpu-type NVIDIA-H200 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-h200
+</pre></div>
+</div>
+<p>Drop <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> to render manifests covering <strong>both</strong> GPU types: the generator emits a separate per-GPU bundle (each with its own <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code>, <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code>, and <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code>) keyed off the <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.gpu</span></code> label. The single <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> is shared.</p>
+</section>
+<section id="three-groups-same-gpu-different-servers-groups">
+<h3>Three Groups, Same GPU, Different Servers (<code class="docutils literal notranslate"><span class="pre">--groups</span></code>)<a class="headerlink" href="#three-groups-same-gpu-different-servers-groups" title="Permalink to this headline"></a></h3>
+<p>A cluster with three server SKUs all running H200s. Discovery places them in three source groups (one per machineType). They are auto-combined at generation time into a single bundle (see <a class="reference internal" href="#strategy-1"><span class="std std-ref">Strategy 1 — Automatic Combination at Generation</span></a> below). <code class="docutils literal notranslate"><span class="pre">--groups</span></code> narrows the cohort when you need a staged rollout.</p>
+<p>The diagram shows the per-source <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> pairing — each NodePolicy carries its source group’s <code class="docutils literal notranslate"><span class="pre">machine</span></code> label and targets exactly its source’s nodes. <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>, <code class="docutils literal notranslate"><span class="pre">IPPool</span></code>, and <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code> are bucket-shared (one CR each, covering all three sources) and are described in the prose below.</p>
+<div data-mermaid="flowchart LR
+    subgraph Manifests[&quot;Default run: one combined bundle&quot;]
+        direction TB
+        NNP_A[&quot;NicNodePolicy A&lt;br/&gt;machine=dgx-b200-...&quot;]
+        NNP_B[&quot;NicNodePolicy B&lt;br/&gt;machine=thinksystem-...&quot;]
+        NNP_C[&quot;NicNodePolicy C&lt;br/&gt;machine=poweredge-...&quot;]
+    end
+
+    subgraph Cluster[&quot;Kubernetes cluster - all H200 nodes&quot;]
+        direction TB
+        G1[&quot;Source A: DGX-B200 + H200&quot;]
+        G2[&quot;Source B: ThinkSystem-SR680a-V3 + H200&quot;]
+        G3[&quot;Source C: PowerEdge-XE9680 + H200&quot;]
+    end
+
+    NNP_A --&gt; G1
+    NNP_B --&gt; G2
+    NNP_C --&gt; G3"><div class="mermaid">
+            flowchart LR
+    subgraph Manifests[&quot;Default run: one combined bundle&quot;]
+        direction TB
+        NNP_A[&quot;NicNodePolicy A&lt;br/&gt;machine=dgx-b200-...&quot;]
+        NNP_B[&quot;NicNodePolicy B&lt;br/&gt;machine=thinksystem-...&quot;]
+        NNP_C[&quot;NicNodePolicy C&lt;br/&gt;machine=poweredge-...&quot;]
+    end
+
+    subgraph Cluster[&quot;Kubernetes cluster - all H200 nodes&quot;]
+        direction TB
+        G1[&quot;Source A: DGX-B200 + H200&quot;]
+        G2[&quot;Source B: ThinkSystem-SR680a-V3 + H200&quot;]
+        G3[&quot;Source C: PowerEdge-XE9680 + H200&quot;]
+    end
+
+    NNP_A --&gt; G1
+    NNP_B --&gt; G2
+    NNP_C --&gt; G3
+        </div></div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default: covers all three source groups (auto-combined into one bundle)</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments
+
+<span class="c1"># Staged rollout: deploy to two of three first</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --groups dgx-b200-nvidia-h200,thinksystem-sr680a-v3-nvidia-h200 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-stage1
+</pre></div>
+</div>
+<p>Same GPU + identical east-west rail count = one bucket. Per-source <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> CRs use the <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine</span></code> label; the bucket-level <code class="docutils literal notranslate"><span class="pre">IPPool</span></code> uses an <code class="docutils literal notranslate"><span class="pre">In</span></code> selector over the source labels (or the shared <code class="docutils literal notranslate"><span class="pre">.gpu</span></code> label when not filtered). The <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code> references a single shared <code class="docutils literal notranslate"><span class="pre">resourceName</span></code> that all three NodePolicies register, so any pod scheduled on any of the six nodes gets a VF.</p>
+</section>
+<section id="mixed-cluster-gpu-type-and-groups-together">
+<h3>Mixed Cluster (<code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> and <code class="docutils literal notranslate"><span class="pre">--groups</span></code> Together)<a class="headerlink" href="#mixed-cluster-gpu-type-and-groups-together" title="Permalink to this headline"></a></h3>
+<p>A real-world cluster: two GPU types, multiple server SKUs per type. Discovery produces four source groups arranged as a 2×2 grid (GPU type × machine type). The three commands below show the three common ways to scope a generation.</p>
+<div data-mermaid="flowchart TB
+    subgraph Cluster[&quot;Kubernetes cluster - 4 source groups&quot;]
+        direction TB
+        subgraph H100[&quot;H100 GPUs&quot;]
+            direction LR
+            G1[&quot;DGX-B200 + H100&quot;]
+            G2[&quot;ThinkSystem + H100&quot;]
+        end
+        subgraph H200[&quot;H200 GPUs&quot;]
+            direction LR
+            G3[&quot;DGX-B200 + H200&quot;]
+            G4[&quot;PowerEdge-XE9680 + H200&quot;]
+        end
+    end"><div class="mermaid">
+            flowchart TB
+    subgraph Cluster[&quot;Kubernetes cluster - 4 source groups&quot;]
+        direction TB
+        subgraph H100[&quot;H100 GPUs&quot;]
+            direction LR
+            G1[&quot;DGX-B200 + H100&quot;]
+            G2[&quot;ThinkSystem + H100&quot;]
+        end
+        subgraph H200[&quot;H200 GPUs&quot;]
+            direction LR
+            G3[&quot;DGX-B200 + H200&quot;]
+            G4[&quot;PowerEdge-XE9680 + H200&quot;]
+        end
+    end
+        </div></div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Default: render everything. Two render buckets (H100, H200), each with</span>
+<span class="c1"># per-source NicNodePolicy CRs and a bucket-level SriovNetwork/IPPool.</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-all
+
+<span class="c1"># Just H200 nodes across both vendors -&gt; selects G3 and G4</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --gpu-type NVIDIA-H200 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-h200-only
+
+<span class="c1"># Just DGX-B200 nodes (one source from each GPU type) -&gt; selects G1 and G3.</span>
+<span class="c1"># Strict subset: per-source NodePolicies use machine labels; bucket-level</span>
+<span class="c1"># CRs use In: [machine-label-h100-dgx, machine-label-h200-dgx].</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --groups dgx-b200-nvidia-h100,dgx-b200-nvidia-h200 <span class="se">\</span>
+    --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+    --save-deployment-files ./deployments-dgx-only
+</pre></div>
+</div>
+<p>The default run is the common path. Use <code class="docutils literal notranslate"><span class="pre">--gpu-type</span></code> when “all nodes of GPU X” is the deployment unit. Use <code class="docutils literal notranslate"><span class="pre">--groups</span></code> when the cohort is enumerated explicitly — e.g., a vendor-specific rollout, or a CI matrix where each cell pins a fixed set of identifiers.</p>
+</section>
+</section>
+<section id="discovery-initial-grouping-by-pci-topology">
 <h2>Discovery: Initial Grouping by PCI Topology<a class="headerlink" href="#discovery-initial-grouping-by-pci-topology" title="Permalink to this headline"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> places nodes into groups by their PCI topology — the set of PCI addresses and device IDs across each node’s PFs. Nodes with identical PCI topology land in the same group. Each group carries:</p>
 <ul class="simple">
@@ -230,7 +353,7 @@
 </div>
 </section>
 <section id="strategy-1-automatic-combination-at-generation">
-<h2>Strategy 1 — Automatic Combination at Generation<a class="headerlink" href="#strategy-1-automatic-combination-at-generation" title="Permalink to this headline"></a></h2>
+<span id="strategy-1"></span><h2>Strategy 1 — Automatic Combination at Generation<a class="headerlink" href="#strategy-1-automatic-combination-at-generation" title="Permalink to this headline"></a></h2>
 <p>The groups in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> stay separate — they’re written as distinct entries with their own machine-label <code class="docutils literal notranslate"><span class="pre">identifier</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>, and PF lists. When <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> runs, groups that share the same <strong>GPU product type</strong> <em>and</em> the same <strong>east-west rail count</strong> are automatically combined into a single render group at generation time:</p>
 <ul class="simple">
 <li><p>The combined render group’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code> follows the resource-name convention (lowercase form of the gpuType, e.g., <code class="docutils literal notranslate"><span class="pre">nvidia-h100-nvl</span></code>). Source machine-labels can differ across the merged groups, so a single per-source label can’t represent the merged set.</p></li>
