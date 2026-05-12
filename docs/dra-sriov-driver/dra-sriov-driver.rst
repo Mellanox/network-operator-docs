@@ -45,6 +45,9 @@ from supported NVIDIA network adapters using the native Kubernetes DRA framework
 You can use the DRA Driver for SR-IOV with the SR-IOV Network Operator to deploy and manage your
 SR-IOV network resources.
 
+.. warning::
+  This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
+
 Deployment
 ==========
 
@@ -359,6 +362,14 @@ constrained to share the same PCIe root:
              count: 1
          constraints:
          - matchAttribute: "resource.kubernetes.io/pcieRoot"
+           requests: [vf, gpu]
+
+.. warning::
+
+   On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
+   the root of the NIC itself. Instead, it is the PCIe root of the NIC's Data Direct sub-interface.
+   This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
+   this topology.
 
 Extended Resource Allocation by DRA
 ====================================
