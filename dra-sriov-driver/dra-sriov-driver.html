@@ -134,6 +134,10 @@ NVIDIA DRA Driver for SR-IOV with the NVIDIA Network Operator.</p>
 from supported NVIDIA network adapters using the native Kubernetes DRA framework.</p>
 <p>You can use the DRA Driver for SR-IOV with the SR-IOV Network Operator to deploy and manage your
 SR-IOV network resources.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.</p>
+</div>
 </section>
 <section id="deployment">
 <h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline"></a></h2>
@@ -418,7 +422,15 @@ constrained to share the same PCIe root:</p>
 <span class="w">          </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">      </span><span class="nt">constraints</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">matchAttribute</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;resource.kubernetes.io/pcieRoot&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="nt">requests</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">vf</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">gpu</span><span class="p p-Indicator">]</span><span class="w"></span>
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
+the root of the NIC itself. Instead, it is the PCIe root of the NIC’s Data Direct sub-interface.
+This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
+this topology.</p>
 </div>
 </section>
 <section id="extended-resource-allocation-by-dra">
@@ -472,7 +484,7 @@ number of devices of that class.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 08, 2026.
+      <span class="lastupdated">Last updated on May 12, 2026.
       </span></p>
   </div>
 
