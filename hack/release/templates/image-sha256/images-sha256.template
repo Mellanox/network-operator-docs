@@ -88,6 +88,10 @@ NVIDIA Network Operator Container Images
      - {{ .SriovIbCni.Image }}
      - {{ .SriovIbCni.Version }}
      - {{ (imageSha .SriovIbCni) }}
+   * - {{ .DraDriverSriov.Repository }}
+     - {{ .DraDriverSriov.Image }}
+     - {{ .DraDriverSriov.Version }}
+     - {{ (imageSha .DraDriverSriov) }}
    * - {{ .CniPlugins.Repository }}
      - {{ .CniPlugins.Image }}
      - {{ .CniPlugins.Version }}

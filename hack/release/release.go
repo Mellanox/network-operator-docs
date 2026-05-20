@@ -65,6 +65,7 @@ type Release struct {
 	SriovConfigDaemonStigFips                  *ReleaseImageSpec
 	SriovCni                                   *ReleaseImageSpec
 	SriovIbCni                                 *ReleaseImageSpec
+	DraDriverSriov                             *ReleaseImageSpec
 	Mofed                                      *ReleaseImageSpec
 	MofedStigFips                              *ReleaseImageSpec
 	RdmaSharedDevicePlugin                     *ReleaseImageSpec

@@ -89,6 +89,10 @@ NVIDIA Network Operator Container Images
      - network-operator-v26.4.0-beta.8
      - sha256:c76c06e515c7ade8c0a3a0131b0dd968091c541b32310dbeee99fb18298e4bd1
    * - nvcr.io/nvstaging/mellanox
+     - dra-driver-sriov
+     - network-operator-v26.4.0-beta.8
+     - sha256:b227bfadb6d5483acfadbf1d2aabedd1d087ac04328811ba73c5cfeba3326b77
+   * - nvcr.io/nvstaging/mellanox
      - plugins
      - network-operator-v26.4.0-beta.8
      - sha256:37f225c8b1a7013e79db2ed712eda407db49190056031fa4439a57051cb708ad
