@@ -26,8 +26,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Advanced Configurations" href="advanced/advanced.html" />
-    <link rel="prev" title="Life Cycle Management" href="life-cycle-management.html" />
+    <link rel="next" title="DRA SR-IOV Driver" href="dra-sriov-driver/dra-sriov-driver.html" />
+    <link rel="prev" title="NVIDIA Network Operator Deployment Guide with Kubernetes" href="deployment-guide-kubernetes.html" />
  
 
 
@@ -56,39 +56,46 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="release-notes.html">Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="platform-support.html">Platform Support</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick-start/quick-start-k8s.html">Quick Start Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment-guide-kubernetes.html">Deployment Guide with Kubernetes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">KubeVirt SR-IOV Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install-the-network-operator">Install the Network Operator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-a-nicclusterpolicy">Create a NicClusterPolicy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment">Deployment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy">Step 1: Create an SriovNetworkNodePolicy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-2-create-an-sriovnetwork">Step 2: Create an SriovNetwork</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-3-create-a-virtualmachine">Step 3: Create a VirtualMachine</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#verification">Verification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#check-the-vmi-is-running">Check the VMI is Running</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#verify-the-vf-inside-the-guest">Verify the VF Inside the Guest</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#guest-driver-note">Guest Driver Note</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations">Limitations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#vf-not-available-on-node">VF Not Available on Node</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vmi-fails-to-start">VMI Fails to Start</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#no-network-interface-in-guest">No Network Interface in Guest</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dra-sriov-driver/dra-sriov-driver.html">DRA SR-IOV Driver</a></li>
 <li class="toctree-l1"><a class="reference internal" href="k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="life-cycle-management.html">Life Cycle Management</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">KubeVirt SR-IOV Integration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#install-the-network-operator">Install the Network Operator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#create-a-nicclusterpolicy">Create a NicClusterPolicy</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy">Step 1: Create an SriovNetworkNodePolicy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-2-create-an-sriovnetwork">Step 2: Create an SriovNetwork</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-3-create-a-virtualmachine">Step 3: Create a VirtualMachine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#check-the-vmi-is-running">Check the VMI is Running</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#verify-the-vf-inside-the-guest">Verify the VF Inside the Guest</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#guest-driver-note">Guest Driver Note</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#vf-not-available-on-node">VF Not Available on Node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#vmi-fails-to-start">VMI Fails to Start</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#no-network-interface-in-guest">No Network Interface in Guest</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced.html">Advanced Configurations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="troubleshooting/troubleshooting.html">Troubleshooting</a></li>
 <li class="toctree-l1"><a class="reference internal" href="licenses.html">Legal Notices and 3rd Party Licenses</a></li>
@@ -111,6 +118,7 @@
 
 <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
   
+    <li><a href="getting-started-with-kubernetes.html">Getting Started with Kubernetes</a> &raquo;</li>
 <li>KubeVirt SR-IOV Integration</li>
 
       <li class="wy-breadcrumbs-aside">
@@ -137,22 +145,26 @@
 <li><p><a class="reference internal" href="#create-a-nicclusterpolicy" id="id3">Create a NicClusterPolicy</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy" id="id4">Step 1: Create an SriovNetworkNodePolicy</a></p></li>
-<li><p><a class="reference internal" href="#step-2-create-an-sriovnetwork" id="id5">Step 2: Create an SriovNetwork</a></p></li>
-<li><p><a class="reference internal" href="#step-3-create-a-virtualmachine" id="id6">Step 3: Create a VirtualMachine</a></p></li>
-<li><p><a class="reference internal" href="#verification" id="id7">Verification</a></p>
+<li><p><a class="reference internal" href="#deployment" id="id4">Deployment</a></p>
 <ul>
-<li><p><a class="reference internal" href="#check-the-vmi-is-running" id="id8">Check the VMI is Running</a></p></li>
-<li><p><a class="reference internal" href="#verify-the-vf-inside-the-guest" id="id9">Verify the VF Inside the Guest</a></p></li>
+<li><p><a class="reference internal" href="#step-1-create-an-sriovnetworknodepolicy" id="id5">Step 1: Create an SriovNetworkNodePolicy</a></p></li>
+<li><p><a class="reference internal" href="#step-2-create-an-sriovnetwork" id="id6">Step 2: Create an SriovNetwork</a></p></li>
+<li><p><a class="reference internal" href="#step-3-create-a-virtualmachine" id="id7">Step 3: Create a VirtualMachine</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#guest-driver-note" id="id10">Guest Driver Note</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
-<li><p><a class="reference internal" href="#troubleshooting" id="id12">Troubleshooting</a></p>
+<li><p><a class="reference internal" href="#verification" id="id8">Verification</a></p>
 <ul>
-<li><p><a class="reference internal" href="#vf-not-available-on-node" id="id13">VF Not Available on Node</a></p></li>
-<li><p><a class="reference internal" href="#vmi-fails-to-start" id="id14">VMI Fails to Start</a></p></li>
-<li><p><a class="reference internal" href="#no-network-interface-in-guest" id="id15">No Network Interface in Guest</a></p></li>
+<li><p><a class="reference internal" href="#check-the-vmi-is-running" id="id9">Check the VMI is Running</a></p></li>
+<li><p><a class="reference internal" href="#verify-the-vf-inside-the-guest" id="id10">Verify the VF Inside the Guest</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#guest-driver-note" id="id11">Guest Driver Note</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id12">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#troubleshooting" id="id13">Troubleshooting</a></p>
+<ul>
+<li><p><a class="reference internal" href="#vf-not-available-on-node" id="id14">VF Not Available on Node</a></p></li>
+<li><p><a class="reference internal" href="#vmi-fails-to-start" id="id15">VMI Fails to Start</a></p></li>
+<li><p><a class="reference internal" href="#no-network-interface-in-guest" id="id16">No Network Interface in Guest</a></p></li>
 </ul>
 </li>
 </ul>
@@ -166,7 +178,6 @@ The VM gets near-native network performance because the data path bypasses the h
 <li><p>KubeVirt installed on the cluster:</p>
 <ul>
 <li><p>Kubernetes: <a class="reference external" href="https://kubevirt.io/user-guide/cluster_admin/installation/">KubeVirt installation guide</a></p></li>
-<li><p>Red Hat OpenShift: <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/installing">OpenShift Virtualization installation guide</a></p></li>
 </ul>
 </li>
 <li><p>IOMMU enabled on worker nodes:</p>
@@ -179,7 +190,6 @@ The VM gets near-native network performance because the data path bypasses the h
 <li><p><code class="docutils literal notranslate"><span class="pre">virtctl</span></code> CLI tool installed:</p>
 <ul>
 <li><p>Kubernetes: <a class="reference external" href="https://kubevirt.io/user-guide/user_workloads/virtctl_client_tool/">virtctl client tool</a></p></li>
-<li><p>Red Hat OpenShift: <a class="reference external" href="https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/getting-started#installing-virtctl_virt-using-the-cli-tools">Installing virtctl on OpenShift</a></p></li>
 </ul>
 </li>
 </ul>
@@ -233,8 +243,10 @@ The VM gets near-native network performance because the data path bypasses the h
 <p>The <code class="docutils literal notranslate"><span class="pre">state</span></code> should show <code class="docutils literal notranslate"><span class="pre">ready</span></code> before proceeding.</p>
 </section>
 </section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline"></a></h2>
 <section id="step-1-create-an-sriovnetworknodepolicy">
-<h2>Step 1: Create an SriovNetworkNodePolicy<a class="headerlink" href="#step-1-create-an-sriovnetworknodepolicy" title="Permalink to this headline"></a></h2>
+<h3>Step 1: Create an SriovNetworkNodePolicy<a class="headerlink" href="#step-1-create-an-sriovnetworknodepolicy" title="Permalink to this headline"></a></h3>
 <p>Configure VFs with <code class="docutils literal notranslate"><span class="pre">deviceType:</span> <span class="pre">vfio-pci</span></code>. The operator creates the VFs and binds them to the <code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code> driver, making them available as allocatable extended resources on the node.</p>
 <p>Set <code class="docutils literal notranslate"><span class="pre">isRdma:</span> <span class="pre">false</span></code> (RDMA is not compatible with <code class="docutils literal notranslate"><span class="pre">vfio-pci</span></code>). The guest VM must have the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> kernel module available.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriovnetwork.openshift.io/v1</span><span class="w"></span>
@@ -262,7 +274,7 @@ The VM gets near-native network performance because the data path bypasses the h
 <p>The output should show <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code> for all nodes.</p>
 </section>
 <section id="step-2-create-an-sriovnetwork">
-<h2>Step 2: Create an SriovNetwork<a class="headerlink" href="#step-2-create-an-sriovnetwork" title="Permalink to this headline"></a></h2>
+<h3>Step 2: Create an SriovNetwork<a class="headerlink" href="#step-2-create-an-sriovnetwork" title="Permalink to this headline"></a></h3>
 <p>Create an <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code> CR that references the <code class="docutils literal notranslate"><span class="pre">resourceName</span></code> from the policy. This generates a <code class="docutils literal notranslate"><span class="pre">NetworkAttachmentDefinition</span></code> that KubeVirt VMs can consume.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -286,7 +298,7 @@ The VM gets near-native network performance because the data path bypasses the h
 </div>
 </section>
 <section id="step-3-create-a-virtualmachine">
-<h2>Step 3: Create a VirtualMachine<a class="headerlink" href="#step-3-create-a-virtualmachine" title="Permalink to this headline"></a></h2>
+<h3>Step 3: Create a VirtualMachine<a class="headerlink" href="#step-3-create-a-virtualmachine" title="Permalink to this headline"></a></h3>
 <p>Define a <code class="docutils literal notranslate"><span class="pre">VirtualMachine</span></code> with an <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface pointing at the network attachment definition. Since IPAM is handled inside the guest, use cloud-init to configure a static IP on the SR-IOV interface.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt.io/v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VirtualMachine</span><span class="w"></span>
@@ -345,6 +357,7 @@ The VM gets near-native network performance because the data path bypasses the h
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">sriov:</span> <span class="pre">{}</span></code> interface type tells KubeVirt to pass the VF into the VM via VFIO. KubeVirt’s resource injector automatically adds the extended resource request (e.g. <code class="docutils literal notranslate"><span class="pre">nvidia.com/kubevirt_sriov:</span> <span class="pre">&quot;1&quot;</span></code>) to the virt-launcher pod.</p>
 <p>The cloud-init <code class="docutils literal notranslate"><span class="pre">runcmd</span></code> script waits for the SR-IOV interface to appear (the <code class="docutils literal notranslate"><span class="pre">mlx5_core</span></code> driver must load first), then configures a static IP using <code class="docutils literal notranslate"><span class="pre">nmcli</span></code>. Adjust the IP address for each VM accordingly.</p>
+</section>
 </section>
 <section id="verification">
 <h2>Verification<a class="headerlink" href="#verification" title="Permalink to this headline"></a></h2>
