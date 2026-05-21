@@ -22,7 +22,7 @@ DRA SR-IOV Driver
 *****************
 
 .. contents::
-   :depth: 2
+   :depth: 3
    :local:
    :backlinks: none
 
@@ -45,8 +45,20 @@ from supported NVIDIA network adapters using the native Kubernetes DRA framework
 You can use the DRA Driver for SR-IOV with the SR-IOV Network Operator to deploy and manage your
 SR-IOV network resources.
 
+
+===========
+Limitations
+===========
+
 .. warning::
   This feature is supported only for Vanilla Kubernetes deployments with SR-IOV Network Operator.
+
+.. warning::
+
+   On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
+   the root of the NIC itself. Instead, it is the PCIe root of the NIC's Data Direct sub-interface.
+   This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
+   this topology.
 
 Deployment
 ==========
@@ -69,7 +81,15 @@ First install the Network Operator with NFD, SR-IOV Network Operator, and DRA en
       featureGates:
         dynamicResourceAllocation: true
 
+Disable the SR-IOV Resources Injector to avoid conflicts with the DRA Driver for SR-IOV:
+
+.. code-block:: bash
+
+   kubectl patch sriovoperatorconfig default -n nvidia-network-operator --type merge -p '{"spec":{"enableInjector":false}}'
+
+===================================
 **Step 1**: Create NicClusterPolicy
+===================================
 
 .. code-block:: yaml
    :substitutions:
@@ -98,7 +118,9 @@ First install the Network Operator with NFD, SR-IOV Network Operator, and DRA en
 
    kubectl apply -f nicclusterpolicy.yaml
 
+=====================================
 **Step 2**: Create IPPool for nv-ipam
+=====================================
 
 .. code-block:: yaml
 
@@ -116,7 +138,9 @@ First install the Network Operator with NFD, SR-IOV Network Operator, and DRA en
 
    kubectl apply -f ippool.yaml
 
+============================
 **Step 3**: Configure SR-IOV
+============================
 
 .. code-block:: yaml
 
@@ -201,7 +225,9 @@ Virtual Function with its attributes:
            string: "0000:08:00.4"
        name: 0000-08-00-4
 
+=================================
 **Step 4**: Create SR-IOV Network
+=================================
 
 .. code-block:: yaml
 
@@ -223,7 +249,9 @@ Virtual Function with its attributes:
 
    kubectl apply -f sriovnetwork.yaml
 
+========================================
 **Step 5**: Create ResourceClaimTemplate
+========================================
 
 .. code-block:: yaml
 
@@ -248,7 +276,9 @@ Virtual Function with its attributes:
 
    kubectl apply -f resourceclaimtemplate.yaml
 
+================================
 **Step 6**: Deploy test workload
+================================
 
 .. code-block:: yaml
 
@@ -363,10 +393,3 @@ constrained to share the same PCIe root:
          constraints:
          - matchAttribute: "resource.kubernetes.io/pcieRoot"
            requests: [vf, gpu]
-
-.. warning::
-
-   On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
-   the root of the NIC itself. Instead, it is the PCIe root of the NIC's Data Direct sub-interface.
-   This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
-   this topology.

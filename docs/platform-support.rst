@@ -183,7 +183,7 @@ Supported Operating Systems and Kubernetes Platforms
      - RT‑kernel support
    * - Red Hat CoreOS
      - —
-     - 4.17–4.20
+     - 4.17–4.21
      - —
      - —
      - —
@@ -499,6 +499,20 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |k8s-launch-kit-repository|
      - k8s-launch-kit
      - |k8s-launch-kit-version|
+     - No
+     -
+   * - `NVIDIA Spectrum-X Operator <https://github.com/Mellanox/spectrum-x-operator>`_
+     - NVIDIA (OSS)
+     - |spectrumxop-repository|
+     - spectrum-x-operator
+     - |spectrumxop-version|
+     - No
+     -
+   * - `DRA Driver SR-IOV <https://github.com/k8snetworkplumbingwg/dra-driver-sriov>`_
+     - Community (OSS)
+     - |dra-driver-sriov-repository|
+     - dra-driver-sriov
+     - |dra-driver-sriov-version|
      - No
      -
 
