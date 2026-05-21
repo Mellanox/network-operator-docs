@@ -40,7 +40,7 @@ Prerequisites
 - KubeVirt installed on the cluster:
 
   - Kubernetes: `KubeVirt installation guide <https://kubevirt.io/user-guide/cluster_admin/installation/>`_
-  - Red Hat OpenShift: `OpenShift Virtualization installation guide <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/installing>`_
+
 - IOMMU enabled on worker nodes:
 
   - Intel: kernel parameter ``intel_iommu=on iommu=pt``
@@ -50,7 +50,6 @@ Prerequisites
 - ``virtctl`` CLI tool installed:
 
   - Kubernetes: `virtctl client tool <https://kubevirt.io/user-guide/user_workloads/virtctl_client_tool/>`_
-  - Red Hat OpenShift: `Installing virtctl on OpenShift <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/virtualization/getting-started#installing-virtctl_virt-using-the-cli-tools>`_
 
 Install the Network Operator
 ----------------------------
@@ -113,10 +112,12 @@ Verify that the NicClusterPolicy is ready:
 
 The ``state`` should show ``ready`` before proceeding.
 
+==========
+Deployment
+==========
 
-========================================
 Step 1: Create an SriovNetworkNodePolicy
-========================================
+----------------------------------------
 
 Configure VFs with ``deviceType: vfio-pci``. The operator creates the VFs and binds them to the ``vfio-pci`` driver, making them available as allocatable extended resources on the node.
 
@@ -150,9 +151,8 @@ Wait for the policy to be applied:
 The output should show ``Succeeded`` for all nodes.
 
 
-==============================
 Step 2: Create an SriovNetwork
-==============================
+------------------------------
 
 Create an ``SriovNetwork`` CR that references the ``resourceName`` from the policy. This generates a ``NetworkAttachmentDefinition`` that KubeVirt VMs can consume.
 
@@ -179,9 +179,8 @@ Verify the ``NetworkAttachmentDefinition`` was created:
    kubectl get net-attach-def -n default sriov-kubevirt-net
 
 
-===============================
 Step 3: Create a VirtualMachine
-===============================
+-------------------------------
 
 Define a ``VirtualMachine`` with an ``sriov: {}`` interface pointing at the network attachment definition. Since IPAM is handled inside the guest, use cloud-init to configure a static IP on the SR-IOV interface.
 

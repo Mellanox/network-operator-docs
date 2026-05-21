@@ -143,6 +143,7 @@ func readEnvironmentVariables(release *Release) {
 	initWithEnvVariale("DOCA_TELEMETRY_SERVICE", release.DOCATelemetryService)
 	initWithEnvVariale("OVS_CNI", release.OVSCni)
 	initWithEnvVariale("RDMA_CNI", release.RDMACni)
+	initWithEnvVariale("DRA_SRIOV_DRIVER", release.DraDriverSriov)
 }
 
 func main() {

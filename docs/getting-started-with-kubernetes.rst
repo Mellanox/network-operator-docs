@@ -29,3 +29,5 @@ This section provides comprehensive guides to help you get started with the NVID
 
    Quick Start Guide <quick-start/quick-start-k8s.rst>
    Deployment Guide with Kubernetes <deployment-guide-kubernetes.rst>
+   KubeVirt SR-IOV Integration <kubevirt.rst>
+   DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver.rst>
