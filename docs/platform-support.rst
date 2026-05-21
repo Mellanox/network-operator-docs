@@ -26,6 +26,57 @@ Platform Support
    :local:
    :backlinks: none
 
+========
+Overview
+========
+
+Use this page to confirm that your hardware, operating system, and Kubernetes platform are supported by **NVIDIA Network Operator** before deployment.
+
+Support terms used on this page:
+
+* **Supported** — A configuration that NVIDIA maintains and backs for this release.
+* **Validated** — A hardware or software configuration that NVIDIA has tested with this release.
+* **GA** (Generally Available) — Production-ready support tier.
+* **Tech Preview** — Limited testing; not recommended for production deployments.
+
+========================
+Versioning and Lifecycle
+========================
+
+**NVIDIA Network Operator** uses calendar versioning in the form ``YY.MM.PP`` (for example, 26.4.0). The first two fields identify the major version and release timeframe; the third field identifies the patch version, used for critical bug and CVE fixes.
+
+When a new major version is released, the previous major version enters a **Deprecated** state and receives only patch updates for critical fixes. Earlier major versions reach **End of Support** and no longer receive updates.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Version
+     - Status
+   * - 26.4.x
+     - Supported
+   * - 26.1.x
+     - Deprecated
+   * - 25.10.x and lower
+     - End of Support
+
+Upgrades are supported within a major release, or to the next major release. For upgrade procedures and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
+
+.. note::
+
+   The product lifecycle and versioning are subject to change in future releases.
+
+=====================
+Important Limitations
+=====================
+
+Review the following limitations before deployment:
+
+* **Firmware reset on BMC-controlled platforms** — NVIDIA DGX/HGX GB200 NVL72, B200, and B300 systems require additional configuration so that firmware updates apply without a reboot loop. See :ref:`fw-reset-external-bmc`.
+* **No GPUDirect RDMA on Arm-based validated configurations** — NVIDIA IGX Orin and NVIDIA Grace ARM Server are validated for RoCE only, without GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
+* **Precompiled DOCA-OFED driver containers are currently unsigned.**
+* **Precompiled DOCA-OFED kernel-flavor support** — Only the Ubuntu ``generic`` kernel flavor is GA. The ``nvidia``, ``aws``, ``azure``, and ``oracle`` flavors are Tech Preview.
+* For per-release known issues, see the :doc:`release-notes`.
+
 =============
 Prerequisites
 =============
@@ -41,7 +92,7 @@ Prerequisites
      -
    * - Helm
      - v3.5+
-     - For information and methods of Helm installation, please refer to the official Helm Website.
+     - For installation methods, refer to the official `Helm website <https://helm.sh/>`_.
    * - Node Feature Discovery
      - >=0.15.6 and <=0.17.0
      - When deploying the Network Operator and GPU Operator on the same cluster, ensure only one instance of Node Feature Discovery (NFD) is installed. We recommend using the version included with the GPU Operator.
@@ -51,56 +102,72 @@ Prerequisites
 System Requirements
 ===================
 
-* **RDMA‑capable NVIDIA network adapters**
-   * NVIDIA ConnectX NICs and SuperNICs
-   * NVIDIA BlueField Networking Platforms
-* **NVIDIA GPU Operator v25.3.x or newer** – required for workloads that use NVIDIA GPUs and GPUDirect RDMA.
+* **RDMA-capable NVIDIA network adapters**
+   * NVIDIA ConnectX NICs and SuperNICs
+   * NVIDIA BlueField Networking Platforms
+* **NVIDIA GPU Operator v25.3.x or newer** – required for workloads that use NVIDIA GPUs and GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
 
 =================================
 Supported NVIDIA Network Adapters
 =================================
-The following adapters have been tested and validated with **NVIDIA Network Operator**:
+The following adapters have been tested and validated with **NVIDIA Network Operator**:
 
 .. list-table::
    :header-rows: 1
 
    * - Product Family
-     - Network Technology
-     - Max Port Speed
-     - Notes
-   * - NVIDIA ConnectX‑6 NIC
-     - Ethernet & InfiniBand
-     - 200 Gb/s
-     - IB RDMA and RoCE
-   * - NVIDIA ConnectX-6 Dx NIC
      - Ethernet
+     - InfiniBand
+     - Max Port Speed
+     - Validated Protocols / Modes
+     - Notes
+   * - NVIDIA ConnectX-6 NIC
+     - Yes
+     - Yes
+     - 200 Gb/s
+     - IB RDMA, RoCE
+     - —
+   * - NVIDIA ConnectX-6 Dx NIC
+     - Yes
+     - No
      - 200 Gb/s
      - RoCE
+     - —
    * - NVIDIA ConnectX-7 NIC
-     - Ethernet & InfiniBand
+     - Yes
+     - Yes
      - 400 Gb/s
-     - IB RDMA and RoCE
+     - IB RDMA, RoCE
+     - —
    * - NVIDIA ConnectX-8 SuperNIC
-     - Ethernet & InfiniBand
+     - Yes
+     - Yes
      - 800 Gb/s
-     - IB RDMA and RoCE
+     - IB RDMA, RoCE
+     - —
    * - NVIDIA ConnectX-9 SuperNIC
-     - Ethernet & InfiniBand
+     - Yes
+     - Yes
      - 800 Gb/s
-     - IB RDMA and RoCE
+     - IB RDMA, RoCE
+     - —
    * - NVIDIA BlueField-3 DPU
-     - Ethernet
+     - Yes
+     - No
      - 200 Gb/s
-     - NIC mode only; RoCE
+     - RoCE
+     - NIC mode only
    * - NVIDIA BlueField-3 SuperNIC
-     - Ethernet
+     - Yes
+     - No
      - 400 Gb/s
-     - NIC mode only; RoCE
+     - RoCE
+     - NIC mode only
 
 ====================================
 Supported NVIDIA Data Center Systems
 ====================================
-The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**:
+The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**:
 
 .. list-table::
    :header-rows: 1
@@ -111,42 +178,48 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - Network Adapter(s)
      - Operating System(s)
      - Notes
-   * - NVIDIA IGX Orin
-     - Arm (NVIDIA Orin)
-     - NVIDIA Ampere
-     - ConnectX-7
-     - Ubuntu 22.04 (ARM64)
-     - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA Grace ARM Server
      - Arm (NVIDIA Grace)
      - NVIDIA Hopper
      - BlueField-3 (NIC Mode)
-     - Ubuntu 22.04 (ARM64) / OCP 4.17 / SLES 15.6
+     - Ubuntu 22.04 (Arm64) / OCP 4.17 / SLES 15.6
      - GA (RoCE only, without GPUDirect RDMA)
-   * - NVIDIA DGX/HGX GB200 NVL72
-     - Arm (NVIDIA Grace)
-     - NVIDIA Blackwell
+   * - NVIDIA IGX Orin
+     - Arm (NVIDIA Orin)
+     - NVIDIA Ampere
      - ConnectX-7
-     - Ubuntu 24.04 (ARM64) / Red Hat OpenShift
-     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
-   * - NVIDIA DGX/HGX B200
-     - x86
-     - NVIDIA Blackwell
-     - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
-     - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
-     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
+     - Ubuntu 22.04 (Arm64)
+     - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA RTX PRO 6000 Blackwell Server
      - x86
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode) / ConnectX-8
      - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
      - GA
+   * - NVIDIA DGX/HGX B200
+     - x86
+     - NVIDIA Blackwell
+     - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
+     - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
    * - NVIDIA DGX/HGX B300
      - x86
      - NVIDIA Blackwell
      - ConnectX-8 SuperNIC
      - Ubuntu 22.04 / 24.04 (x86) / Red Hat OpenShift
-     - GA. Mellanox Firmware Reset required (see :ref:`fw-reset-external-bmc`)
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+   * - NVIDIA DGX/HGX GB200 NVL72
+     - Arm (NVIDIA Grace)
+     - NVIDIA Blackwell
+     - ConnectX-7
+     - Ubuntu 24.04 (Arm64) / Red Hat OpenShift
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+   * - NVIDIA DGX/HGX GB300 NVL72
+     - Arm (NVIDIA Grace)
+     - NVIDIA Blackwell
+     - ConnectX-8
+     - Ubuntu 24.04 (Arm64) / Red Hat OpenShift
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
@@ -155,60 +228,67 @@ Supported Operating Systems and Kubernetes Platforms
 
 .. note::
 
-   Kubernetes support for the NVIDIA Spectrum-X Reference Architecture (RA) is limited to a subset of OS and platform combinations. For details, refer to the NVIDIA Spectrum-X RA documentation.
+   Kubernetes support for the NVIDIA Spectrum-X Reference Architecture (RA) is limited to a subset of OS and platform combinations. For details, refer to the `NVIDIA Spectrum-X documentation <https://www.nvidia.com/en-us/networking/spectrumx/>`_.
 
 .. list-table::
    :header-rows: 1
 
-   * - Operating Systems
-     - Upstream Kubernetes
-     - Red Hat OpenShift
-     - Rancher RKE2
-     - Canonical MicroK8s
-     - Nutanix NKP
+   * - Operating System
+     - Upstream Kubernetes
+     - Red Hat OpenShift
+     - Rancher RKE2
+     - Canonical MicroK8s
+     - Nutanix NKP
+     - Container Runtime
      - Notes
-   * - Ubuntu 24.04 LTS
+   * - Ubuntu 24.04 LTS
      - 1.31–1.35
      - —
      - —
      - 1.31–1.35
-     - 2.12-2.15
+     - 2.12–2.15
+     - Containerd
      - —
-   * - Ubuntu 22.04 LTS
+   * - Ubuntu 22.04 LTS
      - 1.31–1.35
      - —
      - —
      - 1.31–1.35
-     - 2.12-2.15
-     - RT‑kernel support
-   * - Red Hat CoreOS
+     - 2.12–2.15
+     - Containerd
+     - RT kernel support
+   * - Red Hat CoreOS
      - —
      - 4.17–4.21
      - —
      - —
      - —
-     - RT kernels support
-   * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
+     - CRI-O
+     - RT kernel support
+   * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
      - 1.31–1.35
      - —
      - —
      - —
      - —
-     - RT kernels support
-   * - Red Hat Enterprise Linux 8.10 / 8.8
+     - Containerd, CRI-O
+     - RT kernel support
+   * - Red Hat Enterprise Linux 8.10 / 8.8
      - 1.31–1.35
      - —
      - —
      - —
      - —
-     - RT‑kernel support
-   * - SUSE Linux Enterprise Server 15 SP7
+     - Containerd, CRI-O
+     - RT kernel support
+   * - SUSE Linux Enterprise Server 15 SP7
      - 1.31–1.35
      - —
      - 1.31–1.35
      - —
      - —
-     - Kubernetes and Rancher
+     - Containerd
+     - Supported for Kubernetes and Rancher deployments
 
 
 =============================
@@ -231,10 +311,10 @@ Supported Container Runtimes
      - Yes
      - No
      - 
-   * - Red Hat Core OS
+   * - Red Hat CoreOS
      - No
      - Yes
-     - 
+     -
    * - Red Hat Enterprise Linux 9
      - Yes
      - Yes
@@ -260,7 +340,7 @@ NVIDIA Spectrum-X Ethernet Networking Platform
 
 .. note::
 
-   For details on supported topologies, NIC hardware, software components, and version-specific notes, refer to the NVIDIA Spectrum-X RA documentation.
+   For details on supported topologies, NIC hardware, software components, and version-specific notes, refer to the `NVIDIA Spectrum-X documentation <https://www.nvidia.com/en-us/networking/spectrumx/>`_.
 
 .. list-table::
    :header-rows: 1
@@ -270,6 +350,13 @@ NVIDIA Spectrum-X Ethernet Networking Platform
      - Kubernetes Versions
      - Operating Systems
      - Notes
+   * - 2.2
+     - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
+       * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
+     - Upstream Kubernetes (1.31–1.35)
+     - * Ubuntu 24.04 LTS
+       * Ubuntu 22.04 LTS
+     - Small RA, Software Multi-Plane
    * - 2.1
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
@@ -277,6 +364,78 @@ NVIDIA Spectrum-X Ethernet Networking Platform
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
+
+=======================================
+Support for KubeVirt SR-IOV Passthrough
+=======================================
+
+**NVIDIA Network Operator** supports attaching SR-IOV Virtual Functions (VFs) to KubeVirt virtual machines via VFIO PCI passthrough. For deployment instructions, see :doc:`KubeVirt SR-IOV Integration <kubevirt>`.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Operating System
+     - Kubernetes
+     - KubeVirt
+     - Red Hat OpenShift Virtualization
+   * - Ubuntu 24.04 LTS
+     - 1.31–1.35
+     - v1.8.2+
+     - Not supported
+   * - Ubuntu 22.04 LTS
+     - 1.31–1.35
+     - v1.8.2+
+     - Not supported
+
+Key limitations:
+
+* VFIO passthrough requires IOMMU-capable hardware (Intel VT-d or AMD-Vi) with IOMMU enabled at boot.
+* Live migration is not supported for VMs that use SR-IOV VFIO passthrough.
+* Host-side RDMA is not available for VFIO-passed VFs; RDMA inside the guest is provided by the ``mlx5_core`` driver shipped with the guest image.
+
+==========================
+Support for GPUDirect RDMA
+==========================
+
+**NVIDIA Network Operator** enables GPUDirect RDMA between NVIDIA GPUs and supported NICs/SuperNICs when deployed together with **NVIDIA GPU Operator**. For deployment instructions, see :doc:`Network Operator Deployment for GPUDirect Workloads <deployment-guide-kubernetes>`. For GPU Operator-side support details, see `NVIDIA GPU Operator Platform Support — Support for GPUDirect RDMA <https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/platform-support.html#support-for-gpudirect-rdma>`_.
+
+Requirements:
+
+* NVIDIA GPU Operator v25.3.x or newer
+* NVIDIA DOCA-OFED Driver v5.5-1.0.3.2 or newer
+* ``nvidia_peermem`` kernel module (auto-loaded by recent NVIDIA GPU drivers)
+* Supported NVIDIA GPU (Ampere, Hopper, or Blackwell)
+* Supported NVIDIA NICs (NVIDIA ConnectX or BlueField)
+
+.. list-table::
+   :header-rows: 1
+
+   * - Operating System
+     - Kubernetes
+   * - Ubuntu 24.04 LTS
+     - 1.31–1.35
+   * - Ubuntu 22.04 LTS
+     - 1.31–1.35
+   * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
+     - 1.31–1.35
+   * - Red Hat Enterprise Linux 8.10 / 8.8
+     - 1.31–1.35
+   * - Red Hat CoreOS
+     - OpenShift 4.17–4.21
+
+For background on the underlying technology, see the `NVIDIA GPUDirect RDMA documentation <https://docs.nvidia.com/cuda/gpudirect-rdma/>`_.
+
+=============================
+Support for GPUDirect Storage
+=============================
+
+**NVIDIA Network Operator** provides the RDMA networking fabric (RoCE and InfiniBand) required by **GPUDirect Storage (GDS)**. GDS-compatible storage clients operate over the RDMA fabric provisioned by Network Operator.
+
+.. warning::
+
+   With the DOCA-OFED **driver container** and ``ENABLE_NFSRDMA=true``, host-side NVMe-over-RDMA cannot run concurrently — DOCA-OFED's ``ib_core`` conflicts with the inbox ``nvme_rdma`` module. The **DOCA-Host package** install path is unaffected, as is local-NVMe storage.
+
+For configuration details (including the ``ENABLE_NFSRDMA`` setting and the NVMe inbox kernel module workaround), see :doc:`DOCA-OFED Driver Container <advanced/doca-drivers>`. For background on the underlying technology and the list of GDS-compatible storage clients and version requirements, see the `NVIDIA GPUDirect Storage documentation <https://docs.nvidia.com/gpudirect-storage/>`_.
 
 ============================================================
 Supported Precompiled Container Images for DOCA-OFED Drivers
@@ -290,7 +449,9 @@ To save startup time and operational effort, precompiled DOCA-OFED driver contai
 
 The container image tag pattern used for common variants is: **driver_ver-container_ver-kernel_ver-flavor-os-arch**. For example: ``24.07-0.6.1.0-0-6.8.0-49-generic-ubuntu24.04-amd64``
 
-**NOTE:** For the ``generic`` flavor of Ubuntu, the default Kernel version is used for precompiling (e.g. *6.8.0-31* for Ubuntu 24.04). Whereas for all other flavors, their latest (at time of DOCA packaging/release) Kernel version is used.
+.. note::
+
+   For the ``generic`` flavor of Ubuntu, the default kernel version is used for precompiling (for example, ``6.8.0-31`` for Ubuntu 24.04). For all other flavors, the latest kernel version available at the time of DOCA packaging and release is used.
 
 ---------------------------
 Supported Operating Systems
