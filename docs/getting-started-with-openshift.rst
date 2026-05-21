@@ -29,3 +29,4 @@ This section provides comprehensive guides to help you get started with the NVID
 
    Deployment Guide with OpenShift <openshift/deployment-guide-openshift.rst>
    Deployment in Disconnected OpenShift <openshift/disconnected-openshift.rst>
+   OpenShift Virtualization with SR-IOV<openshift/ocp-kubevirt.rst>
