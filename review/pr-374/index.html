@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NVIDIA Network Operator v26.4.0-beta.9 &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+  <title>NVIDIA Network Operator v26.4.0-rc.1 &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -85,7 +85,7 @@
 
 <li><a href="#" class="icon icon-home"></a> &raquo;</li>
   
-<li>NVIDIA Network Operator v26.4.0-beta.9</li>
+<li>NVIDIA Network Operator v26.4.0-rc.1</li>
 
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -103,16 +103,27 @@
   <div class="toctree-wrapper compound">
 </div>
 <section id="nvidia-network-operator-network-operator-version">
-<h1>NVIDIA Network Operator v26.4.0-beta.9<a class="headerlink" href="#nvidia-network-operator-network-operator-version" title="Permalink to this headline"></a></h1>
+<h1>NVIDIA Network Operator v26.4.0-rc.1<a class="headerlink" href="#nvidia-network-operator-network-operator-version" title="Permalink to this headline"></a></h1>
+<p><em>Enabling AI Networking in Kubernetes.</em></p>
 <p>The NVIDIA Network Operator simplifies the provisioning and management of NVIDIA networking resources in a Kubernetes cluster.
 The operator automatically installs the required host networking software - bringing together all the needed components to provide high-speed network connectivity.
 These components include the NVIDIA networking driver, Kubernetes device plugin, CNI plugins, IP address management (IPAM) plugin and others.
-The NVIDIA Network Operator works in conjunction with the NVIDIA GPU Operator to deliver high-throughput, low-latency networking for scale-out, GPU computing clusters.</p>
+The NVIDIA Network Operator works in conjunction with the <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/">NVIDIA GPU Operator</a> to deliver high-throughput, low-latency networking for scale-out, GPU computing clusters.</p>
 <p>A Helm chart is provided for easily deploying the Network operator in a cluster to provision the host software on NVIDIA-enabled nodes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>What’s new in 26.4.0</strong></p>
+<ul class="simple">
+<li><p><strong>KubeVirt SR-IOV passthrough</strong> — accelerated East-West networking for VM workloads on vanilla Kubernetes. See <a class="reference internal" href="kubevirt.html"><span class="doc">KubeVirt SR-IOV Integration</span></a>.</p></li>
+<li><p><strong>Spectrum-X RA 2.2 alignment</strong> — multi-plane fabric with topology-aware pod placement via DRA, plus simplified config generation through the K8s LaunchKit.</p></li>
+<li><p><strong>Dynamic Resource Allocation (DRA) SR-IOV driver</strong> — Kubernetes-native VF allocation for SR-IOV workloads. See <a class="reference internal" href="dra-sriov-driver/dra-sriov-driver.html"><span class="doc">DRA SR-IOV Driver</span></a>.</p></li>
+</ul>
+<p>For the full list of changes, see the <a class="reference internal" href="release-notes.html"><span class="doc">Release Notes</span></a>.</p>
+</div>
 <section id="networking-features">
 <h2>Networking Features<a class="headerlink" href="#networking-features" title="Permalink to this headline"></a></h2>
 <dl class="simple">
-<dt><strong>RDMA Support</strong></dt><dd><p>Remote Direct Memory Access (RDMA) for memory-to-memory data transfers that bypass the CPU and kernel networking stack. Supports InfiniBand and RDMA over Converged Ethernet (RoCE) protocols.</p>
+<dt><strong>RDMA Support</strong></dt><dd><p>Remote Direct Memory Access (RDMA) for memory-to-memory data transfers that bypass the CPU and kernel networking stack. Supports InfiniBand on NVIDIA Quantum-X fabrics and RDMA over Converged Ethernet (RoCE) on NVIDIA Spectrum-X fabrics.</p>
 </dd>
 <dt><strong>SR-IOV Virtualization</strong></dt><dd><p>Single Root I/O Virtualization technology that partitions network interface cards into multiple Virtual Functions (VFs) for hardware-level isolation and performance.</p>
 </dd>
@@ -130,24 +141,30 @@ The NVIDIA Network Operator works in conjunction with the NVIDIA GPU Operator to
 </section>
 <section id="use-cases">
 <h2>Use Cases<a class="headerlink" href="#use-cases" title="Permalink to this headline"></a></h2>
-<p><strong>High-Performance Computing (HPC)</strong>: Scientific simulations, modeling applications, and distributed computing workloads</p>
-<p><strong>Machine Learning</strong>: Distributed training and inference workloads across multiple GPU nodes</p>
-<p><strong>Data Processing</strong>: Database systems, analytics platforms, and storage applications requiring high network throughput</p>
-<p><strong>Legacy Applications</strong>: Existing applications that require direct access to networking hardware</p>
+<p><strong>AI Training at Scale</strong>: Distributed training across multi-GPU, multi-node clusters, with GPUDirect RDMA between GPUs and NICs for low-latency East-West traffic.</p>
+<p><strong>AI Inference and Generative AI</strong>: Multi-node serving of large language and multimodal models, where tensor and pipeline parallelism depend on accelerated GPU-to-GPU networking.</p>
+<p><strong>Telco CNFs and DPDK Workloads</strong>: Cloud-native network functions and DPDK-accelerated user-plane applications using SR-IOV for line-rate packet processing.</p>
+<p><strong>Media and Broadcast</strong>: Containerized live-broadcast pipelines on Kubernetes and OpenShift using NVIDIA Rivermax and uncompressed SMPTE ST 2110 over SR-IOV, with PTP-synchronized timing. Foundational to NVIDIA Holoscan for Media.</p>
+<p><strong>Edge AI and Sensor Streaming</strong>: Low-latency sensor ingest over SR-IOV and RDMA for real-time inference on NVIDIA IGX Orin and Grace ARM platforms.</p>
+<p><strong>High-Performance Computing (HPC)</strong>: Scientific simulations, modeling, and distributed computing workloads.</p>
+<p><strong>Data Processing</strong>: Database systems, analytics platforms, and storage applications requiring high network throughput.</p>
 </section>
-<section id="license-agreement">
-<h2>License Agreement<a class="headerlink" href="#license-agreement" title="Permalink to this headline"></a></h2>
-<p>The NVIDIA Network Operator is licensed under Apache 2.0 and contributions are accepted with a DCO.
-See the contributing document for more information on how to contribute and the release artifacts.</p>
+<section id="license-agreements">
+<h2>License Agreements<a class="headerlink" href="#license-agreements" title="Permalink to this headline"></a></h2>
+<p>The NVIDIA Network Operator source code is licensed under Apache 2.0 and contributions are accepted with a DCO. See the <a class="reference external" href="https://github.com/Mellanox/network-operator/blob/master/CONTRIBUTING.md">contributing document</a> for more information on how to contribute and the release artifacts.</p>
+<p>NVIDIA Network Operator container images distributed via <a class="reference external" href="https://catalog.ngc.nvidia.com/">NVIDIA NGC</a> are subject to the NVIDIA software license terms. Refer to the corresponding container listing on NGC for the applicable license; by pulling and using these containers you accept those terms.</p>
 </section>
 <section id="learn-more">
 <h2>Learn More<a class="headerlink" href="#learn-more" title="Permalink to this headline"></a></h2>
-<p>The Network Operator is open-source.
-For more information on contributions and release artifacts, see the <a class="reference external" href="https://github.com/Mellanox/network-operator">GitHub repo</a>.</p>
-<p>For detailed deployment instructions and examples:</p>
+<p>The Network Operator is open-source. For more information on contributions and release artifacts, see the <a class="reference external" href="https://github.com/Mellanox/network-operator">GitHub repo</a>.</p>
+<p>For detailed deployment, operational, and release information:</p>
 <ul class="simple">
+<li><p><a class="reference internal" href="release-notes.html"><span class="doc">Release Notes</span></a>: What changed in this release, known issues, and upgrade considerations</p></li>
+<li><p><a class="reference internal" href="platform-support.html"><span class="doc">Platform Support</span></a>: Supported hardware, operating systems, and Kubernetes platforms</p></li>
 <li><p><a class="reference internal" href="quick-start/quick-start-k8s.html"><span class="doc">Quick Start Guide for Kubernetes</span></a>: Quick deployment guide with common configurations</p></li>
 <li><p><a class="reference internal" href="deployment-guide-kubernetes.html"><span class="doc">NVIDIA Network Operator Deployment Guide with Kubernetes</span></a>: Detailed deployment scenarios</p></li>
+<li><p><a class="reference internal" href="life-cycle-management.html"><span class="doc">Life Cycle Management</span></a>: Upgrade procedures and lifecycle guidance</p></li>
+<li><p><a class="reference internal" href="troubleshooting/troubleshooting.html"><span class="doc">Troubleshooting</span></a>: Troubleshooting common issues</p></li>
 </ul>
 </section>
 </section>
@@ -161,7 +178,7 @@ For more information on contributions and release artifacts, see the <a class="r
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on May 29, 2026.
+      <span class="lastupdated">Last updated on Jun 02, 2026.
       </span></p>
   </div>
 
