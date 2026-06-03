@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spectrum-X CRDs and API Reference &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NVIDIA Kubernetes Launch Kit" href="../k8s-launch-kit/k8s-launch-kit.html" />
+    <link rel="prev" title="NVIDIA Spectrum-X NIC Configuration" href="spectrum-x-configuration.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="spectrum-x.html">NVIDIA Spectrum-X</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components.html">Architecture and Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CRD API Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spectrumx-nvidia-com-v1alpha2">spectrumx.nvidia.com/v1alpha2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfig">SpectrumXRailPoolConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfigspec">SpectrumXRailPoolConfigSpec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfigstatus">SpectrumXRailPoolConfigStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#railtopology">RailTopology</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nicselector">NicSelector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="spectrum-x.html">NVIDIA Spectrum-X Ethernet Networking Platform</a> &raquo;</li>
+<li>Spectrum-X CRDs and API Reference</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spectrum-x-crds-and-api-reference">
+<h1>Spectrum-X CRDs and API Reference<a class="headerlink" href="#spectrum-x-crds-and-api-reference" title="Permalink to this headline"></a></h1>
+<p>A Spectrum-X Kubernetes deployment uses CRDs from several NVIDIA operators
+working together. This page documents the <strong>Spectrum-X Operator</strong> CRDs
+(v1alpha2 — <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>). For the other CRDs, see the
+linked references. For the full stack of operators, drivers, and CNIs that
+own these CRDs and how they depend on each other, see
+<a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 22%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>CRD</p></th>
+<th class="head"><p>Owner</p></th>
+<th class="head"><p>Role</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code></p></td>
+<td><p>NVIDIA Network Operator</p></td>
+<td><p>Cluster-wide operator configuration. Enables NIC Configuration
+Operator, NV-IPAM, Spectrum-X Operator, and secondary network
+components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code></p></td>
+<td><p>NIC Configuration Operator</p></td>
+<td><p>Per-NIC firmware and Spectrum-X settings (link type, <code class="docutils literal notranslate"><span class="pre">numVfs</span></code>,
+multiplane mode, RA version). See
+<a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code></p></td>
+<td><p>NIC Configuration Operator</p></td>
+<td><p>Predictable rail / plane-based netdev and RDMA names driven by udev
+rules.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code></p></td>
+<td><p>NV-IPAM</p></td>
+<td><p>Per-rail IP allocation pool consumed by <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#spectrumxrailpoolconfig"><span class="std std-ref">SpectrumXRailPoolConfig</span></a></p></td>
+<td><p>Spectrum-X Operator</p></td>
+<td><p>Rail topology, PF selection, IPAM binding, and DRA / SR-IOV resource
+exposure (full API below).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code></p></td>
+<td><p>Kubernetes DRA</p></td>
+<td><p>Pod-to-GPU+VF binding via Dynamic Resource Allocation (Kubernetes
+upstream resource).</p></td>
+</tr>
+</tbody>
+</table>
+<p>Packages:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#spectrumx-nvidia-com-v1alpha2"><span class="std std-ref">spectrumx.nvidia.com/v1alpha2</span></a></p></li>
+</ul>
+<section id="spectrumx-nvidia-com-v1alpha2">
+<span id="id1"></span><h2>spectrumx.nvidia.com/v1alpha2<a class="headerlink" href="#spectrumx-nvidia-com-v1alpha2" title="Permalink to this headline"></a></h2>
+<p>Package v1alpha2 contains API Schema definitions for the spectrumx v1alpha2 API group.</p>
+<p>Resource Types:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#spectrumxrailpoolconfig"><span class="std std-ref">SpectrumXRailPoolConfig</span></a></p></li>
+</ul>
+<section id="spectrumxrailpoolconfig">
+<span id="id2"></span><h3>SpectrumXRailPoolConfig<a class="headerlink" href="#spectrumxrailpoolconfig" title="Permalink to this headline"></a></h3>
+<p>SpectrumXRailPoolConfig is the Schema for the spectrumxrailpoolconfigs API.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">apiVersion</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spectrumx.nvidia.com/v1alpha2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">kind</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">metadata</span></code></p></td>
+<td><p>Standard object metadata. Refer to the Kubernetes API documentation for the fields of the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">spec</span></code></div>
+<div class="line"><a class="reference internal" href="#spectrumxrailpoolconfigspec"><span class="std std-ref">SpectrumXRailPoolConfigSpec</span></a></div>
+</div>
+</td>
+<td><p>Desired state of the SpectrumXRailPoolConfig.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">status</span></code></div>
+<div class="line"><a class="reference internal" href="#spectrumxrailpoolconfigstatus"><span class="std std-ref">SpectrumXRailPoolConfigStatus</span></a></div>
+</div>
+</td>
+<td><p>Observed state of the SpectrumXRailPoolConfig.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="spectrumxrailpoolconfigspec">
+<span id="id3"></span><h3>SpectrumXRailPoolConfigSpec<a class="headerlink" href="#spectrumxrailpoolconfigspec" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfig"><span class="std std-ref">SpectrumXRailPoolConfig</span></a>)</p>
+<p>SpectrumXRailPoolConfigSpec defines the desired state of SpectrumXRailPoolConfig.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">draEnabled</span></code></div>
+<div class="line">bool</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Enables Dynamic Resource Allocation (DRA) for the configured Spectrum-X nodes. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code></div>
+<div class="line">map[string]string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Label selector that identifies the Spectrum-X nodes the configuration applies to.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">maxUnavailable</span></code></div>
+<div class="line"><a class="reference external" href="https://godoc.org/k8s.io/apimachinery/pkg/util/intstr#IntOrString">IntOrString</a></div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Either an integer count or a percentage of nodes in the pool that can be configured in parallel. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Namespace of the NetworkAttachmentDefinition custom resource.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">numVfs</span></code></div>
+<div class="line">int</div>
+</div>
+</td>
+<td><p>Number of VFs to configure on each PF. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">1</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">railTopology</span></code></div>
+<div class="line"><a class="reference internal" href="#railtopology"><span class="std std-ref">[]RailTopology</span></a></div>
+</div>
+</td>
+<td><p>Rails topology list. Must contain at least one entry.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="spectrumxrailpoolconfigstatus">
+<span id="id4"></span><h3>SpectrumXRailPoolConfigStatus<a class="headerlink" href="#spectrumxrailpoolconfigstatus" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfig"><span class="std std-ref">SpectrumXRailPoolConfig</span></a>)</p>
+<p>SpectrumXRailPoolConfigStatus defines the observed state of SpectrumXRailPoolConfig.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">syncStatus</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p>Synchronization status. One of <code class="docutils literal notranslate"><span class="pre">Unknown</span></code>, <code class="docutils literal notranslate"><span class="pre">InProgress</span></code>, <code class="docutils literal notranslate"><span class="pre">Failed</span></code>, <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">observedGeneration</span></code></div>
+<div class="line">int64</div>
+</div>
+</td>
+<td><p>The most recent generation observed by the controller.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="railtopology">
+<span id="id5"></span><h3>RailTopology<a class="headerlink" href="#railtopology" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfigspec"><span class="std std-ref">SpectrumXRailPoolConfigSpec</span></a>)</p>
+<p>RailTopology describes a single rail in the Spectrum-X pool. Only one of <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code> or <code class="docutils literal notranslate"><span class="pre">ipam</span></code> may be specified.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">name</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p>Rail topology name. Must be non-empty.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">nicSelector</span></code></div>
+<div class="line"><a class="reference internal" href="#nicselector"><span class="std std-ref">NicSelector</span></a></div>
+</div>
+</td>
+<td><p>PF selector identifying the NICs that belong to this rail.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Reference to a CIDR Pool resource. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">ipam</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ipam</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Advanced IPAM configuration. Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mtu</span></code></div>
+<div class="line">int</div>
+</div>
+</td>
+<td><p>MTU for the rail. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">0</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="nicselector">
+<span id="id6"></span><h3>NicSelector<a class="headerlink" href="#nicselector" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#railtopology"><span class="std std-ref">RailTopology</span></a>)</p>
+<p>NicSelector selects the physical functions that participate in a rail.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">pfNames</span></code></div>
+<div class="line">[]string</div>
+</div>
+</td>
+<td><p>List of PF names. Must contain at least one entry.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

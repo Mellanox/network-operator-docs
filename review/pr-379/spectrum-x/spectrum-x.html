@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NVIDIA Spectrum-X Ethernet Networking Platform &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Spectrum-X Kubernetes Quick Start" href="quick-start.html" />
+    <link rel="prev" title="Network Operator API reference v1alpha1" href="../nic-conf-operator/crds.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NVIDIA Spectrum-X</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="components.html">Architecture and Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+<li>NVIDIA Spectrum-X Ethernet Networking Platform</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nvidia-spectrum-x-ethernet-networking-platform">
+<h1>NVIDIA Spectrum-X Ethernet Networking Platform<a class="headerlink" href="#nvidia-spectrum-x-ethernet-networking-platform" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section covers <strong>NVIDIA Network Operator configuration</strong> to enable
+NVIDIA Spectrum-X NIC setup in Kubernetes deployments. For the full
+Spectrum-X platform documentation — supported topologies, NIC hardware,
+software components, and version-specific notes — refer to the
+<a class="reference external" href="https://www.nvidia.com/en-us/networking/spectrumx/">NVIDIA Spectrum-X documentation</a>.</p>
+</div>
+<p>NVIDIA Spectrum-X is an AI-optimized Ethernet networking platform that combines
+NVIDIA Spectrum switches with the BlueField-3 SuperNIC, ConnectX-7 NIC, and
+ConnectX-8 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
+GPU-to-GPU compute (east-west) network. NVIDIA Network Operator provides the
+Kubernetes side: discovering the NICs, configuring rails, and exposing them
+to pods as schedulable resources.</p>
+<p><strong>Spectrum-X Multiplane.</strong> Spectrum-X Multiplane is the Spectrum-X capability
+that splits each SuperNIC across two or more independent network planes —
+enabling Ethernet to scale from thousands to hundreds of thousands of GPUs in
+a flat, two-tier topology, with improved performance and resiliency over
+single-plane networks. Network Operator exposes it through the
+<code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field on <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>, with
+<strong>Software Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">swplb</span></code>) and <strong>Hardware Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>,
+tech preview) variants alongside the default single-plane mode (<code class="docutils literal notranslate"><span class="pre">none</span></code>).</p>
+<p><strong>Architecture and multiplane modes.</strong> Spectrum-X Kubernetes deployments fall
+into three network architectures, distinguished by the number of planes per
+rail and the load-balancing mechanism:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 20%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Architecture</p></th>
+<th class="head"><p>NICs</p></th>
+<th class="head"><p>GPU platforms</p></th>
+<th class="head"><p>Multiplane mode</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Single-Plane</p></td>
+<td><p>BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC</p></td>
+<td><p>H100/H200/B200, GB200</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> (1 plane)</p></td>
+<td><p>GA</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dual-Plane</p></td>
+<td><p>ConnectX-8 SuperNIC</p></td>
+<td><p>B300, GB300</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code> (2 planes)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (2 planes)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code> — GA</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — Tech preview</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>Quad-Plane</p></td>
+<td><p>ConnectX-8 SuperNIC</p></td>
+<td><p>B300</p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code> (4 planes)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (4 planes)</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code> — GA</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — Tech preview</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>ConnectX-8 SuperNIC is listed in the Single-Plane row because it also
+supports single-plane (<code class="docutils literal notranslate"><span class="pre">none</span></code>) configuration. Typical Single-Plane
+deployments use BlueField-3 SuperNIC (HGX H100/H200/B200) or ConnectX-7
+NIC (GB200).</p>
+</div>
+<p><strong>Version compatibility.</strong> Each Spectrum-X Reference Architecture version is
+supported by a specific Network Operator release:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Spectrum-X RA Version</p></th>
+<th class="head"><p>NVIDIA Network Operator Release</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Spectrum-X RA 2.2</p></td>
+<td><p>26.4.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Spectrum-X RA 2.1</p></td>
+<td><p>26.1.0</p></td>
+</tr>
+</tbody>
+</table>
+<p>While each Network Operator release is <strong>validated end-to-end</strong> with a
+specific Spectrum-X RA version, individual components support a wider range
+of RAs in their configuration CRDs. For example, NIC Configuration Operator
+in 26.4.0 accepts <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> values <strong>RA1.3</strong>, <strong>RA2.0</strong>,
+<strong>RA2.1</strong>, and <strong>RA2.2</strong>. See <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a> for details.</p>
+<p><strong>Configuration surface.</strong> Network Operator drives Spectrum-X setup through a
+small set of CRDs that work together:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> — cluster-wide Network Operator configuration that
+enables the Spectrum-X Operator, SR-IOV Network Operator, NIC Configuration
+Operator, NV-IPAM, and Multus.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> — NIC-level firmware/PF configuration for
+Spectrum-X (link type, <code class="docutils literal notranslate"><span class="pre">numVfs</span></code>, multiplane mode, RA version).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> — predictable rail/plane-based netdev names
+driven by udev rules.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> (<code class="docutils literal notranslate"><span class="pre">spectrumx.nvidia.com/v1alpha2</span></code>) — rail
+topology, PF selection, IPAM binding, and DRA / SR-IOV resource exposure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> (NV-IPAM) — IP allocation per rail (or per rail/plane in
+<code class="docutils literal notranslate"><span class="pre">swplb</span></code>).</p></li>
+</ul>
+<p>For Dynamic Resource Allocation workflows (tech preview), the upstream
+Kubernetes <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> resource binds pod requests to specific
+GPU + VF combinations.</p>
+<p>For the full operator / driver / CNI stack that backs these CRDs and how the
+components depend on each other, see <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
+<p><strong>Further reading:</strong></p>
+<ul class="simple">
+<li><p><strong>Supported platforms</strong> (servers, NICs, switches, cables, OS combinations for
+each Spectrum-X release): see the <a class="reference external" href="https://docs.nvidia.com/networking/software/spectrumx-solution-stack/index.html">NVIDIA Spectrum-X Solution Stack
+documentation</a>.</p></li>
+<li><p><strong>Network Operator Kubernetes matrix</strong> (operating systems, Kubernetes
+distribution versions, and the Spectrum-X RA support row): see
+<a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p></li>
+<li><p><strong>Component versions</strong> for Network Operator, Spectrum-X Operator, NIC
+Configuration Operator, NV-IPAM, and the SR-IOV DRA driver: see the software
+components table in <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p></li>
+</ul>
+<p>When you’re ready to deploy, continue to the Quick Start walkthroughs:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Architecture and Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>

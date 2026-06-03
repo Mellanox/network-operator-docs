@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spectrum-X Kubernetes Quick Start &mdash; NVIDIA Network Operator v26.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Single-Plane Spectrum-X Quick Start" href="quick-start-single-plane.html" />
+    <link rel="prev" title="NVIDIA Spectrum-X Ethernet Networking Platform" href="spectrum-x.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="spectrum-x.html">NVIDIA Spectrum-X</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quick-start-single-plane.html">Single Plane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick-start-swplb.html">Software Multiplane</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quick-start-hwplb.html">Hardware Multiplane</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="components.html">Architecture and Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="spectrum-x.html">NVIDIA Spectrum-X Ethernet Networking Platform</a> &raquo;</li>
+<li>Spectrum-X Kubernetes Quick Start</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spectrum-x-kubernetes-quick-start">
+<h1>Spectrum-X Kubernetes Quick Start<a class="headerlink" href="#spectrum-x-kubernetes-quick-start" title="Permalink to this headline"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These walkthroughs target <strong>Spectrum-X RA 2.2</strong> on <strong>Network Operator 26.4.0</strong>.
+For the RA-to-release mapping and other RAs, see
+<a class="reference internal" href="spectrum-x.html"><span class="doc">NVIDIA Spectrum-X</span></a>. For supported platforms (operating
+systems, Kubernetes distributions, NIC hardware), see
+<a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
+<p>On Network Operator 26.4.0, <strong>Single-Plane</strong> and <strong>Software Multiplane</strong>
+(<code class="docutils literal notranslate"><span class="pre">swplb</span></code>) deployments on BlueField-3 SuperNICs, ConnectX-7 NICs, and
+ConnectX-8 SuperNICs are GA. <strong>Hardware Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) is tech
+preview only and is not part of the validated Spectrum-X Reference
+Architecture. For background on the operators and CNIs each walkthrough
+relies on, see <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The configuration in each walkthrough can be automated end-to-end with
+NVIDIA Kubernetes Launch Kit — see
+<a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html"><span class="doc">Configuration Assistance with Kubernetes Launch Kit</span></a>.</p>
+</div>
+<p>Pick the walkthrough that matches your hardware and target topology. Each one
+installs Network Operator via Helm, applies the Spectrum-X CRDs, and deploys a
+test pod — adapted to the chosen multiplane mode and NIC family.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 12%" />
+<col style="width: 20%" />
+<col style="width: 22%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Walkthrough</p></th>
+<th class="head"><p>Multiplane mode</p></th>
+<th class="head"><p>NICs</p></th>
+<th class="head"><p>GPU platforms</p></th>
+<th class="head"><p>Use when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="quick-start-single-plane.html"><span class="doc">Single Plane</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC</p></td>
+<td><p>H100/H200/B200 (BlueField-3 SuperNIC), GB200 (ConnectX-7 NIC)</p></td>
+<td><p>One PF per rail. Simplest setup. ConnectX-8 SuperNIC also supports single-plane configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="quick-start-swplb.html"><span class="doc">Software Multiplane</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>ConnectX-8 SuperNIC</p></td>
+<td><p>B300, GB300</p></td>
+<td><p>Software Plane Load Balancing across planes. Set <code class="docutils literal notranslate"><span class="pre">numberOfPlanes:</span> <span class="pre">2</span></code> (Dual-Plane) or <code class="docutils literal notranslate"><span class="pre">4</span></code> (Quad-Plane, B300 only).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="quick-start-hwplb.html"><span class="doc">Hardware Multiplane</span></a> <em>(tech preview)</em></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>ConnectX-8 SuperNIC</p></td>
+<td><p>B300, GB300</p></td>
+<td><p>Same as <code class="docutils literal notranslate"><span class="pre">swplb</span></code> but Plane Load Balancing happens in the NIC hardware. <strong>Tech preview; not RA-validated.</strong></p></td>
+</tr>
+</tbody>
+</table>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
