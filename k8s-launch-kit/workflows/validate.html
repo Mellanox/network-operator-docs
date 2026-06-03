@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
@@ -73,10 +74,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#run-validation">Run Validation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#what-it-checks">What It Checks</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#network-operator-helm-release-version">Network Operator Helm release version</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#manifest-presence">Manifest presence</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#component-versions-in-nicclusterpolicy-and-nicnodepolicy">Component versions in NicClusterPolicy and NicNodePolicy</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#manifest-state">Manifest state</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#connectivity-matrix-default-on">Connectivity matrix (default ON)</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#preset-deviations">Preset deviations</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="#html-validation-report">HTML Validation Report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flag-reference">Flag Reference</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#exit-codes">Exit Codes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sample-output">Sample Output</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
@@ -141,25 +146,34 @@
 <li><p><a class="reference internal" href="#what-it-checks" id="id2">What It Checks</a></p>
 <ul>
 <li><p><a class="reference internal" href="#network-operator-helm-release-version" id="id3">Network Operator Helm release version</a></p></li>
-<li><p><a class="reference internal" href="#manifest-presence" id="id4">Manifest presence</a></p></li>
-<li><p><a class="reference internal" href="#preset-deviations" id="id5">Preset deviations</a></p></li>
+<li><p><a class="reference internal" href="#component-versions-in-nicclusterpolicy-and-nicnodepolicy" id="id4">Component versions in NicClusterPolicy and NicNodePolicy</a></p></li>
+<li><p><a class="reference internal" href="#manifest-state" id="id5">Manifest state</a></p></li>
+<li><p><a class="reference internal" href="#connectivity-matrix-default-on" id="id6">Connectivity matrix (default ON)</a></p></li>
+<li><p><a class="reference internal" href="#preset-deviations" id="id7">Preset deviations</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#exit-codes" id="id6">Exit Codes</a></p></li>
-<li><p><a class="reference internal" href="#sample-output" id="id7">Sample Output</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id8">See Also</a></p></li>
+<li><p><a class="reference internal" href="#html-validation-report" id="id8">HTML Validation Report</a></p></li>
+<li><p><a class="reference internal" href="#flag-reference" id="id9">Flag Reference</a></p></li>
+<li><p><a class="reference internal" href="#exit-codes" id="id10">Exit Codes</a></p></li>
+<li><p><a class="reference internal" href="#sample-output" id="id11">Sample Output</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id12">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Use this when:</strong> you’ve applied a deployment and want to confirm the cluster matches the configuration that produced it. Three things are reported: Network Operator Helm release version, per-manifest presence in the cluster, and any preset deviations recorded in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>.</p>
+<p><strong>Use this when:</strong> you’ve applied a deployment and want to confirm both the control plane (operator and CRs reconciled, component versions match the requested release) and the data plane (pods on different nodes can reach each other on every rail). <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> runs four checks back-to-back and emits an HTML report alongside the text/JSON output.</p>
 </div>
 <section id="run-validation">
 <h2>Run Validation<a class="headerlink" href="#run-validation" title="Permalink to this headline"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k validate
 </pre></div>
 </div>
-<p>No flags required when defaults apply. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> reads <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and the operator namespace, then checks <code class="docutils literal notranslate"><span class="pre">./deployment/</span></code> against the cluster reachable via <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>.</p>
+<p>No flags required when defaults apply. <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> reads <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> (or, when not in the working directory, <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/../cluster-config.yaml</span></code>) for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and the operator namespace, then:</p>
+<ol class="arabic simple">
+<li><p>Classifies every YAML manifest under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> against the live cluster.</p></li>
+<li><p>Runs the connectivity matrix (enabled by default; pass <code class="docutils literal notranslate"><span class="pre">--connectivity=false</span></code> to skip).</p></li>
+<li><p>Writes an HTML validation report to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code>.</p></li>
+</ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k validate --user-config ./cluster-config.yaml <span class="se">\</span>
     --deployment-files ./deployment <span class="se">\</span>
     --kubeconfig ~/.kube/config
@@ -178,26 +192,106 @@
 <li><p>No matching Helm release Secret is found in the operator namespace (e.g., the operator was installed via Argo CD or kubectl rather than Helm).</p></li>
 </ul>
 </section>
-<section id="manifest-presence">
-<h3>Manifest presence<a class="headerlink" href="#manifest-presence" title="Permalink to this headline"></a></h3>
-<p>Every YAML document under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> is fetched from the cluster via the Kubernetes API. Each document is reported:</p>
+<section id="component-versions-in-nicclusterpolicy-and-nicnodepolicy">
+<h3>Component versions in NicClusterPolicy and NicNodePolicy<a class="headerlink" href="#component-versions-in-nicclusterpolicy-and-nicnodepolicy" title="Permalink to this headline"></a></h3>
+<p>The Helm-release check confirms the <em>operator</em> matches the requested release line. Launch Kit also reads the live <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> and every <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> and verifies that each component’s <code class="docutils literal notranslate"><span class="pre">.version</span></code> field matches the catalog. This catches drift the Helm check can miss: out-of-band <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">edit</span></code> changes, partial upgrades, hand-rolled chart values that pinned an older image tag.</p>
+<p>Sections checked:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">FOUND</span></code> — the named object exists in the cluster.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">MISSING</span></code> — the named object is not present.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code> — the API returned a non-NotFound error (RBAC, transient connectivity, …).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> — <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator.operator</span></code>, <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator.configurationDaemon</span></code>, <code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>, <code class="docutils literal notranslate"><span class="pre">secondaryNetwork.cniPlugins</span></code>, <code class="docutils literal notranslate"><span class="pre">secondaryNetwork.multus</span></code>, and <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> (when the 26.1 model is used).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> — <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code>, <code class="docutils literal notranslate"><span class="pre">rdmaSharedDevicePlugin</span></code>, <code class="docutils literal notranslate"><span class="pre">sriovDevicePlugin</span></code>.</p></li>
 </ul>
-<p>Files matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">50-example-daemonset.yaml</span></code>) are skipped — those are demo workloads, not part of the operator surface.</p>
+<p>Each row is reported as <code class="docutils literal notranslate"><span class="pre">MATCH</span></code> or <code class="docutils literal notranslate"><span class="pre">MISMATCH</span></code> with the expected and actual versions side by side. A mismatch fails <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> with exit code 4, the same as a missing manifest or Helm-version mismatch. The check is <strong>skipped</strong> (no impact on exit code) when <code class="docutils literal notranslate"><span class="pre">selectedRelease</span></code> is empty, when the catalog doesn’t carry that release line, or when the cluster has no <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> (<code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> hasn’t been run yet).</p>
+</section>
+<section id="manifest-state">
+<h3>Manifest state<a class="headerlink" href="#manifest-state" title="Permalink to this headline"></a></h3>
+<p>Every YAML document under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> is routed through a per-Kind validator that classifies it as one of four states:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">READY</span></code> — the controller reports the object is fully reconciled. For <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> and <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code>, the per-component <code class="docutils literal notranslate"><span class="pre">appliedStates[]</span></code> are folded into a “ready: 12/12; components: …” summary so an operator sees exactly what landed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IN-PROGRESS</span></code> — the controller is still reconciling. For <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> and the <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> / <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> Kinds, per-node and per-device breakdowns are surfaced (the SR-IOV silent-failure case where <code class="docutils literal notranslate"><span class="pre">syncStatus=Succeeded</span></code> but <code class="docutils literal notranslate"><span class="pre">pfNames</span></code> matched zero interfaces is detected and reported as ERROR rather than READY).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ERROR</span></code> — the controller reported an error state, or a cross-check (expected PFs vs. discovered) failed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MISSING</span></code> — the named object is not present in the cluster.</p></li>
+</ul>
+<p>Files matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">50-example-daemonset.yaml</span></code>) are skipped here — those are demo workloads consumed by the connectivity matrix, not part of the network-operator surface <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> checks for static state.</p>
+</section>
+<section id="connectivity-matrix-default-on">
+<h3>Connectivity matrix (default ON)<a class="headerlink" href="#connectivity-matrix-default-on" title="Permalink to this headline"></a></h3>
+<p>When every manifest is <code class="docutils literal notranslate"><span class="pre">READY</span></code>, Launch Kit applies the example DaemonSet, waits for it to roll out completely (<code class="docutils literal notranslate"><span class="pre">numberReady</span> <span class="pre">==</span> <span class="pre">desiredNumberScheduled</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> — a single <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>-stuck pod fails the wait), enumerates the test pods’ rail IPs from each pod’s <code class="docutils literal notranslate"><span class="pre">k8s.v1.cni.cncf.io/network-status</span></code> annotation, and runs a ping matrix:</p>
+<ul class="simple">
+<li><p><strong>Same-rail tests</strong> — every ordered <code class="docutils literal notranslate"><span class="pre">(srcPod,</span> <span class="pre">dstPod)</span></code> pair on every rail both pods attach to. Verifies the rail’s end-to-end data path.</p></li>
+<li><p><strong>Cross-rail canary</strong> — one ping per ordered pod pair from rail-0 → rail-1 (when both pods have ≥2 rails). Catches routing misconfigurations that would otherwise be invisible when every rail passes independently.</p></li>
+</ul>
+<p>The DaemonSet is deleted on exit. Pass <code class="docutils literal notranslate"><span class="pre">--keep</span></code> to leave it running for follow-up debugging.</p>
+<p>When fewer than two schedulable test pods exist (single-node clusters, pods stuck Pending), the matrix soft-skips with a reason in the report.</p>
 </section>
 <section id="preset-deviations">
 <h3>Preset deviations<a class="headerlink" href="#preset-deviations" title="Permalink to this headline"></a></h3>
-<p>If <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> records preset deviations (any group has a non-empty <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> list), they’re surfaced under a “Preset deviations” section. Each entry shows the field (<code class="docutils literal notranslate"><span class="pre">pfCount</span></code> / <code class="docutils literal notranslate"><span class="pre">pciAddress</span></code> / <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>), the expected value, the discovered value, and a short detail. Deviations are reported for visibility — they do <strong>not</strong> affect the exit code, since the deployment can still run correctly while diverging from the matched preset. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> “Validation and Deviations”.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> records preset deviations, they’re surfaced under each affected node group in the HTML report’s <strong>Node groups</strong> section. Each entry shows the field (<code class="docutils literal notranslate"><span class="pre">pfCount</span></code> / <code class="docutils literal notranslate"><span class="pre">pciAddress</span></code> / <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>), the expected value, the discovered value, and a short detail. Deviations are reported for visibility — they do <strong>not</strong> affect the exit code, since the deployment can still run correctly while diverging from the matched preset. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> “Validation and Deviations”.</p>
 </section>
+</section>
+<section id="html-validation-report">
+<h2>HTML Validation Report<a class="headerlink" href="#html-validation-report" title="Permalink to this headline"></a></h2>
+<p>Every <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> run writes a self-contained HTML report to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code> (override with <code class="docutils literal notranslate"><span class="pre">--report-path</span> <span class="pre">&lt;file&gt;</span></code>, disable with <code class="docutils literal notranslate"><span class="pre">--report-path=-</span></code>). The report is one HTML file with inline CSS — no JavaScript, no external assets — so it can be attached to a ticket, shared in chat, or opened offline.</p>
+<p>Report sections:</p>
+<ul class="simple">
+<li><p><strong>Header</strong> — Launch Kit version, generation timestamp, kubeconfig context, API-server version, operator namespace.</p></li>
+<li><p><strong>Profile</strong> — fabric, deployment type, multirail, and Spectrum-X (version / multiplane mode / number of planes) when enabled. When <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> doesn’t carry an explicit <code class="docutils literal notranslate"><span class="pre">profile:</span></code> block, the profile is inferred from the Kinds present in the rendered deployment manifests.</p></li>
+<li><p><strong>Node groups</strong> — one card per <code class="docutils literal notranslate"><span class="pre">clusterConfig[]</span></code> entry: identifier, machine type, GPU type, link type, node selector, worker-node list, capability pills, and east-west / north-south PF tables (PCI, device ID, rail, netdev, RDMA device, PSID, part number, NUMA node, connected GPU, GPU proximity). Preset deviations are rendered as a sub-table when present.</p></li>
+<li><p><strong>Cluster nodes</strong> — name, <code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine</span></code> and <code class="docutils literal notranslate"><span class="pre">.gpu</span></code> labels, role.</p></li>
+<li><p><strong>Network Operator release</strong> — selected vs. deployed appVersion. When the component-version cross-check ran, a sub-table lists every <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> / <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> section’s <code class="docutils literal notranslate"><span class="pre">MATCH</span></code> / <code class="docutils literal notranslate"><span class="pre">MISMATCH</span></code> against the catalog (expected vs. actual side by side).</p></li>
+<li><p><strong>Manifest state</strong> — one row per CR with a state badge and the validator’s reason. Two expandable rows render full-width directly below each manifest row: <strong>Details</strong> (the SR-IOV per-node breakdown, the NCP appliedStates components, etc.) and <strong>Live YAML</strong> (the cluster’s current view of the object, <code class="docutils literal notranslate"><span class="pre">managedFields</span></code> stripped, status kept). Manifests with nothing to expand render only the data row.</p></li>
+<li><p><strong>Connectivity matrix</strong> — per-rail <code class="docutils literal notranslate"><span class="pre">src</span> <span class="pre">×</span> <span class="pre">dst</span></code> grids with pass/fail/skipped color-coded cells, plus the cross-rail canary list.</p></li>
+<li><p><strong>Warnings</strong> — bulleted rollup (“connectivity matrix skipped because cluster has in-progress manifests”, “SriovNetworkNodePolicy/rail-0 is in-progress on 2/3 nodes”, etc.).</p></li>
+</ul>
+</section>
+<section id="flag-reference">
+<h2>Flag Reference<a class="headerlink" href="#flag-reference" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Flag</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--connectivity</span></code></p></td>
+<td><p>Run the data-plane ping matrix. Default <code class="docutils literal notranslate"><span class="pre">true</span></code>. Pass <code class="docutils literal notranslate"><span class="pre">--connectivity=false</span></code> to limit validate to the static manifest + Helm-release-version checks.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--connectivity-timeout</span></code></p></td>
+<td><p>Wall-clock budget for the connectivity phase (DaemonSet rollout + ping execs). Default <code class="docutils literal notranslate"><span class="pre">5m</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ping-count</span></code></p></td>
+<td><p>Number of ICMP echoes per <code class="docutils literal notranslate"><span class="pre">src</span> <span class="pre">→</span> <span class="pre">dst</span></code> pair (<code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">-c</span> <span class="pre">N</span></code>). Default <code class="docutils literal notranslate"><span class="pre">3</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--keep</span></code></p></td>
+<td><p>Leave the test DaemonSet running after <code class="docutils literal notranslate"><span class="pre">--connectivity</span></code> completes. Useful for follow-up kubectl exec / iperf3 sessions.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--wait</span></code></p></td>
+<td><p>Block validate up to this duration waiting for in-progress manifests to reach a terminal state. <code class="docutils literal notranslate"><span class="pre">0</span></code> (default) returns immediately on the first snapshot. Re-polls the cluster every 10 s.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--report-path</span></code></p></td>
+<td><p>Write the HTML report to this path. Empty (default) writes to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code>. Pass <code class="docutils literal notranslate"><span class="pre">-</span></code> to skip the report entirely.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span></code></p></td>
+<td><p>Cluster config file. Lookup order: explicit path → <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> → <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/../cluster-config.yaml</span></code> → <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/cluster-config.yaml</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code></p></td>
+<td><p>Directory containing the manifests to verify (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code></p></td>
+<td><p>Path to kubeconfig (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="exit-codes">
 <h2>Exit Codes<a class="headerlink" href="#exit-codes" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><strong>0</strong> — every manifest is FOUND and the version check matched (or was skipped).</p></li>
-<li><p><strong>4</strong> — at least one manifest is MISSING or ERROR, or the deployed Helm release version doesn’t match the selected release.</p></li>
+<li><p><strong>0</strong> — every manifest is READY (or all-READY plus IN-PROGRESS without errors) and, when run, the connectivity matrix passed.</p></li>
+<li><p><strong>0 with warning</strong> — at least one manifest is IN-PROGRESS but none are ERROR / MISSING. Connectivity is skipped because pinging an unready cluster would produce noise. Re-run validate later, or use <code class="docutils literal notranslate"><span class="pre">--wait</span> <span class="pre">&lt;duration&gt;</span></code> to block.</p></li>
+<li><p><strong>4</strong> — at least one manifest is MISSING or ERROR, the deployed Helm release version doesn’t match the selected release, or the connectivity matrix reported failures.</p></li>
 <li><p>Other codes — see <a class="reference internal" href="../reference/cli.html"><span class="doc">CLI Reference</span></a> “Exit Codes”.</p></li>
 </ul>
 </section>
@@ -205,30 +299,44 @@
 <h2>Sample Output<a class="headerlink" href="#sample-output" title="Permalink to this headline"></a></h2>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Network Operator release
   selectedRelease: 26.4
-  expected version: v26.4.0-beta.6
-  deployed: network-operator (chart=26.4.0-beta.6 app=v26.4.0-beta.6 rev=3 status=deployed)
+  expected version: v26.4.0-beta.9
+  deployed: network-operator (chart=26.4.0-beta.9 app=v26.4.0-beta.9 rev=3 status=deployed)
   result: MATCH
 
 Manifests
-  [FOUND] NicClusterPolicy/nic-cluster-policy in (cluster-scoped)
-  [FOUND] NicNodePolicy/nicnodepolicy-h100 in (cluster-scoped)
-  [MISSING] SriovNetwork/sriov-network-rail-0 in default --- not found in cluster
+  [READY      ] NicClusterPolicy/nic-cluster-policy in (cluster-scoped) — ready — ready: 12/12; components: cni-plugins, ipoib, multus, …
+  [READY      ] NicNodePolicy/nicnodepolicy-h100 in (cluster-scoped) — ready
+  [READY      ] SriovNetworkNodePolicy/ethernet-sriov-rail-0 in network-operator — 2/2 nodes ready
 
-Preset deviations (cluster differs from matched preset)
-  group-0 (PowerEdge-XE9680/NVIDIA-H200) --- 2 deviation(s):
-    [pciAddress] expected=- got=0000:bd:00.0 --- discovered PCI address not present in preset
-    [deviceID] expected=a2dc@0000:5e:00.0 got=1023@0000:5e:00.0 --- device ID at PCI address differs from preset
+Summary: 12/12 ready, 0 in-progress, 0 error, 0 missing; version: match; preset deviations: 0 group(s)
 
-Summary: 12 manifests, 1 missing/error; version: match; preset deviations: 1 group(s)
+Connectivity matrix
+
+Rail sriov-network-rail-0:
+  src \ dst          c-220-166-240-241  c-220-166-240-242
+  c-220-166-240-241  —                  ✓ 0% 0.1ms
+  c-220-166-240-242  ✓ 0% 0.1ms         —
+
+Rail sriov-network-rail-1:
+  src \ dst          c-220-166-240-241  c-220-166-240-242
+  c-220-166-240-241  —                  ✓ 0% 0.1ms
+  c-220-166-240-242  ✓ 0% 0.3ms         —
+
+Cross-rail canary:
+  c-220-166-240-241 [sriov-network-rail-0]  → c-220-166-240-242 [sriov-network-rail-1]  ✓ 0% 0.1ms
+  c-220-166-240-242 [sriov-network-rail-0]  → c-220-166-240-241 [sriov-network-rail-1]  ✓ 0% 0.1ms
+
+✓ All 6 ping test(s) passed
+HTML report written to /home/user/deployment/verify-report.html
 </pre></div>
 </div>
-<p>For programmatic use, <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> emits a single object on stdout with <code class="docutils literal notranslate"><span class="pre">versionCheck</span></code>, <code class="docutils literal notranslate"><span class="pre">manifests</span></code>, <code class="docutils literal notranslate"><span class="pre">presetDeviations</span></code>, and <code class="docutils literal notranslate"><span class="pre">summary</span></code> fields. Logs go to stderr.</p>
+<p>For programmatic use, <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> emits a single object on stdout with <code class="docutils literal notranslate"><span class="pre">versionCheck</span></code>, <code class="docutils literal notranslate"><span class="pre">manifests</span></code>, <code class="docutils literal notranslate"><span class="pre">presetDeviations</span></code>, <code class="docutils literal notranslate"><span class="pre">summary</span></code>, <code class="docutils literal notranslate"><span class="pre">connectivity</span></code>, and <code class="docutils literal notranslate"><span class="pre">reportPath</span></code> fields. Logs go to stderr.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="deploy.html"><span class="doc">Deploy Workflow</span></a> — the writer side of the contract validate checks</p></li>
-<li><p><a class="reference internal" href="../troubleshooting.html"><span class="doc">Troubleshooting</span></a> — diagnose missing or failing manifests</p></li>
+<li><p><a class="reference internal" href="deploy.html"><span class="doc">Deploy Workflow</span></a> — the writer side of the contract validate checks (also supports <code class="docutils literal notranslate"><span class="pre">--verify</span></code> to chain the matrix straight after a successful deploy)</p></li>
+<li><p><a class="reference internal" href="../troubleshooting.html"><span class="doc">Troubleshooting</span></a> — diagnose missing or failing manifests and read the HTML report</p></li>
 <li><p><a class="reference internal" href="../reference/cli.html"><span class="doc">CLI Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> flag reference</p></li>
 </ul>
 </section>
@@ -243,7 +351,7 @@ Summary: 12 manifests, 1 missing/error; version: match; preset deviations: 1 gro
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 

@@ -84,10 +84,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration-details.html"> Configuration Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html"> [TECH PREVIEW] Spectrum-X Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="crds.html"> CRD API Reference</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
@@ -642,7 +642,7 @@ template:
 <h2>Configure custom interface names (NicInterfaceNameTemplate)<a class="headerlink" href="#configure-custom-interface-names-nicinterfacenametemplate" title="Permalink to this headline"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRD allows you to define custom naming patterns for RDMA and network device interfaces on NVIDIA NICs. This is useful in Spectrum-X multiplane and multi-rail deployments where predictable interface naming is required.</p>
 <p>The operator deploys udev rules to the host to rename network and RDMA interfaces according to the specified naming template. The template uses placeholders (<code class="docutils literal notranslate"><span class="pre">%nic_id%</span></code>, <code class="docutils literal notranslate"><span class="pre">%plane_id%</span></code>, <code class="docutils literal notranslate"><span class="pre">%rail_id%</span></code>) to construct device names based on the NIC topology.</p>
-<p>For full details on NicInterfaceNameTemplate configuration, including multiplane modes and example udev rules, refer to <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
+<p>For full details on NicInterfaceNameTemplate configuration, including multiplane modes and example udev rules, refer to <a class="reference internal" href="../spectrum-x/spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
 </section>
 </section>
 
@@ -655,7 +655,7 @@ template:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 

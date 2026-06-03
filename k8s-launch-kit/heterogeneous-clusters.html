@@ -63,6 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -443,18 +444,13 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 </section>
 <section id="nic-interface-name-templates">
 <span id="id1"></span><h2>NIC Interface Name Templates<a class="headerlink" href="#nic-interface-name-templates" title="Permalink to this headline"></a></h2>
-<p>When <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator.deployNicInterfaceNameTemplate</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the configuration, Launch Kit deploys <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRs to rename NIC interfaces to predictable, rail-based names using udev rules. This setting means “enable when needed” rather than “always enable” — templates are deployed only when:</p>
-<ul class="simple">
-<li><p>Combined groups have cross-rail PCI address conflicts (the same PCI address appears at different rail positions across source groups). PCI addresses alone cannot identify which interface corresponds to which rail in this case, so the template provides a consistent rail-based mapping.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code> profile is used and PFs have empty <code class="docutils literal notranslate"><span class="pre">networkInterface</span></code> fields (the shared device plugin needs interface names).</p></li>
-<li><p>Spectrum-X is enabled (always).</p></li>
-</ul>
+<p><code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> CRs rename NIC interfaces to predictable, rail-based names using udev rules. Launch Kit deploys them by default for <strong>every</strong> profile and every cluster shape — not only when PCI addresses are ambiguous. The benefit is uniform interface names across server SKUs (<code class="docutils literal notranslate"><span class="pre">rdma_r0</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r1</span></code>, …): pod manifests, NetworkAttachmentDefinitions, and operator scripts can reference one stable name per rail regardless of which vendor chassis the pod lands on, and reboots that re-enumerate PCI no longer break selectors.</p>
 <p>Naming conventions:</p>
 <ul class="simple">
 <li><p>Standard profiles: <code class="docutils literal notranslate"><span class="pre">rdma_r%rail%</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r%rail%</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">rdma_r0</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_r1</span></code>).</p></li>
 <li><p>Spectrum-X profiles: <code class="docutils literal notranslate"><span class="pre">roce_p%plane%_r%rail%</span></code>, <code class="docutils literal notranslate"><span class="pre">eth_p%plane%_r%rail%</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">roce_p0_r2</span></code>).</p></li>
 </ul>
-<p>When all machines in a group have identical PCI addresses per rail, name templates are not deployed and PCI addresses identify interfaces directly.</p>
+<p>To opt out and reference interfaces by their original PCI addresses instead, set <code class="docutils literal notranslate"><span class="pre">nicConfigurationOperator.deployNicInterfaceNameTemplate:</span> <span class="pre">false</span></code> in your <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> (or <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code>). This is rarely needed — the renamed names are a strict superset of what PCI selectors can express.</p>
 </section>
 <section id="north-south-vs-east-west-traffic">
 <h2>North-South vs East-West Traffic<a class="headerlink" href="#north-south-vs-east-west-traffic" title="Permalink to this headline"></a></h2>
@@ -529,7 +525,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 

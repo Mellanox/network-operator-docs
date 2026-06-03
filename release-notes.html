@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1"><a class="reference internal" href="k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ai-skills.html">AI Skills</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customizations/customization.html">Customization Options and CRDs</a></li>
@@ -138,7 +139,18 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>26.1.0</p></td>
+<tr class="row-even"><td><p>26.4.0</p></td>
+<td><div class="line-block">
+<div class="line">- Added support for NVIDIA Spectrum-X Reference Architecture 2.2 (RA2.2) with the new <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> v1alpha2 CRD in NVIDIA Spectrum-X Operator</div>
+<div class="line">- Added support for <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> CRD, enabling per-node-group DOCA-OFED driver management in NVIDIA Network Operator</div>
+<div class="line">- [TECH PREVIEW] Added Dynamic Resource Allocation (DRA) support for SR-IOV in NVIDIA Network Operator</div>
+<div class="line">- Added global configuration support for <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code></div>
+<div class="line">- Added preflight checks for the DOCA-OFED driver container (kernel module dependency validation prior to driver load)</div>
+<div class="line">- Added interactive HTML report output for the SOS report collection script</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>26.1.0</p></td>
 <td><div class="line-block">
 <div class="line">Added support for ConnectX-9 SuperNIC</div>
 <div class="line">- Added support for Spectrum-X Ethernet Networking Platform with Kubernetes [GA]</div>
@@ -153,7 +165,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>25.10.0</p></td>
+<tr class="row-even"><td><p>25.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift v4.20</div>
 <div class="line">- Added support for RHEL v10.0</div>
@@ -168,7 +180,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>25.7.0</p></td>
+<tr class="row-odd"><td><p>25.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift v4.19</div>
 <div class="line">- Added support for RHEL v9.6</div>
@@ -178,7 +190,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>25.4.0</p></td>
+<tr class="row-even"><td><p>25.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for NVIDIA NIC Configuration Operator deployment through NicClusterPolicy CR, since using Helm chart will be deprecated in future releases</div>
 <div class="line">- Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade</div>
@@ -188,7 +200,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>25.1.0</p></td>
+<tr class="row-odd"><td><p>25.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform v4.17</div>
 <div class="line">- Added support for SUSE Linux Enterprise Server 15 SP6 with Upstream K8s and Rancher</div>
@@ -198,13 +210,13 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>24.10.1</p></td>
+<tr class="row-even"><td><p>24.10.1</p></td>
 <td><div class="line-block">
 <div class="line">- CVE fix (CVE-2024-45338)</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>24.10.0</p></td>
+<tr class="row-odd"><td><p>24.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for NVIDIA NIC Configuration Operator deployment</div>
 <div class="line">- Added support for Support Single-Node OpenShift (SNO)</div>
@@ -212,7 +224,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>24.7.0</p></td>
+<tr class="row-even"><td><p>24.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform v4.16</div>
 <div class="line">- Added support for NVIDIA Grace based ARM platforms with OpenShift Container Platform</div>
@@ -221,13 +233,13 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>24.4.1</p></td>
+<tr class="row-odd"><td><p>24.4.1</p></td>
 <td><div class="line-block">
 <div class="line">- Fixed NVIDIA Network Operator images in OpenShift Container Platform bundle</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>24.4.0</p></td>
+<tr class="row-even"><td><p>24.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform v4.15</div>
 <div class="line">- Added support for Ubuntu 24.04</div>
@@ -242,7 +254,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>24.1.0</p></td>
+<tr class="row-odd"><td><p>24.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview</div>
 <div class="line">- Added support for CNI bin directory configuration</div>
@@ -253,7 +265,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.10.0</p></td>
+<tr class="row-even"><td><p>23.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform v4.14</div>
 <div class="line">- Added support for RHEL v8.8</div>
@@ -267,7 +279,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>23.7.0</p></td>
+<tr class="row-odd"><td><p>23.7.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform 4.13</div>
 <div class="line">- Added support for RHEL 9.1 and 9.2 with CRI-O container runtime (Beta)</div>
@@ -275,14 +287,14 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.5.0</p></td>
+<tr class="row-even"><td><p>23.5.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for NVIDIA IPAM Plugin deployment</div>
 <div class="line">- Added support for CRDs upgrade during NVIDIA Network Operator installation or upgrade</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>23.4.0</p></td>
+<tr class="row-odd"><td><p>23.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for Kubernetes &gt;= 1.21 and &lt;=1.27</div>
 <div class="line">- Added support for NicClusterPolicy update and removal</div>
@@ -290,7 +302,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.1.0</p></td>
+<tr class="row-even"><td><p>23.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added a calendar versioning schema for Network Operator releases to better align with the NVIDIA GPU Operator</div>
 <div class="line">- Added support for the following operating systems and Kubernetes environments:</div>
@@ -303,7 +315,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.4.0</p></td>
+<tr class="row-odd"><td><p>1.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for Kubernetes &gt;= 1.21 and &lt;=1.25</div>
 <div class="line">- Added support for Ubuntu 22.04</div>
@@ -312,7 +324,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.3.0</p></td>
+<tr class="row-even"><td><p>1.3.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for Kubernetes &gt;= 1.17 and &lt;=1.24</div>
 <div class="line">- Added the option to use a single namespace to deploy Network Operator components</div>
@@ -322,7 +334,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.2.0</p></td>
+<tr class="row-odd"><td><p>1.2.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform 4.10</div>
 <div class="line">- Added extended selectors support for SR-IOV Device Plugin resources with Helm chart</div>
@@ -331,7 +343,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.1.0</p></td>
+<tr class="row-even"><td><p>1.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform 4.9</div>
 <div class="line">- Added support for Network Operator upgrade from v1.0.0</div>
@@ -341,7 +353,7 @@
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.0.0</p></td>
+<tr class="row-odd"><td><p>1.0.0</p></td>
 <td><div class="line-block">
 <div class="line">- Added Node Feature Discovery that can be used to mark nodes with NVIDIA SR-IOV NICs</div>
 <div class="line">- Added support for different networking models:</div>
@@ -636,7 +648,7 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 

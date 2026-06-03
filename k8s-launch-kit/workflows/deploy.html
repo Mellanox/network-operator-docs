@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
@@ -71,8 +72,10 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Deploy</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#deploy-to-cluster">Deploy to Cluster</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#deployment-ordering">Deployment Ordering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deploy-wide-timeout">Deploy-wide Timeout</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dry-run-mode">Dry-Run Mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#verifying-the-deployment">Verifying the Deployment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#end-to-end-verification-verify">End-to-End Verification (–verify)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#manual-verification">Manual Verification</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -134,9 +137,11 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#deploy-to-cluster" id="id1">Deploy to Cluster</a></p></li>
 <li><p><a class="reference internal" href="#deployment-ordering" id="id2">Deployment Ordering</a></p></li>
-<li><p><a class="reference internal" href="#dry-run-mode" id="id3">Dry-Run Mode</a></p></li>
-<li><p><a class="reference internal" href="#verifying-the-deployment" id="id4">Verifying the Deployment</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id5">See Also</a></p></li>
+<li><p><a class="reference internal" href="#deploy-wide-timeout" id="id3">Deploy-wide Timeout</a></p></li>
+<li><p><a class="reference internal" href="#dry-run-mode" id="id4">Dry-Run Mode</a></p></li>
+<li><p><a class="reference internal" href="#end-to-end-verification-verify" id="id5">End-to-End Verification (–verify)</a></p></li>
+<li><p><a class="reference internal" href="#manual-verification" id="id6">Manual Verification</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id7">See Also</a></p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -157,12 +162,24 @@
 </section>
 <section id="deployment-ordering">
 <h2>Deployment Ordering<a class="headerlink" href="#deployment-ordering" title="Permalink to this headline"></a></h2>
-<p>Launch Kit applies manifests in the following order to ensure dependencies are satisfied:</p>
+<p>Launch Kit applies manifests in four phases. The first two block on reconciliation because everything else depends on them; the last two batch the remaining manifests so controllers reconcile concurrently:</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> (cluster-wide components: Multus, CNI, NV-IPAM, operators). Wait for readiness.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> per group (OFED driver, device plugins). Wait for readiness.</p></li>
-<li><p>Remaining manifests — network resources (<code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">HostDeviceNetwork</span></code>, etc.), IP pools, and example workloads.</p></li>
+<li><p><strong>NicClusterPolicy</strong> — applied first, then awaited until the controller reports <code class="docutils literal notranslate"><span class="pre">READY</span></code>. Per-component <code class="docutils literal notranslate"><span class="pre">appliedStates[]</span></code> are surfaced in the progress output (“ready: 7/12; pending: state-OFED, state-multus-cni, …”) so an operator sees exactly which component is the laggard.</p></li>
+<li><p><strong>NicNodePolicy</strong> — applied per group, awaited per policy (OFED driver, device plugins land here).</p></li>
+<li><p><strong>Remaining manifests</strong> — every other CR (<code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">HostDeviceNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>, <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>, …) is applied in a single pass without per-manifest waits, so controllers reconcile concurrently.</p></li>
+<li><p><strong>Verify</strong> — each manifest from phase 3 is polled until it reaches a terminal state. The four-state classification (READY / IN-PROGRESS / ERROR / MISSING) and per-Kind cross-checks (e.g., the SR-IOV silent-failure case where <code class="docutils literal notranslate"><span class="pre">syncStatus=Succeeded</span></code> but <code class="docutils literal notranslate"><span class="pre">pfNames</span></code> matched zero interfaces) are shared with <a class="reference internal" href="validate.html"><span class="doc">l8k validate</span></a>.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Example workload manifests (filenames matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code>) are <strong>not</strong> applied by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>. They are fixtures consumed by the connectivity matrix in <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--connectivity</span></code> (or <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code>, see below) and are deployed only as part of that ping-matrix phase.</p>
+</div>
+</section>
+<section id="deploy-wide-timeout">
+<h2>Deploy-wide Timeout<a class="headerlink" href="#deploy-wide-timeout" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> has no per-manifest deadline. Pass <code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span> <span class="pre">&lt;duration&gt;</span></code> to bound the whole apply + reconciliation phase end-to-end (e.g., <code class="docutils literal notranslate"><span class="pre">45m</span></code>, <code class="docutils literal notranslate"><span class="pre">2h</span></code>). Without the flag, deploy polls until every manifest reaches a terminal state or the user cancels — the right default for SR-IOV configuration on large clusters where a single <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> reconciliation can outlast any small per-manifest budget.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --deploy-timeout 90m
+</pre></div>
+</div>
 </section>
 <section id="dry-run-mode">
 <h2>Dry-Run Mode<a class="headerlink" href="#dry-run-mode" title="Permalink to this headline"></a></h2>
@@ -172,9 +189,17 @@
 </div>
 <p>Dry-run mode is recommended before any first deployment and before production changes.</p>
 </section>
-<section id="verifying-the-deployment">
-<h2>Verifying the Deployment<a class="headerlink" href="#verifying-the-deployment" title="Permalink to this headline"></a></h2>
-<p>After deploying, verify that operator pods, OFED driver pods, and example workloads are running:</p>
+<section id="end-to-end-verification-verify">
+<h2>End-to-End Verification (–verify)<a class="headerlink" href="#end-to-end-verification-verify" title="Permalink to this headline"></a></h2>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">--verify</span></code> to chain a full data-plane verification right after a successful apply: <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code> applies the manifests, waits for every controller to reconcile, then runs the connectivity ping matrix from <a class="reference internal" href="validate.html"><span class="doc">l8k validate</span></a> (apply the example DaemonSet, wait for every pod to be <code class="docutils literal notranslate"><span class="pre">Ready</span></code>, ping every rail across every pod pair, clean up).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --verify
+</pre></div>
+</div>
+<p>The matrix’s exit code propagates: a failed ping causes <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code> to exit non-zero even though the manifests applied successfully. Combine with <code class="docutils literal notranslate"><span class="pre">--keep</span></code> (passed to validate) when debugging.</p>
+</section>
+<section id="manual-verification">
+<h2>Manual Verification<a class="headerlink" href="#manual-verification" title="Permalink to this headline"></a></h2>
+<p>You can also inspect the deployment manually:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
 kubectl get nicclusterpolicy
 kubectl get nicnodepolicy
@@ -203,7 +228,7 @@ kubectl get nicnodepolicy
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 

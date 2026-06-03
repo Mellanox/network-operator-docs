@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation.html">Installation</a></li>
@@ -359,7 +360,7 @@
 </section>
 <section id="l8k-deploy">
 <h2>l8k deploy<a class="headerlink" href="#l8k-deploy" title="Permalink to this headline"></a></h2>
-<p>Applies previously generated manifests to the cluster in dependency order (NicClusterPolicy first, then per-group NicNodePolicy, then networks and workloads).</p>
+<p>Applies previously generated manifests to the cluster in four phases: NicClusterPolicy first (await ready), per-group NicNodePolicy (await each), all remaining CRs in one batch (controllers reconcile concurrently), then verify every manifest reached a terminal state. Example workload manifests (<code class="docutils literal notranslate"><span class="pre">*example*</span></code>) are skipped here — they’re applied by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--connectivity</span></code> / <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code> as part of the data-plane phase. See <a class="reference internal" href="../workflows/deploy.html"><span class="doc">Deploy Workflow</span></a> for the full deployment-ordering description.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 35%" />
@@ -377,6 +378,12 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
 <td><p>Directory containing the manifests to apply (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span> <span class="pre">&lt;duration&gt;</span></code></p></td>
+<td><p>End-to-end wall-clock budget for the apply + reconciliation phase (e.g., <code class="docutils literal notranslate"><span class="pre">45m</span></code>, <code class="docutils literal notranslate"><span class="pre">2h</span></code>). <code class="docutils literal notranslate"><span class="pre">0</span></code> (default) means no deadline; polls until every manifest reaches a terminal state. Useful for matching a maintenance window when SR-IOV reconciliation on a large cluster can take an hour or more.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--verify</span></code></p></td>
+<td><p>After a successful apply, chain the connectivity matrix (same flow as <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--connectivity</span></code>): apply the example DaemonSet, wait for it to roll out, run a ping matrix across every rail and pod pair, then clean up.</p></td>
+</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--dry-run</span></code></p></td>
 <td><p>Preview what would be applied without changing the cluster.</p></td>
 </tr>
@@ -385,7 +392,7 @@
 </section>
 <section id="l8k-validate">
 <h2>l8k validate<a class="headerlink" href="#l8k-validate" title="Permalink to this headline"></a></h2>
-<p>Verifies a deployment matches the selected Network Operator release: compares the deployed Helm chart’s appVersion with the version expected by <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, then confirms every YAML manifest under <code class="docutils literal notranslate"><span class="pre">--deployment-files</span></code> is present in the cluster (skipping example workloads). Exits 4 on any missing manifest or version mismatch. See <a class="reference internal" href="../workflows/validate.html"><span class="doc">Validate Workflow</span></a> for full details.</p>
+<p>Verifies a deployment by running four checks back-to-back: Network Operator Helm release version (compared against <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>); per-component version cross-check that walks the live <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> + <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> and confirms each section’s <code class="docutils literal notranslate"><span class="pre">.version</span></code> field matches the catalog (catches out-of-band edits and partial upgrades the Helm check misses); per-manifest state classification (READY / IN-PROGRESS / ERROR / MISSING via the per-Kind validator registry); and a data-plane connectivity matrix (apply the example DaemonSet, ping every rail across every pod pair). Writes a self-contained HTML report to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code> by default. Exits 4 on any missing/error manifest, Helm-version mismatch, component-version mismatch, or connectivity-matrix failure. See <a class="reference internal" href="../workflows/validate.html"><span class="doc">Validate Workflow</span></a> for full details.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 35%" />
@@ -401,10 +408,28 @@
 <td><p>Path to kubeconfig (falls back to <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>).</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--user-config</span> <span class="pre">&lt;string&gt;</span></code></p></td>
-<td><p>Cluster config file (default: <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code>). Read for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and operator namespace.</p></td>
+<td><p>Cluster config file. Lookup order: explicit path → <code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code> → <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/../cluster-config.yaml</span></code> → <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/cluster-config.yaml</span></code>. Read for <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> and operator namespace.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-files</span> <span class="pre">&lt;string&gt;</span></code></p></td>
 <td><p>Directory containing the manifests to verify (default: <code class="docutils literal notranslate"><span class="pre">./deployment</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--connectivity</span></code></p></td>
+<td><p>Run the data-plane ping matrix. Default <code class="docutils literal notranslate"><span class="pre">true</span></code>. Pass <code class="docutils literal notranslate"><span class="pre">--connectivity=false</span></code> to limit validate to the static manifest + Helm-release-version checks.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--connectivity-timeout</span> <span class="pre">&lt;duration&gt;</span></code></p></td>
+<td><p>Wall-clock budget for the connectivity phase (default: <code class="docutils literal notranslate"><span class="pre">5m</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--ping-count</span> <span class="pre">&lt;int&gt;</span></code></p></td>
+<td><p>Number of ICMP echoes per <code class="docutils literal notranslate"><span class="pre">src</span> <span class="pre">→</span> <span class="pre">dst</span></code> pair (<code class="docutils literal notranslate"><span class="pre">ping</span> <span class="pre">-c</span> <span class="pre">N</span></code>). Default <code class="docutils literal notranslate"><span class="pre">3</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--keep</span></code></p></td>
+<td><p>Leave the test DaemonSet running after <code class="docutils literal notranslate"><span class="pre">--connectivity</span></code> completes (useful for follow-up debugging).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--wait</span> <span class="pre">&lt;duration&gt;</span></code></p></td>
+<td><p>Block validate up to this duration waiting for in-progress manifests to reach a terminal state. <code class="docutils literal notranslate"><span class="pre">0</span></code> (default) returns immediately on the first snapshot. Re-polls the cluster every 10 s.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--report-path</span> <span class="pre">&lt;string&gt;</span></code></p></td>
+<td><p>Write the HTML report to this path. Empty (default) writes to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code>. Pass <code class="docutils literal notranslate"><span class="pre">-</span></code> to skip the report file entirely.</p></td>
 </tr>
 </tbody>
 </table>
@@ -531,7 +556,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 02, 2026.
+      <span class="lastupdated">Last updated on Jun 03, 2026.
       </span></p>
   </div>
 
