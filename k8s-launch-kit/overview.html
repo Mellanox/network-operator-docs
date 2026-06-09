@@ -261,12 +261,12 @@
 <h2>Spectrum-X Multiplane Modes<a class="headerlink" href="#spectrum-x-multiplane-modes" title="Permalink to this headline"></a></h2>
 <p>Spectrum-X profiles add a <strong>multiplane mode</strong> dimension on top of profile selection:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — hardware plane load balancing (large 2- or 3-tier switch topologies)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — hardware plane load balancing (large 2- or 3-tier switch topologies; tech preview, ConnectX-8 SuperNIC only)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code> — software plane load balancing (smaller-scale Spectrum-X clusters)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">uniplane</span></code> — single unified plane (forces <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code> — no plane separation (BlueField-3 SuperNIC; simple topologies)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">none</span></code> — no plane separation (ConnectX-7 NIC, BlueField-3 SuperNIC; simple topologies)</p></li>
 </ul>
-<p>NIC type constrains available modes (ConnectX-8 supports <code class="docutils literal notranslate"><span class="pre">swplb</span></code>/<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>/<code class="docutils literal notranslate"><span class="pre">uniplane</span></code>; BF3 SuperNIC supports <code class="docutils literal notranslate"><span class="pre">none</span></code> only). See <a class="reference internal" href="profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p>
+<p>NIC type constrains available modes: ConnectX-7 NIC and BlueField-3 SuperNIC support <code class="docutils literal notranslate"><span class="pre">none</span></code> only; ConnectX-8 SuperNIC supports <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (tech preview), and <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>. See <a class="reference internal" href="profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p>
 </section>
 <section id="cluster-topology-presets">
 <h2>Cluster Topology Presets<a class="headerlink" href="#cluster-topology-presets" title="Permalink to this headline"></a></h2>
@@ -347,7 +347,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 03, 2026.
+      <span class="lastupdated">Last updated on Jun 09, 2026.
       </span></p>
   </div>
 

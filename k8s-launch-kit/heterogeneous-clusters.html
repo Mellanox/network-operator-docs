@@ -166,7 +166,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Use this when:</strong> your cluster contains multiple node types — e.g., different GPU SKUs (H100 + H200), different NIC SKUs (ConnectX-7 + BF3 SuperNIC), or different OFED requirements.</p>
+<p><strong>Use this when:</strong> your cluster contains multiple node types — e.g., different GPU SKUs (H100 + H200), different NIC SKUs (ConnectX-7 NIC + BlueField-3 SuperNIC), or different OFED requirements.</p>
 </div>
 <section id="supported-configurations">
 <h2>Supported Configurations<a class="headerlink" href="#supported-configurations" title="Permalink to this headline"></a></h2>
@@ -466,8 +466,8 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
     subgraph Node[Compute node]
         direction TB
-        BF3[BF3 DPU&lt;br/&gt;north-south]
-        SUPER[ConnectX-7 / BF3 SuperNIC&lt;br/&gt;east-west]
+        BF3[BlueField-3 DPU&lt;br/&gt;north-south]
+        SUPER[ConnectX-7 NIC / BlueField-3 SuperNIC&lt;br/&gt;east-west]
         GPU[GPUs]
         GPU --- SUPER
     end
@@ -488,8 +488,8 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
     subgraph Node[Compute node]
         direction TB
-        BF3[BF3 DPU&lt;br/&gt;north-south]
-        SUPER[ConnectX-7 / BF3 SuperNIC&lt;br/&gt;east-west]
+        BF3[BlueField-3 DPU&lt;br/&gt;north-south]
+        SUPER[ConnectX-7 NIC / BlueField-3 SuperNIC&lt;br/&gt;east-west]
         GPU[GPUs]
         GPU --- SUPER
     end
@@ -525,7 +525,7 @@ l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 03, 2026.
+      <span class="lastupdated">Last updated on Jun 09, 2026.
       </span></p>
   </div>
 

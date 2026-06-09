@@ -178,7 +178,7 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code> flag selects how planes are mapped onto NICs. <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> takes the SPC-X RA version as its value (<code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>); <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code>, <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code>, and <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> are all required alongside it. <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> implies ethernet fabric, sriov deployment, and multirail.</p>
 <section id="hwplb">
 <h3>HWPLB<a class="headerlink" href="#hwplb" title="Permalink to this headline"></a></h3>
-<p>Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies:</p>
+<p>Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. <strong>Tech preview</strong>, supported on ConnectX-8 SuperNIC with RA2.2 only — not part of the validated Spectrum-X Reference Architecture:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
     --multiplane-mode hwplb --number-of-planes <span class="m">4</span>
@@ -196,7 +196,7 @@
 </section>
 <section id="uniplane">
 <h3>Uniplane<a class="headerlink" href="#uniplane" title="Permalink to this headline"></a></h3>
-<p>Unified plane mode with no plane separation. Use with <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
+<p>Single-plane physical topology that runs the Spectrum-X multiplane software stack and IP schema — multiple PFs all connect to the <strong>same</strong> ToR/plane (rather than separate planes as in <code class="docutils literal notranslate"><span class="pre">swplb</span></code> / <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>). A specialized configuration for compatibility or regression scenarios; for production, use <code class="docutils literal notranslate"><span class="pre">none</span></code> for Single-Plane or <code class="docutils literal notranslate"><span class="pre">swplb</span></code> / <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> for Dual-Plane / Quad-Plane. Supported on ConnectX-8 SuperNIC only. Use with <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
     --multiplane-mode uniplane --number-of-planes <span class="m">1</span>
@@ -205,7 +205,7 @@
 </section>
 <section id="none-single-plane">
 <h3>None (Single Plane)<a class="headerlink" href="#none-single-plane" title="Permalink to this headline"></a></h3>
-<p>No multiplane separation. Use with BlueField-3 SuperNIC or simple topologies. <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
+<p>No multiplane separation. Use with ConnectX-7 NIC, BlueField-3 SuperNIC, or simple topologies. <code class="docutils literal notranslate"><span class="pre">none</span></code> requires <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">1</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.2 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
     --multiplane-mode none --number-of-planes <span class="m">1</span>
@@ -267,13 +267,23 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>ConnectX-8</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></td>
+<tr class="row-even"><td><p>ConnectX-7 NIC</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1021</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> only</p></td>
 </tr>
 <tr class="row-odd"><td><p>BlueField-3 SuperNIC</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">a2dc</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> only</p></td>
+</tr>
+<tr class="row-even"><td><p>ConnectX-8 SuperNIC</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">none</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> <em>(tech preview)</em></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">uniplane</span></code></div>
+</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -308,7 +318,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 03, 2026.
+      <span class="lastupdated">Last updated on Jun 09, 2026.
       </span></p>
   </div>
 
