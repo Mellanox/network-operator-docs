@@ -141,18 +141,27 @@
 <tbody>
 <tr class="row-even"><td><p>26.4.0</p></td>
 <td><div class="line-block">
-<div class="line">- Added support for NVIDIA Spectrum-X Reference Architecture 2.2 (RA2.2) with the new <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> v1alpha2 CRD in NVIDIA Spectrum-X Operator</div>
-<div class="line">- Added support for <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> CRD, enabling per-node-group DOCA-OFED driver management in NVIDIA Network Operator</div>
-<div class="line">- [TECH PREVIEW] Added Dynamic Resource Allocation (DRA) support for SR-IOV in NVIDIA Network Operator</div>
+<div class="line">- Added support for Kubernetes 1.35</div>
+<div class="line">- Added support for Red Hat OpenShift 4.21</div>
+<div class="line">- Added support for NVIDIA GB300 NVL72 (DGX/HGX) systems</div>
+<div class="line">- Added support for NVIDIA Spectrum-X Reference Architecture 2.2 (RA 2.2) in NVIDIA Spectrum-X Operator, with unified configuration and the new <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> v1alpha2 CRD</div>
+<div class="line">- Added IPv6 support for Spectrum-X on Kubernetes</div>
+<div class="line">- Added consistent naming of RDMA and network devices in Pods</div>
+<div class="line">- Added RDMA CNI host-to-Pod QoS propagation</div>
+<div class="line">- Enhanced NVIDIA Kubernetes Launch Kit with simplified Spectrum-X configuration generation, new use-cases, and AI-assisted troubleshooting</div>
+<div class="line">- Added KubeVirt support on vanilla Kubernetes, enabling Kubernetes-native VM deployments with accelerated East-West networking</div>
+<div class="line">- Added heterogeneous cluster support through multiple NIC policies, with the new <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> CRD enabling per-node-group DOCA-OFED driver management in NVIDIA Network Operator</div>
 <div class="line">- Added global configuration support for <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code></div>
 <div class="line">- Added preflight checks for the DOCA-OFED driver container (kernel module dependency validation prior to driver load)</div>
 <div class="line">- Added interactive HTML report output for the SOS report collection script</div>
+<div class="line">- [TECH PREVIEW] Added Dynamic Resource Allocation (DRA) support for SR-IOV in NVIDIA Network Operator</div>
+<div class="line">- [TECH PREVIEW] Added support for multiple workloads (Pods) per node with topology awareness using DRA on Spectrum-X</div>
 </div>
 </td>
 </tr>
 <tr class="row-odd"><td><p>26.1.0</p></td>
 <td><div class="line-block">
-<div class="line">Added support for ConnectX-9 SuperNIC</div>
+<div class="line">- Added support for ConnectX-9 SuperNIC</div>
 <div class="line">- Added support for Spectrum-X Ethernet Networking Platform with Kubernetes [GA]</div>
 <div class="line">- Added support for Spectrum-X Single-plane and SW Multi-plane topologies in Spectrum-X Operator and NIC Configuration Operator</div>
 <div class="line">- Added Spectrum-X support for NVIDIA Kubernetes Launch Kit</div>
@@ -196,7 +205,7 @@
 <div class="line">- Integrate NVIDIA Network Operator with NVIDIA Maintenance Operator for DOCA-OFED Driver container upgrade</div>
 <div class="line">- Added support for OpenShift 4.18</div>
 <div class="line">- Added support for ConnectX-8 SuperNIC</div>
-<div class="line">- Added support for NVIDIA Spectrum-X Operator deployment - Tech Preview</div>
+<div class="line">- [TECH PREVIEW] Added support for NVIDIA Spectrum-X Operator deployment</div>
 </div>
 </td>
 </tr>
@@ -229,7 +238,7 @@
 <div class="line">- Added support for OpenShift Container Platform v4.16</div>
 <div class="line">- Added support for NVIDIA Grace based ARM platforms with OpenShift Container Platform</div>
 <div class="line">- Added support for RHEL v8.9, v8.10, v9.3 and v9.4 with Upstream K8s and Containerd runtime</div>
-<div class="line">- Added support for Switchdev mode SR-IOV mode with OVS CNI with RHEL</div>
+<div class="line">- Added support for Switchdev SR-IOV mode with OVS CNI on RHEL</div>
 </div>
 </td>
 </tr>
@@ -243,10 +252,10 @@
 <td><div class="line-block">
 <div class="line">- Added support for OpenShift Container Platform v4.15</div>
 <div class="line">- Added support for Ubuntu 24.04</div>
-<div class="line">- Added support for NVIDIA Grace based ARM platforms with Ubuntu 22.04 and Upstream K8s as a Tech Preview feature</div>
+<div class="line">- [TECH PREVIEW] Added support for NVIDIA Grace based ARM platforms with Ubuntu 22.04 and Upstream K8s</div>
 <div class="line">- Added support for NVIDIA IGX Orin based ARM platforms with Ubuntu 22.04 and Upstream K8s as a GA feature</div>
 <div class="line">- Added support for Precompiled DOCA-OFED Driver containers for Ubuntu 22.04</div>
-<div class="line">- Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI as a Tech Preview feature</div>
+<div class="line">- [TECH PREVIEW] Added support for Switchdev SR-IOV mode with SR-IOV Network Operator and OVS CNI</div>
 <div class="line">- Added support for DOCA Telemetry Service (DTS) integration to expose network telemetry and NIC metrics in K8s</div>
 <div class="line">- Added support for network namespace isolation of RDMA devices with RDMA CNI</div>
 <div class="line">- Added support for RHEL and OpenShift deployments with Real-time kernels</div>
@@ -256,7 +265,7 @@
 </tr>
 <tr class="row-odd"><td><p>24.1.0</p></td>
 <td><div class="line-block">
-<div class="line">- Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin) - Tech Preview</div>
+<div class="line">- [TECH PREVIEW] Added support for Ubuntu 22.04 with Upstream K8s on ARM platforms (NVIDIA IGX Orin)</div>
 <div class="line">- Added support for CNI bin directory configuration</div>
 <div class="line">- Added support for OpenShift MOFED/DOCA-OFED driver container build and deployment via driver toolkit (DTK)</div>
 <div class="line">- Added support for Ubuntu 22.04 deployments with Real-time kernels</div>
@@ -476,26 +485,32 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>1.4.0</p></td>
+<tr class="row-even"><td><p>26.4.0</p></td>
+<td><div class="line-block">
+<div class="line">- Fixed stale VF representor deletion from the OVS bridge in OVS-CNI after a Kubernetes node reboot</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>1.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- Fixed a cluster scale-up issue</div>
 <div class="line">- Fixed an issue with IPoIB CNI deployment in OCP</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.3.0</p></td>
+<tr class="row-even"><td><p>1.3.0</p></td>
 <td><div class="line-block">
 <div class="line">- N/A</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.2.0</p></td>
+<tr class="row-odd"><td><p>1.2.0</p></td>
 <td><div class="line-block">
 <div class="line">- N/A</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.1.0</p></td>
+<tr class="row-even"><td><p>1.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Fixed the Whereabouts IPAM plugin to work with Kubernetes v1.22</div>
 <div class="line">- Fixed imagePullSecrets for Network Operator</div>
@@ -522,7 +537,6 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 <tbody>
 <tr class="row-even"><td><p>26.1.0</p></td>
 <td><div class="line-block">
-<div class="line">- There is a known limitation in OVS-CNI after applying SR-IOV Operator OVSNetwork and SriovNetworkNodePolicy with OVS bridge and switchdev mode configuration. The limitation is that after k8s node is rebooted, the VF representor that was attached to the OVS bridge will not be deleted. The workaround is to (manually/CD) delete all stale VF representors after the node is rebooted</div>
 <div class="line">- Multus CNI does not use a service account token after the Kubernetes API rotates it. The recommended workaround is to edit the Multus CNI DaemonSet manually to remove <code class="docutils literal notranslate"><span class="pre">--skip-config-watch</span></code> CLI argument.</div>
 <div class="line">- The DOCA driver container is validated with host kernel versions up to 6.8.0-100. Compatibility with newer kernel versions is not guaranteed and may require a newer DOCA driver container release</div>
 </div>
@@ -544,9 +558,9 @@ It is advised to keep deployCR=false in your helm values and create/update NicCl
 </tr>
 <tr class="row-odd"><td><p>25.1.0</p></td>
 <td><div class="line-block">
-<div class="line">- In Infiniband mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF)
+<div class="line">- In InfiniBand mode, due to a kernel bug, there is a limitation on the number of Virtual Functions (VFs) on a single Physical Function (PF)
 The recommendation is to create up to 16 VFs per PF. Larger number will cause “ip link show dev &lt;device_name&gt;” to fail with a “Message too long” error</div>
-<div class="line">- In infiniband mode, in case of existing Intel NICs, loaded <cite>irdma</cite> module should be unloaded before deploying DOCA-OFED driver</div>
+<div class="line">- In InfiniBand mode, in case of existing Intel NICs, loaded <cite>irdma</cite> module should be unloaded before deploying DOCA-OFED driver</div>
 </div>
 </td>
 </tr>
@@ -555,11 +569,6 @@ The recommendation is to create up to 16 VFs per PF. Larger number will cause �
 <div class="line">- There is a known limitation when using NVIDIA NICs as <strong>primary network interfaces</strong>. If the NVIDIA DOCA-OFED Driver container is configured to be deployed, we cannot guarantee that the inbox or pre-installed NVIDIA NIC driver will unload successfully if it remains in use
 If the current driver does unload, it removes all NVIDIA NIC networking interfaces and netdevices. DOCA-OFED driver container then loads new drivers but only restores <strong>basic configuration</strong> (for example, IP addresses) on the primary network interface’s Physical Function (PF) and its Virtual Functions (VFs). More advanced settings (such as VLANs, bonding, and OVS) will <strong>not</strong> be restored automatically
 This limitation applies to <strong>all</strong> versions of the NVIDIA Network Operator</div>
-</div>
-</td>
-</tr>
-<tr class="row-odd"><td><p>24.10.0</p></td>
-<td><div class="line-block">
 <div class="line">- There is a known limitation when using <cite>docker</cite> on RHEL 8 and 9. If you encounter this issue, it is recommended to use “the preferred, maintained, and supported container runtime of choice for Red Hat Enterprise Linux”</div>
 <div class="line-block">
 <div class="line">For more details, refer to the article <a class="reference external" href="https://access.redhat.com/solutions/3696691">Is the docker package available for Red Hat Enterprise Linux 8 and 9?</a> in the Red Hat Knowledge Base</div>
@@ -569,9 +578,9 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>24.7.0</p></td>
+<tr class="row-odd"><td><p>24.7.0</p></td>
 <td><div class="line-block">
-<div class="line">- In case ENABLE_NFSRDMA is enabled for DOCA-OFED Driver container and NVMe modules are loaded in the host system, NVIDA DOCA-OFED Driver Container will fail to load.</div>
+<div class="line">- In case ENABLE_NFSRDMA is enabled for DOCA-OFED Driver container and NVMe modules are loaded in the host system, NVIDIA DOCA-OFED Driver Container will fail to load.</div>
 <div class="line-block">
 <div class="line">User should blacklist NVMe modules to prevent them from loading on system boot. If this is not possible (e.g when the system uses NVMe SSD drives) then ENABLE_NFSRDMA must be set to <cite>false</cite>.</div>
 <div class="line">Using features such as GPU Direct Storage is not supported in such case</div>
@@ -579,45 +588,45 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.10.0</p></td>
+<tr class="row-even"><td><p>23.10.0</p></td>
 <td><div class="line-block">
 <div class="line">- IPoIB sub-interface creation does not work on RHEL 8.8 and RHEL 9.2 due to the kernel limitations in these distributions. This means that IPoIBNetwork cannot be used with these operating systems</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>23.4.0</p></td>
+<tr class="row-odd"><td><p>23.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- In case that the UNLOAD_STORAGE_MODULES parameter is enabled for MOFED container deployment, it is required to make sure that the relevant storage modules are not in use in the OS</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>23.1.0</p></td>
+<tr class="row-even"><td><p>23.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- Only a single PKey can be configured per IPoIB workload pod</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.4.0</p></td>
+<tr class="row-odd"><td><p>1.4.0</p></td>
 <td><div class="line-block">
 <div class="line">- The operator upgrade procedure does not reflect configuration changes. The RDMA Shared Device Plugin or SR-IOV Device Plugin should be restarted manually in case of configuration changes</div>
 <div class="line">- The RDMA subsystem could be exclusive or shared only in one cluster. Mixed configuration is not supported. The RDMA Shared Device Plugin requires shared RDMA subsystem</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.3.0</p></td>
+<tr class="row-even"><td><p>1.3.0</p></td>
 <td><div class="line-block">
 <div class="line">- MOFED container is not a supported configuration on the DGX platform</div>
 <div class="line">- MOFED container deletion may lead to the driver’s unloading: In this case, the mlx5_core kernel driver must be reloaded manually. Network connectivity could be affected if there are only NVIDIA NICs on the node</div>
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.2.0</p></td>
+<tr class="row-odd"><td><p>1.2.0</p></td>
 <td><div class="line-block">
 <div class="line">- N/A</div>
 </div>
 </td>
 </tr>
-<tr class="row-odd"><td><p>1.1.0</p></td>
+<tr class="row-even"><td><p>1.1.0</p></td>
 <td><div class="line-block">
 <div class="line">- NicClusterPolicy update is not supported at the moment</div>
 <div class="line">- Network Operator is compatible only with NVIDIA GPU Operator v1.9.0 and above</div>
@@ -627,7 +636,7 @@ This limitation applies to <strong>all</strong> versions of the NVIDIA Network O
 </div>
 </td>
 </tr>
-<tr class="row-even"><td><p>1.0.0</p></td>
+<tr class="row-odd"><td><p>1.0.0</p></td>
 <td><div class="line-block">
 <div class="line">- Network Operator is only compatible with NVIDIA GPU Operator v1.5.2 and above</div>
 <div class="line">- Persistent NICs configuration for netplan or ifupdown scripts is required for SR-IOV and Shared RDMA interfaces on the host</div>
