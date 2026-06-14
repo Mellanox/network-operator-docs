@@ -151,6 +151,7 @@ func main() {
 	outputDir := flag.String("outputDir", ".", "Destination directory to render templates to")
 	releaseVersions := flag.String("releaseVersions", "", "File with release versions to use for the templates. Won't be used if not provided")
 	releaseDefaults := flag.String("releaseDefaults", "release.yaml", "Destination of the release defaults definition")
+	repoToml := flag.String("repoToml", "", "Path to repo.toml whose version field will be updated if it does not match the release version. Won't be used if not provided")
 	retrieveSha := flag.Bool("with-sha256", false, "retrieve SHA256 for container images references")
 	flag.Parse()
 	release := readDefaults(*releaseDefaults)
@@ -166,6 +167,13 @@ func main() {
 	}
 	if *releaseVersions != "" {
 		err := handleReleaseVersions(&release, *releaseVersions)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			os.Exit(1)
+		}
+	}
+	if *repoToml != "" {
+		err := updateRepoTomlVersion(&release, *repoToml)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
 			os.Exit(1)
@@ -396,6 +404,30 @@ func getAuth(repo string) remote.Option {
 	} else {
 		return remote.WithAuthFromKeychain(authn.DefaultKeychain)
 	}
+}
+
+// updateRepoTomlVersion updates the version field in repo.toml to match the release version
+// if it does not already match.
+func updateRepoTomlVersion(release *Release, repoTomlPath string) error {
+	content, err := os.ReadFile(filepath.Clean(repoTomlPath))
+	if err != nil {
+		return err
+	}
+
+	// Strip pre-release/build-metadata suffix so repo.toml always holds the
+	// base version, e.g. "v26.4.0-rc.1" -> "v26.4.0".
+	baseVersionRe := regexp.MustCompile(`^(v?\d+\.\d+\.\d+)[-+].*$`)
+	target := release.NetworkOperator.Version
+	if m := baseVersionRe.FindStringSubmatch(target); m != nil {
+		target = m[1]
+	}
+	re := regexp.MustCompile(`(?m)^(version\s*=\s*)"[^"]*"`)
+	updated := re.ReplaceAllString(string(content), `${1}"`+target+`"`)
+	if updated == string(content) {
+		return nil
+	}
+
+	return os.WriteFile(filepath.Clean(repoTomlPath), []byte(updated), 0o644)
 }
 
 // handleReleaseVersions updates the release versions file with the current major.minor version
