@@ -118,6 +118,9 @@ func getEnviromnentVariableOrDefault(defaultValue, varName string) string {
 }
 
 func initWithEnvVariale(name string, image *ReleaseImageSpec) {
+	if image == nil {
+		return
+	}
 	envName := name + "_IMAGE"
 	image.Image = getEnviromnentVariableOrDefault(image.Image, envName)
 	envName = name + "_REPO"
