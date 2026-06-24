@@ -16,9 +16,19 @@ jobs:
       TAG: ${{ inputs.git_tag }}
       PR_TITLE_PREFIX: "task: update documentation for"
     steps:
+    - name: Determine docs branch
+      run: |
+        MAJOR_MINOR=$(echo "${{ inputs.git_tag }}" | sed 's/^v//' | grep -oE '^[0-9]+\.[0-9]+')
+        PATCH=$(echo "${{ inputs.git_tag }}" | sed 's/^v//' | cut -d. -f3 | grep -oE '^[0-9]+')
+        if [ "$PATCH" != "0" ]; then
+          echo "DOCS_BRANCH=v${MAJOR_MINOR}.x" >> "$GITHUB_ENV"
+        else
+          echo "DOCS_BRANCH=main" >> "$GITHUB_ENV"
+        fi
     - uses: actions/checkout@v4
       with:
         token: ${{ secrets.GH_TOKEN_NVIDIA_CI_CD }}  # token must be explicitly set here for push to work in following step
+        ref: ${{ env.DOCS_BRANCH }}
     - name: Setup Go
       uses: actions/setup-go@v5.0.2
       with:
@@ -30,7 +40,7 @@ jobs:
         make release-build
     - name: Close any existing documentation PRs
       run: |
-        for pr_number in $(gh pr list --search "$PR_TITLE_PREFIX" --json number --jq ".[].number"); do
+        for pr_number in $(gh pr list --base "$DOCS_BRANCH" --search "$PR_TITLE_PREFIX" --json number --jq ".[].number"); do
           gh pr close $pr_number
         done
     - name: Create PR
@@ -38,13 +48,12 @@ jobs:
         DOWNSTREAM_REPO_OWNER: nvidia-ci-cd
         DOWNSTREAM_FEATURE_BRANCH: update-docs-for-${{ env.TAG }}
         UPSTREAM_REPO_OWNER: Mellanox
-        UPSTREAM_DEFAULT_BRANCH: main
         COMMIT_MESSAGE: ${{ env.PR_TITLE_PREFIX }} ${{ env.TAG }}
       run: |
         git config user.name  nvidia-ci-cd
         git config user.email svc-cloud-orch-gh@nvidia.com
         gh repo fork --remote --default-branch-only
-        gh repo sync $DOWNSTREAM_REPO_OWNER/${{ github.event.repository.name }} --source $UPSTREAM_REPO_OWNER/${{ github.event.repository.name }} --branch $UPSTREAM_DEFAULT_BRANCH
+        gh repo sync $DOWNSTREAM_REPO_OWNER/${{ github.event.repository.name }} --source $UPSTREAM_REPO_OWNER/${{ github.event.repository.name }} --branch $DOCS_BRANCH
 
         git checkout -b $DOWNSTREAM_FEATURE_BRANCH
         git status
@@ -56,6 +65,6 @@ jobs:
         git push -u origin $DOWNSTREAM_FEATURE_BRANCH
         gh pr create \
           --head $DOWNSTREAM_REPO_OWNER:$DOWNSTREAM_FEATURE_BRANCH \
-          --base $UPSTREAM_DEFAULT_BRANCH \
+          --base $DOCS_BRANCH \
           --title "$COMMIT_MESSAGE" \
           --body "Created by the *${{ github.job }}* job in [${{ github.repository }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})."
