@@ -107,8 +107,8 @@ RA2.1 introduces multiplane mode support, allowing NICs to be configured with mu
 
    **Note:** Multiplane modes are only available with RA2.1. For RA1.3 and RA2.0, ``multiplaneMode`` must be ``none`` and ``numberOfPlanes`` must be ``1``.
 
-`Example Spectrum-X NicConfigurationTemplate with multiplane <docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml>`__:
-'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Example Spectrum-X NicConfigurationTemplate with multiplane:
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 .. code:: yaml
 
