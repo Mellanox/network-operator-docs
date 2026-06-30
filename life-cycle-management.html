@@ -69,6 +69,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#network-operator-life-cycle">Network Operator Life Cycle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensuring-deployment-readiness">Ensuring Deployment Readiness</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance">Status Field Example of a NICClusterPolicy Instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nicclusterpolicy-status-conditions">NicClusterPolicy Status Conditions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#condition-field-model">Condition Field Model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#per-component-conditions">Per-Component Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#aggregate-ready-condition">Aggregate Ready Condition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#querying-conditions">Querying Conditions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#condition-status-examples">Condition Status Examples</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#network-operator-upgrade">Network Operator Upgrade</a><ul>
@@ -153,47 +161,56 @@
 <li><p><a class="reference internal" href="#ensuring-deployment-readiness" id="id4">Ensuring Deployment Readiness</a></p>
 <ul>
 <li><p><a class="reference internal" href="#status-field-example-of-a-nicclusterpolicy-instance" id="id5">Status Field Example of a NICClusterPolicy Instance</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#network-operator-upgrade" id="id6">Network Operator Upgrade</a></p>
+<li><p><a class="reference internal" href="#nicclusterpolicy-status-conditions" id="id6">NicClusterPolicy Status Conditions</a></p>
 <ul>
-<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id7">Downloading a New Helm Chart</a></p></li>
-<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id8">Applying the Helm Chart Update</a></p></li>
-<li><p><a class="reference internal" href="#updating-the-nicclusterpolicy" id="id9">Updating the NicClusterPolicy</a></p></li>
-<li><p><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade" id="id10">Automatic DOCA-OFED Driver Upgrade</a></p>
+<li><p><a class="reference internal" href="#condition-field-model" id="id7">Condition Field Model</a></p></li>
+<li><p><a class="reference internal" href="#per-component-conditions" id="id8">Per-Component Conditions</a></p></li>
+<li><p><a class="reference internal" href="#aggregate-ready-condition" id="id9">Aggregate Ready Condition</a></p></li>
+<li><p><a class="reference internal" href="#querying-conditions" id="id10">Querying Conditions</a></p></li>
+<li><p><a class="reference internal" href="#condition-status-examples" id="id11">Condition Status Examples</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-operator-upgrade" id="id12">Network Operator Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#node-upgrade-states" id="id11">Node Upgrade States</a></p></li>
-<li><p><a class="reference internal" href="#upgrade-modes" id="id12">Upgrade modes</a></p></li>
-<li><p><a class="reference internal" href="#safe-driver-loading" id="id13">Safe Driver Loading</a></p>
+<li><p><a class="reference internal" href="#downloading-a-new-helm-chart" id="id13">Downloading a New Helm Chart</a></p></li>
+<li><p><a class="reference internal" href="#applying-the-helm-chart-update" id="id14">Applying the Helm Chart Update</a></p></li>
+<li><p><a class="reference internal" href="#updating-the-nicclusterpolicy" id="id15">Updating the NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#automatic-doca-ofed-driver-upgrade" id="id16">Automatic DOCA-OFED Driver Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#troubleshooting" id="id14">Troubleshooting</a></p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#doca-ofed-driver-manual-upgrade" id="id15">DOCA-OFED Driver Manual Upgrade</a></p>
+<li><p><a class="reference internal" href="#node-upgrade-states" id="id17">Node Upgrade States</a></p></li>
+<li><p><a class="reference internal" href="#upgrade-modes" id="id18">Upgrade modes</a></p></li>
+<li><p><a class="reference internal" href="#safe-driver-loading" id="id19">Safe Driver Loading</a></p>
 <ul>
-<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-doca-ofed-driver" id="id16">Restarting Pods with a Containerized DOCA-OFED Driver</a></p></li>
-<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id17">Removing Pods with a Secondary Network from the Node</a></p></li>
-<li><p><a class="reference internal" href="#restarting-the-doca-ofed-driver-pod" id="id18">Restarting the DOCA-OFED Driver Pod</a></p></li>
-<li><p><a class="reference internal" href="#deleting-the-doca-ofed-driver-pod-from-the-node" id="id19">Deleting the DOCA-OFED Driver Pod from the Node</a></p>
+<li><p><a class="reference internal" href="#troubleshooting" id="id20">Troubleshooting</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#doca-ofed-driver-manual-upgrade" id="id21">DOCA-OFED Driver Manual Upgrade</a></p>
 <ul>
-<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id20">Returning Pods with a Secondary Network to the Node</a></p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform" id="id21">Network Operator Upgrade on OpenShift Container Platform</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id22">Uninstalling the Network Operator</a></p>
+<li><p><a class="reference internal" href="#restarting-pods-with-a-containerized-doca-ofed-driver" id="id22">Restarting Pods with a Containerized DOCA-OFED Driver</a></p></li>
+<li><p><a class="reference internal" href="#removing-pods-with-a-secondary-network-from-the-node" id="id23">Removing Pods with a Secondary Network from the Node</a></p></li>
+<li><p><a class="reference internal" href="#restarting-the-doca-ofed-driver-pod" id="id24">Restarting the DOCA-OFED Driver Pod</a></p></li>
+<li><p><a class="reference internal" href="#deleting-the-doca-ofed-driver-pod-from-the-node" id="id25">Deleting the DOCA-OFED Driver Pod from the Node</a></p>
 <ul>
-<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id23">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
-<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id24">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
-<li><p><a class="reference internal" href="#additional-steps" id="id25">Additional Steps</a></p></li>
+<li><p><a class="reference internal" href="#returning-pods-with-a-secondary-network-to-the-node" id="id26">Returning Pods with a Secondary Network to the Node</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id26">NicClusterPolicy CRD Update</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#network-operator-upgrade-on-openshift-container-platform" id="id27">Network Operator Upgrade on OpenShift Container Platform</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator" id="id28">Uninstalling the Network Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#uninstalling-network-operator-on-a-vanilla-kubernetes-cluster" id="id29">Uninstalling Network Operator on a Vanilla Kubernetes Cluster</a></p></li>
+<li><p><a class="reference internal" href="#uninstalling-the-network-operator-on-an-openshift-cluster" id="id30">Uninstalling the Network Operator on an OpenShift Cluster</a></p></li>
+<li><p><a class="reference internal" href="#additional-steps" id="id31">Additional Steps</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#nicclusterpolicy-crd-update" id="id32">NicClusterPolicy CRD Update</a></p></li>
 </ul>
 </div>
 <section id="network-operator-versioning">
@@ -283,6 +300,400 @@ reaches End of Support (EOS) and no longer receives any updates.</p>
 <p class="admonition-title">Note</p>
 <p>An “Ignore” state indicates that the sub-state was not defined in the custom resource, and thus, it is ignored.</p>
 </div>
+</section>
+<section id="nicclusterpolicy-status-conditions">
+<span id="ncp-conditions"></span><h3>NicClusterPolicy Status Conditions<a class="headerlink" href="#nicclusterpolicy-status-conditions" title="Permalink to this headline"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> exposes a <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code> array
+following the standard Kubernetes condition model (<code class="docutils literal notranslate"><span class="pre">metav1.Condition</span></code>).
+Conditions surface component health in a machine-readable way, making it straightforward
+to integrate with monitoring tools, CI/CD pipelines, and <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">wait</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The existing <code class="docutils literal notranslate"><span class="pre">status.state</span></code>, <code class="docutils literal notranslate"><span class="pre">status.reason</span></code>, and <code class="docutils literal notranslate"><span class="pre">status.appliedStates[]</span></code> fields
+are preserved unchanged. The <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code> field is purely additive.
+Any existing tooling that reads these fields continues to work.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> exposes the same <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code> model for the components it
+manages (DOCA-OFED driver, RDMA shared device plugin, and SR-IOV device plugin).</p>
+</div>
+<section id="condition-field-model">
+<h4>Condition Field Model<a class="headerlink" href="#condition-field-model" title="Permalink to this headline"></a></h4>
+<p>Every condition in <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code> has the following fields:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Name of the condition, e.g. <code class="docutils literal notranslate"><span class="pre">OFEDDriverReady</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+<td><p>string</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reason</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Short machine-readable code explaining why</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">message</span></code></p></td>
+<td><p>string</p></td>
+<td><p>Human-readable detail</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lastTransitionTime</span></code></p></td>
+<td><p>time</p></td>
+<td><p>When <code class="docutils literal notranslate"><span class="pre">status</span></code> last changed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">observedGeneration</span></code></p></td>
+<td><p>int64</p></td>
+<td><p>Which spec version (<code class="docutils literal notranslate"><span class="pre">metadata.generation</span></code>) this reflects</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="per-component-conditions">
+<h4>Per-Component Conditions<a class="headerlink" href="#per-component-conditions" title="Permalink to this headline"></a></h4>
+<p>Each configured component gets one condition named <code class="docutils literal notranslate"><span class="pre">&lt;ComponentName&gt;Ready</span></code>.
+Its <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code> when the component is ready and <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code> otherwise.
+The <code class="docutils literal notranslate"><span class="pre">reason</span></code> field distinguishes the different cases.</p>
+<p>Components that are not configured in the spec (<code class="docutils literal notranslate"><span class="pre">ignore</span></code> state) do not produce a
+condition – they are omitted from <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code> entirely. When a component is
+removed from the spec, its stale condition is pruned on the next reconcile.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Condition Type</p></th>
+<th class="head"><p>Component</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OFEDDriverReady</span></code></p></td>
+<td><p>DOCA-OFED driver</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RDMASharedDevicePluginReady</span></code></p></td>
+<td><p>RDMA shared device plugin</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SRIOVDevicePluginReady</span></code></p></td>
+<td><p>SR-IOV device plugin</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">IBKubernetesReady</span></code></p></td>
+<td><p>IB Kubernetes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MultusCNIReady</span></code></p></td>
+<td><p>Multus CNI</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CNIPluginsReady</span></code></p></td>
+<td><p>CNI plugins</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">IPoIBCNIReady</span></code></p></td>
+<td><p>IPoIB CNI</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NVIPAMReady</span></code></p></td>
+<td><p>NV-IPAM</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NICFeatureDiscoveryReady</span></code></p></td>
+<td><p>NIC feature discovery</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DOCATelemetryServiceReady</span></code></p></td>
+<td><p>DOCA telemetry service</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NICConfigurationOperatorReady</span></code></p></td>
+<td><p>NIC configuration operator</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SpectrumXOperatorReady</span></code></p></td>
+<td><p>Spectrum-X operator</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Status and Reason Mapping</strong></p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Internal State</p></th>
+<th class="head"><p>Condition Status</p></th>
+<th class="head"><p>Condition Reason</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ready</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ComponentReady</span></code></p></td>
+<td><p>Component workloads are fully available</p></td>
+</tr>
+<tr class="row-odd"><td><p>notReady</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ComponentNotReady</span></code></p></td>
+<td><p>Component is still deploying, expected to self-heal</p></td>
+</tr>
+<tr class="row-even"><td><p>error</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ComponentError</span></code></p></td>
+<td><p>Reconcile failure, needs human intervention</p></td>
+</tr>
+<tr class="row-odd"><td><p>ignore</p></td>
+<td><p><em>(omitted)</em></p></td>
+<td><p><em>(omitted)</em></p></td>
+<td><p>Component not configured in spec – no condition is written</p></td>
+</tr>
+</tbody>
+</table>
+<p>Both <code class="docutils literal notranslate"><span class="pre">notReady</span></code> and <code class="docutils literal notranslate"><span class="pre">error</span></code> produce <code class="docutils literal notranslate"><span class="pre">status:</span> <span class="pre">&quot;False&quot;</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">reason</span></code> field is what distinguishes them:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ComponentNotReady</span></code> – the component is deploying and is expected to become ready.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ComponentError</span></code> – the component has failed and likely requires human intervention.</p></li>
+</ul>
+<p>This distinction drives the aggregate <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition described below.</p>
+</section>
+<section id="aggregate-ready-condition">
+<h4>Aggregate Ready Condition<a class="headerlink" href="#aggregate-ready-condition" title="Permalink to this headline"></a></h4>
+<p>A single <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition summarizes the overall health of the policy.
+It is computed from the per-component conditions after every reconcile.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Reason</p></th>
+<th class="head"><p>Message</p></th>
+<th class="head"><p>When</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AllComponentsReady</span></code></p></td>
+<td><p><em>(empty)</em></p></td>
+<td><p>Every configured component is ready (or no components are configured)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ComponentsNotReady</span></code></p></td>
+<td><p>One or more components are not yet ready</p></td>
+<td><p>At least one component is deploying (<code class="docutils literal notranslate"><span class="pre">ComponentNotReady</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ComponentError</span></code></p></td>
+<td><p>One or more components are in error state</p></td>
+<td><p>At least one component is in error</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">ComponentError</span></code> takes priority over <code class="docutils literal notranslate"><span class="pre">ComponentsNotReady</span></code>: if any component is in
+error state, the <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition reports <code class="docutils literal notranslate"><span class="pre">reason=ComponentError</span></code> regardless of
+whether other components are also still deploying.</p>
+</div>
+</section>
+<section id="querying-conditions">
+<h4>Querying Conditions<a class="headerlink" href="#querying-conditions" title="Permalink to this headline"></a></h4>
+<p>View all conditions:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy <span class="se">\</span>
+  -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> jq .
+</pre></div>
+</div>
+<p>Filter to the aggregate condition only:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy <span class="se">\</span>
+  -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> <span class="se">\</span>
+  jq <span class="s1">&#39;[.[] | select(.type == &quot;Ready&quot;)]&#39;</span>
+</pre></div>
+</div>
+<p>Filter to a specific component:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy <span class="se">\</span>
+  -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.conditions}&#39;</span> <span class="p">|</span> <span class="se">\</span>
+  jq <span class="s1">&#39;[.[] | select(.type == &quot;OFEDDriverReady&quot;)]&#39;</span>
+</pre></div>
+</div>
+<p>Wait for the policy to become ready:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl <span class="nb">wait</span> nicclusterpolicies.mellanox.com nic-cluster-policy <span class="se">\</span>
+  --for<span class="o">=</span><span class="nv">condition</span><span class="o">=</span>Ready --timeout<span class="o">=</span>300s
+</pre></div>
+</div>
+</section>
+<section id="condition-status-examples">
+<h4>Condition Status Examples<a class="headerlink" href="#condition-status-examples" title="Permalink to this headline"></a></h4>
+<p>In the following examples the spec configures two components, the DOCA-OFED driver
+and Multus CNI. All other components are in the <code class="docutils literal notranslate"><span class="pre">ignore</span></code> state and therefore do not
+appear in <code class="docutils literal notranslate"><span class="pre">status.conditions[]</span></code>.</p>
+<p><strong>Example 1 – Fully Healthy (all configured components ready)</strong></p>
+<p>Both configured components are fully available, so each reports
+<code class="docutils literal notranslate"><span class="pre">ComponentReady</span></code> and the aggregate <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition is <code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code> with reason
+<code class="docutils literal notranslate"><span class="pre">AllComponentsReady</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">appliedStates</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-multus-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ready</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-container-networking-plugins</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ipoib-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-OFED</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ready</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-SRIOV-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-RDMA-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ib-kubernetes</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nv-ipam-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-feature-discovery</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-doca-telemetry-service</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-configuration-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-spectrum-x-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OFEDDriverReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MultusCNIReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AllComponentsReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ready</span><span class="w"></span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ready</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>Example 2 – Component Deploying (OFED driver not yet ready)</strong></p>
+<p>OFED DaemonSet pods are not yet ready, so <code class="docutils literal notranslate"><span class="pre">OFEDDriverReady</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code> with reason
+<code class="docutils literal notranslate"><span class="pre">ComponentNotReady</span></code>. The aggregate <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition is <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code> with reason
+<code class="docutils literal notranslate"><span class="pre">ComponentsNotReady</span></code> because a deployment is still in progress.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">appliedStates</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-multus-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ready</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-container-networking-plugins</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ipoib-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-OFED</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-SRIOV-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-RDMA-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ib-kubernetes</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nv-ipam-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-feature-discovery</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-doca-telemetry-service</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-configuration-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-spectrum-x-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentNotReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OFEDDriverReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MultusCNIReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">One or more components are not yet ready</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentsNotReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ready</span><span class="w"></span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">notReady</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>Example 3 – Component Error (OFED driver reconcile failure)</strong></p>
+<p>The OFED driver failed to reconcile, so <code class="docutils literal notranslate"><span class="pre">OFEDDriverReady</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;False&quot;</span></code> with reason
+<code class="docutils literal notranslate"><span class="pre">ComponentError</span></code> and the failure detail in <code class="docutils literal notranslate"><span class="pre">message</span></code>. The aggregate <code class="docutils literal notranslate"><span class="pre">Ready</span></code> condition
+reports <code class="docutils literal notranslate"><span class="pre">ComponentError</span></code>, which takes priority over any component that is merely deploying.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">status</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">appliedStates</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-multus-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ready</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-container-networking-plugins</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ipoib-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-OFED</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-SRIOV-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-RDMA-device-plugin</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-ib-kubernetes</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nv-ipam-cni</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-feature-discovery</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-doca-telemetry-service</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-nic-configuration-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">state-spectrum-x-operator</span><span class="w"></span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ignore</span><span class="w"></span>
+<span class="w">  </span><span class="nt">conditions</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">render</span><span class="nv"> </span><span class="s">objects:</span><span class="nv"> </span><span class="s">...&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentError</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">OFEDDriverReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentReady</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;True&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MultusCNIReady</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">lastTransitionTime</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-23T12:45:26Z&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">One or more components are in error state</span><span class="w"></span>
+<span class="w">    </span><span class="nt">observedGeneration</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ComponentError</span><span class="w"></span>
+<span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ready</span><span class="w"></span>
+<span class="w">  </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 <section id="network-operator-upgrade">
@@ -702,7 +1113,7 @@ No resources found
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jun 25, 2026.
+      <span class="lastupdated">Last updated on Jun 30, 2026.
       </span></p>
   </div>
 
