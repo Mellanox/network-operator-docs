@@ -118,6 +118,372 @@ Get the NicClusterPolicy status:
 
 .. note:: An "Ignore" state indicates that the sub-state was not defined in the custom resource, and thus, it is ignored.
 
+.. _ncp-conditions:
+
+-----------------------------------
+NicClusterPolicy Status Conditions
+-----------------------------------
+
+``NicClusterPolicy`` exposes a ``status.conditions[]`` array
+following the standard Kubernetes condition model (``metav1.Condition``).
+Conditions surface component health in a machine-readable way, making it straightforward
+to integrate with monitoring tools, CI/CD pipelines, and ``kubectl wait``.
+
+.. note::
+   The existing ``status.state``, ``status.reason``, and ``status.appliedStates[]`` fields
+   are preserved unchanged. The ``status.conditions[]`` field is purely additive.
+   Any existing tooling that reads these fields continues to work.
+
+.. note::
+   ``NicNodePolicy`` exposes the same ``status.conditions[]`` model for the components it
+   manages (DOCA-OFED driver, RDMA shared device plugin, and SR-IOV device plugin).
+
+#####################
+Condition Field Model
+#####################
+
+Every condition in ``status.conditions[]`` has the following fields:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field
+     - Type
+     - Description
+   * - ``type``
+     - string
+     - Name of the condition, e.g. ``OFEDDriverReady``
+   * - ``status``
+     - string
+     - ``"True"`` or ``"False"``
+   * - ``reason``
+     - string
+     - Short machine-readable code explaining why
+   * - ``message``
+     - string
+     - Human-readable detail
+   * - ``lastTransitionTime``
+     - time
+     - When ``status`` last changed
+   * - ``observedGeneration``
+     - int64
+     - Which spec version (``metadata.generation``) this reflects
+
+###########################
+Per-Component Conditions
+###########################
+
+Each configured component gets one condition named ``<ComponentName>Ready``.
+Its ``status`` is ``"True"`` when the component is ready and ``"False"`` otherwise.
+The ``reason`` field distinguishes the different cases.
+
+Components that are not configured in the spec (``ignore`` state) do not produce a
+condition -- they are omitted from ``status.conditions[]`` entirely. When a component is
+removed from the spec, its stale condition is pruned on the next reconcile.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Condition Type
+     - Component
+   * - ``OFEDDriverReady``
+     - DOCA-OFED driver
+   * - ``RDMASharedDevicePluginReady``
+     - RDMA shared device plugin
+   * - ``SRIOVDevicePluginReady``
+     - SR-IOV device plugin
+   * - ``IBKubernetesReady``
+     - IB Kubernetes
+   * - ``MultusCNIReady``
+     - Multus CNI
+   * - ``CNIPluginsReady``
+     - CNI plugins
+   * - ``IPoIBCNIReady``
+     - IPoIB CNI
+   * - ``NVIPAMReady``
+     - NV-IPAM
+   * - ``NICFeatureDiscoveryReady``
+     - NIC feature discovery
+   * - ``DOCATelemetryServiceReady``
+     - DOCA telemetry service
+   * - ``NICConfigurationOperatorReady``
+     - NIC configuration operator
+   * - ``SpectrumXOperatorReady``
+     - Spectrum-X operator
+
+**Status and Reason Mapping**
+
+.. list-table::
+   :header-rows: 1
+
+   * - Internal State
+     - Condition Status
+     - Condition Reason
+     - Meaning
+   * - ready
+     - ``"True"``
+     - ``ComponentReady``
+     - Component workloads are fully available
+   * - notReady
+     - ``"False"``
+     - ``ComponentNotReady``
+     - Component is still deploying, expected to self-heal
+   * - error
+     - ``"False"``
+     - ``ComponentError``
+     - Reconcile failure, needs human intervention
+   * - ignore
+     - *(omitted)*
+     - *(omitted)*
+     - Component not configured in spec -- no condition is written
+
+Both ``notReady`` and ``error`` produce ``status: "False"``.
+The ``reason`` field is what distinguishes them:
+
+- ``ComponentNotReady`` -- the component is deploying and is expected to become ready.
+- ``ComponentError`` -- the component has failed and likely requires human intervention.
+
+This distinction drives the aggregate ``Ready`` condition described below.
+
+#########################
+Aggregate Ready Condition
+#########################
+
+A single ``Ready`` condition summarizes the overall health of the policy.
+It is computed from the per-component conditions after every reconcile.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Status
+     - Reason
+     - Message
+     - When
+   * - ``"True"``
+     - ``AllComponentsReady``
+     - *(empty)*
+     - Every configured component is ready (or no components are configured)
+   * - ``"False"``
+     - ``ComponentsNotReady``
+     - One or more components are not yet ready
+     - At least one component is deploying (``ComponentNotReady``)
+   * - ``"False"``
+     - ``ComponentError``
+     - One or more components are in error state
+     - At least one component is in error
+
+.. note::
+   ``ComponentError`` takes priority over ``ComponentsNotReady``: if any component is in
+   error state, the ``Ready`` condition reports ``reason=ComponentError`` regardless of
+   whether other components are also still deploying.
+
+###########################
+Querying Conditions
+###########################
+
+View all conditions:
+
+.. code-block:: bash
+
+   kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+     -o jsonpath='{.status.conditions}' | jq .
+
+Filter to the aggregate condition only:
+
+.. code-block:: bash
+
+   kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+     -o jsonpath='{.status.conditions}' | \
+     jq '[.[] | select(.type == "Ready")]'
+
+Filter to a specific component:
+
+.. code-block:: bash
+
+   kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+     -o jsonpath='{.status.conditions}' | \
+     jq '[.[] | select(.type == "OFEDDriverReady")]'
+
+Wait for the policy to become ready:
+
+.. code-block:: bash
+
+   kubectl wait nicclusterpolicies.mellanox.com nic-cluster-policy \
+     --for=condition=Ready --timeout=300s
+
+##########################
+Condition Status Examples
+##########################
+
+In the following examples the spec configures two components, the DOCA-OFED driver
+and Multus CNI. All other components are in the ``ignore`` state and therefore do not
+appear in ``status.conditions[]``.
+
+**Example 1 -- Fully Healthy (all configured components ready)**
+
+Both configured components are fully available, so each reports
+``ComponentReady`` and the aggregate ``Ready`` condition is ``"True"`` with reason
+``AllComponentsReady``.
+
+.. code-block:: yaml
+
+   status:
+     appliedStates:
+     - name: state-multus-cni
+       state: ready
+     - name: state-container-networking-plugins
+       state: ignore
+     - name: state-ipoib-cni
+       state: ignore
+     - name: state-OFED
+       state: ready
+     - name: state-SRIOV-device-plugin
+       state: ignore
+     - name: state-RDMA-device-plugin
+       state: ignore
+     - name: state-ib-kubernetes
+       state: ignore
+     - name: state-nv-ipam-cni
+       state: ignore
+     - name: state-nic-feature-discovery
+       state: ignore
+     - name: state-doca-telemetry-service
+       state: ignore
+     - name: state-nic-configuration-operator
+       state: ignore
+     - name: state-spectrum-x-operator
+       state: ignore
+     conditions:
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: ComponentReady
+       status: "True"
+       type: OFEDDriverReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: ComponentReady
+       status: "True"
+       type: MultusCNIReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: AllComponentsReady
+       status: "True"
+       type: Ready
+     state: ready
+
+**Example 2 -- Component Deploying (OFED driver not yet ready)**
+
+OFED DaemonSet pods are not yet ready, so ``OFEDDriverReady`` is ``"False"`` with reason
+``ComponentNotReady``. The aggregate ``Ready`` condition is ``"False"`` with reason
+``ComponentsNotReady`` because a deployment is still in progress.
+
+.. code-block:: yaml
+
+   status:
+     appliedStates:
+     - name: state-multus-cni
+       state: ready
+     - name: state-container-networking-plugins
+       state: ignore
+     - name: state-ipoib-cni
+       state: ignore
+     - name: state-OFED
+       state: notReady
+     - name: state-SRIOV-device-plugin
+       state: ignore
+     - name: state-RDMA-device-plugin
+       state: ignore
+     - name: state-ib-kubernetes
+       state: ignore
+     - name: state-nv-ipam-cni
+       state: ignore
+     - name: state-nic-feature-discovery
+       state: ignore
+     - name: state-doca-telemetry-service
+       state: ignore
+     - name: state-nic-configuration-operator
+       state: ignore
+     - name: state-spectrum-x-operator
+       state: ignore
+     conditions:
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: ComponentNotReady
+       status: "False"
+       type: OFEDDriverReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: ComponentReady
+       status: "True"
+       type: MultusCNIReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: One or more components are not yet ready
+       observedGeneration: 1
+       reason: ComponentsNotReady
+       status: "False"
+       type: Ready
+     state: notReady
+
+**Example 3 -- Component Error (OFED driver reconcile failure)**
+
+The OFED driver failed to reconcile, so ``OFEDDriverReady`` is ``"False"`` with reason
+``ComponentError`` and the failure detail in ``message``. The aggregate ``Ready`` condition
+reports ``ComponentError``, which takes priority over any component that is merely deploying.
+
+.. code-block:: yaml
+
+   status:
+     appliedStates:
+     - name: state-multus-cni
+       state: ready
+     - name: state-container-networking-plugins
+       state: ignore
+     - name: state-ipoib-cni
+       state: ignore
+     - name: state-OFED
+       state: error
+     - name: state-SRIOV-device-plugin
+       state: ignore
+     - name: state-RDMA-device-plugin
+       state: ignore
+     - name: state-ib-kubernetes
+       state: ignore
+     - name: state-nv-ipam-cni
+       state: ignore
+     - name: state-nic-feature-discovery
+       state: ignore
+     - name: state-doca-telemetry-service
+       state: ignore
+     - name: state-nic-configuration-operator
+       state: ignore
+     - name: state-spectrum-x-operator
+       state: ignore
+     conditions:
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: "failed to render objects: ..."
+       observedGeneration: 1
+       reason: ComponentError
+       status: "False"
+       type: OFEDDriverReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: ""
+       observedGeneration: 1
+       reason: ComponentReady
+       status: "True"
+       type: MultusCNIReady
+     - lastTransitionTime: "2026-03-23T12:45:26Z"
+       message: One or more components are in error state
+       observedGeneration: 1
+       reason: ComponentError
+       status: "False"
+       type: Ready
+     state: error
+
 ========================
 Network Operator Upgrade
 ========================
@@ -139,7 +505,7 @@ To obtain new releases, run:
 Applying the Helm Chart Update
 ---------------------------------------------
 
-Edit the `values-<VERSION>.yaml` file as required for your cluster. 
+Edit the `values-<VERSION>.yaml` file as required for your cluster.
 
 To apply the Helm chart update, run:
 
@@ -152,15 +518,15 @@ Updating the NicClusterPolicy
 -----------------------------
 
 .. note::
-  
+
   Helm upgrade does not update components version in the NicClusterPolicy. It should be done manually after the upgrade is done.
 
 .. note::
-  
+
   The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.
 
   Known limitations:
-  
+
   * If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.
 
   These limitations will be addressed in future releases.
@@ -450,7 +816,7 @@ The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSched
 
   $ kubectl uncordon -l "network.nvidia.com/operator.mofed.wait=false"
 
---------------------------------------------------------  
+--------------------------------------------------------
 Network Operator Upgrade on OpenShift Container Platform
 --------------------------------------------------------
 
