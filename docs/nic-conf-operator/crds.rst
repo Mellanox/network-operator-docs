@@ -33,8 +33,9 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | ``numVfs``                                                                                        | Number of VFs to be configured                                                                    |
       | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``linkType``                                                                                      | LinkType to be configured, Ethernet|Infiniband                                                    |
-      | :ref:`LinkTypeEnum <LinkTypeEnum>`                                                                |                                                                                                   |
+      | ``linkType``                                                                                      | *(Optional)*                                                                                      |
+      | :ref:`LinkTypeEnum <LinkTypeEnum>`                                                                | LinkType to be configured, Ethernet|Infiniband. Required unless networkBay is configured; for     |
+      |                                                                                                   | Network Bay the link type is governed by the system configuration and must not be set.            |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pciPerformanceOptimized``                                                                       | PCI performance optimization settings                                                             |
       | :ref:`PciPerformanceOptimizedSpec <PciPerformanceOptimizedSpec>`                                  |                                                                                                   |
@@ -45,11 +46,46 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | ``gpuDirectOptimized``                                                                            | GPU Direct optimization settings                                                                  |
       | :ref:`GpuDirectOptimizedSpec <GpuDirectOptimizedSpec>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``runtimePerformanceOptimized``                                                                   | Runtime NIC performance tuning (ring buffers, channels, LRO) applied via ethtool                  |
+      | :ref:`RuntimePerformanceOptimizedSpec <RuntimePerformanceOptimizedSpec>`                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==1. RawNvConfig    |
       | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | parameters, if provided, are merged as overrides on top of Spectrum-X calculated params.          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``networkBay``                                                                                    | *(Optional)*                                                                                      |
+      | :ref:`NetworkBaySpec <NetworkBaySpec>`                                                            | NetworkBay configures a ConnectX-9 Network Bay card (per-ASIC set_system_conf). Allowed only for  |
+      |                                                                                                   | ConnectX-9 (nicType 1025).                                                                        |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rawNvConfig``                                                                                   | List of arbitrary nv config parameters                                                            |
       | :ref:`[]NvConfigParam <NvConfigParam>`                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``force``                                                                                         | *(Optional)*                                                                                      |
+      | bool                                                                                              | Force passes ``--force`` to mlxconfig set commands. When set, the daemon applies the nv config    |
+      |                                                                                                   | batch and set_system_conf with –force, letting mlxconfig accept a batch it would otherwise refuse |
+      |                                                                                                   | due to implicit parameter dependencies.                                                           |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _ECNSpec:
+
+ECNSpec
+~~~~~~~
+
+(*Appears on:* :ref:`QosSpec <QosSpec>`)
+
+ECNSpec specifies Explicit Congestion Notification settings
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enabled``                                                                                       | Enable ECN on the specified priority                                                              |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``priority``                                                                                      | Traffic class / priority to enable ECN on (0-7)                                                   |
+      | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _FirmwareTemplateSpec:
@@ -106,6 +142,28 @@ LinkTypeEnum (``string`` alias)
 (*Appears on:* :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`)
 
 LinkTypeEnum described the link type (Ethernet / Infiniband)
+
+.. _NetworkBaySpec:
+
+NetworkBaySpec
+~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`)
+
+NetworkBaySpec configures a ConnectX-9 Network Bay (“orchid”) card. A Network Bay card exposes two CX9 ASICs as two PCI endpoints that share a single OSFP cage and must be configured as a pair.
+Allowed only when nicSelector.nicType == “1025” (ConnectX-9), enforced by CEL on NicConfigurationTemplateSpec.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``conf``                                                                                          | Conf is the argument passed to ``mlxconfig set_system_conf``. The per-ASIC index is appended      |
+      | string                                                                                            | automatically by the daemon based on the device’s detected Network Bay ASIC index, e.g.           |
+      |                                                                                                   | set_system_conf [0].                                                                              |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicConfigurationTemplate:
 
@@ -244,6 +302,30 @@ NicDeviceInterfaceNameSpec
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
+.. _NicDeviceNetworkBayStatus:
+
+NicDeviceNetworkBayStatus
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`NicDeviceStatus <NicDeviceStatus>`)
+
+NicDeviceNetworkBayStatus holds the ConnectX-9 Network Bay identity of a device.
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``asic``                                                                                          | Asic is the orchid ASIC index (0 or 1) inferred from the MGIR.ga register field.                  |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``peerPci``                                                                                       | *(Optional)*                                                                                      |
+      | string                                                                                            | PeerPCI is the PCI address of the sibling ASIC in the same Network Bay card (the other device     |
+      |                                                                                                   | sharing this device’s serial number). Empty if the peer could not be resolved.                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
 .. _NicDevicePortSpec:
 
 NicDevicePortSpec
@@ -344,6 +426,10 @@ NicDeviceStatus defines the observed state of NicDevice
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ports``                                                                                                     | List of ports for the device                                                                      |
       | :ref:`[]NicDevicePortSpec <NicDevicePortSpec>`                                                                |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``networkBay``                                                                                                | *(Optional)*                                                                                      |
+      | :ref:`NicDeviceNetworkBayStatus <NicDeviceNetworkBayStatus>`                                                  | NetworkBay holds ConnectX-9 Network Bay (“orchid”) identity for the device. Set only when the     |
+      |                                                                                                               | device is detected as part of a Network Bay card.                                                 |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``conditions``                                                                                                | List of conditions observed for the device                                                        |
       | `[]Kubernetes                                                                                                 |                                                                                                   |
@@ -603,12 +689,16 @@ NicTemplateStatus defines the observed state of NicConfigurationTemplate and Nic
 
    .. container:: md-typeset__table
 
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | Field                                                                                             | Description                                                                                       |
-      +===================================================================================================+===================================================================================================+
-      | ``nicDevices``                                                                                    | NicDevice CRs matching this configuration / firmware template                                     |
-      | []string                                                                                          |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                                         | Description                                                                                       |
+      +===============================================================================================================+===================================================================================================+
+      | ``nicDevices``                                                                                                | NicDevice CRs matching this configuration / firmware template                                     |
+      | []string                                                                                                      |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``conditions``                                                                                                | Conditions observed for this template, e.g. a Network Bay pairing imbalance on a node             |
+      | `[]Kubernetes                                                                                                 |                                                                                                   |
+      | meta/v1.Condition <https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/#condition-v1-meta>`__ |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NvConfigParam:
 
@@ -629,6 +719,26 @@ NvConfigParam
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``value``                                                                                         | Value of the arbitrary nvconfig parameter                                                         |
       | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _PauseFramesSpec:
+
+PauseFramesSpec
+~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`QosSpec <QosSpec>`)
+
+PauseFramesSpec specifies global pause frame settings
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enabled``                                                                                       | Enable global pause frames (autoneg, rx, tx). Set to false to disable all pause frames            |
+      | bool                                                                                              | (recommended when PFC is used).                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _PciPerformanceOptimizedSpec:
@@ -673,7 +783,7 @@ QosSpec specifies Quality of Service settings
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``trust``                                                                                         | Trust mode for QoS settings, e.g. trust-dscp                                                      |
+      | ``trust``                                                                                         | Trust mode for QoS settings, e.g. dscp                                                            |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``pfc``                                                                                           | Priority-based Flow Control configuration, e.g. “0,0,0,1,0,0,0,0”                                 |
@@ -681,6 +791,15 @@ QosSpec specifies Quality of Service settings
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``tos``                                                                                           | 8-bit value for type of service                                                                   |
       | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``cableLen``                                                                                      | Cable length in meters, used for ECN buffer threshold calculation                                 |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``ecn``                                                                                           | ECN (Explicit Congestion Notification) settings                                                   |
+      | :ref:`ECNSpec <ECNSpec>`                                                                          |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``pauseFrames``                                                                                   | Global pause frame settings (disable when using PFC)                                              |
+      | :ref:`PauseFramesSpec <PauseFramesSpec>`                                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _RoceOptimizedSpec:
@@ -705,6 +824,41 @@ RoceOptimizedSpec specifies RoCE optimization settings
       | ``qos``                                                                                           | Quality of Service settings                                                                       |
       | :ref:`QosSpec <QosSpec>`                                                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``roceMode``                                                                                      | RoCE mode: 1 for RoCE v1, 2 for RoCE v2. Only effective when roceOptimized.enabled is true.       |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+
+.. _RuntimePerformanceOptimizedSpec:
+
+RuntimePerformanceOptimizedSpec
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`ConfigurationTemplateSpec <ConfigurationTemplateSpec>`)
+
+RuntimePerformanceOptimizedSpec specifies runtime NIC performance tuning applied via ethtool
+
+.. container:: md-typeset__scrollwrap
+
+   .. container:: md-typeset__table
+
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | Field                                                                                             | Description                                                                                       |
+      +===================================================================================================+===================================================================================================+
+      | ``enabled``                                                                                       | Enable runtime performance optimization                                                           |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``rxRingSize``                                                                                    | RX ring buffer size (ethtool -G rx)                                                               |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``txRingSize``                                                                                    | TX ring buffer size (ethtool -G tx)                                                               |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``combinedChannels``                                                                              | Number of combined channels (ethtool -L combined)                                                 |
+      | int                                                                                               |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``lro``                                                                                           | Enable Large Receive Offload (ethtool -K lro)                                                     |
+      | bool                                                                                              |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _SpectrumXOptimizedSpec:
 
@@ -725,8 +879,8 @@ SpectrumXOptimizedSpec enables Spectrum-X specific optimizations
       | ``enabled``                                                                                       | Optimize Spectrum X                                                                               |
       | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | Version of the Spectrum-X architecture to optimize for                                            |
-      | string                                                                                            |                                                                                                   |
+      | ``version``                                                                                       | Version of the Spectrum-X architecture to optimize for. Should match the name of the config map   |
+      | string                                                                                            | with Spectrum-X profile                                                                           |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``overlay``                                                                                       | *(Optional)*                                                                                      |
       | string                                                                                            | Overlay mode to be configured Can be “l3” or “none”                                               |
