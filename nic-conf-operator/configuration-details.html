@@ -64,6 +64,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> Configuration Details</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Configuration details</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#spectrum-x-configuration">Spectrum-X Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-spectrum-x-profile-configmap">Example Spectrum-X profile ConfigMap:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane">Example Spectrum-X NicConfigurationTemplate with multiplane:</a></li>
 </ul>
 </li>
@@ -182,10 +183,10 @@
 <li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> (RoCE settings are included automatically)</p></li>
 <li><p>Can be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> — raw params are merged as overrides on top of Spectrum-X calculated params</p></li>
 <li><p>Only supported on ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Reference Architecture version (<code class="docutils literal notranslate"><span class="pre">RA1.3</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.0</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>, or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Must match the name of a Spectrum-X profile ConfigMap</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Set to <code class="docutils literal notranslate"><span class="pre">l3</span></code> for L3 EVPN overlay</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Only available with RA2.1. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Only available with RA2.1. Options: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
 </ul>
 </li>
 <li><p>If a configuration is not set in spec, its non-volatile configuration parameters (if any) should be set to device default.</p></li>
@@ -193,9 +194,55 @@
 </section>
 <section id="spectrum-x-configuration">
 <h2>Spectrum-X Configuration<a class="headerlink" href="#spectrum-x-configuration" title="Permalink to this headline"></a></h2>
-<p>The NIC Configuration Operator supports Spectrum-X-specific NIC configuration for different versions of the NVIDIA Spectrum-X Reference Architecture (RA1.3, RA2.0, and RA2.1).</p>
+<p>The NIC Configuration Operator supports Spectrum-X-specific NIC configuration through Spectrum-X profile ConfigMaps. A profile ConfigMap contains the Spectrum-X YAML profile consumed by the daemon at runtime.</p>
+<p>To create a Spectrum-X profile ConfigMap:</p>
+<ol class="arabic simple">
+<li><p>Create one ConfigMap per profile.</p></li>
+<li><p>Set the ConfigMap name to the value that will be used in <code class="docutils literal notranslate"><span class="pre">template.spectrumXOptimized.version</span></code>.</p></li>
+<li><p>Add the label <code class="docutils literal notranslate"><span class="pre">network.nvidia.com/operator.nic-configuration.spectrum-x-profile</span></code>. The label value is ignored; only the label key must be present.</p></li>
+<li><p>Put the complete Spectrum-X profile YAML under <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>.</p></li>
+</ol>
+<p>The profile ConfigMap can be created in any namespace watched by the operator.</p>
+<blockquote>
+<div><p><strong>Warning:</strong> If two labeled ConfigMaps in different namespaces share the same name, they define the same Spectrum-X version key and the latest-reconciled ConfigMap silently wins with no error. To avoid unpredictable behavior, use unique ConfigMap names across all watched namespaces.</p>
+</div></blockquote>
+<section id="example-spectrum-x-profile-configmap">
+<h3><a class="reference external" href="docs/examples/spectrum-x/example-spectrum-x-profile-configmap.yaml">Example Spectrum-X profile ConfigMap</a>:<a class="headerlink" href="#example-spectrum-x-profile-configmap" title="Permalink to this headline"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-spectrum-x-profile</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">network.nvidia.com/operator.nic-configuration.spectrum-x-profile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="nt">data</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">    </span><span class="no">useSoftwareCCAlgorithm: true</span><span class="w"></span>
+<span class="w">    </span><span class="no">docaCCVersion: &quot;example-version&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">mlxConfig:</span><span class="w"></span>
+<span class="w">      </span><span class="no">none:</span><span class="w"></span>
+<span class="w">        </span><span class="no">&quot;1023&quot;:</span><span class="w"></span>
+<span class="w">          </span><span class="no">postBreakout:</span><span class="w"></span>
+<span class="w">            </span><span class="no">EXAMPLE_NVCONFIG_PARAMETER: &quot;example-value&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="no">runtimeConfig:</span><span class="w"></span>
+<span class="w">      </span><span class="no">roce:</span><span class="w"></span>
+<span class="w">        </span><span class="no">- name: Example RoCE runtime parameter</span><span class="w"></span>
+<span class="w">          </span><span class="no">value: &quot;example-value&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="no">valueType: string</span><span class="w"></span>
+<span class="w">          </span><span class="no">dmsPath: &quot;&lt;dms-path-for-runtime-parameter&gt;&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Reference the profile from a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> by using the ConfigMap name as the Spectrum-X version:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example-spectrum-x-profile&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+</pre></div>
+</div>
 <p>Supported NIC types for Spectrum-X: * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports all multiplane modes * ConnectX-9 (device ID <code class="docutils literal notranslate"><span class="pre">1025</span></code>) – supports all multiplane modes (same configuration as ConnectX-8) * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports all multiplane modes except <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p>
-<p>RA2.1 introduces multiplane mode support, allowing NICs to be configured with multiple data planes. Available modes:</p>
+<p>Spectrum-X profiles can configure NICs with multiple data planes. Available modes:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 15%" />
@@ -233,9 +280,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<div><p><strong>Note:</strong> Multiplane modes are only available with RA2.1. For RA1.3 and RA2.0, <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> must be <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> must be <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
-</div></blockquote>
+</section>
 <section id="example-spectrum-x-nicconfigurationtemplate-with-multiplane">
 <h3><a class="reference external" href="docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml">Example Spectrum-X NicConfigurationTemplate with multiplane</a>:<a class="headerlink" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane" title="Permalink to this headline"></a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -274,7 +319,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 05, 2026.
+      <span class="lastupdated">Last updated on Jul 06, 2026.
       </span></p>
   </div>
 
