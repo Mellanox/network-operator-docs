@@ -37,13 +37,9 @@ Configuration details
 
 - ``pciPerformanceOptimized``: performs PCI performance optimizations. If enabled then by default the following will happen:
 
-  - Set nvconfig ``MAX_ACC_OUT_READ`` nvconfig parameter to ``0`` (use device defaults)
   - Set PCI max read request size for each PF to ``4096`` (note: this is a runtime config and is not persistent)
-  - Users can override values via ``maxAccOutRead`` and ``maxReadRequest``
-  - **IMPORTANT** :
-
-    - According to the PRM, setting ``MAX_ACC_OUT_READ`` to zero enables the auto mode, which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.
-    - In this case, until the fix is available, ``MAX_ACC_OUT_READ`` will not be set and a warning event will be emitted for this device’s CR.
+  - Users can override the runtime value via ``maxReadRequest``
+  - ``maxAccOutRead`` is deprecated and ignored; use ``rawNvConfig`` for explicit ``MAX_ACC_OUT_READ`` management if needed.
 
 - ``roceOptimized``: performs RoCE related optimizations. If enabled performs the following by default:
 
@@ -125,6 +121,17 @@ The profile ConfigMap can be created in any namespace watched by the operator.
              value: "example-value"
              valueType: string
              dmsPath: "<dms-path-for-runtime-parameter>"
+         adaptiveRouting:
+           - name: Example mlxreg runtime parameter
+             value: "0x00000001"
+             mlxreg:
+               register: ROCE_ACCL
+               field: "<mlxreg-field-to-check>"
+               setFields:
+                 - name: "<mlxreg-field-to-set>"
+                   value: "0x1"
+                 - name: "<mlxreg-field-select-to-set>"
+                   value: "0x1"
 
 Reference the profile from a ``NicConfigurationTemplate`` by using the ConfigMap name as the Spectrum-X version:
 

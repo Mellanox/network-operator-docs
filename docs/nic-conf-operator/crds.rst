@@ -345,6 +345,10 @@ NicDevicePortSpec describes the ports of the NIC
       | ``pci``                                                                                           | PCI is a PCI address of the port, e.g. 0000:3b:00.0                                               |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``fwctlDevice``                                                                                   | *(Optional)*                                                                                      |
+      | string                                                                                            | FwctlDevice is the fwctl character device path for this port, e.g. /dev/fwctl/fwctl0. Empty when  |
+      |                                                                                                   | the host does not expose a fwctl device for this PCI function.                                    |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``networkInterface``                                                                              | NetworkInterface is the name of the network interface for this port, e.g. eth1                    |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -760,7 +764,7 @@ PciPerformanceOptimizedSpec specifies PCI performance optimization settings
       | ``enabled``                                                                                       | Specifies whether to enable PCI performance optimization                                          |
       | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``maxAccOutRead``                                                                                 | Specifies the PCIe Max Accumulative Outstanding read bytes                                        |
+      | ``maxAccOutRead``                                                                                 | Deprecated: this field is ignored and no longer maps to MAX_ACC_OUT_READ.                         |
       | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``maxReadRequest``                                                                                | Specifies the size of a single PCI read request in bytes                                          |
