@@ -136,15 +136,9 @@
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code>: performs PCI performance optimizations. If enabled then by default the following will happen:</p>
 <ul>
-<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> nvconfig parameter to <code class="docutils literal notranslate"><span class="pre">0</span></code> (use device defaults)</p></li>
 <li><p>Set PCI max read request size for each PF to <code class="docutils literal notranslate"><span class="pre">4096</span></code> (note: this is a runtime config and is not persistent)</p></li>
-<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> and <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
-<li><p><strong>IMPORTANT</strong> :</p>
-<ul>
-<li><p>According to the PRM, setting <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> to zero enables the auto mode, which applies the best suitable optimizations. However, there is a bug in certain FW versions, where the zero value is not available.</p></li>
-<li><p>In this case, until the fix is available, <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> will not be set and a warning event will be emitted for this device’s CR.</p></li>
-</ul>
-</li>
+<li><p>Users can override the runtime value via <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> is deprecated and ignored; use <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> for explicit <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> management if needed.</p></li>
 </ul>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>: performs RoCE related optimizations. If enabled performs the following by default:</p>
@@ -230,6 +224,17 @@
 <span class="w">          </span><span class="no">value: &quot;example-value&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="no">valueType: string</span><span class="w"></span>
 <span class="w">          </span><span class="no">dmsPath: &quot;&lt;dms-path-for-runtime-parameter&gt;&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="no">adaptiveRouting:</span><span class="w"></span>
+<span class="w">        </span><span class="no">- name: Example mlxreg runtime parameter</span><span class="w"></span>
+<span class="w">          </span><span class="no">value: &quot;0x00000001&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="no">mlxreg:</span><span class="w"></span>
+<span class="w">            </span><span class="no">register: ROCE_ACCL</span><span class="w"></span>
+<span class="w">            </span><span class="no">field: &quot;&lt;mlxreg-field-to-check&gt;&quot;</span><span class="w"></span>
+<span class="w">            </span><span class="no">setFields:</span><span class="w"></span>
+<span class="w">              </span><span class="no">- name: &quot;&lt;mlxreg-field-to-set&gt;&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="no">value: &quot;0x1&quot;</span><span class="w"></span>
+<span class="w">              </span><span class="no">- name: &quot;&lt;mlxreg-field-select-to-set&gt;&quot;</span><span class="w"></span>
+<span class="w">                </span><span class="no">value: &quot;0x1&quot;</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Reference the profile from a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> by using the ConfigMap name as the Spectrum-X version:</p>
@@ -319,7 +324,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 06, 2026.
+      <span class="lastupdated">Last updated on Jul 20, 2026.
       </span></p>
   </div>
 
