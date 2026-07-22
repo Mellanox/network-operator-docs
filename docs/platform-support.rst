@@ -88,7 +88,7 @@ Prerequisites
      - Version
      - Notes
    * - Kubernetes
-     - >=1.31 and <=1.35
+     - >=1.31 and <=1.36
      -
    * - Helm
      - v3.5+
@@ -242,31 +242,31 @@ Supported Operating Systems and Kubernetes Platforms
      - Container Runtime
      - Notes
    * - Ubuntu 24.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
      - —
      - —
-     - 1.31–1.35
+     - 1.31–1.36
      - 2.12–2.15
      - Containerd
      - —
    * - Ubuntu 22.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
      - —
      - —
-     - 1.31–1.35
+     - 1.31–1.36
      - 2.12–2.15
      - Containerd
      - RT kernel support
    * - Red Hat CoreOS
      - —
-     - 4.17–4.21
+     - 4.17–4.22
      - —
      - —
      - —
      - CRI-O
      - RT kernel support
-   * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
-     - 1.31–1.35
+   * - Red Hat Enterprise Linux 10.0 / 10.2 / 9.8 / 9.6 / 9.4
+     - 1.31–1.36
      - —
      - —
      - —
@@ -274,7 +274,7 @@ Supported Operating Systems and Kubernetes Platforms
      - Containerd, CRI-O
      - RT kernel support
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.31–1.35
+     - 1.31–1.36
      - —
      - —
      - —
@@ -282,9 +282,9 @@ Supported Operating Systems and Kubernetes Platforms
      - Containerd, CRI-O
      - RT kernel support
    * - SUSE Linux Enterprise Server 15 SP7
-     - 1.31–1.35
+     - 1.31–1.36
      - —
-     - 1.31–1.35
+     - 1.31–1.36
      - —
      - —
      - Containerd
@@ -353,14 +353,14 @@ NVIDIA Spectrum-X Ethernet Networking Platform
    * - 2.2
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
-     - Upstream Kubernetes (1.31–1.35)
+     - Upstream Kubernetes (1.31–1.36)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
    * - 2.1
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
-     - Upstream Kubernetes (1.31–1.35)
+     - Upstream Kubernetes (1.31–1.36)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
@@ -379,11 +379,11 @@ Support for KubeVirt SR-IOV Passthrough
      - KubeVirt
      - Red Hat OpenShift Virtualization
    * - Ubuntu 24.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
      - v1.8.2+
      - Not supported
    * - Ubuntu 22.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
      - v1.8.2+
      - Not supported
 
@@ -413,15 +413,15 @@ Requirements:
    * - Operating System
      - Kubernetes
    * - Ubuntu 24.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
    * - Ubuntu 22.04 LTS
-     - 1.31–1.35
+     - 1.31–1.36
    * - Red Hat Enterprise Linux 10.0 / 9.6 / 9.4
-     - 1.31–1.35
+     - 1.31–1.36
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.31–1.35
+     - 1.31–1.36
    * - Red Hat CoreOS
-     - OpenShift 4.17–4.21
+     - OpenShift 4.17–4.22
 
 For background on the underlying technology, see the `NVIDIA GPUDirect RDMA documentation <https://docs.nvidia.com/cuda/gpudirect-rdma/>`_.
 
