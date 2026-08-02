@@ -160,32 +160,37 @@ can find those below.</p>
 <td><p><cite>[]</cite></p></td>
 <td><p>An optional list of references to secrets to use for pulling any of the Network Operator images.</p></td>
 </tr>
-<tr class="row-odd"><td><p>maintenanceOperator.enabled</p></td>
+<tr class="row-odd"><td><p>keepNCP</p></td>
+<td><p>bool</p></td>
+<td><p><cite>true</cite></p></td>
+<td><p>Preserve a Helm-managed NicClusterPolicy custom resource during chart upgrades.</p></td>
+</tr>
+<tr class="row-even"><td><p>maintenanceOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy Maintenance Operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>nfd.deployNodeFeatureRules</p></td>
+<tr class="row-odd"><td><p>nfd.deployNodeFeatureRules</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy Node Feature Rules to label the nodes with the discovered features.</p></td>
 </tr>
-<tr class="row-odd"><td><p>nfd.enabled</p></td>
+<tr class="row-even"><td><p>nfd.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy Node Feature Discovery operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.admissionController.enabled</p></td>
+<tr class="row-odd"><td><p>operator.admissionController.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy with admission controller.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.admissionController.useCertManager</p></td>
+<tr class="row-even"><td><p>operator.admissionController.useCertManager</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Use cert-manager for generating self-signed certificate.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.affinity.nodeAffinity</p></td>
+<tr class="row-odd"><td><p>operator.affinity.nodeAffinity</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
@@ -205,67 +210,67 @@ can find those below.</p>
 </td>
 <td><p>Configure node affinity settings for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.cniBinDirectory</p></td>
+<tr class="row-even"><td><p>operator.cniBinDirectory</p></td>
 <td><p>string</p></td>
 <td><p><cite>“/opt/cni/bin”</cite></p></td>
 <td><p>Directory, where CNI binaries will be deployed on the nodes. Setting for the sriov-network-operator is set with <code class="docutils literal notranslate"><span class="pre">sriov-network-operator.cniBinPath</span></code> parameter. Note that the CNI bin directory should be aligned with the CNI bin directory in the container runtime.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.cniNetworkDirectory</p></td>
+<tr class="row-odd"><td><p>operator.cniNetworkDirectory</p></td>
 <td><p>string</p></td>
 <td><p><cite>“/etc/cni/net.d”</cite></p></td>
 <td><p>Directory, where CNI network configuration will be deployed on the nodes. Note that the CNI network directory should be aligned with the CNI network directory in the container runtime.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.fullnameOverride</p></td>
+<tr class="row-even"><td><p>operator.fullnameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used to replace generated names.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.image</p></td>
+<tr class="row-odd"><td><p>operator.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator”</cite></p></td>
 <td><p>Network Operator image name</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.maintenanceOperator</p></td>
+<tr class="row-even"><td><p>operator.maintenanceOperator</p></td>
 <td><p>object</p></td>
 <td><p><cite>{“drainControllerRequestorID”:”nvidia.network-operator-drain-controller”,”nodeMaintenanceNamePrefix”:”network-operator”,”nodeMaintenanceNamespace”:”default”,”requestorID”:”nvidia.doca-driver-upgrade”,”useDrainControllerRequestor”:false,”useRequestor”:false}</cite></p></td>
 <td><p>Enable the use of maintenance operator upgrade logic.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.nameOverride</p></td>
+<tr class="row-odd"><td><p>operator.nameOverride</p></td>
 <td><p>string</p></td>
 <td><p><cite>“”</cite></p></td>
 <td><p>Name to be used as part of objects name generation.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.nodeSelector</p></td>
+<tr class="row-even"><td><p>operator.nodeSelector</p></td>
 <td><p>object</p></td>
 <td><p><cite>{}</cite></p></td>
 <td><p>Configure node selector settings for the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.enable</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.enable</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Deploy init container.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.image</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.image</p></td>
 <td><p>string</p></td>
 <td><p><cite>“network-operator-init-container”</cite></p></td>
 <td><p>Init container image name.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.ofedDriver.initContainer.repository</p></td>
+<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.repository</p></td>
 <td><p>string</p></td>
 <td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
 <td><p>Init container image repository.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.ofedDriver.initContainer.version</p></td>
+<tr class="row-even"><td><p>operator.ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
 <td><p>Init container image version.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.repository</p></td>
+<tr class="row-odd"><td><p>operator.repository</p></td>
 <td><p>string</p></td>
 <td><p><cite>“nvcr.io/nvstaging/mellanox”</cite></p></td>
 <td><p>Network Operator image repository.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.resources</p></td>
+<tr class="row-even"><td><p>operator.resources</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">limits</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500m</span><span class="w"></span>
@@ -278,7 +283,7 @@ can find those below.</p>
 </td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.tolerations</p></td>
+<tr class="row-odd"><td><p>operator.tolerations</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
@@ -293,17 +298,17 @@ can find those below.</p>
 </td>
 <td><p>Set additional tolerations for various Daemonsets deployed by the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.useDTK</p></td>
+<tr class="row-even"><td><p>operator.useDTK</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable the use of Driver ToolKit to compile DOCA-OFED Drivers (OpenShift only).</p></td>
 </tr>
-<tr class="row-even"><td><p>sriovNetworkOperator.enabled</p></td>
+<tr class="row-odd"><td><p>sriovNetworkOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy SR-IOV Network Operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>upgradeCRDs</p></td>
+<tr class="row-even"><td><p>upgradeCRDs</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable CRDs upgrade with helm pre-install and pre-upgrade hooks.</p></td>
@@ -403,7 +408,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>node-feature-discovery.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>node-feature-discovery.master</p></td>
@@ -476,22 +481,22 @@ can find those below.</p>
 <tbody>
 <tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.rdmaCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.resourcesInjector</p></td>
@@ -501,27 +506,27 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovDraDriver</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.webhook</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers</p></td>
@@ -674,7 +679,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>maintenance-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-beta.5”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>maintenance-operator-chart.operatorConfig</p></td>
@@ -711,7 +716,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Jul 28, 2026.
+      <span class="lastupdated">Last updated on Aug 02, 2026.
       </span></p>
   </div>
 
