@@ -59,8 +59,7 @@ An example of Node Feature Discovery configuration:
      namespace: openshift-nfd
    spec:
      operand:
-       image: registry.redhat.io/openshift4/ose-node-feature-discovery-rhel9:v4.16
-       imagePullPolicy: Always
+       imagePullPolicy: IfNotPresent
      workerConfig:
        configData: |
          sources:
@@ -413,6 +412,7 @@ To create an NV-IPAM IPPool, apply:
     kind: IPPool
     metadata:
       name: my-pool
+      namespace: nvidia-network-operator
     spec:
       subnet: 192.168.0.0/24
       perNodeBlockSize: 100
@@ -509,7 +509,7 @@ NV-IPAM IPPool should be created before SriovNetwork:
     kind: IPPool
     metadata:
       name: my-pool
-      namespace: openshift-sriov-network-operator
+      namespace: nvidia-network-operator
     spec:
       subnet: 192.168.0.0/24
       perNodeBlockSize: 100
@@ -645,6 +645,7 @@ To create an NV-IPAM IPPool, apply:
     kind: IPPool
     metadata:
       name: my-pool
+      namespace: nvidia-network-operator
     spec:
       subnet: 192.168.0.0/24
       perNodeBlockSize: 100
