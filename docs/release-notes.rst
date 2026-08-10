@@ -36,6 +36,12 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.4.1
+     - | - CVEs fixes
+       | - Added support for OpenShift 4.22
+       | - Added support for Kubernetes 1.36
+       | - Added support for RHEL 9.8
+       | - Added support for RHEL 10.2
    * - 26.4.0
      - | - Added support for Kubernetes 1.35
        | - Added support for Red Hat OpenShift 4.21
