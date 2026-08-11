@@ -36,6 +36,8 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.1.2
+     - | - CVEs fixes
    * - 26.1.1
      - | - CVEs fixes
    * - 26.1.0
