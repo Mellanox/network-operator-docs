@@ -35,7 +35,7 @@ Before deploying the NVIDIA Network Operator, ensure you have the following:
 Prerequisites
 =============
 
-#. **Kubernetes Cluster**: A running Kubernetes cluster (v1.32+) with nodes that have NVIDIA NICs.
+#. **Kubernetes Cluster**: A running Kubernetes cluster (v1.32-v1.36) with nodes that have NVIDIA NICs.
 
 #. **CLI Tools**: Install ``kubectl`` and ``helm`` on your client machine:
 
