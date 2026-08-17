@@ -262,8 +262,18 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>operator.ofedDriver.initContainer.version</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.2”</cite></p></td>
 <td><p>Init container image version.</p></td>
+</tr>
+<tr class="row-odd"><td><p>operator.preStopSleepSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>25</cite></p></td>
+<td><p>Seconds to sleep in <code class="docutils literal notranslate"><span class="pre">preStop</span></code> before SIGTERM. Keeps the controller reconciling while MOFED pods begin terminating during graceful node shutdown. Requires Kubernetes &gt;= 1.29 (PodLifecycleSleepAction). Set to <code class="docutils literal notranslate"><span class="pre">0</span></code> to disable.</p></td>
+</tr>
+<tr class="row-even"><td><p>operator.priorityClassName</p></td>
+<td><p>string</p></td>
+<td><p><cite>“system-node-critical”</cite></p></td>
+<td><p>Priority class for the operator controller. <code class="docutils literal notranslate"><span class="pre">system-node-critical</span></code> keeps the controller in the same graceful node shutdown phase as MOFED so it can update <code class="docutils literal notranslate"><span class="pre">network.nvidia.com/operator.mofed.wait</span></code> before the node goes down. See <a class="reference external" href="https://github.com/Mellanox/network-operator/issues/2954">https://github.com/Mellanox/network-operator/issues/2954</a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p>operator.repository</p></td>
 <td><p>string</p></td>
@@ -283,7 +293,12 @@ can find those below.</p>
 </td>
 <td><p>Optional <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">resource requests and limits</a> for the operator.</p></td>
 </tr>
-<tr class="row-odd"><td><p>operator.tolerations</p></td>
+<tr class="row-odd"><td><p>operator.terminationGracePeriodSeconds</p></td>
+<td><p>int</p></td>
+<td><p><cite>30</cite></p></td>
+<td><p>Termination grace period for the operator controller. Must be greater than <code class="docutils literal notranslate"><span class="pre">preStopSleepSeconds</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>operator.tolerations</p></td>
 <td><p>yaml</p></td>
 <td><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node-role.kubernetes.io/master&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Equal&quot;</span><span class="w"></span>
@@ -298,17 +313,17 @@ can find those below.</p>
 </td>
 <td><p>Set additional tolerations for various Daemonsets deployed by the operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>operator.useDTK</p></td>
+<tr class="row-odd"><td><p>operator.useDTK</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable the use of Driver ToolKit to compile DOCA-OFED Drivers (OpenShift only).</p></td>
 </tr>
-<tr class="row-odd"><td><p>sriovNetworkOperator.enabled</p></td>
+<tr class="row-even"><td><p>sriovNetworkOperator.enabled</p></td>
 <td><p>bool</p></td>
 <td><p><cite>false</cite></p></td>
 <td><p>Deploy SR-IOV Network Operator.</p></td>
 </tr>
-<tr class="row-even"><td><p>upgradeCRDs</p></td>
+<tr class="row-odd"><td><p>upgradeCRDs</p></td>
 <td><p>bool</p></td>
 <td><p><cite>true</cite></p></td>
 <td><p>Enable CRDs upgrade with helm pre-install and pre-upgrade hooks.</p></td>
@@ -408,7 +423,7 @@ can find those below.</p>
 </tr>
 <tr class="row-even"><td><p>node-feature-discovery.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>node-feature-discovery.master</p></td>
@@ -481,22 +496,22 @@ can find those below.</p>
 <tbody>
 <tr class="row-even"><td><p>sriov-network-operator.images.ibSriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.operator</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.ovsCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.rdmaCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.resourcesInjector</p></td>
@@ -506,27 +521,27 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovCni</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovConfigDaemon</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.sriovDevicePlugin</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.images.sriovDraDriver</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>sriov-network-operator.images.webhook</p></td>
 <td><p>string</p></td>
-<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>sriov-network-operator.operator.admissionControllers</p></td>
@@ -679,7 +694,7 @@ can find those below.</p>
 </tr>
 <tr class="row-odd"><td><p>maintenance-operator-chart.operator.image.tag</p></td>
 <td><p>string</p></td>
-<td><p><cite>“network-operator-v26.7.0-rc.1”</cite></p></td>
+<td><p><cite>“network-operator-v26.7.0-rc.2”</cite></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>maintenance-operator-chart.operatorConfig</p></td>
@@ -716,7 +731,7 @@ can find those below.</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 11, 2026.
+      <span class="lastupdated">Last updated on Aug 17, 2026.
       </span></p>
   </div>
 
