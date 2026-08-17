@@ -131,8 +131,16 @@ General Parameters
      - Init container image repository.
    * - operator.ofedDriver.initContainer.version
      - string
-     - `"network-operator-v26.7.0-rc.1"`
+     - `"network-operator-v26.7.0-rc.2"`
      - Init container image version.
+   * - operator.preStopSleepSeconds
+     - int
+     - `25`
+     - Seconds to sleep in ``preStop`` before SIGTERM. Keeps the controller reconciling while MOFED pods begin terminating during graceful node shutdown. Requires Kubernetes >= 1.29 (PodLifecycleSleepAction). Set to ``0`` to disable.
+   * - operator.priorityClassName
+     - string
+     - `"system-node-critical"`
+     - Priority class for the operator controller. ``system-node-critical`` keeps the controller in the same graceful node shutdown phase as MOFED so it can update ``network.nvidia.com/operator.mofed.wait`` before the node goes down. See https://github.com/Mellanox/network-operator/issues/2954.
    * - operator.repository
      - string
      - `"nvcr.io/nvstaging/mellanox"`
@@ -149,6 +157,10 @@ General Parameters
               memory: 64Mi
          
      - Optional `resource requests and limits <https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/>`_ for the operator.
+   * - operator.terminationGracePeriodSeconds
+     - int
+     - `30`
+     - Termination grace period for the operator controller. Must be greater than ``preStopSleepSeconds``.
    * - operator.tolerations
      - yaml
      - .. code-block:: yaml
@@ -251,7 +263,7 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      -
    * - node-feature-discovery.image.tag
      - string
-     - `"network-operator-v26.7.0-rc.1"`
+     - `"network-operator-v26.7.0-rc.2"`
      -
    * - node-feature-discovery.master
      - yaml
@@ -313,19 +325,19 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.rdmaCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
@@ -333,23 +345,23 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.sriovDraDriver
      - string
-     - `"nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.1"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.2"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -480,7 +492,7 @@ Maintenance Operator Helm chart customization options can be found `here <https:
      -
    * - maintenance-operator-chart.operator.image.tag
      - string
-     - `"network-operator-v26.7.0-rc.1"`
+     - `"network-operator-v26.7.0-rc.2"`
      -
    * - maintenance-operator-chart.operatorConfig
      - object
