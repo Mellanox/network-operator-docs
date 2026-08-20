@@ -35,7 +35,7 @@ A Helm chart is provided for easily deploying the Network operator in a cluster 
    **What's new in 26.4.0**
 
    * **KubeVirt SR-IOV passthrough** — accelerated East-West networking for VM workloads on vanilla Kubernetes. See :doc:`KubeVirt SR-IOV Integration <kubevirt>`.
-   * **Spectrum-X RA 2.2 alignment** — multi-plane fabric with topology-aware pod placement via DRA, plus simplified config generation through the K8s LaunchKit.
+   * **Spectrum-X RA 2.1 alignment (Tech Preview on 26.4.x)** — multi-plane fabric with topology-aware pod placement via DRA, plus simplified config generation through the K8s LaunchKit.
    * **Dynamic Resource Allocation (DRA) SR-IOV driver** — Kubernetes-native VF allocation for SR-IOV workloads. See :doc:`DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver>`.
 
    For the full list of changes, see the :doc:`release-notes`.

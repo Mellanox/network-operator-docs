@@ -26,6 +26,15 @@ Software Multiplane Spectrum-X Quick Start
    :local:
    :backlinks: none
 
+.. warning::
+
+   On Network Operator 26.4.x, this Spectrum-X RA 2.1 configuration workflow is
+   **Tech Preview** — intended for early evaluation of new configuration flows
+   and capabilities, not for production use. The validated, generally available
+   Spectrum-X RA 2.1 solution is Network Operator 26.1.x (see the `NVIDIA
+   Spectrum-X Validated Solution Stack
+   <https://networking-docs.nvidia.com/software/spectrumx-solution-stack>`_).
+
 .. note::
 
    You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
@@ -37,7 +46,7 @@ is split into multiple PFs, each assigned to a separate plane, and the
 software stack performs **Software Plane Load Balancing** (``swplb``) across
 them. Used on **B300** and **GB300** platforms — set ``numberOfPlanes: 2``
 for Dual-Plane or ``numberOfPlanes: 4`` for Quad-Plane (B300 only). The
-configuration uses RA 2.2 with ``multiplaneMode: swplb``. The example below
+configuration uses RA 2.1 with ``multiplaneMode: swplb``. The example below
 uses ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your
 cluster-specific values before applying.
 
@@ -157,7 +166,7 @@ Map PCI addresses to rail/plane indices and define interface naming. Replace ``T
 Step 4: NicConfigurationTemplate
 ==================================
 
-Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.2 with ``swplb`` multiplane mode. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
+Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.1 with ``swplb`` multiplane mode. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
 
 .. code-block:: yaml
 
@@ -176,7 +185,7 @@ Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.2 with ``swplb`` multipla
        linkType: Ethernet
        spectrumXOptimized:
          enabled: true
-         version: "RA2.2"
+         version: "RA2.1"
          overlay: "none"
          multiplaneMode: "swplb"
          numberOfPlanes: 2

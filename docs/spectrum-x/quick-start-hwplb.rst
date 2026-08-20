@@ -28,9 +28,10 @@ Hardware Multiplane Spectrum-X Quick Start (Tech Preview)
 
 .. warning::
 
-   Hardware Multiplane (``hwplb``) is **tech preview** in Network Operator
-   26.4.0 and is **not part of the validated Spectrum-X Reference
-   Architecture**. Use only for evaluation purposes.
+   Hardware Multiplane (``hwplb``) is **tech preview**, planned for a future
+   Spectrum-X Reference Architecture, and is **not part of the current
+   validated Spectrum-X Reference Architecture**. Use only for evaluation
+   purposes.
 
 .. note::
 
@@ -44,7 +45,7 @@ the hardware layer, so each rail still uses a single ``CIDRPool`` while
 exposing multiple per-plane PFs. Used on **B300**
 and **GB300** platforms — set ``numberOfPlanes: 2`` for Dual-Plane or
 ``numberOfPlanes: 4`` for Quad-Plane (B300 only). The configuration uses
-RA 2.2 with ``multiplaneMode: hwplb``. The example below uses
+RA 2.1 with ``multiplaneMode: hwplb``. The example below uses
 ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your cluster-specific
 values before applying.
 
@@ -162,7 +163,7 @@ Map PCI addresses to rail/plane indices and define interface naming. Replace ``T
 Step 4: NicConfigurationTemplate
 ==================================
 
-Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.2 with ``hwplb`` multiplane mode. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
+Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.1 with ``hwplb`` multiplane mode. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
 
 .. code-block:: yaml
 
@@ -181,7 +182,7 @@ Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.2 with ``hwplb`` multipla
        linkType: Ethernet
        spectrumXOptimized:
          enabled: true
-         version: "RA2.2"
+         version: "RA2.1"
          overlay: "none"
          multiplaneMode: "hwplb"
          numberOfPlanes: 2

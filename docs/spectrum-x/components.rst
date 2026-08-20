@@ -135,14 +135,14 @@ Driver
    * - **DOCA-Host**
      - Host-installed NVIDIA OFED kernel modules and DOCA tooling.
        Includes OVS-DOCA (see :ref:`host-virtual-switch` below). Default
-       driver path for Spectrum-X RA 2.2 validated deployments.
+       driver path for Spectrum-X RA 2.1 (Tech Preview on 26.4.x) deployments.
 
 .. important::
 
    **DOCA-Host (host-installed)** and the **containerized DOCA-OFED
    driver** (deployed via Network Operator — see
    :ref:`k8s-driver-layer`) are **mutually exclusive**. Choose one per
-   node; do not deploy both. Spectrum-X RA 2.2 validated deployments
+   node; do not deploy both. Spectrum-X RA 2.1 (Tech Preview on 26.4.x) deployments
    typically use host-installed DOCA-Host.
 
 .. _host-virtual-switch:
