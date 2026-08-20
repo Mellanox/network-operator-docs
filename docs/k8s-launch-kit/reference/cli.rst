@@ -108,13 +108,13 @@ Profile Selection
    * - ``--multirail``
      - Enable multirail deployment. Auto-defaults to ``true``. Opt out with ``--multirail=false`` (YAML cannot express explicit-false).
    * - ``--spectrum-x <RA-version>``
-     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.1`` or ``RA2.2``. Implies ethernet fabric, sriov deployment, and multirail.
+     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.1``. Implies ethernet fabric, sriov deployment, and multirail.
    * - ``--multiplane-mode <string>``
      - Multiplane mode: ``swplb``, ``hwplb``, ``uniplane``, or ``none``. Required with ``--spectrum-x``; auto-defaulted from east-west PF deviceID when omitted (CX7/BF3 → ``uniplane``, CX8 → ``swplb``, CX9 → ``hwplb``). ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
      - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from deviceID (CX7/BF3 → 1, CX8 → 2, CX9 → 4).
    * - ``--network-operator-release <string>``
-     - Pin to a Network Operator release line. Supported: ``25.10``, ``26.1``, ``26.4``. Auto-defaulted under ``--spectrum-x`` (``RA2.1`` → ``26.1``; ``RA2.2`` → ``26.4``). See :doc:`../overview`.
+     - Pin to a Network Operator release line. Supported: ``25.10``, ``26.1``, ``26.4``. Auto-defaulted under ``--spectrum-x`` (``RA2.1`` → ``26.1``). See :doc:`../overview`.
    * - ``--groups <a,b,...>``
      - Restrict output to the named source groups (comma-separated, matched case-sensitively against ``clusterConfig[].identifier``). Mutually exclusive with ``--gpu-type``. Empty match is a validation error. See :doc:`../heterogeneous-clusters`.
    * - ``--gpu-type <string>``

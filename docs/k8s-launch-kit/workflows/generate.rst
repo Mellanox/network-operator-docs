@@ -77,7 +77,7 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - 1 (CX7 / BF3 SuperNIC), 2 (CX8), 4 (CX9)
      - only when ``--spectrum-x`` is set
    * - ``--network-operator-release``
-     - matching release for the chosen RA (RA2.1 → 26.1, RA2.2 → 26.4)
+     - matching release for the chosen RA (RA2.1 → 26.1)
      - only when ``--spectrum-x`` is set
 
 Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (ConnectX-8 (deviceID 1023))``); the full reasoning trail is at debug level (``--log-level debug``).
@@ -99,7 +99,7 @@ For Spectrum-X profiles --- and recommended for all deployments --- pin the Netw
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
 
-Supported release lines: ``26.1`` and ``26.4``. The release auto-fills versions and image tags from an embedded catalog. RA2.1 Spectrum-X requires ``--network-operator-release 26.1``; RA2.2 Spectrum-X requires ``26.4``.
+Supported release lines: ``26.1`` and ``26.4``. The release auto-fills versions and image tags from an embedded catalog. RA2.1 Spectrum-X requires ``--network-operator-release 26.1``.
 
 ================================================================================
 Generation without a Live Cluster
