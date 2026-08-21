@@ -46,7 +46,7 @@ Changes and New Features
      - | - Added support for Kubernetes 1.35
        | - Added support for Red Hat OpenShift 4.21
        | - Added support for NVIDIA GB300 NVL72 (DGX/HGX) systems
-       | - Added support for NVIDIA Spectrum-X Reference Architecture 2.2 (RA 2.2) in NVIDIA Spectrum-X Operator, with unified configuration and the new ``SpectrumXRailPoolConfig`` v1alpha2 CRD
+       | - Added a new unified Spectrum-X configuration workflow (the ``SpectrumXRailPoolConfig`` v1alpha2 CRD in NVIDIA Spectrum-X Operator) providing Tech Preview support for Spectrum-X RA 2.1; the generally available (GA) Spectrum-X RA 2.1 workflow is provided in Network Operator 26.1.x
        | - Added IPv6 support for Spectrum-X on Kubernetes
        | - Added consistent naming of RDMA and network devices in Pods
        | - Added RDMA CNI host-to-Pod QoS propagation

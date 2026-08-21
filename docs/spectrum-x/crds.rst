@@ -134,9 +134,40 @@ SpectrumXRailPoolConfigStatus defines the observed state of SpectrumXRailPoolCon
    * - | ``syncStatus``
        | string
      - Synchronization status. One of ``Unknown``, ``InProgress``, ``Failed``, ``Succeeded``.
+   * - | ``nodeStates``
+       | :ref:`[]NodeState <NodeState>`
+     - *(Optional)* Per-node view of the observed state, giving a finer-grained picture than the aggregate ``syncStatus``.
    * - | ``observedGeneration``
        | int64
      - The most recent generation observed by the controller.
+
+.. _NodeState:
+
+NodeState
+~~~~~~~~~
+
+(*Appears on:* :ref:`SpectrumXRailPoolConfigStatus <SpectrumXRailPoolConfigStatus>`)
+
+NodeState defines a finer-grained view of the observed state of SpectrumXRailPoolConfig on a single node.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+   * - | ``name``
+       | string
+     - Name of the node this state refers to.
+   * - | ``state``
+       | string
+     - State of the node configuration. One of ``Unknown``, ``InProgress``, ``Failed``, ``Succeeded``.
+   * - | ``observedGeneration``
+       | int64
+     - *(Optional)* The ``SpectrumXRailPoolConfig`` generation this node state was reported for.
+   * - | ``message``
+       | string
+     - *(Optional)* Human-readable message with details about why the node is in this state.
 
 .. _RailTopology:
 

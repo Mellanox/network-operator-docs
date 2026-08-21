@@ -60,7 +60,7 @@ Limitations
 
 .. warning::
 
-   On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
+   On NVIDIA GB300 NVL72, Vera Rubin NVL72, and HGX Rubin NVL8 systems, the PCIe root used to match a NIC to a GPU is not
    the root of the NIC itself. Instead, it is the PCIe root of the NIC's Data Direct sub-interface.
    This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
    this topology.
@@ -399,3 +399,42 @@ constrained to share the same PCIe root:
          constraints:
          - matchAttribute: "resource.kubernetes.io/pcieRoot"
            requests: [vf, gpu]
+
+Spectrum-X rails
+================
+
+On Spectrum-X, the Spectrum-X Operator generates one SR-IOV resource per
+entry in ``SpectrumXRailPoolConfig.railTopology``, named after that entry.
+Create one ``ResourceClaimTemplate`` per entry and select the matching
+resource:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 39 39
+
+   * - Multiplane mode
+     - Rail topology entries
+     - Resource to request
+   * - ``none``, ``hwplb``
+     - One per rail, listing every plane's PF
+     - ``nvidia.com/<rail>`` — for example ``nvidia.com/rail0``
+   * - ``swplb``
+     - One per rail-plane, a single PF each
+     - ``nvidia.com/<rail><plane>`` — for example ``nvidia.com/rail0p0``
+
+Use that value in the CEL selector shown under `Resource Alignment`_, and
+pair it with a GPU through the ``resource.kubernetes.io/pcieRoot``
+constraint so the VF and GPU share a PCIe root.
+
+.. important::
+
+   ``SpectrumXRailPoolConfig.draEnabled`` **defaults to** ``true`` and must
+   agree with the ``dynamicResourceAllocation`` feature gate on the SR-IOV
+   Network Operator. Enable both when workloads allocate VFs through DRA;
+   if you allocate VFs through the device plugin instead, set
+   ``draEnabled: false`` explicitly. A mismatch leaves the rails without
+   usable resources and reports no error.
+
+For the rail topology itself, see :doc:`Spectrum-X CRDs and API Reference
+<../spectrum-x/crds>` and the
+:doc:`Spectrum-X Kubernetes Quick Start <../spectrum-x/quick-start>`.

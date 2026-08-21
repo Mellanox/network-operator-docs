@@ -32,7 +32,7 @@ distinct domains:
   Operator** on top of a working Kubernetes cluster.
 
 This page maps each component to its role, dependencies, and
-default-enabled state in Network Operator 26.4.0. For exact image versions,
+default-enabled state in Network Operator 26.7.0. For exact image versions,
 see the software components table in :doc:`Platform Support
 <../platform-support>`. For end-to-end walkthroughs, see :doc:`Spectrum-X
 Kubernetes Quick Start <quick-start>`.
@@ -70,25 +70,15 @@ Day 2 are reconciled by Network Operator.
 Stack overview
 ==============
 
-**Host Layer** *(Day 0 — outside Network Operator scope)*:
+**Host Layer** *(Day 0 — outside Network Operator scope)* — operating-system
+prerequisites, the DOCA-Host driver, and the OVS-DOCA virtual switch.
 
-- **OS prerequisites** — SR-IOV BIOS + firmware; hugepages; RDMA namespace
-  exclusive mode.
-- **Driver** — DOCA-Host (NVIDIA OFED kernel modules + DOCA tooling).
-- **Virtual switch** — OVS-DOCA (hardware-accelerated Open vSwitch,
-  bundled with DOCA-Host).
+**Kubernetes Layer** *(Day 1 / Day 2 — owned by Network Operator)* — node
+discovery, the containerized driver, the operator stack, the CNI and
+data-plane components, and the Spectrum-X profile ConfigMap that feeds NIC
+configuration.
 
-**Kubernetes Layer** *(Day 1 / Day 2 — owned by Network Operator)*:
-
-- **Discovery** — Node Feature Discovery (NFD); NIC Feature Discovery.
-- **Driver** *(alternative to host-installed DOCA-Host)* — DOCA-OFED
-  driver container.
-- **Operator** — Network Operator (umbrella); SR-IOV Network Operator;
-  NIC Configuration Operator; Spectrum-X Operator; Maintenance Operator.
-- **CNI / data-plane** — Multus; OVS-CNI; SR-IOV Network Device Plugin;
-  SR-IOV CNI; RDMA-CNI; NV-IPAM; Spectrum-X flow-controller DaemonSet.
-- **Optional / tech preview** — DOCA xPlane (Hardware Multiplane only);
-  SR-IOV DRA driver; NicNodePolicy CRD; DOCA Telemetry Service.
+Each layer is broken out in the sections below.
 
 ==========
 Host Layer
@@ -109,13 +99,18 @@ OS prerequisites
 
    * - Component
      - Role
-   * - **SR-IOV BIOS + firmware**
-       (``SRIOV_EN=True``, ``NUM_OF_VFS=1``)
-     - BIOS and NIC firmware settings that enable Virtual Function
-       creation on each SuperNIC.
+   * - **SR-IOV enabled in BIOS/UEFI**
+     - Platform firmware setting that permits Virtual Function creation.
+       The NIC-side nvconfig (``SRIOV_EN``, ``SRIOV_NUM_OF_VFS``, and the
+       multiplane parameters) is **not** set here — the NIC Configuration
+       Operator derives it from ``numVfs`` and the Spectrum-X profile. See
+       :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
    * - **Hugepages**
-     - Memory backing for OVS-DOCA. 400 MB per SuperNIC from DOCA 3.4
-       onwards (1 GB on earlier DOCA).
+     - Memory backing for OVS-DOCA: 400 MB per SuperNIC from DOCA 3.4
+       onwards (1 GB on earlier DOCA), reserved on the kernel command
+       line. **Hardware Multiplane needs a second reservation** for DOCA
+       xPlane — at least 150 × 2 MB pages per SuperNIC, provisioned with
+       ``doca-hugepages config --app doca-xplane``.
    * - **RDMA namespace exclusive mode**
        (``options ib_core netns_mode=0``)
      - Per-namespace RDMA device isolation, required to assign RDMA
@@ -135,14 +130,14 @@ Driver
    * - **DOCA-Host**
      - Host-installed NVIDIA OFED kernel modules and DOCA tooling.
        Includes OVS-DOCA (see :ref:`host-virtual-switch` below). Default
-       driver path for Spectrum-X RA 2.2 validated deployments.
+       driver path for Spectrum-X RA 2.3 validated deployments.
 
 .. important::
 
    **DOCA-Host (host-installed)** and the **containerized DOCA-OFED
    driver** (deployed via Network Operator — see
    :ref:`k8s-driver-layer`) are **mutually exclusive**. Choose one per
-   node; do not deploy both. Spectrum-X RA 2.2 validated deployments
+   node; do not deploy both. Spectrum-X RA 2.3 validated deployments
    typically use host-installed DOCA-Host.
 
 .. _host-virtual-switch:
@@ -192,51 +187,67 @@ Discovery
 
 .. _k8s-driver-layer:
 
-Driver (alternative to host-installed DOCA-Host)
-------------------------------------------------
+Driver (containerized)
+----------------------
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 50 20
-
-   * - Component
-     - Role
-     - Default
-   * - **DOCA-OFED driver container** (``doca-driver``)
-     - Containerized NVIDIA OFED kernel driver. Used **only** when the
-       host does not have DOCA-Host installed. See the host
-       :ref:`Driver <host-driver>` section for the mutual-exclusion rule.
-     - Opt-in via ``ofedDriver`` on ``NicClusterPolicy``.
-
-Operator
---------
-
-The operator sub-layer is what Network Operator deploys and reconciles
-when you enable the Spectrum-X bits in ``NicClusterPolicy``.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 22 45 18 15
+   :widths: 24 46 16 14
 
    * - Component
      - Role
      - Default
      - Spectrum-X relevance
-   * - **Network Operator** (umbrella)
-     - Reconciles ``NicClusterPolicy`` (and ``NicNodePolicy``);
-       orchestrates all sub-operators, CNIs, and driver lifecycle.
-     - Always on.
-     - Essential.
-   * - **SR-IOV Network Operator** (sub-chart)
+   * - **DOCA-OFED driver container** (``doca-driver``)
+     - Containerized NVIDIA DOCA-OFED kernel driver, loaded on the node by
+       Network Operator. Mutually exclusive with host-installed
+       :ref:`DOCA-Host <host-driver>` — choose one per node. On
+       **immutable operating systems** such as Red Hat CoreOS, where host
+       packages cannot be installed, this is the **only** way to deliver
+       DOCA kernel drivers for ConnectX and BlueField hardware, and it
+       keeps the driver on the same cloud-native lifecycle as the rest of
+       the stack.
+     - Opt-in via ``ofedDriver`` on ``NicClusterPolicy``.
+     - Optional by default; required on immutable hosts.
+
+Operator
+--------
+
+**NVIDIA Network Operator is the only networking operator you install.**
+It is the entry point for all NVIDIA networking on Kubernetes — RDMA and
+RoCE, InfiniBand, and Spectrum-X alike — and it owns the
+``NicClusterPolicy`` and ``NicNodePolicy`` APIs through which everything
+else is configured. (GPU workloads additionally use NVIDIA GPU Operator,
+which is installed separately.)
+
+Everything in the table below is a **sub-operator**: packaged in the
+Network Operator Helm chart, switched on through ``NicClusterPolicy``,
+and version-pinned and reconciled by Network Operator. None of them is
+installed, upgraded, or configured on its own — Spectrum-X is enabled by
+turning the right sub-operators on, not by adding another operator
+alongside Network Operator.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 22 45 18 15
+
+   * - Sub-operator
+     - Role
+     - Default
+     - Spectrum-X relevance
+   * - **SR-IOV Network Operator**
      - Owns ``SriovNetworkNodePolicy`` and ``OVSNetwork``; manages VF
-       creation, switchdev mode, and ships **OVS-CNI**, **SR-IOV CNI**,
-       **RDMA-CNI**, the SR-IOV Device Plugin, and the DRA driver.
+       creation and switchdev mode, and ships the components the
+       Spectrum-X data path uses — **OVS-CNI**, **RDMA-CNI**, the SR-IOV
+       Device Plugin, and the DRA driver.
      - Off by default; **on for Spectrum-X**.
      - Essential.
    * - **NIC Configuration Operator**
      - Owns ``NicConfigurationTemplate``, ``NicFirmwareTemplate``, and
        ``NicInterfaceNameTemplate``; applies firmware and rail-name
-       templates to each SuperNIC.
+       templates to each SuperNIC. Reads NIC tuning from the Spectrum-X
+       profile ConfigMap named by ``spectrumXOptimized.version`` — see
+       :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
      - Opt-in.
      - Recommended.
    * - **Spectrum-X Operator**
@@ -251,7 +262,8 @@ when you enable the Spectrum-X bits in ``NicClusterPolicy``.
      - Orchestrates node-maintenance windows (drain / cordon) for safe
        firmware updates and OFED driver upgrades.
      - Opt-in.
-     - Optional.
+     - Recommended. Enabled in the Spectrum-X reference values
+       (``maintenanceOperator.enabled: true``).
 
 CNI / data-plane
 ----------------
@@ -275,10 +287,12 @@ individually here because they play distinct roles.
      - Opt-in via ``secondaryNetwork.multus``.
      - Essential.
    * - **OVS-CNI**
-     - Plugs SR-IOV VFs into the per-rail OVS bridge (provided by
-       :ref:`OVS-DOCA <host-virtual-switch>` in the Host Layer) and chains
-       with NV-IPAM for address allocation. Shipped under the SR-IOV
-       Network Operator sub-chart.
+     - Plugs SR-IOV VFs into the rail's OVS bridge and chains with NV-IPAM
+       for address allocation. The bridge itself is created by an operator
+       — per-PF by the SR-IOV Network Operator for ``swplb`` / ``none``,
+       or ``br-xplane`` by the Spectrum-X Operator for ``hwplb`` — on top
+       of the :ref:`OVS-DOCA <host-virtual-switch>` switch from the Host
+       Layer. Shipped under the SR-IOV Network Operator sub-chart.
      - With SR-IOV Op.
      - Essential.
    * - **SR-IOV Network Device Plugin**
@@ -286,19 +300,18 @@ individually here because they play distinct roles.
        resources.
      - With SR-IOV Op.
      - Essential.
-   * - **SR-IOV CNI**
-     - Standard SR-IOV CNI binary. OVS-CNI is the typical Spectrum-X
-       data path; SR-IOV CNI is available for non-OVS deployments.
-     - With SR-IOV Op.
-     - Alternative.
    * - **RDMA-CNI**
      - Moves RDMA devices into the pod network namespace (requires RDMA
-       exclusive mode on the host).
+       exclusive mode on the host) and applies the RDMA QoS values the
+       Spectrum-X Operator sets on the generated ``OVSNetwork``. Every
+       Spectrum-X rail chains it, so it is not optional in practice.
      - With SR-IOV Op.
-     - Optional.
+     - Essential.
    * - **NV-IPAM**
      - Rail / plane-aware IP allocation for pods. Consumes ``CIDRPool``
-       CRDs and assigns IPs to VFs on pod creation.
+       CRDs and assigns IPs to VFs on pod creation. Rails normally point
+       at a pool with ``cidrPoolRef``; ``railTopology[].ipam`` is an
+       advanced alternative for supplying the NV-IPAM block by hand.
      - Opt-in via ``nvIpam``.
      - Essential.
    * - **Spectrum-X flow-controller DaemonSet**
@@ -307,12 +320,23 @@ individually here because they play distinct roles.
        deployed by Spectrum-X Operator.
      - With Spectrum-X Op.
      - Essential.
+   * - **DOCA xPlane**
+     - DaemonSet that manages local and remote plane failover inside
+       OVS-DOCA: consumes route-availability updates from the Spectrum-X
+       fabric, programs the OpenFlow rules that divert traffic away from a
+       failed plane, and exposes gRPC telemetry. Deployed by the
+       Spectrum-X Operator; its image tag follows the **DOCA** release,
+       not the Network Operator version. Currently requires ConnectX-8
+       SuperNIC with firmware 40.48.1000 or later. See
+       :ref:`when-xplane-is-deployed`.
+     - With Spectrum-X Op.
+     - **Required for Hardware Multiplane.**
 
-Optional / tech preview
------------------------
+Optional and tech preview
+-------------------------
 
-These components are either tech preview in 26.4.0 or strictly optional
-for a Spectrum-X K8s deployment.
+These components are optional for a Spectrum-X Kubernetes deployment, or
+are still tech preview.
 
 .. list-table::
    :header-rows: 1
@@ -321,26 +345,90 @@ for a Spectrum-X K8s deployment.
    * - Component
      - Role
      - Status
-   * - **DOCA xPlane** sidecar
-     - DOCA control-plane container used by the Spectrum-X flow controller
-       for **Hardware Multiplane** (``hwplb``) deployments. Not required
-       for single-plane (``none``) or **Software Multiplane** (``swplb``).
-       Deployed via the ``spectrumXOperator.xPlane`` sub-spec on
-       ``NicClusterPolicy``.
-     - **Tech preview** in 26.4.0; planned GA in 26.7.0 alongside
-       ``hwplb`` GA.
    * - **SR-IOV DRA driver** (``dra-driver-sriov``)
-     - Dynamic Resource Allocation driver for SR-IOV (Kubernetes 1.32+
-       DRA API). Enables fine-grained VF claims via ``ResourceClaim`` and
-       ``ResourceClaimTemplate`` objects.
-     - **Tech preview** in 26.4.0.
+     - Dynamic Resource Allocation driver for SR-IOV. Enables fine-grained
+       VF claims via ``ResourceClaim`` and ``ResourceClaimTemplate``
+       objects, and pairs a VF with the GPU behind the same PCIe root.
+       Requires the Kubernetes 1.32+ DRA API; Spectrum-X RA 2.3 requires
+       Kubernetes 1.35 or later — see :doc:`Platform Support
+       <../platform-support>`. See :doc:`DRA SR-IOV Driver
+       <../dra-sriov-driver/dra-sriov-driver>`.
+     - **Tech preview**.
    * - **NicNodePolicy** CRD
      - Per-node-group DOCA-OFED driver management — supersedes the
-       cluster-wide ``ofedDriver`` setting for heterogeneous clusters.
-     - New in 26.4.0.
+       cluster-wide ``ofedDriver`` setting. Use it when one cluster mixes
+       node types with different NIC hardware, driver versions, or
+       configurations. Spectrum-X reference-architecture deployments are
+       homogeneous, so a single ``NicClusterPolicy`` is sufficient; check
+       the Spectrum-X documentation for your Reference Architecture before
+       mixing node types. See :doc:`NicNodePolicy
+       <../customizations/nic-node-policy>`.
+     - **GA.** Optional for Spectrum-X.
    * - **DOCA Telemetry Service**
      - Host telemetry exporter for OVS, RDMA, and SuperNIC statistics.
      - Opt-in.
+
+=======================================
+What the Spectrum-X Operator configures
+=======================================
+
+Beyond creating CRDs, the Spectrum-X Operator applies SR-IOV and host
+settings on your behalf. Do not configure these by hand — the operator
+reconciles them, and manual changes are overwritten.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 26 48 26
+
+   * - Setting
+     - What it does
+     - Applied when
+   * - ``flow_steering_mode=hmfs``
+     - devlink parameter enabling hardware-managed flow steering on each
+       PF, written through the ``SriovNetworkNodePolicy`` the operator
+       generates.
+     - Every Spectrum-X rail, all multiplane modes.
+   * - ``esw_multiport=true``
+     - devlink parameter putting the PF e-switch into multiport mode, so a
+       single e-switch spans the rail's planes.
+     - Hardware Multiplane only.
+   * - eSwitch mode ``switchdev``
+     - Required for VF representors and OVS offload.
+     - Every Spectrum-X rail.
+   * - **OVS bridge**
+     - For ``swplb`` and ``none``, a per-PF bridge created by the SR-IOV
+       Network Operator (``GroupingPolicy: perPF``, datapath ``netdev``,
+       uplink type ``doca``) — this is what the ``manageSoftwareBridges``
+       feature gate enables. For ``hwplb``, ``br-xplane``, created by the
+       Spectrum-X Operator.
+     - Every Spectrum-X rail.
+   * - **RDMA QoS meta-plugin**
+     - The generated ``OVSNetwork`` chains the RDMA CNI with
+       ``rdmaQoS: {tos: 96, tc: 96}`` and names the Pod's RDMA device
+       ``rdma_<rail topology name>``.
+     - Every Spectrum-X rail.
+   * - **VRF meta-plugin**
+     - Isolates each rail in its own VRF, named after the rail topology
+       entry. Inspect routes with ``ip -6 route show vrf <rail>``.
+     - Rails whose ``cidrPoolRef`` resolves to an IPv6 ``CIDRPool``. The
+       operator reads the address family from the referenced pool, so a
+       rail that supplies its NV-IPAM block inline through
+       ``railTopology[].ipam`` does not get a VRF.
+   * - **OVS safe-start drop-in**
+     - Installs ``/var/lib/spectrum-x/xplane-ovs-safe-start.sh`` and an
+       ``ExecStartPre`` drop-in at
+       ``/etc/systemd/system/ovs-vswitchd.service.d/20-xplane-safe-start.conf``.
+       On OVS start it removes any xPlane uplink whose PF has not yet
+       entered switchdev mode, so OVS never comes up with a
+       half-configured uplink.
+     - Hardware Multiplane only.
+
+.. note::
+
+   The DOCA XPlane Service Guide documents the devlink and eSwitch steps
+   as manual ``devlink`` commands for bare-metal hosts. In a Kubernetes
+   deployment the Spectrum-X Operator performs them for you — follow this
+   page rather than the bare-metal procedure.
 
 =========================
 Dependencies and ordering
@@ -363,9 +451,37 @@ reconciliation loop and validated by CRD webhooks where applicable:
 - **OVS-CNI** (Kubernetes Layer) plugs VFs into OVS bridges provided by
   **OVS-DOCA** (Host Layer). OVS-DOCA must be present on each node before
   the Kubernetes Layer can program rail / plane flows.
-- **DOCA xPlane** is required only when ``multiplaneMode: hwplb`` is set
-  on the ``NicConfigurationTemplate``. For single-plane and Software
-  Multiplane deployments, the flow controller runs without xPlane.
+
+.. _when-xplane-is-deployed:
+
+When DOCA xPlane is deployed
+----------------------------
+
+The Spectrum-X Operator deploys the xPlane DaemonSet **per rail topology
+entry that selects more than one PF** — that is, when
+``SpectrumXRailPoolConfig.railTopology[].nicSelector.pfNames`` lists two or
+more PFs. It does **not** read ``multiplaneMode``: that field lives on
+``NicConfigurationTemplate``, which a different operator owns.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 45 35
+
+   * - Mode
+     - Rail topology shape
+     - DOCA xPlane
+   * - ``hwplb``
+     - One entry per rail, listing every plane's PF
+     - Deployed
+   * - ``swplb``
+     - One entry per rail-plane, a single PF each
+     - Not deployed
+   * - ``none``
+     - One entry per rail, a single PF
+     - Not deployed
+
+Before creating the ``br-xplane`` bridge, the operator waits for the
+selected PFs to enter switchdev mode.
 
 ===============
 Further reading
