@@ -20,6 +20,12 @@
 Spectrum-X Kubernetes Architecture and Components
 *************************************************
 
+.. contents:: On this page
+   :depth: 3
+   :local:
+   :backlinks: none
+
+
 A Spectrum-X Kubernetes deployment is a layered stack split across two
 distinct domains:
 

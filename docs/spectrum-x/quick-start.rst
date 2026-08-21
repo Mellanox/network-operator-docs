@@ -21,6 +21,12 @@
 Spectrum-X Kubernetes Quick Start
 *********************************
 
+.. contents:: On this page
+   :depth: 3
+   :local:
+   :backlinks: none
+
+
 .. note::
 
    These walkthroughs target **Spectrum-X RA 2.3** on **Network Operator 26.7.0**.
@@ -303,8 +309,11 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
    kubectl apply -f nicclusterpolicy.yaml
 
 ================================
-Step 4: NicInterfaceNameTemplate
+Step 4: Name the Rail Interfaces
 ================================
+
+Create the ``NicInterfaceNameTemplate`` that maps PCI addresses to rails and
+gives each interface a predictable name.
 
 .. tab-set::
 
@@ -407,9 +416,12 @@ The NIC Configuration Operator reads Spectrum-X NIC tuning from a **profile Conf
 
 The profile must include ``mlxConfig`` tuning for the multiplane mode you selected and for your NIC's device ID. For where the profile comes from and how it is referenced, see :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`; for the ConfigMap format itself, see :doc:`Configuration Details <../nic-conf-operator/configuration-details>`.
 
-================================
-Step 6: NicConfigurationTemplate
-================================
+===============================
+Step 6: Configure the SuperNICs
+===============================
+
+Create the ``NicConfigurationTemplate`` that applies the Spectrum-X profile to
+the SuperNICs and sets the multiplane mode.
 
 .. tab-set::
 
@@ -535,9 +547,12 @@ Step 6: NicConfigurationTemplate
 
          List the east-west PFs explicitly in ``nicSelector.pciAddresses``. On nodes that also carry a north-south DPU with the same device ID, selecting on ``nicType`` alone matches the north-south device as well and applies Spectrum-X configuration to the wrong NIC.
 
-================
-Step 7: CIDRPool
-================
+=============================
+Step 7: Allocate Rail Subnets
+=============================
+
+Create the ``CIDRPool`` resources that NV-IPAM uses to assign rail addresses to
+Pods.
 
 .. tab-set::
 
@@ -702,9 +717,12 @@ Step 7: CIDRPool
 
          kubectl apply -f cidrpool.yaml
 
-===============================
-Step 8: SpectrumXRailPoolConfig
-===============================
+============================
+Step 8: Define the Rail Pool
+============================
+
+Create the ``SpectrumXRailPoolConfig`` that describes the rail topology and
+exposes each rail as a schedulable resource.
 
 .. tab-set::
 

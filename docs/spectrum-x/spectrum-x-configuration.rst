@@ -34,9 +34,7 @@ This replaces the fixed RA-version enum used in earlier releases. In Network Ope
 
 For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see :doc:`Platform Support <../platform-support>`.
 
-.. note::
-
-   Currently, ConnectX-7 NIC (device ID ``1021``), ConnectX-8 SuperNIC (device ID ``1023``), ConnectX-9 SuperNIC (device ID ``1025``), and BlueField-3 SuperNIC (device ID ``a2dc``) devices are supported for Spectrum-X configuration. Hardware Plane Load Balancing (``hwplb``) requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC.
+Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC, and BlueField-3 SuperNIC; Hardware Plane Load Balancing (``hwplb``) additionally requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC. Device IDs and the modes each NIC accepts are listed under `NIC type constraints`_.
 
 .. note::
 

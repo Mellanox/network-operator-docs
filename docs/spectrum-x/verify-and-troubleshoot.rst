@@ -31,9 +31,9 @@ before it, so the first failing check is where to start debugging. The
 examples assume the Network Operator is installed in the
 ``nvidia-network-operator`` namespace.
 
-=================================
-Step 1: The profile was loaded
-=================================
+===================================
+Step 1: Check the profile is loaded
+===================================
 
 Profile ConfigMaps are watched and loaded by the NIC configuration
 **daemon**, which runs on every node — not by the operator Pod. It logs a
@@ -56,9 +56,9 @@ The label value is ignored — only the key must be present. The ConfigMap
 **name** is what ``spectrumXOptimized.version`` must match, character for
 character.
 
-=======================================
-Step 2: NIC configuration was applied
-=======================================
+===========================================
+Step 2: Check the NIC configuration applied
+===========================================
 
 Each SuperNIC appears as a ``NicDevice``. Check the conditions:
 
@@ -99,9 +99,9 @@ Reasons you may see on the ``ConfigUpdateInProgress`` condition:
        app.kubernetes.io/name=nic-configuration-daemon --field-selector
        spec.nodeName=<node>``.
 
-=================================
-Step 3: Rails are configured
-=================================
+======================================
+Step 3: Check the rails are configured
+======================================
 
 ``SpectrumXRailPoolConfig`` reports an aggregate status and a per-node
 breakdown:
@@ -128,9 +128,9 @@ one per rail-plane in ``swplb``:
 
 .. _verify-plane-health:
 
-===========================================
-Step 4: Plane health (Hardware Multiplane)
-===========================================
+================================================
+Step 4: Check plane health (Hardware Multiplane)
+================================================
 
 With ``hwplb`` the planes are hidden from the workload: a Pod sees one
 interface per rail whether every plane is healthy or only one is. A
@@ -175,9 +175,9 @@ failures. When a plane is ``DEGRADED``, narrow it down:
    Diverted traffic counters confirm failover is working rather than
    traffic being dropped.
 
-===============================
-Step 5: The workload sees rails
-===============================
+=========================================
+Step 5: Check the workload sees its rails
+=========================================
 
 Deploy the test Pod from your walkthrough and confirm one RDMA device per
 rail:
