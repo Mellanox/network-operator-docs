@@ -241,11 +241,11 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
      nicConfigurationOperator:
        operator:
          image: nic-configuration-operator
-         repository: |network-operator-repository|
+         repository: |nic-configuration-operator-repository|
          version: |nic-configuration-operator-version|
        configurationDaemon:
          image: nic-configuration-operator-daemon
-         repository: |network-operator-repository|
+         repository: |nic-configuration-operator-repository|
          version: |nic-configuration-operator-version|
        nicFirmwareStorage:
          create: true
@@ -255,12 +255,12 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
        logLevel: info
      nvIpam:
        image: nvidia-k8s-ipam
-       repository: |network-operator-repository|
+       repository: |nvidia-ipam-repository|
        version: |nvidia-ipam-version|
        enableWebhook: false
      spectrumXOperator:
        image: spectrum-x-operator
-       repository: |network-operator-repository|
+       repository: |spectrumxop-repository|
        version: |spectrumxop-version|
        # xPlane is only used when multiplaneMode=hwplb (Hardware Multiplane).
        # Including it here lets you flip multiplaneMode without re-applying NicClusterPolicy.
@@ -268,16 +268,16 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
          image: xplane
          # xPlane ships on the DOCA release cadence, so its repository and tag
          # differ from the other Network Operator components.
-         repository: nvcr.io/nvstaging/doca
-         version: 3.5.0035
+         repository: |xplane-repository|
+         version: |xplane-version|
      secondaryNetwork:
        cniPlugins:
          image: plugins
-         repository: |network-operator-repository|
+         repository: |cni-plugins-repository|
          version: |cni-plugins-version|
        multus:
          image: multus-cni
-         repository: |network-operator-repository|
+         repository: |multus-repository|
          version: |multus-version|
 
 .. code-block:: bash
