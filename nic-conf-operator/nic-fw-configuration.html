@@ -62,7 +62,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> NIC Firmware Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8">Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></li>
 </ul>
@@ -136,7 +136,7 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator" id="id1">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></p></li>
-<li><p><a class="reference internal" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb" id="id2">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</a></p>
+<li><p><a class="reference internal" href="#platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8" id="id2">Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)</a></p>
 <ul>
 <li><p><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update" id="id3">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></p></li>
 <li><p><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate" id="id4">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></p></li>
@@ -213,9 +213,9 @@
 <p>SR-IOV Network Operator can work together with the NIC Configuration Operator only in <code class="docutils literal notranslate"><span class="pre">daemon</span></code> configuration mode. <code class="docutils literal notranslate"><span class="pre">systemd</span></code> configuration mode is not supported with this scenario.</p>
 </div>
 </section>
-<section id="platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb">
-<span id="fw-reset-external-bmc"></span><h2>Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)<a class="headerlink" href="#platforms-with-external-bmc-dgx-hgx-gb200-b200-b300-vera-rubin-gb" title="Permalink to this headline"></a></h2>
-<p>On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX and HGX systems (GB200 NVL72, B200, B300) and the Vera Rubin GB family — an OS-level node reboot does <strong>not</strong> reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with <code class="docutils literal notranslate"><span class="pre">mlxconfig</span></code> are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.</p>
+<section id="platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8">
+<span id="fw-reset-external-bmc"></span><h2>Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)<a class="headerlink" href="#platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8" title="Permalink to this headline"></a></h2>
+<p>On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, and Rubin NVL8 systems — an OS-level node reboot does <strong>not</strong> reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with <code class="docutils literal notranslate"><span class="pre">mlxconfig</span></code> are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.</p>
 <p>To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (<code class="docutils literal notranslate"><span class="pre">mlxfwreset</span></code> / <code class="docutils literal notranslate"><span class="pre">mstfwreset</span></code>) <strong>before</strong> the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -278,7 +278,7 @@ To disable the Firmware upgrade and validation logic, do not define the <code cl
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On platforms where the NIC is controlled by an external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB), additional configuration is required so that firmware updates are applied without a reboot loop — see <a class="reference internal" href="#fw-reset-external-bmc"><span class="std std-ref">Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)</span></a>. The example below shows the relevant <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code> knob commented out for reference.</p>
+<p>On platforms where the NIC is controlled by an external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8), additional configuration is required so that firmware updates are applied without a reboot loop — see <a class="reference internal" href="#fw-reset-external-bmc"><span class="std std-ref">Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)</span></a>. The example below shows the relevant <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code> knob commented out for reference.</p>
 </div>
 <p>First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:</p>
 <p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>:</p>
@@ -654,7 +654,7 @@ template:
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 17, 2026.
+      <span class="lastupdated">Last updated on Aug 23, 2026.
       </span></p>
   </div>
 
