@@ -80,11 +80,11 @@ There are two requirements for the SR-IOV Network Operator to work together with
 
 .. _fw-reset-external-bmc:
 
-=====================================================================
-Platforms with external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB)
-=====================================================================
+=============================================================================================
+Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)
+=============================================================================================
 
-On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX and HGX systems (GB200 NVL72, B200, B300) and the Vera Rubin GB family — an OS-level node reboot does **not** reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with ``mlxconfig`` are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.
+On platforms where the NIC is controlled by an external BMC — including NVIDIA DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, and Rubin NVL8 systems — an OS-level node reboot does **not** reload NIC firmware: the BMC keeps the device powered across the reboot. As a result, persistent firmware parameters set with ``mlxconfig`` are not applied, and the operator stack can end up in a reboot loop trying to converge on the requested configuration.
 
 To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (``mlxfwreset`` / ``mstfwreset``) **before** the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.
 
@@ -159,7 +159,7 @@ Install the NIC Configuration Operator and observe NIC devices in the cluster
     To disable the Firmware upgrade and validation logic, do not define the ``nicFirmwareStorage`` section in the NicClusterPolicy CR.
 
 .. note::
-    On platforms where the NIC is controlled by an external BMC (DGX, HGX GB200/B200/B300, Vera Rubin GB), additional configuration is required so that firmware updates are applied without a reboot loop — see :ref:`fw-reset-external-bmc`. The example below shows the relevant ``FW_RESET_AFTER_CONFIG_UPDATE`` knob commented out for reference.
+    On platforms where the NIC is controlled by an external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8), additional configuration is required so that firmware updates are applied without a reboot loop — see :ref:`fw-reset-external-bmc`. The example below shows the relevant ``FW_RESET_AFTER_CONFIG_UPDATE`` knob commented out for reference.
 
 First install the Network Operator helm chart with the Maintenance Operator enabled and deploy a NIC Cluster Policy CRD with NIC Configuration Operator and DOCA-OFED Driver enabled:
 

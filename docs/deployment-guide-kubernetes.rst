@@ -435,7 +435,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     * Secondary network
     * Multus CNI
     * Container Networking plugins
-    * IPAM plugin
+    * NVIDIA IPAM plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -841,7 +841,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     * Secondary network
     * Multus CNI
     * Container Networking plugins
-    * IPAM plugin
+    * NVIDIA IPAM plugin
 
 
 .. code-block:: yaml
@@ -1281,7 +1281,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     * Secondary network
     * Multus CNI
     * Container Networking Plugins
-    * IPAM plugin
+    * NVIDIA IPAM plugin
 
 .. code-block:: yaml
    :substitutions:
@@ -1465,7 +1465,7 @@ Once the Network Operator is installed create a NicClusterPolicy with:
     * Secondary network
     * Multus CNI
     * Container Networking plugins
-    * IPAM Plugin
+    * NVIDIA IPAM Plugin
 
 .. code-block:: yaml
    :substitutions:
