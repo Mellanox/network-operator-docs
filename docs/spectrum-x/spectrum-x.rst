@@ -89,20 +89,38 @@ supported by a specific Network Operator release:
 
 .. list-table::
    :header-rows: 1
-   :widths: 50 50
+   :widths: 34 33 33
 
    * - Spectrum-X RA Version
      - NVIDIA Network Operator Release
-   * - Spectrum-X RA 2.2
-     - 26.4.0
+     - Support Level
    * - Spectrum-X RA 2.1
-     - 26.1.0
+     - 26.1.x
+     - GA
+   * - Spectrum-X RA 2.1
+     - 26.4.x
+     - Tech Preview
+
+.. note::
+
+   On Network Operator 26.4.x, the Spectrum-X RA 2.1 configuration workflow is
+   **Tech Preview** — it lets early adopters evaluate new configuration flows
+   and capabilities, but it is **not a validated or production-ready (GA)
+   solution**. The validated, generally available Spectrum-X RA 2.1 solution is
+   **Network Operator 26.1.x**; see the `NVIDIA Spectrum-X Validated Solution Stack <https://networking-docs.nvidia.com/software/spectrumx-solution-stack>`_.
+
+   The two workflows also differ in their configuration surface: the GA 26.1.x
+   solution uses the SR-IOV Network Operator with ``OVSNetwork`` and
+   ``SpectrumXRailPoolConfig`` (``spectrumx.nvidia.com/v1alpha1``), whereas the
+   26.4.x Tech Preview uses the Dynamic Resource Allocation (DRA) flow with
+   ``SpectrumXRailPoolConfig`` (``spectrumx.nvidia.com/v1alpha2``) described
+   below.
 
 While each Network Operator release is **validated end-to-end** with a
 specific Spectrum-X RA version, individual components support a wider range
 of RAs in their configuration CRDs. For example, NIC Configuration Operator
 in 26.4.0 accepts ``spectrumXOptimized.version`` values **RA1.3**, **RA2.0**,
-**RA2.1**, and **RA2.2**. See :doc:`Spectrum-X NIC Configuration
+and **RA2.1**. See :doc:`Spectrum-X NIC Configuration
 <spectrum-x-configuration>` for details.
 
 **Configuration surface.** Network Operator drives Spectrum-X setup through a

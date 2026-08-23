@@ -26,6 +26,15 @@ Single-Plane Spectrum-X Quick Start
    :local:
    :backlinks: none
 
+.. warning::
+
+   On Network Operator 26.4.x, this Spectrum-X RA 2.1 configuration workflow is
+   **Tech Preview** — intended for early evaluation of new configuration flows
+   and capabilities, not for production use. The validated, generally available
+   Spectrum-X RA 2.1 solution is Network Operator 26.1.x (see the `NVIDIA
+   Spectrum-X Validated Solution Stack
+   <https://networking-docs.nvidia.com/software/spectrumx-solution-stack>`_).
+
 .. note::
 
    You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
@@ -37,7 +46,7 @@ one PF per rail, one ``CIDRPool`` per rail, one network per rail. Used on
 **GB200 NVL72** platforms (ConnectX-7 NIC, ``nicType: 1021``).
 **ConnectX-8 SuperNIC** (``nicType: 1023``) also supports single-plane configuration —
 useful if you want a single-plane setup on B300/GB300 hardware. The
-configuration uses RA 2.2 with ``multiplaneMode: none`` and
+configuration uses RA 2.1 with ``multiplaneMode: none`` and
 ``numberOfPlanes: 1``. The example below uses BlueField-3 SuperNIC; change
 ``nicType`` for other NICs. Replace ``TODO_*`` values with your
 cluster-specific values before applying.
@@ -158,7 +167,7 @@ Map PCI addresses to rails and define interface naming. With single-plane config
 Step 4: NicConfigurationTemplate
 ==================================
 
-Configure the NICs for Spectrum-X RA 2.2 in single-plane mode. Use ``nicType: a2dc`` for BlueField-3 SuperNIC (HGX H100/H200/B200), ``nicType: 1021`` for ConnectX-7 NIC (GB200), or ``nicType: 1023`` for ConnectX-8 SuperNIC.
+Configure the NICs for Spectrum-X RA 2.1 in single-plane mode. Use ``nicType: a2dc`` for BlueField-3 SuperNIC (HGX H100/H200/B200), ``nicType: 1021`` for ConnectX-7 NIC (GB200), or ``nicType: 1023`` for ConnectX-8 SuperNIC.
 
 .. code-block:: yaml
 
@@ -177,7 +186,7 @@ Configure the NICs for Spectrum-X RA 2.2 in single-plane mode. Use ``nicType: a2
        linkType: Ethernet
        spectrumXOptimized:
          enabled: true
-         version: "RA2.2"
+         version: "RA2.1"
          overlay: "none"
          multiplaneMode: "none"
          numberOfPlanes: 1

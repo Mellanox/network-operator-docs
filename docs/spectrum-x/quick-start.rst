@@ -22,16 +22,21 @@ Spectrum-X Kubernetes Quick Start
 
 .. note::
 
-   These walkthroughs target **Spectrum-X RA 2.2** on **Network Operator 26.4.0**.
-   For the RA-to-release mapping and other RAs, see
+   These walkthroughs target **Spectrum-X RA 2.1** on **Network Operator 26.4.x**,
+   where the Spectrum-X configuration workflow is **Tech Preview**. The fully
+   generally available (GA) Spectrum-X RA 2.1 workflow is provided in
+   **Network Operator 26.1.x**. The 26.4.x workflow shown here is DRA-based
+   (``SpectrumXRailPoolConfig`` ``v1alpha2``); the GA 26.1.x workflow uses the
+   SR-IOV Network Operator with ``OVSNetwork`` and ``SpectrumXRailPoolConfig``
+   ``v1alpha1``. For the RA-to-release mapping and other RAs, see
    :doc:`NVIDIA Spectrum-X <spectrum-x>`. For supported platforms (operating
    systems, Kubernetes distributions, NIC hardware), see
    :doc:`Platform Support <../platform-support>`.
 
-   On Network Operator 26.4.0, **Single-Plane** and **Software Multiplane**
-   (``swplb``) deployments on BlueField-3 SuperNICs, ConnectX-7 NICs, and
-   ConnectX-8 SuperNICs are GA. **Hardware Multiplane** (``hwplb``) is tech
-   preview only and is not part of the validated Spectrum-X Reference
+   On Network Operator 26.4.x, **Single-Plane** and **Software Multiplane**
+   (``swplb``) Spectrum-X deployments (RA 2.1) are **Tech Preview** — intended
+   for early evaluation, not production use. **Hardware Multiplane**
+   (``hwplb``) is tech preview only and is not part of the validated Spectrum-X Reference
    Architecture. For background on the operators and CNIs each walkthrough
    relies on, see :doc:`Architecture and Components <components>`.
 
