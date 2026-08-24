@@ -140,7 +140,7 @@ Spectrum-X profiles add a **multiplane mode** dimension on top of profile select
 - ``swplb`` --- software plane load balancing (smaller-scale Spectrum-X clusters)
 - ``none`` --- no plane separation (ConnectX-7 NIC, BlueField-3 SuperNIC; simple topologies)
 
-NIC type determines both the mode Launch Kit defaults to and the modes the cluster will accept: ConnectX-7 NIC defaults to ``none``, BlueField-3 SuperNIC defaults to ``none`` and also accepts ``swplb``, and ConnectX-8 SuperNIC and ConnectX-9 SuperNIC (tech preview) accept all three. See :doc:`profiles/spectrum-x`.
+NIC type determines both the mode Launch Kit defaults to and the modes the cluster will accept. ConnectX-7 NIC defaults to and accepts ``none``. BlueField-3 SuperNIC defaults to ``none`` and also accepts ``swplb``. ConnectX-8 SuperNIC accepts all three, and its default depends on the GPU platform. ConnectX-9 SuperNIC (tech preview) accepts all three and defaults to ``hwplb``. See :doc:`profiles/spectrum-x`.
 
 ================================================================================
 Cluster Topology Presets

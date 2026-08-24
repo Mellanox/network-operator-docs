@@ -178,7 +178,7 @@ Choosing a Deployment Profile (Spectrum-X)
 **Skill-driven flow:**
 
 1. ``k8s-launch-kit-generate`` recognizes Spectrum-X intent.
-2. The skill verifies the cohort: ConnectX-8 → ``--multiplane-mode swplb`` and ``--number-of-planes 2`` are the hardware defaults; RA2.3 pairs with Network Operator 26.7 and requires a Spectrum-X profile ConfigMap.
+2. The skill verifies the cohort: ConnectX-8 on a GB300 platform → ``--multiplane-mode swplb`` and ``--number-of-planes 2`` are the hardware defaults; RA2.3 pairs with Network Operator 26.7 and requires a Spectrum-X profile ConfigMap.
 3. Before running ``l8k generate``, the skill asks the operator to confirm the **switch-side** Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) --- because ``l8k`` does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.
 4. Once confirmed, the agent runs:
 
@@ -188,13 +188,13 @@ Choosing a Deployment Profile (Spectrum-X)
           --spectrum-x RA2.3 \
           --network-operator-release 26.7 \
           --spectrum-x-config ./spectrum-x-profile.yaml \
-          --topology-scheme 2-tier \
+          --topology-scheme 2-tier --topology-file ./topology.json \
           --save-deployment-files ./deployments-spectrum-x \
           --output json 2>/dev/null
 
 5. The agent reports the auto-defaulted flags ("``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``", "``Defaulted --number-of-planes=2``") and recommends ``l8k generate --dry-run`` before applying.
 
-The skill knows the per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite --- the operator only needs to state intent.
+The skill knows the per-platform and per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite --- the operator only needs to state intent.
 
 Triaging a Stuck Deployment
 ----------------------------

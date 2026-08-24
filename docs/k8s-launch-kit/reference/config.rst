@@ -327,7 +327,7 @@ Profile selection (also overridable via CLI flags).
    * - ``spectrumX.ipVersion``
      - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``. Equivalent to ``--ip-version``.
    * - ``spectrumX.topologyFile``
-     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON, used to generate Spectrum-X ``CIDRPool`` resources. Equivalent to ``--topology-file``.
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. Required for Spectrum-X generation --- the profiles always render ``CIDRPool`` resources. Equivalent to ``--topology-file``.
    * - ``spectrumX.hostFirstOctet``
      - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Defaults to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. No effect when ``ipVersion`` is ``ipv6``.
    * - ``spectrumX.profile``
