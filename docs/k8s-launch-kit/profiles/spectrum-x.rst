@@ -134,32 +134,43 @@ Side-by-side comparison of the three modes:
        end
 
 ================================================================================
-NIC Type Constraints
+NIC Types, Defaults, and Accepted Modes
 ================================================================================
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 15 55
+   :widths: 26 12 28 34
 
    * - **NIC Type**
      - **Device ID**
-     - **Supported Modes**
+     - **Hardware default**
+     - **Modes accepted**
    * - ConnectX-7 NIC
      - ``1021``
-     - ``none`` only
+     - ``none``, 1 plane
+     - ``none``
    * - BlueField-3 SuperNIC
      - ``a2dc``
-     - ``none`` only
+     - ``none``, 1 plane
+     - ``none``, ``swplb``
    * - ConnectX-8 SuperNIC
      - ``1023``
-     - | ``none``
-       | ``swplb``
-       | ``hwplb``
+     - platform-dependent --- see above
+     - ``none``, ``swplb``, ``hwplb``
    * - ConnectX-9 SuperNIC *(tech preview)*
      - ``1025``
-     - | ``none``
-       | ``swplb``
-       | ``hwplb``
+     - ``hwplb``, 4 planes
+     - ``none``, ``swplb``, ``hwplb``
+
+**Hardware default** is the mode and plane count Launch Kit picks when
+``--multiplane-mode`` and ``--number-of-planes`` are omitted.
+
+**Modes accepted** is what the generated manifests will pass. Launch Kit itself
+does not restrict modes per NIC --- ``--multiplane-mode`` takes ``none``,
+``swplb``, or ``hwplb`` for any NIC --- but the ``NicConfigurationTemplate`` API
+rejects ``hwplb`` on anything other than ConnectX-8 SuperNIC or ConnectX-9
+SuperNIC. Passing a mode outside this column generates manifests the cluster
+will refuse.
 
 .. note::
 
