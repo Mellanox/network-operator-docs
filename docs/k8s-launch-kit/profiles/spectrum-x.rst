@@ -65,6 +65,7 @@ RA2.3 moves the Spectrum-X tuning knobs out of the CRD and into a ConfigMap that
 
    l8k generate --spectrum-x RA2.3 \
        --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier \
        --multiplane-mode swplb --number-of-planes 2
 
 The file may be either a full ConfigMap manifest or just the YAML that belongs under its ``data.profile`` key. With raw ``data.profile`` YAML, also pass ``--spectrum-x-configmap-name`` to name the generated ConfigMap; with a full manifest, the name comes from ``metadata.name``.
@@ -88,6 +89,7 @@ Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier sw
 
    l8k generate --spectrum-x RA2.3 \
        --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier \
        --multiplane-mode hwplb --number-of-planes 4
 
 SWPLB
@@ -99,6 +101,7 @@ Software Plane Load Balancing for smaller-scale Spectrum-X clusters. Generates s
 
    l8k generate --spectrum-x RA2.3 \
        --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier \
        --multiplane-mode swplb --number-of-planes 2
 
 None (Single Plane)
@@ -110,6 +113,7 @@ No multiplane separation. Use with ConnectX-7 NIC, BlueField-3 SuperNIC, or simp
 
    l8k generate --spectrum-x RA2.3 \
        --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier \
        --multiplane-mode none --number-of-planes 1
 
 Side-by-side comparison of the three modes:
@@ -199,6 +203,7 @@ To target Network Operator 26.1, pass ``RA2.1`` to ``--spectrum-x``. ``--spectru
 .. code-block:: bash
 
    l8k generate --spectrum-x RA2.1 \
+       --topology-scheme 2-tier \
        --multiplane-mode swplb --number-of-planes 2
 
 ================================================================================

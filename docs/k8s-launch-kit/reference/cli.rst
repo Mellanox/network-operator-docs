@@ -75,6 +75,12 @@ Probes cluster hardware and writes a ``cluster-config.yaml``.
      - Override the Network Operator namespace (default: ``nvidia-network-operator``).
    * - ``--network-operator-release <string>``
      - Pin discovery to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``.
+   * - ``--topology-scheme <string>``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. Persisted to ``profile.spectrumX.topologyType`` in the saved cluster configuration, so a later ``l8k generate`` does not need the flag.
+   * - ``--ip-version <string>``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``.
+   * - ``--topology-file <string>``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON, used to generate Spectrum-X ``CIDRPool`` resources.
    * - ``--spectrum-x-config <string>``
      - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for ``RA2.3``.
    * - ``--spectrum-x-configmap-name <string>``
@@ -117,6 +123,12 @@ Profile Selection
      - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 use ``none``, B300 / GB300 use ``swplb``. These are Launch Kit's generator defaults; Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass it explicitly to follow the RA. ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
      - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform (single-plane platforms → ``1``, B300 / GB300 → ``2``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
+   * - ``--topology-scheme <string>``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. **Required** with ``--spectrum-x`` --- Launch Kit does not default it. May instead be carried in the cluster configuration as ``profile.spectrumX.topologyType``, which ``l8k discover --topology-scheme`` persists; a later ``l8k generate`` then needs no flag.
+   * - ``--ip-version <string>``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``.
+   * - ``--topology-file <string>``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON, used to generate Spectrum-X ``CIDRPool`` resources. Optional; without it, addresses come from the scheme's built-in allocation.
    * - ``--spectrum-x-config <string>``
      - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for ``RA2.3``. Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and points ``spectrumXOptimized.version`` at it. See :doc:`../profiles/spectrum-x`.
    * - ``--spectrum-x-configmap-name <string>``

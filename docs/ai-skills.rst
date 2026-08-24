@@ -188,6 +188,7 @@ Choosing a Deployment Profile (Spectrum-X)
           --spectrum-x RA2.3 \
           --network-operator-release 26.7 \
           --spectrum-x-config ./spectrum-x-profile.yaml \
+          --topology-scheme 2-tier \
           --save-deployment-files ./deployments-spectrum-x \
           --output json 2>/dev/null
 

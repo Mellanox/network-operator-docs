@@ -322,6 +322,14 @@ Profile selection (also overridable via CLI flags).
      - Multiplane mode: ``hwplb``, ``swplb``, ``none``.
    * - ``spectrumX.numberOfPlanes``
      - Number of planes.
+   * - ``spectrumX.topologyType``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. Required for Spectrum-X. Equivalent to ``--topology-scheme``.
+   * - ``spectrumX.ipVersion``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``. Equivalent to ``--ip-version``.
+   * - ``spectrumX.topologyFile``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON, used to generate Spectrum-X ``CIDRPool`` resources. Equivalent to ``--topology-file``.
+   * - ``spectrumX.hostFirstOctet``
+     - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Defaults to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. No effect when ``ipVersion`` is ``ipv6``.
    * - ``spectrumX.profile``
      - Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap's ``data.profile`` key, or a full ConfigMap manifest. Required for ``RA2.3``. Equivalent to ``--spectrum-x-config``.
    * - ``spectrumX.configMapName``
