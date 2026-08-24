@@ -83,12 +83,12 @@ test pod — adapted to the chosen multiplane mode and NIC family.
      - ``hwplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane, B300 only).
+     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
    * - :doc:`Software Multiplane <quick-start-swplb>`
      - ``swplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Software Plane Load Balancing across planes, with each plane exposed to the workload as its own interface. Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane, B300 only).
+     - Software Plane Load Balancing across planes, with each plane exposed to the workload as its own interface. Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
 
 =========================
 Choose a deployment mode
@@ -112,12 +112,12 @@ Choose a deployment mode
      - ``hwplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane, B300 only).
+     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
    * - **Software Multiplane**
      - ``swplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Software Plane Load Balancing across planes, with each plane exposed to the workload as its own interface. Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane, B300 only).
+     - Software Plane Load Balancing across planes, with each plane exposed to the workload as its own interface. Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
 
 Select your mode below. The tabs on this page are linked — choosing here
 switches every mode-specific step that follows.
@@ -147,7 +147,7 @@ switches every mode-specific step that follows.
       the hardware layer, so each rail still uses a single ``CIDRPool`` while
       exposing multiple per-plane PFs. Used on **B300**
       and **GB300** platforms — set ``numberOfPlanes: 2`` for Dual-Plane or
-      ``numberOfPlanes: 4`` for Quad-Plane (B300 only). The configuration uses
+      ``numberOfPlanes: 4`` for Quad-Plane. The configuration uses
       Spectrum-X RA 2.3 with ``multiplaneMode: hwplb``. The example below uses
       ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your cluster-specific
       values before applying.
@@ -160,7 +160,7 @@ switches every mode-specific step that follows.
       is split into multiple PFs, each assigned to a separate plane, and the
       software stack performs **Software Plane Load Balancing** (``swplb``) across
       them. Used on **B300** and **GB300** platforms — set ``numberOfPlanes: 2``
-      for Dual-Plane or ``numberOfPlanes: 4`` for Quad-Plane (B300 only). The
+      for Dual-Plane or ``numberOfPlanes: 4`` for Quad-Plane. The
       configuration uses Spectrum-X RA 2.3 with ``multiplaneMode: swplb``. The example below
       uses ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your
       cluster-specific values before applying.
@@ -468,7 +468,7 @@ the SuperNICs and sets the multiplane mode.
    .. tab-item:: Hardware Multiplane
       :sync: hwplb
 
-      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``hwplb`` multiplane mode. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``, tech preview); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
+      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``hwplb`` multiplane mode. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``, tech preview); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane, set ``numberOfPlanes: 4``.
 
       .. code-block:: yaml
 
@@ -509,7 +509,7 @@ the SuperNICs and sets the multiplane mode.
    .. tab-item:: Software Multiplane
       :sync: swplb
 
-      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``swplb`` multiplane mode. For Quad-Plane (B300 only), set ``numberOfPlanes: 4``.
+      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``swplb`` multiplane mode. For Quad-Plane, set ``numberOfPlanes: 4``.
 
       .. code-block:: yaml
 

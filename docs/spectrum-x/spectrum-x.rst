@@ -87,7 +87,7 @@ rail and the load-balancing mechanism:
      - GA
    * - Quad-Plane
      - ConnectX-8 SuperNIC
-     - B300
+     - B300, GB300
      - | ``hwplb`` (4 planes)
        | ``swplb`` (4 planes)
      - GA

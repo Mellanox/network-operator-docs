@@ -30,7 +30,7 @@ NVIDIA Spectrum-X NIC Configuration
 
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ in Network Operator 26.7.0 applies Spectrum-X NIC tuning from a **Spectrum-X profile** — a versioned YAML document published for each Reference Architecture and supplied to the cluster as a labeled ConfigMap. The ``spectrumXOptimized.version`` field names that ConfigMap.
 
-This replaces the fixed RA-version enum used in earlier releases. In Network Operator 26.4.0 and earlier, ``version`` accepted only the built-in values ``RA1.3``, ``RA2.0``, and ``RA2.1``, and the tuning tables shipped inside the operator image. From 26.7.0, the operator carries no built-in profiles: every Spectrum-X deployment must apply a profile ConfigMap first, and NIC tuning can be revised without a new operator release.
+This replaces the fixed RA-version enum used in earlier releases. In Network Operator 26.4.0 and earlier, ``version`` accepted only a fixed set of built-in RA versions, and the tuning tables shipped inside the operator image. From 26.7.0, the operator carries no built-in profiles: every Spectrum-X deployment must apply a profile ConfigMap first, and NIC tuning can be revised without a new operator release.
 
 For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see :doc:`Platform Support <../platform-support>`.
 
