@@ -136,7 +136,7 @@ Spectrum-X Multiplane Modes
 
 Spectrum-X profiles add a **multiplane mode** dimension on top of profile selection:
 
-- ``hwplb`` --- hardware plane load balancing (large 2- or 3-tier switch topologies; ConnectX-8 SuperNIC only)
+- ``hwplb`` --- hardware plane load balancing (large 2- or 3-tier switch topologies)
 - ``swplb`` --- software plane load balancing (smaller-scale Spectrum-X clusters)
 - ``none`` --- no plane separation (ConnectX-7 NIC, BlueField-3 SuperNIC; simple topologies)
 

@@ -77,7 +77,7 @@ Multiplane Modes
 
 The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
 
-``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, B300 / GB300 get ``swplb`` and 2 planes. ``hwplb`` is not chosen automatically on ConnectX-8 SuperNIC; pass it explicitly. Launch Kit skips the default and warns if the cluster's node groups would need different values.
+``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, B300 / GB300 get ``swplb`` and 2 planes. Note that these are Launch Kit's generator defaults, not the Reference Architecture's recommendation: Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass ``--multiplane-mode hwplb`` to follow the RA. Launch Kit skips the default and warns if the cluster's node groups would need different values.
 
 HWPLB
 ------

@@ -72,7 +72,7 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - always; opt out via ``--multirail=false`` (YAML cannot express explicit-false)
    * - ``--multiplane-mode``
      - ``none`` (H100 / H200 / B200 / GB200, ConnectX-7 NIC, BlueField-3 SuperNIC), ``swplb`` (B300 / GB300)
-     - only when ``--spectrum-x`` is set; from the GPU platform and east-west PF deviceID, skipped+warned when groups disagree. ``hwplb`` is not defaulted on ConnectX-8 SuperNIC --- pass it explicitly.
+     - only when ``--spectrum-x`` is set; from the GPU platform and east-west PF deviceID, skipped+warned when groups disagree. ``hwplb`` is not defaulted --- Spectrum-X RA 2.3 recommends it on multiplane platforms, so pass it explicitly.
    * - ``--number-of-planes``
      - 1 (single-plane platforms and NICs), 2 (B300 / GB300)
      - only when ``--spectrum-x`` is set. Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.

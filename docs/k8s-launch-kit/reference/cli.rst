@@ -114,7 +114,7 @@ Profile Selection
    * - ``--spectrum-x <RA-version>``
      - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.3``, or ``RA2.1`` for Network Operator 26.1. Implies ethernet fabric, sriov deployment, and multirail.
    * - ``--multiplane-mode <string>``
-     - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 use ``none``, B300 / GB300 use ``swplb``. ``hwplb`` is not auto-selected on ConnectX-8 SuperNIC; pass it explicitly. ``none`` requires ``--number-of-planes 1``.
+     - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 use ``none``, B300 / GB300 use ``swplb``. These are Launch Kit's generator defaults; Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass it explicitly to follow the RA. ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
      - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform (single-plane platforms → ``1``, B300 / GB300 → ``2``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
    * - ``--spectrum-x-config <string>``
