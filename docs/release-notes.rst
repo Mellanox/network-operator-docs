@@ -36,6 +36,18 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.7.0
+     - | - Added support for Ubuntu 26.04
+       | - Added support for NVIDIA DGX GB300 Workstation systems
+       | - Added support for NVIDIA Spectrum-X Reference Architecture 2.3 (RA 2.3), with NIC tuning delivered as a Spectrum-X profile ConfigMap instead of a built-in Reference Architecture version
+       | - Hardware Multiplane with DOCA xPlane is now GA on NVIDIA ConnectX-8 SuperNIC for Dual-Plane and Quad-Plane B300 and GB300 deployments
+       | - Added IPv6 rail isolation for Spectrum-X using the VRF CNI meta-plugin
+       | - Added automatic Data Direct enablement on Spectrum-X Virtual Functions, ensuring Pods on Hardware Multiplane rails receive a Data Direct-enabled VF
+       | - Added deployment and configuration status reporting across NVIDIA Network Operator custom resources, with per-component readiness conditions on ``NicClusterPolicy`` and ``NicNodePolicy``, and per-node configuration status on ``SpectrumXRailPoolConfig``
+       | - Added KubeVirt support on Red Hat OpenShift, enabling SR-IOV VFIO passthrough to OpenShift Virtualization virtual machines
+       | - Enhanced NVIDIA Kubernetes Launch Kit with DRA-based Spectrum-X configuration for running multiple workloads per node
+       | - Extended NIC configuration in NVIDIA NIC Configuration Operator with runtime performance tuning, RoCE mode selection, and additional QoS controls
+       | - [TECH PREVIEW] Added NVIDIA ConnectX-9 SuperNIC Network Bay configuration in NVIDIA NIC Configuration Operator for NVIDIA Vera Rubin NVL72 platforms
    * - 26.4.1
      - | - CVEs fixes
        | - Added support for OpenShift 4.22
@@ -203,6 +215,12 @@ Upgrade Notes
 
    * - Version
      - Notes
+   * - 26.7.0
+     - | - ``spectrumXOptimized.version`` now names a Spectrum-X profile ConfigMap instead of a built-in Reference Architecture version. Apply the profile ConfigMap for your Reference Architecture before or together with the upgrade
+       | - Minimum supported Kubernetes version raised to 1.32. Helm installation and upgrade fail on earlier clusters
+       | - Spectrum-X OVS interface type changed from ``dpdk`` to ``doca``. Nodes must run an OVS build with DOCA support
+       | - ``pciPerformanceOptimized.maxAccOutRead`` is deprecated. Use ``rawNvConfig`` to set ``MAX_ACC_OUT_READ`` explicitly
+       | - ``rawNvConfig`` is now limited to 128 entries, and index-range syntax such as ``NAME[0..3]`` is no longer accepted. List each index explicitly
    * - 25.10.0
      - | - Whereabouts IPAM plugin support removed
        | - NIC Configuration Operator Helm chart support removed
@@ -271,6 +289,9 @@ Known Limitations
 
    * - Version
      - Description
+   * - 26.7.0
+     - | - NVIDIA Spectrum-X Reference Architecture 2.3 requires Kubernetes 1.35 or later
+       | - A Spectrum-X profile that does not include ``mlxConfig`` tuning for a given device ID applies no Spectrum-X parameters to those NICs and reports no error. Verify that the profile covers every NIC model in the cluster
    * - 26.1.0
      - | - Multus CNI does not use a service account token after the Kubernetes API rotates it. The recommended workaround is to edit the Multus CNI DaemonSet manually to remove ``--skip-config-watch`` CLI argument.
        | - The DOCA driver container is validated with host kernel versions up to 6.8.0-100. Compatibility with newer kernel versions is not guaranteed and may require a newer DOCA driver container release

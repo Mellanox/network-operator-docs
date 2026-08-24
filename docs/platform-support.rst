@@ -220,6 +220,18 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - ConnectX-8
      - Ubuntu 24.04 (Arm64) / Red Hat OpenShift
      - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+   * - NVIDIA DGX GB300 Workstation
+     - Arm (NVIDIA Grace)
+     - NVIDIA Blackwell
+     - ConnectX-8 SuperNIC
+     - Ubuntu 24.04, 22.04 (Arm64)
+     - GA (RoCE only, without InfiniBand)
+   * - NVIDIA Vera Rubin NVL72
+     - Arm (NVIDIA Vera)
+     - NVIDIA Rubin
+     - ConnectX-9 SuperNIC
+     - Ubuntu 24.04, 22.04 (Arm64)
+     - GA for RoCE and InfiniBand workloads. Spectrum-X support is Tech Preview (ConnectX-9 Network Bay configuration)
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
@@ -241,6 +253,14 @@ Supported Operating Systems and Kubernetes Platforms
      - Nutanix NKP
      - Container Runtime
      - Notes
+   * - Ubuntu 26.04 LTS
+     - 1.32–1.36
+     - —
+     - —
+     - 1.32–1.36
+     - 2.12–2.15
+     - Containerd
+     - —
    * - Ubuntu 24.04 LTS
      - 1.32–1.36
      - —
