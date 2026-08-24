@@ -155,6 +155,29 @@ NIC Type Constraints
      - | ``none``
        | ``swplb``
        | ``hwplb``
+   * - ConnectX-9 SuperNIC *(tech preview)*
+     - ``1025``
+     - | ``none``
+       | ``swplb``
+       | ``hwplb``
+
+.. note::
+
+   **ConnectX-9 SuperNIC support for Spectrum-X is Tech Preview in Network
+   Operator 26.7.0.** Launch Kit accepts ConnectX-9 SuperNIC and defaults it to
+   ``hwplb`` with 4 planes --- the one NIC for which ``hwplb`` is the hardware
+   default --- but the resulting configuration is not validated against any
+   Spectrum-X Reference Architecture. Use it for evaluation only.
+
+   ConnectX-9 SuperNIC additionally requires a Spectrum-X profile that carries
+   ``mlxConfig`` tuning for device ID ``1025``. A profile that omits it applies
+   **no** Spectrum-X parameters to those NICs and reports no error. Contact
+   NVIDIA Support or your NVIDIA CPM for a profile that covers ConnectX-9
+   SuperNIC.
+
+   ConnectX-9 SuperNIC remains fully supported by Network Operator for general
+   RoCE and InfiniBand workloads --- see :doc:`Platform Support
+   <../../platform-support>`.
 
 ================================================================================
 Pinning to RA2.1
