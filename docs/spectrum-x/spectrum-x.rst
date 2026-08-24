@@ -53,11 +53,11 @@ single-plane networks. Network Operator exposes it through the
 ``multiplaneMode`` field on ``NicConfigurationTemplate``, with
 **Hardware Multiplane** (``hwplb``) and **Software Multiplane** (``swplb``)
 variants alongside the single-plane mode (``none``). On multiplane platforms,
-Hardware Multiplane is the default mode; Software Multiplane is selected only
-for software-based multiplane deployments.
+Hardware Multiplane is the mode Spectrum-X RA 2.3 recommends; Software
+Multiplane is selected only for software-based multiplane deployments.
 
-On multiplane platforms (B300, GB300), Hardware Multiplane is the default and
-**DOCA xPlane is a required component** — it manages plane failover inside
+On multiplane platforms (B300, GB300), Hardware Multiplane is the recommended
+mode and **DOCA xPlane is a required component** — it manages plane failover inside
 OVS-DOCA. Single-plane deployments on BlueField-3 SuperNIC do not use it. See
 :doc:`Architecture and Components <components>`.
 

@@ -83,7 +83,7 @@ test pod — adapted to the chosen multiplane mode and NIC family.
      - ``hwplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
+     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The recommended mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
    * - :doc:`Software Multiplane <quick-start-swplb>`
      - ``swplb``
      - ConnectX-8 SuperNIC
@@ -112,7 +112,7 @@ Choose a deployment mode
      - ``hwplb``
      - ConnectX-8 SuperNIC
      - B300, GB300
-     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The default mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
+     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The recommended mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
    * - **Software Multiplane**
      - ``swplb``
      - ConnectX-8 SuperNIC

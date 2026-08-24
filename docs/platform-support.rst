@@ -358,7 +358,7 @@ NVIDIA Spectrum-X Ethernet Networking Platform
      - Upstream Kubernetes (1.35–1.36)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
-     - Hardware Multiplane (default) and Software Multiplane
+     - Hardware Multiplane (recommended) and Software Multiplane
    * - 2.1
      - Tech Preview on 26.4.x (GA on 26.1.x)
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)

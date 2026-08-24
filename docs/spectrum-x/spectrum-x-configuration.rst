@@ -196,7 +196,7 @@ The following multiplane modes are available:
      - BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
      - 1
    * - ``hwplb``
-     - Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. **The default mode on multiplane platforms.**
+     - Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. **The recommended mode on multiplane platforms.**
      - ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
      - 2, 4
    * - ``swplb``
@@ -210,7 +210,7 @@ The following multiplane modes are available:
 
 .. note::
 
-   On multiplane platforms, ``hwplb`` is the default mode — select ``swplb`` only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. Note that this is a deployment default, not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
+   On multiplane platforms, ``hwplb`` is the mode Spectrum-X RA 2.3 recommends — select ``swplb`` only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. This is a Reference Architecture recommendation, not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
 
    The modes a given deployment can actually use are additionally bounded by the Spectrum-X profile: a mode is configurable only if the profile carries ``mlxConfig`` tuning for that mode and device ID.
 
