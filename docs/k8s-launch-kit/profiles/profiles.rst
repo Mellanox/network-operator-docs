@@ -65,15 +65,13 @@ Fabric is determined by the underlying hardware topology (Spectrum-X clusters ar
        IBDT -->|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
        SPCXRA -->|RA2.3<br/>Network Operator 26.7| SX3([Spectrum-X RA2.3])
-       SPCXRA -->|RA2.2<br/>Network Operator 26.4| SX2([Spectrum-X RA2.2])
        SPCXRA -->|RA2.1<br/>Network Operator 26.1| SX1([Spectrum-X RA2.1])
        SX3 --> MPM[multiplane mode<br/>none / swplb / hwplb<br/>+ number of planes]
-       SX2 --> MPM
        SX1 --> MPM
 
        classDef profile fill:#a2efb6,stroke:#28a745,color:#000
        classDef params fill:#fff3cd,stroke:#ffc107,color:#000
-       class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2,SX3 profile
+       class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX3 profile
        class MPM params
 
 ================================================================================
@@ -109,7 +107,7 @@ Decision Matrix
      - ethernet / rdma_shared
      - MacVLAN, multi-tenant, network-segmentation
    * - :doc:`Spectrum-X <spectrum-x>`
-     - NVIDIA Spectrum-X multi-rail AI interconnect (RA2.1, RA2.2, or RA2.3). Single-plane, SWPLB, or HWPLB.
+     - NVIDIA Spectrum-X multi-rail AI interconnect (RA2.3, or RA2.1 for Network Operator 26.1). Single-plane, SWPLB, or HWPLB.
      - ethernet / sriov / spectrum-x
      - Spectrum-X, multiplane, RA2.3, HWPLB
 

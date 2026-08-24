@@ -76,7 +76,7 @@ Probes cluster hardware and writes a ``cluster-config.yaml``.
    * - ``--network-operator-release <string>``
      - Pin discovery to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``.
    * - ``--spectrum-x-config <string>``
-     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for RA versions newer than ``RA2.2``.
+     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for ``RA2.3``.
    * - ``--spectrum-x-configmap-name <string>``
      - Name for the generated profile ConfigMap. Required only when ``--spectrum-x-config`` holds raw ``data.profile`` YAML; with a full ConfigMap manifest the name is taken from ``metadata.name``.
    * - ``--node-selector <string>``
@@ -112,17 +112,17 @@ Profile Selection
    * - ``--multirail``
      - Enable multirail deployment. Auto-defaults to ``true``. Opt out with ``--multirail=false`` (YAML cannot express explicit-false).
    * - ``--spectrum-x <RA-version>``
-     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.1``, ``RA2.2``, or ``RA2.3``. Implies ethernet fabric, sriov deployment, and multirail.
+     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.3``, or ``RA2.1`` for Network Operator 26.1. Implies ethernet fabric, sriov deployment, and multirail.
    * - ``--multiplane-mode <string>``
-     - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 use ``none``, B300 / GB300 use ``swplb``. ``hwplb`` is never auto-selected; pass it explicitly. ``none`` requires ``--number-of-planes 1``.
+     - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 use ``none``, B300 / GB300 use ``swplb``. ``hwplb`` is not auto-selected on ConnectX-8 SuperNIC; pass it explicitly. ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
-     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform (single-plane platforms → ``1``, B300 / GB300 → ``2``). Pass ``4`` explicitly for a quad-plane B300 topology.
+     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform (single-plane platforms → ``1``, B300 / GB300 → ``2``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
    * - ``--spectrum-x-config <string>``
-     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for RA versions newer than ``RA2.2``. Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and points ``spectrumXOptimized.version`` at it. See :doc:`../profiles/spectrum-x`.
+     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for ``RA2.3``. Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and points ``spectrumXOptimized.version`` at it. See :doc:`../profiles/spectrum-x`.
    * - ``--spectrum-x-configmap-name <string>``
      - Name for the generated profile ConfigMap. Required only when ``--spectrum-x-config`` holds raw ``data.profile`` YAML; with a full ConfigMap manifest the name is taken from ``metadata.name``.
    * - ``--network-operator-release <string>``
-     - Pin to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``. Auto-defaulted under ``--spectrum-x`` (``RA2.1`` → ``26.1``; ``RA2.2`` → ``26.4``; ``RA2.3`` → ``26.7``). See :doc:`../overview`.
+     - Pin to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``. Auto-defaulted under ``--spectrum-x`` (``RA2.3`` → ``26.7``; ``RA2.1`` → ``26.1``). See :doc:`../overview`.
    * - ``--groups <a,b,...>``
      - Restrict output to the named source groups (comma-separated, matched case-sensitively against ``clusterConfig[].identifier``). Mutually exclusive with ``--gpu-type``. Empty match is a validation error. See :doc:`../heterogeneous-clusters`.
    * - ``--gpu-type <string>``

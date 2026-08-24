@@ -317,7 +317,7 @@ Profile selection (also overridable via CLI flags).
    * - ``multirail``
      - Enable multirail.
    * - ``spectrumX.spcxVersion``
-     - Spectrum-X reference architecture (``RA2.1``, ``RA2.2``, or ``RA2.3``).
+     - Spectrum-X reference architecture (``RA2.3``, or ``RA2.1`` for Network Operator 26.1).
    * - ``spectrumX.multiplaneMode``
      - Multiplane mode: ``hwplb``, ``swplb``, ``none``.
    * - ``spectrumX.numberOfPlanes``

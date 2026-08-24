@@ -75,7 +75,7 @@ The artifact pipeline:
 Profiles
 ================================================================================
 
-A **profile** is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit ships eight profiles:
+A **profile** is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit ships seven profiles:
 
 - ``sriov-ethernet`` --- SR-IOV with Ethernet
 - ``sriov-infiniband`` --- SR-IOV with InfiniBand
@@ -83,7 +83,6 @@ A **profile** is a named combination of fabric and deployment type that maps to 
 - ``macvlan-rdma-shared`` --- Ethernet with shared RDMA device plugin and MacVLAN
 - ``ipoib-rdma-shared`` --- InfiniBand with shared RDMA device plugin and IPoIB
 - ``spectrum-x`` --- Spectrum-X multi-rail AI interconnect (RA2.3 on Network Operator 26.7)
-- ``spectrum-x-ra2.2`` --- Spectrum-X for the RA2.2 reference architecture (Network Operator 26.4)
 - ``spectrum-x-ra2.1`` --- Spectrum-X for the RA2.1 reference architecture (Network Operator 26.1)
 
 Profiles are selected by flag combinations on ``l8k generate``: ``--fabric``, ``--deployment-type``, ``--multirail``, and ``--spectrum-x``. See :doc:`Deployment Profiles <profiles/profiles>` for the decision matrix.
@@ -95,7 +94,7 @@ Network Operator Releases
 Launch Kit pins to specific NVIDIA Network Operator releases. The ``--network-operator-release`` flag (and the ``networkOperator.selectedRelease`` config key) selects between supported release lines:
 
 - ``26.1`` --- required for ``spectrum-x-ra2.1`` (RA2.1).
-- ``26.4`` --- required for ``spectrum-x-ra2.2`` (RA2.2).
+- ``26.4``
 - ``26.7`` --- required for ``spectrum-x`` (RA2.3).
 
 The selected release auto-fills versions and image tags from an embedded catalog. Version mismatches (for example, requesting RA2.1 with release 26.7) error out with a specific message.

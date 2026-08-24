@@ -72,12 +72,12 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - always; opt out via ``--multirail=false`` (YAML cannot express explicit-false)
    * - ``--multiplane-mode``
      - ``none`` (H100 / H200 / B200 / GB200, ConnectX-7 NIC, BlueField-3 SuperNIC), ``swplb`` (B300 / GB300)
-     - only when ``--spectrum-x`` is set; from the GPU platform and east-west PF deviceID, skipped+warned when groups disagree. ``hwplb`` is never defaulted --- pass it explicitly.
+     - only when ``--spectrum-x`` is set; from the GPU platform and east-west PF deviceID, skipped+warned when groups disagree. ``hwplb`` is not defaulted on ConnectX-8 SuperNIC --- pass it explicitly.
    * - ``--number-of-planes``
      - 1 (single-plane platforms and NICs), 2 (B300 / GB300)
-     - only when ``--spectrum-x`` is set. Pass ``4`` explicitly for a quad-plane B300 topology.
+     - only when ``--spectrum-x`` is set. Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
    * - ``--network-operator-release``
-     - matching release for the chosen RA (RA2.1 → 26.1, RA2.2 → 26.4, RA2.3 → 26.7)
+     - matching release for the chosen RA (RA2.3 → 26.7, RA2.1 → 26.1)
      - only when ``--spectrum-x`` is set
 
 Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``); the full reasoning trail is at debug level (``--log-level debug``).
@@ -99,7 +99,7 @@ For Spectrum-X profiles --- and recommended for all deployments --- pin the Netw
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
 
-Supported release lines: ``26.1``, ``26.4``, and ``26.7``. The release auto-fills versions and image tags from an embedded catalog. Each Spectrum-X RA requires its matching line: RA2.1 → ``26.1``, RA2.2 → ``26.4``, RA2.3 → ``26.7``.
+Supported release lines: ``26.1``, ``26.4``, and ``26.7``. The release auto-fills versions and image tags from an embedded catalog. Each Spectrum-X RA requires its matching line: RA2.3 → ``26.7``, RA2.1 → ``26.1``.
 
 ================================================================================
 Generation without a Live Cluster

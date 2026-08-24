@@ -32,7 +32,7 @@ Use Case
 
 NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.
 
-Three reference architectures are supported. The RA version is the value of ``--spectrum-x``, and each one pins to a Network Operator release line:
+Two reference architectures are supported. The RA version is the value of ``--spectrum-x``, and each one pins to a Network Operator release line:
 
 .. list-table::
    :header-rows: 1
@@ -46,10 +46,6 @@ Three reference architectures are supported. The RA version is the value of ``--
      - ``26.7``
      - ``spectrum-x``
      - Current. Adds the Spectrum-X profile ConfigMap (see below) and requires ``--spectrum-x-config``.
-   * - ``RA2.2``
-     - ``26.4``
-     - ``spectrum-x-ra2.2``
-     - Uses ``SpectrumXRailPoolConfig`` (v1alpha2 CRD).
    * - ``RA2.1``
      - ``26.1``
      - ``spectrum-x-ra2.1``
@@ -81,7 +77,7 @@ Multiplane Modes
 
 The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
 
-``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, B300 / GB300 get ``swplb`` and 2 planes. ``hwplb`` is never chosen automatically; pass it explicitly. Launch Kit skips the default and warns if the cluster's node groups would need different values.
+``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, B300 / GB300 get ``swplb`` and 2 planes. ``hwplb`` is not chosen automatically on ConnectX-8 SuperNIC; pass it explicitly. Launch Kit skips the default and warns if the cluster's node groups would need different values.
 
 HWPLB
 ------
@@ -161,15 +157,12 @@ NIC Type Constraints
        | ``hwplb``
 
 ================================================================================
-Pinning to an Earlier RA
+Pinning to RA2.1
 ================================================================================
 
-To target an earlier reference architecture, pass its version to ``--spectrum-x``. ``--spectrum-x-config`` does not apply --- RA2.1 and RA2.2 carry their Spectrum-X settings in the CRDs themselves.
+To target Network Operator 26.1, pass ``RA2.1`` to ``--spectrum-x``. ``--spectrum-x-config`` does not apply --- RA2.1 carries its Spectrum-X settings in the CRDs themselves.
 
 .. code-block:: bash
-
-   l8k generate --spectrum-x RA2.2 \
-       --multiplane-mode swplb --number-of-planes 2
 
    l8k generate --spectrum-x RA2.1 \
        --multiplane-mode swplb --number-of-planes 2
