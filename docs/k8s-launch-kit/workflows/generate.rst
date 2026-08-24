@@ -71,16 +71,16 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - ``true``
      - always; opt out via ``--multirail=false`` (YAML cannot express explicit-false)
    * - ``--multiplane-mode``
-     - ``uniplane`` (CX7 / BF3 SuperNIC), ``swplb`` (CX8), ``hwplb`` (CX9)
-     - only when ``--spectrum-x`` is set; per east-west PF deviceID, skipped+warned when groups have mixed deviceIDs
+     - ``none`` (H100 / H200 / B200 / GB200, ConnectX-7 NIC, BlueField-3 SuperNIC), ``swplb`` (B300 / GB300)
+     - only when ``--spectrum-x`` is set; from the GPU platform and east-west PF deviceID, skipped+warned when groups disagree. ``hwplb`` is never defaulted --- pass it explicitly.
    * - ``--number-of-planes``
-     - 1 (CX7 / BF3 SuperNIC), 2 (CX8), 4 (CX9)
-     - only when ``--spectrum-x`` is set
+     - 1 (single-plane platforms and NICs), 2 (B300 / GB300)
+     - only when ``--spectrum-x`` is set. Pass ``4`` explicitly for a quad-plane B300 topology.
    * - ``--network-operator-release``
-     - matching release for the chosen RA (RA2.1 → 26.1, RA2.2 → 26.4)
+     - matching release for the chosen RA (RA2.1 → 26.1, RA2.2 → 26.4, RA2.3 → 26.7)
      - only when ``--spectrum-x`` is set
 
-Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (ConnectX-8 (deviceID 1023))``); the full reasoning trail is at debug level (``--log-level debug``).
+Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``); the full reasoning trail is at debug level (``--log-level debug``).
 
 Resolution precedence (lowest → highest): hardware default < config-file < CLI flag. The Spectrum-X cohort rules (RA-to-release pairing, ``multiplane-mode=none`` requiring ``number-of-planes=1``, etc.) are enforced after defaults run, so a partial CLI input plus defaults must still resolve to a consistent whole.
 
@@ -95,11 +95,11 @@ For Spectrum-X profiles --- and recommended for all deployments --- pin the Netw
 .. code-block:: bash
 
    l8k generate --user-config ./cluster-config.yaml \
-       --network-operator-release 26.4 \
+       --network-operator-release 26.7 \
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
 
-Supported release lines: ``26.1`` and ``26.4``. The release auto-fills versions and image tags from an embedded catalog. RA2.1 Spectrum-X requires ``--network-operator-release 26.1``; RA2.2 Spectrum-X requires ``26.4``.
+Supported release lines: ``26.1``, ``26.4``, and ``26.7``. The release auto-fills versions and image tags from an embedded catalog. Each Spectrum-X RA requires its matching line: RA2.1 → ``26.1``, RA2.2 → ``26.4``, RA2.3 → ``26.7``.
 
 ================================================================================
 Generation without a Live Cluster

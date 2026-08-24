@@ -32,28 +32,66 @@ Use Case
 
 NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.
 
-Two reference architectures are supported, selected by Network Operator release:
+Three reference architectures are supported. The RA version is the value of ``--spectrum-x``, and each one pins to a Network Operator release line:
 
-- **RA2.2** (current) --- requires ``--network-operator-release 26.4``. Uses ``SpectrumXRailPoolConfig`` (v1alpha2 CRD).
-- **RA2.1** (previous) --- requires ``--network-operator-release 26.1``. Uses ``SriovNetworkPoolConfig`` + ``SriovNetworkNodePolicy`` + ``OVSNetwork`` with NV-IPAM glue.
+.. list-table::
+   :header-rows: 1
+   :widths: 14 22 30 34
+
+   * - **RA**
+     - **Release**
+     - **Profile directory**
+     - **Notes**
+   * - ``RA2.3``
+     - ``26.7``
+     - ``spectrum-x``
+     - Current. Adds the Spectrum-X profile ConfigMap (see below) and requires ``--spectrum-x-config``.
+   * - ``RA2.2``
+     - ``26.4``
+     - ``spectrum-x-ra2.2``
+     - Uses ``SpectrumXRailPoolConfig`` (v1alpha2 CRD).
+   * - ``RA2.1``
+     - ``26.1``
+     - ``spectrum-x-ra2.1``
+     - Uses ``SriovNetworkPoolConfig`` + ``SriovNetworkNodePolicy`` + ``OVSNetwork`` with NV-IPAM glue.
+
+If the release and RA version are mismatched (for example, ``--spectrum-x RA2.1`` with ``--network-operator-release 26.7``), Launch Kit errors out with an explicit message. Omitting ``--network-operator-release`` picks the matching line automatically.
 
 For deeper Spectrum-X background, see :doc:`Spectrum-X Configuration <../../spectrum-x/spectrum-x-configuration>`.
+
+================================================================================
+The RA2.3 Profile ConfigMap
+================================================================================
+
+RA2.3 moves the Spectrum-X tuning knobs out of the CRD and into a ConfigMap that the NIC Configuration Operator reads. Pass its contents with ``--spectrum-x-config``:
+
+.. code-block:: bash
+
+   l8k generate --spectrum-x RA2.3 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
+       --multiplane-mode swplb --number-of-planes 2
+
+The file may be either a full ConfigMap manifest or just the YAML that belongs under its ``data.profile`` key. With raw ``data.profile`` YAML, also pass ``--spectrum-x-configmap-name`` to name the generated ConfigMap; with a full manifest, the name comes from ``metadata.name``.
+
+Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and sets ``spectrumXOptimized.version`` on the generated ``NicConfigurationTemplate`` to the ConfigMap's name.
 
 ================================================================================
 Multiplane Modes
 ================================================================================
 
-The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` takes the SPC-X RA version as its value (``RA2.1`` or ``RA2.2``); ``--multiplane-mode``, ``--number-of-planes``, and ``--network-operator-release`` are all required alongside it. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
+The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
+
+``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered GPU platform and east-west NIC when omitted --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, B300 / GB300 get ``swplb`` and 2 planes. ``hwplb`` is never chosen automatically; pass it explicitly. Launch Kit skips the default and warns if the cluster's node groups would need different values.
 
 HWPLB
 ------
 
-Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. **Tech preview**, supported on ConnectX-8 SuperNIC with RA2.2 only --- not part of the validated Spectrum-X Reference Architecture:
+Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. Supported on ConnectX-8 SuperNIC:
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
        --multiplane-mode hwplb --number-of-planes 4
 
 SWPLB
@@ -63,20 +101,9 @@ Software Plane Load Balancing for smaller-scale Spectrum-X clusters. Generates s
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
        --multiplane-mode swplb --number-of-planes 2
-
-Uniplane
----------
-
-Single-plane physical topology that runs the Spectrum-X multiplane software stack and IP schema --- multiple PFs all connect to the **same** ToR/plane (rather than separate planes as in ``swplb`` / ``hwplb``). A specialized configuration for compatibility or regression scenarios; for production, use ``none`` for Single-Plane or ``swplb`` / ``hwplb`` for Dual-Plane / Quad-Plane. Supported on ConnectX-8 SuperNIC only. Use with ``--number-of-planes 1``:
-
-.. code-block:: bash
-
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
-       --multiplane-mode uniplane --number-of-planes 1
 
 None (Single Plane)
 --------------------
@@ -85,11 +112,11 @@ No multiplane separation. Use with ConnectX-7 NIC, BlueField-3 SuperNIC, or simp
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
        --multiplane-mode none --number-of-planes 1
 
-Side-by-side comparison of the four modes:
+Side-by-side comparison of the three modes:
 
 .. mermaid::
 
@@ -106,10 +133,7 @@ Side-by-side comparison of the four modes:
            S_OVS -->|SW LB| S_P2[Plane 2]
            S_OVS -->|SW LB| S_P3[Plane 3]
        end
-       subgraph UNI[Uniplane]
-           U_NIC[NIC] --> U_P[Single plane]
-       end
-       subgraph NONE[None]
+       subgraph NONE[None - single plane]
            N_NIC[NIC] --> N_NET[Standard network]
        end
 
@@ -134,22 +158,21 @@ NIC Type Constraints
      - ``1023``
      - | ``none``
        | ``swplb``
-       | ``hwplb`` *(tech preview)*
-       | ``uniplane``
+       | ``hwplb``
 
 ================================================================================
-Pinning to RA2.1
+Pinning to an Earlier RA
 ================================================================================
 
-For Network Operator 26.1 deployments, select the Spectrum-X RA2.1 profile by passing ``RA2.1`` as the value of ``--spectrum-x``:
+To target an earlier reference architecture, pass its version to ``--spectrum-x``. ``--spectrum-x-config`` does not apply --- RA2.1 and RA2.2 carry their Spectrum-X settings in the CRDs themselves.
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.1 \
-       --network-operator-release 26.1 \
+   l8k generate --spectrum-x RA2.2 \
        --multiplane-mode swplb --number-of-planes 2
 
-If the release and Spectrum-X version are mismatched (for example, ``--spectrum-x RA2.1`` with ``--network-operator-release 26.4``), Launch Kit errors out with an explicit message.
+   l8k generate --spectrum-x RA2.1 \
+       --multiplane-mode swplb --number-of-planes 2
 
 ================================================================================
 See Also
