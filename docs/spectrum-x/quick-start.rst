@@ -292,8 +292,10 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
        # Including it here lets you flip multiplaneMode without re-applying NicClusterPolicy.
        xPlane:
          image: xplane
-         repository: |network-operator-repository|
-         version: |spectrumxop-version|
+         # xPlane ships on the DOCA release cadence, so its repository and tag
+         # differ from the other Network Operator components.
+         repository: nvcr.io/nvstaging/doca
+         version: 3.5.0035
      secondaryNetwork:
        cniPlugins:
          image: plugins
@@ -442,8 +444,9 @@ the SuperNICs and sets the multiplane mode.
              feature.node.kubernetes.io/network-sriov.capable: "true"
            nicSelector:
              nicType: "a2dc"  # BlueField-3 SuperNIC (HGX H100/H200/B200). Use "1021" for ConnectX-7 NIC (GB200) or "1023" for ConnectX-8 SuperNIC.
-             pciAddresses:  # east-west PFs only
+             pciAddresses:  # every east-west PF, all rails
                - "TODO_PCI_RAIL0_NIC0"
+               - "TODO_PCI_RAIL1_NIC0"
            template:
              numVfs: 1
              linkType: Ethernet
@@ -482,9 +485,11 @@ the SuperNICs and sets the multiplane mode.
              feature.node.kubernetes.io/network-sriov.capable: "true"
            nicSelector:
              nicType: "1023"  # ConnectX-8 SuperNIC (B300, GB300)
-             pciAddresses:  # east-west PFs only
+             pciAddresses:  # every east-west PF, all rails
                - "TODO_PCI_RAIL0_NIC0"
                - "TODO_PCI_RAIL0_NIC1"
+               - "TODO_PCI_RAIL1_NIC0"
+               - "TODO_PCI_RAIL1_NIC1"
            template:
              numVfs: 1
              linkType: Ethernet
@@ -523,9 +528,11 @@ the SuperNICs and sets the multiplane mode.
              feature.node.kubernetes.io/network-sriov.capable: "true"
            nicSelector:
              nicType: "1023"  # ConnectX-8 SuperNIC (B300, GB300)
-             pciAddresses:  # east-west PFs only
+             pciAddresses:  # every east-west PF, all rails
                - "TODO_PCI_RAIL0_NIC0"
                - "TODO_PCI_RAIL0_NIC1"
+               - "TODO_PCI_RAIL1_NIC0"
+               - "TODO_PCI_RAIL1_NIC1"
            template:
              numVfs: 1
              linkType: Ethernet
