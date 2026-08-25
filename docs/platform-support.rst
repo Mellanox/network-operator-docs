@@ -231,7 +231,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - NVIDIA Rubin
      - ConnectX-9 SuperNIC
      - Ubuntu 24.04, 22.04 (Arm64)
-     - GA for RoCE and InfiniBand workloads. Spectrum-X support is Tech Preview (ConnectX-9 Network Bay configuration)
+     - GA for RoCE and InfiniBand workloads. Firmware reset required (see :ref:`fw-reset-external-bmc`). Spectrum-X support is Tech Preview
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
@@ -389,7 +389,7 @@ NVIDIA Spectrum-X Ethernet Networking Platform
 Support for KubeVirt SR-IOV Passthrough
 =======================================
 
-**NVIDIA Network Operator** supports attaching SR-IOV Virtual Functions (VFs) to KubeVirt virtual machines via VFIO PCI passthrough. For deployment instructions, see :doc:`KubeVirt SR-IOV Integration <kubevirt>`.
+**NVIDIA Network Operator** supports attaching SR-IOV Virtual Functions (VFs) to KubeVirt and Red Hat OpenShift Virtualization virtual machines via VFIO PCI passthrough. For deployment instructions, see :doc:`KubeVirt SR-IOV Integration <kubevirt>` on upstream Kubernetes, or :doc:`OpenShift Virtualization SR-IOV Integration <openshift/ocp-kubevirt>` on Red Hat OpenShift.
 
 .. list-table::
    :header-rows: 1
@@ -398,14 +398,22 @@ Support for KubeVirt SR-IOV Passthrough
      - Kubernetes
      - KubeVirt
      - Red Hat OpenShift Virtualization
+   * - Ubuntu 26.04 LTS
+     - 1.32–1.36
+     - v1.8.2+
+     - —
    * - Ubuntu 24.04 LTS
      - 1.32–1.36
      - v1.8.2+
-     - Not supported
+     - —
    * - Ubuntu 22.04 LTS
      - 1.32–1.36
      - v1.8.2+
-     - Not supported
+     - —
+   * - Red Hat CoreOS
+     - —
+     - —
+     - 4.17–4.22
 
 Key limitations:
 
@@ -479,6 +487,7 @@ Supported Operating Systems
 
 Currently precompiled DOCA-OFED driver container images are provided for the following operating systems:
 
+- Ubuntu 26.04 (amd64/arm64)
 - Ubuntu 24.04 (amd64/arm64)
 - Ubuntu 22.04 (amd64/arm64)
 
