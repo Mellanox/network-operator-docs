@@ -168,7 +168,7 @@
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> in Network Operator 26.7.0 applies Spectrum-X NIC tuning from a <strong>Spectrum-X profile</strong> — a versioned YAML document published for each Reference Architecture and supplied to the cluster as a labeled ConfigMap. The <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> field names that ConfigMap.</p>
-<p>This replaces the fixed RA-version enum used in earlier releases. In Network Operator 26.4.0 and earlier, <code class="docutils literal notranslate"><span class="pre">version</span></code> accepted only the built-in values <code class="docutils literal notranslate"><span class="pre">RA1.3</span></code>, <code class="docutils literal notranslate"><span class="pre">RA2.0</span></code>, and <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code>, and the tuning tables shipped inside the operator image. From 26.7.0, the operator carries no built-in profiles: every Spectrum-X deployment must apply a profile ConfigMap first, and NIC tuning can be revised without a new operator release.</p>
+<p>This replaces the fixed RA-version enum used in earlier releases. In Network Operator 26.4.0 and earlier, <code class="docutils literal notranslate"><span class="pre">version</span></code> accepted only a fixed set of built-in RA versions, and the tuning tables shipped inside the operator image. From 26.7.0, the operator carries no built-in profiles: every Spectrum-X deployment must apply a profile ConfigMap first, and NIC tuning can be revised without a new operator release.</p>
 <p>For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 <p>Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC, and BlueField-3 SuperNIC; Hardware Plane Load Balancing (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) additionally requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC. Device IDs and the modes each NIC accepts are listed under <a class="reference internal" href="#nic-type-constraints">NIC type constraints</a>.</p>
 <div class="admonition note">
@@ -341,7 +341,7 @@ The package should be available in the cluster and then its URL should be provid
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
-<td><p>Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. <strong>The default mode on multiplane platforms.</strong></p></td>
+<td><p>Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. <strong>The recommended mode on multiplane platforms.</strong></p></td>
 <td><p>ConnectX-8 SuperNIC, ConnectX-9 SuperNIC</p></td>
 <td><p>2, 4</p></td>
 </tr>
@@ -359,7 +359,7 @@ The package should be available in the cluster and then its URL should be provid
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On multiplane platforms, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> is the default mode — select <code class="docutils literal notranslate"><span class="pre">swplb</span></code> only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. Note that this is a deployment default, not an API default: the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field itself defaults to <code class="docutils literal notranslate"><span class="pre">none</span></code>, so multiplane deployments must set it explicitly.</p>
+<p>On multiplane platforms, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> is the mode Spectrum-X RA 2.3 recommends — select <code class="docutils literal notranslate"><span class="pre">swplb</span></code> only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. This is a Reference Architecture recommendation, not an API default: the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field itself defaults to <code class="docutils literal notranslate"><span class="pre">none</span></code>, so multiplane deployments must set it explicitly.</p>
 <p>The modes a given deployment can actually use are additionally bounded by the Spectrum-X profile: a mode is configurable only if the profile carries <code class="docutils literal notranslate"><span class="pre">mlxConfig</span></code> tuning for that mode and device ID.</p>
 </div>
 </section>
@@ -489,7 +489,7 @@ naming (for example, <code class="docutils literal notranslate"><span class="pre
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 23, 2026.
+      <span class="lastupdated">Last updated on Aug 25, 2026.
       </span></p>
   </div>
 

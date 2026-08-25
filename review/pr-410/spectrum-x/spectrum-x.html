@@ -150,10 +150,10 @@ single-plane networks. Network Operator exposes it through the
 <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field on <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>, with
 <strong>Hardware Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) and <strong>Software Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">swplb</span></code>)
 variants alongside the single-plane mode (<code class="docutils literal notranslate"><span class="pre">none</span></code>). On multiplane platforms,
-Hardware Multiplane is the default mode; Software Multiplane is selected only
-for software-based multiplane deployments.</p>
-<p>On multiplane platforms (B300, GB300), Hardware Multiplane is the default and
-<strong>DOCA xPlane is a required component</strong> — it manages plane failover inside
+Hardware Multiplane is the mode Spectrum-X RA 2.3 recommends; Software
+Multiplane is selected only for software-based multiplane deployments.</p>
+<p>On multiplane platforms (B300, GB300), Hardware Multiplane is the recommended
+mode and <strong>DOCA xPlane is a required component</strong> — it manages plane failover inside
 OVS-DOCA. Single-plane deployments on BlueField-3 SuperNIC do not use it. See
 <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
 <p>Spectrum-X Kubernetes deployments fall
@@ -194,7 +194,7 @@ rail and the load-balancing mechanism:</p>
 </tr>
 <tr class="row-even"><td><p>Quad-Plane</p></td>
 <td><p>ConnectX-8 SuperNIC</p></td>
-<td><p>B300</p></td>
+<td><p>B300, GB300</p></td>
 <td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (4 planes)</div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">swplb</span></code> (4 planes)</div>
@@ -352,7 +352,7 @@ For the Kubernetes and OS matrix and component versions, see
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 23, 2026.
+      <span class="lastupdated">Last updated on Aug 25, 2026.
       </span></p>
   </div>
 
