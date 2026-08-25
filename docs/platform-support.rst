@@ -50,7 +50,7 @@ When a new major version is released, the previous major version enters a **Depr
 .. list-table::
    :header-rows: 1
 
-   * - Version
+   * - Network Operator Version
      - Status
    * - |current-ga-version|
      - Supported
@@ -59,7 +59,7 @@ When a new major version is released, the previous major version enters a **Depr
    * - |current-eol-version| and lower
      - End of Support
 
-Upgrades are supported within a major release, or to the next major release. For upgrade procedures and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
+Upgrades are supported within a major release, or to the next major release. For the full support-status table, upgrade procedures, and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
 
 .. note::
 
