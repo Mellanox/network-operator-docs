@@ -661,42 +661,42 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |ovs-cni-repository|
      - ovs-cni-plugin
      - |ovs-cni-version|
-     - No
+     - Yes
      - 
    * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - |nic-configuration-operator-repository|
      - nic-configuration-operator
      - |nic-configuration-operator-version|
-     - No
+     - Yes
      - 
    * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
      - |nic-configuration-operator-repository|
      - nic-configuration-operator-daemon
      - |nic-configuration-operator-version|
-     - No
+     - Yes
      - 
    * - `NVIDIA Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_
      - NVIDIA (OSS)
      - |maintenance-operator-repository|
      - maintenance-operator
      - |maintenance-operator-version|
-     - No
+     - Yes
      - 
    * - `NVIDIA Kubernetes Launch Kit <https://github.com/NVIDIA/k8s-launch-kit>`_
      - NVIDIA (OSS)
      - |k8s-launch-kit-repository|
      - k8s-launch-kit
      - |k8s-launch-kit-version|
-     - No
+     - Yes
      -
    * - `NVIDIA Spectrum-X Operator <https://github.com/Mellanox/spectrum-x-operator>`_
      - NVIDIA (OSS)
      - |spectrumxop-repository|
      - spectrum-x-operator
      - |spectrumxop-version|
-     - No
+     - Yes
      -
    * - `DRA Driver SR-IOV <https://github.com/k8snetworkplumbingwg/dra-driver-sriov>`_
      - Community (OSS)
