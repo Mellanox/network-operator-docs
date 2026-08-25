@@ -43,7 +43,7 @@ Support terms used on this page:
 Versioning and Lifecycle
 ========================
 
-**NVIDIA Network Operator** uses calendar versioning in the form ``YY.MM.PP`` (for example, 26.4.0). The first two fields identify the major version and release timeframe; the third field identifies the patch version, used for critical bug and CVE fixes.
+**NVIDIA Network Operator** uses calendar versioning in the form ``YY.MM.PP`` (for example, 26.7.0). The first two fields identify the major version and release timeframe; the third field identifies the patch version, used for critical bug and CVE fixes.
 
 When a new major version is released, the previous major version enters a **Deprecated** state and receives only patch updates for critical fixes. Earlier major versions reach **End of Support** and no longer receive updates.
 
@@ -52,11 +52,11 @@ When a new major version is released, the previous major version enters a **Depr
 
    * - Version
      - Status
-   * - 26.4.x
+   * - |current-ga-version|
      - Supported
-   * - 26.1.x
+   * - |current-maintenance-version|
      - Deprecated
-   * - 25.10.x and lower
+   * - |current-eol-version| and lower
      - End of Support
 
 Upgrades are supported within a major release, or to the next major release. For upgrade procedures and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
