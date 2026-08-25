@@ -102,6 +102,7 @@ Full Schema
        spcxVersion: "RA2.3"
        multiplaneMode: swplb
        numberOfPlanes: 4
+       useDRA: false
      ai: false
 
    clusterConfig:
@@ -334,6 +335,8 @@ Profile selection (also overridable via CLI flags).
      - Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap's ``data.profile`` key, or a full ConfigMap manifest. Required for ``RA2.3``. Equivalent to ``--spectrum-x-config``.
    * - ``spectrumX.configMapName``
      - Name for the generated profile ConfigMap. Required only when ``spectrumX.profile`` holds raw ``data.profile`` YAML. Equivalent to ``--spectrum-x-configmap-name``.
+   * - ``spectrumX.useDRA``
+     - Generate DRA ``ResourceClaimTemplate`` resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only --- there is no CLI flag. Defaults to ``false``. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV --- see :doc:`../profiles/spectrum-x`.
 
 ================================================================================
 clusterConfig

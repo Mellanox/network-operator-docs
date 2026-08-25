@@ -197,6 +197,62 @@ will refuse.
    <../../platform-support>`.
 
 ================================================================================
+DRA-Based Workload Allocation
+================================================================================
+
+By default the Spectrum-X profiles hand rails to workloads through the SR-IOV device plugin: the generated workload requests ``nvidia.com/rail<N>`` resources (``nvidia.com/rail<N>p<P>`` in ``swplb``). Setting ``profile.spectrumX.useDRA: true`` switches generation to Kubernetes Dynamic Resource Allocation (DRA) instead, so the rails of one node can be claimed by more than one workload.
+
+``useDRA`` is config-only --- there is no CLI flag --- and defaults to ``false``:
+
+.. code-block:: yaml
+
+   profile:
+     spectrumX:
+       spcxVersion: "RA2.3"
+       multiplaneMode: hwplb
+       numberOfPlanes: 4
+       useDRA: true
+
+The key is honoured by the ``RA2.3`` profile. On ``RA2.1`` it is accepted but has no effect --- that profile carries no DRA templates, and Launch Kit does not report an error.
+
+What changes in the generated manifests
+----------------------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 32 68
+
+   * - **File**
+     - **Difference when DRA is enabled**
+   * - ``00-values.yaml``
+     - Adds the SR-IOV Network Operator feature gate ``dynamicResourceAllocation: true``. The Spectrum-X profiles already set ``enableInjector: false``, which DRA also requires.
+   * - ``80-spectrumxrailpoolconfig.yaml``
+     - ``spec.draEnabled: true``. Launch Kit always renders this field explicitly, so with ``useDRA: false`` it writes ``false`` and overrides the CRD default of ``true``.
+   * - ``85-resourceclaimtemplate.yaml``
+     - New file, generated only when ``useDRA`` is ``true``. Holds one ``resource.k8s.io/v1`` ``ResourceClaimTemplate`` per rail (``none`` and ``hwplb``) or per rail-plane (``swplb``), rendered into the network namespace.
+   * - ``90-example-daemonset.yaml``
+     - The example workload references the generated templates through pod-level ``spec.resourceClaims`` and container-level ``resources.claims`` instead of ``nvidia.com/rail*`` requests and limits.
+
+Each claim template carries two device requests: a ``gpu`` request against device class ``gpu.nvidia.com``, and a ``vf`` request against device class ``sriovnetwork.k8snetworkplumbingwg.io`` selected by the rail's resource name.
+
+Prerequisites
+--------------
+
+- **Kubernetes 1.34 or later.** The generated templates use ``resource.k8s.io/v1``, which is only served from 1.34. Launch Kit does not check the cluster version, so on an older cluster the file is generated and then rejected on apply.
+- **The DRA Driver for SR-IOV**, which publishes the ``sriovnetwork.k8snetworkplumbingwg.io`` device class. It is a Tech Preview feature, supported only on upstream Kubernetes with the SR-IOV Network Operator --- not on Red Hat OpenShift. See :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>`.
+- **The NVIDIA DRA Driver for GPUs**, which publishes the ``gpu.nvidia.com`` device class. Neither Launch Kit nor the Network Operator installs it; without it, the ``gpu`` request in every generated claim is unallocatable.
+- **No SR-IOV device plugin.** DRA and the SR-IOV device plugin cannot run on the same cluster. Turning ``useDRA`` on for a cluster that already runs device-plugin workloads is a migration rather than a toggle: delete existing ``SriovNetworkNodePolicy`` resources first. Launch Kit neither performs nor warns about this.
+
+Limitations
+------------
+
+- **A rail is the smallest unit of sharing.** ``SpectrumXRailPoolConfig`` and ``NicConfigurationTemplate`` both render ``numVfs: 1`` --- ``spectrumXOptimized`` is rejected by the API for any other value --- so several workloads on one node must take different rails; they cannot share a rail.
+- **The generated example workload still claims every rail.** Running several workloads on a node means authoring a workload that references only the subset of ``ResourceClaimTemplate`` resources it needs.
+- **No automatic GPU-to-rail mapping.** Each template names one rail, fixed at generation time. The scheduler is not asked to choose the rail closest to the allocated GPU.
+- **GPU-to-NIC co-location is not enforced.** Launch Kit does not emit a ``constraints`` / ``matchAttribute`` block. Where affinity matters, add the relative ``constraints`` form documented in :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>` to your own workload.
+- **Not all target platforms are supported by the driver.** On NVIDIA GB300 NVL72, Vera Rubin NVL72, and HGX Rubin NVL8 systems the PCIe root used to match a NIC to a GPU is the root of the NIC's Data Direct sub-interface, and the DRA SR-IOV driver does not currently support that topology. This applies to ConnectX-8 and later adapters, which is what RA 2.3 targets.
+
+================================================================================
 Pinning to RA2.1
 ================================================================================
 
@@ -217,3 +273,4 @@ See Also
 - :doc:`Spectrum-X Configuration <../../spectrum-x/spectrum-x-configuration>` --- background and CRD details
 - :doc:`Generate Workflow <../workflows/generate>` --- generation details
 - :doc:`Configuration Reference <../reference/config>` --- ``spectrumX`` config section
+- :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>` --- driver installation, prerequisites, and limitations for ``useDRA``

@@ -75,6 +75,12 @@ Common Failures
    * - SR-IOV pods stuck in ``ContainerCreating``
      - VF allocation failure or device plugin not ready
      - ``kubectl describe pod`` and SR-IOV operator logs
+   * - ``85-resourceclaimtemplate.yaml`` rejected with ``no matches for kind "ResourceClaimTemplate"``
+     - Cluster is older than Kubernetes 1.34
+     - ``kubectl version``; upgrade the cluster or unset ``profile.spectrumX.useDRA`` (see :doc:`profiles/spectrum-x`)
+   * - Workload pods with DRA claims stay ``Pending``
+     - The DRA Driver for SR-IOV or the NVIDIA DRA Driver for GPUs is not installed, or no device matches a claim's selectors
+     - ``kubectl get resourceclaim -A`` and ``kubectl describe pod`` (see :doc:`profiles/spectrum-x`)
 
 ================================================================================
 See Also
