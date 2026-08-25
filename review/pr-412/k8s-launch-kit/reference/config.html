@@ -220,6 +220,7 @@
 <span class="w">    </span><span class="nt">spcxVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.3&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
 <span class="w">    </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">    </span><span class="nt">useDRA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ai</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 
 <span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
@@ -531,6 +532,9 @@
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.configMapName</span></code></p></td>
 <td><p>Name for the generated profile ConfigMap. Required only when <code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code> holds raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-configmap-name</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.useDRA</span></code></p></td>
+<td><p>Generate DRA <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only — there is no CLI flag. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV — see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p></td>
 </tr>
 </tbody>
 </table>
