@@ -73,6 +73,8 @@ The file may be either a full ConfigMap manifest or just the YAML that belongs u
 
 Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and sets ``spectrumXOptimized.version`` on the generated ``NicConfigurationTemplate`` to the ConfigMap's name.
 
+The ``RA2.3`` profile also sets ``pciPerformanceOptimized`` on that template, with ``maxReadRequest: 4096`` --- the largest PCIe read request size the API accepts. The values are fixed and not configurable from the cluster configuration. The ``RA2.1`` profile does not set this field.
+
 ================================================================================
 Multiplane Modes
 ================================================================================
