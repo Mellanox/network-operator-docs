@@ -823,7 +823,7 @@ Network Operator Deployment for GPUDirect Workloads
 
 GPUDirect requires the following:
 
-* NVIDIA DOCA-OFED Driver v5.5-1.0.3.2 or newer
+* NVIDIA DOCA-OFED Driver |doca-driver-version-min| or newer
 * GPU Operator v1.9.0 or newer
 * NVIDIA GPU and driver supporting GPUDirect e.g Quadro RTX 6000/8000 or NVIDIA T4/NVIDIA V100/NVIDIA A100
 

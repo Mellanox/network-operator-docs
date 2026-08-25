@@ -166,7 +166,7 @@ The following adapters have been tested and validated with **NVIDIA Network Oper
 ====================================
 Supported NVIDIA Data Center Systems
 ====================================
-The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**:
+The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**. For the supported versions of each operating system, see `Supported Operating Systems and Kubernetes Platforms`_.
 
 .. list-table::
    :header-rows: 1
@@ -230,7 +230,7 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - NVIDIA Rubin
      - ConnectX-9 SuperNIC
      - Ubuntu 24.04, 22.04 (Arm64)
-     - Tech Preview. ConnectX-9 SuperNIC for RoCE and InfiniBand workloads. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+     - Tech Preview — system validation is in progress. Uses ConnectX-9 SuperNIC, which is generally available for RoCE and InfiniBand workloads; see `Supported NVIDIA Network Adapters`_. Firmware reset required (see :ref:`fw-reset-external-bmc`)
 
 .. _supported-deployment-options:
 
