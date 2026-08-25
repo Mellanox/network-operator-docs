@@ -45,7 +45,7 @@ Changes and New Features
        | - Added automatic Data Direct enablement on Spectrum-X Virtual Functions, ensuring Pods on Hardware Multiplane rails receive a Data Direct-enabled VF
        | - Added deployment and configuration status reporting across NVIDIA Network Operator custom resources, with per-component readiness conditions on ``NicClusterPolicy`` and ``NicNodePolicy``, and per-node configuration status on ``SpectrumXRailPoolConfig``
        | - Added KubeVirt support on Red Hat OpenShift, enabling SR-IOV VFIO passthrough to OpenShift Virtualization virtual machines
-       | - Enhanced NVIDIA Kubernetes Launch Kit with DRA-based Spectrum-X configuration for running multiple workloads per node
+       | - [TECH PREVIEW] Added an opt-in ``profile.spectrumX.useDRA`` setting to NVIDIA Kubernetes Launch Kit that generates DRA ``ResourceClaimTemplate`` resources for Spectrum-X rails in place of SR-IOV device-plugin resource requests, so a node's rails can be divided among several workloads. Disabled by default; requires Kubernetes 1.34 or later and the Tech Preview DRA Driver for SR-IOV
        | - Extended NIC configuration in NVIDIA NIC Configuration Operator with runtime performance tuning, RoCE mode selection, and additional QoS controls
        | - [TECH PREVIEW] Added NVIDIA ConnectX-9 SuperNIC Network Bay configuration in NVIDIA NIC Configuration Operator for NVIDIA Vera Rubin NVL72 platforms
    * - 26.4.1
