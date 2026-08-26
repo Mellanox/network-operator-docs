@@ -166,7 +166,7 @@ The following adapters have been tested and validated with **NVIDIA Network Oper
 ====================================
 Supported NVIDIA Data Center Systems
 ====================================
-The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**. For the supported versions of each operating system, see `Supported Operating Systems and Kubernetes Platforms`_.
+The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**. For the supported versions of each operating system, see `Supported Operating Systems and Kubernetes Platforms`_. On Arm-based systems, only the Arm64 builds of the listed distributions are validated; not every operating system version in that table is available for Arm64.
 
 .. list-table::
    :header-rows: 1
