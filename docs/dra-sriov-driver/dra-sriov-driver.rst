@@ -82,9 +82,10 @@ First install the Network Operator with NFD, SR-IOV Network Operator, and DRA en
       enabled: true
     sriovNetworkOperator:
       enabled: true
-    sriovOperatorConfig:
-      featureGates:
-        dynamicResourceAllocation: true
+    sriov-network-operator:
+      sriovOperatorConfig:
+        featureGates:
+          dynamicResourceAllocation: true
 
 Disable the SR-IOV Resources Injector to avoid conflicts with the DRA Driver for SR-IOV:
 
