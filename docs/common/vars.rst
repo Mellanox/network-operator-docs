@@ -5,6 +5,7 @@
 .. |doca-driver-repository| replace:: nvcr.io/nvstaging/mellanox
 .. |doca-driver-version-lts| replace:: doca3.2.2-25.10-2.4.1.0-4
 .. |doca-driver-version-min| replace:: doca3.1.0-25.07-0.9.7.0-0
+.. |gpu-operator-version-min| replace:: v25.3.x
 .. |doca-workload-image| replace:: nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host
 .. |xplane-repository| replace:: nvcr.io/nvstaging/doca
 .. |xplane-version| replace:: 3.5.0035

@@ -509,7 +509,7 @@ Support for GPUDirect RDMA
 
 Requirements:
 
-* NVIDIA GPU Operator v25.3.x or newer
+* NVIDIA GPU Operator |gpu-operator-version-min| or newer
 * NVIDIA DOCA-OFED Driver |doca-driver-version-min| or newer
 * ``nvidia_peermem`` kernel module (auto-loaded by recent NVIDIA GPU drivers)
 * Supported NVIDIA GPU (Ampere, Hopper, Blackwell, or Rubin)

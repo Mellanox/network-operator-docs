@@ -824,8 +824,8 @@ Network Operator Deployment for GPUDirect Workloads
 GPUDirect requires the following:
 
 * NVIDIA DOCA-OFED Driver |doca-driver-version-min| or newer
-* GPU Operator v1.9.0 or newer
-* NVIDIA GPU and driver supporting GPUDirect e.g Quadro RTX 6000/8000 or NVIDIA T4/NVIDIA V100/NVIDIA A100
+* NVIDIA GPU Operator |gpu-operator-version-min| or newer
+* Supported NVIDIA GPU (Ampere, Hopper, Blackwell, or Rubin) and a GPU driver that supports GPUDirect
 
 First install the Network Operator with NFD enabled:
 ``values.yaml``:
