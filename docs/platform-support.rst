@@ -104,7 +104,7 @@ System Requirements
 * **RDMA-capable NVIDIA network adapters**
    * NVIDIA ConnectX NICs and SuperNICs
    * NVIDIA BlueField Networking Platforms
-* **NVIDIA GPU Operator |gpu-operator-version-min| or newer** – required for workloads that use NVIDIA GPUs and GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
+* **NVIDIA GPU Operator** |gpu-operator-version-min| or newer – required for workloads that use NVIDIA GPUs and GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
 
 =================================
 Supported NVIDIA Network Adapters
