@@ -222,6 +222,7 @@
 </div>
 <p>The file may be either a full ConfigMap manifest or just the YAML that belongs under its <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> key. With raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML, also pass <code class="docutils literal notranslate"><span class="pre">--spectrum-x-configmap-name</span></code> to name the generated ConfigMap; with a full manifest, the name comes from <code class="docutils literal notranslate"><span class="pre">metadata.name</span></code>.</p>
 <p>Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and sets <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> on the generated <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> to the ConfigMap’s name.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RA2.3</span></code> profile also sets <code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code> on that template, with <code class="docutils literal notranslate"><span class="pre">maxReadRequest:</span> <span class="pre">4096</span></code> — the largest PCIe read request size the API accepts. The values are fixed and not configurable from the cluster configuration. The <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> profile does not set this field.</p>
 </section>
 <section id="multiplane-modes">
 <h2>Multiplane Modes<a class="headerlink" href="#multiplane-modes" title="Permalink to this headline"></a></h2>
@@ -446,7 +447,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../../
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 25, 2026.
+      <span class="lastupdated">Last updated on Aug 27, 2026.
       </span></p>
   </div>
 
