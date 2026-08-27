@@ -868,11 +868,11 @@ Step 9: Deploy a Test Pod
                    add: ["IPC_LOCK", "NET_RAW"]
                resources:
                  requests:
-                   nvidia.com/rail_0: "1"
-                   nvidia.com/rail_1: "1"
+                   nvidia.com/rail0: "1"
+                   nvidia.com/rail1: "1"
                  limits:
-                   nvidia.com/rail_0: "1"
-                   nvidia.com/rail_1: "1"
+                   nvidia.com/rail0: "1"
+                   nvidia.com/rail1: "1"
 
       .. code-block:: bash
 
@@ -903,11 +903,11 @@ Step 9: Deploy a Test Pod
                    add: ["IPC_LOCK", "NET_RAW"]
                resources:
                  requests:
-                   nvidia.com/rail_0: "1"
-                   nvidia.com/rail_1: "1"
+                   nvidia.com/rail0: "1"
+                   nvidia.com/rail1: "1"
                  limits:
-                   nvidia.com/rail_0: "1"
-                   nvidia.com/rail_1: "1"
+                   nvidia.com/rail0: "1"
+                   nvidia.com/rail1: "1"
 
       .. code-block:: bash
 
@@ -938,15 +938,15 @@ Step 9: Deploy a Test Pod
                    add: ["IPC_LOCK", "NET_RAW"]
                resources:
                  requests:
-                   nvidia.com/rail_0_plane_0: "1"
-                   nvidia.com/rail_0_plane_1: "1"
-                   nvidia.com/rail_1_plane_0: "1"
-                   nvidia.com/rail_1_plane_1: "1"
+                   nvidia.com/rail0p0: "1"
+                   nvidia.com/rail0p1: "1"
+                   nvidia.com/rail1p0: "1"
+                   nvidia.com/rail1p1: "1"
                  limits:
-                   nvidia.com/rail_0_plane_0: "1"
-                   nvidia.com/rail_0_plane_1: "1"
-                   nvidia.com/rail_1_plane_0: "1"
-                   nvidia.com/rail_1_plane_1: "1"
+                   nvidia.com/rail0p0: "1"
+                   nvidia.com/rail0p1: "1"
+                   nvidia.com/rail1p0: "1"
+                   nvidia.com/rail1p1: "1"
 
       .. code-block:: bash
 
