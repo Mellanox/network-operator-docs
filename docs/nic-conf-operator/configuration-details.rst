@@ -70,7 +70,7 @@ Configuration details
   - Requires ``linkType=Ethernet`` and ``numVfs=1``
   - Cannot be combined with ``roceOptimized`` (RoCE settings are included automatically)
   - Can be combined with ``rawNvConfig`` — raw params are merged as overrides on top of Spectrum-X calculated params
-  - Only supported on ConnectX-8 (``nicType: 1023``), ConnectX-9 (``nicType: 1025``) and BlueField-3 SuperNIC (``nicType: a2dc``)
+  - Only supported on ConnectX-7 (``nicType: 1021``), ConnectX-8 (``nicType: 1023``), ConnectX-9 (``nicType: 1025``) and BlueField-3 SuperNIC (``nicType: a2dc``)
   - ``version``: Required. Must match the name of a Spectrum-X profile ConfigMap
   - ``overlay``: Optional, default ``none``. Set to ``l3`` for L3 EVPN overlay
   - ``multiplaneMode``: Optional, default ``none``. Options: ``none``, ``swplb``, ``hwplb``, ``uniplane``
@@ -144,21 +144,21 @@ Reference the profile from a ``NicConfigurationTemplate`` by using the ConfigMap
      multiplaneMode: "none"
      numberOfPlanes: 1
 
-Supported NIC types for Spectrum-X: \* ConnectX-8 (device ID ``1023``) – supports all multiplane modes \* ConnectX-9 (device ID ``1025``) – supports all multiplane modes (same configuration as ConnectX-8) \* BlueField-3 SuperNIC (device ID ``a2dc``) – supports all multiplane modes except ``hwplb``
+Supported NIC types for Spectrum-X: \* ConnectX-7 NIC (device ID ``1021``) – single-plane (``none``) only \* ConnectX-8 (device ID ``1023``) – supports all multiplane modes \* ConnectX-9 (device ID ``1025``) – supports all multiplane modes (same configuration as ConnectX-8) \* BlueField-3 SuperNIC (device ID ``a2dc``) – supports all multiplane modes except ``hwplb``
 
 Spectrum-X profiles can configure NICs with multiple data planes. Available modes:
 
-+--------------+--------------------------------+--------------------------------------+------------+
-| Mode         | Description                    | Supported NICs                       | Planes     |
-+==============+================================+======================================+============+
-| ``none``     | Single plane (default)         | ConnectX-8, ConnectX-9, BF3 SuperNIC | 1          |
-+--------------+--------------------------------+--------------------------------------+------------+
-| ``swplb``    | Software Packet Load Balancing | ConnectX-8, ConnectX-9, BF3 SuperNIC | 2, 4       |
-+--------------+--------------------------------+--------------------------------------+------------+
-| ``hwplb``    | Hardware Packet Load Balancing | ConnectX-8, ConnectX-9 only          | 2, 4       |
-+--------------+--------------------------------+--------------------------------------+------------+
-| ``uniplane`` | Uniplane mode                  | ConnectX-8, ConnectX-9, BF3 SuperNIC | 2          |
-+--------------+--------------------------------+--------------------------------------+------------+
++--------------+-------------------------------+--------------------------------------------------+--------+
+| Mode         | Description                   | Supported NICs                                   | Planes |
++==============+===============================+==================================================+========+
+| ``none``     | Single plane (default)        | ConnectX-7, ConnectX-8, ConnectX-9, BF3 SuperNIC | 1      |
++--------------+-------------------------------+--------------------------------------------------+--------+
+| ``swplb``    | Software Plane Load Balancing | ConnectX-8, ConnectX-9, BF3 SuperNIC             | 2, 4   |
++--------------+-------------------------------+--------------------------------------------------+--------+
+| ``hwplb``    | Hardware Plane Load Balancing | ConnectX-8, ConnectX-9 only                      | 2, 4   |
++--------------+-------------------------------+--------------------------------------------------+--------+
+| ``uniplane`` | Uniplane mode                 | ConnectX-8, ConnectX-9, BF3 SuperNIC             | 2      |
++--------------+-------------------------------+--------------------------------------------------+--------+
 
 `Example Spectrum-X NicConfigurationTemplate with multiplane <docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml>`__:
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -184,5 +184,5 @@ Spectrum-X profiles can configure NICs with multiple data planes. Available mode
              enabled: true
              version: "example-spectrum-x-profile"
              overlay: "none"
-             multiplaneMode: "hwplb" # Hardware Packet Load Balancing, ConnectX-8 only
+             multiplaneMode: "hwplb" # Hardware Plane Load Balancing, ConnectX-8 / ConnectX-9 only
              numberOfPlanes: 4
