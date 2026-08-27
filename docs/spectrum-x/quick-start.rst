@@ -61,34 +61,9 @@ Spectrum-X Kubernetes Quick Start
    Once the cluster is up, :doc:`Verify and Troubleshoot
    <verify-and-troubleshoot>` walks through checking each layer.
 
-Pick the walkthrough that matches your hardware and target topology. Each one
-installs Network Operator via Helm, applies the Spectrum-X CRDs, and deploys a
-test pod — adapted to the chosen multiplane mode and NIC family.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 22 12 20 22 24
-
-   * - Walkthrough
-     - Multiplane mode
-     - NICs
-     - GPU platforms
-     - Use when
-   * - :doc:`Single Plane <quick-start-single-plane>`
-     - ``none``
-     - BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC
-     - H100/H200/B200 (BlueField-3 SuperNIC), GB200 (ConnectX-7 NIC)
-     - One PF per rail. Simplest setup. ConnectX-8 SuperNIC also supports single-plane configuration.
-   * - :doc:`Hardware Multiplane <quick-start-hwplb>`
-     - ``hwplb``
-     - ConnectX-8 SuperNIC
-     - B300, GB300
-     - Plane Load Balancing happens in the NIC hardware and the planes are hidden from the workload. **The recommended mode on multiplane platforms.** Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
-   * - :doc:`Software Multiplane <quick-start-swplb>`
-     - ``swplb``
-     - ConnectX-8 SuperNIC
-     - B300, GB300
-     - Software Plane Load Balancing across planes, with each plane exposed to the workload as its own interface. Set ``numberOfPlanes: 2`` (Dual-Plane) or ``4`` (Quad-Plane).
+The walkthrough installs Network Operator via Helm, applies the Spectrum-X
+CRDs, and deploys a test pod, adapted to the multiplane mode and NIC family
+you choose below.
 
 =========================
 Choose a deployment mode
@@ -745,7 +720,7 @@ exposes each rail as a schedulable resource.
            name: rails
            namespace: nvidia-network-operator
          spec:
-           draEnabled: true
+           draEnabled: false
            networkNamespace: default
            numVfs: 1
            railTopology:
@@ -777,7 +752,7 @@ exposes each rail as a schedulable resource.
            name: rails
            namespace: nvidia-network-operator
          spec:
-           draEnabled: true
+           draEnabled: false
            networkNamespace: default
            numVfs: 1
            railTopology:
@@ -809,7 +784,7 @@ exposes each rail as a schedulable resource.
            name: rails
            namespace: nvidia-network-operator
          spec:
-           draEnabled: true
+           draEnabled: false
            networkNamespace: default
            numVfs: 1
            railTopology:
@@ -917,7 +892,7 @@ Step 9: Deploy a Test Pod
    .. tab-item:: Software Multiplane
       :sync: swplb
 
-      Request one VF per (rail, plane) combination. The network annotation lists each rail-plane and the resource request matches the corresponding DRA resource.
+      Request one VF per (rail, plane) combination. The network annotation lists each rail-plane and the resource request matches the SR-IOV device-plugin resource the Spectrum-X Operator creates for each rail-plane.
 
       .. code-block:: yaml
 
