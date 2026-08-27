@@ -213,7 +213,6 @@ Spectrum-X requires several non-default chart values. Create ``values.yaml``:
          network.nvidia.com/operator.nic-configuration.wait: "false"
        featureGates:
          manageSoftwareBridges: true
-         dynamicResourceAllocation: true
        disablePlugins:
        - mellanox
 
@@ -230,7 +229,7 @@ Spectrum-X requires several non-default chart values. Create ``values.yaml``:
    * - ``configDaemonNodeSelector``
      - Makes the SR-IOV config daemon wait for the NIC Configuration Operator to finish per-node firmware and NIC configuration before it touches VFs.
    * - ``featureGates.dynamicResourceAllocation``
-     - Required only for Dynamic Resource Allocation (DRA) workloads. Omit it if you allocate VFs through the device plugin.
+     - Not set in this walkthrough, which allocates VFs through the SR-IOV device plugin. Add it only for Dynamic Resource Allocation (DRA) workloads: enabling it replaces the device plugin with the DRA driver, so the resource requests in Step 9 no longer apply. See :doc:`DRA SR-IOV Driver <../dra-sriov-driver/dra-sriov-driver>`.
 
 Install the Network Operator. Spectrum-X Operator and NIC Configuration Operator are deployed via the same chart and enabled later through ``NicClusterPolicy``.
 
