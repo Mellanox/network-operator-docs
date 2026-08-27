@@ -182,7 +182,7 @@ Spectrum-X profiles can configure NICs with multiple data planes. Available mode
          linkType: Ethernet
          spectrumXOptimized:
              enabled: true
-             version: "RA2.1"
+             version: "example-spectrum-x-profile"
              overlay: "none"
              multiplaneMode: "hwplb" # Hardware Packet Load Balancing, ConnectX-8 only
              numberOfPlanes: 4
