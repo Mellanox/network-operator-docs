@@ -128,7 +128,7 @@ Profile Selection
    * - ``--multiplane-mode <string>``
      - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the east-west NIC and GPU platform when omitted --- ConnectX-7 NIC and BlueField-3 SuperNIC use ``none``, ConnectX-9 SuperNIC uses ``hwplb``, and ConnectX-8 SuperNIC uses ``none`` on H100 / H200 / B200 / GB200 and ``swplb`` on B300 / GB300 or any unrecognised platform. These are Launch Kit's generator defaults; Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass it explicitly to follow the RA. ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
-     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the GPU platform (single-plane platforms → ``1``, B300 / GB300 → ``2``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
+     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the east-west NIC and GPU platform (ConnectX-7, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on single-plane platforms → ``1``; ConnectX-8 SuperNIC on B300 / GB300 → ``2``; ConnectX-9 SuperNIC → ``4``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
    * - ``--topology-scheme <string>``
      - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. **Required** with ``--spectrum-x`` --- Launch Kit does not default it. May instead be carried in the cluster configuration as ``profile.spectrumX.topologyType``, which ``l8k discover --topology-scheme`` persists; a later ``l8k generate`` then needs no flag.
    * - ``--ip-version <string>``
