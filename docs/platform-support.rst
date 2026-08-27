@@ -585,8 +585,6 @@ Limitations
    - Only ``generic`` kernel variant is tested and supported as a GA.
    - ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel variants are supported as a Tech Preview and have limited testing.
 
-.. _network-operator-component-matrix:
-
 ===========================================
 Additional Supported Tools and Integrations
 ===========================================
@@ -607,6 +605,8 @@ Orchestration & resource scheduling:
 .. note::
 
    Run:ai requires the NVIDIA Network Operator as a prerequisite. To configure NVIDIA Network Operator refer to the Run:ai `cluster requirements documentation <https://run-ai-docs.nvidia.com/self-hosted/getting-started/installation/install-using-helm/system-requirements#nvidia-network-operator>`_ for more information.
+
+.. _network-operator-component-matrix:
 
 =================================
 Network Operator Component Matrix
