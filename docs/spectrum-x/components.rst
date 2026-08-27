@@ -355,7 +355,7 @@ are still tech preview.
      - Dynamic Resource Allocation driver for SR-IOV. Enables fine-grained
        VF claims via ``ResourceClaim`` and ``ResourceClaimTemplate``
        objects, and pairs a VF with the GPU behind the same PCIe root.
-       Requires the Kubernetes 1.32+ DRA API; Spectrum-X RA 2.3 requires
+       Requires Kubernetes 1.34 or later (``resource.k8s.io/v1``); Spectrum-X RA 2.3 requires
        Kubernetes 1.35 or later — see :doc:`Platform Support
        <../platform-support>`. See :doc:`DRA SR-IOV Driver
        <../dra-sriov-driver/dra-sriov-driver>`.
