@@ -75,6 +75,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#resource-alignment">Resource Alignment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrum-x-rails">Spectrum-X rails</a></li>
 </ul>
 </li>
 </ul>
@@ -145,6 +146,7 @@
 </ul>
 </li>
 <li><p><a class="reference internal" href="#resource-alignment" id="id10">Resource Alignment</a></p></li>
+<li><p><a class="reference internal" href="#spectrum-x-rails" id="id11">Spectrum-X rails</a></p></li>
 </ul>
 </div>
 <p>Dynamic Resource Allocation (DRA) is a Kubernetes concept for flexibly requesting, configuring, and sharing
@@ -175,7 +177,7 @@ SR-IOV network resources.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>On GB300, Vera Rubin, and Fractal systems, the PCIe root used to match a NIC to a GPU is not
+<p>On NVIDIA GB300 NVL72, Vera Rubin NVL72, and HGX Rubin NVL8 systems, the PCIe root used to match a NIC to a GPU is not
 the root of the NIC itself. Instead, it is the PCIe root of the NIC’s Data Direct sub-interface.
 This applies to ConnectX-8 and later adapters. The DRA SR-IOV driver does not currently support
 this topology.</p>
@@ -196,9 +198,10 @@ existing <code class="docutils literal notranslate"><span class="pre">SriovNetwo
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 <span class="nt">sriovNetworkOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">sriovOperatorConfig</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">featureGates</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dynamicResourceAllocation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="nt">sriov-network-operator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">sriovOperatorConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">featureGates</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">dynamicResourceAllocation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Disable the SR-IOV Resources Injector to avoid conflicts with the DRA Driver for SR-IOV:</p>
@@ -485,6 +488,50 @@ constrained to share the same PCIe root:</p>
 </pre></div>
 </div>
 </section>
+<section id="spectrum-x-rails">
+<h2>Spectrum-X rails<a class="headerlink" href="#spectrum-x-rails" title="Permalink to this headline"></a></h2>
+<p>On Spectrum-X, the Spectrum-X Operator generates one SR-IOV resource per
+entry in <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig.railTopology</span></code>, named after that entry.
+Create one <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> per entry and select the matching
+resource:</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 39%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Multiplane mode</p></th>
+<th class="head"><p>Rail topology entries</p></th>
+<th class="head"><p>Resource to request</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>One per rail, listing every plane’s PF</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nvidia.com/&lt;rail&gt;</span></code> — for example <code class="docutils literal notranslate"><span class="pre">nvidia.com/rail0</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>One per rail-plane, a single PF each</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nvidia.com/&lt;rail&gt;&lt;plane&gt;</span></code> — for example <code class="docutils literal notranslate"><span class="pre">nvidia.com/rail0p0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>Use that value in the CEL selector shown under <a class="reference internal" href="#resource-alignment">Resource Alignment</a>, and
+pair it with a GPU through the <code class="docutils literal notranslate"><span class="pre">resource.kubernetes.io/pcieRoot</span></code>
+constraint so the VF and GPU share a PCIe root.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig.draEnabled</span></code> <strong>defaults to</strong> <code class="docutils literal notranslate"><span class="pre">true</span></code> and must
+agree with the <code class="docutils literal notranslate"><span class="pre">dynamicResourceAllocation</span></code> feature gate on the SR-IOV
+Network Operator. Enable both when workloads allocate VFs through DRA;
+if you allocate VFs through the device plugin instead, set
+<code class="docutils literal notranslate"><span class="pre">draEnabled:</span> <span class="pre">false</span></code> explicitly. A mismatch leaves the rails without
+usable resources and reports no error.</p>
+</div>
+<p>For the rail topology itself, see <a class="reference internal" href="../spectrum-x/crds.html"><span class="doc">Spectrum-X CRDs and API Reference</span></a> and the
+<a class="reference internal" href="../spectrum-x/quick-start.html"><span class="doc">Spectrum-X Kubernetes Quick Start</span></a>.</p>
+</section>
 </section>
 
 
@@ -496,7 +543,7 @@ constrained to share the same PCIe root:</p>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 23, 2026.
+      <span class="lastupdated">Last updated on Aug 31, 2026.
       </span></p>
   </div>
 

@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NVIDIA Kubernetes Launch Kit" href="../k8s-launch-kit/k8s-launch-kit.html" />
-    <link rel="prev" title="NVIDIA Spectrum-X NIC Configuration" href="spectrum-x-configuration.html" />
+    <link rel="prev" title="Verify and Troubleshoot Spectrum-X" href="verify-and-troubleshoot.html" />
  
 
 
@@ -61,16 +61,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="spectrum-x.html">NVIDIA Spectrum-X</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
-<li class="toctree-l2"><a class="reference internal" href="components.html">Architecture and Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">CRD API Reference</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#spectrumx-nvidia-com-v1alpha2">spectrumx.nvidia.com/v1alpha2</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfig">SpectrumXRailPoolConfig</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfigspec">SpectrumXRailPoolConfigSpec</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#spectrumxrailpoolconfigstatus">SpectrumXRailPoolConfigStatus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#railtopology">RailTopology</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#nicselector">NicSelector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#how-spectrum-x-works-on-kubernetes">How Spectrum-X works on Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#supported-reference-architectures">Supported Reference Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#what-you-configure">What you configure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="spectrum-x.html#where-to-start">Where to start</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="components.html">Architecture and Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="verify-and-troubleshoot.html">Verify and Troubleshoot</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">CRD API Reference</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#spectrumx-nvidia-com-v1alpha2">spectrumx.nvidia.com/v1alpha2</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#spectrumxrailpoolconfig">SpectrumXRailPoolConfig</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#spectrumxrailpoolconfigspec">SpectrumXRailPoolConfigSpec</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#spectrumxrailpoolconfigstatus">SpectrumXRailPoolConfigStatus</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#nodestate">NodeState</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#railtopology">RailTopology</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#nicselector">NicSelector</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -121,6 +129,21 @@
              
   <section id="spectrum-x-crds-and-api-reference">
 <h1>Spectrum-X CRDs and API Reference<a class="headerlink" href="#spectrum-x-crds-and-api-reference" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#spectrumx-nvidia-com-v1alpha2" id="id8">spectrumx.nvidia.com/v1alpha2</a></p>
+<ul>
+<li><p><a class="reference internal" href="#spectrumxrailpoolconfig" id="id9">SpectrumXRailPoolConfig</a></p></li>
+<li><p><a class="reference internal" href="#spectrumxrailpoolconfigspec" id="id10">SpectrumXRailPoolConfigSpec</a></p></li>
+<li><p><a class="reference internal" href="#spectrumxrailpoolconfigstatus" id="id11">SpectrumXRailPoolConfigStatus</a></p></li>
+<li><p><a class="reference internal" href="#nodestate" id="id12">NodeState</a></p></li>
+<li><p><a class="reference internal" href="#railtopology" id="id13">RailTopology</a></p></li>
+<li><p><a class="reference internal" href="#nicselector" id="id14">NicSelector</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
 <p>A Spectrum-X Kubernetes deployment uses CRDs from several NVIDIA operators
 working together. This page documents the <strong>Spectrum-X Operator</strong> CRDs
 (v1alpha2 — <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>). For the other CRDs, see the
@@ -307,6 +330,13 @@ upstream resource).</p></td>
 <td><p>Synchronization status. One of <code class="docutils literal notranslate"><span class="pre">Unknown</span></code>, <code class="docutils literal notranslate"><span class="pre">InProgress</span></code>, <code class="docutils literal notranslate"><span class="pre">Failed</span></code>, <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">nodeStates</span></code></div>
+<div class="line"><a class="reference internal" href="#nodestate"><span class="std std-ref">[]NodeState</span></a></div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Per-node view of the observed state, giving a finer-grained picture than the aggregate <code class="docutils literal notranslate"><span class="pre">syncStatus</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">observedGeneration</span></code></div>
 <div class="line">int64</div>
 </div>
@@ -316,8 +346,54 @@ upstream resource).</p></td>
 </tbody>
 </table>
 </section>
+<section id="nodestate">
+<span id="id5"></span><h3>NodeState<a class="headerlink" href="#nodestate" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfigstatus"><span class="std std-ref">SpectrumXRailPoolConfigStatus</span></a>)</p>
+<p>NodeState defines a finer-grained view of the observed state of SpectrumXRailPoolConfig on a single node.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">name</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p>Name of the node this state refers to.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">state</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p>State of the node configuration. One of <code class="docutils literal notranslate"><span class="pre">Unknown</span></code>, <code class="docutils literal notranslate"><span class="pre">InProgress</span></code>, <code class="docutils literal notranslate"><span class="pre">Failed</span></code>, <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">observedGeneration</span></code></div>
+<div class="line">int64</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> The <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> generation this node state was reported for.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">message</span></code></div>
+<div class="line">string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Human-readable message with details about why the node is in this state.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="railtopology">
-<span id="id5"></span><h3>RailTopology<a class="headerlink" href="#railtopology" title="Permalink to this headline"></a></h3>
+<span id="id6"></span><h3>RailTopology<a class="headerlink" href="#railtopology" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfigspec"><span class="std std-ref">SpectrumXRailPoolConfigSpec</span></a>)</p>
 <p>RailTopology describes a single rail in the Spectrum-X pool. Only one of <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code> or <code class="docutils literal notranslate"><span class="pre">ipam</span></code> may be specified.</p>
 <table class="colwidths-given docutils align-default">
@@ -370,7 +446,7 @@ upstream resource).</p></td>
 </table>
 </section>
 <section id="nicselector">
-<span id="id6"></span><h3>NicSelector<a class="headerlink" href="#nicselector" title="Permalink to this headline"></a></h3>
+<span id="id7"></span><h3>NicSelector<a class="headerlink" href="#nicselector" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#railtopology"><span class="std std-ref">RailTopology</span></a>)</p>
 <p>NicSelector selects the physical functions that participate in a rail.</p>
 <table class="colwidths-given docutils align-default">
@@ -406,7 +482,7 @@ upstream resource).</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 23, 2026.
+      <span class="lastupdated">Last updated on Aug 31, 2026.
       </span></p>
   </div>
 
