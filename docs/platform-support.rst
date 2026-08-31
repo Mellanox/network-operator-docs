@@ -52,11 +52,11 @@ When a new major version is released, the previous major version enters a **Depr
 
    * - Version
      - Status
-   * - 26.4.x
+   * - |current-ga-version|
      - Supported
-   * - 26.1.x
+   * - |current-maintenance-version|
      - Deprecated
-   * - 25.10.x and lower
+   * - |current-eol-version| and lower
      - End of Support
 
 Upgrades are supported within a major release, or to the next major release. For upgrade procedures and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
@@ -346,24 +346,37 @@ NVIDIA Spectrum-X Ethernet Networking Platform
    :header-rows: 1
 
    * - Spectrum-X RA Version
+     - Support Level
      - Topologies and NIC Hardware
      - Kubernetes Versions
      - Operating Systems
      - Notes
-   * - 2.2
+   * - 2.3
+     - GA on 26.7.x
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
-     - Upstream Kubernetes (1.32–1.36)
+     - Upstream Kubernetes (1.35–1.36)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
-     - Small RA, Software Multi-Plane
+     - Hardware Multiplane (recommended) and Software Multiplane
    * - 2.1
+     - Tech Preview on 26.4.x (GA on 26.1.x)
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
      - Upstream Kubernetes (1.32–1.36)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
+
+.. note::
+
+   NVIDIA ConnectX-9 SuperNIC is **not** part of Spectrum-X RA 2.3. Network
+   Operator accepts ConnectX-9 SuperNIC for Spectrum-X NIC configuration as a
+   **Tech Preview** — available for evaluation, but not an RA-validated or
+   production-ready Spectrum-X configuration, and it requires a Spectrum-X
+   profile covering ConnectX-9 SuperNIC, available from NVIDIA Support. For
+   general RoCE and InfiniBand workloads, ConnectX-9 SuperNIC is fully
+   supported; see the NIC table above.
 
 =======================================
 Support for KubeVirt SR-IOV Passthrough

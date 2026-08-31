@@ -32,11 +32,11 @@ A Helm chart is provided for easily deploying the Network operator in a cluster 
 
 .. note::
 
-   **What's new in 26.4.0**
+   **What's new in 26.7.0**
 
-   * **KubeVirt SR-IOV passthrough** — accelerated East-West networking for VM workloads on vanilla Kubernetes. See :doc:`KubeVirt SR-IOV Integration <kubevirt>`.
-   * **Spectrum-X RA 2.2 alignment** — multi-plane fabric with topology-aware pod placement via DRA, plus simplified config generation through the K8s LaunchKit.
-   * **Dynamic Resource Allocation (DRA) SR-IOV driver** — Kubernetes-native VF allocation for SR-IOV workloads. See :doc:`DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver>`.
+   * **Spectrum-X Reference Architecture 2.3** — NIC tuning is delivered as a Spectrum-X profile ConfigMap instead of a Reference Architecture version built into the operator. See :doc:`NVIDIA Spectrum-X <spectrum-x/spectrum-x>`.
+   * **Hardware Multiplane is GA** — plane load balancing in the NIC with DOCA xPlane, on ConnectX-8 SuperNIC for B300 and GB300 deployments. See :doc:`Architecture and Components <spectrum-x/components>`.
+   * **KubeVirt SR-IOV passthrough on Red Hat OpenShift** — accelerated East-West networking for OpenShift Virtualization virtual machines. See :doc:`OpenShift Virtualization SR-IOV Integration <openshift/ocp-kubevirt>`.
 
    For the full list of changes, see the :doc:`release-notes`.
 
