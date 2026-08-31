@@ -154,7 +154,7 @@
 <section id="full-schema">
 <h2>Full Schema<a class="headerlink" href="#full-schema" title="Permalink to this headline"></a></h2>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">selectedRelease</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;26.4&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">selectedRelease</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;26.7&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.7.0-rc.2</span><span class="w"></span>
 <span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.7.0-rc.2</span><span class="w"></span>
 <span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
@@ -217,9 +217,10 @@
 <span class="w">  </span><span class="nt">deployment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov</span><span class="w"></span>
 <span class="w">  </span><span class="nt">multirail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">spcxVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.1&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spcxVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.3&quot;</span><span class="w"></span>
 <span class="w">    </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
 <span class="w">    </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">    </span><span class="nt">useDRA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 <span class="w">  </span><span class="nt">ai</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
 
 <span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
@@ -262,7 +263,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">selectedRelease</span></code></p></td>
-<td><p>Pin to a release line. Supported: <code class="docutils literal notranslate"><span class="pre">25.10</span></code>, <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>. Auto-fills <code class="docutils literal notranslate"><span class="pre">version</span></code> and image tags from an embedded catalog. Equivalent to the <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> flag.</p></td>
+<td><p>Pin to a release line. Supported: <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>, <code class="docutils literal notranslate"><span class="pre">26.7</span></code>. Auto-fills <code class="docutils literal notranslate"><span class="pre">version</span></code> and image tags from an embedded catalog. Equivalent to the <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> flag.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
 <td><p>Explicit Network Operator version. Overrides the catalog when set.</p></td>
@@ -449,7 +450,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicType</span></code></p></td>
-<td><p>NIC type device ID. <code class="docutils literal notranslate"><span class="pre">1021</span></code> = ConnectX-7 NIC; <code class="docutils literal notranslate"><span class="pre">1023</span></code> = ConnectX-8 SuperNIC; <code class="docutils literal notranslate"><span class="pre">a2dc</span></code> = BlueField-3 SuperNIC.</p></td>
+<td><p>NIC type device ID. <code class="docutils literal notranslate"><span class="pre">1021</span></code> = ConnectX-7 NIC; <code class="docutils literal notranslate"><span class="pre">1023</span></code> = ConnectX-8 SuperNIC; <code class="docutils literal notranslate"><span class="pre">1025</span></code> = ConnectX-9 SuperNIC <em>(tech preview)</em>; <code class="docutils literal notranslate"><span class="pre">a2dc</span></code> = BlueField-3 SuperNIC.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code></p></td>
 <td><p>Overlay mode.</p></td>
@@ -506,13 +507,34 @@
 <td><p>Enable multirail.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.spcxVersion</span></code></p></td>
-<td><p>Spectrum-X reference architecture (<code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> or <code class="docutils literal notranslate"><span class="pre">RA2.2</span></code>).</p></td>
+<td><p>Spectrum-X reference architecture (<code class="docutils literal notranslate"><span class="pre">RA2.3</span></code>, or <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> for Network Operator 26.1).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.multiplaneMode</span></code></p></td>
-<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p></td>
+<td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.numberOfPlanes</span></code></p></td>
 <td><p>Number of planes.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyType</span></code></p></td>
+<td><p>Topology scheme for Spectrum-X IP allocation: <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> or <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. Required for Spectrum-X. Equivalent to <code class="docutils literal notranslate"><span class="pre">--topology-scheme</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.ipVersion</span></code></p></td>
+<td><p>IP version for Spectrum-X address allocation: <code class="docutils literal notranslate"><span class="pre">ipv4</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>. Equivalent to <code class="docutils literal notranslate"><span class="pre">--ip-version</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyFile</span></code></p></td>
+<td><p>Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. Required for Spectrum-X generation — the profiles always render <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> resources. Equivalent to <code class="docutils literal notranslate"><span class="pre">--topology-file</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.hostFirstOctet</span></code></p></td>
+<td><p>First octet used for IPv4 host allocation. Config-only — there is no CLI flag. Defaults to <code class="docutils literal notranslate"><span class="pre">172</span></code> for <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> for <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. No effect when <code class="docutils literal notranslate"><span class="pre">ipVersion</span></code> is <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code></p></td>
+<td><p>Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap’s <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> key, or a full ConfigMap manifest. Required for <code class="docutils literal notranslate"><span class="pre">RA2.3</span></code>. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.configMapName</span></code></p></td>
+<td><p>Name for the generated profile ConfigMap. Required only when <code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code> holds raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-configmap-name</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.useDRA</span></code></p></td>
+<td><p>Generate DRA <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only — there is no CLI flag. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV — see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p></td>
 </tr>
 </tbody>
 </table>

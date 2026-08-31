@@ -284,25 +284,27 @@ mkdir -p .cursor/rules
 <h3>Choosing a Deployment Profile (Spectrum-X)<a class="headerlink" href="#choosing-a-deployment-profile-spectrum-x" title="Permalink to this headline"></a></h3>
 <p><strong>Operator prompt:</strong></p>
 <blockquote>
-<div><p><em>“This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we’re targeting Network Operator 26.4. Generate the manifests.”</em></p>
+<div><p><em>“This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we’re targeting Network Operator 26.7. Generate the manifests.”</em></p>
 </div></blockquote>
 <p><strong>Skill-driven flow:</strong></p>
 <ol class="arabic">
 <li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-generate</span></code> recognizes Spectrum-X intent.</p></li>
-<li><p>The skill verifies the cohort: ConnectX-8 → <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">2</span></code> are the hardware defaults; RA2.2 pairs with Network Operator 26.4.</p></li>
+<li><p>The skill verifies the cohort: ConnectX-8 on a GB300 platform → <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">2</span></code> are the hardware defaults; RA2.3 pairs with Network Operator 26.7 and requires a Spectrum-X profile ConfigMap.</p></li>
 <li><p>Before running <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>, the skill asks the operator to confirm the <strong>switch-side</strong> Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) — because <code class="docutils literal notranslate"><span class="pre">l8k</span></code> does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.</p></li>
 <li><p>Once confirmed, the agent runs:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate <span class="se">\</span>
-    --spectrum-x RA2.2 <span class="se">\</span>
-    --network-operator-release <span class="m">26</span>.4 <span class="se">\</span>
+    --spectrum-x RA2.3 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.7 <span class="se">\</span>
+    --spectrum-x-config ./spectrum-x-profile.yaml <span class="se">\</span>
+    --topology-scheme <span class="m">2</span>-tier --topology-file ./topology.json <span class="se">\</span>
     --save-deployment-files ./deployments-spectrum-x <span class="se">\</span>
     --output json <span class="m">2</span>&gt;/dev/null
 </pre></div>
 </div>
 </li>
-<li><p>The agent reports the auto-defaulted flags (”<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(ConnectX-8</span> <span class="pre">deviceID</span> <span class="pre">1023)</span></code>”, “<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--number-of-planes=2</span></code>”) and recommends <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code> before applying.</p></li>
+<li><p>The agent reports the auto-defaulted flags (”<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(GB300</span> <span class="pre">dual-plane</span> <span class="pre">platform;</span> <span class="pre">SWPLB</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">GA</span> <span class="pre">default)</span></code>”, “<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--number-of-planes=2</span></code>”) and recommends <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code> before applying.</p></li>
 </ol>
-<p>The skill knows the per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite — the operator only needs to state intent.</p>
+<p>The skill knows the per-platform and per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite — the operator only needs to state intent.</p>
 </section>
 <section id="triaging-a-stuck-deployment">
 <h3>Triaging a Stuck Deployment<a class="headerlink" href="#triaging-a-stuck-deployment" title="Permalink to this headline"></a></h3>
