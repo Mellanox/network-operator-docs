@@ -43,14 +43,14 @@ Support terms used on this page:
 Versioning and Lifecycle
 ========================
 
-**NVIDIA Network Operator** uses calendar versioning in the form ``YY.MM.PP`` (for example, 26.4.0). The first two fields identify the major version and release timeframe; the third field identifies the patch version, used for critical bug and CVE fixes.
+**NVIDIA Network Operator** uses calendar versioning in the form ``YY.MM.PP`` (for example, 26.7.0). The first two fields identify the major version and release timeframe; the third field identifies the patch version, used for critical bug and CVE fixes.
 
 When a new major version is released, the previous major version enters a **Deprecated** state and receives only patch updates for critical fixes. Earlier major versions reach **End of Support** and no longer receive updates.
 
 .. list-table::
    :header-rows: 1
 
-   * - Version
+   * - Network Operator Version
      - Status
    * - |current-ga-version|
      - Supported
@@ -59,7 +59,7 @@ When a new major version is released, the previous major version enters a **Depr
    * - |current-eol-version| and lower
      - End of Support
 
-Upgrades are supported within a major release, or to the next major release. For upgrade procedures and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
+Upgrades are supported within a major release, or to the next major release. For the full support-status table, upgrade procedures, and operational guidance, see :doc:`Life Cycle Management <life-cycle-management>`.
 
 .. note::
 
@@ -72,7 +72,6 @@ Important Limitations
 Review the following limitations before deployment:
 
 * **Firmware reset on BMC-controlled platforms** — NVIDIA DGX/HGX GB200 NVL72, B200, and B300 systems require additional configuration so that firmware updates apply without a reboot loop. See :ref:`fw-reset-external-bmc`.
-* **No GPUDirect RDMA on Arm-based validated configurations** — NVIDIA IGX Orin and NVIDIA Grace ARM Server are validated for RoCE only, without GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
 * **Precompiled DOCA-OFED driver containers are currently unsigned.**
 * **Precompiled DOCA-OFED kernel-flavor support** — Only the Ubuntu ``generic`` kernel flavor is GA. The ``nvidia``, ``aws``, ``azure``, and ``oracle`` flavors are Tech Preview.
 * For per-release known issues, see the :doc:`release-notes`.
@@ -105,7 +104,7 @@ System Requirements
 * **RDMA-capable NVIDIA network adapters**
    * NVIDIA ConnectX NICs and SuperNICs
    * NVIDIA BlueField Networking Platforms
-* **NVIDIA GPU Operator v25.3.x or newer** – required for workloads that use NVIDIA GPUs and GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
+* **NVIDIA GPU Operator** |gpu-operator-version-min| or newer – required for workloads that use NVIDIA GPUs and GPUDirect RDMA. See `Support for GPUDirect RDMA`_.
 
 =================================
 Supported NVIDIA Network Adapters
@@ -167,7 +166,7 @@ The following adapters have been tested and validated with **NVIDIA Network Oper
 ====================================
 Supported NVIDIA Data Center Systems
 ====================================
-The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**:
+The following NVIDIA Data Center systems have been tested and validated with **NVIDIA Network Operator**. For the supported versions of each operating system, see `Supported Operating Systems and Kubernetes Platforms`_. On Arm-based systems, only the Arm64 builds of the listed distributions are validated; not every operating system version in that table is available for Arm64.
 
 .. list-table::
    :header-rows: 1
@@ -182,13 +181,13 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - Arm (NVIDIA Grace)
      - NVIDIA Hopper
      - BlueField-3 (NIC Mode)
-     - Ubuntu 22.04 (Arm64) / OCP 4.17 / SLES 15.6
+     - Ubuntu / Red Hat OpenShift / SUSE Linux Enterprise Server
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA IGX Orin
      - Arm (NVIDIA Orin)
      - NVIDIA Ampere
      - ConnectX-7
-     - Ubuntu 22.04 (Arm64)
+     - Ubuntu
      - GA (RoCE only, without GPUDirect RDMA)
    * - NVIDIA RTX PRO 6000 Blackwell Server
      - x86
@@ -220,6 +219,95 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - ConnectX-8
      - Ubuntu 24.04 (Arm64) / Red Hat OpenShift
      - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+   * - NVIDIA DGX GB300 Workstation
+     - Arm (NVIDIA Grace)
+     - NVIDIA Blackwell
+     - ConnectX-8 SuperNIC
+     - Ubuntu 24.04, 22.04 (Arm64)
+     - GA (RoCE only, without InfiniBand)
+   * - NVIDIA Vera Rubin NVL72
+     - Arm (NVIDIA Vera)
+     - NVIDIA Rubin
+     - ConnectX-9 SuperNIC
+     - Ubuntu 24.04, 22.04 (Arm64)
+     - Tech Preview — system validation is in progress. Uses ConnectX-9 SuperNIC, which is generally available for RoCE and InfiniBand workloads; see `Supported NVIDIA Network Adapters`_. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+
+.. _supported-deployment-options:
+
+============================
+Supported Deployment Options
+============================
+
+**NVIDIA Network Operator** supports the deployment models below, and supports
+the DOCA-OFED driver being either pre-installed on the host or deployed as a
+container.
+
+-------------------------
+Cluster Deployment Models
+-------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 26 48 26
+
+   * - Deployment Model
+     - Description
+     - Guide
+   * - **Bare metal**
+     - Worker nodes run directly on physical hosts. Network Operator manages the NICs on those hosts.
+     - :doc:`Getting Started with Kubernetes <getting-started-with-kubernetes>`
+   * - **Virtual machine with PCIe passthrough**
+     - A full NIC or an individual Virtual Function is passed through to the virtual machine. Network Operator runs **inside** the virtual machine and manages the passed-through device.
+     - :doc:`Host Device Network with RDMA <quick-start/host-device-rdma>`
+   * - **Virtual machine with SR-IOV**
+     - Network Operator runs in the **host** cluster and allocates Virtual Functions to KubeVirt or Red Hat OpenShift Virtualization virtual machines through VFIO PCI passthrough.
+     - :doc:`KubeVirt SR-IOV Integration <kubevirt>` and :doc:`OpenShift Virtualization SR-IOV Integration <openshift/ocp-kubevirt>`
+
+-------------------------
+DOCA-OFED Driver Delivery
+-------------------------
+
+Every **NVIDIA Network Operator** release supports both the latest DOCA-OFED **GA** driver and the latest DOCA-OFED **LTS** driver. For this release those are |doca-driver-version| (GA) and |doca-driver-version-lts| (LTS).
+
+Both delivery methods are equally supported. The DOCA-OFED driver may be **pre-installed on the host** from the DOCA-Host package, or deployed as the **containerized DOCA-OFED driver** by Network Operator.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 40 36
+
+   * - Delivery Method
+     - Installed and Upgraded By
+     - Supported Operating Systems
+   * - **DOCA-Host** (pre-installed)
+     - The host provisioning process, **before** Kubernetes and Network Operator are installed. Outside Network Operator scope — see the `NVIDIA DOCA Installation Guide for Linux <https://networking-docs.nvidia.com/doca/sdk/doca-installation-guide-for-linux>`_.
+     - See *Supported Host OS per DOCA-Host Installation Profile* in the `NVIDIA DOCA documentation <https://networking-docs.nvidia.com/doca/sdk/doca-installation-guide-for-linux>`_.
+   * - **DOCA-OFED driver container** (``doca-driver``)
+     - Network Operator, through ``ofedDriver`` on ``NicClusterPolicy`` or :doc:`NicNodePolicy <customizations/nic-node-policy>`. See :doc:`DOCA-OFED Driver Container <advanced/doca-drivers>`.
+     - `Supported Operating Systems and Kubernetes Platforms`_ on this page.
+
+.. important::
+
+   **DOCA-Host (host-installed)** and the **containerized DOCA-OFED driver** are **mutually exclusive**. Choose one per node; do not deploy both.
+
+Recommended delivery method by host operating system type:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 24 52
+
+   * - Host OS Type
+     - Recommended
+     - Rationale
+   * - **Mutable** — Ubuntu, Red Hat Enterprise Linux, SUSE Linux Enterprise Server
+     - Either
+     - Choose **DOCA-Host** to install and version drivers separately from the cluster; it is a prerequisite completed before Kubernetes and Network Operator are installed. Choose the **driver container** for a cloud-native workflow that keeps the driver on the same lifecycle as the rest of the stack.
+   * - **Immutable** — Red Hat CoreOS with Red Hat OpenShift
+     - **Driver container**
+     - Host packages cannot be installed, so DOCA-Host is not directly available. The driver container is the only way to deliver DOCA kernel drivers.
+
+.. note::
+
+   Precompiled driver container images are available for a subset of operating systems and kernel flavors — see `Supported Precompiled Container Images for DOCA-OFED Drivers`_.
 
 ====================================================
 Supported Operating Systems and Kubernetes Platforms
@@ -241,6 +329,14 @@ Supported Operating Systems and Kubernetes Platforms
      - Nutanix NKP
      - Container Runtime
      - Notes
+   * - Ubuntu 26.04 LTS
+     - 1.32–1.36
+     - —
+     - —
+     - 1.32–1.36
+     - 2.12–2.15
+     - Containerd
+     - —
    * - Ubuntu 24.04 LTS
      - 1.32–1.36
      - —
@@ -303,6 +399,10 @@ Supported Container Runtimes
      - Containerd
      - CRI-O
      - Notes
+   * - Ubuntu 26.04 LTS
+     - Yes
+     - No
+     - 
    * - Ubuntu 24.04 LTS
      - Yes
      - No
@@ -382,7 +482,7 @@ NVIDIA Spectrum-X Ethernet Networking Platform
 Support for KubeVirt SR-IOV Passthrough
 =======================================
 
-**NVIDIA Network Operator** supports attaching SR-IOV Virtual Functions (VFs) to KubeVirt virtual machines via VFIO PCI passthrough. For deployment instructions, see :doc:`KubeVirt SR-IOV Integration <kubevirt>`.
+**NVIDIA Network Operator** supports attaching SR-IOV Virtual Functions (VFs) to KubeVirt and Red Hat OpenShift Virtualization virtual machines via VFIO PCI passthrough. For deployment instructions, see :doc:`KubeVirt SR-IOV Integration <kubevirt>` on upstream Kubernetes, or :doc:`OpenShift Virtualization SR-IOV Integration <openshift/ocp-kubevirt>` on Red Hat OpenShift.
 
 .. list-table::
    :header-rows: 1
@@ -391,14 +491,22 @@ Support for KubeVirt SR-IOV Passthrough
      - Kubernetes
      - KubeVirt
      - Red Hat OpenShift Virtualization
+   * - Ubuntu 26.04 LTS
+     - 1.32–1.36
+     - v1.8.2+
+     - —
    * - Ubuntu 24.04 LTS
      - 1.32–1.36
      - v1.8.2+
-     - Not supported
+     - —
    * - Ubuntu 22.04 LTS
      - 1.32–1.36
      - v1.8.2+
-     - Not supported
+     - —
+   * - Red Hat CoreOS
+     - —
+     - —
+     - 4.17–4.22
 
 Key limitations:
 
@@ -414,10 +522,10 @@ Support for GPUDirect RDMA
 
 Requirements:
 
-* NVIDIA GPU Operator v25.3.x or newer
-* NVIDIA DOCA-OFED Driver v5.5-1.0.3.2 or newer
+* NVIDIA GPU Operator |gpu-operator-version-min| or newer
+* NVIDIA DOCA-OFED Driver |doca-driver-version-min| or newer
 * ``nvidia_peermem`` kernel module (auto-loaded by recent NVIDIA GPU drivers)
-* Supported NVIDIA GPU (Ampere, Hopper, or Blackwell)
+* Supported NVIDIA GPU (Ampere, Hopper, Blackwell, or Rubin)
 * Supported NVIDIA NICs (NVIDIA ConnectX or BlueField)
 
 .. list-table::
@@ -425,6 +533,8 @@ Requirements:
 
    * - Operating System
      - Kubernetes
+   * - Ubuntu 26.04 LTS
+     - 1.32–1.36
    * - Ubuntu 24.04 LTS
      - 1.32–1.36
    * - Ubuntu 22.04 LTS
@@ -488,14 +598,39 @@ Limitations
    - Only ``generic`` kernel variant is tested and supported as a GA.
    - ``nvidia``, ``aws``, ``azure``, and ``oracle`` kernel variants are supported as a Tech Preview and have limited testing.
 
+===========================================
+Additional Supported Tools and Integrations
+===========================================
+
+Container management tools:
+
+* `Helm v3 <https://helm.sh/>`_
+* `Red Hat Operator Lifecycle Manager (OLM) <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/understanding-operators#operator-lifecycle-manager-olm>`_
+
+Deployment tooling:
+
+* `NVIDIA Kubernetes Launch Kit <https://github.com/NVIDIA/k8s-launch-kit>`_ — CLI that discovers cluster hardware and generates Network Operator manifests. See :doc:`NVIDIA Kubernetes Launch Kit <k8s-launch-kit/k8s-launch-kit>`.
+
+Orchestration & resource scheduling:
+
+* `Run:ai <https://run-ai-docs.nvidia.com/>`_
+
+.. note::
+
+   Run:ai requires the NVIDIA Network Operator as a prerequisite. To configure NVIDIA Network Operator refer to the Run:ai `cluster requirements documentation <https://run-ai-docs.nvidia.com/self-hosted/getting-started/installation/install-using-helm/system-requirements#nvidia-network-operator>`_ for more information.
+
 .. _network-operator-component-matrix:
 
 =================================
 Network Operator Component Matrix
 =================================
 
-The following component versions are deployed by **NVIDIA Network Operator**:
+The following components are shipped and versioned with **NVIDIA Network Operator**:
 
+
+---------
+Operators
+---------
 
 .. list-table::
    :header-rows: 1
@@ -521,62 +656,34 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |doca-init-container-version|
      - Yes
      - 
-   * - `DOCA-OFED Driver Container <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver>`_
-     - NVIDIA (EULA)
-     - |doca-driver-repository|
-     - doca-driver
-     - |doca-driver-version|
-     - Yes
-     - LTS version: |doca-driver-version-lts|
-   * - `RDMA Shared Device Plugin <https://github.com/Mellanox/k8s-rdma-shared-dev-plugin>`_ 
+   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
-     - |k8s-rdma-shared-dev-plugin-repository|
-     - k8s-rdma-shared-dev-plugin
-     - |k8s-rdma-shared-dev-plugin-version|
+     - |nic-configuration-operator-repository|
+     - nic-configuration-operator
+     - |nic-configuration-operator-version|
      - Yes
      - 
-   * - `IB Kubernetes Plugin <https://github.com/Mellanox/ib-kubernetes>`_
+   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
      - NVIDIA (OSS)
-     - |ib-kubernetes-repository|
-     - ib-kubernetes
-     - |ib-kubernetes-version|
+     - |nic-configuration-operator-repository|
+     - nic-configuration-operator-daemon
+     - |nic-configuration-operator-version|
      - Yes
      - 
-   * - `IP Over Infiniband (IPoIB) CNI plugin <https://github.com/Mellanox/ipoib-cni>`_
+   * - `NVIDIA Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_
      - NVIDIA (OSS)
-     - |ipoib-cni-repository|
-     - ipoib-cni
-     - |ipoib-cni-version|
+     - |maintenance-operator-repository|
+     - maintenance-operator
+     - |maintenance-operator-version|
      - Yes
      - 
-   * - `NVIDIA IPAM Plugin <https://github.com/Mellanox/nvidia-k8s-ipam>`_
+   * - `NVIDIA Spectrum-X Operator <https://github.com/Mellanox/spectrum-x-operator>`_
      - NVIDIA (OSS)
-     - |nvidia-ipam-repository|
-     - nvidia-k8s-ipam
-     - |nvidia-ipam-version|
+     - |spectrumxop-repository|
+     - spectrum-x-operator
+     - |spectrumxop-version|
      - Yes
      - 
-   * - `NVIDIA NIC Feature Discovery <https://github.com/Mellanox/nic-feature-discovery>`_
-     - NVIDIA (OSS)
-     - |nic-feature-discovery-repository|
-     - nic-feature-discovery
-     - |nic-feature-discovery-version|
-     - Yes
-     - 
-   * - `DOCA Telemetry Service (DTS) <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry>`_
-     - NVIDIA (EULA)
-     - |doca-telemetry-repository|
-     - doca_telemetry
-     - |doca-telemetry-version|
-     - Yes
-     - 
-   * - `Node Feature Discovery <https://github.com/kubernetes-sigs/node-feature-discovery>`_
-     - Community (OSS)
-     - |node-feature-discovery-repository|
-     - node-feature-discovery
-     - |node-feature-discovery-version|
-     - Yes
-     - Optionally deployed. May already be present in the cluster with proper configuration.
    * - `SRIOV Network Operator <https://github.com/k8snetworkplumbingwg/sriov-network-operator>`_
      - Community (OSS)
      - |sriovnetop-repository|
@@ -598,11 +705,69 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |sriovnetop-version|
      - Yes
      - 
-   * - `SR-IOV Network Device Plugin <https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin>`_
+
+--------------------
+Drivers and Services
+--------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Origin
+     - Repository
+     - Image Name
+     - Tag
+     - NVAIE
+     - Notes
+   * - `DOCA-OFED Driver Container <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/mellanox/containers/doca-driver>`_
+     - NVIDIA (EULA)
+     - |doca-driver-repository|
+     - doca-driver
+     - |doca-driver-version|
+     - Yes
+     - LTS version: |doca-driver-version-lts|
+   * - `DOCA xPlane Service <https://catalog.ngc.nvidia.com/orgs/nvidia/doca/containers/xplane>`_
+     - NVIDIA (EULA)
+     - |xplane-repository|
+     - xplane
+     - |xplane-version|
+     - Yes
+     - Deployed for Spectrum-X Hardware Multiplane. The version tracks the DOCA release, not the Network Operator release.
+   * - `DOCA Telemetry Service (DTS) <https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca_telemetry>`_
+     - NVIDIA (EULA)
+     - |doca-telemetry-repository|
+     - doca_telemetry
+     - |doca-telemetry-version|
+     - Yes
+     - 
+
+------------------
+Networking Plugins
+------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Origin
+     - Repository
+     - Image Name
+     - Tag
+     - NVAIE
+     - Notes
+   * - `Multus CNI <https://github.com/k8snetworkplumbingwg/multus-cni>`_
      - Community (OSS)
-     - |sriovnetop-sriov-device-plugin-repository|
-     - sriov-network-device-plugin
-     - |sriovnetop-sriov-device-plugin-version|
+     - |multus-repository|
+     - multus-cni
+     - |multus-version|
+     - Yes
+     - 
+   * - `K8s CNI network plugins <https://github.com/containernetworking/plugins>`_
+     - Community (OSS)
+     - |cni-plugins-repository|
+     - plugins
+     - |cni-plugins-version|
      - Yes
      - 
    * - `SR-IOV CNI plugin <https://github.com/k8snetworkplumbingwg/sriov-cni>`_
@@ -619,18 +784,11 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |sriovnetop-ib-sriov-cni-version|
      - Yes
      - 
-   * - `K8s CNI network plugins <https://github.com/containernetworking/plugins>`_
-     - Community (OSS)
-     - |cni-plugins-repository|
-     - plugins
-     - |cni-plugins-version|
-     - Yes
-     - 
-   * - `Multus CNI <https://github.com/k8snetworkplumbingwg/multus-cni>`_
-     - Community (OSS)
-     - |multus-repository|
-     - multus-cni
-     - |multus-version|
+   * - `IP Over Infiniband (IPoIB) CNI plugin <https://github.com/Mellanox/ipoib-cni>`_
+     - NVIDIA (OSS)
+     - |ipoib-cni-repository|
+     - ipoib-cni
+     - |ipoib-cni-version|
      - Yes
      - 
    * - `RDMA CNI plugin <https://github.com/k8snetworkplumbingwg/rdma-cni>`_
@@ -645,64 +803,106 @@ The following component versions are deployed by **NVIDIA Network Operator**:
      - |ovs-cni-repository|
      - ovs-cni-plugin
      - |ovs-cni-version|
-     - No
+     - Yes
      - 
-   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
+   * - `NVIDIA IPAM Plugin <https://github.com/Mellanox/nvidia-k8s-ipam>`_
      - NVIDIA (OSS)
-     - |nic-configuration-operator-repository|
-     - nic-configuration-operator
-     - |nic-configuration-operator-version|
-     - No
+     - |nvidia-ipam-repository|
+     - nvidia-k8s-ipam
+     - |nvidia-ipam-version|
+     - Yes
      - 
-   * - `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_
+   * - `IB Kubernetes Plugin <https://github.com/Mellanox/ib-kubernetes>`_
      - NVIDIA (OSS)
-     - |nic-configuration-operator-repository|
-     - nic-configuration-operator-daemon
-     - |nic-configuration-operator-version|
-     - No
+     - |ib-kubernetes-repository|
+     - ib-kubernetes
+     - |ib-kubernetes-version|
+     - Yes
      - 
-   * - `NVIDIA Maintenance Operator <https://github.com/Mellanox/maintenance-operator>`_
+
+--------------------------------------
+Device Plugins and Resource Allocation
+--------------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Component
+     - Origin
+     - Repository
+     - Image Name
+     - Tag
+     - NVAIE
+     - Notes
+   * - `RDMA Shared Device Plugin <https://github.com/Mellanox/k8s-rdma-shared-dev-plugin>`_ 
      - NVIDIA (OSS)
-     - |maintenance-operator-repository|
-     - maintenance-operator
-     - |maintenance-operator-version|
-     - No
+     - |k8s-rdma-shared-dev-plugin-repository|
+     - k8s-rdma-shared-dev-plugin
+     - |k8s-rdma-shared-dev-plugin-version|
+     - Yes
      - 
-   * - `NVIDIA Kubernetes Launch Kit <https://github.com/NVIDIA/k8s-launch-kit>`_
-     - NVIDIA (OSS)
-     - |k8s-launch-kit-repository|
-     - k8s-launch-kit
-     - |k8s-launch-kit-version|
-     - No
-     -
-   * - `NVIDIA Spectrum-X Operator <https://github.com/Mellanox/spectrum-x-operator>`_
-     - NVIDIA (OSS)
-     - |spectrumxop-repository|
-     - spectrum-x-operator
-     - |spectrumxop-version|
-     - No
-     -
+   * - `SR-IOV Network Device Plugin <https://github.com/k8snetworkplumbingwg/sriov-network-device-plugin>`_
+     - Community (OSS)
+     - |sriovnetop-sriov-device-plugin-repository|
+     - sriov-network-device-plugin
+     - |sriovnetop-sriov-device-plugin-version|
+     - Yes
+     - 
    * - `DRA Driver SR-IOV <https://github.com/k8snetworkplumbingwg/dra-driver-sriov>`_
      - Community (OSS)
      - |dra-driver-sriov-repository|
      - dra-driver-sriov
      - |dra-driver-sriov-version|
      - No
-     -
+     - **Tech Preview.** See :doc:`DRA SR-IOV Driver <dra-sriov-driver/dra-sriov-driver>`.
 
-===========================================
-Additional Supported Tools and Integrations
-===========================================
+---------
+Discovery
+---------
 
-Container management tools:
+.. list-table::
+   :header-rows: 1
 
-* `Helm v3 <https://helm.sh/>`_
-* `Red Hat Operator Lifecycle Manager (OLM) <https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/understanding-operators#operator-lifecycle-manager-olm>`_
+   * - Component
+     - Origin
+     - Repository
+     - Image Name
+     - Tag
+     - NVAIE
+     - Notes
+   * - `NVIDIA NIC Feature Discovery <https://github.com/Mellanox/nic-feature-discovery>`_
+     - NVIDIA (OSS)
+     - |nic-feature-discovery-repository|
+     - nic-feature-discovery
+     - |nic-feature-discovery-version|
+     - Yes
+     - 
+   * - `Node Feature Discovery <https://github.com/kubernetes-sigs/node-feature-discovery>`_
+     - Community (OSS)
+     - |node-feature-discovery-repository|
+     - node-feature-discovery
+     - |node-feature-discovery-version|
+     - Yes
+     - Optionally deployed. May already be present in the cluster with proper configuration.
 
-Orchestration & resource scheduling:
+-----
+Tools
+-----
 
-* `Run:ai <https://run-ai-docs.nvidia.com/>`_
+.. list-table::
+   :header-rows: 1
 
-.. note::
-
-   Run:ai requires the NVIDIA Network Operator as a prerequisite. To configure NVIDIA Network Operator refer to the Run:ai `cluster requirements documentation <https://run-ai-docs.nvidia.com/self-hosted/getting-started/installation/install-using-helm/system-requirements#nvidia-network-operator>`_ for more information.
+   * - Component
+     - Origin
+     - Repository
+     - Image Name
+     - Tag
+     - NVAIE
+     - Notes
+   * - `NVIDIA Kubernetes Launch Kit <https://github.com/NVIDIA/k8s-launch-kit>`_
+     - NVIDIA (OSS)
+     - |k8s-launch-kit-repository|
+     - k8s-launch-kit
+     - |k8s-launch-kit-version|
+     - Yes
+     - CLI tool that generates manifests and installs Network Operator; not deployed by the operator. See :doc:`NVIDIA Kubernetes Launch Kit <k8s-launch-kit/k8s-launch-kit>`.

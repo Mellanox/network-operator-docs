@@ -32,7 +32,7 @@ Network Operator Versioning
 
 NVIDIA Network Operator is versioned following the calendar versioning convention.
 
-The version follows the pattern ``YY.MM.PP``, such as 25.1.0, 24.10.0, and 24.10.1.
+The version follows the pattern ``YY.MM.PP``, such as 26.7.0, 26.4.1, and 26.1.0.
 The first two fields, ``YY.MM`` identify a major version and indicates when the major version was initially released.
 The third field, ``PP``, identifies the patch version of the major version.
 Patch releases typically include critical bug and CVE fixes.
