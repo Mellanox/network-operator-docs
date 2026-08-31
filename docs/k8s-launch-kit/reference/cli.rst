@@ -74,7 +74,23 @@ Probes cluster hardware and writes a ``cluster-config.yaml``.
    * - ``--network-operator-namespace <string>``
      - Override the Network Operator namespace (default: ``nvidia-network-operator``).
    * - ``--network-operator-release <string>``
-     - Pin discovery to a Network Operator release line. Supported: ``25.10``, ``26.1``, ``26.4``.
+     - Pin discovery to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``.
+   * - ``--spectrum-x <RA-version>``
+     - Enable Spectrum-X for discovery. Value is the SPC-X RA version: ``RA2.3``, or ``RA2.1`` for Network Operator 26.1. Required before any of the Spectrum-X flags below --- passing one without it is a validation error.
+   * - ``--multiplane-mode <string>``
+     - Multiplane mode override: ``none``, ``swplb``, or ``hwplb``. Requires ``--spectrum-x``.
+   * - ``--number-of-planes <int>``
+     - Plane count override: ``1``, ``2``, or ``4``. Requires ``--spectrum-x``.
+   * - ``--topology-scheme <string>``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. Requires ``--spectrum-x``. Persisted to ``profile.spectrumX.topologyType`` in the saved cluster configuration, so a later ``l8k generate`` does not need the flag.
+   * - ``--ip-version <string>``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``. Requires ``--spectrum-x``.
+   * - ``--topology-file <string>``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON, used to generate Spectrum-X ``CIDRPool`` resources. Requires ``--spectrum-x``. Persisted alongside the other Spectrum-X settings.
+   * - ``--spectrum-x-config <string>``
+     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Requires ``--spectrum-x``; required for ``RA2.3``.
+   * - ``--spectrum-x-configmap-name <string>``
+     - Name for the generated profile ConfigMap. Requires ``--spectrum-x``. Needed only when ``--spectrum-x-config`` holds raw ``data.profile`` YAML; with a full ConfigMap manifest the name is taken from ``metadata.name``.
    * - ``--node-selector <string>``
      - Filter nodes for discovery by label. Default: ``feature.node.kubernetes.io/pci-15b3.present=true`` (Mellanox NICs).
    * - ``--image-pull-secrets <strings>``
@@ -108,13 +124,23 @@ Profile Selection
    * - ``--multirail``
      - Enable multirail deployment. Auto-defaults to ``true``. Opt out with ``--multirail=false`` (YAML cannot express explicit-false).
    * - ``--spectrum-x <RA-version>``
-     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.1`` or ``RA2.2``. Implies ethernet fabric, sriov deployment, and multirail.
+     - Enable Spectrum-X. Value is the SPC-X RA version: ``RA2.3``, or ``RA2.1`` for Network Operator 26.1. Implies ethernet fabric, sriov deployment, and multirail.
    * - ``--multiplane-mode <string>``
-     - Multiplane mode: ``swplb``, ``hwplb``, ``uniplane``, or ``none``. Required with ``--spectrum-x``; auto-defaulted from east-west PF deviceID when omitted (CX7/BF3 → ``uniplane``, CX8 → ``swplb``, CX9 → ``hwplb``). ``none`` requires ``--number-of-planes 1``.
+     - Multiplane mode: ``none``, ``swplb``, or ``hwplb``. Required with ``--spectrum-x``; auto-defaulted from the east-west NIC and GPU platform when omitted --- ConnectX-7 NIC and BlueField-3 SuperNIC use ``none``, ConnectX-9 SuperNIC uses ``hwplb``, and ConnectX-8 SuperNIC uses ``none`` on H100 / H200 / B200 / GB200 and ``swplb`` on B300 / GB300 or any unrecognised platform. These are Launch Kit's generator defaults; Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass it explicitly to follow the RA. ``none`` requires ``--number-of-planes 1``.
    * - ``--number-of-planes <int>``
-     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from deviceID (CX7/BF3 → 1, CX8 → 2, CX9 → 4).
+     - Number of planes: ``1``, ``2``, or ``4``. Required with ``--spectrum-x``; auto-defaulted from the east-west NIC and GPU platform (ConnectX-7, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on single-plane platforms → ``1``; ConnectX-8 SuperNIC on B300 / GB300 → ``2``; ConnectX-9 SuperNIC → ``4``). Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
+   * - ``--topology-scheme <string>``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. **Required** with ``--spectrum-x`` --- Launch Kit does not default it. May instead be carried in the cluster configuration as ``profile.spectrumX.topologyType``, which ``l8k discover --topology-scheme`` persists; a later ``l8k generate`` then needs no flag.
+   * - ``--ip-version <string>``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``.
+   * - ``--topology-file <string>``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. **Required** with ``--spectrum-x`` --- the Spectrum-X profiles always render ``CIDRPool`` resources and generation aborts without a topology file. May instead be carried in the cluster configuration as ``profile.spectrumX.topologyFile``.
+   * - ``--spectrum-x-config <string>``
+     - Path to the Spectrum-X profile ConfigMap YAML, or to the raw ``data.profile`` YAML it wraps. Required for ``RA2.3``. Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and points ``spectrumXOptimized.version`` at it. See :doc:`../profiles/spectrum-x`.
+   * - ``--spectrum-x-configmap-name <string>``
+     - Name for the generated profile ConfigMap. Required only when ``--spectrum-x-config`` holds raw ``data.profile`` YAML; with a full ConfigMap manifest the name is taken from ``metadata.name``.
    * - ``--network-operator-release <string>``
-     - Pin to a Network Operator release line. Supported: ``25.10``, ``26.1``, ``26.4``. Auto-defaulted under ``--spectrum-x`` (``RA2.1`` → ``26.1``; ``RA2.2`` → ``26.4``). See :doc:`../overview`.
+     - Pin to a Network Operator release line. Supported: ``26.1``, ``26.4``, ``26.7``. Auto-defaulted under ``--spectrum-x`` (``RA2.3`` → ``26.7``; ``RA2.1`` → ``26.1``). See :doc:`../overview`.
    * - ``--groups <a,b,...>``
      - Restrict output to the named source groups (comma-separated, matched case-sensitively against ``clusterConfig[].identifier``). Mutually exclusive with ``--gpu-type``. Empty match is a validation error. See :doc:`../heterogeneous-clusters`.
    * - ``--gpu-type <string>``

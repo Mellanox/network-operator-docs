@@ -36,7 +36,7 @@ Full Schema
    :substitutions:
 
    networkOperator:
-     selectedRelease: "26.4"
+     selectedRelease: "26.7"
      version: |k8s-launch-kit-version|
      componentVersion: |k8s-launch-kit-component-version|
      repository: |k8s-launch-kit-network-operator-repository|
@@ -99,9 +99,10 @@ Full Schema
      deployment: sriov
      multirail: false
      spectrumX:
-       spcxVersion: "RA2.1"
+       spcxVersion: "RA2.3"
        multiplaneMode: swplb
        numberOfPlanes: 4
+       useDRA: false
      ai: false
 
    clusterConfig:
@@ -140,7 +141,7 @@ Network Operator version, image registry, namespace, and pull secrets.
    * - **Field**
      - **Description**
    * - ``selectedRelease``
-     - Pin to a release line. Supported: ``25.10``, ``26.1``, ``26.4``. Auto-fills ``version`` and image tags from an embedded catalog. Equivalent to the ``--network-operator-release`` flag.
+     - Pin to a release line. Supported: ``26.1``, ``26.4``, ``26.7``. Auto-fills ``version`` and image tags from an embedded catalog. Equivalent to the ``--network-operator-release`` flag.
    * - ``version``
      - Explicit Network Operator version. Overrides the catalog when set.
    * - ``componentVersion``
@@ -277,7 +278,7 @@ Spectrum-X-specific settings.
    * - **Field**
      - **Description**
    * - ``nicType``
-     - NIC type device ID. ``1021`` = ConnectX-7 NIC; ``1023`` = ConnectX-8 SuperNIC; ``a2dc`` = BlueField-3 SuperNIC.
+     - NIC type device ID. ``1021`` = ConnectX-7 NIC; ``1023`` = ConnectX-8 SuperNIC; ``1025`` = ConnectX-9 SuperNIC *(tech preview)*; ``a2dc`` = BlueField-3 SuperNIC.
    * - ``overlay``
      - Overlay mode.
    * - ``rdmaPrefix``
@@ -317,11 +318,25 @@ Profile selection (also overridable via CLI flags).
    * - ``multirail``
      - Enable multirail.
    * - ``spectrumX.spcxVersion``
-     - Spectrum-X reference architecture (``RA2.1`` or ``RA2.2``).
+     - Spectrum-X reference architecture (``RA2.3``, or ``RA2.1`` for Network Operator 26.1).
    * - ``spectrumX.multiplaneMode``
-     - Multiplane mode: ``hwplb``, ``swplb``, ``uniplane``, ``none``.
+     - Multiplane mode: ``hwplb``, ``swplb``, ``none``.
    * - ``spectrumX.numberOfPlanes``
      - Number of planes.
+   * - ``spectrumX.topologyType``
+     - Topology scheme for Spectrum-X IP allocation: ``2-tier`` or ``3-tier``. Required for Spectrum-X. Equivalent to ``--topology-scheme``.
+   * - ``spectrumX.ipVersion``
+     - IP version for Spectrum-X address allocation: ``ipv4`` (default) or ``ipv6``. Equivalent to ``--ip-version``.
+   * - ``spectrumX.topologyFile``
+     - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. Required for Spectrum-X generation --- the profiles always render ``CIDRPool`` resources. Equivalent to ``--topology-file``.
+   * - ``spectrumX.hostFirstOctet``
+     - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Defaults to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. No effect when ``ipVersion`` is ``ipv6``.
+   * - ``spectrumX.profile``
+     - Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap's ``data.profile`` key, or a full ConfigMap manifest. Required for ``RA2.3``. Equivalent to ``--spectrum-x-config``.
+   * - ``spectrumX.configMapName``
+     - Name for the generated profile ConfigMap. Required only when ``spectrumX.profile`` holds raw ``data.profile`` YAML. Equivalent to ``--spectrum-x-configmap-name``.
+   * - ``spectrumX.useDRA``
+     - Generate DRA ``ResourceClaimTemplate`` resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only --- there is no CLI flag. Defaults to ``false``. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV --- see :doc:`../profiles/spectrum-x`.
 
 ================================================================================
 clusterConfig

@@ -32,28 +32,68 @@ Use Case
 
 NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.
 
-Two reference architectures are supported, selected by Network Operator release:
+Two reference architectures are supported. The RA version is the value of ``--spectrum-x``, and each one pins to a Network Operator release line:
 
-- **RA2.2** (current) --- requires ``--network-operator-release 26.4``. Uses ``SpectrumXRailPoolConfig`` (v1alpha2 CRD).
-- **RA2.1** (previous) --- requires ``--network-operator-release 26.1``. Uses ``SriovNetworkPoolConfig`` + ``SriovNetworkNodePolicy`` + ``OVSNetwork`` with NV-IPAM glue.
+.. list-table::
+   :header-rows: 1
+   :widths: 14 22 30 34
+
+   * - **RA**
+     - **Release**
+     - **Profile directory**
+     - **Notes**
+   * - ``RA2.3``
+     - ``26.7``
+     - ``spectrum-x``
+     - Current. Adds the Spectrum-X profile ConfigMap (see below) and requires ``--spectrum-x-config``.
+   * - ``RA2.1``
+     - ``26.1``
+     - ``spectrum-x-ra2.1``
+     - Uses ``SriovNetworkPoolConfig`` + ``SriovNetworkNodePolicy`` + ``OVSNetwork`` with NV-IPAM glue.
+
+If the release and RA version are mismatched (for example, ``--spectrum-x RA2.1`` with ``--network-operator-release 26.7``), Launch Kit errors out with an explicit message. Pass the release explicitly: it is only inferred from the RA when ``networkOperator.selectedRelease`` is unset in the cluster configuration, and the shipped default pins ``26.4``.
 
 For deeper Spectrum-X background, see :doc:`Spectrum-X Configuration <../../spectrum-x/spectrum-x-configuration>`.
+
+================================================================================
+The RA2.3 Profile ConfigMap
+================================================================================
+
+RA2.3 moves the Spectrum-X tuning knobs out of the CRD and into a ConfigMap that the NIC Configuration Operator reads. Pass its contents with ``--spectrum-x-config``:
+
+.. code-block:: bash
+
+   l8k generate --spectrum-x RA2.3 \
+       --network-operator-release 26.7 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier --topology-file ./topology.json \
+       --multiplane-mode swplb --number-of-planes 2
+
+The file may be either a full ConfigMap manifest or just the YAML that belongs under its ``data.profile`` key. With raw ``data.profile`` YAML, also pass ``--spectrum-x-configmap-name`` to name the generated ConfigMap; with a full manifest, the name comes from ``metadata.name``.
+
+Launch Kit renders the ConfigMap into the Network Operator namespace with the label the NIC Configuration Operator watches, and sets ``spectrumXOptimized.version`` on the generated ``NicConfigurationTemplate`` to the ConfigMap's name.
+
+The ``RA2.3`` profile also sets ``pciPerformanceOptimized`` on that template, with ``maxReadRequest: 4096`` --- the largest PCIe read request size the API accepts. The values are fixed and not configurable from the cluster configuration. The ``RA2.1`` profile does not set this field.
 
 ================================================================================
 Multiplane Modes
 ================================================================================
 
-The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` takes the SPC-X RA version as its value (``RA2.1`` or ``RA2.2``); ``--multiplane-mode``, ``--number-of-planes``, and ``--network-operator-release`` are all required alongside it. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
+The ``--multiplane-mode`` flag selects how planes are mapped onto NICs. ``--spectrum-x`` implies ethernet fabric, sriov deployment, and multirail.
+
+``--multiplane-mode`` and ``--number-of-planes`` are defaulted from the discovered hardware when omitted. The east-west NIC decides first: ConnectX-7 NIC and BlueField-3 SuperNIC get ``none`` and 1 plane, and ConnectX-9 SuperNIC gets ``hwplb`` and 4 planes. For ConnectX-8 SuperNIC the GPU platform decides --- H100 / H200 / B200 / GB200 get ``none`` and 1 plane, while B300 / GB300, or any platform Launch Kit does not recognise, get ``swplb`` and 2 planes. Note that these are Launch Kit's generator defaults, not the Reference Architecture's recommendation: Spectrum-X RA 2.3 recommends ``hwplb`` on multiplane platforms, so pass ``--multiplane-mode hwplb`` to follow the RA. Launch Kit skips the default and warns if the cluster's node groups would need different values.
 
 HWPLB
 ------
 
-Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. **Tech preview**, supported on ConnectX-8 SuperNIC with RA2.2 only --- not part of the validated Spectrum-X Reference Architecture:
+Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. Requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC:
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --network-operator-release 26.7 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier --topology-file ./topology.json \
        --multiplane-mode hwplb --number-of-planes 4
 
 SWPLB
@@ -63,20 +103,11 @@ Software Plane Load Balancing for smaller-scale Spectrum-X clusters. Generates s
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --network-operator-release 26.7 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier --topology-file ./topology.json \
        --multiplane-mode swplb --number-of-planes 2
-
-Uniplane
----------
-
-Single-plane physical topology that runs the Spectrum-X multiplane software stack and IP schema --- multiple PFs all connect to the **same** ToR/plane (rather than separate planes as in ``swplb`` / ``hwplb``). A specialized configuration for compatibility or regression scenarios; for production, use ``none`` for Single-Plane or ``swplb`` / ``hwplb`` for Dual-Plane / Quad-Plane. Supported on ConnectX-8 SuperNIC only. Use with ``--number-of-planes 1``:
-
-.. code-block:: bash
-
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
-       --multiplane-mode uniplane --number-of-planes 1
 
 None (Single Plane)
 --------------------
@@ -85,11 +116,13 @@ No multiplane separation. Use with ConnectX-7 NIC, BlueField-3 SuperNIC, or simp
 
 .. code-block:: bash
 
-   l8k generate --spectrum-x RA2.2 \
-       --network-operator-release 26.4 \
+   l8k generate --spectrum-x RA2.3 \
+       --network-operator-release 26.7 \
+       --spectrum-x-config ./spectrum-x-profile.yaml \
+       --topology-scheme 2-tier --topology-file ./topology.json \
        --multiplane-mode none --number-of-planes 1
 
-Side-by-side comparison of the four modes:
+Side-by-side comparison of the three modes:
 
 .. mermaid::
 
@@ -98,58 +131,141 @@ Side-by-side comparison of the four modes:
            H_NIC[NIC]
            H_NIC -->|HW LB| H_P1[Plane 1]
            H_NIC -->|HW LB| H_P2[Plane 2]
-           H_NIC -->|HW LB| H_P3[Plane 3]
        end
        subgraph SWPLB[SWPLB - software load balancing]
            S_NIC[NIC] --> S_OVS[OVS]
            S_OVS -->|SW LB| S_P1[Plane 1]
            S_OVS -->|SW LB| S_P2[Plane 2]
-           S_OVS -->|SW LB| S_P3[Plane 3]
        end
-       subgraph UNI[Uniplane]
-           U_NIC[NIC] --> U_P[Single plane]
-       end
-       subgraph NONE[None]
+       subgraph NONE[None - single plane]
            N_NIC[NIC] --> N_NET[Standard network]
        end
 
 ================================================================================
-NIC Type Constraints
+NIC Types, Defaults, and Accepted Modes
 ================================================================================
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 15 55
+   :widths: 26 12 28 34
 
    * - **NIC Type**
      - **Device ID**
-     - **Supported Modes**
+     - **Hardware default**
+     - **Modes accepted**
    * - ConnectX-7 NIC
      - ``1021``
-     - ``none`` only
+     - ``none``, 1 plane
+     - ``none``
    * - BlueField-3 SuperNIC
      - ``a2dc``
-     - ``none`` only
+     - ``none``, 1 plane
+     - ``none``, ``swplb``
    * - ConnectX-8 SuperNIC
      - ``1023``
-     - | ``none``
-       | ``swplb``
-       | ``hwplb`` *(tech preview)*
-       | ``uniplane``
+     - platform-dependent --- see above
+     - ``none``, ``swplb``, ``hwplb``
+   * - ConnectX-9 SuperNIC *(tech preview)*
+     - ``1025``
+     - ``hwplb``, 4 planes
+     - ``none``, ``swplb``, ``hwplb``
+
+**Hardware default** is the mode and plane count Launch Kit picks when
+``--multiplane-mode`` and ``--number-of-planes`` are omitted.
+
+**Modes accepted** is what the generated manifests will pass. Launch Kit itself
+does not restrict modes per NIC --- ``--multiplane-mode`` takes ``none``,
+``swplb``, or ``hwplb`` for any NIC --- but the ``NicConfigurationTemplate`` API
+rejects ``hwplb`` on anything other than ConnectX-8 SuperNIC or ConnectX-9
+SuperNIC. Passing a mode outside this column generates manifests the cluster
+will refuse.
+
+.. note::
+
+   **ConnectX-9 SuperNIC support for Spectrum-X is Tech Preview in Network
+   Operator 26.7.0.** Launch Kit accepts ConnectX-9 SuperNIC and defaults it to
+   ``hwplb`` with 4 planes --- the one NIC for which ``hwplb`` is the hardware
+   default --- but the resulting configuration is not validated against any
+   Spectrum-X Reference Architecture. Use it for evaluation only.
+
+   ConnectX-9 SuperNIC additionally requires a Spectrum-X profile that carries
+   ``mlxConfig`` tuning for device ID ``1025``. A profile that omits it applies
+   **no** Spectrum-X parameters to those NICs and reports no error. Contact
+   NVIDIA Support or your NVIDIA CPM for a profile that covers ConnectX-9
+   SuperNIC.
+
+   ConnectX-9 SuperNIC remains fully supported by Network Operator for general
+   RoCE and InfiniBand workloads --- see :doc:`Platform Support
+   <../../platform-support>`.
+
+================================================================================
+DRA-Based Workload Allocation
+================================================================================
+
+By default the Spectrum-X profiles hand rails to workloads through the SR-IOV device plugin: the generated workload requests ``nvidia.com/rail<N>`` resources (``nvidia.com/rail<N>p<P>`` in ``swplb``). Setting ``profile.spectrumX.useDRA: true`` switches generation to Kubernetes Dynamic Resource Allocation (DRA) instead, so the rails of one node can be claimed by more than one workload.
+
+``useDRA`` is config-only --- there is no CLI flag --- and defaults to ``false``:
+
+.. code-block:: yaml
+
+   profile:
+     spectrumX:
+       spcxVersion: "RA2.3"
+       multiplaneMode: hwplb
+       numberOfPlanes: 4
+       useDRA: true
+
+The key is honoured by the ``RA2.3`` profile. On ``RA2.1`` it is accepted but has no effect --- that profile carries no DRA templates, and Launch Kit does not report an error.
+
+What changes in the generated manifests
+----------------------------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 32 68
+
+   * - **File**
+     - **Difference when DRA is enabled**
+   * - ``00-values.yaml``
+     - Adds the SR-IOV Network Operator feature gate ``dynamicResourceAllocation: true``. The Spectrum-X profiles already set ``enableInjector: false``, which DRA also requires.
+   * - ``80-spectrumxrailpoolconfig.yaml``
+     - ``spec.draEnabled: true``. Launch Kit always renders this field explicitly, so with ``useDRA: false`` it writes ``false`` and overrides the CRD default of ``true``.
+   * - ``85-resourceclaimtemplate.yaml``
+     - New file, generated only when ``useDRA`` is ``true``. Holds one ``resource.k8s.io/v1`` ``ResourceClaimTemplate`` per rail (``none`` and ``hwplb``) or per rail-plane (``swplb``), rendered into the network namespace.
+   * - ``90-example-daemonset.yaml``
+     - The example workload references the generated templates through pod-level ``spec.resourceClaims`` and container-level ``resources.claims`` instead of ``nvidia.com/rail*`` requests and limits.
+
+Each claim template carries two device requests: a ``gpu`` request against device class ``gpu.nvidia.com``, and a ``vf`` request against device class ``sriovnetwork.k8snetworkplumbingwg.io`` selected by the rail's resource name.
+
+Prerequisites
+--------------
+
+- **Kubernetes 1.34 or later.** The generated templates use ``resource.k8s.io/v1``, which is only served from 1.34. Launch Kit does not check the cluster version, so on an older cluster the file is generated and then rejected on apply.
+- **The DRA Driver for SR-IOV**, which publishes the ``sriovnetwork.k8snetworkplumbingwg.io`` device class. It is a Tech Preview feature, supported only on upstream Kubernetes with the SR-IOV Network Operator --- not on Red Hat OpenShift. See :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>`.
+- **The NVIDIA DRA Driver for GPUs**, which publishes the ``gpu.nvidia.com`` device class. Neither Launch Kit nor the Network Operator installs it; without it, the ``gpu`` request in every generated claim is unallocatable.
+- **No SR-IOV device plugin.** DRA and the SR-IOV device plugin cannot run on the same cluster. Turning ``useDRA`` on for a cluster that already runs device-plugin workloads is a migration rather than a toggle: delete existing ``SriovNetworkNodePolicy`` resources first. Launch Kit neither performs nor warns about this.
+
+Limitations
+------------
+
+- **A rail is the smallest unit of sharing.** ``SpectrumXRailPoolConfig`` and ``NicConfigurationTemplate`` both render ``numVfs: 1`` --- ``spectrumXOptimized`` is rejected by the API for any other value --- so several workloads on one node must take different rails; they cannot share a rail.
+- **The generated example workload still claims every rail.** Running several workloads on a node means authoring a workload that references only the subset of ``ResourceClaimTemplate`` resources it needs.
+- **No automatic GPU-to-rail mapping.** Each template names one rail, fixed at generation time. The scheduler is not asked to choose the rail closest to the allocated GPU.
+- **GPU-to-NIC co-location is not enforced.** Launch Kit does not emit a ``constraints`` / ``matchAttribute`` block. Where affinity matters, add the relative ``constraints`` form documented in :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>` to your own workload.
+- **Not all target platforms are supported by the driver.** On NVIDIA GB300 NVL72, Vera Rubin NVL72, and HGX Rubin NVL8 systems the PCIe root used to match a NIC to a GPU is the root of the NIC's Data Direct sub-interface, and the DRA SR-IOV driver does not currently support that topology. This applies to ConnectX-8 and later adapters, which is what RA 2.3 targets.
 
 ================================================================================
 Pinning to RA2.1
 ================================================================================
 
-For Network Operator 26.1 deployments, select the Spectrum-X RA2.1 profile by passing ``RA2.1`` as the value of ``--spectrum-x``:
+To target Network Operator 26.1, pass ``RA2.1`` to ``--spectrum-x``. ``--spectrum-x-config`` does not apply --- RA2.1 carries its Spectrum-X settings in the CRDs themselves.
 
 .. code-block:: bash
 
    l8k generate --spectrum-x RA2.1 \
        --network-operator-release 26.1 \
+       --topology-scheme 2-tier --topology-file ./topology.json \
        --multiplane-mode swplb --number-of-planes 2
-
-If the release and Spectrum-X version are mismatched (for example, ``--spectrum-x RA2.1`` with ``--network-operator-release 26.4``), Launch Kit errors out with an explicit message.
 
 ================================================================================
 See Also
@@ -159,3 +275,4 @@ See Also
 - :doc:`Spectrum-X Configuration <../../spectrum-x/spectrum-x-configuration>` --- background and CRD details
 - :doc:`Generate Workflow <../workflows/generate>` --- generation details
 - :doc:`Configuration Reference <../reference/config>` --- ``spectrumX`` config section
+- :doc:`DRA SR-IOV Driver <../../dra-sriov-driver/dra-sriov-driver>` --- driver installation, prerequisites, and limitations for ``useDRA``
