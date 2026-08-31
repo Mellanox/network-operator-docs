@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NVIDIA Spectrum-X NIC Configuration" href="spectrum-x-configuration.html" />
-    <link rel="prev" title="Hardware Multiplane Spectrum-X Quick Start (Tech Preview)" href="quick-start-hwplb.html" />
+    <link rel="prev" title="Software Multiplane Spectrum-X Quick Start" href="quick-start-swplb.html" />
  
 
 
@@ -61,30 +61,41 @@
 <li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="spectrum-x.html">NVIDIA Spectrum-X</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Architecture and Components</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#deployment-ownership">Deployment ownership</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#stack-overview">Stack overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#host-layer">Host Layer</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#os-prerequisites">OS prerequisites</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#driver">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#virtual-switch">Virtual switch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#how-spectrum-x-works-on-kubernetes">How Spectrum-X works on Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#supported-reference-architectures">Supported Reference Architectures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spectrum-x.html#what-you-configure">What you configure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="spectrum-x.html#where-to-start">Where to start</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="quick-start.html">Quick Start</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Architecture and Components</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#deployment-ownership">Deployment ownership</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stack-overview">Stack overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#host-layer">Host Layer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#os-prerequisites">OS prerequisites</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#driver">Driver</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#virtual-switch">Virtual switch</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#kubernetes-layer">Kubernetes Layer</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#discovery">Discovery</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#driver-alternative-to-host-installed-doca-host">Driver (alternative to host-installed DOCA-Host)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#operator">Operator</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#cni-data-plane">CNI / data-plane</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#optional-tech-preview">Optional / tech preview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kubernetes-layer">Kubernetes Layer</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#discovery">Discovery</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#driver-containerized">Driver (containerized)</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#operator">Operator</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#cni-data-plane">CNI / data-plane</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#optional-and-tech-preview">Optional and tech preview</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#dependencies-and-ordering">Dependencies and ordering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#further-reading">Further reading</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#what-the-spectrum-x-operator-configures">What the Spectrum-X Operator configures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dependencies-and-ordering">Dependencies and ordering</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#when-doca-xplane-is-deployed">When DOCA xPlane is deployed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#further-reading">Further reading</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="verify-and-troubleshoot.html">Verify and Troubleshoot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crds.html">CRD API Reference</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
@@ -131,6 +142,36 @@
              
   <section id="spectrum-x-kubernetes-architecture-and-components">
 <h1>Spectrum-X Kubernetes Architecture and Components<a class="headerlink" href="#spectrum-x-kubernetes-architecture-and-components" title="Permalink to this headline"></a></h1>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#deployment-ownership" id="id1">Deployment ownership</a></p></li>
+<li><p><a class="reference internal" href="#stack-overview" id="id2">Stack overview</a></p></li>
+<li><p><a class="reference internal" href="#host-layer" id="id3">Host Layer</a></p>
+<ul>
+<li><p><a class="reference internal" href="#os-prerequisites" id="id4">OS prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#driver" id="id5">Driver</a></p></li>
+<li><p><a class="reference internal" href="#virtual-switch" id="id6">Virtual switch</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#kubernetes-layer" id="id7">Kubernetes Layer</a></p>
+<ul>
+<li><p><a class="reference internal" href="#discovery" id="id8">Discovery</a></p></li>
+<li><p><a class="reference internal" href="#driver-containerized" id="id9">Driver (containerized)</a></p></li>
+<li><p><a class="reference internal" href="#operator" id="id10">Operator</a></p></li>
+<li><p><a class="reference internal" href="#cni-data-plane" id="id11">CNI / data-plane</a></p></li>
+<li><p><a class="reference internal" href="#optional-and-tech-preview" id="id12">Optional and tech preview</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#what-the-spectrum-x-operator-configures" id="id13">What the Spectrum-X Operator configures</a></p></li>
+<li><p><a class="reference internal" href="#dependencies-and-ordering" id="id14">Dependencies and ordering</a></p>
+<ul>
+<li><p><a class="reference internal" href="#when-doca-xplane-is-deployed" id="id15">When DOCA xPlane is deployed</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#further-reading" id="id16">Further reading</a></p></li>
+</ul>
+</div>
 <p>A Spectrum-X Kubernetes deployment is a layered stack split across two
 distinct domains:</p>
 <ul class="simple">
@@ -143,7 +184,7 @@ discovery components. Deployed and reconciled by <strong>NVIDIA Network
 Operator</strong> on top of a working Kubernetes cluster.</p></li>
 </ul>
 <p>This page maps each component to its role, dependencies, and
-default-enabled state in Network Operator 26.4.0. For exact image versions,
+default-enabled state in Network Operator 26.7.0. For exact image versions,
 see the software components table in <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>. For end-to-end walkthroughs, see <a class="reference internal" href="quick-start.html"><span class="doc">Spectrum-X
 Kubernetes Quick Start</span></a>.</p>
 <section id="deployment-ownership">
@@ -185,26 +226,13 @@ VF / representor lifecycle.</p></td>
 </section>
 <section id="stack-overview">
 <h2>Stack overview<a class="headerlink" href="#stack-overview" title="Permalink to this headline"></a></h2>
-<p><strong>Host Layer</strong> <em>(Day 0 — outside Network Operator scope)</em>:</p>
-<ul class="simple">
-<li><p><strong>OS prerequisites</strong> — SR-IOV BIOS + firmware; hugepages; RDMA namespace
-exclusive mode.</p></li>
-<li><p><strong>Driver</strong> — DOCA-Host (NVIDIA OFED kernel modules + DOCA tooling).</p></li>
-<li><p><strong>Virtual switch</strong> — OVS-DOCA (hardware-accelerated Open vSwitch,
-bundled with DOCA-Host).</p></li>
-</ul>
-<p><strong>Kubernetes Layer</strong> <em>(Day 1 / Day 2 — owned by Network Operator)</em>:</p>
-<ul class="simple">
-<li><p><strong>Discovery</strong> — Node Feature Discovery (NFD); NIC Feature Discovery.</p></li>
-<li><p><strong>Driver</strong> <em>(alternative to host-installed DOCA-Host)</em> — DOCA-OFED
-driver container.</p></li>
-<li><p><strong>Operator</strong> — Network Operator (umbrella); SR-IOV Network Operator;
-NIC Configuration Operator; Spectrum-X Operator; Maintenance Operator.</p></li>
-<li><p><strong>CNI / data-plane</strong> — Multus; OVS-CNI; SR-IOV Network Device Plugin;
-SR-IOV CNI; RDMA-CNI; NV-IPAM; Spectrum-X flow-controller DaemonSet.</p></li>
-<li><p><strong>Optional / tech preview</strong> — DOCA xPlane (Hardware Multiplane only);
-SR-IOV DRA driver; NicNodePolicy CRD; DOCA Telemetry Service.</p></li>
-</ul>
+<p><strong>Host Layer</strong> <em>(Day 0 — outside Network Operator scope)</em> — operating-system
+prerequisites, the DOCA-Host driver, and the OVS-DOCA virtual switch.</p>
+<p><strong>Kubernetes Layer</strong> <em>(Day 1 / Day 2 — owned by Network Operator)</em> — node
+discovery, the containerized driver, the operator stack, the CNI and
+data-plane components, and the Spectrum-X profile ConfigMap that feeds NIC
+configuration.</p>
+<p>Each layer is broken out in the sections below.</p>
 </section>
 <section id="host-layer">
 <h2>Host Layer<a class="headerlink" href="#host-layer" title="Permalink to this headline"></a></h2>
@@ -226,14 +254,19 @@ action, and are <strong>not</strong> managed by Network Operator.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>SR-IOV BIOS + firmware</strong>
-(<code class="docutils literal notranslate"><span class="pre">SRIOV_EN=True</span></code>, <code class="docutils literal notranslate"><span class="pre">NUM_OF_VFS=1</span></code>)</p></td>
-<td><p>BIOS and NIC firmware settings that enable Virtual Function
-creation on each SuperNIC.</p></td>
+<tr class="row-even"><td><p><strong>SR-IOV enabled in BIOS/UEFI</strong></p></td>
+<td><p>Platform firmware setting that permits Virtual Function creation.
+The NIC-side nvconfig (<code class="docutils literal notranslate"><span class="pre">SRIOV_EN</span></code>, <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS</span></code>, and the
+multiplane parameters) is <strong>not</strong> set here — the NIC Configuration
+Operator derives it from <code class="docutils literal notranslate"><span class="pre">numVfs</span></code> and the Spectrum-X profile. See
+<a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Hugepages</strong></p></td>
-<td><p>Memory backing for OVS-DOCA. 400 MB per SuperNIC from DOCA 3.4
-onwards (1 GB on earlier DOCA).</p></td>
+<td><p>Memory backing for OVS-DOCA: 400 MB per SuperNIC from DOCA 3.4
+onwards (1 GB on earlier DOCA), reserved on the kernel command
+line. <strong>Hardware Multiplane needs a second reservation</strong> for DOCA
+xPlane — at least 150 × 2 MB pages per SuperNIC, provisioned with
+<code class="docutils literal notranslate"><span class="pre">doca-hugepages</span> <span class="pre">config</span> <span class="pre">--app</span> <span class="pre">doca-xplane</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>RDMA namespace exclusive mode</strong>
 (<code class="docutils literal notranslate"><span class="pre">options</span> <span class="pre">ib_core</span> <span class="pre">netns_mode=0</span></code>)</p></td>
@@ -259,7 +292,7 @@ devices into pod network namespaces.</p></td>
 <tr class="row-even"><td><p><strong>DOCA-Host</strong></p></td>
 <td><p>Host-installed NVIDIA OFED kernel modules and DOCA tooling.
 Includes OVS-DOCA (see <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">Virtual switch</span></a> below). Default
-driver path for Spectrum-X RA 2.2 validated deployments.</p></td>
+driver path for Spectrum-X RA 2.3 validated deployments.</p></td>
 </tr>
 </tbody>
 </table>
@@ -267,8 +300,8 @@ driver path for Spectrum-X RA 2.2 validated deployments.</p></td>
 <p class="admonition-title">Important</p>
 <p><strong>DOCA-Host (host-installed)</strong> and the <strong>containerized DOCA-OFED
 driver</strong> (deployed via Network Operator — see
-<a class="reference internal" href="#k8s-driver-layer"><span class="std std-ref">Driver (alternative to host-installed DOCA-Host)</span></a>) are <strong>mutually exclusive</strong>. Choose one per
-node; do not deploy both. Spectrum-X RA 2.2 validated deployments
+<a class="reference internal" href="#k8s-driver-layer"><span class="std std-ref">Driver (containerized)</span></a>) are <strong>mutually exclusive</strong>. Choose one per
+node; do not deploy both. Spectrum-X RA 2.3 validated deployments
 typically use host-installed DOCA-Host.</p>
 </div>
 </section>
@@ -329,40 +362,14 @@ device IDs) as node labels.</p></td>
 </tbody>
 </table>
 </section>
-<section id="driver-alternative-to-host-installed-doca-host">
-<span id="k8s-driver-layer"></span><h3>Driver (alternative to host-installed DOCA-Host)<a class="headerlink" href="#driver-alternative-to-host-installed-doca-host" title="Permalink to this headline"></a></h3>
+<section id="driver-containerized">
+<span id="k8s-driver-layer"></span><h3>Driver (containerized)<a class="headerlink" href="#driver-containerized" title="Permalink to this headline"></a></h3>
 <table class="colwidths-given docutils align-default">
 <colgroup>
-<col style="width: 30%" />
-<col style="width: 50%" />
-<col style="width: 20%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Component</p></th>
-<th class="head"><p>Role</p></th>
-<th class="head"><p>Default</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>DOCA-OFED driver container</strong> (<code class="docutils literal notranslate"><span class="pre">doca-driver</span></code>)</p></td>
-<td><p>Containerized NVIDIA OFED kernel driver. Used <strong>only</strong> when the
-host does not have DOCA-Host installed. See the host
-<a class="reference internal" href="#host-driver"><span class="std std-ref">Driver</span></a> section for the mutual-exclusion rule.</p></td>
-<td><p>Opt-in via <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> on <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="operator">
-<h3>Operator<a class="headerlink" href="#operator" title="Permalink to this headline"></a></h3>
-<p>The operator sub-layer is what Network Operator deploys and reconciles
-when you enable the Spectrum-X bits in <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>.</p>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 45%" />
-<col style="width: 18%" />
-<col style="width: 15%" />
+<col style="width: 24%" />
+<col style="width: 46%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Component</p></th>
@@ -372,27 +379,68 @@ when you enable the Spectrum-X bits in <code class="docutils literal notranslate
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>Network Operator</strong> (umbrella)</p></td>
-<td><p>Reconciles <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> (and <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code>);
-orchestrates all sub-operators, CNIs, and driver lifecycle.</p></td>
-<td><p>Always on.</p></td>
-<td><p>Essential.</p></td>
+<tr class="row-even"><td><p><strong>DOCA-OFED driver container</strong> (<code class="docutils literal notranslate"><span class="pre">doca-driver</span></code>)</p></td>
+<td><p>Containerized NVIDIA DOCA-OFED kernel driver, loaded on the node by
+Network Operator. Mutually exclusive with host-installed
+<a class="reference internal" href="#host-driver"><span class="std std-ref">DOCA-Host</span></a> — choose one per node. On
+<strong>immutable operating systems</strong> such as Red Hat CoreOS, where host
+packages cannot be installed, this is the <strong>only</strong> way to deliver
+DOCA kernel drivers for ConnectX and BlueField hardware, and it
+keeps the driver on the same cloud-native lifecycle as the rest of
+the stack.</p></td>
+<td><p>Opt-in via <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> on <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>.</p></td>
+<td><p>Optional by default; required on immutable hosts.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>SR-IOV Network Operator</strong> (sub-chart)</p></td>
+</tbody>
+</table>
+</section>
+<section id="operator">
+<h3>Operator<a class="headerlink" href="#operator" title="Permalink to this headline"></a></h3>
+<p><strong>NVIDIA Network Operator is the only networking operator you install.</strong>
+It is the entry point for all NVIDIA networking on Kubernetes — RDMA and
+RoCE, InfiniBand, and Spectrum-X alike — and it owns the
+<code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> and <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> APIs through which everything
+else is configured. (GPU workloads additionally use NVIDIA GPU Operator,
+which is installed separately.)</p>
+<p>Everything in the table below is a <strong>sub-operator</strong>: packaged in the
+Network Operator Helm chart, switched on through <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>,
+and version-pinned and reconciled by Network Operator. None of them is
+installed, upgraded, or configured on its own — Spectrum-X is enabled by
+turning the right sub-operators on, not by adding another operator
+alongside Network Operator.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 45%" />
+<col style="width: 18%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Sub-operator</p></th>
+<th class="head"><p>Role</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Spectrum-X relevance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>SR-IOV Network Operator</strong></p></td>
 <td><p>Owns <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> and <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code>; manages VF
-creation, switchdev mode, and ships <strong>OVS-CNI</strong>, <strong>SR-IOV CNI</strong>,
-<strong>RDMA-CNI</strong>, the SR-IOV Device Plugin, and the DRA driver.</p></td>
+creation and switchdev mode, and ships the components the
+Spectrum-X data path uses — <strong>OVS-CNI</strong>, <strong>RDMA-CNI</strong>, the SR-IOV
+Device Plugin, and the DRA driver.</p></td>
 <td><p>Off by default; <strong>on for Spectrum-X</strong>.</p></td>
 <td><p>Essential.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>NIC Configuration Operator</strong></p></td>
+<tr class="row-odd"><td><p><strong>NIC Configuration Operator</strong></p></td>
 <td><p>Owns <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>, <code class="docutils literal notranslate"><span class="pre">NicFirmwareTemplate</span></code>, and
 <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code>; applies firmware and rail-name
-templates to each SuperNIC.</p></td>
+templates to each SuperNIC. Reads NIC tuning from the Spectrum-X
+profile ConfigMap named by <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> — see
+<a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a>.</p></td>
 <td><p>Opt-in.</p></td>
 <td><p>Recommended.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Spectrum-X Operator</strong></p></td>
+<tr class="row-even"><td><p><strong>Spectrum-X Operator</strong></p></td>
 <td><p>Owns <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> and deploys the
 <strong>flow-controller DaemonSet</strong> that programs per-rail OVS flows on
 each host (writing into the OVS-DOCA bridges from the Host Layer).
@@ -401,11 +449,12 @@ Essential for any Spectrum-X mode (single-plane, <code class="docutils literal n
 <td><p>Opt-in via <code class="docutils literal notranslate"><span class="pre">spectrumXOperator</span></code>.</p></td>
 <td><p>Essential.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Maintenance Operator</strong></p></td>
+<tr class="row-odd"><td><p><strong>Maintenance Operator</strong></p></td>
 <td><p>Orchestrates node-maintenance windows (drain / cordon) for safe
 firmware updates and OFED driver upgrades.</p></td>
 <td><p>Opt-in.</p></td>
-<td><p>Optional.</p></td>
+<td><p>Recommended. Enabled in the Spectrum-X reference values
+(<code class="docutils literal notranslate"><span class="pre">maintenanceOperator.enabled:</span> <span class="pre">true</span></code>).</p></td>
 </tr>
 </tbody>
 </table>
@@ -438,10 +487,12 @@ rail / plane).</p></td>
 <td><p>Essential.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>OVS-CNI</strong></p></td>
-<td><p>Plugs SR-IOV VFs into the per-rail OVS bridge (provided by
-<a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">OVS-DOCA</span></a> in the Host Layer) and chains
-with NV-IPAM for address allocation. Shipped under the SR-IOV
-Network Operator sub-chart.</p></td>
+<td><p>Plugs SR-IOV VFs into the rail’s OVS bridge and chains with NV-IPAM
+for address allocation. The bridge itself is created by an operator
+— per-PF by the SR-IOV Network Operator for <code class="docutils literal notranslate"><span class="pre">swplb</span></code> / <code class="docutils literal notranslate"><span class="pre">none</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> by the Spectrum-X Operator for <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — on top
+of the <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">OVS-DOCA</span></a> switch from the Host
+Layer. Shipped under the SR-IOV Network Operator sub-chart.</p></td>
 <td><p>With SR-IOV Op.</p></td>
 <td><p>Essential.</p></td>
 </tr>
@@ -451,38 +502,48 @@ resources.</p></td>
 <td><p>With SR-IOV Op.</p></td>
 <td><p>Essential.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>SR-IOV CNI</strong></p></td>
-<td><p>Standard SR-IOV CNI binary. OVS-CNI is the typical Spectrum-X
-data path; SR-IOV CNI is available for non-OVS deployments.</p></td>
-<td><p>With SR-IOV Op.</p></td>
-<td><p>Alternative.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>RDMA-CNI</strong></p></td>
+<tr class="row-odd"><td><p><strong>RDMA-CNI</strong></p></td>
 <td><p>Moves RDMA devices into the pod network namespace (requires RDMA
-exclusive mode on the host).</p></td>
+exclusive mode on the host) and applies the RDMA QoS values the
+Spectrum-X Operator sets on the generated <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code>. Every
+Spectrum-X rail chains it, so it is not optional in practice.</p></td>
 <td><p>With SR-IOV Op.</p></td>
-<td><p>Optional.</p></td>
+<td><p>Essential.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>NV-IPAM</strong></p></td>
+<tr class="row-even"><td><p><strong>NV-IPAM</strong></p></td>
 <td><p>Rail / plane-aware IP allocation for pods. Consumes <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>
-CRDs and assigns IPs to VFs on pod creation.</p></td>
+CRDs and assigns IPs to VFs on pod creation. Rails normally point
+at a pool with <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code>; <code class="docutils literal notranslate"><span class="pre">railTopology[].ipam</span></code> is an
+advanced alternative for supplying the NV-IPAM block by hand.</p></td>
 <td><p>Opt-in via <code class="docutils literal notranslate"><span class="pre">nvIpam</span></code>.</p></td>
 <td><p>Essential.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Spectrum-X flow-controller DaemonSet</strong></p></td>
+<tr class="row-odd"><td><p><strong>Spectrum-X flow-controller DaemonSet</strong></p></td>
 <td><p>Programs OVS flows on each host so packets are forwarded onto the
 correct rail / plane uplink. Not a separately versioned CNI;
 deployed by Spectrum-X Operator.</p></td>
 <td><p>With Spectrum-X Op.</p></td>
 <td><p>Essential.</p></td>
 </tr>
+<tr class="row-even"><td><p><strong>DOCA xPlane</strong></p></td>
+<td><p>DaemonSet that manages local and remote plane failover inside
+OVS-DOCA: consumes route-availability updates from the Spectrum-X
+fabric, programs the OpenFlow rules that divert traffic away from a
+failed plane, and exposes gRPC telemetry. Deployed by the
+Spectrum-X Operator; its image tag follows the <strong>DOCA</strong> release,
+not the Network Operator version. Currently requires ConnectX-8
+SuperNIC with firmware 40.48.1000 or later. See
+<a class="reference internal" href="#when-xplane-is-deployed"><span class="std std-ref">When DOCA xPlane is deployed</span></a>.</p></td>
+<td><p>With Spectrum-X Op.</p></td>
+<td><p><strong>Required for Hardware Multiplane.</strong></p></td>
+</tr>
 </tbody>
 </table>
 </section>
-<section id="optional-tech-preview">
-<h3>Optional / tech preview<a class="headerlink" href="#optional-tech-preview" title="Permalink to this headline"></a></h3>
-<p>These components are either tech preview in 26.4.0 or strictly optional
-for a Spectrum-X K8s deployment.</p>
+<section id="optional-and-tech-preview">
+<h3>Optional and tech preview<a class="headerlink" href="#optional-and-tech-preview" title="Permalink to this headline"></a></h3>
+<p>These components are optional for a Spectrum-X Kubernetes deployment, or
+are still tech preview.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 25%" />
@@ -496,33 +557,105 @@ for a Spectrum-X K8s deployment.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>DOCA xPlane</strong> sidecar</p></td>
-<td><p>DOCA control-plane container used by the Spectrum-X flow controller
-for <strong>Hardware Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) deployments. Not required
-for single-plane (<code class="docutils literal notranslate"><span class="pre">none</span></code>) or <strong>Software Multiplane</strong> (<code class="docutils literal notranslate"><span class="pre">swplb</span></code>).
-Deployed via the <code class="docutils literal notranslate"><span class="pre">spectrumXOperator.xPlane</span></code> sub-spec on
-<code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>.</p></td>
-<td><p><strong>Tech preview</strong> in 26.4.0; planned GA in 26.7.0 alongside
-<code class="docutils literal notranslate"><span class="pre">hwplb</span></code> GA.</p></td>
+<tr class="row-even"><td><p><strong>SR-IOV DRA driver</strong> (<code class="docutils literal notranslate"><span class="pre">dra-driver-sriov</span></code>)</p></td>
+<td><p>Dynamic Resource Allocation driver for SR-IOV. Enables fine-grained
+VF claims via <code class="docutils literal notranslate"><span class="pre">ResourceClaim</span></code> and <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code>
+objects, and pairs a VF with the GPU behind the same PCIe root.
+Requires Kubernetes 1.34 or later (<code class="docutils literal notranslate"><span class="pre">resource.k8s.io/v1</span></code>); Spectrum-X RA 2.3 requires
+Kubernetes 1.35 or later — see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>. See <a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html"><span class="doc">DRA SR-IOV Driver</span></a>.</p></td>
+<td><p><strong>Tech preview</strong>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>SR-IOV DRA driver</strong> (<code class="docutils literal notranslate"><span class="pre">dra-driver-sriov</span></code>)</p></td>
-<td><p>Dynamic Resource Allocation driver for SR-IOV (Kubernetes 1.32+
-DRA API). Enables fine-grained VF claims via <code class="docutils literal notranslate"><span class="pre">ResourceClaim</span></code> and
-<code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> objects.</p></td>
-<td><p><strong>Tech preview</strong> in 26.4.0.</p></td>
-</tr>
-<tr class="row-even"><td><p><strong>NicNodePolicy</strong> CRD</p></td>
+<tr class="row-odd"><td><p><strong>NicNodePolicy</strong> CRD</p></td>
 <td><p>Per-node-group DOCA-OFED driver management — supersedes the
-cluster-wide <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> setting for heterogeneous clusters.</p></td>
-<td><p>New in 26.4.0.</p></td>
+cluster-wide <code class="docutils literal notranslate"><span class="pre">ofedDriver</span></code> setting. Use it when one cluster mixes
+node types with different NIC hardware, driver versions, or
+configurations. Spectrum-X reference-architecture deployments are
+homogeneous, so a single <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> is sufficient; check
+the Spectrum-X documentation for your Reference Architecture before
+mixing node types. See <a class="reference internal" href="../customizations/nic-node-policy.html"><span class="doc">NicNodePolicy</span></a>.</p></td>
+<td><p><strong>GA.</strong> Optional for Spectrum-X.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>DOCA Telemetry Service</strong></p></td>
+<tr class="row-even"><td><p><strong>DOCA Telemetry Service</strong></p></td>
 <td><p>Host telemetry exporter for OVS, RDMA, and SuperNIC statistics.</p></td>
 <td><p>Opt-in.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
+</section>
+<section id="what-the-spectrum-x-operator-configures">
+<h2>What the Spectrum-X Operator configures<a class="headerlink" href="#what-the-spectrum-x-operator-configures" title="Permalink to this headline"></a></h2>
+<p>Beyond creating CRDs, the Spectrum-X Operator applies SR-IOV and host
+settings on your behalf. Do not configure these by hand — the operator
+reconciles them, and manual changes are overwritten.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 48%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Setting</p></th>
+<th class="head"><p>What it does</p></th>
+<th class="head"><p>Applied when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flow_steering_mode=hmfs</span></code></p></td>
+<td><p>devlink parameter enabling hardware-managed flow steering on each
+PF, written through the <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> the operator
+generates.</p></td>
+<td><p>Every Spectrum-X rail, all multiplane modes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">esw_multiport=true</span></code></p></td>
+<td><p>devlink parameter putting the PF e-switch into multiport mode, so a
+single e-switch spans the rail’s planes.</p></td>
+<td><p>Hardware Multiplane only.</p></td>
+</tr>
+<tr class="row-even"><td><p>eSwitch mode <code class="docutils literal notranslate"><span class="pre">switchdev</span></code></p></td>
+<td><p>Required for VF representors and OVS offload.</p></td>
+<td><p>Every Spectrum-X rail.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>OVS bridge</strong></p></td>
+<td><p>For <code class="docutils literal notranslate"><span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">none</span></code>, a per-PF bridge created by the SR-IOV
+Network Operator (<code class="docutils literal notranslate"><span class="pre">GroupingPolicy:</span> <span class="pre">perPF</span></code>, datapath <code class="docutils literal notranslate"><span class="pre">netdev</span></code>,
+uplink type <code class="docutils literal notranslate"><span class="pre">doca</span></code>) — this is what the <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code>
+feature gate enables. For <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code>, created by the
+Spectrum-X Operator.</p></td>
+<td><p>Every Spectrum-X rail.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>RDMA QoS meta-plugin</strong></p></td>
+<td><p>The generated <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code> chains the RDMA CNI with
+<code class="docutils literal notranslate"><span class="pre">rdmaQoS:</span> <span class="pre">{tos:</span> <span class="pre">96,</span> <span class="pre">tc:</span> <span class="pre">96}</span></code> and names the Pod’s RDMA device
+<code class="docutils literal notranslate"><span class="pre">rdma_&lt;rail</span> <span class="pre">topology</span> <span class="pre">name&gt;</span></code>.</p></td>
+<td><p>Every Spectrum-X rail.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>VRF meta-plugin</strong></p></td>
+<td><p>Isolates each rail in its own VRF, named after the rail topology
+entry. Inspect routes with <code class="docutils literal notranslate"><span class="pre">ip</span> <span class="pre">-6</span> <span class="pre">route</span> <span class="pre">show</span> <span class="pre">vrf</span> <span class="pre">&lt;rail&gt;</span></code>.</p></td>
+<td><p>Rails whose <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code> resolves to an IPv6 <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>. The
+operator reads the address family from the referenced pool, so a
+rail that supplies its NV-IPAM block inline through
+<code class="docutils literal notranslate"><span class="pre">railTopology[].ipam</span></code> does not get a VRF.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>OVS safe-start drop-in</strong></p></td>
+<td><p>Installs <code class="docutils literal notranslate"><span class="pre">/var/lib/spectrum-x/xplane-ovs-safe-start.sh</span></code> and an
+<code class="docutils literal notranslate"><span class="pre">ExecStartPre</span></code> drop-in at
+<code class="docutils literal notranslate"><span class="pre">/etc/systemd/system/ovs-vswitchd.service.d/20-xplane-safe-start.conf</span></code>.
+On OVS start it removes any xPlane uplink whose PF has not yet
+entered switchdev mode, so OVS never comes up with a
+half-configured uplink.</p></td>
+<td><p>Hardware Multiplane only.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The DOCA XPlane Service Guide documents the devlink and eSwitch steps
+as manual <code class="docutils literal notranslate"><span class="pre">devlink</span></code> commands for bare-metal hosts. In a Kubernetes
+deployment the Spectrum-X Operator performs them for you — follow this
+page rather than the bare-metal procedure.</p>
+</div>
 </section>
 <section id="dependencies-and-ordering">
 <h2>Dependencies and ordering<a class="headerlink" href="#dependencies-and-ordering" title="Permalink to this headline"></a></h2>
@@ -543,10 +676,44 @@ per node; do not deploy both.</p></li>
 <li><p><strong>OVS-CNI</strong> (Kubernetes Layer) plugs VFs into OVS bridges provided by
 <strong>OVS-DOCA</strong> (Host Layer). OVS-DOCA must be present on each node before
 the Kubernetes Layer can program rail / plane flows.</p></li>
-<li><p><strong>DOCA xPlane</strong> is required only when <code class="docutils literal notranslate"><span class="pre">multiplaneMode:</span> <span class="pre">hwplb</span></code> is set
-on the <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>. For single-plane and Software
-Multiplane deployments, the flow controller runs without xPlane.</p></li>
 </ul>
+<section id="when-doca-xplane-is-deployed">
+<span id="when-xplane-is-deployed"></span><h3>When DOCA xPlane is deployed<a class="headerlink" href="#when-doca-xplane-is-deployed" title="Permalink to this headline"></a></h3>
+<p>The Spectrum-X Operator deploys the xPlane DaemonSet <strong>per rail topology
+entry that selects more than one PF</strong> — that is, when
+<code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig.railTopology[].nicSelector.pfNames</span></code> lists two or
+more PFs. It does <strong>not</strong> read <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: that field lives on
+<code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>, which a different operator owns.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 45%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Rail topology shape</p></th>
+<th class="head"><p>DOCA xPlane</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>One entry per rail, listing every plane’s PF</p></td>
+<td><p>Deployed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>One entry per rail-plane, a single PF each</p></td>
+<td><p>Not deployed</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>One entry per rail, a single PF</p></td>
+<td><p>Not deployed</p></td>
+</tr>
+</tbody>
+</table>
+<p>Before creating the <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> bridge, the operator waits for the
+selected PFs to enter switchdev mode.</p>
+</section>
 </section>
 <section id="further-reading">
 <h2>Further reading<a class="headerlink" href="#further-reading" title="Permalink to this headline"></a></h2>
@@ -572,7 +739,7 @@ table in <a class="reference internal" href="../platform-support.html"><span cla
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Aug 23, 2026.
+      <span class="lastupdated">Last updated on Aug 31, 2026.
       </span></p>
   </div>
 
