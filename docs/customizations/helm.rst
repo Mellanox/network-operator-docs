@@ -97,6 +97,10 @@ General Parameters
      - string
      - `"/etc/cni/net.d"`
      - Directory, where CNI network configuration will be deployed on the nodes. Note that the CNI network directory should be aligned with the CNI network directory in the container runtime.
+   * - operator.coverage
+     - object
+     - `{"enabled":false}`
+     - Enable Go integration coverage collection (GOCOVERDIR, coverage volume, instrumented image tag).
    * - operator.fullnameOverride
      - string
      - `""`
@@ -127,11 +131,11 @@ General Parameters
      - Init container image name.
    * - operator.ofedDriver.initContainer.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/mellanox"`
      - Init container image repository.
    * - operator.ofedDriver.initContainer.version
      - string
-     - `"network-operator-v26.7.0-rc.2"`
+     - `"network-operator-v26.7.0"`
      - Init container image version.
    * - operator.preStopSleepSeconds
      - int
@@ -143,7 +147,7 @@ General Parameters
      - Priority class for the operator controller. ``system-node-critical`` keeps the controller in the same graceful node shutdown phase as MOFED so it can update ``network.nvidia.com/operator.mofed.wait`` before the node goes down. See https://github.com/Mellanox/network-operator/issues/2954.
    * - operator.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/cloud-native"`
      - Network Operator image repository.
    * - operator.resources
      - yaml
@@ -259,11 +263,11 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      -
    * - node-feature-discovery.image.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox/node-feature-discovery"`
+     - `"nvcr.io/nvidia/mellanox/node-feature-discovery"`
      -
    * - node-feature-discovery.image.tag
      - string
-     - `"network-operator-v26.7.0-rc.2"`
+     - `"network-operator-v26.7.0"`
      -
    * - node-feature-discovery.master
      - yaml
@@ -325,19 +329,19 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/ib-sriov-cni:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/ovs-cni-plugin:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.rdmaCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/rdma-cni:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
@@ -345,23 +349,23 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-cni:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-device-plugin:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.sriovDraDriver
      - string
-     - `"nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/dra-driver-sriov:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0-rc.2"`
+     - `"nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:network-operator-v26.7.0"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -488,11 +492,11 @@ Maintenance Operator Helm chart customization options can be found `here <https:
      -
    * - maintenance-operator-chart.operator.image.repository
      - string
-     - `"nvcr.io/nvstaging/mellanox"`
+     - `"nvcr.io/nvidia/mellanox"`
      -
    * - maintenance-operator-chart.operator.image.tag
      - string
-     - `"network-operator-v26.7.0-rc.2"`
+     - `"network-operator-v26.7.0"`
      -
    * - maintenance-operator-chart.operatorConfig
      - object
