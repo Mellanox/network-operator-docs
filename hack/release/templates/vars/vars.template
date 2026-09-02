@@ -4,6 +4,14 @@
 .. |doca-driver-version| replace:: {{ .Mofed.Version }}
 .. |doca-driver-repository| replace:: {{ .Mofed.Repository }}
 .. |doca-driver-version-lts| replace:: doca3.2.2-25.10-2.4.1.0-4
+.. |doca-driver-version-min| replace:: doca3.1.0-25.07-0.9.7.0-0
+.. |gpu-operator-version-min| replace:: v25.3.x
+{{/* xPlane is held static pending the DOCA 3.6 / NetOp 26.10 redesign (WIP).
+     release.yaml already carries xPlaneService{repository,version}; convert these
+     two to {{ .XPlaneService.* }} once the shape settles, which also needs an
+     XPlaneService field adding to the Release struct in hack/release/release.go. */ -}}
+.. |xplane-repository| replace:: nvcr.io/nvstaging/doca
+.. |xplane-version| replace:: 3.5.0035
 .. |doca-workload-image| replace:: nvcr.io/nvidia/doca/doca:3.1.0-full-rt-host
 .. |doca-driver-repository-stig| replace:: {{ .MofedStigFips.Repository }}
 .. |doca-driver-version-stig| replace:: {{ .MofedStigFips.Version }}
