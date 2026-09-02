@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: macvlan-rdma-server
+  namespace: default
+  labels:
+    app: macvlan-rdma
+    role: server
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan-network
+spec:
+  restartPolicy: Never
+  containers:
+  - name: rdma-test
+    image: |doca-workload-image|
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_a: "1"
+      limits:
+        rdma/rdma_shared_device_a: "1"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: macvlan-rdma-client
+  namespace: default
+  labels:
+    app: macvlan-rdma
+    role: client
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan-network
+spec:
+  restartPolicy: Never
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - server
+        topologyKey: kubernetes.io/hostname
+  containers:
+  - name: rdma-test
+    image: |doca-workload-image|
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    securityContext:
+      capabilities:
+        add: ["IPC_LOCK"]
+    resources:
+      requests:
+        rdma/rdma_shared_device_a: "1"
+      limits:
+        rdma/rdma_shared_device_a: "1"
