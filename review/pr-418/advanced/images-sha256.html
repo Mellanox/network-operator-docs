@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NVIDIA Network Operator Container Images &mdash; NVIDIA Network Operator v26.4.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Troubleshooting" href="../troubleshooting/troubleshooting.html" />
+    <link rel="prev" title="Advanced Configurations" href="advanced-configurations.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced.html">Advanced Configurations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="proxy-airgapped.html">Proxy &amp; Air-gapped</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doca-drivers.html">DOCA-OFED Driver Container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="advanced-configurations.html">Other Advanced Configurations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Container Images Digests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#doca-ofed-driver-container-images">DOCA-OFED Driver Container Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rhcos">RHCOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rhel">RHEL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sles">SLES</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stig-fips-compliant-doca-ofed-driver-container-images">STIG FIPS Compliant DOCA-OFED Driver Container Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Ubuntu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">RHEL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="advanced.html">Advanced Configurations</a> &raquo;</li>
+<li>NVIDIA Network Operator Container Images</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nvidia-network-operator-container-images">
+<span id="container-images-digest"></span><h1>NVIDIA Network Operator Container Images<a class="headerlink" href="#nvidia-network-operator-container-images" title="Permalink to this headline"></a></h1>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Repository</p></th>
+<th class="head"><p>Image Name</p></th>
+<th class="head"><p>Tag</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>network-operator</p></td>
+<td><p>v26.4.2-rc.1</p></td>
+<td><p>sha256:42ad621266c9946e00daa1664c52cfada54fbf7c605dc5f5c4d93c9b9e873e97</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>network-operator-init-container</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:d5e3659e7913cbdd896f0b462019c66dede02cde7d8045b2fbc32e4efca79bc5</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>k8s-rdma-shared-dev-plugin</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:59d1f8f86f564b2b109fe6b5634f0a1c39ab1a0e6f367f658e5c70ad9f6df24e</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>ib-kubernetes</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:21c6229a3f7ce0bdd64c12ebc2963de3d33d4091cf275f2b988c0bb619ad2639</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>ipoib-cni</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:e6166f5d6c8c4e723e9737b997ad2fa9fc6c21b82094e9e74002626080e4d3bc</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>nvidia-k8s-ipam</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:f39a190662ccc46473c6b26df723f14835a2cb8a9f0304ca90c28563fa5b6adc</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>nic-feature-discovery</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:3b98c54798889d8a93e1061d63b5049be8a0c50695663e7bffbee30be80619c4</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvidia/doca</p></td>
+<td><p>doca_telemetry</p></td>
+<td><p>1.25.5-doca3.4.0-host</p></td>
+<td><p>sha256:e728430bdde27bc0f2e57cedb83814f21d23113385328034af9727e900724d09</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:19d050d68d502b2dfaa44e9da3c6ebca043f16526c3726076eac46c01a8ae5c9</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator-webhook</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:8339a19e41fbfc800e5a5c6a0a7b52af234a8ffb581a3ca13fd703693e159349</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-operator-config-daemon</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:80e56f45b8fe4ad1d3c757e2ce436552baf43fb3c5cd65b9d9e145470697b4dc</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-network-device-plugin</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:ad58ea01765989bf9abd2b69018af6cfef5afb34224b75e270d56d6aa0bfebf0</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>sriov-cni</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:af2057083e949be330dddb9e1ccdfd30175065b447445dda280d2b239a77e26d</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>ib-sriov-cni</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:14363d4799e9b7f4b7a2851234b636729fad6c223b1a536b783a9012375f38d5</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>dra-driver-sriov</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:2e8ef28bc99fd362ab2ec1a5ddd884561bd46061c0f1310dbc7e17ee5d64dfbf</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>plugins</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:7dce9b2d8b17823af2066d53c8420d9777e7427aea24d166740b477090dcae31</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>multus-cni</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:2d211ab8d0acba223caa0fc19d4116f890698d8510c3196c887af39501ef942d</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>ovs-cni-plugin</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:4bf7a90faf33e06d83a588c3afb15b5568c15a35a825c92b95dae0324fbacd3c</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>rdma-cni</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:42c91453b8698a5592bb1f159ab3c6274853f904bd582b463120a20e43c72afd</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>nic-configuration-operator</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:22f528ac1ca88402aebe24dd1c55813cdab29cb70516eaa2ba057da358436561</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>nic-configuration-operator-daemon</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:593ba6ab84944ec07c411fb80c9db1969eb3be5363e565327fe6fa9f15c18fe9</p></td>
+</tr>
+<tr class="row-odd"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>maintenance-operator</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:28f3d3b49b79858ad39a2f11111357c62258e0041ff699c0e4542b86ee342ae9</p></td>
+</tr>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>spectrum-x-operator</p></td>
+<td><p>network-operator-v26.4.2-rc.1</p></td>
+<td><p>sha256:68f82683cffa529ae86aa8d16083762c68327aeda43206acde28031cf6d6d83f</p></td>
+</tr>
+</tbody>
+</table>
+<section id="doca-ofed-driver-container-images">
+<h2>DOCA-OFED Driver Container Images<a class="headerlink" href="#doca-ofed-driver-container-images" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Repository</p></th>
+<th class="head"><p>Image Name</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>doca-driver</p></td>
+<td><p>doca3.4.1-26.04-1.1.0.0-1</p></td>
+</tr>
+</tbody>
+</table>
+<p>The followings tags are available for the above DOCA-OFED Driver container version:</p>
+<section id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-5.15.0-186-generic-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:47a6fb4c03e2d615922b2e2f062294054e4941f0edc757df248a060b50c4c609</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-5.15.0-186-generic-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:86d90b354234628e2bd3da28941a1dfdf90d225ef35263ec73fe52acae993a25</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.17.0-1018-oracle-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:948878edf174fa9385286a8c7f8cce56c03b3cb57a1b7145f4e5441b8b6b3976</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.17.0-1018-oracle-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:4f4d7cb58c6c187aa8196a79c37e72977b315376bd3402fc3da96422ccd4ca5e</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1058-oracle-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:4e6809fef7bdbd4caa4a41f9e18e9707bdbcde7420cddaf9578dca7900bd71b7</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1058-oracle-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:a529fdbcd997f98233a90b87bfe84aa4c2af0c924160dcee80cd2e371431ed17</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1059-nvidia-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:7302810208ed93a20e4190e3ff06192a134802fcda7740a5638ee93093320c49</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1059-nvidia-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:0e56966dcaf0d910e7852b549a84b65db3c0aa27b846206ba4f575ab2013839f</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1060-aws-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:db0dda46ccd375a9d995ebeb01070624db6dad9ddefcdf2f33ea5b633b74a5f0</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1060-aws-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:ccc8a894291eae350f8d4c56bdcaf68221a420b559de9066a4782c9881191219</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1062-azure-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:e96d634f000fd0fb1154877d92f983bab849f26e1801a31104ed9e99fec2afd9</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-1062-azure-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:03cce9c7eb096ae90c7e51c34f6869938d6e566cc1eb5a63921dbd0bcd69ef9c</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-136-generic-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:0423624781c6c2e4c1e1a4cb708d33616398fb4f18132ff7276b9c7f3555fdd9</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-6.8.0-136-generic-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:4719bae5270c8682180c61edd86651055fb4a714fa39cdc8529793257e2a9414</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1007-aws-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:9db49f50d510a8c9b8d10e852045e7de97904d962ab80010d2f6f0473cb7227e</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1007-aws-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:6d5634d211c4464e28484210379eadafe332f9cc9f1dea4eae9933c82776c64f</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1008-azure-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:d44d884e45203fa6b619d4322b662a1b1563a64309a33a00fb8f7c3e3df9511a</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1008-azure-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:03ac5f7bc8fb6aae9cb3c62f83a57bd7015344a5cd3f09aa4068751a9bd1dc48</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1013-nvidia-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:96dc7189d22c5fcbda4a6cc5e3230c8596df13e7c0155a6588454f296f8d51b1</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-7.0.0-1013-nvidia-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:614009dad9d39e6f6a95a7f287c67e119cd5bb8418f3ee620f1809a6fa33205a</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu22.04</div>
+</div>
+</td>
+<td><p>sha256:52a800dce5fba7e0ccf5ce27357219cd5bee42f5829e92cbddce47cda105a06b</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu22.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:015ae0c39d5fe8ced57f66e369f0d1c0ba77e6f83817489b3d15a2697f5a9ebe</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu22.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:f0a16e01d47cd928692092b500ce8b2e5401a73884bca8b4a8b841b7e5acd04c</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu24.04</div>
+</div>
+</td>
+<td><p>sha256:35d467f5edd785a26c8a4d854a03e1652a5933f8ebcc85681abcf6beb57eb5f8</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:edce1f95a5778cd6a36c13ebb4b87fc43b61ede5d4dc0489e56cfa9ae37fa0c3</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu24.04-arm64</div>
+</div>
+</td>
+<td><p>sha256:c802335d23793c12347fae05adcadc4de5bff556d7c1d9f3eb1fa2fce1ad1061</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rhcos">
+<h3>RHCOS<a class="headerlink" href="#rhcos" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.16-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.17-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.18-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.19-amd64</div>
+</div>
+</td>
+<td><p>sha256:8c21373355eebfb0127fb6c19efb5a59ce878e636afddeaf186f238b68b394ea</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.16-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.17-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.18-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.19-arm64</div>
+</div>
+</td>
+<td><p>sha256:087d6ca78ff0ff1ca0446e80c093185cdf06976df757db74ff9f3453c8e3a7fd</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhcos4.19</div>
+</div>
+</td>
+<td><p>sha256:a18c0cd1e2eaeafc17fb08c9ea688d191b865323f7fddf481d9a69a09700ee47</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rhel">
+<h3>RHEL<a class="headerlink" href="#rhel" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.0</div>
+</div>
+</td>
+<td><p>sha256:20abc3255ccb361948cdd4b2a9bb0e8c9d61d7c9bbe1cc91710841c7cd22a8a4</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.0-amd64</div>
+</div>
+</td>
+<td><p>sha256:b15772d84e982ba4e83e772405d9ea71c80dc92bee7064fdc5725e88ff046fef</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.0-arm64</div>
+</div>
+</td>
+<td><p>sha256:4bbb1726299e9df97fa43c2a067670f30ca9e13f301b78d426b1910b51b9a825</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.2</div>
+</div>
+</td>
+<td><p>sha256:45a8ee2aa1a6cbc3799262aa849132b2f6848ea685d9ddc7a2b255b6093cdef8</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.2-amd64</div>
+</div>
+</td>
+<td><p>sha256:6bd61a20b45e22ceacac6da16fb04512c494ecf37878505d8cbd67a6ea178dae</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel10.2-arm64</div>
+</div>
+</td>
+<td><p>sha256:092424661028fd9c1d8fcdc5fab79136952211a66d7f096c574f97973216e034</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.10</div>
+</div>
+</td>
+<td><p>sha256:e247096ca295df158a0b1622e64db6a31f22bc5b85ef38aa9a711a5b38477642</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.10-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.6-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.8-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.9-amd64</div>
+</div>
+</td>
+<td><p>sha256:df9d3e99ca8ef8cb9188ae9c858d5eb32a480733f6b70d0fba1cb813cbc10f25</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.10-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.6-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.8-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel8.9-arm64</div>
+</div>
+</td>
+<td><p>sha256:32e2855ade034b7be6b04de7033c1c6764e5e6afb665a7e6ffa786b90c1f53d0</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.0-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.2-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.3-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.4-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.5-amd64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.6-amd64</div>
+</div>
+</td>
+<td><p>sha256:73e37500c6224b9807b3f7814b72d81ec2b5708cdb9e6264007910c8f409c0bd</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.0-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.2-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.3-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.4-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.5-arm64</div>
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.6-arm64</div>
+</div>
+</td>
+<td><p>sha256:559ff08d3f0fbf72bb300f87e7782aacd1e90ab8b1d80c78235f6478d8d8e77a</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.6</div>
+</div>
+</td>
+<td><p>sha256:8c7444effcf5192e793ddcdbdeeb5cdb21f3ed7a2f33e8e0194bd698c341ce84</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.8</div>
+</div>
+</td>
+<td><p>sha256:90646ee7d6df775d6afaf48fd918ae46075719d286eb6e503e2354ba3cb3628a</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.8-amd64</div>
+</div>
+</td>
+<td><p>sha256:08946c3bc681506f5b08557bed9b19683d225569aa835dd6f2dace7461e30e61</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.8-arm64</div>
+</div>
+</td>
+<td><p>sha256:0c5d7f07d8aa8331745739be21563e3faa67bd914bc055c63cc5aeb8577b4aaa</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sles">
+<h3>SLES<a class="headerlink" href="#sles" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-sles15.7</div>
+</div>
+</td>
+<td><p>sha256:c258af17ed2aa572bd6b2fb3a8dd4245c1f1f469f9b7c1a6a150316cca53968d</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-sles15.7-amd64</div>
+</div>
+</td>
+<td><p>sha256:721656effacc772748693fd7087e5d313a1707d35c9b9ca14782ff748cff9d66</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-sles15.7-arm64</div>
+</div>
+</td>
+<td><p>sha256:048468221ba0664e1e8fba9daf0d9be0dca00952a80cc3dd3dbc022b11112d58</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="stig-fips-compliant-doca-ofed-driver-container-images">
+<h2>STIG FIPS Compliant DOCA-OFED Driver Container Images<a class="headerlink" href="#stig-fips-compliant-doca-ofed-driver-container-images" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Repository</p></th>
+<th class="head"><p>Image Name</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>nvcr.io/nvstaging/mellanox</p></td>
+<td><p>doca-driver-stig-fips</p></td>
+<td><p>doca3.4.1-26.04-1.1.0.0-1</p></td>
+</tr>
+</tbody>
+</table>
+<p>The followings tags are available for the above STIG FIPS Compliant DOCA-OFED Driver container version:</p>
+<section id="id1">
+<h3>Ubuntu<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-ubuntu24.04-amd64</div>
+</div>
+</td>
+<td><p>sha256:23d6bd67ae83f1d720a562dff3a94ca8e1c476d44ad3e3a0e88cba5cda67306b</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h3>RHEL<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tags</p></th>
+<th class="head"><p>Digest</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="line-block">
+<div class="line">doca3.4.1-26.04-1.1.0.0-1-rhel9.6-amd64</div>
+</div>
+</td>
+<td><p>sha256:648b0c3664c8111a7572d1996dbab2be2ea55f6609a75f0f9d78e640b29ae4c8</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Sep 03, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
