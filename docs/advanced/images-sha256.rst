@@ -62,8 +62,8 @@ NVIDIA Network Operator Container Images
      - sha256:c17e530aba4fa28c0403de72fd3b5b05638e8aa74f456d53527df89b2f4a6a52
    * - nvcr.io/nvidia/doca
      - doca_telemetry
-     - 1.25.5-doca3.4.0-host
-     - sha256:e728430bdde27bc0f2e57cedb83814f21d23113385328034af9727e900724d09
+     - 1.26.5-doca3.5.0-host
+     - sha256:3ec2bb66428e5a6c7137ed9680c03dba03618b03521d92bdcbdb2d7e2e53e029
    * - nvcr.io/nvidia/mellanox
      - sriov-network-operator
      - network-operator-v26.7.0
