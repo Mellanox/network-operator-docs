@@ -5,12 +5,12 @@ metadata:
 spec:
   ofedDriver:
     image: doca-driver
-    repository: |doca-driver-repository|
-    version: |doca-driver-version|
+    repository: $DOCA_DRIVER_REPOSITORY
+    version: $DOCA_DRIVER_VERSION
   rdmaSharedDevicePlugin:
     image: k8s-rdma-shared-dev-plugin
-    repository: |k8s-rdma-shared-dev-plugin-repository|
-    version: |k8s-rdma-shared-dev-plugin-version|
+    repository: $K8S_RDMA_SHARED_DEV_PLUGIN_REPOSITORY
+    version: $K8S_RDMA_SHARED_DEV_PLUGIN_VERSION
     config: |
       {
         "configList": [
@@ -39,20 +39,20 @@ spec:
       }
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: |nvidia-ipam-repository|
-    version: |nvidia-ipam-version|
+    repository: $NVIDIA_IPAM_REPOSITORY
+    version: $NVIDIA_IPAM_VERSION
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: |cni-plugins-repository|
-      version: |cni-plugins-version|
+      repository: $CNI_PLUGINS_REPOSITORY
+      version: $CNI_PLUGINS_VERSION
     multus:
       image: multus-cni
-      repository: |multus-repository|
-      version: |multus-version|
+      repository: $MULTUS_REPOSITORY
+      version: $MULTUS_VERSION
     ipoib:
       image: ipoib-cni
-      repository: |ipoib-cni-repository|
-      version: |ipoib-cni-version|
+      repository: $IPOIB_CNI_REPOSITORY
+      version: $IPOIB_CNI_VERSION
