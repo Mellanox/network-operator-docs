@@ -21,7 +21,8 @@ ConfigurationTemplateSpec
 
 (*Appears on:* :ref:`NicConfigurationTemplateSpec <NicConfigurationTemplateSpec>`, :ref:`NicDeviceConfigurationSpec <NicDeviceConfigurationSpec>`)
 
-ConfigurationTemplateSpec is a set of configurations for the NICs
+ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): HIGH PRIORITY – remove the next two temporary restrictions ASAP once DMS can report typed-plan native parameter
+ownership or validate combined typed/raw state.
 
 .. container:: md-typeset__scrollwrap
 
@@ -49,20 +50,19 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | ``runtimePerformanceOptimized``                                                                   | Runtime NIC performance tuning (ring buffers, channels, LRO) applied via ethtool                  |
       | :ref:`RuntimePerformanceOptimizedSpec <RuntimePerformanceOptimizedSpec>`                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==1. RawNvConfig    |
-      | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | parameters, if provided, are merged as overrides on top of Spectrum-X calculated params.          |
+      | ``spectrumXOptimized``                                                                            | Spectrum-X optimization settings. Works only with linkType==Ethernet && numVfs==1. Temporarily    |
+      | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | cannot be combined with rawNvConfig or networkBay.                                                |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``networkBay``                                                                                    | *(Optional)*                                                                                      |
-      | :ref:`NetworkBaySpec <NetworkBaySpec>`                                                            | NetworkBay configures a ConnectX-9 Network Bay card (per-ASIC set_system_conf). Allowed only for  |
-      |                                                                                                   | ConnectX-9 (nicType 1025).                                                                        |
+      | :ref:`NetworkBaySpec <NetworkBaySpec>`                                                            | NetworkBay configures a ConnectX-9 Network Bay card from a per-ASIC mlxconfig system profile.     |
+      |                                                                                                   | Allowed only for ConnectX-9 (nicType 1025).                                                       |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rawNvConfig``                                                                                   | List of arbitrary nv config parameters                                                            |
       | :ref:`[]NvConfigParam <NvConfigParam>`                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``force``                                                                                         | *(Optional)*                                                                                      |
-      | bool                                                                                              | Force passes ``--force`` to mlxconfig set commands. When set, the daemon applies the nv config    |
-      |                                                                                                   | batch and set_system_conf with –force, letting mlxconfig accept a batch it would otherwise refuse |
-      |                                                                                                   | due to implicit parameter dependencies.                                                           |
+      | bool                                                                                              | Force passes ``--force`` to mlxconfig set commands, letting mlxconfig accept a batch it would     |
+      |                                                                                                   | otherwise refuse due to implicit parameter dependencies.                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _ECNSpec:
@@ -160,9 +160,9 @@ Allowed only when nicSelector.nicType == “1025” (ConnectX-9), enforced by CE
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``conf``                                                                                          | Conf is the argument passed to ``mlxconfig set_system_conf``. The per-ASIC index is appended      |
-      | string                                                                                            | automatically by the daemon based on the device’s detected Network Bay ASIC index, e.g.           |
-      |                                                                                                   | set_system_conf [0].                                                                              |
+      | ``conf``                                                                                          | Conf is the mlxconfig system configuration profile name. The daemon resolves the profile          |
+      | string                                                                                            | parameters for the device’s detected Network Bay ASIC and manages them through the regular        |
+      |                                                                                                   | mlxconfig validation and apply flow.                                                              |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicConfigurationTemplate:
@@ -488,8 +488,9 @@ NicFirmwareSourceSpec represents a list of url sources for FW
       | string                                                                                            | BFBUrlSource represents a url source for BlueField Bundle                                         |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``docaSpcXCCUrlSource``                                                                           | *(Optional)*                                                                                      |
-      | string                                                                                            | DocaSpcXCCUrlSource represents a url source for DOCA SPC-X CC .deb package for ubuntu 22.04 Will  |
-      |                                                                                                   | be removed in the future, once Doca SPC-X CC algorithm will be publicly available                 |
+      | string                                                                                            | DocaSpcXCCUrlSource represents a URL source for a DOCA SPC-X CC .deb package. Deprecated: the     |
+      |                                                                                                   | doSPCX runtime path launches the doca_spcx_cc binary preinstalled in the NIC Configuration Daemon |
+      |                                                                                                   | image. A package supplied here is not installed or selected.                                      |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareSourceStatus:
@@ -520,8 +521,9 @@ NicFirmwareSourceStatus represents the status of the FW from given sources, e.g.
       | ``bfbVersions``                                                                                   | BFBVersions represents the FW versions available in the provided BFB bundle                       |
       | map[string]string                                                                                 |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``docaSpcXCCVersion``                                                                             | DocaSpcXCCVersion represents the FW versions available in the provided DOCA SPC-X CC .deb package |
-      | string                                                                                            | for ubuntu 22.04                                                                                  |
+      | ``docaSpcXCCVersion``                                                                             | DocaSpcXCCVersion represents the version found in a deprecated DocaSpcXCCUrlSource package.       |
+      | string                                                                                            | Deprecated: this value does not select the doca_spcx_cc binary used by doSPCX runtime             |
+      |                                                                                                   | configuration.                                                                                    |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareTemplate:
@@ -883,14 +885,17 @@ SpectrumXOptimizedSpec enables Spectrum-X specific optimizations
       | ``enabled``                                                                                       | Optimize Spectrum X                                                                               |
       | bool                                                                                              |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``version``                                                                                       | Version of the Spectrum-X architecture to optimize for. Should match the name of the config map   |
-      | string                                                                                            | with Spectrum-X profile                                                                           |
+      | ``version``                                                                                       | Version of the Spectrum-X architecture passed to the doSPCX planner.                              |
+      | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``platformType``                                                                                  | *(Optional)*                                                                                      |
+      | string                                                                                            | Platform type used by the doSPCX planner to select a recipe from the supplied profile.            |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``overlay``                                                                                       | *(Optional)*                                                                                      |
       | string                                                                                            | Overlay mode to be configured Can be “l3” or “none”                                               |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``multiplaneMode``                                                                                | *(Optional)*                                                                                      |
-      | string                                                                                            | Multiplane mode to be configured Can be “none”, “swplb”, “hwplb”, or “uniplane”                   |
+      | string                                                                                            | Multiplane mode to be configured Can be “none”, “swplb”, or “hwplb”                               |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``numberOfPlanes``                                                                                | *(Optional)*                                                                                      |
       | int                                                                                               | Number of planes to be configured                                                                 |
