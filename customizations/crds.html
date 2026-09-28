@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v26.7.0 documentation</title>
+  <title>Network Operator API reference v1alpha1 &mdash; NVIDIA Network Operator v26.10.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -88,6 +88,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#macvlannetwork">MacvlanNetwork</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#macvlannetworkspec">MacvlanNetworkSpec</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#macvlannetworkstatus">MacvlanNetworkStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multusdeploymenttype-string-alias">MultusDeploymentType (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multusspec">MultusSpec</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nicfeaturediscoveryspec">NICFeatureDiscoverySpec</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nvipamspec">NVIPAMSpec</a></li>
@@ -204,7 +205,7 @@ string</p></td>
 </section>
 <section id="configmapnamereference">
 <span id="id4"></span><h3>ConfigMapNameReference<a class="headerlink" href="#configmapnamereference" title="Permalink to this headline"></a></h3>
-<p>(<em>Appears on:</em> <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationoperatorspec"><span class="std std-ref">NicConfigurationOperatorSpec</span></a>, <a class="reference internal" href="#ofeddriverspec"><span class="std std-ref">OFEDDriverSpec</span></a>)</p>
 <p>ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
@@ -282,6 +283,14 @@ ConfigMap must be in the same namespace as the NICClusterPolicy.</p></td>
 <td><p><em>(Optional)</em>
 Config contains custom config for the DOCATelemetryService. If set no default config will be
 deployed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shareHostSharedMemory</span></code>
+bool</p></td>
+<td><p><em>(Optional)</em>
+ShareHostSharedMemory backs the shared memory used for IPC with the host’s whole /dev/shm, which
+is what IPC clients running directly on the node require. When false the shared memory is
+confined to /dev/shm/telemetry on the host, which containerized IPC clients can mount while the
+rest of the host’s shared memory stays isolated.</p></td>
 </tr>
 </tbody>
 </table>
@@ -516,6 +525,11 @@ string</p></td>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
 string</p></td>
 <td><p>IPAM configuration to be used for this network</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metaPlugins</span></code>
+string</p></td>
+<td><p>MetaPluginsConfig contains a raw, comma-separated sequence of CNI plugin objects without
+enclosing array brackets to chain after the host-device plugin.</p></td>
 </tr>
 </tbody>
 </table>
@@ -854,6 +868,11 @@ int</p></td>
 string</p></td>
 <td><p>IPAM configuration to be used for this network.</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metaPlugins</span></code>
+string</p></td>
+<td><p>MetaPluginsConfig contains a raw, comma-separated sequence of CNI plugin objects without
+enclosing array brackets to chain after the macvlan plugin.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -893,6 +912,11 @@ string</p></td>
 </div>
 </div>
 </section>
+<section id="multusdeploymenttype-string-alias">
+<span id="multusdeploymenttype"></span><h3>MultusDeploymentType (<code class="docutils literal notranslate"><span class="pre">string</span></code> alias)<a class="headerlink" href="#multusdeploymenttype-string-alias" title="Permalink to this headline"></a></h3>
+<p>(<em>Appears on:</em> <a class="reference internal" href="#multusspec"><span class="std std-ref">MultusSpec</span></a>)</p>
+<p>MultusDeploymentType defines the Multus CNI deployment variant.</p>
+</section>
 <section id="multusspec">
 <span id="id23"></span><h3>MultusSpec<a class="headerlink" href="#multusspec" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#secondarynetworkspec"><span class="std std-ref">SecondaryNetworkSpec</span></a>)</p>
@@ -914,6 +938,14 @@ the CNI configuration file of the master plugin (the first file in lexicographic
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ImageSpecWithConfig</span></code>
 <a class="reference internal" href="#imagespecwithconfig"><span class="std std-ref">ImageSpecWithConfig</span></a></p></td>
 <td><p>Image information for Multus and optional configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">deploymentType</span></code>
+<a class="reference internal" href="#multusdeploymenttype"><span class="std std-ref">MultusDeploymentType</span></a></p></td>
+<td><p><em>(Optional)</em>
+DeploymentType selects the Multus deployment variant. “thin” (default): Multus runs as an
+in-process CNI plugin. The config field, if set, provides the Multus CNI configuration file
+content. “thick”: Multus runs as a privileged daemon; CNI calls are proxied via a Unix socket
+shim. The config field, if set, configures the daemon (daemon-config.json).</p></td>
 </tr>
 </tbody>
 </table>
@@ -1193,6 +1225,10 @@ firmware storage will not be configured.</p></td>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logLevel</span></code>
 string</p></td>
 <td><p>LogLevel sets the verbosity level of the logs. info|debug</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">certConfig</span></code>
+<a class="reference internal" href="#configmapnamereference"><span class="std std-ref">ConfigMapNameReference</span></a></p></td>
+<td><p>Optional: Custom TLS certificates configuration for NIC Configuration Operator container</p></td>
 </tr>
 </tbody>
 </table>

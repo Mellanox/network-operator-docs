@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuration Details &mdash; NVIDIA Network Operator v26.7.0 documentation</title>
+  <title>Configuration Details &mdash; NVIDIA Network Operator v26.10.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
@@ -64,7 +64,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#"> Configuration Details</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Configuration details</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#spectrum-x-configuration">Spectrum-X Configuration</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#example-spectrum-x-profile-configmap">Example Spectrum-X profile ConfigMap:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane">Example Spectrum-X NicConfigurationTemplate with multiplane:</a></li>
 </ul>
 </li>
@@ -175,11 +174,12 @@
 <ul>
 <li><p>Requires <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">numVfs=1</span></code></p></li>
 <li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> (RoCE settings are included automatically)</p></li>
-<li><p>Can be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> — raw params are merged as overrides on top of Spectrum-X calculated params</p></li>
+<li><p>Temporarily cannot be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> or <code class="docutils literal notranslate"><span class="pre">networkBay</span></code>. NCO cannot yet determine which native mlxconfig parameters are owned by typed doSPCX operations, so allowing either combination could create a non-convergent reconcile loop</p></li>
 <li><p>Only supported on ConnectX-7 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1021</span></code>), ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Must match the name of a Spectrum-X profile ConfigMap</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Spectrum-X architecture version passed to the doSPCX planner</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">platformType</span></code>: Required. doSPCX platform identifier defined by the supplied Blueprints profile</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Set to <code class="docutils literal notranslate"><span class="pre">l3</span></code> for L3 EVPN overlay</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
 </ul>
 </li>
@@ -188,72 +188,38 @@
 </section>
 <section id="spectrum-x-configuration">
 <h2>Spectrum-X Configuration<a class="headerlink" href="#spectrum-x-configuration" title="Permalink to this headline"></a></h2>
-<p>The NIC Configuration Operator supports Spectrum-X-specific NIC configuration through Spectrum-X profile ConfigMaps. A profile ConfigMap contains the Spectrum-X YAML profile consumed by the daemon at runtime.</p>
-<p>To create a Spectrum-X profile ConfigMap:</p>
-<ol class="arabic simple">
-<li><p>Create one ConfigMap per profile.</p></li>
-<li><p>Set the ConfigMap name to the value that will be used in <code class="docutils literal notranslate"><span class="pre">template.spectrumXOptimized.version</span></code>.</p></li>
-<li><p>Add the label <code class="docutils literal notranslate"><span class="pre">network.nvidia.com/operator.nic-configuration.spectrum-x-profile</span></code>. The label value is ignored; only the label key must be present.</p></li>
-<li><p>Put the complete Spectrum-X profile YAML under <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>.</p></li>
-</ol>
-<p>The profile ConfigMap can be created in any namespace watched by the operator.</p>
-<blockquote>
-<div><p><strong>Warning:</strong> If two labeled ConfigMaps in different namespaces share the same name, they define the same Spectrum-X version key and the latest-reconciled ConfigMap silently wins with no error. To avoid unpredictable behavior, use unique ConfigMap names across all watched namespaces.</p>
-</div></blockquote>
-<section id="example-spectrum-x-profile-configmap">
-<h3><a class="reference external" href="docs/examples/spectrum-x/example-spectrum-x-profile-configmap.yaml">Example Spectrum-X profile ConfigMap</a>:<a class="headerlink" href="#example-spectrum-x-profile-configmap" title="Permalink to this headline"></a></h3>
+<p>Spectrum-X configuration is compiled from the doSPCX data bundle published by the <code class="docutils literal notranslate"><span class="pre">dospcx-data</span></code> repository. The labeled ConfigMap contains a versioned format marker and a gzip-compressed archive of the complete doSPCX data tree:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
 <span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example-spectrum-x-profile</span><span class="w"></span>
-<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doscpx-data-main</span><span class="w"></span>
 <span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">network.nvidia.com/operator.nic-configuration.spectrum-x-profile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
 <span class="nt">data</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">    </span><span class="no">useSoftwareCCAlgorithm: true</span><span class="w"></span>
-<span class="w">    </span><span class="no">docaCCVersion: &quot;example-version&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="no">mlxConfig:</span><span class="w"></span>
-<span class="w">      </span><span class="no">none:</span><span class="w"></span>
-<span class="w">        </span><span class="no">&quot;1023&quot;:</span><span class="w"></span>
-<span class="w">          </span><span class="no">postBreakout:</span><span class="w"></span>
-<span class="w">            </span><span class="no">EXAMPLE_NVCONFIG_PARAMETER: &quot;example-value&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="no">runtimeConfig:</span><span class="w"></span>
-<span class="w">      </span><span class="no">roce:</span><span class="w"></span>
-<span class="w">        </span><span class="no">- name: Example RoCE runtime parameter</span><span class="w"></span>
-<span class="w">          </span><span class="no">value: &quot;example-value&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="no">valueType: string</span><span class="w"></span>
-<span class="w">          </span><span class="no">dmsPath: &quot;&lt;dms-path-for-runtime-parameter&gt;&quot;</span><span class="w"></span>
-<span class="w">      </span><span class="no">adaptiveRouting:</span><span class="w"></span>
-<span class="w">        </span><span class="no">- name: Example mlxreg runtime parameter</span><span class="w"></span>
-<span class="w">          </span><span class="no">value: &quot;0x00000001&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="no">mlxreg:</span><span class="w"></span>
-<span class="w">            </span><span class="no">register: ROCE_ACCL</span><span class="w"></span>
-<span class="w">            </span><span class="no">field: &quot;&lt;mlxreg-field-to-check&gt;&quot;</span><span class="w"></span>
-<span class="w">            </span><span class="no">setFields:</span><span class="w"></span>
-<span class="w">              </span><span class="no">- name: &quot;&lt;mlxreg-field-to-set&gt;&quot;</span><span class="w"></span>
-<span class="w">                </span><span class="no">value: &quot;0x1&quot;</span><span class="w"></span>
-<span class="w">              </span><span class="no">- name: &quot;&lt;mlxreg-field-select-to-set&gt;&quot;</span><span class="w"></span>
-<span class="w">                </span><span class="no">value: &quot;0x1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dospcx-data.tar.gz/v1</span><span class="w"></span>
+<span class="nt">binaryData</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">dospcx-data.tar.gz</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-archive&gt;</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Reference the profile from a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> by using the ConfigMap name as the Spectrum-X version:</p>
+<p>The Kubernetes API decodes <code class="docutils literal notranslate"><span class="pre">binaryData</span></code> before it reaches the daemon. The daemon validates and extracts the archive with the Go standard library, then replaces <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/services/dms/doSpcx/data</span></code> with the restored <code class="docutils literal notranslate"><span class="pre">data/</span></code> tree. Archive paths must remain under <code class="docutils literal notranslate"><span class="pre">data/</span></code>; links, special files, path traversal, oversized archives, and incomplete doSPCX layouts are rejected. A failed update leaves the previous valid tree in place. Exactly one labeled doSPCX data bundle may exist cluster-wide; multiple bundles are rejected instead of selecting one based on reconciliation order, and manager-installed data is deactivated while the conflict exists. Removing the active bundle removes the data installed from it and invalidates plans cached with its digest.</p>
+<p>Select the architecture and platform inputs in a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example-spectrum-x-profile&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ra2.2&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">platformType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gb300&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 </pre></div>
 </div>
-<p>Supported NIC types for Spectrum-X: * ConnectX-7 (device ID <code class="docutils literal notranslate"><span class="pre">1021</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code> only (single-plane) * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports all multiplane modes * ConnectX-9 (device ID <code class="docutils literal notranslate"><span class="pre">1025</span></code>) – supports all multiplane modes (same configuration as ConnectX-8) * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports all multiplane modes except <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p>
-<p>Spectrum-X profiles can configure NICs with multiple data planes. Available modes:</p>
+<p>Supported NIC types for Spectrum-X: * ConnectX-7 (device ID <code class="docutils literal notranslate"><span class="pre">1021</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code> only (single-plane) * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> * ConnectX-9 (device ID <code class="docutils literal notranslate"><span class="pre">1025</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">swplb</span></code></p>
+<p>doSPCX profiles can configure NICs with multiple data planes. Available modes:</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 13%" />
-<col style="width: 30%" />
-<col style="width: 46%" />
 <col style="width: 11%" />
+<col style="width: 30%" />
+<col style="width: 48%" />
+<col style="width: 12%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Mode</p></th>
@@ -269,23 +235,32 @@
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
-<td><p>Software Packet Load Balancing</p></td>
+<td><p>Software Plane Load Balancing</p></td>
 <td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
 <td><p>2, 4</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
-<td><p>Hardware Packet Load Balancing</p></td>
+<td><p>Hardware Plane Load Balancing</p></td>
 <td><p>ConnectX-8, ConnectX-9 only</p></td>
 <td><p>2, 4</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></td>
-<td><p>Uniplane mode</p></td>
-<td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
-<td><p>2</p></td>
-</tr>
 </tbody>
 </table>
-</section>
+<p><code class="docutils literal notranslate"><span class="pre">spectrumx.SpectrumXManager</span></code> includes the <code class="docutils literal notranslate"><span class="pre">spectrumx.PlanManager</span></code> interface. Before the controller starts its existing concurrent per-device NV apply, it calls <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> once for the node’s Spectrum-X device group with the <code class="docutils literal notranslate"><span class="pre">prepare</span></code> stage. It does the same with the <code class="docutils literal notranslate"><span class="pre">configure</span></code> stage before the existing concurrent runtime apply. Plan preparation itself never executes generated plan operations. <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> parses the host-k8s <code class="docutils literal notranslate"><span class="pre">plan.semantic.groups</span></code> contract once and caches a homogeneous configuration plan in memory. The compiled form contains only three execution inputs: ordered <code class="docutils literal notranslate"><span class="pre">breakout</span></code> and <code class="docutils literal notranslate"><span class="pre">post-breakout</span></code> XPath operation slices for the prepare stage, and ordered runtime operation groups for the configure stage. Device targeting remains the responsibility of the configuration manager when it consumes the plan. <code class="docutils literal notranslate"><span class="pre">GetPreparedPlan</span></code> validates the requesting device’s inputs and membership against the cache; it does not reread or reparse files for every per-device apply. During NV validation, the configuration manager separately queries the existing template-derived native parameter map and the active doSPCX XPath phase. During NV apply, it sends both inputs in one DMS action through the primary PF and passes every available logical port number so DMS can expand port-scoped typed mappings. Breakout must match current and pending state on all device ports before post-breakout is considered. <code class="docutils literal notranslate"><span class="pre">force</span></code> applies the complete breakout plus post-breakout intent immediately; after the breakout barrier, <code class="docutils literal notranslate"><span class="pre">with-default</span></code> also resends both phases so default filling cannot undo breakout. Semantic group references are authoritative, and an omitted operation kind means <code class="docutils literal notranslate"><span class="pre">set</span></code>, matching DMS. Configure groups <code class="docutils literal notranslate"><span class="pre">eswitch</span></code> and <code class="docutils literal notranslate"><span class="pre">vf-lifecycle</span></code> are intentionally omitted from the compiled plan; unknown groups fail closed. Plan compilation remains execution-free.</p>
+<p>At runtime, the configuration manager validates the final desired value of every operation group on each applicable PCI function. Repeated writes remain ordered during apply, while validation compares the last write for each path and leaf across all scope and target-class batches that apply to that function. Validation keeps different scope and target-class pairs in separate DMS commands. Generic runtime configuration is applied first and doSPCX groups are applied last in semantic order. The <code class="docutils literal notranslate"><span class="pre">cc</span></code> group starts <code class="docutils literal notranslate"><span class="pre">doca_spcx_cc</span></code> before its XPath operations; in HWPLB mode it uses the first function of each NIC because the functions share one RDMA device. Other groups are applied to every discovered function. Indexed XPath queries are issued individually until DMS preserves indexed keys in batched JSON responses.</p>
+<p>The NIC Configuration Daemon image must contain the executable at <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/tools/doca_spcx_cc</span></code>; the STIG daemon images install the <code class="docutils literal notranslate"><span class="pre">doca-spcx-cc</span></code> package during their build. The deprecated <code class="docutils literal notranslate"><span class="pre">NicFirmwareSource.spec.docaSpcXCCUrlSource</span></code> field does not install or select the runtime executable. When migrating to doSPCX plans, remove that field from firmware sources and ensure any custom daemon image provides the binary.</p>
+<p>NCO translates its CRD multiplane modes to the public profiles supplied by the doSPCX data bundle: <code class="docutils literal notranslate"><span class="pre">none</span></code> selects <code class="docutils literal notranslate"><span class="pre">single-plane</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code> selects <code class="docutils literal notranslate"><span class="pre">SPX_NetPlugin</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> selects <code class="docutils literal notranslate"><span class="pre">SPX_Multiplane</span></code>.</p>
+<p>The manager creates its command executor internally. The executable DMS planner remains part of the daemon base image and resolves its authored catalog from the native DMS location where the labeled doSPCX data ConfigMap restores it: <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/services/dms/doSpcx/data</span></code>. When <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> is called, files are written to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/var/lib/blueprints/target-maps/nco-&lt;node&gt;-spcx.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-prepare/plan.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-prepare/metadata.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-configure/plan.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-configure/metadata.json
+</pre></div>
+</div>
+<p>NICs are sorted by function-zero BDF and assigned deterministic target-map rail IDs. NCO writes the doSPCX schema-v1 target-map contract: every pre-breakout target has an ID, function-zero BDF, hexadecimal device ID, <code class="docutils literal notranslate"><span class="pre">ew</span></code> role, and rail. The same pre-breakout target map is passed to both stages; during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, doSPCX resolves the post-breakout inventory after NVConfig is active. The planner does not read <code class="docutils literal notranslate"><span class="pre">interfaceNameTemplate</span></code>; interface naming remains an independent NCO capability.</p>
+<p>Each stage stores a flat metadata document containing only the planner inputs, including the platform, Spectrum-X settings, planner parameters, doSPCX data archive digest, and target-map digest. Repeated calls in the same process reuse the in-memory plan. After a process restart, <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> loads and compiles the saved plan once when that metadata still matches, the target-map digest is unchanged, and the semantic operations compile under NCO’s execution policy. Any input change or invalid saved artifact regenerates the plan through <code class="docutils literal notranslate"><span class="pre">dms-cli</span></code>. Before applying an individual Spectrum-X device, the configuration manager calls <code class="docutils literal notranslate"><span class="pre">GetPreparedPlan</span></code> and fails without changing the device if the stage-specific plan is missing, stale, or its target map does not contain that device.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">BLUEPRINTS_STATE_DIR</span></code> to override <code class="docutils literal notranslate"><span class="pre">/var/lib/blueprints</span></code>.</p>
 <section id="example-spectrum-x-nicconfigurationtemplate-with-multiplane">
 <h3><a class="reference external" href="docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml">Example Spectrum-X NicConfigurationTemplate with multiplane</a>:<a class="headerlink" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane" title="Permalink to this headline"></a></h3>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -305,9 +280,9 @@
 <span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
 <span class="w">      </span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
 <span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.1&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ra2.2&quot;</span><span class="w"></span>
 <span class="w">          </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
-<span class="w">          </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hwplb&quot;</span><span class="w"> </span><span class="c1"># Hardware Packet Load Balancing, ConnectX-8 only</span><span class="w"></span>
+<span class="w">          </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hwplb&quot;</span><span class="w"> </span><span class="c1"># Hardware Plane Load Balancing, ConnectX-8, ConnectX-9 only</span><span class="w"></span>
 <span class="w">          </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
 </pre></div>
 </div>
