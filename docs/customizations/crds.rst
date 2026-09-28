@@ -52,7 +52,7 @@ ConditionHolder is implemented by CRDs that carry a status.conditions array. Nic
 ConfigMapNameReference
 ~~~~~~~~~~~~~~~~~~~~~~
 
-(*Appears on:* :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
+(*Appears on:* :ref:`NicConfigurationOperatorSpec <NicConfigurationOperatorSpec>`, :ref:`OFEDDriverSpec <OFEDDriverSpec>`)
 
 ConfigMapNameReference references a config map in a specific namespace. The namespace must be specified at the point of use.
 
@@ -110,6 +110,12 @@ DOCATelemetryServiceSpec is the configuration for DOCA Telemetry Service.
       | ``config``                                                                                        | *(Optional)*                                                                                      |
       | :ref:`DOCATelemetryServiceConfig <DOCATelemetryServiceConfig>`                                    | Config contains custom config for the DOCATelemetryService. If set no default config will be      |
       |                                                                                                   | deployed.                                                                                         |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``shareHostSharedMemory``                                                                         | *(Optional)*                                                                                      |
+      | bool                                                                                              | ShareHostSharedMemory backs the shared memory used for IPC with the host’s whole /dev/shm, which  |
+      |                                                                                                   | is what IPC clients running directly on the node require. When false the shared memory is         |
+      |                                                                                                   | confined to /dev/shm/telemetry on the host, which containerized IPC clients can mount while the   |
+      |                                                                                                   | rest of the host’s shared memory stays isolated.                                                  |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _DevicePluginSpec:
@@ -280,6 +286,9 @@ HostDeviceNetworkSpec defines the desired state of HostDeviceNetwork
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipam``                                                                                          | IPAM configuration to be used for this network                                                    |
       | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``metaPlugins``                                                                                   | MetaPluginsConfig contains a raw, comma-separated sequence of CNI plugin objects without          |
+      | string                                                                                            | enclosing array brackets to chain after the host-device plugin.                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _HostDeviceNetworkStatus:
@@ -534,6 +543,9 @@ MacvlanNetworkSpec defines the desired state of MacvlanNetwork
       | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``metaPlugins``                                                                                   | MetaPluginsConfig contains a raw, comma-separated sequence of CNI plugin objects without          |
+      | string                                                                                            | enclosing array brackets to chain after the macvlan plugin.                                       |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _MacvlanNetworkStatus:
 
@@ -561,6 +573,15 @@ MacvlanNetworkStatus defines the observed state of MacvlanNetwork
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
+.. _MultusDeploymentType:
+
+MultusDeploymentType (``string`` alias)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(*Appears on:* :ref:`MultusSpec <MultusSpec>`)
+
+MultusDeploymentType defines the Multus CNI deployment variant.
+
 .. _MultusSpec:
 
 MultusSpec
@@ -580,6 +601,12 @@ the CNI configuration file of the master plugin (the first file in lexicographic
       +===================================================================================================+===================================================================================================+
       | ``ImageSpecWithConfig``                                                                           | Image information for Multus and optional configuration                                           |
       | :ref:`ImageSpecWithConfig <ImageSpecWithConfig>`                                                  |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``deploymentType``                                                                                | *(Optional)*                                                                                      |
+      | :ref:`MultusDeploymentType <MultusDeploymentType>`                                                | DeploymentType selects the Multus deployment variant. “thin” (default): Multus runs as an         |
+      |                                                                                                   | in-process CNI plugin. The config field, if set, provides the Multus CNI configuration file       |
+      |                                                                                                   | content. “thick”: Multus runs as a privileged daemon; CNI calls are proxied via a Unix socket     |
+      |                                                                                                   | shim. The config field, if set, configures the daemon (daemon-config.json).                       |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NICFeatureDiscoverySpec:
@@ -783,6 +810,9 @@ NicConfigurationOperatorSpec is the configuration for NIC Configuration Operator
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``logLevel``                                                                                      | LogLevel sets the verbosity level of the logs. info|debug                                         |
       | string                                                                                            |                                                                                                   |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``certConfig``                                                                                    | Optional: Custom TLS certificates configuration for NIC Configuration Operator container          |
+      | :ref:`ConfigMapNameReference <ConfigMapNameReference>`                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicFirmwareStorageSpec:
