@@ -83,30 +83,15 @@ The ConfigMap **name** is the value you reference from ``spectrumXOptimized.vers
 
 For the full profile ConfigMap format, the label rules, and a complete annotated example, see :doc:`Configuration Details <../nic-conf-operator/configuration-details>`.
 
+For Spectrum-X RA 2.1 and later, the DOCA SPC-X CC algorithm package is included in the operator image. Set ``useSoftwareCCAlgorithm`` and ``docaCCVersion`` in the Spectrum-X profile to control its use and version.
+
 .. note::
 
    ``version`` is a free-form name and is not validated against existing ConfigMaps, so a template that references a missing profile is accepted by the API and only fails when it is applied. For that and the other profile failure signatures, see :doc:`Verify and Troubleshoot <verify-and-troubleshoot>`.
 
-=============================================
-Provision the DOCA SPC-X CC Algorithm Package
-=============================================
-
-.. note::
-
-   For Spectrum-X RA 2.1 and later, the DOCA SPC-X CC algorithm package is included in the operator image and does not need to be deployed separately. For RA 2.0 and earlier, the package must be deployed manually using the example below.
-
-   Whether the software congestion-control algorithm is used, and which version the operator runs, is declared by the ``useSoftwareCCAlgorithm`` and ``docaCCVersion`` keys of the Spectrum-X profile rather than configured on the ``NicConfigurationTemplate``.
-
-To enable the DOCA SPC-X CC algorithm on NIC devices, the DOCA SPC-X CC .deb package for ubuntu 22.04 is required. This configuration step will be removed in the future, once the DOCA SPC-X CC algorithm is publicly available.
-To access the package, contact your NVIDIA CPM.
-The package should be available in the cluster and then its URL should be provided in the packageUrlSource field of the SpectrumXOperator CR.
-
-.. rli:: https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-|network-operator-version|/docs/examples/spectrum-x/example-nicfirmwaresource-spectrum-x-cc-only.yaml
-    :language: yaml
-    :lines: 18-
-
+================
 Firmware Upgrade
-----------------
+================
 
 If the firmware on the devices needs to be updated, extend the NicFirmwareSource CR with fields for ConnectX and BlueField firmware. Make sure to use the correct firmware for your devices.
 
