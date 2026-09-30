@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Details &mdash; NVIDIA Network Operator v26.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Network Operator API reference v1alpha1" href="crds.html" />
+    <link rel="prev" title="NIC Firmware Configuration" href="nic-fw-configuration.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="nic-configuration-operator.html">NIC Configuration Operator</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nic-fw-configuration.html"> NIC Firmware Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Configuration Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Configuration details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spectrum-x-configuration">Spectrum-X Configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane">Example Spectrum-X NicConfigurationTemplate with multiplane:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="crds.html"> CRD API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+    <li><a href="nic-configuration-operator.html">NIC Configuration Operator</a> &raquo;</li>
+<li>Configuration Details</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration-details">
+<h1>Configuration Details<a class="headerlink" href="#configuration-details" title="Permalink to this headline"></a></h1>
+<section id="id1">
+<h2>Configuration details<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numVFs</span></code>: if provided, configure SR-IOV VFs via nvconfig.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g: if <code class="docutils literal notranslate"><span class="pre">numVFs=2</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=1</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=2</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">numVFs=0</span></code> then <code class="docutils literal notranslate"><span class="pre">SRIOV_EN=0</span></code> and <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS=0</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code>: if provided configure <code class="docutils literal notranslate"><span class="pre">linkType</span></code> for the NIC for all NIC ports.</p>
+<ul>
+<li><p>This is a mandatory parameter.</p></li>
+<li><p>E.g <code class="docutils literal notranslate"><span class="pre">linkType</span> <span class="pre">=</span> <span class="pre">Infiniband</span></code> then set <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P1=IB</span></code> and <code class="docutils literal notranslate"><span class="pre">LINK_TYPE_P2=IB</span></code> if second PCI function is present</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code>: performs PCI performance optimizations. If enabled then by default the following will happen:</p>
+<ul>
+<li><p>Set PCI max read request size for each PF to <code class="docutils literal notranslate"><span class="pre">4096</span></code> (note: this is a runtime config and is not persistent)</p></li>
+<li><p>Users can override the runtime value via <code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code> is deprecated and ignored; use <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> for explicit <code class="docutils literal notranslate"><span class="pre">MAX_ACC_OUT_READ</span></code> management if needed.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code>: performs RoCE related optimizations. If enabled performs the following by default:</p>
+<ul>
+<li><p>Nvconfig set for both ports (can be applied from PF0)</p>
+<ul>
+<li><p>Conditionally applied for second port if present</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P1=255</span></code>, <code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P2=255</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P1=4</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P2=4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P1=6</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P2=6</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Configure pfc (Priority Flow Control) for priority 3, set trust to dscp on each PF, set ToS (Type of Service) to 0.</p>
+<ul>
+<li><p>Non-persistent (need to be applied after each boot)</p></li>
+<li><p>Users can override values via <code class="docutils literal notranslate"><span class="pre">trust</span></code>, <code class="docutils literal notranslate"><span class="pre">pfc</span></code> and <code class="docutils literal notranslate"><span class="pre">tos</span></code> parameters</p></li>
+</ul>
+</li>
+<li><p>Can only be enabled with <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gpuDirectOptimized</span></code>: performs gpu direct optimizations. ATM only optimizations for Baremetal environment are supported. If enabled perform the following:</p>
+<ul>
+<li><p>Set nvconfig <code class="docutils literal notranslate"><span class="pre">ATS_ENABLED=0</span></code></p></li>
+<li><p>Can only be enabled when <code class="docutils literal notranslate"><span class="pre">pciPerformanceOptimized</span></code> is enabled</p></li>
+<li><p>Both the numeric values and their string aliases, supported by NVConfig, are allowed (e.g. <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=False</span></code>, <code class="docutils literal notranslate"><span class="pre">REAL_TIME_CLOCK_ENABLE=0</span></code>).</p></li>
+<li><p>For per port parameters (suffix <code class="docutils literal notranslate"><span class="pre">_P1</span></code>, <code class="docutils literal notranslate"><span class="pre">_P2</span></code>) parameters with <code class="docutils literal notranslate"><span class="pre">_P2</span></code> suffix are ignored if the device is single port.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">spectrumXOptimized</span></code>: enables Spectrum-X specific NIC optimizations. When enabled:</p>
+<ul>
+<li><p>Requires <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">numVfs=1</span></code></p></li>
+<li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> (RoCE settings are included automatically)</p></li>
+<li><p>Temporarily cannot be combined with <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> or <code class="docutils literal notranslate"><span class="pre">networkBay</span></code>. NCO cannot yet determine which native mlxconfig parameters are owned by typed doSPCX operations, so allowing either combination could create a non-convergent reconcile loop</p></li>
+<li><p>Only supported on ConnectX-7 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1021</span></code>), ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Spectrum-X architecture version passed to the doSPCX planner</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">platformType</span></code>: Required. doSPCX platform identifier defined by the supplied Blueprints profile</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Set to <code class="docutils literal notranslate"><span class="pre">l3</span></code> for L3 EVPN overlay</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">none</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code>: Optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Options: <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
+</ul>
+</li>
+<li><p>If a configuration is not set in spec, its non-volatile configuration parameters (if any) should be set to device default.</p></li>
+</ul>
+</section>
+<section id="spectrum-x-configuration">
+<h2>Spectrum-X Configuration<a class="headerlink" href="#spectrum-x-configuration" title="Permalink to this headline"></a></h2>
+<p>Spectrum-X configuration is compiled from the doSPCX data bundle published by the <code class="docutils literal notranslate"><span class="pre">dospcx-data</span></code> repository. The labeled ConfigMap contains a versioned format marker and a gzip-compressed archive of the complete doSPCX data tree:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doscpx-data-main</span><span class="w"></span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">network.nvidia.com/operator.nic-configuration.spectrum-x-profile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="nt">data</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dospcx-data.tar.gz/v1</span><span class="w"></span>
+<span class="nt">binaryData</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">dospcx-data.tar.gz</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-archive&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The Kubernetes API decodes <code class="docutils literal notranslate"><span class="pre">binaryData</span></code> before it reaches the daemon. The daemon validates and extracts the archive with the Go standard library, then replaces <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/services/dms/doSpcx/data</span></code> with the restored <code class="docutils literal notranslate"><span class="pre">data/</span></code> tree. Archive paths must remain under <code class="docutils literal notranslate"><span class="pre">data/</span></code>; links, special files, path traversal, oversized archives, and incomplete doSPCX layouts are rejected. A failed update leaves the previous valid tree in place. Exactly one labeled doSPCX data bundle may exist cluster-wide; multiple bundles are rejected instead of selecting one based on reconciliation order, and manager-installed data is deactivated while the conflict exists. Removing the active bundle removes the data installed from it and invalidates plans cached with its digest.</p>
+<p>Select the architecture and platform inputs in a <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ra2.2&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">platformType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gb300&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Supported NIC types for Spectrum-X: * ConnectX-7 (device ID <code class="docutils literal notranslate"><span class="pre">1021</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code> only (single-plane) * ConnectX-8 (device ID <code class="docutils literal notranslate"><span class="pre">1023</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> * ConnectX-9 (device ID <code class="docutils literal notranslate"><span class="pre">1025</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> * BlueField-3 SuperNIC (device ID <code class="docutils literal notranslate"><span class="pre">a2dc</span></code>) – supports <code class="docutils literal notranslate"><span class="pre">none</span></code> and <code class="docutils literal notranslate"><span class="pre">swplb</span></code></p>
+<p>doSPCX profiles can configure NICs with multiple data planes. Available modes:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 30%" />
+<col style="width: 48%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Supported NICs</p></th>
+<th class="head"><p>Planes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>Single plane (default)</p></td>
+<td><p>ConnectX-7, ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>Software Plane Load Balancing</p></td>
+<td><p>ConnectX-8, ConnectX-9, BF3 SuperNIC</p></td>
+<td><p>2, 4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>Hardware Plane Load Balancing</p></td>
+<td><p>ConnectX-8, ConnectX-9 only</p></td>
+<td><p>2, 4</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">spectrumx.SpectrumXManager</span></code> includes the <code class="docutils literal notranslate"><span class="pre">spectrumx.PlanManager</span></code> interface. Before the controller starts its existing concurrent per-device NV apply, it calls <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> once for the node’s Spectrum-X device group with the <code class="docutils literal notranslate"><span class="pre">prepare</span></code> stage. It does the same with the <code class="docutils literal notranslate"><span class="pre">configure</span></code> stage before the existing concurrent runtime apply. Plan preparation itself never executes generated plan operations. <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> parses the host-k8s <code class="docutils literal notranslate"><span class="pre">plan.semantic.groups</span></code> contract once and caches a homogeneous configuration plan in memory. The compiled form contains only three execution inputs: ordered <code class="docutils literal notranslate"><span class="pre">breakout</span></code> and <code class="docutils literal notranslate"><span class="pre">post-breakout</span></code> XPath operation slices for the prepare stage, and ordered runtime operation groups for the configure stage. Device targeting remains the responsibility of the configuration manager when it consumes the plan. <code class="docutils literal notranslate"><span class="pre">GetPreparedPlan</span></code> validates the requesting device’s inputs and membership against the cache; it does not reread or reparse files for every per-device apply. During NV validation, the configuration manager separately queries the existing template-derived native parameter map and the active doSPCX XPath phase. During NV apply, it sends both inputs in one DMS action through the primary PF and passes every available logical port number so DMS can expand port-scoped typed mappings. Breakout must match current and pending state on all device ports before post-breakout is considered. <code class="docutils literal notranslate"><span class="pre">force</span></code> applies the complete breakout plus post-breakout intent immediately; after the breakout barrier, <code class="docutils literal notranslate"><span class="pre">with-default</span></code> also resends both phases so default filling cannot undo breakout. Semantic group references are authoritative, and an omitted operation kind means <code class="docutils literal notranslate"><span class="pre">set</span></code>, matching DMS. Configure groups <code class="docutils literal notranslate"><span class="pre">eswitch</span></code> and <code class="docutils literal notranslate"><span class="pre">vf-lifecycle</span></code> are intentionally omitted from the compiled plan; unknown groups fail closed. Plan compilation remains execution-free.</p>
+<p>At runtime, the configuration manager validates the final desired value of every operation group on each applicable PCI function. Repeated writes remain ordered during apply, while validation compares the last write for each path and leaf across all scope and target-class batches that apply to that function. Validation keeps different scope and target-class pairs in separate DMS commands. Generic runtime configuration is applied first and doSPCX groups are applied last in semantic order. The <code class="docutils literal notranslate"><span class="pre">cc</span></code> group starts <code class="docutils literal notranslate"><span class="pre">doca_spcx_cc</span></code> before its XPath operations; in HWPLB mode it uses the first function of each NIC because the functions share one RDMA device. Other groups are applied to every discovered function. Indexed XPath queries are issued individually until DMS preserves indexed keys in batched JSON responses.</p>
+<p>The NIC Configuration Daemon image must contain the executable at <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/tools/doca_spcx_cc</span></code>; the STIG daemon images install the <code class="docutils literal notranslate"><span class="pre">doca-spcx-cc</span></code> package during their build. The deprecated <code class="docutils literal notranslate"><span class="pre">NicFirmwareSource.spec.docaSpcXCCUrlSource</span></code> field does not install or select the runtime executable. When migrating to doSPCX plans, remove that field from firmware sources and ensure any custom daemon image provides the binary.</p>
+<p>NCO translates its CRD multiplane modes to the public profiles supplied by the doSPCX data bundle: <code class="docutils literal notranslate"><span class="pre">none</span></code> selects <code class="docutils literal notranslate"><span class="pre">single-plane</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code> selects <code class="docutils literal notranslate"><span class="pre">SPX_NetPlugin</span></code>, and <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> selects <code class="docutils literal notranslate"><span class="pre">SPX_Multiplane</span></code>.</p>
+<p>The manager creates its command executor internally. The executable DMS planner remains part of the daemon base image and resolves its authored catalog from the native DMS location where the labeled doSPCX data ConfigMap restores it: <code class="docutils literal notranslate"><span class="pre">/opt/mellanox/doca/services/dms/doSpcx/data</span></code>. When <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> is called, files are written to:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/var/lib/blueprints/target-maps/nco-&lt;node&gt;-spcx.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-prepare/plan.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-prepare/metadata.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-configure/plan.json
+/var/lib/blueprints/plans/nco-&lt;node&gt;-spcx-configure/metadata.json
+</pre></div>
+</div>
+<p>NICs are sorted by function-zero BDF and assigned deterministic target-map rail IDs. NCO writes the doSPCX schema-v1 target-map contract: every pre-breakout target has an ID, function-zero BDF, hexadecimal device ID, <code class="docutils literal notranslate"><span class="pre">ew</span></code> role, and rail. The same pre-breakout target map is passed to both stages; during <code class="docutils literal notranslate"><span class="pre">configure</span></code>, doSPCX resolves the post-breakout inventory after NVConfig is active. The planner does not read <code class="docutils literal notranslate"><span class="pre">interfaceNameTemplate</span></code>; interface naming remains an independent NCO capability.</p>
+<p>Each stage stores a flat metadata document containing only the planner inputs, including the platform, Spectrum-X settings, planner parameters, doSPCX data archive digest, and target-map digest. Repeated calls in the same process reuse the in-memory plan. After a process restart, <code class="docutils literal notranslate"><span class="pre">PreparePlan</span></code> loads and compiles the saved plan once when that metadata still matches, the target-map digest is unchanged, and the semantic operations compile under NCO’s execution policy. Any input change or invalid saved artifact regenerates the plan through <code class="docutils literal notranslate"><span class="pre">dms-cli</span></code>. Before applying an individual Spectrum-X device, the configuration manager calls <code class="docutils literal notranslate"><span class="pre">GetPreparedPlan</span></code> and fails without changing the device if the stage-specific plan is missing, stale, or its target map does not contain that device.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">BLUEPRINTS_STATE_DIR</span></code> to override <code class="docutils literal notranslate"><span class="pre">/var/lib/blueprints</span></code>.</p>
+<section id="example-spectrum-x-nicconfigurationtemplate-with-multiplane">
+<h3><a class="reference external" href="docs/examples/spectrum-x/example-nicconfigurationtemplate-spectrum-x-multiplane.yaml">Example Spectrum-X NicConfigurationTemplate with multiplane</a>:<a class="headerlink" href="#example-spectrum-x-nicconfigurationtemplate-with-multiplane" title="Permalink to this headline"></a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrum-x-multiplane-configuration</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
+<span class="nt">spec</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8. Use &quot;1025&quot; for ConnectX-9, or &quot;a2dc&quot; for BlueField-3 SuperNIC (hwplb not supported on BF3). ConnectX-7 (`1021`) is single-plane only.</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># partNumbers:</span><span class="w"></span>
+<span class="w">      </span><span class="c1">#   - &quot;MCX713106AEHEA_QP1&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+<span class="w">      </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
+<span class="w">      </span><span class="nt">spectrumXOptimized</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">          </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ra2.2&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
+<span class="w">          </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hwplb&quot;</span><span class="w"> </span><span class="c1"># Hardware Plane Load Balancing, ConnectX-8, ConnectX-9 only</span><span class="w"></span>
+<span class="w">          </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Sep 30, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
