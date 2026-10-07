@@ -138,10 +138,135 @@ DOCA-OFED Driver Container Images
      - Version
    * - nvcr.io/nvidia/mellanox
      - doca-driver
-     - doca3.5.0-26.07-0.7.7.0-0
+     - doca3.5.0-26.07-0.7.7.0-1
 
 
 The followings tags are available for the above DOCA-OFED Driver container version:
+
+------
+Ubuntu
+------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu22.04-amd64
+     - sha256:79aca7024df168e3b7e846cc5404d9d83dce92d4542e452951cbd6c47fa3b86c
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu22.04-arm64
+     - sha256:85666ec7a9d60b371f1f6830b61cf82052305cd41e46d6c43b115a7609509175
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu24.04-amd64
+     - sha256:423e43e617f673afa52a94bbec2a204b166a6ecac306f0b15c1b7441ef9b5bd6
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu24.04-arm64
+     - sha256:078eda21ec5d6883b4e11684872b2016da8afd3add683381600ccac6bb6300b7
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu26.04-amd64
+     - sha256:8ef90df6673fc431431f83ccf22a15ee7af6eda317bd03cbb1bf24a97cc6cccd
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-ubuntu26.04-arm64
+     - sha256:1a04dff923a966d94c2de5ce1d894e5c8ed6839a4fdb3ce9e046182c60f46d1a
+
+-----
+RHCOS
+-----
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhcos4.17-amd64
+       | doca3.5.0-26.07-0.7.7.0-1-rhcos4.18-amd64
+     - sha256:308826e3af01eea6c42bc45ce99abdebd3559cee0bb4caed6457b31c339208c7
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhcos4.17-arm64
+       | doca3.5.0-26.07-0.7.7.0-1-rhcos4.18-arm64
+     - sha256:4e49fe49626daaf613d036c090bcb0cb5f46bfaff9be930b65854612ec7265cc
+
+----
+RHEL
+----
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel10.0-amd64
+     - sha256:d9f9f2dfd935ad9190f2b60f370a3513598d8b5ba56d33fe24d1c2c8c6dba75a
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel10.0-arm64
+     - sha256:3140a8517b2c9d8ea06f9e45664f2ba86484e55f4111a950cfffc0276ef32339
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel10.2-amd64
+     - sha256:c6a37b347b470cb2eeb1e7c736a586fb8ef953eda8cf9b6cca6ceb9642a23de6
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel10.2-arm64
+     - sha256:23b2eaccf7060e0bbe31e9144c95210fff7e5ab2740bb2a88877fbd13686658f
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel8.10-amd64
+     - sha256:ca98318595c2ec01b5822e77a6faab5a20584f5987ac4ec636d07ad95d33a497
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel8.10-arm64
+     - sha256:5f619078a7c67fca86591ec715ad423554fde90d0fdf65eed468d05c4ebe97f4
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.4-amd64
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.6-amd64
+     - sha256:9635aabe482997fc8cb9172edcae0c1c36446fcb75189bf1b829541c12990b13
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.4-arm64
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.6-arm64
+     - sha256:6ff9c6d39bac92202ef44a9ee2d7a99ff354070482f05dfc26f48af1fcc3cc88
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.8-amd64
+     - sha256:3598650ae89100f8f43713a906a50eb50375a776e06a19d71e214d6959b9dd3d
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-rhel9.8-arm64
+     - sha256:f50b90c9bc651ec9f9abc814b395ccec261a024f195efd476500229f423eeba3
+
+----
+SLES
+----
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tags
+     - Digest
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-sles15.7-amd64
+     - sha256:707765c29ff83294d4b67c2f46bdcae0a1741588c95ce1f9063a7816d5c95bf6
+   * -
+       | doca3.5.0-26.07-0.7.7.0-1-sles15.7-arm64
+     - sha256:c7587af27562a7afdde60f113bf6eb88f92ec3115c11ce4387d21c34620b32de
+
+
+=============================================
+Precompiled DOCA-OFED Driver Container Images
+=============================================
+
+.. note::
+
+   Precompiled driver containers are published for ``doca3.5.0-26.07-0.7.7.0-0`` only. To use them, pin the DOCA-OFED driver ``version`` to ``doca3.5.0-26.07-0.7.7.0-0`` in the ``NicClusterPolicy``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Repository
+     - Image Name
+     - Version
+   * - nvcr.io/nvidia/mellanox
+     - doca-driver
+     - doca3.5.0-26.07-0.7.7.0-0
+
+The followings precompiled tags are available for the above DOCA-OFED Driver container version:
 
 ------
 Ubuntu
@@ -158,6 +283,12 @@ Ubuntu
    * -
        | doca3.5.0-26.07-0.7.7.0-0-5.15.0-190-generic-ubuntu22.04-arm64
      - sha256:5b0507612df12cb6d1ef5cc436d2054f6fdc7f3bf525aa50b07e8e347ee16ba5
+   * -
+       | doca3.5.0-26.07-0.7.7.0-0-6.8.0-138-generic-ubuntu24.04-amd64
+     - sha256:4811f2cc9d822fa9032e43734f313a19013cd49acb1af971efb18113ac6dcc8c
+   * -
+       | doca3.5.0-26.07-0.7.7.0-0-6.8.0-138-generic-ubuntu24.04-arm64
+     - sha256:0063f39093bdc732884b855e22877cfc962e4741e609aa88e3eab905be5afc72
    * -
        | doca3.5.0-26.07-0.7.7.0-0-6.8.0-1060-oracle-ubuntu22.04-amd64
      - sha256:0ef071d91899e47e400f8e6b3f066f674513faf2a71afc61c0abb72774f8de4d
@@ -183,12 +314,6 @@ Ubuntu
        | doca3.5.0-26.07-0.7.7.0-0-6.8.0-1064-azure-ubuntu22.04-arm64
      - sha256:3c555ca7b7898975bd6388a29b425323f6588e6f2b4a146515371d225075751e
    * -
-       | doca3.5.0-26.07-0.7.7.0-0-6.8.0-138-generic-ubuntu24.04-amd64
-     - sha256:4811f2cc9d822fa9032e43734f313a19013cd49acb1af971efb18113ac6dcc8c
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-6.8.0-138-generic-ubuntu24.04-arm64
-     - sha256:0063f39093bdc732884b855e22877cfc962e4741e609aa88e3eab905be5afc72
-   * -
        | doca3.5.0-26.07-0.7.7.0-0-7.0.0-1006-oracle-ubuntu24.04-amd64
      - sha256:2022c6a78c71c2e35905517549df0130b031ca1587b79a20c5ed052983dff0c9
    * -
@@ -212,100 +337,6 @@ Ubuntu
    * -
        | doca3.5.0-26.07-0.7.7.0-0-7.0.0-1016-nvidia-ubuntu24.04-arm64
      - sha256:63e39e771f791338989c90b93b1b31b7e5a68aa4bd5711605b0b9995ba82f92a
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu22.04-amd64
-     - sha256:f56af38fa5a232b21b3d170bb0345a1f687f0ebc88aa2466445635a741a358be
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu22.04-arm64
-     - sha256:590a82cfe01fb87d3f8a7a67fe9ca34a764c20a70cc0ca60c8c1223a65d2a690
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu24.04-amd64
-     - sha256:b9e75f514aea9c90b54cd689b1756178c9003c54c8b6ee8eb9c0d11dd3f18425
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu24.04-arm64
-     - sha256:30a20839f9892fb96b53474dcbc4bd19ae55f8f0fdbb2186b03c1388dfd2dc30
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu26.04-amd64
-     - sha256:ae488f7c5996dc5b8f50798ec7f5166ba8e113d3e416a1dff307b5e48e2535f2
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-ubuntu26.04-arm64
-     - sha256:f6ab3740ee7ee51427e5eb1d3f9cc3d1473f3d186319551ccb852f42dec65a3e
-
------
-RHCOS
------
-
-.. list-table::
-   :header-rows: 1
-
-   * - Tags
-     - Digest
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhcos4.17-amd64
-       | doca3.5.0-26.07-0.7.7.0-0-rhcos4.18-amd64
-     - sha256:0714d39e688335f1a303b77c24c9747f84ec148ee8db8e97406b0e34e9dbb26b
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhcos4.17-arm64
-       | doca3.5.0-26.07-0.7.7.0-0-rhcos4.18-arm64
-     - sha256:d69273531bbc0ce0c78b9a0b30f5b138b8867a04b09c727c43b78a0075a6a5b3
-
-----
-RHEL
-----
-
-.. list-table::
-   :header-rows: 1
-
-   * - Tags
-     - Digest
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel10.0-amd64
-     - sha256:92dfc2d6c6687fdb3e9c9ff524695d72b4b791f7c1127f9799633eaa15a4d75c
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel10.0-arm64
-     - sha256:7f0be6c284b8e565a87e811a83c11f69dfe3d6625679748040b24c5b246c0a1f
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel10.2-amd64
-     - sha256:8d19fa70116cdfb23754c92c5047bfe1de9277a9852fd55a0619fcf2aaba54cf
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel10.2-arm64
-     - sha256:72a596f2a3bee99f8ab842aab80e2b1b6918716952b4e533c79727e4874870d6
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel8.10-amd64
-     - sha256:899ab9209f555392aee8a0da86d894dd4ab42d36e2fc7f1e21eeadc2dce4164a
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel8.10-arm64
-     - sha256:f1509cb991a9c6dc18207ab00eff7806755f674bc0ef04a332169fa037075402
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.4-amd64
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.6-amd64
-     - sha256:81472ef09dc1633450ed16ff150fb3c9c4b12c4f0d3e965837185429ec65028e
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.4-arm64
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.6-arm64
-     - sha256:4abf24a5167b14db33fc7ca7122b1b4d1167ed2a2a42630ae4aca22b6f0ad3bf
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.8-amd64
-     - sha256:310ea3186839c158029f0ee0e5d118e2c1e8bf8012c37964e8a449cc48a86cd1
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-rhel9.8-arm64
-     - sha256:eaf6ce1d2622de5ad59bee1a577d14d362a96077980d6c6d2d72148e1eba4597
-
-----
-SLES
-----
-
-.. list-table::
-   :header-rows: 1
-
-   * - Tags
-     - Digest
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-sles15.7-amd64
-     - sha256:8d3f99918ff29e4864e53faf60800dab980cb040774c8eea431e86045444b32c
-   * -
-       | doca3.5.0-26.07-0.7.7.0-0-sles15.7-arm64
-     - sha256:9b274d61dd6e8de146ea06f48f8b664c8acc28d51841a82937c148e5d10bf1f8
 
 
 =====================================================
