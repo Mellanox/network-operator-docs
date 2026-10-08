@@ -113,6 +113,23 @@ General Parameters
      - string
      - `""`
      - Directory of the kubelet root on the nodes. Used by the RDMA shared device plugin for --kubelet-root-dir and for device-plugins / plugins_registry hostPath mounts. When empty, the operator uses /var/lib/kubelet and omits --kubelet-root-dir. Set this when kubelet uses a non-default root (for example /var/lib/k0s/kubelet).
+   * - operator.leaderElection
+     - yaml
+     - .. code-block:: yaml
+
+          # -- Renew deadline of the leader lease, as a duration such as ``60s``: how long the
+          # leader keeps trying to renew before standing down. The lease duration, which is how
+          # long a standby waits before taking over, is derived as ``renewDeadline`` plus 5s.
+          # Leave empty for the controller-runtime defaults of 10s and 15s. Values below 3s are
+          # rejected at startup, since leader election requires the deadline to exceed its retry
+          # period with jitter.
+          renewDeadline: 60s
+         
+     - Leader election settings for the operator controller.
+   * - operator.leaderElection.renewDeadline
+     - string
+     - `"60s"`
+     - Renew deadline of the leader lease, as a duration such as ``60s``: how long the leader keeps trying to renew before standing down. The lease duration, which is how long a standby waits before taking over, is derived as ``renewDeadline`` plus 5s. Leave empty for the controller-runtime defaults of 10s and 15s. Values below 3s are rejected at startup, since leader election requires the deadline to exceed its retry period with jitter.
    * - operator.maintenanceOperator
      - object
      - `{"drainControllerRequestorID":"nvidia.network-operator-drain-controller","nodeMaintenanceNamePrefix":"network-operator","nodeMaintenanceNamespace":"default","requestorID":"nvidia.doca-driver-upgrade","useDrainControllerRequestor":false,"useRequestor":false}`
@@ -139,7 +156,7 @@ General Parameters
      - Init container image repository.
    * - operator.ofedDriver.initContainer.version
      - string
-     - `"network-operator-v26.10.0-beta.2"`
+     - `"network-operator-v26.10.0-beta.3"`
      - Init container image version.
    * - operator.preStopSleepSeconds
      - int
@@ -271,7 +288,7 @@ Node Feature Discovery Helm chart customization options can be found `here <http
      -
    * - node-feature-discovery.image.tag
      - string
-     - `"network-operator-v26.10.0-beta.2"`
+     - `"network-operator-v26.10.0-beta.3"`
      -
    * - node-feature-discovery.master
      - yaml
@@ -333,19 +350,19 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      - Notes
    * - sriov-network-operator.images.ibSriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/ib-sriov-cni:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.operator
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.ovsCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/ovs-cni-plugin:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.rdmaCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/rdma-cni:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.resourcesInjector
      - string
@@ -353,23 +370,23 @@ SR-IOV Network Operator Helm chart customization options can be found `here <htt
      -
    * - sriov-network-operator.images.sriovCni
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-cni:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovConfigDaemon
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-config-daemon:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDevicePlugin
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-device-plugin:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.sriovDraDriver
      - string
-     - `"nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/dra-driver-sriov:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.images.webhook
      - string
-     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.10.0-beta.2"`
+     - `"nvcr.io/nvstaging/mellanox/sriov-network-operator-webhook:network-operator-v26.10.0-beta.3"`
      -
    * - sriov-network-operator.operator.admissionControllers
      - yaml
@@ -500,7 +517,7 @@ Maintenance Operator Helm chart customization options can be found `here <https:
      -
    * - maintenance-operator-chart.operator.image.tag
      - string
-     - `"network-operator-v26.10.0-beta.2"`
+     - `"network-operator-v26.10.0-beta.3"`
      -
    * - maintenance-operator-chart.operator.resources
      - yaml

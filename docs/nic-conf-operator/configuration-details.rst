@@ -39,7 +39,6 @@ Configuration details
 
   - Set PCI max read request size for each PF to ``4096`` (note: this is a runtime config and is not persistent)
   - Users can override the runtime value via ``maxReadRequest``
-  - ``maxAccOutRead`` is deprecated and ignored; use ``rawNvConfig`` for explicit ``MAX_ACC_OUT_READ`` management if needed.
 
 - ``roceOptimized``: performs RoCE related optimizations. If enabled performs the following by default:
 
@@ -69,7 +68,10 @@ Configuration details
 
   - Requires ``linkType=Ethernet`` and ``numVfs=1``
   - Cannot be combined with ``roceOptimized`` (RoCE settings are included automatically)
-  - Temporarily cannot be combined with ``rawNvConfig`` or ``networkBay``. NCO cannot yet determine which native mlxconfig parameters are owned by typed doSPCX operations, so allowing either combination could create a non-convergent reconcile loop
+  - Native NVConfig precedence is ``rawNvConfig`` > template-derived parameters > doSPCX. Validation uses DMS GET ``_nvconfig`` metadata to recognize overridden typed leaves and checks their native current/next-boot values, so intentional overrides converge after reboot
+  - Requires a DMS build containing NVConfig GET mapping metadata support (DOCA change 1508833) when native parameters accompany typed intent. Missing mappings fail validation before apply, including with ``force``. For ``/nvidia/link/type/value`` and indexed breakout ``planes`` only, the operator reuses the current mapping when the pending mapping is absent to support DMS builds missing that declaration; conflicting mappings still fail validation
+  - Raw ``MODULE_SPLIT_*`` assignments cannot be combined with typed breakout lane operations: DMS does not yet expose composite lane ownership
+  - Temporarily cannot be combined with ``networkBay``; complete native ownership is required to place the system profile below typed doSPCX intent
   - Only supported on ConnectX-7 (``nicType: 1021``), ConnectX-8 (``nicType: 1023``), ConnectX-9 (``nicType: 1025``) and BlueField-3 SuperNIC (``nicType: a2dc``)
   - ``version``: Required. Spectrum-X architecture version passed to the doSPCX planner
   - ``platformType``: Required. doSPCX platform identifier defined by the supplied Blueprints profile
@@ -81,6 +83,22 @@ Configuration details
 
 Spectrum-X Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+The planner profile is selected from ``platformType`` and ``multiplaneMode``:
+
++-----------------------+----------------------------------+-----------------------------------------------------------+
+| Platform              | Mode                             | doSPCX profile                                            |
++=======================+==================================+===========================================================+
+| ``rtx``               | ``none`` (or omitted)            | ``rtx``                                                   |
++-----------------------+----------------------------------+-----------------------------------------------------------+
+| ``vr``                | ``swplb``                        | ``vr-SPX_NetPlugin``                                      |
++-----------------------+----------------------------------+-----------------------------------------------------------+
+| ``vr``                | ``hwplb``                        | ``vr-SPX_Multiplane``                                     |
++-----------------------+----------------------------------+-----------------------------------------------------------+
+| Other platforms       | ``none`` / ``swplb`` / ``hwplb`` | ``single-plane`` / ``SPX_NetPlugin`` / ``SPX_Multiplane`` |
++-----------------------+----------------------------------+-----------------------------------------------------------+
+
+RTX rejects multiplane modes; VR rejects single-plane mode. The supplied data bundle must contain the selected profile and support the requested hardware. VR profile selection alone does not provide complete VR support: target-map construction still lacks the two-NIC-per-rail layout and ``nic_index_in_rail``, and the CRD does not yet allow eight planes for VR hardware multiplane.
 
 Spectrum-X configuration is compiled from the doSPCX data bundle published by the ``dospcx-data`` repository. The labeled ConfigMap contains a versioned format marker and a gzip-compressed archive of the complete doSPCX data tree:
 
@@ -125,7 +143,7 @@ doSPCX profiles can configure NICs with multiple data planes. Available modes:
 | ``hwplb`` | Hardware Plane Load Balancing | ConnectX-8, ConnectX-9 only                      | 2, 4       |
 +-----------+-------------------------------+--------------------------------------------------+------------+
 
-``spectrumx.SpectrumXManager`` includes the ``spectrumx.PlanManager`` interface. Before the controller starts its existing concurrent per-device NV apply, it calls ``PreparePlan`` once for the node’s Spectrum-X device group with the ``prepare`` stage. It does the same with the ``configure`` stage before the existing concurrent runtime apply. Plan preparation itself never executes generated plan operations. ``PreparePlan`` parses the host-k8s ``plan.semantic.groups`` contract once and caches a homogeneous configuration plan in memory. The compiled form contains only three execution inputs: ordered ``breakout`` and ``post-breakout`` XPath operation slices for the prepare stage, and ordered runtime operation groups for the configure stage. Device targeting remains the responsibility of the configuration manager when it consumes the plan. ``GetPreparedPlan`` validates the requesting device’s inputs and membership against the cache; it does not reread or reparse files for every per-device apply. During NV validation, the configuration manager separately queries the existing template-derived native parameter map and the active doSPCX XPath phase. During NV apply, it sends both inputs in one DMS action through the primary PF and passes every available logical port number so DMS can expand port-scoped typed mappings. Breakout must match current and pending state on all device ports before post-breakout is considered. ``force`` applies the complete breakout plus post-breakout intent immediately; after the breakout barrier, ``with-default`` also resends both phases so default filling cannot undo breakout. Semantic group references are authoritative, and an omitted operation kind means ``set``, matching DMS. Configure groups ``eswitch`` and ``vf-lifecycle`` are intentionally omitted from the compiled plan; unknown groups fail closed. Plan compilation remains execution-free.
+``spectrumx.SpectrumXManager`` includes the ``spectrumx.PlanManager`` interface. Before the controller starts its existing concurrent per-device NV apply, it calls ``PreparePlan`` once for the node’s Spectrum-X device group with the ``prepare`` stage. It does the same with the ``configure`` stage before the existing concurrent runtime apply. Plan preparation itself never executes generated plan operations. ``PreparePlan`` parses the host-k8s ``plan.semantic.groups`` contract once and caches a homogeneous configuration plan in memory. The compiled form contains only three execution inputs: ordered ``breakout`` and ``post-breakout`` XPath operation slices for the prepare stage, and ordered runtime operation groups for the configure stage. Device targeting remains the responsibility of the configuration manager when it consumes the plan. ``GetPreparedPlan`` validates the requesting device’s inputs and membership against the cache; it does not reread or reparse files for every per-device apply. During NV validation, the configuration manager separately queries the existing template-derived native parameter map and the active doSPCX XPath phase. During NV apply, it sends both inputs in one DMS action per discovered PCI function, using local port 1 consistently with validation. Each batch includes that function’s supported native overrides. Breakout must match current and pending state on all device ports before post-breakout is considered. ``force`` applies the complete breakout plus post-breakout intent immediately; after the breakout barrier, ``with-default`` also resends both phases so default filling cannot undo breakout. Semantic group references are authoritative, and an omitted operation kind means ``set``, matching DMS. Configure groups ``eswitch`` and ``vf-lifecycle`` are intentionally omitted from the compiled plan; unknown groups fail closed. Plan compilation remains execution-free.
 
 At runtime, the configuration manager validates the final desired value of every operation group on each applicable PCI function. Repeated writes remain ordered during apply, while validation compares the last write for each path and leaf across all scope and target-class batches that apply to that function. Validation keeps different scope and target-class pairs in separate DMS commands. Generic runtime configuration is applied first and doSPCX groups are applied last in semantic order. The ``cc`` group starts ``doca_spcx_cc`` before its XPath operations; in HWPLB mode it uses the first function of each NIC because the functions share one RDMA device. Other groups are applied to every discovered function. Indexed XPath queries are issued individually until DMS preserves indexed keys in batched JSON responses.
 
