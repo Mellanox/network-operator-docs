@@ -399,6 +399,10 @@ IPoIBNetworkSpec defines the desired state of IPoIBNetwork
       | ``master``                                                                                        | Name of the host interface to enslave. Defaults to default route interface                        |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``mtu``                                                                                           | MTU of the IPoIB child interface. If 0 (default), MTU is not set and the child keeps the          |
+      | int                                                                                               | kernel/fabric default, which may differ from the master’s MTU. Set an explicit value to match the |
+      |                                                                                                   | master’s MTU.                                                                                     |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ipam``                                                                                          | IPAM configuration to be used for this network.                                                   |
       | string                                                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
@@ -843,6 +847,12 @@ NicFirmwareStorageSpec contains configuration for the NIC firmware storage
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``availableStorageSize``                                                                          | AvailableStorageSize is storage size for the NIC Configuration Operator to request. Only applies  |
       | string                                                                                            | if nicFirmwareStorage.create == true. Default value: 1Gi                                          |
+      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
+      | ``accessMode``                                                                                    | AccessMode is the access mode of the PVC to create. Only applies if nicFirmwareStorage.create ==  |
+      | string                                                                                            | true. ReadWriteMany is required on multi-node clusters, where the firmware storage is mounted by  |
+      |                                                                                                   | the configuration daemon on every node. ReadWriteOnce is only valid on single-node clusters (e.g. |
+      |                                                                                                   | Single Node OpenShift with storage that does not support ReadWriteMany). Default value:           |
+      |                                                                                                   | ReadWriteMany                                                                                     |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicNodePolicy:

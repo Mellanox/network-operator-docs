@@ -21,8 +21,7 @@ ConfigurationTemplateSpec
 
 (*Appears on:* :ref:`NicConfigurationTemplateSpec <NicConfigurationTemplateSpec>`, :ref:`NicDeviceConfigurationSpec <NicDeviceConfigurationSpec>`)
 
-ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): HIGH PRIORITY – remove the next two temporary restrictions ASAP once DMS can report typed-plan native parameter
-ownership or validate combined typed/raw state.
+ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): Restore Network Bay after DMS exposes composite lane ownership for layering system profiles below typed intent.
 
 .. container:: md-typeset__scrollwrap
 
@@ -408,10 +407,10 @@ NicDeviceStatus defines the observed state of NicDevice
       | string                                                                                                        | all cards on a host: on systems with embedded NICs sharing a flashed VPD image (e.g. HGX B300)    |
       |                                                                                                               | multiple cards will report the same serial number. The operator identifies NICs uniquely by their |
       |                                                                                                               | PCI device address (the ``pci`` field on the first entry in ``ports``, with the function digit    |
-      |                                                                                                               | stripped).                                                                                        |
+      |                                                                                                               | stripped). Empty when the serial number is unavailable from PCI VPD.                              |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``partNumber``                                                                                                | Part number of the device, e.g. MCX713106AEHEA_QP1                                                |
-      | string                                                                                                        |                                                                                                   |
+      | ``partNumber``                                                                                                | Part number of the device, e.g. MCX713106AEHEA_QP1 Empty when the part number is unavailable from |
+      | string                                                                                                        | PCI VPD.                                                                                          |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``psid``                                                                                                      | Product Serial ID of the device, e.g. MT_0000000221                                               |
       | string                                                                                                        |                                                                                                   |
@@ -422,10 +421,10 @@ NicDeviceStatus defines the observed state of NicDevice
       | ``dpu``                                                                                                       | DPU indicates if the device is a BlueField in DPU mode                                            |
       | bool                                                                                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``modelName``                                                                                                 | ModelName is the model name of the device, e.g. ConnectX-6 or BlueField-3                         |
-      | string                                                                                                        |                                                                                                   |
+      | ``modelName``                                                                                                 | ModelName is the model name of the device, e.g. ConnectX-6 or BlueField-3 Empty when the model    |
+      | string                                                                                                        | name is unavailable from PCI VPD.                                                                 |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``superNIC``                                                                                                  | SuperNIC indicates if the device is a SuperNIC                                                    |
+      | ``superNIC``                                                                                                  | SuperNIC indicates if the device is a SuperNIC False when the PCI VPD model name is unavailable.  |
       | bool                                                                                                          |                                                                                                   |
       +---------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``ports``                                                                                                     | List of ports for the device                                                                      |
@@ -765,9 +764,6 @@ PciPerformanceOptimizedSpec specifies PCI performance optimization settings
       +===================================================================================================+===================================================================================================+
       | ``enabled``                                                                                       | Specifies whether to enable PCI performance optimization                                          |
       | bool                                                                                              |                                                                                                   |
-      +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
-      | ``maxAccOutRead``                                                                                 | Deprecated: this field is ignored and no longer maps to MAX_ACC_OUT_READ.                         |
-      | int                                                                                               |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``maxReadRequest``                                                                                | Specifies the size of a single PCI read request in bytes                                          |
       | int                                                                                               |                                                                                                   |
