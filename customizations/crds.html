@@ -676,7 +676,13 @@ string</p></td>
 string</p></td>
 <td><p>Name of the host interface to enslave. Defaults to default route interface</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">mtu</span></code>
+int</p></td>
+<td><p>MTU of the IPoIB child interface. If 0 (default), MTU is not set and the child keeps the
+kernel/fabric default, which may differ from the master’s MTU. Set an explicit value to match the
+master’s MTU.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ipam</span></code>
 string</p></td>
 <td><p>IPAM configuration to be used for this network.</p></td>
 </tr>
@@ -1273,6 +1279,14 @@ string</p></td>
 <td><p>AvailableStorageSize is storage size for the NIC Configuration Operator to request. Only applies
 if nicFirmwareStorage.create == true. Default value: 1Gi</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">accessMode</span></code>
+string</p></td>
+<td><p>AccessMode is the access mode of the PVC to create. Only applies if nicFirmwareStorage.create ==
+true. ReadWriteMany is required on multi-node clusters, where the firmware storage is mounted by
+the configuration daemon on every node. ReadWriteOnce is only valid on single-node clusters (e.g.
+Single Node OpenShift with storage that does not support ReadWriteMany). Default value:
+ReadWriteMany</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1679,7 +1693,7 @@ termination, zero means infinite</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 30, 2026.
+      <span class="lastupdated">Last updated on Oct 08, 2026.
       </span></p>
   </div>
 

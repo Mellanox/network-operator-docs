@@ -158,8 +158,7 @@
 <section id="configurationtemplatespec">
 <span id="id2"></span><h3>ConfigurationTemplateSpec<a class="headerlink" href="#configurationtemplatespec" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#nicconfigurationtemplatespec"><span class="std std-ref">NicConfigurationTemplateSpec</span></a>, <a class="reference internal" href="#nicdeviceconfigurationspec"><span class="std std-ref">NicDeviceConfigurationSpec</span></a>)</p>
-<p>ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): HIGH PRIORITY – remove the next two temporary restrictions ASAP once DMS can report typed-plan native parameter
-ownership or validate combined typed/raw state.</p>
+<p>ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): Restore Network Bay after DMS exposes composite lane ownership for layering system profiles below typed intent.</p>
 <div class="md-typeset-scrollwrap docutils container">
 <div class="md-typeset-table docutils container">
 <table class="docutils align-default">
@@ -672,11 +671,12 @@ string</p></td>
 all cards on a host: on systems with embedded NICs sharing a flashed VPD image (e.g. HGX B300)
 multiple cards will report the same serial number. The operator identifies NICs uniquely by their
 PCI device address (the <code class="docutils literal notranslate"><span class="pre">pci</span></code> field on the first entry in <code class="docutils literal notranslate"><span class="pre">ports</span></code>, with the function digit
-stripped).</p></td>
+stripped). Empty when the serial number is unavailable from PCI VPD.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">partNumber</span></code>
 string</p></td>
-<td><p>Part number of the device, e.g. MCX713106AEHEA_QP1</p></td>
+<td><p>Part number of the device, e.g. MCX713106AEHEA_QP1 Empty when the part number is unavailable from
+PCI VPD.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">psid</span></code>
 string</p></td>
@@ -692,11 +692,12 @@ bool</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">modelName</span></code>
 string</p></td>
-<td><p>ModelName is the model name of the device, e.g. ConnectX-6 or BlueField-3</p></td>
+<td><p>ModelName is the model name of the device, e.g. ConnectX-6 or BlueField-3 Empty when the model
+name is unavailable from PCI VPD.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">superNIC</span></code>
 bool</p></td>
-<td><p>SuperNIC indicates if the device is a SuperNIC</p></td>
+<td><p>SuperNIC indicates if the device is a SuperNIC False when the PCI VPD model name is unavailable.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ports</span></code>
 <a class="reference internal" href="#nicdeviceportspec"><span class="std std-ref">[]NicDevicePortSpec</span></a></p></td>
@@ -1147,11 +1148,7 @@ bool</p></td>
 bool</p></td>
 <td><p>Specifies whether to enable PCI performance optimization</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">maxAccOutRead</span></code>
-int</p></td>
-<td><p>Deprecated: this field is ignored and no longer maps to MAX_ACC_OUT_READ.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">maxReadRequest</span></code>
 int</p></td>
 <td><p>Specifies the size of a single PCI read request in bytes</p></td>
 </tr>
@@ -1344,7 +1341,7 @@ Number of planes to be configured</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Sep 30, 2026.
+      <span class="lastupdated">Last updated on Oct 08, 2026.
       </span></p>
   </div>
 
