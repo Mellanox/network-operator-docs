@@ -53,16 +53,15 @@ ConfigurationTemplateSpec is a set of configurations for the NICs
       | :ref:`SpectrumXOptimizedSpec <SpectrumXOptimizedSpec>`                                            | parameters, if provided, are merged as overrides on top of Spectrum-X calculated params.          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``networkBay``                                                                                    | *(Optional)*                                                                                      |
-      | :ref:`NetworkBaySpec <NetworkBaySpec>`                                                            | NetworkBay configures a ConnectX-9 Network Bay card (per-ASIC set_system_conf). Allowed only for  |
-      |                                                                                                   | ConnectX-9 (nicType 1025).                                                                        |
+      | :ref:`NetworkBaySpec <NetworkBaySpec>`                                                            | NetworkBay configures a ConnectX-9 Network Bay card from a per-ASIC mlxconfig system profile.     |
+      |                                                                                                   | Allowed only for ConnectX-9 (nicType 1025).                                                       |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``rawNvConfig``                                                                                   | List of arbitrary nv config parameters                                                            |
       | :ref:`[]NvConfigParam <NvConfigParam>`                                                            |                                                                                                   |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | ``force``                                                                                         | *(Optional)*                                                                                      |
-      | bool                                                                                              | Force passes ``--force`` to mlxconfig set commands. When set, the daemon applies the nv config    |
-      |                                                                                                   | batch and set_system_conf with –force, letting mlxconfig accept a batch it would otherwise refuse |
-      |                                                                                                   | due to implicit parameter dependencies.                                                           |
+      | bool                                                                                              | Force passes ``--force`` to mlxconfig set commands, letting mlxconfig accept a batch it would     |
+      |                                                                                                   | otherwise refuse due to implicit parameter dependencies.                                          |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _ECNSpec:
@@ -160,9 +159,9 @@ Allowed only when nicSelector.nicType == “1025” (ConnectX-9), enforced by CE
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
       | Field                                                                                             | Description                                                                                       |
       +===================================================================================================+===================================================================================================+
-      | ``conf``                                                                                          | Conf is the argument passed to ``mlxconfig set_system_conf``. The per-ASIC index is appended      |
-      | string                                                                                            | automatically by the daemon based on the device’s detected Network Bay ASIC index, e.g.           |
-      |                                                                                                   | set_system_conf [0].                                                                              |
+      | ``conf``                                                                                          | Conf is the mlxconfig system configuration profile name. The daemon resolves the profile          |
+      | string                                                                                            | parameters for the device’s detected Network Bay ASIC and manages them through the regular        |
+      |                                                                                                   | mlxconfig validation and apply flow.                                                              |
       +---------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------+
 
 .. _NicConfigurationTemplate:
