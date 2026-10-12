@@ -21,7 +21,7 @@ ConfigurationTemplateSpec
 
 (*Appears on:* :ref:`NicConfigurationTemplateSpec <NicConfigurationTemplateSpec>`, :ref:`NicDeviceConfigurationSpec <NicDeviceConfigurationSpec>`)
 
-ConfigurationTemplateSpec is a set of configurations for the NICs TODO(dospcx-nvconfig): Restore Network Bay after DMS exposes composite lane ownership for layering system profiles below typed intent.
+ConfigurationTemplateSpec is a set of configurations for the NICs
 
 .. container:: md-typeset__scrollwrap
 
