@@ -47,7 +47,7 @@ Configuration details
     - Conditionally applied for second port if present
 
       - ``ROCE_CC_PRIO_MASK_P1=255``, ``ROCE_CC_PRIO_MASK_P2=255``
-      - ``CNP_DSCP_P1=4``, ``CNP_DSCP_P2=4``
+      - ``CNP_DSCP_P1=48``, ``CNP_DSCP_P2=48``
       - ``CNP_802P_PRIO_P1=6``, ``CNP_802P_PRIO_P2=6``
 
   - Configure pfc (Priority Flow Control) for priority 3, set trust to dscp on each PF, set ToS (Type of Service) to 0.
@@ -69,9 +69,9 @@ Configuration details
   - Requires ``linkType=Ethernet`` and ``numVfs=1``
   - Cannot be combined with ``roceOptimized`` (RoCE settings are included automatically)
   - Native NVConfig precedence is ``rawNvConfig`` > template-derived parameters > doSPCX. Validation uses DMS GET ``_nvconfig`` metadata to recognize overridden typed leaves and checks their native current/next-boot values, so intentional overrides converge after reboot
-  - Requires a DMS build containing NVConfig GET mapping metadata support (DOCA change 1508833) when native parameters accompany typed intent. Missing mappings fail validation before apply, including with ``force``. For ``/nvidia/link/type/value`` and indexed breakout ``planes`` only, the operator reuses the current mapping when the pending mapping is absent to support DMS builds missing that declaration; conflicting mappings still fail validation
-  - Raw ``MODULE_SPLIT_*`` assignments cannot be combined with typed breakout lane operations: DMS does not yet expose composite lane ownership
-  - Temporarily cannot be combined with ``networkBay``; complete native ownership is required to place the system profile below typed doSPCX intent
+  - Requires a DMS build containing NVConfig GET mapping metadata support (DOCA changes 1508833 and 1521729) when native parameters accompany typed intent. Current and pending mappings must both be present and consistent; missing or conflicting mappings fail validation before apply, including with ``force``
+  - Supported raw ``MODULE_SPLIT_*`` assignments override individual typed breakout lanes; their native values are validated separately from the remaining typed lane membership
+  - Can be combined with ``networkBay``: doSPCX overrides system-profile defaults, while explicit template settings and ``rawNvConfig`` take precedence over doSPCX
   - Only supported on ConnectX-7 (``nicType: 1021``), ConnectX-8 (``nicType: 1023``), ConnectX-9 (``nicType: 1025``) and BlueField-3 SuperNIC (``nicType: a2dc``)
   - ``version``: Required. Spectrum-X architecture version passed to the doSPCX planner
   - ``platformType``: Required. doSPCX platform identifier defined by the supplied Blueprints profile
