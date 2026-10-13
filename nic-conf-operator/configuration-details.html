@@ -146,7 +146,7 @@
 <li><p>Conditionally applied for second port if present</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P1=255</span></code>, <code class="docutils literal notranslate"><span class="pre">ROCE_CC_PRIO_MASK_P2=255</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P1=4</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P2=4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P1=48</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_DSCP_P2=48</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P1=6</span></code>, <code class="docutils literal notranslate"><span class="pre">CNP_802P_PRIO_P2=6</span></code></p></li>
 </ul>
 </li>
@@ -174,9 +174,9 @@
 <li><p>Requires <code class="docutils literal notranslate"><span class="pre">linkType=Ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">numVfs=1</span></code></p></li>
 <li><p>Cannot be combined with <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> (RoCE settings are included automatically)</p></li>
 <li><p>Native NVConfig precedence is <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> &gt; template-derived parameters &gt; doSPCX. Validation uses DMS GET <code class="docutils literal notranslate"><span class="pre">_nvconfig</span></code> metadata to recognize overridden typed leaves and checks their native current/next-boot values, so intentional overrides converge after reboot</p></li>
-<li><p>Requires a DMS build containing NVConfig GET mapping metadata support (DOCA change 1508833) when native parameters accompany typed intent. Missing mappings fail validation before apply, including with <code class="docutils literal notranslate"><span class="pre">force</span></code>. For <code class="docutils literal notranslate"><span class="pre">/nvidia/link/type/value</span></code> and indexed breakout <code class="docutils literal notranslate"><span class="pre">planes</span></code> only, the operator reuses the current mapping when the pending mapping is absent to support DMS builds missing that declaration; conflicting mappings still fail validation</p></li>
-<li><p>Raw <code class="docutils literal notranslate"><span class="pre">MODULE_SPLIT_*</span></code> assignments cannot be combined with typed breakout lane operations: DMS does not yet expose composite lane ownership</p></li>
-<li><p>Temporarily cannot be combined with <code class="docutils literal notranslate"><span class="pre">networkBay</span></code>; complete native ownership is required to place the system profile below typed doSPCX intent</p></li>
+<li><p>Requires a DMS build containing NVConfig GET mapping metadata support (DOCA changes 1508833 and 1521729) when native parameters accompany typed intent. Current and pending mappings must both be present and consistent; missing or conflicting mappings fail validation before apply, including with <code class="docutils literal notranslate"><span class="pre">force</span></code></p></li>
+<li><p>Supported raw <code class="docutils literal notranslate"><span class="pre">MODULE_SPLIT_*</span></code> assignments override individual typed breakout lanes; their native values are validated separately from the remaining typed lane membership</p></li>
+<li><p>Can be combined with <code class="docutils literal notranslate"><span class="pre">networkBay</span></code>: doSPCX overrides system-profile defaults, while explicit template settings and <code class="docutils literal notranslate"><span class="pre">rawNvConfig</span></code> take precedence over doSPCX</p></li>
 <li><p>Only supported on ConnectX-7 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1021</span></code>), ConnectX-8 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>) and BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">version</span></code>: Required. Spectrum-X architecture version passed to the doSPCX planner</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">platformType</span></code>: Required. doSPCX platform identifier defined by the supplied Blueprints profile</p></li>
@@ -334,7 +334,7 @@
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 08, 2026.
+      <span class="lastupdated">Last updated on Oct 13, 2026.
       </span></p>
   </div>
 
