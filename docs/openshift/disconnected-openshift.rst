@@ -530,7 +530,7 @@ You need to provide required parameters depending on your setup. After editing a
         name: cert-config
       env:
       - name: RESTORE_DRIVER_ON_POD_TERMINATION
-        value: "true"
+        value: "false"
       - name: UNLOAD_STORAGE_MODULES
         value: "true"
       - name: CREATE_IFNAMES_UDEV
@@ -608,7 +608,7 @@ You need to provide required parameters depending on your setup. After editing a
     ofedDriver:
       env:
       - name: RESTORE_DRIVER_ON_POD_TERMINATION
-        value: "true"
+        value: "false"
       - name: UNLOAD_STORAGE_MODULES
         value: "true"
       - name: CREATE_IFNAMES_UDEV

@@ -40,7 +40,7 @@ The following are special environment variables supported by the NVIDIA DOCA-OFE
      - Enable loading of NFS related storage modules from a NVIDIA DOCA-OFED Driver container
    * - RESTORE_DRIVER_ON_POD_TERMINATION
      - "false"
-     - Restore host drivers when a container
+     - Restore host drivers when the container terminates. See the warning below.
 
 In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
 
@@ -58,6 +58,17 @@ ENABLE_NFSRDMA Environment Variable
 In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
 In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on `ib_core` which does not match (symbol error). Only NVME with local drive is supported.
 
+
+------------------------------------------------------
+RESTORE_DRIVER_ON_POD_TERMINATION Environment Variable
+------------------------------------------------------
+
+When set to ``"true"``, pod termination unloads the NVIDIA DOCA-OFED Driver kernel modules and restores the host drivers.
+
+.. warning::
+   Leave ``RESTORE_DRIVER_ON_POD_TERMINATION`` at its default value, ``"false"``, when the operating system IP address is configured on an NVIDIA NIC.
+
+   With ``"true"``, unloading those kernel modules removes the node's management connectivity. If the unload fails because a kernel module is busy, the drivers can be left in a partial state and the node becomes unreachable. Kubernetes cannot recover the node in-band. Restore connectivity with out-of-band access, such as a BMC reboot.
 
 
 ---------------------------
