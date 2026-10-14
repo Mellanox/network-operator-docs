@@ -71,6 +71,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#nvidia-doca-ofed-driver-container-environment-variables">NVIDIA DOCA-OFED Driver Container Environment Variables</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#create-ifnames-udev-environment-variable">CREATE_IFNAMES_UDEV Environment Variable</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#enable-nfsrdma-environment-variable">ENABLE_NFSRDMA Environment Variable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#restore-driver-on-pod-termination-environment-variable">RESTORE_DRIVER_ON_POD_TERMINATION Environment Variable</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-of-nicclusterpolicy">Example of NicClusterPolicy</a></li>
 </ul>
 </li>
@@ -150,17 +151,18 @@
 <ul>
 <li><p><a class="reference internal" href="#create-ifnames-udev-environment-variable" id="id5">CREATE_IFNAMES_UDEV Environment Variable</a></p></li>
 <li><p><a class="reference internal" href="#enable-nfsrdma-environment-variable" id="id6">ENABLE_NFSRDMA Environment Variable</a></p></li>
-<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id7">Example of NicClusterPolicy</a></p></li>
+<li><p><a class="reference internal" href="#restore-driver-on-pod-termination-environment-variable" id="id7">RESTORE_DRIVER_ON_POD_TERMINATION Environment Variable</a></p></li>
+<li><p><a class="reference internal" href="#example-of-nicclusterpolicy" id="id8">Example of NicClusterPolicy</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id8">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
+<li><p><a class="reference internal" href="#precompiled-container-build-instructions-for-nvidia-doca-ofed-driver-container" id="id9">Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container</a></p>
 <ul>
-<li><p><a class="reference internal" href="#prerequisites" id="id9">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#dockerfile-overview" id="id10">Dockerfile Overview</a></p></li>
-<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id11">Common mandatory build parameters</a></p></li>
-<li><p><a class="reference internal" href="#rhcos" id="id12">RHCOS</a></p></li>
-<li><p><a class="reference internal" href="#ubuntu" id="id13">Ubuntu</a></p></li>
-<li><p><a class="reference internal" href="#sles" id="id14">SLES</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id10">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#dockerfile-overview" id="id11">Dockerfile Overview</a></p></li>
+<li><p><a class="reference internal" href="#common-mandatory-build-parameters" id="id12">Common mandatory build parameters</a></p></li>
+<li><p><a class="reference internal" href="#rhcos" id="id13">RHCOS</a></p></li>
+<li><p><a class="reference internal" href="#ubuntu" id="id14">Ubuntu</a></p></li>
+<li><p><a class="reference internal" href="#sles" id="id15">SLES</a></p></li>
 </ul>
 </li>
 </ul>
@@ -210,7 +212,7 @@
 </tr>
 <tr class="row-odd"><td><p>RESTORE_DRIVER_ON_POD_TERMINATION</p></td>
 <td><p>“false”</p></td>
-<td><p>Restore host drivers when a container</p></td>
+<td><p>Restore host drivers when the container terminates. See the warning below.</p></td>
 </tr>
 </tbody>
 </table>
@@ -226,6 +228,15 @@
 <h3>ENABLE_NFSRDMA Environment Variable<a class="headerlink" href="#enable-nfsrdma-environment-variable" title="Permalink to this headline"></a></h3>
 <p>In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
 In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on <cite>ib_core</cite> which does not match (symbol error). Only NVME with local drive is supported.</p>
+</section>
+<section id="restore-driver-on-pod-termination-environment-variable">
+<h3>RESTORE_DRIVER_ON_POD_TERMINATION Environment Variable<a class="headerlink" href="#restore-driver-on-pod-termination-environment-variable" title="Permalink to this headline"></a></h3>
+<p>When set to <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code>, pod termination unloads the NVIDIA DOCA-OFED Driver kernel modules and restores the host drivers.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Leave <code class="docutils literal notranslate"><span class="pre">RESTORE_DRIVER_ON_POD_TERMINATION</span></code> at its default value, <code class="docutils literal notranslate"><span class="pre">&quot;false&quot;</span></code>, when the operating system IP address is configured on an NVIDIA NIC.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code>, unloading those kernel modules removes the node’s management connectivity. If the unload fails because a kernel module is busy, the drivers can be left in a partial state and the node becomes unreachable. Kubernetes cannot recover the node in-band. Restore connectivity with out-of-band access, such as a BMC reboot.</p>
+</div>
 </section>
 <section id="example-of-nicclusterpolicy">
 <h3>Example of NicClusterPolicy<a class="headerlink" href="#example-of-nicclusterpolicy" title="Permalink to this headline"></a></h3>
@@ -407,7 +418,7 @@ quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 13, 2026.
+      <span class="lastupdated">Last updated on Oct 14, 2026.
       </span></p>
   </div>
 
