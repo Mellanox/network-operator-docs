@@ -202,8 +202,6 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f spectrum-x-profile-configmap.yaml
 </pre></div>
 </div>
-<p>The label value is ignored. Exactly <strong>one</strong> profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved.</p>
-<p>The deprecated <code class="docutils literal notranslate"><span class="pre">NicFirmwareSource.spec.docaSpcXCCUrlSource</span></code> field no longer selects the congestion-control software. Remove it when migrating. The old <code class="docutils literal notranslate"><span class="pre">docaCCVersion</span></code> and <code class="docutils literal notranslate"><span class="pre">useSoftwareCCAlgorithm</span></code> settings are no longer configured separately; use the published profile ConfigMap.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Admission checks the template fields, but does not establish that the profile supports the architecture, platform, and NIC combination. Check <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> conditions as described in <a class="reference internal" href="verify-and-troubleshoot.html"><span class="doc">Verify and Troubleshoot</span></a>.</p>
@@ -247,8 +245,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 <h2>Enable SPC-X Optimizations for Devices<a class="headerlink" href="#enable-spc-x-optimizations-for-devices" title="Permalink to this headline"></a></h2>
 <section id="platform-configuration-values">
 <span id="spectrum-x-platform-configuration"></span><h3>Platform configuration values<a class="headerlink" href="#platform-configuration-values" title="Permalink to this headline"></a></h3>
-<p>Use the following values from the <strong>Working Version</strong> deployment guides’
-<strong>Appendix: K8s Deployment</strong>. <code class="docutils literal notranslate"><span class="pre">PLATFORM_TYPE</span></code> maps to
+<p><code class="docutils literal notranslate"><span class="pre">PLATFORM_TYPE</span></code> maps to
 <code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.platformType</span></code>, <code class="docutils literal notranslate"><span class="pre">NIC_TYPE</span></code> to
 <code class="docutils literal notranslate"><span class="pre">spec.nicSelector.nicType</span></code>, <code class="docutils literal notranslate"><span class="pre">MP_MODE</span></code> to
 <code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.multiplaneMode</span></code>, and <code class="docutils literal notranslate"><span class="pre">NUM_PLANES</span></code> to
@@ -391,10 +388,6 @@ In <code class="docutils literal notranslate"><span class="pre">swplb</span></co
 number of planes. The totals above are platform-wide counts, not values
 for <code class="docutils literal notranslate"><span class="pre">template.numVfs</span></code>; the NIC configuration template still uses
 <code class="docutils literal notranslate"><span class="pre">numVfs:</span> <span class="pre">1</span></code>.</p>
-<p>The working VR200 and HGX R200 Kubernetes appendices do not yet specify
-complete configuration values, so those layouts are not included here.
-For validated hardware and release combinations, see
-<a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 </section>
 <section id="single-plane-configuration">
 <h3>Single-plane configuration<a class="headerlink" href="#single-plane-configuration" title="Permalink to this headline"></a></h3>
