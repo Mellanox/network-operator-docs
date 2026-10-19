@@ -80,8 +80,6 @@ The following shows the required API format. Use the published ConfigMap rather 
 
    kubectl apply -f spectrum-x-profile-configmap.yaml
 
-The label value is ignored. Exactly **one** profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved.
-
 The deprecated ``NicFirmwareSource.spec.docaSpcXCCUrlSource`` field no longer selects the congestion-control software. Remove it when migrating. The old ``docaCCVersion`` and ``useSoftwareCCAlgorithm`` settings are no longer configured separately; use the published profile ConfigMap.
 
 .. note::
