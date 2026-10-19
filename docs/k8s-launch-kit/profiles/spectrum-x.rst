@@ -89,6 +89,9 @@ ConfigMap name. Launch Kit derives each group's ``platformType`` from
 Unknown or ambiguous GPU platforms prevent RA2.4 generation. The supplied
 profile must support the selected platform and hardware layout.
 
+For the platform-to-``platformType`` mapping, NIC IDs, plane counts, and
+PF/VF totals, see :ref:`spectrum-x-platform-configuration`.
+
 .. important::
 
    The installed NIC Configuration Operator must support the current

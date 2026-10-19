@@ -394,6 +394,8 @@ Step 6: Configure the SuperNICs
 Create the ``NicConfigurationTemplate`` that selects the architecture version,
 platform, and multiplane mode. Match ``platformType`` to the deployed GPU
 platform and the profile's supported identifiers, rather than the NIC model.
+Use :ref:`spectrum-x-platform-configuration` to select the platform type,
+NIC ID, multiplane mode, and plane count for your worker nodes.
 
 .. tab-set::
 

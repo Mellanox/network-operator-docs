@@ -137,6 +137,130 @@ Configure and apply the NicFirmwareTemplate CR:
 Enable SPC-X Optimizations for Devices
 ======================================
 
+.. _spectrum-x-platform-configuration:
+
+Platform configuration values
+-----------------------------
+
+Use the following values from the **Working Version** deployment guides'
+**Appendix: K8s Deployment**. ``PLATFORM_TYPE`` maps to
+``spec.template.spectrumXOptimized.platformType``, ``NIC_TYPE`` to
+``spec.nicSelector.nicType``, ``MP_MODE`` to
+``spec.template.spectrumXOptimized.multiplaneMode``, and ``NUM_PLANES`` to
+``spec.template.spectrumXOptimized.numberOfPlanes``.
+
+PF and VF totals describe the east-west NICs on one worker node in the
+reference platform layout, excluding north-south NICs. For HGX H100 use
+``h100``; for HGX H200 use ``h200``. Select the row matching your NIC and
+physical plane configuration.
+
+.. list-table:: Platform configuration by worker node
+   :header-rows: 1
+   :widths: 18 22 16 14 15 15
+
+   * - | Platform type
+       | (``PLATFORM_TYPE``)
+     - | NIC type ID
+       | (``NIC_TYPE``)
+     - | Multi-plane mode
+       | (``MP_MODE``)
+     - | Number of planes
+       | (``NUM_PLANES``)
+     - Total PFs per platform
+     - Total VFs per platform
+   * - ``h100`` / ``h200``
+     - ``a2dc`` (BlueField-3)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``b200``
+     - ``a2dc`` (BlueField-3)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``b200``
+     - ``1021`` (ConnectX-7)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``gb200``
+     - ``1021`` (ConnectX-7)
+     - ``none``
+     - 1
+     - 4
+     - 4
+   * - ``rtx`` (RTX PRO 6000)
+     - ``1023`` (ConnectX-8)
+     - ``none``
+     - 1
+     - 8 (2 x 4)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 2
+     - 16 (2 x 8)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 4
+     - 32 (4 x 8)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 2
+     - 16 (2 x 8)
+     - 16
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 4
+     - 32 (4 x 8)
+     - 32
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 2
+     - 8 (2 x 4)
+     - 4
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 4
+     - 16 (4 x 4)
+     - 4
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 2
+     - 8 (2 x 4)
+     - 8
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 4
+     - 16 (4 x 4)
+     - 16
+
+In ``hwplb``, each rail exposes one VF regardless of the number of planes.
+In ``swplb``, each PF exposes a VF, so the VF count increases with the
+number of planes. The totals above are platform-wide counts, not values
+for ``template.numVfs``; the NIC configuration template still uses
+``numVfs: 1``.
+
+The working VR200 and HGX R200 Kubernetes appendices do not yet specify
+complete configuration values, so those layouts are not included here.
+For validated hardware and release combinations, see
+:doc:`Platform Support <../platform-support>`.
+
+Single-plane configuration
+--------------------------
+
 Set the architecture version and the platform identifier supported by the profile. Spectrum-X optimizations require ``linkType: Ethernet`` and ``numVfs: 1``; Network Bay has a separate link-type rule described below. This example selects a GB200 single-plane deployment:
 
 .. code-block:: yaml
