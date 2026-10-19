@@ -130,13 +130,9 @@ Launch Kit provides an ``RA2.4`` profile for the 26.10 release line; a
 generator profile does not establish platform qualification. Use
 :doc:`Platform Support <../platform-support>` for validated combinations.
 
-Through Network Operator 26.4.x, ``spectrumXOptimized.version`` selected
-built-in NIC tuning. In 26.7.x, tuning moved to a YAML ``data.profile``
-ConfigMap and ``version`` named that ConfigMap. In 26.10, apply one
-**Spectrum-X profile ConfigMap** and set ``version`` to the architecture
-version, together with ``platformType``. The ConfigMap name is independent
-of those API field values. Existing 26.7 templates and profile bodies require
-migration before use with 26.10.
+Apply one **Spectrum-X profile ConfigMap** and set
+``spectrumXOptimized.version`` to the architecture version, together with
+``platformType``. The ConfigMap name is independent of those API field values.
 See :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>` for details.
 
 ==================

@@ -30,24 +30,7 @@ NVIDIA Spectrum-X NIC Configuration
 
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ in Network Operator 26.10 applies Spectrum-X settings from a **profile ConfigMap**. The ``spectrumXOptimized.version`` field selects the architecture version, and ``platformType`` selects the hardware platform. Neither field names the ConfigMap.
 
-The examples on this page target the component versions shipped with Network Operator |network-operator-version|. The configuration contract changed after 26.7.0:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 45 35
-
-   * - Network Operator
-     - Configuration data
-     - Meaning of ``version``
-   * - 26.4.x and earlier
-     - Built-in tuning tables
-     - Built-in RA identifier
-   * - 26.7.x
-     - ConfigMap with a YAML ``data.profile`` body
-     - Profile ConfigMap name
-   * - 26.10
-     - One profile ConfigMap containing the published configuration package
-     - Architecture version, for example ``RA2.4``; ``platformType`` is also required
+The examples on this page target the component versions shipped with Network Operator |network-operator-version|.
 
 For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see :doc:`Platform Support <../platform-support>`.
 
@@ -61,21 +44,9 @@ Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, Connect
    and is not covered by an RA-validated configuration. Use it for evaluation
    only.
 
-   Configuring ConnectX-9 SuperNIC additionally requires a profile ConfigMap
-   that supports the requested platform, NIC, and architecture version.
-   Contact NVIDIA Support or your NVIDIA CPM for configuration data that covers
-   ConnectX-9 SuperNIC. Hardware Multiplane on ConnectX-9 SuperNIC also depends
-   on DOCA xPlane support for that NIC — see :doc:`Architecture and Components
-   <components>`.
-
    ConnectX-9 SuperNIC remains fully supported by Network Operator for general
    RoCE and InfiniBand workloads — see :doc:`Platform Support
    <../platform-support>`.
-
-.. important::
-
-   When upgrading from 26.7.x, replace the legacy ``data.profile`` ConfigMap with the profile ConfigMap published for the new release, change ``version`` from the ConfigMap name to the intended architecture version, and add ``platformType`` to every enabled Spectrum-X template. Install the matching NIC Configuration Operator CRDs as part of the upgrade. The 26.7 profile body cannot be reused by renaming its ConfigMap.
-
 
 ====================================================
 Install and Configure the NIC Configuration Operator
@@ -87,7 +58,7 @@ To install the operator and for more information on the CRDs, see :doc:`NIC Firm
 Apply the Spectrum-X Profile ConfigMap
 ======================================
 
-Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents. Do not replace its contents with the ``data.profile`` YAML used in 26.7.x.
+Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.
 
 The following shows the required API format. Use the published ConfigMap rather than applying this placeholder example:
 
@@ -109,7 +80,7 @@ The following shows the required API format. Use the published ConfigMap rather 
 
    kubectl apply -f spectrum-x-profile-configmap.yaml
 
-The watch label is unchanged from 26.7; its value is ignored. Exactly **one** current-format profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved. Legacy ConfigMaps containing only ``data.profile`` are not supported by the current release.
+The label value is ignored. Exactly **one** profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved.
 
 The deprecated ``NicFirmwareSource.spec.docaSpcXCCUrlSource`` field no longer selects the congestion-control software. Remove it when migrating. The old ``docaCCVersion`` and ``useSoftwareCCAlgorithm`` settings are no longer configured separately; use the published profile ConfigMap.
 
