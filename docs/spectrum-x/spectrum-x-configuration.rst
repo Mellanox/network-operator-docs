@@ -80,8 +80,6 @@ The following shows the required API format. Use the published ConfigMap rather 
 
    kubectl apply -f spectrum-x-profile-configmap.yaml
 
-The deprecated ``NicFirmwareSource.spec.docaSpcXCCUrlSource`` field no longer selects the congestion-control software. Remove it when migrating. The old ``docaCCVersion`` and ``useSoftwareCCAlgorithm`` settings are no longer configured separately; use the published profile ConfigMap.
-
 .. note::
 
    Admission checks the template fields, but does not establish that the profile supports the architecture, platform, and NIC combination. Check ``NicDevice`` conditions as described in :doc:`Verify and Troubleshoot <verify-and-troubleshoot>`.
@@ -111,8 +109,7 @@ Enable SPC-X Optimizations for Devices
 Platform configuration values
 -----------------------------
 
-Use the following values from the **Working Version** deployment guides'
-**Appendix: K8s Deployment**. ``PLATFORM_TYPE`` maps to
+``PLATFORM_TYPE`` maps to
 ``spec.template.spectrumXOptimized.platformType``, ``NIC_TYPE`` to
 ``spec.nicSelector.nicType``, ``MP_MODE`` to
 ``spec.template.spectrumXOptimized.multiplaneMode``, and ``NUM_PLANES`` to
@@ -221,11 +218,6 @@ In ``swplb``, each PF exposes a VF, so the VF count increases with the
 number of planes. The totals above are platform-wide counts, not values
 for ``template.numVfs``; the NIC configuration template still uses
 ``numVfs: 1``.
-
-The working VR200 and HGX R200 Kubernetes appendices do not yet specify
-complete configuration values, so those layouts are not included here.
-For validated hardware and release combinations, see
-:doc:`Platform Support <../platform-support>`.
 
 Single-plane configuration
 --------------------------
