@@ -481,7 +481,6 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>On multiplane platforms, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> is the mode Spectrum-X RA 2.3 recommends — select <code class="docutils literal notranslate"><span class="pre">swplb</span></code> only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. This is a Reference Architecture recommendation, not an API default: the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field itself defaults to <code class="docutils literal notranslate"><span class="pre">none</span></code>, so multiplane deployments must set it explicitly.</p>
-<p>The modes a deployment can use are additionally bounded by its profile ConfigMap. <code class="docutils literal notranslate"><span class="pre">uniplane</span></code> is no longer an accepted API value; use <code class="docutils literal notranslate"><span class="pre">none</span></code> with one plane for a single-plane deployment.</p>
 </div>
 </section>
 <section id="nic-type-constraints">
@@ -552,8 +551,6 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">railPciAddresses</span></code> field defines the PCI address to rail mapping. The first dimension is the rail index and the second dimension lists one PCI address per <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> in that rail. <code class="docutils literal notranslate"><span class="pre">pfsPerNic</span></code> determines how many PF rules are generated for each device; do not list each PF of the same device as another NIC.</p>
-<p>Multiple templates may select the same node when they select disjoint <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> objects, for example east-west and north-south NICs. Each template starts its indices at zero. Templates cannot split different PFs of one <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> between them, and generated names must be unique within the netdev and RDMA namespaces. On an overlap, the operator rejects the proposed assignment and preserves the existing naming specifications and udev rules.</p>
-<p>Set only <code class="docutils literal notranslate"><span class="pre">netDevicePrefix</span></code> to rename netdevs alone. For RDMA-only naming, supply <code class="docutils literal notranslate"><span class="pre">rdmaDevicePrefix</span></code> and explicitly set <code class="docutils literal notranslate"><span class="pre">netDevicePrefix:</span> <span class="pre">&quot;&quot;</span></code>. At least one prefix must be non-empty.</p>
 <section id="generated-udev-rules">
 <h4>Generated udev rules<a class="headerlink" href="#generated-udev-rules" title="Permalink to this headline"></a></h4>
 <p>The operator generates udev rules based on the template and writes them to the host. The rules are written to two separate files.</p>
