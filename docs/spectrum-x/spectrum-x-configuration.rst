@@ -222,7 +222,7 @@ for ``template.numVfs``; the NIC configuration template still uses
 Single-plane configuration
 --------------------------
 
-Set the architecture version and the platform identifier supported by the profile. Spectrum-X optimizations require ``linkType: Ethernet`` and ``numVfs: 1``; Network Bay has a separate link-type rule described below. This example selects a GB200 single-plane deployment:
+Set the architecture version and the platform identifier supported by the profile. Spectrum-X optimizations require ``linkType: Ethernet`` and ``numVfs: 1``. This example selects a GB200 single-plane deployment:
 
 .. code-block:: yaml
 
