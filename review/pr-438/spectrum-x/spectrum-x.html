@@ -248,13 +248,9 @@ v26.10.0-beta.5 and its current NIC configuration API.
 Launch Kit provides an <code class="docutils literal notranslate"><span class="pre">RA2.4</span></code> profile for the 26.10 release line; a
 generator profile does not establish platform qualification. Use
 <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a> for validated combinations.</p>
-<p>Through Network Operator 26.4.x, <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> selected
-built-in NIC tuning. In 26.7.x, tuning moved to a YAML <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>
-ConfigMap and <code class="docutils literal notranslate"><span class="pre">version</span></code> named that ConfigMap. In 26.10, apply one
-<strong>Spectrum-X profile ConfigMap</strong> and set <code class="docutils literal notranslate"><span class="pre">version</span></code> to the architecture
-version, together with <code class="docutils literal notranslate"><span class="pre">platformType</span></code>. The ConfigMap name is independent
-of those API field values. Existing 26.7 templates and profile bodies require
-migration before use with 26.10.
+<p>Apply one <strong>Spectrum-X profile ConfigMap</strong> and set
+<code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> to the architecture version, together with
+<code class="docutils literal notranslate"><span class="pre">platformType</span></code>. The ConfigMap name is independent of those API field values.
 See <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a> for details.</p>
 </section>
 <section id="what-you-configure">

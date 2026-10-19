@@ -165,34 +165,7 @@
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> in Network Operator 26.10 applies Spectrum-X settings from a <strong>profile ConfigMap</strong>. The <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> field selects the architecture version, and <code class="docutils literal notranslate"><span class="pre">platformType</span></code> selects the hardware platform. Neither field names the ConfigMap.</p>
-<p>The examples on this page target the component versions shipped with Network Operator v26.10.0-beta.5. The configuration contract changed after 26.7.0:</p>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 45%" />
-<col style="width: 35%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Network Operator</p></th>
-<th class="head"><p>Configuration data</p></th>
-<th class="head"><p>Meaning of <code class="docutils literal notranslate"><span class="pre">version</span></code></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>26.4.x and earlier</p></td>
-<td><p>Built-in tuning tables</p></td>
-<td><p>Built-in RA identifier</p></td>
-</tr>
-<tr class="row-odd"><td><p>26.7.x</p></td>
-<td><p>ConfigMap with a YAML <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> body</p></td>
-<td><p>Profile ConfigMap name</p></td>
-</tr>
-<tr class="row-even"><td><p>26.10</p></td>
-<td><p>One profile ConfigMap containing the published configuration package</p></td>
-<td><p>Architecture version, for example <code class="docutils literal notranslate"><span class="pre">RA2.4</span></code>; <code class="docutils literal notranslate"><span class="pre">platformType</span></code> is also required</p></td>
-</tr>
-</tbody>
-</table>
+<p>The examples on this page target the component versions shipped with Network Operator v26.10.0-beta.5.</p>
 <p>For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 <p>Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC, and BlueField-3 SuperNIC; Hardware Plane Load Balancing (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) additionally requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC. Device IDs and the modes each NIC accepts are listed under <a class="reference internal" href="#nic-type-constraints">NIC type constraints</a>.</p>
 <div class="admonition note">
@@ -202,17 +175,8 @@ Configuration Operator API accepts ConnectX-9 SuperNIC and applies Spectrum-X
 settings to it, but ConnectX-9 SuperNIC is <strong>not part of Spectrum-X RA 2.3</strong>
 and is not covered by an RA-validated configuration. Use it for evaluation
 only.</p>
-<p>Configuring ConnectX-9 SuperNIC additionally requires a profile ConfigMap
-that supports the requested platform, NIC, and architecture version.
-Contact NVIDIA Support or your NVIDIA CPM for configuration data that covers
-ConnectX-9 SuperNIC. Hardware Multiplane on ConnectX-9 SuperNIC also depends
-on DOCA xPlane support for that NIC — see <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
 <p>ConnectX-9 SuperNIC remains fully supported by Network Operator for general
 RoCE and InfiniBand workloads — see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
-</div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>When upgrading from 26.7.x, replace the legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> ConfigMap with the profile ConfigMap published for the new release, change <code class="docutils literal notranslate"><span class="pre">version</span></code> from the ConfigMap name to the intended architecture version, and add <code class="docutils literal notranslate"><span class="pre">platformType</span></code> to every enabled Spectrum-X template. Install the matching NIC Configuration Operator CRDs as part of the upgrade. The 26.7 profile body cannot be reused by renaming its ConfigMap.</p>
 </div>
 <section id="install-and-configure-the-nic-configuration-operator">
 <h2>Install and Configure the NIC Configuration Operator<a class="headerlink" href="#install-and-configure-the-nic-configuration-operator" title="Permalink to this headline"></a></h2>
@@ -220,7 +184,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 </section>
 <section id="apply-the-spectrum-x-profile-configmap">
 <h2>Apply the Spectrum-X Profile ConfigMap<a class="headerlink" href="#apply-the-spectrum-x-profile-configmap" title="Permalink to this headline"></a></h2>
-<p>Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents. Do not replace its contents with the <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML used in 26.7.x.</p>
+<p>Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.</p>
 <p>The following shows the required API format. Use the published ConfigMap rather than applying this placeholder example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
@@ -238,7 +202,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f spectrum-x-profile-configmap.yaml
 </pre></div>
 </div>
-<p>The watch label is unchanged from 26.7; its value is ignored. Exactly <strong>one</strong> current-format profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved. Legacy ConfigMaps containing only <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> are not supported by the current release.</p>
+<p>The label value is ignored. Exactly <strong>one</strong> profile ConfigMap may be selected across the cluster. Multiple selected profiles prevent Spectrum-X configuration until the conflict is resolved.</p>
 <p>The deprecated <code class="docutils literal notranslate"><span class="pre">NicFirmwareSource.spec.docaSpcXCCUrlSource</span></code> field no longer selects the congestion-control software. Remove it when migrating. The old <code class="docutils literal notranslate"><span class="pre">docaCCVersion</span></code> and <code class="docutils literal notranslate"><span class="pre">useSoftwareCCAlgorithm</span></code> settings are no longer configured separately; use the published profile ConfigMap.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
