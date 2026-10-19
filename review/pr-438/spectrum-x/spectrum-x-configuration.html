@@ -72,6 +72,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#apply-the-spectrum-x-profile-configmap">Apply the Spectrum-X Profile ConfigMap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#firmware-upgrade">Firmware Upgrade</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#enable-spc-x-optimizations-for-devices">Enable SPC-X Optimizations for Devices</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#platform-configuration-values">Platform configuration values</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#single-plane-configuration">Single-plane configuration</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#multiplane-configuration">Multiplane configuration</a><ul>
 <li class="toctree-l6"><a class="reference internal" href="#multiplane-modes">Multiplane modes</a></li>
 <li class="toctree-l6"><a class="reference internal" href="#nic-type-constraints">NIC type constraints</a></li>
@@ -139,25 +141,27 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator" id="id1">Install and Configure the NIC Configuration Operator</a></p></li>
-<li><p><a class="reference internal" href="#apply-the-spectrum-x-profile-configmap" id="id2">Apply the Spectrum-X Profile ConfigMap</a></p></li>
-<li><p><a class="reference internal" href="#firmware-upgrade" id="id3">Firmware Upgrade</a></p></li>
-<li><p><a class="reference internal" href="#enable-spc-x-optimizations-for-devices" id="id4">Enable SPC-X Optimizations for Devices</a></p>
+<li><p><a class="reference internal" href="#install-and-configure-the-nic-configuration-operator" id="id2">Install and Configure the NIC Configuration Operator</a></p></li>
+<li><p><a class="reference internal" href="#apply-the-spectrum-x-profile-configmap" id="id3">Apply the Spectrum-X Profile ConfigMap</a></p></li>
+<li><p><a class="reference internal" href="#firmware-upgrade" id="id4">Firmware Upgrade</a></p></li>
+<li><p><a class="reference internal" href="#enable-spc-x-optimizations-for-devices" id="id5">Enable SPC-X Optimizations for Devices</a></p>
 <ul>
-<li><p><a class="reference internal" href="#multiplane-configuration" id="id5">Multiplane configuration</a></p>
+<li><p><a class="reference internal" href="#platform-configuration-values" id="id6">Platform configuration values</a></p></li>
+<li><p><a class="reference internal" href="#single-plane-configuration" id="id7">Single-plane configuration</a></p></li>
+<li><p><a class="reference internal" href="#multiplane-configuration" id="id8">Multiplane configuration</a></p>
 <ul>
-<li><p><a class="reference internal" href="#multiplane-modes" id="id6">Multiplane modes</a></p></li>
-<li><p><a class="reference internal" href="#nic-type-constraints" id="id7">NIC type constraints</a></p></li>
+<li><p><a class="reference internal" href="#multiplane-modes" id="id9">Multiplane modes</a></p></li>
+<li><p><a class="reference internal" href="#nic-type-constraints" id="id10">NIC type constraints</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configure-custom-interface-names" id="id8">Configure custom interface names</a></p>
+<li><p><a class="reference internal" href="#configure-custom-interface-names" id="id11">Configure custom interface names</a></p>
 <ul>
-<li><p><a class="reference internal" href="#generated-udev-rules" id="id9">Generated udev rules</a></p></li>
+<li><p><a class="reference internal" href="#generated-udev-rules" id="id12">Generated udev rules</a></p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#validation-rules" id="id10">Validation rules</a></p></li>
+<li><p><a class="reference internal" href="#validation-rules" id="id13">Validation rules</a></p></li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> in Network Operator 26.10 applies Spectrum-X settings from a <strong>profile ConfigMap</strong>. The <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> field selects the architecture version, and <code class="docutils literal notranslate"><span class="pre">platformType</span></code> selects the hardware platform. Neither field names the ConfigMap.</p>
@@ -277,6 +281,159 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 </section>
 <section id="enable-spc-x-optimizations-for-devices">
 <h2>Enable SPC-X Optimizations for Devices<a class="headerlink" href="#enable-spc-x-optimizations-for-devices" title="Permalink to this headline"></a></h2>
+<section id="platform-configuration-values">
+<span id="spectrum-x-platform-configuration"></span><h3>Platform configuration values<a class="headerlink" href="#platform-configuration-values" title="Permalink to this headline"></a></h3>
+<p>Use the following values from the <strong>Working Version</strong> deployment guides’
+<strong>Appendix: K8s Deployment</strong>. <code class="docutils literal notranslate"><span class="pre">PLATFORM_TYPE</span></code> maps to
+<code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.platformType</span></code>, <code class="docutils literal notranslate"><span class="pre">NIC_TYPE</span></code> to
+<code class="docutils literal notranslate"><span class="pre">spec.nicSelector.nicType</span></code>, <code class="docutils literal notranslate"><span class="pre">MP_MODE</span></code> to
+<code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.multiplaneMode</span></code>, and <code class="docutils literal notranslate"><span class="pre">NUM_PLANES</span></code> to
+<code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.numberOfPlanes</span></code>.</p>
+<p>PF and VF totals describe the east-west NICs on one worker node in the
+reference platform layout, excluding north-south NICs. For HGX H100 use
+<code class="docutils literal notranslate"><span class="pre">h100</span></code>; for HGX H200 use <code class="docutils literal notranslate"><span class="pre">h200</span></code>. Select the row matching your NIC and
+physical plane configuration.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Platform configuration by worker node</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 22%" />
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><div class="line-block">
+<div class="line">Platform type</div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">PLATFORM_TYPE</span></code>)</div>
+</div>
+</th>
+<th class="head"><div class="line-block">
+<div class="line">NIC type ID</div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">NIC_TYPE</span></code>)</div>
+</div>
+</th>
+<th class="head"><div class="line-block">
+<div class="line">Multi-plane mode</div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">MP_MODE</span></code>)</div>
+</div>
+</th>
+<th class="head"><div class="line-block">
+<div class="line">Number of planes</div>
+<div class="line">(<code class="docutils literal notranslate"><span class="pre">NUM_PLANES</span></code>)</div>
+</div>
+</th>
+<th class="head"><p>Total PFs per platform</p></th>
+<th class="head"><p>Total VFs per platform</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">h100</span></code> / <code class="docutils literal notranslate"><span class="pre">h200</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">a2dc</span></code> (BlueField-3)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">b200</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">a2dc</span></code> (BlueField-3)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">b200</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1021</span></code> (ConnectX-7)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gb200</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1021</span></code> (ConnectX-7)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>1</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rtx</span></code> (RTX PRO 6000)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code></p></td>
+<td><p>1</p></td>
+<td><p>8 (2 x 4)</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">b300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>2</p></td>
+<td><p>16 (2 x 8)</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">b300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>4</p></td>
+<td><p>32 (4 x 8)</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">b300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>2</p></td>
+<td><p>16 (2 x 8)</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">b300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>4</p></td>
+<td><p>32 (4 x 8)</p></td>
+<td><p>32</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gb300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>2</p></td>
+<td><p>8 (2 x 4)</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gb300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
+<td><p>4</p></td>
+<td><p>16 (4 x 4)</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gb300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>2</p></td>
+<td><p>8 (2 x 4)</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gb300</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1023</span></code> (ConnectX-8)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>4</p></td>
+<td><p>16 (4 x 4)</p></td>
+<td><p>16</p></td>
+</tr>
+</tbody>
+</table>
+<p>In <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, each rail exposes one VF regardless of the number of planes.
+In <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, each PF exposes a VF, so the VF count increases with the
+number of planes. The totals above are platform-wide counts, not values
+for <code class="docutils literal notranslate"><span class="pre">template.numVfs</span></code>; the NIC configuration template still uses
+<code class="docutils literal notranslate"><span class="pre">numVfs:</span> <span class="pre">1</span></code>.</p>
+<p>The working VR200 and HGX R200 Kubernetes appendices do not yet specify
+complete configuration values, so those layouts are not included here.
+For validated hardware and release combinations, see
+<a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
+</section>
+<section id="single-plane-configuration">
+<h3>Single-plane configuration<a class="headerlink" href="#single-plane-configuration" title="Permalink to this headline"></a></h3>
 <p>Set the architecture version and the platform identifier supported by the profile. Spectrum-X optimizations require <code class="docutils literal notranslate"><span class="pre">linkType:</span> <span class="pre">Ethernet</span></code> and <code class="docutils literal notranslate"><span class="pre">numVfs:</span> <span class="pre">1</span></code>; Network Bay has a separate link-type rule described below. This example selects a GB200 single-plane deployment:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NicConfigurationTemplate</span><span class="w"></span>
@@ -298,6 +455,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 <span class="w">      </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="c1"># For an L3 EVPN overlay, use &quot;l3&quot;</span><span class="w"></span>
 </pre></div>
 </div>
+</section>
 <section id="multiplane-configuration">
 <h3>Multiplane configuration<a class="headerlink" href="#multiplane-configuration" title="Permalink to this headline"></a></h3>
 <p>Multiplane modes let a NIC drive multiple data planes on the same rail. Set <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> and <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> alongside the architecture and platform fields.</p>
