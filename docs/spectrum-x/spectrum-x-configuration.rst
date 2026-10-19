@@ -278,10 +278,6 @@ Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``mu
 
 The profile must support the requested architecture, platform, mode, and NIC. ``platformType: rtx`` permits only ``multiplaneMode: none``. ``platformType: vr`` requires ``swplb`` or ``hwplb``.
 
-.. note::
-
-   VR deployments that require two NICs per rail or eight planes are not supported by the current configuration workflow. The API allows at most four planes.
-
 All Spectrum-X devices selected on a node must agree on the platform, architecture version, mode, overlay, and plane count. Select only east-west NICs with ``nicSelector.pciAddresses`` when north-south devices share the same NIC type. Keep the PCI-to-rail mapping in ``NicInterfaceNameTemplate`` consistent with the PF names selected in ``SpectrumXRailPoolConfig``.
 
 Multiplane modes
