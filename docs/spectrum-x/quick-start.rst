@@ -291,6 +291,10 @@ Step 4: Name the Rail Interfaces
 Create the ``NicInterfaceNameTemplate`` that maps PCI addresses to rails and
 gives each interface a predictable name.
 
+Host PF RDMA names must differ from pod VF RDMA names. The Spectrum-X Operator
+names pod RDMA devices ``rdma_<railTopology.name>``, for example, ``rdma_rail0``.
+The examples use the ``roce_r`` prefix for host PFs to avoid name collisions.
+
 .. tab-set::
 
    .. tab-item:: Single-Plane
@@ -307,7 +311,7 @@ gives each interface a predictable name.
            namespace: nvidia-network-operator
          spec:
            pfsPerNic: 1
-           rdmaDevicePrefix: "rdma_rail%rail_id%"
+           rdmaDevicePrefix: "roce_r%rail_id%"
            netDevicePrefix: "net_rail%rail_id%"
            railPciAddresses:
              - ["TODO_PCI_RAIL0_NIC0"]
@@ -331,7 +335,7 @@ gives each interface a predictable name.
            namespace: nvidia-network-operator
          spec:
            pfsPerNic: 2
-           rdmaDevicePrefix: "rdma_rail%rail_id%_plane%plane_id%"
+           rdmaDevicePrefix: "roce_r%rail_id%_plane%plane_id%"
            netDevicePrefix: "net_rail%rail_id%_plane%plane_id%"
            railPciAddresses:
              - ["TODO_PCI_RAIL0_NIC0", "TODO_PCI_RAIL0_NIC1"]
@@ -355,7 +359,7 @@ gives each interface a predictable name.
            namespace: nvidia-network-operator
          spec:
            pfsPerNic: 2
-           rdmaDevicePrefix: "rdma_rail%rail_id%_plane%plane_id%"
+           rdmaDevicePrefix: "roce_r%rail_id%_plane%plane_id%"
            netDevicePrefix: "net_rail%rail_id%_plane%plane_id%"
            railPciAddresses:
              - ["TODO_PCI_RAIL0_NIC0", "TODO_PCI_RAIL0_NIC1"]
@@ -535,6 +539,10 @@ Step 7: Allocate Rail Subnets
 Create the ``CIDRPool`` resources that NV-IPAM uses to assign rail addresses to
 Pods.
 
+Each per-node ``/31`` contains two addresses. With ``gatewayIndex: 0``, index 0
+is reserved for the gateway and index 1 is available for the pod. Do not exclude
+index 1, which would leave no address for pod allocation.
+
 .. tab-set::
 
    .. tab-item:: Single-Plane
@@ -553,9 +561,6 @@ Pods.
            cidr: TODO_RAIL0_CIDR             # e.g., 10.0.0.0/15
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL0_SUBNET        # same as cidr
              - dst: TODO_EAST_WEST_SUBNET
@@ -569,9 +574,6 @@ Pods.
            cidr: TODO_RAIL1_CIDR
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL1_SUBNET
              - dst: TODO_EAST_WEST_SUBNET
@@ -596,9 +598,6 @@ Pods.
            cidr: TODO_RAIL0_CIDR             # e.g., 10.0.0.0/15
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL0_SUBNET        # same as cidr
              - dst: TODO_EAST_WEST_SUBNET
@@ -612,9 +611,6 @@ Pods.
            cidr: TODO_RAIL1_CIDR
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL1_SUBNET
              - dst: TODO_EAST_WEST_SUBNET
@@ -639,9 +635,6 @@ Pods.
            cidr: TODO_RAIL0_PLANE0_CIDR      # e.g., 10.0.0.0/15
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL0_PLANE0_SUBNET # same as cidr
              - dst: TODO_EAST_WEST_SUBNET
@@ -655,9 +648,6 @@ Pods.
            cidr: TODO_RAIL0_PLANE1_CIDR
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL0_PLANE1_SUBNET
              - dst: TODO_EAST_WEST_SUBNET
@@ -671,9 +661,6 @@ Pods.
            cidr: TODO_RAIL1_PLANE0_CIDR
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL1_PLANE0_SUBNET
              - dst: TODO_EAST_WEST_SUBNET
@@ -687,9 +674,6 @@ Pods.
            cidr: TODO_RAIL1_PLANE1_CIDR
            gatewayIndex: 0
            perNodeNetworkPrefix: 31
-           perNodeExclusions:
-             - startIndex: 1
-               endIndex: 1
            routes:
              - dst: TODO_RAIL1_PLANE1_SUBNET
              - dst: TODO_EAST_WEST_SUBNET
