@@ -443,7 +443,6 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 </pre></div>
 </div>
 <p>The profile must support the requested architecture, platform, mode, and NIC. <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">rtx</span></code> permits only <code class="docutils literal notranslate"><span class="pre">multiplaneMode:</span> <span class="pre">none</span></code>. <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code> requires <code class="docutils literal notranslate"><span class="pre">swplb</span></code> or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>.</p>
-<p>All Spectrum-X devices selected on a node must agree on the platform, architecture version, mode, overlay, and plane count. Select only east-west NICs with <code class="docutils literal notranslate"><span class="pre">nicSelector.pciAddresses</span></code> when north-south devices share the same NIC type. Keep the PCI-to-rail mapping in <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code> consistent with the PF names selected in <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>.</p>
 <section id="multiplane-modes">
 <h4>Multiplane modes<a class="headerlink" href="#multiplane-modes" title="Permalink to this headline"></a></h4>
 <p>The following multiplane modes are available:</p>
