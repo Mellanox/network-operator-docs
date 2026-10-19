@@ -124,17 +124,6 @@ supported by a specific Network Operator release:
      - 26.1.x
      - GA
 
-The configuration examples in this documentation target Network Operator
-|network-operator-version| and its current NIC configuration API.
-Launch Kit provides an ``RA2.4`` profile for the 26.10 release line; a
-generator profile does not establish platform qualification. Use
-:doc:`Platform Support <../platform-support>` for validated combinations.
-
-Apply one **Spectrum-X profile ConfigMap** and set
-``spectrumXOptimized.version`` to the architecture version, together with
-``platformType``. The ConfigMap name is independent of those API field values.
-See :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>` for details.
-
 ==================
 What you configure
 ==================

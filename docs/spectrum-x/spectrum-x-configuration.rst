@@ -308,8 +308,6 @@ The following multiplane modes are available:
 
    On multiplane platforms, ``hwplb`` is the mode Spectrum-X RA 2.3 recommends — select ``swplb`` only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. This is a Reference Architecture recommendation, not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
 
-   The modes a deployment can use are additionally bounded by its profile ConfigMap. ``uniplane`` is no longer an accepted API value; use ``none`` with one plane for a single-plane deployment.
-
 NIC type constraints
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -355,10 +353,6 @@ The template uses the following placeholders for device name construction:
     :lines: 18-
 
 The ``railPciAddresses`` field defines the PCI address to rail mapping. The first dimension is the rail index and the second dimension lists one PCI address per ``NicDevice`` in that rail. ``pfsPerNic`` determines how many PF rules are generated for each device; do not list each PF of the same device as another NIC.
-
-Multiple templates may select the same node when they select disjoint ``NicDevice`` objects, for example east-west and north-south NICs. Each template starts its indices at zero. Templates cannot split different PFs of one ``NicDevice`` between them, and generated names must be unique within the netdev and RDMA namespaces. On an overlap, the operator rejects the proposed assignment and preserves the existing naming specifications and udev rules.
-
-Set only ``netDevicePrefix`` to rename netdevs alone. For RDMA-only naming, supply ``rdmaDevicePrefix`` and explicitly set ``netDevicePrefix: ""``. At least one prefix must be non-empty.
 
 Generated udev rules
 ^^^^^^^^^^^^^^^^^^^^^
