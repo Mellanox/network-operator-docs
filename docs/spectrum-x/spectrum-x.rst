@@ -15,6 +15,7 @@
   limitations under the License.
 
 .. headings # #, * *, =, -, ^, "
+.. include:: ../common/vars.rst
 
 **********************************************
 NVIDIA Spectrum-X Ethernet Networking Platform
@@ -123,16 +124,6 @@ supported by a specific Network Operator release:
      - 26.1.x
      - GA
 
-Through Network Operator
-26.4.x, ``spectrumXOptimized.version`` selected one of a fixed set of RA
-versions built into the NIC Configuration Operator image. From 26.7.0, NIC
-tuning ships as a **Spectrum-X profile** — a versioned YAML document published
-for each Reference Architecture and applied to the cluster as a labeled
-ConfigMap — and ``version`` names that ConfigMap. The operator carries no
-built-in profiles, so every Spectrum-X deployment applies a profile before
-configuring NICs, and tuning can be revised without a new operator release.
-See :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>` for details.
-
 ==================
 What you configure
 ==================
@@ -153,11 +144,12 @@ Each one is documented on the page that owns it:
        NV-IPAM, and Multus.
      - :doc:`Architecture and Components <components>`
    * - **Spectrum-X profile ConfigMap**
-     - Per-RA NIC tuning, referenced by ``spectrumXOptimized.version``.
+     - Cluster-wide Spectrum-X configuration data. Exactly one
+       current-format profile may be selected.
      - :doc:`NIC Configuration <spectrum-x-configuration>`
    * - ``NicConfigurationTemplate``
      - NIC-level firmware and PF configuration: link type, ``numVfs``,
-       multiplane mode, profile reference.
+       multiplane mode, architecture version, and platform type.
      - :doc:`NIC Configuration <spectrum-x-configuration>`
    * - ``NicInterfaceNameTemplate``
      - Predictable rail and plane based interface names, applied by udev.
@@ -189,7 +181,7 @@ Where to start
    * - :doc:`Architecture and Components <components>`
      - You want to know what gets deployed and which operator owns what.
    * - :doc:`NIC Configuration <spectrum-x-configuration>`
-     - You are writing the profile ConfigMap or the NIC templates.
+     - You are applying the profile ConfigMap or writing NIC templates.
    * - :doc:`Verify and Troubleshoot <verify-and-troubleshoot>`
      - The cluster is up and you need to confirm it, or something failed.
    * - :doc:`CRD API Reference <crds>`

@@ -32,7 +32,7 @@ Use Case
 
 NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.
 
-Two reference architectures are supported. The RA version is the value of ``--spectrum-x``, and each one pins to a Network Operator release line:
+The RA version is the value of ``--spectrum-x``. Select the profile that matches the Network Operator release and its NIC configuration data format:
 
 .. list-table::
    :header-rows: 1
@@ -42,24 +42,106 @@ Two reference architectures are supported. The RA version is the value of ``--sp
      - **Release**
      - **Profile directory**
      - **Notes**
+   * - ``RA2.4``
+     - ``26.10`` and newer catalogued releases
+     - ``spectrum-x-ra2.4``
+     - Profile ConfigMap and per-group ``platformType``. Requires matching NIC Configuration Operator CRDs.
    * - ``RA2.3``
      - ``26.7``
      - ``spectrum-x``
-     - Current. Adds the Spectrum-X profile ConfigMap (see below) and requires ``--spectrum-x-config``.
+     - Legacy YAML ``data.profile`` ConfigMap. Restricted to 26.7.
+   * - ``RA2.2``
+     - ``26.4``
+     - ``spectrum-x-ra2.2``
+     - Uses v1alpha2 ``SpectrumXRailPoolConfig`` with built-in NIC tuning.
    * - ``RA2.1``
      - ``26.1``
      - ``spectrum-x-ra2.1``
      - Uses ``SriovNetworkPoolConfig`` + ``SriovNetworkNodePolicy`` + ``OVSNetwork`` with NV-IPAM glue.
 
-If the release and RA version are mismatched (for example, ``--spectrum-x RA2.1`` with ``--network-operator-release 26.7``), Launch Kit errors out with an explicit message. Pass the release explicitly: it is only inferred from the RA when ``networkOperator.selectedRelease`` is unset in the cluster configuration, and the shipped default pins ``26.4``.
+If the release and RA version are mismatched, Launch Kit reports an error. Pass the release explicitly when using a saved configuration that selects another release. RA2.3 output cannot be deployed unchanged with the 26.10 configuration API.
 
 For deeper Spectrum-X background, see :doc:`Spectrum-X Configuration <../../spectrum-x/spectrum-x-configuration>`.
+
+================================================================================
+RA2.4: Profile ConfigMap
+================================================================================
+
+Use the full published ConfigMap with ``data.format: dospcx-data.tar.gz/v1``
+and ``binaryData.dospcx-data.tar.gz``. Raw legacy ``data.profile`` YAML is
+not accepted for RA2.4. Launch Kit preserves the ConfigMap contents and source
+annotations, supplies the Network Operator namespace and discovery label,
+and renders it once for the selected groups.
+
+.. code-block:: bash
+
+   l8k generate --spectrum-x RA2.4 \
+       --network-operator-release 26.10 \
+       --spectrum-x-config ./spectrum-x-profile-configmap.yaml \
+       --topology-scheme 2-tier --topology-file ./topology.json \
+       --multiplane-mode hwplb --number-of-planes 2 \
+       --save-deployment-files ./deployment-ra24 --output json
+
+The NIC template receives ``version: RA2.4``, independently of the
+ConfigMap name. Launch Kit derives each group's ``platformType`` from
+``clusterConfig[].gpuType`` using the platform identifiers ``h100``,
+``h200``, ``b200``, ``gb200``, ``b300``, ``gb300``, ``rtx``, and ``vr``.
+Unknown or ambiguous GPU platforms prevent RA2.4 generation. The supplied
+profile must support the selected platform and hardware layout.
+
+For the platform-to-``platformType`` mapping, NIC IDs, plane counts, and
+PF/VF totals, see :ref:`spectrum-x-platform-configuration`.
+
+.. important::
+
+   The installed NIC Configuration Operator must support the current
+   profile format and expose ``spectrumXOptimized.platformType`` as a
+   string in the served ``NicConfigurationTemplate`` CRD. Older 26.10
+   betas, including beta.2, do not meet this requirement. Launch Kit
+   checks API compatibility before applying the profile ConfigMap and NIC
+   templates, including during dry-run. Generation alone does not prove
+   that the installed APIs are compatible.
+
+Optional settings use the following configuration keys:
+
+.. code-block:: yaml
+
+   spectrumX:
+     ovsConfig:
+       max-idle: "0"
+   clusterConfig:
+     - identifier: machine-a
+       gpuType: NVIDIA-GB300
+       spectrumX:
+         swPlaneByRail:
+           0: 0
+           1: 1
+
+This is a fragment to merge into the discovered configuration.
+``spectrumX.ovsConfig`` is a string map rendered into the rail-pool
+``spec.ovsConfig``. Per-group ``spectrumX.swPlaneByRail`` maps existing
+east-west rail IDs to ``swPlane`` offsets; omitted assignments mean zero.
+Nonzero offsets require ``hwplb``. See :doc:`Architecture and Components
+<../../spectrum-x/components>` for their OVS meaning.
+
+RA2.4 generation requires dense zero-based rail IDs and a uniform physical
+NIC count per rail that divides the plane count. PFs of one physical NIC
+must remain on one rail. Groups merged into a rail pool must agree on
+layout and effective switch-plane assignments. Current generation permits
+one rail-pool parent: a complete compatible GPU/rail-count cohort or one
+source selected with ``--groups``.
+
+Review the generated profile ConfigMap, selectors, addresses, and templates, then use
+``l8k deploy --deployment-files ./deployment-ra24 --dry-run`` before
+deployment and ``l8k validate --deployment-files ./deployment-ra24 --wait 10m``
+after deployment. Discovery refresh can drop switch-plane assignments when
+worker membership or hardware changes; review them before regenerating.
 
 ================================================================================
 The RA2.3 Profile ConfigMap
 ================================================================================
 
-RA2.3 moves the Spectrum-X tuning knobs out of the CRD and into a ConfigMap that the NIC Configuration Operator reads. Pass its contents with ``--spectrum-x-config``:
+For Network Operator 26.7.x, RA2.3 uses a legacy profile ConfigMap. The following examples are for that release line, not the RA2.4 configuration workflow. Pass its contents with ``--spectrum-x-config``:
 
 .. code-block:: bash
 

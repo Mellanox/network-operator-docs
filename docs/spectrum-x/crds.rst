@@ -124,6 +124,9 @@ SpectrumXRailPoolConfigSpec defines the desired state of SpectrumXRailPoolConfig
    * - | ``draEnabled``
        | bool
      - *(Optional)* Enables Dynamic Resource Allocation (DRA) for the configured Spectrum-X nodes. Defaults to ``true``.
+   * - | ``vfStateFollow``
+       | bool
+     - *(Optional)* Mirrors PF carrier loss to active VF representors. When all PFs in a rail topology report ``NO-CARRIER``, its VF representors are set administratively down so Pods receive a link-down notification. Defaults to ``true``. Recovery of any PF restores the representors; setting ``false`` also restores them and disables following.
    * - | ``nodeSelector``
        | map[string]string
      - *(Optional)* Label selector that identifies the Spectrum-X nodes the configuration applies to.
@@ -133,6 +136,9 @@ SpectrumXRailPoolConfigSpec defines the desired state of SpectrumXRailPoolConfig
    * - | ``networkNamespace``
        | string
      - *(Optional)* Namespace of the NetworkAttachmentDefinition custom resource.
+   * - | ``ovsConfig``
+       | map[string]string
+     - *(Optional)* Additional ``ovs-vswitchd`` ``other_config`` entries, merged over the operator defaults. Matching keys override the default value. See :ref:`spectrum-x-ovs-settings`.
    * - | ``numVfs``
        | int
      - Number of VFs to configure on each PF. Must be ``>= 1``.
@@ -223,6 +229,9 @@ RailTopology describes a single rail in the Spectrum-X pool. Only one of ``cidrP
    * - | ``mtu``
        | int
      - MTU for the rail. Must be ``>= 0``.
+   * - | ``swPlane``
+       | int
+     - *(Optional)* Switch-plane offset for Hardware Multiplane entries that select multiple PFs. Must be ``>= 0``; omitted means ``0``. Switch-plane numbers start at ``len(pfNames) * swPlane`` and follow the order in ``pfNames``. This field does not change the NIC plane count.
 
 .. _NicSelector:
 
