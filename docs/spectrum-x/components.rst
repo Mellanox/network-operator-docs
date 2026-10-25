@@ -15,6 +15,7 @@
   limitations under the License.
 
 .. headings # #, * *, =, -, ^, "
+.. include:: ../common/vars.rst
 
 *************************************************
 Spectrum-X Kubernetes Architecture and Components
@@ -38,7 +39,7 @@ distinct domains:
   Operator** on top of a working Kubernetes cluster.
 
 This page maps each component to its role, dependencies, and
-default-enabled state in Network Operator 26.7.0. For exact image versions,
+default-enabled state in Network Operator |network-operator-version|. For exact image versions,
 see the software components table in :doc:`Platform Support
 <../platform-support>`. For end-to-end walkthroughs, see :doc:`Spectrum-X
 Kubernetes Quick Start <quick-start>`.
@@ -252,7 +253,8 @@ alongside Network Operator.
      - Owns ``NicConfigurationTemplate``, ``NicFirmwareTemplate``, and
        ``NicInterfaceNameTemplate``; applies firmware and rail-name
        templates to each SuperNIC. Reads NIC tuning from the Spectrum-X
-       profile ConfigMap named by ``spectrumXOptimized.version`` — see
+       profile ConfigMap, using ``spectrumXOptimized.version`` and
+       ``platformType`` to select the requested configuration — see
        :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
      - Opt-in.
      - Recommended.
@@ -428,6 +430,52 @@ reconciles them, and manual changes are overwritten.
        entered switchdev mode, so OVS never comes up with a
        half-configured uplink.
      - Hardware Multiplane only.
+   * - **VF carrier-state following**
+     - Sets active VF representors down when every PF of a rail topology
+       reports ``NO-CARRIER``, and restores them when a PF recovers. A
+       single failed plane does not mark the whole Hardware Multiplane
+       rail down while another PF still has carrier.
+     - All modes; enabled by default. Set
+       ``SpectrumXRailPoolConfig.spec.vfStateFollow: false`` to disable.
+
+.. _spectrum-x-ovs-settings:
+
+OVS settings and switch-plane offsets
+-------------------------------------
+
+Set ``SpectrumXRailPoolConfig.spec.ovsConfig`` to supply string-valued
+``ovs-vswitchd`` ``other_config`` entries. The operator merges these with
+``doca-init: "true"``, ``hw-offload: "true"``,
+``hw-offload-ct-size: "0"``, and ``max-idle: "300000"`` before generating
+``SriovNetworkPoolConfig``. User values override matching defaults and add
+other keys; omitting a key retains its default.
+
+For Hardware Multiplane, ``railTopology[].swPlane`` supplies a switch-plane
+offset. For example, two PFs with ``swPlane: 1`` use switch-plane numbers ``2`` and ``3``. Preserve the order of
+``pfNames`` and match the offset to the fabric configuration. An omitted
+offset is zero; it has no effect on single-PF entries.
+
+The following fragment illustrates the optional settings for one dual-plane
+rail; use the PF names and CIDRPool from your deployment:
+
+.. code-block:: yaml
+
+   spec:
+     vfStateFollow: true
+     ovsConfig:
+       max-idle: "0"
+     railTopology:
+       - name: rail0
+         swPlane: 1
+         nicSelector:
+           pfNames: ["net_rail0_plane0", "net_rail0_plane1"]
+         cidrPoolRef: rail-0
+         mtu: 9216
+
+These settings configure host networking. They do not replace the NIC
+configuration template's ``multiplaneMode`` or ``numberOfPlanes``. The
+rail-pool ``numVfs`` is propagated to the primary generated SR-IOV policy;
+the Spectrum-X NIC configuration template still requires ``numVfs: 1``.
 
 .. note::
 

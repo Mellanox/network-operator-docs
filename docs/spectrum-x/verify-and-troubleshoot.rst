@@ -31,30 +31,33 @@ before it, so the first failing check is where to start debugging. The
 examples assume the Network Operator is installed in the
 ``nvidia-network-operator`` namespace.
 
-===================================
-Step 1: Check the profile is loaded
-===================================
+====================================
+Step 1: Check the profile ConfigMap
+====================================
 
-Profile ConfigMaps are watched and loaded by the NIC configuration
-**daemon**, which runs on every node — not by the operator Pod. It logs a
-line for each profile it picks up:
-
-.. code-block:: bash
-
-   kubectl -n nvidia-network-operator logs \
-     -l app.kubernetes.io/name=nic-configuration-daemon \
-     | grep "Loaded Spectrum-X profile"
-
-If nothing matches, confirm the ConfigMap carries the watch label:
+Confirm the profile ConfigMap carries the required label:
 
 .. code-block:: bash
 
    kubectl get configmap -A \
      -l network.nvidia.com/operator.nic-configuration.spectrum-x-profile
 
-The label value is ignored — only the key must be present. The ConfigMap
-**name** is what ``spectrumXOptimized.version`` must match, character for
-character.
+The label value is ignored. Exactly one current-format profile may be
+selected cluster-wide. Check that its contents match the published file,
+including ``data.format: dospcx-data.tar.gz/v1`` and a non-empty
+``binaryData.dospcx-data.tar.gz``. A legacy ``data.profile`` body from
+26.7.x is not supported by the current release.
+
+``spectrumXOptimized.version`` is the architecture version, not the
+ConfigMap name. Every enabled template must also specify ``platformType``.
+Confirm the profile supports the requested version, platform, NIC, and mode.
+For configuration errors, inspect the NIC configuration daemon logs:
+
+.. code-block:: bash
+
+   kubectl -n nvidia-network-operator logs \
+     -l app.kubernetes.io/name=nic-configuration-daemon \
+     --prefix --tail=200
 
 ===========================================
 Step 2: Check the NIC configuration applied
@@ -94,10 +97,15 @@ Reasons you may see on the ``ConfigUpdateInProgress`` condition:
        :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
    * - ``NonVolatileConfigUpdateFailed``, ``RuntimeConfigUpdateFailed``,
        ``FirmwareError``
-     - The apply itself failed. Check the daemon logs on the affected
-       node: ``kubectl -n nvidia-network-operator logs -l
+     - The apply itself failed. Get the daemon Pod on the affected node
+       with ``kubectl -n nvidia-network-operator get pods -l
        app.kubernetes.io/name=nic-configuration-daemon --field-selector
-       spec.nodeName=<node>``.
+       spec.nodeName=<node>``, then inspect that Pod's logs.
+
+Runtime validation reports ``all network interfaces have NO-CARRIER`` only
+when every checked interface on a NIC has no carrier. One working plane
+allows validation to proceed; this does not establish that all planes are
+healthy. Inspect the fabric and xPlane state for partial failures.
 
 ======================================
 Step 3: Check the rails are configured
@@ -215,21 +223,30 @@ Common failure modes
 
    * - Symptom
      - Cause and fix
-   * - ``spectrum-x config version <name> not found``
-     - ``spectrumXOptimized.version`` names a profile ConfigMap that does
-       not exist, or exists without the watch label. The field is not
-       validated against existing ConfigMaps, so the template is accepted
-       and only the apply fails. Check the name matches exactly.
-   * - Spectrum-X parameters silently not applied, no error
-     - The profile loaded, but carries no ``mlxConfig`` entry for this
-       device ID or multiplane mode, so those parameters were skipped and
-       the device left at its defaults. Confirm the profile covers every
-       NIC model and mode in the cluster.
-   * - Two profiles, unpredictable results
-     - Profiles are keyed by ConfigMap **name**, not namespace. Two
-       labeled ConfigMaps sharing a name define the same profile key and
-       the most recently reconciled one wins, with no error. Use unique
-       names across every watched namespace.
+   * - Template rejected for missing ``platformType`` or invalid ``uniplane``
+     - A 26.7-era template is being used with the current CRD. Add the
+       supported platform identifier, set ``version`` to the architecture
+       version, and select ``none``, ``swplb``, or ``hwplb``.
+   * - Multiple profile ConfigMaps selected
+     - Keep exactly one current-format profile selected cluster-wide.
+       Remove the extra ConfigMap or its selector label so configuration
+       can resume.
+   * - Invalid profile ConfigMap contents
+     - Reapply the complete published profile, preserving ``data.format``
+       and ``binaryData``. Renaming a legacy ``data.profile`` ConfigMap
+       does not convert its contents to the current format.
+   * - Spectrum-X configuration fails for the selected platform
+     - Check the profile supports the requested platform, version, NIC,
+       and mode. Selected devices on a node must use consistent API field
+       values. Check ``NicDevice`` conditions and the daemon logs.
+   * - ``RuntimeConfigUpdateFailed`` with ``all network interfaces have NO-CARRIER``
+     - Restore carrier on at least one NIC port and check cabling, switch
+       ports, and the physical plane configuration. Runtime validation
+       retries when connectivity returns.
+   * - Pod rail goes down when all its PFs lose carrier
+     - Expected with ``vfStateFollow: true`` (the default). Active VF
+       representors are restored when a PF recovers. Use xPlane telemetry
+       to diagnose individual failed planes on Hardware Multiplane.
    * - Configuration flaps between two states
      - The SR-IOV Network Operator's ``mellanox`` plugin is still enabled
        and is configuring the same NIC state as the NIC Configuration

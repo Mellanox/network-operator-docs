@@ -29,20 +29,23 @@ Spectrum-X Kubernetes Quick Start
 
 .. note::
 
-   These walkthroughs target **Spectrum-X RA 2.3** on **Network Operator 26.7.0**.
+   These walkthroughs use the **RA2.4 configuration workflow** on
+   **Network Operator** |network-operator-version|. They require the matching
+   NIC Configuration Operator CRDs, including ``platformType``.
    For the RA-to-release mapping and other RAs, see
    :doc:`NVIDIA Spectrum-X <spectrum-x>`. For supported platforms (operating
    systems, Kubernetes distributions, NIC hardware), see
    :doc:`Platform Support <../platform-support>`.
 
-   On Network Operator 26.7.0, **Single-Plane**, **Hardware Multiplane**
-   (``hwplb``), and **Software Multiplane** (``swplb``) deployments are GA.
+   The tabs cover **Single-Plane**, **Hardware Multiplane** (``hwplb``),
+   and **Software Multiplane** (``swplb``) configuration. Use the support
+   matrix for the validation status of your hardware and release.
    For background on the operators and CNIs each walkthrough relies on, see
    :doc:`Architecture and Components <components>`.
 
-   Every walkthrough begins by applying a **Spectrum-X profile ConfigMap**.
-   From 26.7.0, ``spectrumXOptimized.version`` names that ConfigMap instead of
-   selecting a built-in RA version — see
+   Before configuring the NICs, apply one **Spectrum-X profile ConfigMap**.
+   Unlike 26.7.x, ``spectrumXOptimized.version`` selects the architecture
+   version and does not name the ConfigMap — see
    :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
 
 .. tip::
@@ -324,7 +327,7 @@ The examples use the ``roce_r`` prefix for host PFs to avoid name collisions.
    .. tab-item:: Hardware Multiplane
       :sync: hwplb
 
-      Map PCI addresses to rail/plane indices and define interface naming. Replace ``TODO_PCI_*`` with the PCI addresses of the Spectrum-X NICs on your nodes.
+      Map PCI addresses to rail/plane indices and define interface naming. List one base PCI address per physical NIC; ``pfsPerNic: 2`` generates names for its two PFs. Replace ``TODO_PCI_*`` with the PCI addresses of the Spectrum-X NICs on your nodes.
 
       .. code-block:: yaml
 
@@ -338,8 +341,8 @@ The examples use the ``roce_r`` prefix for host PFs to avoid name collisions.
            rdmaDevicePrefix: "roce_r%rail_id%_plane%plane_id%"
            netDevicePrefix: "net_rail%rail_id%_plane%plane_id%"
            railPciAddresses:
-             - ["TODO_PCI_RAIL0_NIC0", "TODO_PCI_RAIL0_NIC1"]
-             - ["TODO_PCI_RAIL1_NIC0", "TODO_PCI_RAIL1_NIC1"]
+             - ["TODO_PCI_RAIL0_NIC0"]
+             - ["TODO_PCI_RAIL1_NIC0"]
 
       .. code-block:: bash
 
@@ -348,7 +351,7 @@ The examples use the ``roce_r`` prefix for host PFs to avoid name collisions.
    .. tab-item:: Software Multiplane
       :sync: swplb
 
-      Map PCI addresses to rail/plane indices and define interface naming. Replace ``TODO_PCI_*`` with the PCI addresses of the Spectrum-X NICs on your nodes.
+      Map PCI addresses to rail/plane indices and define interface naming. List one base PCI address per physical NIC; ``pfsPerNic: 2`` generates names for its two PFs. Replace ``TODO_PCI_*`` with the PCI addresses of the Spectrum-X NICs on your nodes.
 
       .. code-block:: yaml
 
@@ -362,53 +365,48 @@ The examples use the ``roce_r`` prefix for host PFs to avoid name collisions.
            rdmaDevicePrefix: "roce_r%rail_id%_plane%plane_id%"
            netDevicePrefix: "net_rail%rail_id%_plane%plane_id%"
            railPciAddresses:
-             - ["TODO_PCI_RAIL0_NIC0", "TODO_PCI_RAIL0_NIC1"]
-             - ["TODO_PCI_RAIL1_NIC0", "TODO_PCI_RAIL1_NIC1"]
+             - ["TODO_PCI_RAIL0_NIC0"]
+             - ["TODO_PCI_RAIL1_NIC0"]
 
       .. code-block:: bash
 
          kubectl apply -f nicinterfacenametemplate.yaml
 
-====================================
-Step 5: Apply the Spectrum-X Profile
-====================================
+===================================
+Step 5: Apply the Profile ConfigMap
+===================================
 
-The NIC Configuration Operator reads Spectrum-X NIC tuning from a **profile ConfigMap**, not from a built-in RA version. Obtain the RA 2.3 profile YAML from NVOnline, or contact your NVIDIA CPM, then apply it as a labeled ConfigMap whose **name** is the value you will reference from ``spectrumXOptimized.version``.
-
-.. code-block:: yaml
-
-   apiVersion: v1
-   kind: ConfigMap
-   metadata:
-     name: spectrum-x-ra2.3-profile
-     namespace: nvidia-network-operator
-     labels:
-       network.nvidia.com/operator.nic-configuration.spectrum-x-profile: ""
-   data:
-     profile: |
-       # TODO_PASTE_RA23_PROFILE_YAML
-       # Contents supplied by NVIDIA: useSoftwareCCAlgorithm, docaCCVersion,
-       # mlxConfig (per multiplane mode and device ID), runtimeConfig.
+Obtain the complete published Spectrum-X profile ConfigMap for your deployment,
+or contact your NVIDIA CPM. It must carry the
+``network.nvidia.com/operator.nic-configuration.spectrum-x-profile`` label,
+``data.format: dospcx-data.tar.gz/v1``, and the compressed archive under
+``binaryData.dospcx-data.tar.gz``. Keep only one current-format profile selected cluster-wide.
 
 .. code-block:: bash
 
    kubectl apply -f spectrum-x-profile-configmap.yaml
 
-The profile must include ``mlxConfig`` tuning for the multiplane mode you selected and for your NIC's device ID. For where the profile comes from and how it is referenced, see :doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`; for the ConfigMap format itself, see :doc:`Configuration Details <../nic-conf-operator/configuration-details>`.
+The profile must support the architecture version, platform, mode, and NICs
+you select. Its name is independent of ``spectrumXOptimized.version``.
+For the profile ConfigMap format and migration from 26.7.x, see
+:doc:`Spectrum-X NIC Configuration <spectrum-x-configuration>`.
 
 ===============================
 Step 6: Configure the SuperNICs
 ===============================
 
-Create the ``NicConfigurationTemplate`` that applies the Spectrum-X profile to
-the SuperNICs and sets the multiplane mode.
+Create the ``NicConfigurationTemplate`` that selects the architecture version,
+platform, and multiplane mode. Match ``platformType`` to the deployed GPU
+platform and the profile's supported identifiers, rather than the NIC model.
+Use :ref:`spectrum-x-platform-configuration` to select the platform type,
+NIC ID, multiplane mode, and plane count for your worker nodes.
 
 .. tab-set::
 
    .. tab-item:: Single-Plane
       :sync: single-plane
 
-      Configure the NICs for Spectrum-X RA 2.3 in single-plane mode. Use ``nicType: a2dc`` for BlueField-3 SuperNIC (HGX H100/H200/B200), ``nicType: 1021`` for ConnectX-7 NIC (GB200), or ``nicType: 1023`` for ConnectX-8 SuperNIC.
+      Configure the NICs in single-plane mode. This example uses BlueField-3 SuperNIC on H100. For H200 or B200, change ``platformType`` to ``h200`` or ``b200``. For ConnectX-7 NIC on GB200, use ``nicType: "1021"`` and ``platformType: gb200``.
 
       .. code-block:: yaml
 
@@ -430,7 +428,8 @@ the SuperNICs and sets the multiplane mode.
              linkType: Ethernet
              spectrumXOptimized:
                enabled: true
-               version: "spectrum-x-ra2.3-profile"  # name of the profile ConfigMap from Step 5
+               version: "RA2.4"
+               platformType: "h100"
                overlay: "none"
                multiplaneMode: "none"
                numberOfPlanes: 1
@@ -449,7 +448,7 @@ the SuperNICs and sets the multiplane mode.
    .. tab-item:: Hardware Multiplane
       :sync: hwplb
 
-      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``hwplb`` multiplane mode. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``, tech preview); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane, set ``numberOfPlanes: 4``.
+      Configure the ConnectX-8 SuperNICs with ``hwplb``. This example uses GB300; for B300 use ``platformType: b300``. ``hwplb`` requires ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``, tech preview); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane, set ``numberOfPlanes: 4``.
 
       .. code-block:: yaml
 
@@ -473,7 +472,8 @@ the SuperNICs and sets the multiplane mode.
              linkType: Ethernet
              spectrumXOptimized:
                enabled: true
-               version: "spectrum-x-ra2.3-profile"  # name of the profile ConfigMap from Step 5
+               version: "RA2.4"
+               platformType: "gb300"
                overlay: "none"
                multiplaneMode: "hwplb"
                numberOfPlanes: 2
@@ -492,7 +492,7 @@ the SuperNICs and sets the multiplane mode.
    .. tab-item:: Software Multiplane
       :sync: swplb
 
-      Configure the ConnectX-8 SuperNICs for Spectrum-X RA 2.3 with ``swplb`` multiplane mode. For Quad-Plane, set ``numberOfPlanes: 4``.
+      Configure the ConnectX-8 SuperNICs with ``swplb``. This example uses GB300; for B300 use ``platformType: b300``. For Quad-Plane, set ``numberOfPlanes: 4``.
 
       .. code-block:: yaml
 
@@ -516,7 +516,8 @@ the SuperNICs and sets the multiplane mode.
              linkType: Ethernet
              spectrumXOptimized:
                enabled: true
-               version: "spectrum-x-ra2.3-profile"  # name of the profile ConfigMap from Step 5
+               version: "RA2.4"
+               platformType: "gb300"
                overlay: "none"
                multiplaneMode: "swplb"
                numberOfPlanes: 2

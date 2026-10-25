@@ -28,9 +28,9 @@ NVIDIA Spectrum-X NIC Configuration
    :backlinks: none
 
 
-`NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ in Network Operator 26.7.0 applies Spectrum-X NIC tuning from a **Spectrum-X profile** — a versioned YAML document published for each Reference Architecture and supplied to the cluster as a labeled ConfigMap. The ``spectrumXOptimized.version`` field names that ConfigMap.
+`NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ in Network Operator 26.10 applies Spectrum-X settings from a **profile ConfigMap**. The ``spectrumXOptimized.version`` field selects the architecture version, and ``platformType`` selects the hardware platform. Neither field names the ConfigMap.
 
-This replaces the fixed RA-version enum used in earlier releases. In Network Operator 26.4.0 and earlier, ``version`` accepted only a fixed set of built-in RA versions, and the tuning tables shipped inside the operator image. From 26.7.0, the operator carries no built-in profiles: every Spectrum-X deployment must apply a profile ConfigMap first, and NIC tuning can be revised without a new operator release.
+The examples on this page target the component versions shipped with Network Operator |network-operator-version|.
 
 For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see :doc:`Platform Support <../platform-support>`.
 
@@ -44,22 +44,9 @@ Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, Connect
    and is not covered by an RA-validated configuration. Use it for evaluation
    only.
 
-   Configuring ConnectX-9 SuperNIC additionally requires a Spectrum-X profile
-   that carries ``mlxConfig`` tuning for device ID ``1025``. A profile that omits
-   it applies **no** Spectrum-X parameters to those NICs and reports no error.
-   Contact NVIDIA Support or your NVIDIA CPM for a profile that covers
-   ConnectX-9 SuperNIC. Hardware Multiplane on ConnectX-9 SuperNIC also depends
-   on DOCA xPlane support for that NIC — see :doc:`Architecture and Components
-   <components>`.
-
    ConnectX-9 SuperNIC remains fully supported by Network Operator for general
    RoCE and InfiniBand workloads — see :doc:`Platform Support
    <../platform-support>`.
-
-.. important::
-
-   Upgrading from Network Operator 26.4.x or earlier is not a drop-in change. A ``NicConfigurationTemplate`` that carries ``version: "RA2.1"`` no longer resolves to a built-in profile — it now resolves to a ConfigMap named ``RA2.1``, and Spectrum-X configuration will not be applied until a matching profile ConfigMap exists. Apply the profile ConfigMap for your Reference Architecture before or together with the upgrade.
-
 
 ====================================================
 Install and Configure the NIC Configuration Operator
@@ -67,27 +54,35 @@ Install and Configure the NIC Configuration Operator
 
 To install the operator and for more information on the CRDs, see :doc:`NIC Firmware Configuration <../nic-conf-operator/nic-fw-configuration>` and :doc:`Configuration Details <../nic-conf-operator/configuration-details>`.
 
-===============================
-Apply the Spectrum-X Profile
-===============================
+======================================
+Apply the Spectrum-X Profile ConfigMap
+======================================
 
-A Spectrum-X profile holds the NIC tuning for one Reference Architecture: the non-volatile ``mlxConfig`` parameters applied per multiplane mode and device ID, the ``runtimeConfig`` parameters for RoCE, adaptive routing, congestion control and inter-packet gap, and the congestion-control settings ``docaCCVersion`` and ``useSoftwareCCAlgorithm``.
+Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.
 
-Download the profile published for your Reference Architecture from the NVOnline portal, or contact your NVIDIA CPM. Apply it **as-is** — the published file already carries the ``network.nvidia.com/operator.nic-configuration.spectrum-x-profile`` label and the complete ``data.profile`` body:
+The following shows the required API format. Use the published ConfigMap rather than applying this placeholder example:
+
+.. code-block:: yaml
+
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: spectrum-x-profile
+     namespace: nvidia-network-operator
+     labels:
+       network.nvidia.com/operator.nic-configuration.spectrum-x-profile: ""
+   data:
+     format: dospcx-data.tar.gz/v1
+   binaryData:
+     dospcx-data.tar.gz: <base64-encoded-archive>
 
 .. code-block:: bash
 
    kubectl apply -f spectrum-x-profile-configmap.yaml
 
-The ConfigMap **name** is the value you reference from ``spectrumXOptimized.version``. Profiles are keyed by name and not by namespace, so use unique profile names across every namespace the operator watches.
-
-For the full profile ConfigMap format, the label rules, and a complete annotated example, see :doc:`Configuration Details <../nic-conf-operator/configuration-details>`.
-
-For Spectrum-X RA 2.1 and later, the DOCA SPC-X CC algorithm package is included in the operator image. Set ``useSoftwareCCAlgorithm`` and ``docaCCVersion`` in the Spectrum-X profile to control its use and version.
-
 .. note::
 
-   ``version`` is a free-form name and is not validated against existing ConfigMaps, so a template that references a missing profile is accepted by the API and only fails when it is applied. For that and the other profile failure signatures, see :doc:`Verify and Troubleshoot <verify-and-troubleshoot>`.
+   Admission checks the template fields, but does not establish that the profile supports the architecture, platform, and NIC combination. Check ``NicDevice`` conditions as described in :doc:`Verify and Troubleshoot <verify-and-troubleshoot>`.
 
 ================
 Firmware Upgrade
@@ -109,7 +104,125 @@ Configure and apply the NicFirmwareTemplate CR:
 Enable SPC-X Optimizations for Devices
 ======================================
 
-Reference the profile ConfigMap by name from ``spectrumXOptimized.version``. Spectrum-X optimizations require ``linkType: Ethernet`` and ``numVfs: 1``.
+.. _spectrum-x-platform-configuration:
+
+Platform configuration values
+-----------------------------
+
+``PLATFORM_TYPE`` maps to
+``spec.template.spectrumXOptimized.platformType``, ``NIC_TYPE`` to
+``spec.nicSelector.nicType``, ``MP_MODE`` to
+``spec.template.spectrumXOptimized.multiplaneMode``, and ``NUM_PLANES`` to
+``spec.template.spectrumXOptimized.numberOfPlanes``.
+
+PF and VF totals describe the east-west NICs on one worker node in the
+reference platform layout, excluding north-south NICs. For HGX H100 use
+``h100``; for HGX H200 use ``h200``. Select the row matching your NIC and
+physical plane configuration.
+
+.. list-table:: Platform configuration by worker node
+   :header-rows: 1
+   :widths: 18 22 16 14 15 15
+
+   * - | Platform type
+       | (``PLATFORM_TYPE``)
+     - | NIC type ID
+       | (``NIC_TYPE``)
+     - | Multi-plane mode
+       | (``MP_MODE``)
+     - | Number of planes
+       | (``NUM_PLANES``)
+     - Total PFs per platform
+     - Total VFs per platform
+   * - ``h100`` / ``h200``
+     - ``a2dc`` (BlueField-3)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``b200``
+     - ``a2dc`` (BlueField-3)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``b200``
+     - ``1021`` (ConnectX-7)
+     - ``none``
+     - 1
+     - 8
+     - 8
+   * - ``gb200``
+     - ``1021`` (ConnectX-7)
+     - ``none``
+     - 1
+     - 4
+     - 4
+   * - ``rtx`` (RTX PRO 6000)
+     - ``1023`` (ConnectX-8)
+     - ``none``
+     - 1
+     - 8 (2 x 4)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 2
+     - 16 (2 x 8)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 4
+     - 32 (4 x 8)
+     - 8
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 2
+     - 16 (2 x 8)
+     - 16
+   * - ``b300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 4
+     - 32 (4 x 8)
+     - 32
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 2
+     - 8 (2 x 4)
+     - 4
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``hwplb``
+     - 4
+     - 16 (4 x 4)
+     - 4
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 2
+     - 8 (2 x 4)
+     - 8
+   * - ``gb300``
+     - ``1023`` (ConnectX-8)
+     - ``swplb``
+     - 4
+     - 16 (4 x 4)
+     - 16
+
+In ``hwplb``, each rail exposes one VF regardless of the number of planes.
+In ``swplb``, each PF exposes a VF, so the VF count increases with the
+number of planes. The totals above are platform-wide counts, not values
+for ``template.numVfs``; the NIC configuration template still uses
+``numVfs: 1``.
+
+Single-plane configuration
+--------------------------
+
+Set the architecture version and the platform identifier supported by the profile. Spectrum-X optimizations require ``linkType: Ethernet`` and ``numVfs: 1``. This example selects a GB200 single-plane deployment:
 
 .. code-block:: yaml
 
@@ -122,19 +235,20 @@ Reference the profile ConfigMap by name from ``spectrumXOptimized.version``. Spe
      nodeSelector:
        feature.node.kubernetes.io/network-sriov.capable: "true"
      nicSelector:
-       nicType: a2dc # BlueField-3 SuperNIC. Use "1023" for ConnectX-8 SuperNIC, or "1025" for ConnectX-9 SuperNIC (tech preview)
+       nicType: "1021" # ConnectX-7 NIC on GB200
      template:
        numVfs: 1
        linkType: Ethernet
        spectrumXOptimized:
          enabled: true
-         version: "spectrum-x-ra2.3-profile" # name of the Spectrum-X profile ConfigMap
+         version: "RA2.4"
+         platformType: "gb200"
          overlay: "none" # For an L3 EVPN overlay, use "l3"
 
 Multiplane configuration
 ------------------------
 
-Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``multiplaneMode`` and ``numberOfPlanes`` alongside the profile reference.
+Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``multiplaneMode`` and ``numberOfPlanes`` alongside the architecture and platform fields.
 
 .. note::
    It is recommended to perform a NIC configuration reset before applying or switching between multiplane configurations to ensure a clean and consistent initial state. See :doc:`Reset NIC Configuration to Default <../nic-conf-operator/nic-fw-configuration>` for details.
@@ -156,12 +270,13 @@ Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``mu
        linkType: Ethernet
        spectrumXOptimized:
          enabled: true
-         version: "spectrum-x-ra2.3-profile"
+         version: "RA2.4"
+         platformType: "gb300"
          overlay: "none"
          multiplaneMode: "hwplb" # Hardware Plane Load Balancing
-         numberOfPlanes: 4
+         numberOfPlanes: 2
 
-The profile must contain tuning for the multiplane mode and device ID you select. A profile that has no ``mlxConfig`` entry for the requested mode leaves those parameters at their device defaults.
+The profile must support the requested architecture, platform, mode, and NIC. ``platformType: rtx`` permits only ``multiplaneMode: none``. ``platformType: vr`` requires ``swplb`` or ``hwplb``.
 
 Multiplane modes
 ^^^^^^^^^^^^^^^^
@@ -188,16 +303,10 @@ The following multiplane modes are available:
      - Software Plane Load Balancing. The NIC port is split into multiple PFs, each assigned to a separate data plane; the software stack distributes packets across planes. Each plane is exposed to the workload as its own interface.
      - BlueField-3 SuperNIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
      - 2, 4
-   * - ``uniplane``
-     - Uniplane mode. Single-plane physical topology that uses the Spectrum-X multiplane software stack and IP schema — multiple PFs all connect to the **same** ToR/plane (rather than separate planes as in ``swplb`` / ``hwplb``). **Not part of Spectrum-X RA 2.3.** The API accepts the value, but it takes effect only if the Spectrum-X profile you apply carries a ``uniplane`` section; published profiles do not. For production deployments use ``none`` for Single-Plane, or ``hwplb`` / ``swplb`` for Dual-Plane / Quad-Plane.
-     - BlueField-3 SuperNIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
-     - 2
 
 .. note::
 
    On multiplane platforms, ``hwplb`` is the mode Spectrum-X RA 2.3 recommends — select ``swplb`` only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. This is a Reference Architecture recommendation, not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
-
-   The modes a given deployment can actually use are additionally bounded by the Spectrum-X profile: a mode is configurable only if the profile carries ``mlxConfig`` tuning for that mode and device ID.
 
 NIC type constraints
 ^^^^^^^^^^^^^^^^^^^^
@@ -214,13 +323,13 @@ NIC type constraints
      - ``none``
    * - ConnectX-8 SuperNIC
      - ``1023``
-     - ``none``, ``swplb``, ``hwplb``, ``uniplane``
+     - ``none``, ``swplb``, ``hwplb``
    * - ConnectX-9 SuperNIC *(tech preview)*
      - ``1025``
-     - ``none``, ``swplb``, ``hwplb``, ``uniplane``
+     - ``none``, ``swplb``, ``hwplb``
    * - BlueField-3 SuperNIC
      - ``a2dc``
-     - ``none``, ``swplb``, ``uniplane``
+     - ``none``, ``swplb``
 
 .. warning::
 
@@ -243,24 +352,25 @@ The template uses the following placeholders for device name construction:
     :language: yaml
     :lines: 18-
 
-The ``railPciAddresses`` field defines the PCI address to rail mapping. The first dimension is the rail index and the second dimension is the list of PCI addresses of the NICs in that rail.
+The ``railPciAddresses`` field defines the PCI address to rail mapping. The first dimension is the rail index and the second dimension lists one PCI address per ``NicDevice`` in that rail. ``pfsPerNic`` determines how many PF rules are generated for each device; do not list each PF of the same device as another NIC.
 
 Generated udev rules
 ^^^^^^^^^^^^^^^^^^^^^
 
 The operator generates udev rules based on the template and writes them to the host. The rules are written to two separate files.
 
-Example generated udev rules for net devices (``/etc/udev/rules.d/10-nic-net-interface-naming.rules``):
+Example generated udev rules for one PF's net device (``/etc/udev/rules.d/10-nic-net-interface-naming.rules``):
 
 .. code-block:: text
 
    # Auto-generated by nic-configuration-operator
    # Do not edit manually
 
-   SUBSYSTEM=="net", ACTION=="add", KERNELS=="0000:1a:00.0", NAME="net_0_0_0"
-   SUBSYSTEM=="net", ACTION=="add", KERNELS=="0000:1a:00.1", NAME="net_0_1_0"
-   SUBSYSTEM=="net", ACTION=="add", KERNELS=="0000:3a:00.0", NAME="net_1_0_1"
-   SUBSYSTEM=="net", ACTION=="add", KERNELS=="0000:3a:00.1", NAME="net_1_1_1"
+   SUBSYSTEM=="net", ACTION=="add", ATTR{phys_port_name}=="p[0-9]*", KERNELS=="0000:1a:00.0", NAME="net_0_0_0"
+   SUBSYSTEM=="net", ACTION=="add", ATTR{phys_port_name}=="", KERNELS=="0000:1a:00.0", NAME="net_0_0_0"
+   SUBSYSTEM=="net", ACTION=="add", TEST!="phys_port_name", KERNELS=="0000:1a:00.0", NAME="net_0_0_0"
+
+The physical-port match prevents VF and SF representors from taking the PF name. The other rules cover hosts where ``phys_port_name`` is empty or absent.
 
 Example generated udev rules for RDMA devices (``/etc/udev/rules.d/10-nic-rdma-interface-naming.rules``):
 
@@ -287,12 +397,15 @@ Validation rules
 
 The following validation rules are enforced by the API:
 
-- Spectrum-X optimizations can only be enabled when ``linkType`` is ``Ethernet`` and ``numVfs`` is ``1``.
+- Spectrum-X optimizations require ``numVfs: 1`` and ``linkType: Ethernet``. When ``networkBay`` is configured, omit ``linkType`` because the system profile governs it.
 - Spectrum-X optimizations can only be enabled for ConnectX-7 NIC (``nicType: 1021``), ConnectX-8 SuperNIC (``nicType: 1023``), ConnectX-9 SuperNIC (``nicType: 1025``), or BlueField-3 SuperNIC (``nicType: a2dc``).
 - When Spectrum-X optimizations are enabled, ``roceOptimized`` must not be enabled (RoCE settings are included in the Spectrum-X configuration).
-- ``version`` is required and is not validated against existing ConfigMaps — any name is accepted.
+- ``version`` and ``platformType`` are required for enabled Spectrum-X configuration. Their values must be supported by the supplied profile; ``version`` is not a ConfigMap reference.
+- ``multiplaneMode`` must be ``none``, ``swplb``, or ``hwplb``; ``numberOfPlanes`` must be ``1``, ``2``, or ``4``.
 - When ``multiplaneMode`` is ``none``, ``numberOfPlanes`` must be ``1``.
 - When ``multiplaneMode`` is not ``none``, ``numberOfPlanes`` must not be ``1``.
 - The ``hwplb`` multiplane mode can only be enabled for ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``).
 
-``rawNvConfig`` may be combined with Spectrum-X optimizations: the raw parameters are merged as overrides on top of the parameters calculated from the Spectrum-X profile. Parameter names must not use index-range syntax such as ``NAME[0..3]`` — list each index explicitly.
+``rawNvConfig`` may be combined with Spectrum-X optimizations. Values in ``rawNvConfig`` override explicit template settings, which override Spectrum-X profile settings. Parameter names must not use index-range syntax such as ``NAME[0..3]`` — list each index explicitly.
+
+ConnectX-9 Network Bay configuration can combine ``networkBay.conf`` with Spectrum-X. Select both ASICs of the card, omit ``linkType``, and use a system profile supported by the firmware. Spectrum-X profile settings override the Network Bay system-profile defaults; explicit template settings and ``rawNvConfig`` override both. See :doc:`Configuration Details <../nic-conf-operator/configuration-details>` for Network Bay pairing and validation requirements.
