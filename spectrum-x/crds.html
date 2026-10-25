@@ -270,25 +270,39 @@ upstream resource).</p></td>
 <td><p><em>(Optional)</em> Enables Dynamic Resource Allocation (DRA) for the configured Spectrum-X nodes. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">vfStateFollow</span></code></div>
+<div class="line">bool</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Mirrors PF carrier loss to active VF representors. When all PFs in a rail topology report <code class="docutils literal notranslate"><span class="pre">NO-CARRIER</span></code>, its VF representors are set administratively down so Pods receive a link-down notification. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>. Recovery of any PF restores the representors; setting <code class="docutils literal notranslate"><span class="pre">false</span></code> also restores them and disables following.</p></td>
+</tr>
+<tr class="row-even"><td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code></div>
 <div class="line">map[string]string</div>
 </div>
 </td>
 <td><p><em>(Optional)</em> Label selector that identifies the Spectrum-X nodes the configuration applies to.</p></td>
 </tr>
-<tr class="row-even"><td><div class="line-block">
+<tr class="row-odd"><td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">maxUnavailable</span></code></div>
 <div class="line"><a class="reference external" href="https://godoc.org/k8s.io/apimachinery/pkg/util/intstr#IntOrString">IntOrString</a></div>
 </div>
 </td>
 <td><p><em>(Optional)</em> Either an integer count or a percentage of nodes in the pool that can be configured in parallel. Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><div class="line-block">
+<tr class="row-even"><td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">networkNamespace</span></code></div>
 <div class="line">string</div>
 </div>
 </td>
 <td><p><em>(Optional)</em> Namespace of the NetworkAttachmentDefinition custom resource.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ovsConfig</span></code></div>
+<div class="line">map[string]string</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Additional <code class="docutils literal notranslate"><span class="pre">ovs-vswitchd</span></code> <code class="docutils literal notranslate"><span class="pre">other_config</span></code> entries, merged over the operator defaults. Matching keys override the default value. See <a class="reference internal" href="components.html#spectrum-x-ovs-settings"><span class="std std-ref">OVS settings and switch-plane offsets</span></a>.</p></td>
 </tr>
 <tr class="row-even"><td><div class="line-block">
 <div class="line"><code class="docutils literal notranslate"><span class="pre">numVfs</span></code></div>
@@ -442,6 +456,13 @@ upstream resource).</p></td>
 </td>
 <td><p>MTU for the rail. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">0</span></code>.</p></td>
 </tr>
+<tr class="row-odd"><td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">swPlane</span></code></div>
+<div class="line">int</div>
+</div>
+</td>
+<td><p><em>(Optional)</em> Switch-plane offset for Hardware Multiplane entries that select multiple PFs. Must be <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">0</span></code>; omitted means <code class="docutils literal notranslate"><span class="pre">0</span></code>. Switch-plane numbers start at <code class="docutils literal notranslate"><span class="pre">len(pfNames)</span> <span class="pre">*</span> <span class="pre">swPlane</span></code> and follow the order in <code class="docutils literal notranslate"><span class="pre">pfNames</span></code>. This field does not change the NIC plane count.</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -482,7 +503,7 @@ upstream resource).</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 19, 2026.
+      <span class="lastupdated">Last updated on Oct 25, 2026.
       </span></p>
   </div>
 

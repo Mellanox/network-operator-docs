@@ -243,15 +243,6 @@ supported by a specific Network Operator release:</p>
 </tr>
 </tbody>
 </table>
-<p>Through Network Operator
-26.4.x, <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> selected one of a fixed set of RA
-versions built into the NIC Configuration Operator image. From 26.7.0, NIC
-tuning ships as a <strong>Spectrum-X profile</strong> — a versioned YAML document published
-for each Reference Architecture and applied to the cluster as a labeled
-ConfigMap — and <code class="docutils literal notranslate"><span class="pre">version</span></code> names that ConfigMap. The operator carries no
-built-in profiles, so every Spectrum-X deployment applies a profile before
-configuring NICs, and tuning can be revised without a new operator release.
-See <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a> for details.</p>
 </section>
 <section id="what-you-configure">
 <h2>What you configure<a class="headerlink" href="#what-you-configure" title="Permalink to this headline"></a></h2>
@@ -277,12 +268,13 @@ NV-IPAM, and Multus.</p></td>
 <td><p><a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Spectrum-X profile ConfigMap</strong></p></td>
-<td><p>Per-RA NIC tuning, referenced by <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code>.</p></td>
+<td><p>Cluster-wide Spectrum-X configuration data. Exactly one
+current-format profile may be selected.</p></td>
 <td><p><a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">NIC Configuration</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code></p></td>
 <td><p>NIC-level firmware and PF configuration: link type, <code class="docutils literal notranslate"><span class="pre">numVfs</span></code>,
-multiplane mode, profile reference.</p></td>
+multiplane mode, architecture version, and platform type.</p></td>
 <td><p><a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">NIC Configuration</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code></p></td>
@@ -324,7 +316,7 @@ combinations — see <a class="reference internal" href="../dra-sriov-driver/dra
 <td><p>You want to know what gets deployed and which operator owns what.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">NIC Configuration</span></a></p></td>
-<td><p>You are writing the profile ConfigMap or the NIC templates.</p></td>
+<td><p>You are applying the profile ConfigMap or writing NIC templates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="verify-and-troubleshoot.html"><span class="doc">Verify and Troubleshoot</span></a></p></td>
 <td><p>The cluster is up and you need to confirm it, or something failed.</p></td>
@@ -352,7 +344,7 @@ For the Kubernetes and OS matrix and component versions, see
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 19, 2026.
+      <span class="lastupdated">Last updated on Oct 25, 2026.
       </span></p>
   </div>
 

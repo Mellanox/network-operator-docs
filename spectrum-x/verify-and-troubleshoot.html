@@ -69,7 +69,7 @@
 <li class="toctree-l3"><a class="reference internal" href="components.html">Architecture and Components</a></li>
 <li class="toctree-l3"><a class="reference internal" href="spectrum-x-configuration.html">Spectrum-X NIC Configuration</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Verify and Troubleshoot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#step-1-check-the-profile-is-loaded">Step 1: Check the profile is loaded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-1-check-the-profile-configmap">Step 1: Check the profile ConfigMap</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-2-check-the-nic-configuration-applied">Step 2: Check the NIC configuration applied</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-3-check-the-rails-are-configured">Step 3: Check the rails are configured</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-4-check-plane-health-hardware-multiplane">Step 4: Check plane health (Hardware Multiplane)</a></li>
@@ -130,7 +130,7 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#step-1-check-the-profile-is-loaded" id="id1">Step 1: Check the profile is loaded</a></p></li>
+<li><p><a class="reference internal" href="#step-1-check-the-profile-configmap" id="id1">Step 1: Check the profile ConfigMap</a></p></li>
 <li><p><a class="reference internal" href="#step-2-check-the-nic-configuration-applied" id="id2">Step 2: Check the NIC configuration applied</a></p></li>
 <li><p><a class="reference internal" href="#step-3-check-the-rails-are-configured" id="id3">Step 3: Check the rails are configured</a></p></li>
 <li><p><a class="reference internal" href="#step-4-check-plane-health-hardware-multiplane" id="id4">Step 4: Check plane health (Hardware Multiplane)</a></p></li>
@@ -143,24 +143,27 @@
 before it, so the first failing check is where to start debugging. The
 examples assume the Network Operator is installed in the
 <code class="docutils literal notranslate"><span class="pre">nvidia-network-operator</span></code> namespace.</p>
-<section id="step-1-check-the-profile-is-loaded">
-<h2>Step 1: Check the profile is loaded<a class="headerlink" href="#step-1-check-the-profile-is-loaded" title="Permalink to this headline"></a></h2>
-<p>Profile ConfigMaps are watched and loaded by the NIC configuration
-<strong>daemon</strong>, which runs on every node — not by the operator Pod. It logs a
-line for each profile it picks up:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator logs <span class="se">\</span>
-  -l app.kubernetes.io/name<span class="o">=</span>nic-configuration-daemon <span class="se">\</span>
-  <span class="p">|</span> grep <span class="s2">&quot;Loaded Spectrum-X profile&quot;</span>
-</pre></div>
-</div>
-<p>If nothing matches, confirm the ConfigMap carries the watch label:</p>
+<section id="step-1-check-the-profile-configmap">
+<h2>Step 1: Check the profile ConfigMap<a class="headerlink" href="#step-1-check-the-profile-configmap" title="Permalink to this headline"></a></h2>
+<p>Confirm the profile ConfigMap carries the required label:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get configmap -A <span class="se">\</span>
   -l network.nvidia.com/operator.nic-configuration.spectrum-x-profile
 </pre></div>
 </div>
-<p>The label value is ignored — only the key must be present. The ConfigMap
-<strong>name</strong> is what <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> must match, character for
-character.</p>
+<p>The label value is ignored. Exactly one current-format profile may be
+selected cluster-wide. Check that its contents match the published file,
+including <code class="docutils literal notranslate"><span class="pre">data.format:</span> <span class="pre">dospcx-data.tar.gz/v1</span></code> and a non-empty
+<code class="docutils literal notranslate"><span class="pre">binaryData.dospcx-data.tar.gz</span></code>. A legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> body from
+26.7.x is not supported by the current release.</p>
+<p><code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> is the architecture version, not the
+ConfigMap name. Every enabled template must also specify <code class="docutils literal notranslate"><span class="pre">platformType</span></code>.
+Confirm the profile supports the requested version, platform, NIC, and mode.
+For configuration errors, inspect the NIC configuration daemon logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator logs <span class="se">\</span>
+  -l app.kubernetes.io/name<span class="o">=</span>nic-configuration-daemon <span class="se">\</span>
+  --prefix --tail<span class="o">=</span><span class="m">200</span>
+</pre></div>
+</div>
 </section>
 <section id="step-2-check-the-nic-configuration-applied">
 <h2>Step 2: Check the NIC configuration applied<a class="headerlink" href="#step-2-check-the-nic-configuration-applied" title="Permalink to this headline"></a></h2>
@@ -205,13 +208,17 @@ spec params are not supported on this device and were skipped: …</em></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NonVolatileConfigUpdateFailed</span></code>, <code class="docutils literal notranslate"><span class="pre">RuntimeConfigUpdateFailed</span></code>,
 <code class="docutils literal notranslate"><span class="pre">FirmwareError</span></code></p></td>
-<td><p>The apply itself failed. Check the daemon logs on the affected
-node: <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">-n</span> <span class="pre">nvidia-network-operator</span> <span class="pre">logs</span> <span class="pre">-l</span>
+<td><p>The apply itself failed. Get the daemon Pod on the affected node
+with <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">-n</span> <span class="pre">nvidia-network-operator</span> <span class="pre">get</span> <span class="pre">pods</span> <span class="pre">-l</span>
 <span class="pre">app.kubernetes.io/name=nic-configuration-daemon</span> <span class="pre">--field-selector</span>
-<span class="pre">spec.nodeName=&lt;node&gt;</span></code>.</p></td>
+<span class="pre">spec.nodeName=&lt;node&gt;</span></code>, then inspect that Pod’s logs.</p></td>
 </tr>
 </tbody>
 </table>
+<p>Runtime validation reports <code class="docutils literal notranslate"><span class="pre">all</span> <span class="pre">network</span> <span class="pre">interfaces</span> <span class="pre">have</span> <span class="pre">NO-CARRIER</span></code> only
+when every checked interface on a NIC has no carrier. One working plane
+allows validation to proceed; this does not establish that all planes are
+healthy. Inspect the fabric and xPlane state for partial failures.</p>
 </section>
 <section id="step-3-check-the-rails-are-configured">
 <h2>Step 3: Check the rails are configured<a class="headerlink" href="#step-3-check-the-rails-are-configured" title="Permalink to this headline"></a></h2>
@@ -309,39 +316,51 @@ named after the rail topology entry, so routes are not in the main table:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x</span> <span class="pre">config</span> <span class="pre">version</span> <span class="pre">&lt;name&gt;</span> <span class="pre">not</span> <span class="pre">found</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> names a profile ConfigMap that does
-not exist, or exists without the watch label. The field is not
-validated against existing ConfigMaps, so the template is accepted
-and only the apply fails. Check the name matches exactly.</p></td>
+<tr class="row-even"><td><p>Template rejected for missing <code class="docutils literal notranslate"><span class="pre">platformType</span></code> or invalid <code class="docutils literal notranslate"><span class="pre">uniplane</span></code></p></td>
+<td><p>A 26.7-era template is being used with the current CRD. Add the
+supported platform identifier, set <code class="docutils literal notranslate"><span class="pre">version</span></code> to the architecture
+version, and select <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Spectrum-X parameters silently not applied, no error</p></td>
-<td><p>The profile loaded, but carries no <code class="docutils literal notranslate"><span class="pre">mlxConfig</span></code> entry for this
-device ID or multiplane mode, so those parameters were skipped and
-the device left at its defaults. Confirm the profile covers every
-NIC model and mode in the cluster.</p></td>
+<tr class="row-odd"><td><p>Multiple profile ConfigMaps selected</p></td>
+<td><p>Keep exactly one current-format profile selected cluster-wide.
+Remove the extra ConfigMap or its selector label so configuration
+can resume.</p></td>
 </tr>
-<tr class="row-even"><td><p>Two profiles, unpredictable results</p></td>
-<td><p>Profiles are keyed by ConfigMap <strong>name</strong>, not namespace. Two
-labeled ConfigMaps sharing a name define the same profile key and
-the most recently reconciled one wins, with no error. Use unique
-names across every watched namespace.</p></td>
+<tr class="row-even"><td><p>Invalid profile ConfigMap contents</p></td>
+<td><p>Reapply the complete published profile, preserving <code class="docutils literal notranslate"><span class="pre">data.format</span></code>
+and <code class="docutils literal notranslate"><span class="pre">binaryData</span></code>. Renaming a legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> ConfigMap
+does not convert its contents to the current format.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Configuration flaps between two states</p></td>
+<tr class="row-odd"><td><p>Spectrum-X configuration fails for the selected platform</p></td>
+<td><p>Check the profile supports the requested platform, version, NIC,
+and mode. Selected devices on a node must use consistent API field
+values. Check <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> conditions and the daemon logs.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RuntimeConfigUpdateFailed</span></code> with <code class="docutils literal notranslate"><span class="pre">all</span> <span class="pre">network</span> <span class="pre">interfaces</span> <span class="pre">have</span> <span class="pre">NO-CARRIER</span></code></p></td>
+<td><p>Restore carrier on at least one NIC port and check cabling, switch
+ports, and the physical plane configuration. Runtime validation
+retries when connectivity returns.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pod rail goes down when all its PFs lose carrier</p></td>
+<td><p>Expected with <code class="docutils literal notranslate"><span class="pre">vfStateFollow:</span> <span class="pre">true</span></code> (the default). Active VF
+representors are restored when a PF recovers. Use xPlane telemetry
+to diagnose individual failed planes on Hardware Multiplane.</p></td>
+</tr>
+<tr class="row-even"><td><p>Configuration flaps between two states</p></td>
 <td><p>The SR-IOV Network Operator’s <code class="docutils literal notranslate"><span class="pre">mellanox</span></code> plugin is still enabled
 and is configuring the same NIC state as the NIC Configuration
 Operator. Set <code class="docutils literal notranslate"><span class="pre">disablePlugins:</span> <span class="pre">[mellanox]</span></code> — see
 <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p>No OVS bridge, VFs never attach</p></td>
+<tr class="row-odd"><td><p>No OVS bridge, VFs never attach</p></td>
 <td><p>The <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code> feature gate is not set on the SR-IOV
 Network Operator, so it cannot create the per-PF bridge.</p></td>
 </tr>
-<tr class="row-odd"><td><p>RDMA devices from other Pods are visible</p></td>
+<tr class="row-even"><td><p>RDMA devices from other Pods are visible</p></td>
 <td><p>RDMA subsystem namespace awareness is not enabled. Set
 <code class="docutils literal notranslate"><span class="pre">options</span> <span class="pre">ib_core</span> <span class="pre">netns_mode=0</span></code> and reboot the node.</p></td>
 </tr>
-<tr class="row-even"><td><p>OVS starts with uplinks missing after a reboot</p></td>
+<tr class="row-odd"><td><p>OVS starts with uplinks missing after a reboot</p></td>
 <td><p>Expected on Hardware Multiplane: the operator installs an
 <code class="docutils literal notranslate"><span class="pre">ExecStartPre</span></code> hook that removes xPlane uplinks whose PF has not
 yet entered switchdev mode. Check
@@ -374,7 +393,7 @@ PFs are ready.</p></td>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 19, 2026.
+      <span class="lastupdated">Last updated on Oct 25, 2026.
       </span></p>
   </div>
 

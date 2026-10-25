@@ -77,6 +77,7 @@
 <li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN (RDMA Shared)</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Spectrum-X</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#use-case">Use Case</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ra2-4-profile-configmap">RA2.4: Profile ConfigMap</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#the-ra2-3-profile-configmap">The RA2.3 Profile ConfigMap</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#multiplane-modes">Multiplane Modes</a><ul>
 <li class="toctree-l6"><a class="reference internal" href="#hwplb">HWPLB</a></li>
@@ -156,30 +157,31 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#use-case" id="id1">Use Case</a></p></li>
-<li><p><a class="reference internal" href="#the-ra2-3-profile-configmap" id="id2">The RA2.3 Profile ConfigMap</a></p></li>
-<li><p><a class="reference internal" href="#multiplane-modes" id="id3">Multiplane Modes</a></p>
+<li><p><a class="reference internal" href="#ra2-4-profile-configmap" id="id2">RA2.4: Profile ConfigMap</a></p></li>
+<li><p><a class="reference internal" href="#the-ra2-3-profile-configmap" id="id3">The RA2.3 Profile ConfigMap</a></p></li>
+<li><p><a class="reference internal" href="#multiplane-modes" id="id4">Multiplane Modes</a></p>
 <ul>
-<li><p><a class="reference internal" href="#hwplb" id="id4">HWPLB</a></p></li>
-<li><p><a class="reference internal" href="#swplb" id="id5">SWPLB</a></p></li>
-<li><p><a class="reference internal" href="#none-single-plane" id="id6">None (Single Plane)</a></p></li>
+<li><p><a class="reference internal" href="#hwplb" id="id5">HWPLB</a></p></li>
+<li><p><a class="reference internal" href="#swplb" id="id6">SWPLB</a></p></li>
+<li><p><a class="reference internal" href="#none-single-plane" id="id7">None (Single Plane)</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#nic-types-defaults-and-accepted-modes" id="id7">NIC Types, Defaults, and Accepted Modes</a></p></li>
-<li><p><a class="reference internal" href="#dra-based-workload-allocation" id="id8">DRA-Based Workload Allocation</a></p>
+<li><p><a class="reference internal" href="#nic-types-defaults-and-accepted-modes" id="id8">NIC Types, Defaults, and Accepted Modes</a></p></li>
+<li><p><a class="reference internal" href="#dra-based-workload-allocation" id="id9">DRA-Based Workload Allocation</a></p>
 <ul>
-<li><p><a class="reference internal" href="#what-changes-in-the-generated-manifests" id="id9">What changes in the generated manifests</a></p></li>
-<li><p><a class="reference internal" href="#prerequisites" id="id10">Prerequisites</a></p></li>
-<li><p><a class="reference internal" href="#limitations" id="id11">Limitations</a></p></li>
+<li><p><a class="reference internal" href="#what-changes-in-the-generated-manifests" id="id10">What changes in the generated manifests</a></p></li>
+<li><p><a class="reference internal" href="#prerequisites" id="id11">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#limitations" id="id12">Limitations</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#pinning-to-ra2-1" id="id12">Pinning to RA2.1</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id13">See Also</a></p></li>
+<li><p><a class="reference internal" href="#pinning-to-ra2-1" id="id13">Pinning to RA2.1</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id14">See Also</a></p></li>
 </ul>
 </div>
 <section id="use-case">
 <h2>Use Case<a class="headerlink" href="#use-case" title="Permalink to this headline"></a></h2>
 <p>NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.</p>
-<p>Two reference architectures are supported. The RA version is the value of <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>, and each one pins to a Network Operator release line:</p>
+<p>The RA version is the value of <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. Select the profile that matches the Network Operator release and its NIC configuration data format:</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 14%" />
@@ -195,10 +197,20 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.3</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">26.10</span></code> and newer catalogued releases</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x-ra2.4</span></code></p></td>
+<td><p>Profile ConfigMap and per-group <code class="docutils literal notranslate"><span class="pre">platformType</span></code>. Requires matching NIC Configuration Operator CRDs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.3</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">26.7</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x</span></code></p></td>
-<td><p>Current. Adds the Spectrum-X profile ConfigMap (see below) and requires <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>.</p></td>
+<td><p>Legacy YAML <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> ConfigMap. Restricted to 26.7.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">26.4</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x-ra2.2</span></code></p></td>
+<td><p>Uses v1alpha2 <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> with built-in NIC tuning.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">26.1</span></code></p></td>
@@ -207,12 +219,75 @@
 </tr>
 </tbody>
 </table>
-<p>If the release and RA version are mismatched (for example, <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span> <span class="pre">RA2.1</span></code> with <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span> <span class="pre">26.7</span></code>), Launch Kit errors out with an explicit message. Pass the release explicitly: it is only inferred from the RA when <code class="docutils literal notranslate"><span class="pre">networkOperator.selectedRelease</span></code> is unset in the cluster configuration, and the shipped default pins <code class="docutils literal notranslate"><span class="pre">26.4</span></code>.</p>
+<p>If the release and RA version are mismatched, Launch Kit reports an error. Pass the release explicitly when using a saved configuration that selects another release. RA2.3 output cannot be deployed unchanged with the 26.10 configuration API.</p>
 <p>For deeper Spectrum-X background, see <a class="reference internal" href="../../spectrum-x/spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
+</section>
+<section id="ra2-4-profile-configmap">
+<h2>RA2.4: Profile ConfigMap<a class="headerlink" href="#ra2-4-profile-configmap" title="Permalink to this headline"></a></h2>
+<p>Use the full published ConfigMap with <code class="docutils literal notranslate"><span class="pre">data.format:</span> <span class="pre">dospcx-data.tar.gz/v1</span></code>
+and <code class="docutils literal notranslate"><span class="pre">binaryData.dospcx-data.tar.gz</span></code>. Raw legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML is
+not accepted for RA2.4. Launch Kit preserves the ConfigMap contents and source
+annotations, supplies the Network Operator namespace and discovery label,
+and renders it once for the selected groups.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.4 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.10 <span class="se">\</span>
+    --spectrum-x-config ./spectrum-x-profile-configmap.yaml <span class="se">\</span>
+    --topology-scheme <span class="m">2</span>-tier --topology-file ./topology.json <span class="se">\</span>
+    --multiplane-mode hwplb --number-of-planes <span class="m">2</span> <span class="se">\</span>
+    --save-deployment-files ./deployment-ra24 --output json
+</pre></div>
+</div>
+<p>The NIC template receives <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA2.4</span></code>, independently of the
+ConfigMap name. Launch Kit derives each group’s <code class="docutils literal notranslate"><span class="pre">platformType</span></code> from
+<code class="docutils literal notranslate"><span class="pre">clusterConfig[].gpuType</span></code> using the platform identifiers <code class="docutils literal notranslate"><span class="pre">h100</span></code>,
+<code class="docutils literal notranslate"><span class="pre">h200</span></code>, <code class="docutils literal notranslate"><span class="pre">b200</span></code>, <code class="docutils literal notranslate"><span class="pre">gb200</span></code>, <code class="docutils literal notranslate"><span class="pre">b300</span></code>, <code class="docutils literal notranslate"><span class="pre">gb300</span></code>, <code class="docutils literal notranslate"><span class="pre">rtx</span></code>, and <code class="docutils literal notranslate"><span class="pre">vr</span></code>.
+Unknown or ambiguous GPU platforms prevent RA2.4 generation. The supplied
+profile must support the selected platform and hardware layout.</p>
+<p>For the platform-to-<code class="docutils literal notranslate"><span class="pre">platformType</span></code> mapping, NIC IDs, plane counts, and
+PF/VF totals, see <a class="reference internal" href="../../spectrum-x/spectrum-x-configuration.html#spectrum-x-platform-configuration"><span class="std std-ref">Platform configuration values</span></a>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The installed NIC Configuration Operator must support the current
+profile format and expose <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.platformType</span></code> as a
+string in the served <code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> CRD. Older 26.10
+betas, including beta.2, do not meet this requirement. Launch Kit
+checks API compatibility before applying the profile ConfigMap and NIC
+templates, including during dry-run. Generation alone does not prove
+that the installed APIs are compatible.</p>
+</div>
+<p>Optional settings use the following configuration keys:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ovsConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">max-idle</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"></span>
+<span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">machine-a</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gpuType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NVIDIA-GB300</span><span class="w"></span>
+<span class="w">    </span><span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">swPlaneByRail</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"></span>
+<span class="w">        </span><span class="nt">1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This is a fragment to merge into the discovered configuration.
+<code class="docutils literal notranslate"><span class="pre">spectrumX.ovsConfig</span></code> is a string map rendered into the rail-pool
+<code class="docutils literal notranslate"><span class="pre">spec.ovsConfig</span></code>. Per-group <code class="docutils literal notranslate"><span class="pre">spectrumX.swPlaneByRail</span></code> maps existing
+east-west rail IDs to <code class="docutils literal notranslate"><span class="pre">swPlane</span></code> offsets; omitted assignments mean zero.
+Nonzero offsets require <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. See <a class="reference internal" href="../../spectrum-x/components.html"><span class="doc">Architecture and Components</span></a> for their OVS meaning.</p>
+<p>RA2.4 generation requires dense zero-based rail IDs and a uniform physical
+NIC count per rail that divides the plane count. PFs of one physical NIC
+must remain on one rail. Groups merged into a rail pool must agree on
+layout and effective switch-plane assignments. Current generation permits
+one rail-pool parent: a complete compatible GPU/rail-count cohort or one
+source selected with <code class="docutils literal notranslate"><span class="pre">--groups</span></code>.</p>
+<p>Review the generated profile ConfigMap, selectors, addresses, and templates, then use
+<code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--deployment-files</span> <span class="pre">./deployment-ra24</span> <span class="pre">--dry-run</span></code> before
+deployment and <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--deployment-files</span> <span class="pre">./deployment-ra24</span> <span class="pre">--wait</span> <span class="pre">10m</span></code>
+after deployment. Discovery refresh can drop switch-plane assignments when
+worker membership or hardware changes; review them before regenerating.</p>
 </section>
 <section id="the-ra2-3-profile-configmap">
 <h2>The RA2.3 Profile ConfigMap<a class="headerlink" href="#the-ra2-3-profile-configmap" title="Permalink to this headline"></a></h2>
-<p>RA2.3 moves the Spectrum-X tuning knobs out of the CRD and into a ConfigMap that the NIC Configuration Operator reads. Pass its contents with <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>:</p>
+<p>For Network Operator 26.7.x, RA2.3 uses a legacy profile ConfigMap. The following examples are for that release line, not the RA2.4 configuration workflow. Pass its contents with <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.3 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.7 <span class="se">\</span>
     --spectrum-x-config ./spectrum-x-profile.yaml <span class="se">\</span>
@@ -447,7 +522,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../../
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Oct 19, 2026.
+      <span class="lastupdated">Last updated on Oct 25, 2026.
       </span></p>
   </div>
 
