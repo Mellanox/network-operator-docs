@@ -34,96 +34,96 @@ NVIDIA Network Operator Container Images
      - Digest
    * - nvcr.io/nvstaging/mellanox
      - network-operator
-     - v26.10.0-rc.1
-     - sha256:ad9699229ff12369256f76bc7af958b015de56e44b303ac5ff6f2dbfe0647a2a
+     - v26.10.0-rc.2
+     - sha256:d907164195dffa30681b97c5df10d2d132c1bfe73d973bc95848a5fa8568c28e
    * - nvcr.io/nvstaging/mellanox
      - network-operator-init-container
-     - network-operator-v26.10.0-rc.1
-     - sha256:c11bb0d6cdecb1bc49bc010fbf1da249e37c12c73b67e2d43fb27d9506a44428
+     - network-operator-v26.10.0-rc.2
+     - sha256:8bcf3bd90449b1c5f9b0c2ffc0835f827fd3d473f6bf299b76b97a27737575a8
    * - nvcr.io/nvstaging/mellanox
      - k8s-rdma-shared-dev-plugin
-     - network-operator-v26.10.0-rc.1
-     - sha256:bacc5a0a995acbb19d0228ff38e11dad03ff1d7953a1ef64c2799bb8bbff375a
+     - network-operator-v26.10.0-rc.2
+     - sha256:79bab65c74ddd3c6941d0d9ceb564e7d24d793f191c5ed3c209e095e8a6f662b
    * - nvcr.io/nvstaging/mellanox
      - ib-kubernetes
-     - network-operator-v26.10.0-rc.1
-     - sha256:32723026b9d7bec19474fb9205986e142c8d7d1be4b503d40aecc978b29bd2aa
+     - network-operator-v26.10.0-rc.2
+     - sha256:89b2661ad6bfe1ef5d96ab3a748ca04cb12e35b5f4b084cec49c04d0f54a6677
    * - nvcr.io/nvstaging/mellanox
      - ipoib-cni
-     - network-operator-v26.10.0-rc.1
-     - sha256:88bc18db9908adaff6feff5ec08116267ca98f8bbf9a56ea13ddd9942a065b27
+     - network-operator-v26.10.0-rc.2
+     - sha256:7a3ce987e2d832da7860da7ac55362c96442f7044550cc5eefc2b09470f040f3
    * - nvcr.io/nvstaging/mellanox
      - nvidia-k8s-ipam
-     - network-operator-v26.10.0-rc.1
-     - sha256:d3be8b03b44b76fbdaa1004745265da7b60e314a925a67ab2df76fa3e348600c
+     - network-operator-v26.10.0-rc.2
+     - sha256:644aa95ca268ff4a0342c62b0f2a15d3d65568b1235eb6421ceb0408513578bb
    * - nvcr.io/nvstaging/mellanox
      - nic-feature-discovery
-     - network-operator-v26.10.0-rc.1
-     - sha256:598f48970ba35eaf7c3311c66ba3da53e40fe94f8b768cc22c43316faf1df350
+     - network-operator-v26.10.0-rc.2
+     - sha256:08a5c4a7aeb071a6a862d3e6356350f4415e8e231c93681235f88a74c37e80f7
    * - nvcr.io/nvstaging/doca
      - doca_telemetry
-     - 1.27.6-doca3.6.0-host
-     - sha256:43cd127f4fd54735a905c6d6765eac1992b38cc0e2b9946fcdca51162ce2d284
+     - 1.27.7-doca3.6.0-host
+     - sha256:a53ace5699cd16c9e8ea62d1938f5b9cd52b4abdec0b9ef0eae34da032ccd10a
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator
-     - network-operator-v26.10.0-rc.1
-     - sha256:8c3e2d38eea3f7b04fc34b878fb64f3d0f4b19fe1dd7846fbc77c9aeb364fa91
+     - network-operator-v26.10.0-rc.2
+     - sha256:021aad3248a938e03b7b14858a5d388140d144c2160e54e42c9c9c3b8cdf81bd
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-webhook
-     - network-operator-v26.10.0-rc.1
-     - sha256:e4b355eb1bd9cd50cb0bc380c55ad1ed8a22442b11f642dd0189da86d85615ca
+     - network-operator-v26.10.0-rc.2
+     - sha256:f49e77bb5345d69d8aaf195317855f048bc07216caa21b88139b5a59990b35a1
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-operator-config-daemon
-     - network-operator-v26.10.0-rc.1
-     - sha256:88cedfcfe42f60263bb5612146e40733d158330d4b0fceee80fd6096289991ff
+     - network-operator-v26.10.0-rc.2
+     - sha256:b4e5cba9c10c84b6a6589d9c8ee20503143efb7f5cdd39ce03a56efce655b7a3
    * - nvcr.io/nvstaging/mellanox
      - sriov-network-device-plugin
-     - network-operator-v26.10.0-rc.1
-     - sha256:8d89da28cca2d63d8bff116e39cf1213af9a8c2b5e64ec221cc06b63857af79c
+     - network-operator-v26.10.0-rc.2
+     - sha256:0af8aef810ae3c5b2e00ea46f29bd913410348c0e56f04e2db81f36f9999bfd5
    * - nvcr.io/nvstaging/mellanox
      - sriov-cni
-     - network-operator-v26.10.0-rc.1
-     - sha256:2183c060e82e52cec0e45168ff2f36fd9980036a99cfff52c93069817cb6b23f
+     - network-operator-v26.10.0-rc.2
+     - sha256:e025843a12b5f4092ab48b37041867db93cf6adfe803c7db8f045731c7a5e437
    * - nvcr.io/nvstaging/mellanox
      - ib-sriov-cni
-     - network-operator-v26.10.0-rc.1
-     - sha256:0fbb8619e355cd49e745eac40e4cf027d495f0dc0d2f0c3cc3bfa5a6ab71e5de
+     - network-operator-v26.10.0-rc.2
+     - sha256:ed00110e87f431be3dcf6f0be1124aaa632640ff4c42e8267836d740ac0697fe
    * - nvcr.io/nvstaging/mellanox
      - dra-driver-sriov
-     - network-operator-v26.10.0-rc.1
-     - sha256:028259cd6de330bea3ba6825faf1bc2b195d46496c379f7ab067445d281e3799
+     - network-operator-v26.10.0-rc.2
+     - sha256:dbe6e4645b03c9bb15c1eb408745301e1945c6ee2a7d8a1811c95487123b5dba
    * - nvcr.io/nvstaging/mellanox
      - plugins
-     - network-operator-v26.10.0-rc.1
-     - sha256:7dae3b709077cc05735515a56809b6be5c681ae7931590aeac1771c3376303dd
+     - network-operator-v26.10.0-rc.2
+     - sha256:076031e81da9f3f84cab4e0f4c5c2c9baea31d997a414186494190238e08f5ea
    * - nvcr.io/nvstaging/mellanox
      - multus-cni
-     - network-operator-v26.10.0-rc.1
-     - sha256:0a69a8a3b8efbf6b4ed9acb8e808423e750de9598af116db82b895fac6f8542a
+     - network-operator-v26.10.0-rc.2
+     - sha256:91ce2f8336cc2b66b0602fbeeed6ca8d6e50fbd5d0e0460312615fb0c525f747
    * - nvcr.io/nvstaging/mellanox
      - ovs-cni-plugin
-     - network-operator-v26.10.0-rc.1
-     - sha256:3f07038df2ea1848d9eff6f0ce1dd42e29c118c3be20402a3fed9da082ab213d
+     - network-operator-v26.10.0-rc.2
+     - sha256:58265d6ea58c12b10588800c520f51be867b09338c3114420bbd98a0dd2ad229
    * - nvcr.io/nvstaging/mellanox
      - rdma-cni
-     - network-operator-v26.10.0-rc.1
-     - sha256:781bb55dfe94c0eadfbf859e4b60a35b55d111e5268b2e34ad20f03bd490b6f7
+     - network-operator-v26.10.0-rc.2
+     - sha256:c324acc76a0ffb370c56dbfb2fdc7eefadeb780945857f9ed4b78c1697c4fc5a
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator
-     - network-operator-v26.10.0-rc.1
-     - sha256:be7697a2c1185d396bc645fee793e2419da947dec4916958a0af5900cc4ac424
+     - network-operator-v26.10.0-rc.2
+     - sha256:013560bde2ea449fe4ed63a2d2c3391be36db1c03a96a4470f870aa0808f42ba
    * - nvcr.io/nvstaging/mellanox
      - nic-configuration-operator-daemon
-     - network-operator-v26.10.0-rc.1
-     - sha256:9dd929f12e474bcf8cc4181593ad6a3bd2597c7875acb163ee38faf6d5b4bc15
+     - network-operator-v26.10.0-rc.2
+     - sha256:04213ebfecd09ee4cf1fb47853317ce62e36a465fb1a3016c00a6115d5d3b828
    * - nvcr.io/nvstaging/mellanox
      - maintenance-operator
-     - network-operator-v26.10.0-rc.1
-     - sha256:a8e91d3a2e3c74620cb1ca02b01abbe7556c1ecf270d6ef332a8e7b06999fd4e
+     - network-operator-v26.10.0-rc.2
+     - sha256:e3b4282f276e3219be67fab36e76b7e4d0453a2c295c150329f74e2efb437dcb
    * - nvcr.io/nvstaging/mellanox
      - spectrum-x-operator
-     - network-operator-v26.10.0-rc.1
-     - sha256:9ab9fdee08b09df55c26517c6e954b0fd2c2bdb3aa82775107620eaf6d32d22c
+     - network-operator-v26.10.0-rc.2
+     - sha256:0e2c6d3a95ae6205cc1f7ecaaf67e7160d67c0f88535315466215d1428c8b8b1
 
 =================================
 DOCA-OFED Driver Container Images
@@ -138,7 +138,7 @@ DOCA-OFED Driver Container Images
      - Version
    * - nvcr.io/nvstaging/mellanox
      - doca-driver
-     - doca3.6.0-26.10-058000-0
+     - doca3.6.0-26.10-062000-0
 
 
 The followings tags are available for the above DOCA-OFED Driver container version:
@@ -153,83 +153,83 @@ Ubuntu
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-5.15.0-198-generic-ubuntu22.04-amd64
-     - sha256:3f188545c1515255fbdc80286cbd978dc86cf3fd5c0cbf096ae0bc054c77d352
+       | doca3.6.0-26.10-062000-0-5.15.0-198-generic-ubuntu22.04-amd64
+     - sha256:f09abfd2ddafb5b81505f7b20e7fb4ce1bc2b82e37c5051daae6b1044dfdca8f
    * -
-       | doca3.6.0-26.10-058000-0-5.15.0-198-generic-ubuntu22.04-arm64
-     - sha256:d254817d7212f9270b75d1742642d1c7088fb109b159867b25216609e3997419
+       | doca3.6.0-26.10-062000-0-5.15.0-198-generic-ubuntu22.04-arm64
+     - sha256:edf2b6f2eb13d0feea093f3374b7b639fe63678ef43a4466d6ad9f2bd87e0e0c
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1062-oracle-ubuntu22.04-amd64
-     - sha256:2c32855013d882e514e2948905aeedacfa9a5761da206db5a1f183654d5b66fa
+       | doca3.6.0-26.10-062000-0-6.8.0-1062-oracle-ubuntu22.04-amd64
+     - sha256:1ebe8010cb1def76de4166cfd5450ad2ac0429040c6888ecf6bb899fca669e54
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1062-oracle-ubuntu22.04-arm64
-     - sha256:a3b7112d38316d38b355d1515dcfba186067562cc21b9c19ac71ab2ed51fed31
+       | doca3.6.0-26.10-062000-0-6.8.0-1062-oracle-ubuntu22.04-arm64
+     - sha256:49f815da2295cfa077f9a498ab77c1734d1944d946a55f86782a6a67b4f8a8d2
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1064-nvidia-ubuntu22.04-amd64
-     - sha256:e425f5b41ffb770a8aec164b77cec112ad13c7b3209b877bc16788ff0d386410
+       | doca3.6.0-26.10-062000-0-6.8.0-1064-nvidia-ubuntu22.04-amd64
+     - sha256:bc553fac6b04a23b2aefd980bcdbcc9e589b2169de40e4af0cb3dccc90c869b6
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1064-nvidia-ubuntu22.04-arm64
-     - sha256:eb7aebefb0e28dfd196a33fd7d49900372611aa32efd41dd1f868bfc7f798f16
+       | doca3.6.0-26.10-062000-0-6.8.0-1064-nvidia-ubuntu22.04-arm64
+     - sha256:daf289406afe06046aa2d56bd7801d1225dbc684abcec20023fac6b8f309c28a
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1066-aws-ubuntu22.04-amd64
-     - sha256:0cac9d7160c032e6fb60290194e3f1a3d592e569b4ec441a34bc2aeb18cb34cd
+       | doca3.6.0-26.10-062000-0-6.8.0-1066-aws-ubuntu22.04-amd64
+     - sha256:85624df9378201a2988ccb17dd0296b19cbfdeea340a3bf9ad06f15e8483189c
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1066-aws-ubuntu22.04-arm64
-     - sha256:76e3b2bf71393b517e7c19a056a0bdf549a6220a9a42b7c9227355d204a3a0d8
+       | doca3.6.0-26.10-062000-0-6.8.0-1066-aws-ubuntu22.04-arm64
+     - sha256:1c5431bc8a4a76922c40f880e1e33abff4d8cfc204b4b5f0fed235f360e5ad55
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1070-azure-ubuntu22.04-amd64
-     - sha256:23cddcd10087060423d00be675aa108ad2c3a8db68130a840a79ebcb0d18bb5c
+       | doca3.6.0-26.10-062000-0-6.8.0-1070-azure-ubuntu22.04-amd64
+     - sha256:5fd94f0c02fde3b393ff457864f6f110875153eeaf028d4632f04c26b8d8ff26
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-1070-azure-ubuntu22.04-arm64
-     - sha256:de34738bc36a508c603a3dc5f21755119af55578fd08e5ffafa3e06e8a127cfe
+       | doca3.6.0-26.10-062000-0-6.8.0-1070-azure-ubuntu22.04-arm64
+     - sha256:ba1178edc8b79e795ee6834939ac1e89c0c007ef2f709246f77f1b45d46d1afb
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-147-generic-ubuntu24.04-amd64
-     - sha256:308ccca687164d009b57da7add81ce7bb548868841e8af304fe953a0f85cb297
+       | doca3.6.0-26.10-062000-0-6.8.0-147-generic-ubuntu24.04-amd64
+     - sha256:b80f42a91925fcedb2629465643285ee6c428fdb853176054e85a099cc032be1
    * -
-       | doca3.6.0-26.10-058000-0-6.8.0-147-generic-ubuntu24.04-arm64
-     - sha256:aafce4bea55adeefab5ae0706eedb1efa18d60fd599b595afb259eb6898b2830
+       | doca3.6.0-26.10-062000-0-6.8.0-147-generic-ubuntu24.04-arm64
+     - sha256:43f92626fbce2391edf7f9a6b442abf0b52f4f7ae50b6e82c886ea4f6dd149e7
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1013-oracle-ubuntu24.04-amd64
-     - sha256:57fa9211884d7a38365308b826bb755e262405e7706e57deb8b9d676dc31797b
+       | doca3.6.0-26.10-062000-0-7.0.0-1013-oracle-ubuntu24.04-amd64
+     - sha256:2c2428d07c77fce5bc20f4440641f9c058bc8c1f63fcbf75d39e4d1601beda00
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1013-oracle-ubuntu24.04-arm64
-     - sha256:3a10bb83aae212209d79aabfd9c0d47239913e1a25699658b00456d94ca1765c
+       | doca3.6.0-26.10-062000-0-7.0.0-1013-oracle-ubuntu24.04-arm64
+     - sha256:5cf8e5c4ae851fa2d4c400df4d8d1ff3eccaff22f2089d42f5fbac1d834fcca0
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1014-aws-ubuntu24.04-amd64
-     - sha256:26d2f8053c9d6c60bb1ede37de395e26df04e8f5ba7ea044a6fc0c19668bd4fb
+       | doca3.6.0-26.10-062000-0-7.0.0-1014-aws-ubuntu24.04-amd64
+     - sha256:65fb44c25de1de2a7ebf46a80282746612f07e32823589ddb558c5866c6adef2
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1014-aws-ubuntu24.04-arm64
-     - sha256:f31594b791f04257d7530e15c731ebeb39ee0398dd87c2cda6260d064fde8714
+       | doca3.6.0-26.10-062000-0-7.0.0-1014-aws-ubuntu24.04-arm64
+     - sha256:2f1f9c145f35f2473ee3ed754e10de7ec98975faa7b491e43bf617c57e655b4e
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1017-azure-ubuntu24.04-amd64
-     - sha256:7c432a29e3f8c8b0cb092fd8f9b7402c49089b685e70ceaa31683b45d684758f
+       | doca3.6.0-26.10-062000-0-7.0.0-1017-azure-ubuntu24.04-amd64
+     - sha256:a342393da750ab72b9726747178d37f811cc27c7ef67f09cf27ee0609988ff9a
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1017-azure-ubuntu24.04-arm64
-     - sha256:6d2fee82e0fb9d4d0c42d5cccb32c2727f8d50ba3f9803dd216c0ebd42043683
+       | doca3.6.0-26.10-062000-0-7.0.0-1017-azure-ubuntu24.04-arm64
+     - sha256:5728ff97db81a93a36d111600189efb22eb397fd632317a3a83a6b7430524d2a
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1019-nvidia-ubuntu24.04-amd64
-     - sha256:a03a64d878b27ca48f0a7fa0f092e5926c28efd3c571cb2caeff35d2588f31a2
+       | doca3.6.0-26.10-062000-0-7.0.0-1019-nvidia-ubuntu24.04-amd64
+     - sha256:3bb3966b324cef71df90eea9cc4072ad759f4b07377c4fac480bb7bc0366ea96
    * -
-       | doca3.6.0-26.10-058000-0-7.0.0-1019-nvidia-ubuntu24.04-arm64
-     - sha256:80662a29ddd29cc55af2fda33082a5a04fb7e0145250e22227b9bdad14c67acf
+       | doca3.6.0-26.10-062000-0-7.0.0-1019-nvidia-ubuntu24.04-arm64
+     - sha256:af5cfbf0f66d3a87483915dcbdfafe5a826e6428643f56ab19aeb14d0d3b580f
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu22.04-amd64
-     - sha256:f5b5117260cc05587404b3c5ed4f7ebd89e495045c7a45699292b42fffd4a7e1
+       | doca3.6.0-26.10-062000-0-ubuntu22.04-amd64
+     - sha256:a8efef6cbf9442157a8e7ecd854f69e481d6f5a06cdef73d96518f2442fa195d
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu22.04-arm64
-     - sha256:924024422afeb4620f5cd6b5118d0b252ba9bdf1fdffc27e8f3067608626476f
+       | doca3.6.0-26.10-062000-0-ubuntu22.04-arm64
+     - sha256:365e85cce95061ece9f4680c6eaa0c1f54cacf0803aa7782f5195ef8c8e8ce96
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu24.04-amd64
-     - sha256:bfee202ef141361a9a199264fb23066c4af7b61d4ba3041eebb79e9a8fdae780
+       | doca3.6.0-26.10-062000-0-ubuntu24.04-amd64
+     - sha256:5cede6b8b8adec1da58fa958dcb958f92b7666e9c5b3b125344cceded7073638
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu24.04-arm64
-     - sha256:c8440d5598a25e6fae7f62385f8ce94cfb698ef35bc6624268b91bbb8427b537
+       | doca3.6.0-26.10-062000-0-ubuntu24.04-arm64
+     - sha256:b33ef61f35969798c5f31b45e9166b625e54e196993d18389da7edfe657964e5
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu26.04-amd64
-     - sha256:9e43b0769582ad11cdb23bfdc9daca27b8ce10f320376c029b0a0062b7f9a968
+       | doca3.6.0-26.10-062000-0-ubuntu26.04-amd64
+     - sha256:03a09590ab71ea1a7e35f239cd7095fd109d7453b597ed8159fc283861544090
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu26.04-arm64
-     - sha256:636a3b946eb6dd69b3c1451649e4bc92ebe783ebfac1c8d3a52b6e4d7b122f6a
+       | doca3.6.0-26.10-062000-0-ubuntu26.04-arm64
+     - sha256:3d33e7c917c6ab46515811e7e481063fdac2d383b5efc8f154b9c0e7463b841a
 
 -----
 RHCOS
@@ -241,17 +241,17 @@ RHCOS
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-rhcos4.16-amd64
-       | doca3.6.0-26.10-058000-0-rhcos4.17-amd64
-       | doca3.6.0-26.10-058000-0-rhcos4.18-amd64
-       | doca3.6.0-26.10-058000-0-rhcos4.19-amd64
-     - sha256:612bccf323bd1872ecedb41d39ace80c482a7eed52ec5195a4928e6bf113f200
+       | doca3.6.0-26.10-062000-0-rhcos4.16-amd64
+       | doca3.6.0-26.10-062000-0-rhcos4.17-amd64
+       | doca3.6.0-26.10-062000-0-rhcos4.18-amd64
+       | doca3.6.0-26.10-062000-0-rhcos4.19-amd64
+     - sha256:431e4e1a47a759c1bdfcdfd172e9ef8d7aff53368d7a53b4592418f31a454ca0
    * -
-       | doca3.6.0-26.10-058000-0-rhcos4.16-arm64
-       | doca3.6.0-26.10-058000-0-rhcos4.17-arm64
-       | doca3.6.0-26.10-058000-0-rhcos4.18-arm64
-       | doca3.6.0-26.10-058000-0-rhcos4.19-arm64
-     - sha256:ce508c26eca2c2791269af5bfe7a09d572d84d4159ec65fe281afe6b3ef98bd6
+       | doca3.6.0-26.10-062000-0-rhcos4.16-arm64
+       | doca3.6.0-26.10-062000-0-rhcos4.17-arm64
+       | doca3.6.0-26.10-062000-0-rhcos4.18-arm64
+       | doca3.6.0-26.10-062000-0-rhcos4.19-arm64
+     - sha256:598049498298750cc6a2b155c922e38ca5b8afe76a98aad48848a8cdb922dabe
 
 ----
 RHEL
@@ -263,51 +263,51 @@ RHEL
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-rhel10.0-amd64
-     - sha256:c1910d604af79558d60097249b439b63c8c53af0e6c4155cf84026bd4da263b4
+       | doca3.6.0-26.10-062000-0-rhel10.0-amd64
+     - sha256:d2e1191b8bc1af96628edb8ce2e5274e8cf32f63bcd1ccb7c755e800fc84e857
    * -
-       | doca3.6.0-26.10-058000-0-rhel10.0-arm64
-     - sha256:62d7c2ec1f72de42b1e12105161cf21aa2f6a21f3f1decd990cada3df7a59960
+       | doca3.6.0-26.10-062000-0-rhel10.0-arm64
+     - sha256:7bf490b624cc32a70adab58cfe93d49b1a41d68112c18d0ca642e8e750229cc8
    * -
-       | doca3.6.0-26.10-058000-0-rhel10.2-amd64
-     - sha256:c1d9c347c808b7ff8bef15e3933cc1abb00c4b933b06b077377d57c7be611c1c
+       | doca3.6.0-26.10-062000-0-rhel10.2-amd64
+     - sha256:a3175c40bc5daae221973492844fe769d59c8c6460788397d825c6377ecda3e8
    * -
-       | doca3.6.0-26.10-058000-0-rhel10.2-arm64
-     - sha256:42328902ead4fa27d0a762fbde0905b26bc69af4dcd3c7501397727bec5579f8
+       | doca3.6.0-26.10-062000-0-rhel10.2-arm64
+     - sha256:740c74c0ea2bdea3c7aacb3a0149b01def591609d4cb28bc789a1223b0fd4640
    * -
-       | doca3.6.0-26.10-058000-0-rhel8.10-amd64
-       | doca3.6.0-26.10-058000-0-rhel8.6-amd64
-       | doca3.6.0-26.10-058000-0-rhel8.8-amd64
-       | doca3.6.0-26.10-058000-0-rhel8.9-amd64
-     - sha256:0fb5672431abac03d4828d48bf68f40d038fd905c9120fc04d7a0b8d0228b07f
+       | doca3.6.0-26.10-062000-0-rhel8.10-amd64
+       | doca3.6.0-26.10-062000-0-rhel8.6-amd64
+       | doca3.6.0-26.10-062000-0-rhel8.8-amd64
+       | doca3.6.0-26.10-062000-0-rhel8.9-amd64
+     - sha256:1fb5d8b0b2b9c9cd5b41ae02e87db2e0e9f2d85324c81239370cc300beef5537
    * -
-       | doca3.6.0-26.10-058000-0-rhel8.10-arm64
-       | doca3.6.0-26.10-058000-0-rhel8.6-arm64
-       | doca3.6.0-26.10-058000-0-rhel8.8-arm64
-       | doca3.6.0-26.10-058000-0-rhel8.9-arm64
-     - sha256:9c31ad336e4f303695b37b25dbfb7b34995bdd6194bb3ad0a085acfc13ef8493
+       | doca3.6.0-26.10-062000-0-rhel8.10-arm64
+       | doca3.6.0-26.10-062000-0-rhel8.6-arm64
+       | doca3.6.0-26.10-062000-0-rhel8.8-arm64
+       | doca3.6.0-26.10-062000-0-rhel8.9-arm64
+     - sha256:29bb89492ca680d88066a5720734d1dcde303668a724067084eb4be25cc93d2e
    * -
-       | doca3.6.0-26.10-058000-0-rhel9.0-amd64
-       | doca3.6.0-26.10-058000-0-rhel9.2-amd64
-       | doca3.6.0-26.10-058000-0-rhel9.3-amd64
-       | doca3.6.0-26.10-058000-0-rhel9.4-amd64
-       | doca3.6.0-26.10-058000-0-rhel9.5-amd64
-       | doca3.6.0-26.10-058000-0-rhel9.6-amd64
-     - sha256:3b635439d49fadb0e7bbd5f3fc6e8303f7adedc6d2e163c860d546d0b1fecc4e
+       | doca3.6.0-26.10-062000-0-rhel9.0-amd64
+       | doca3.6.0-26.10-062000-0-rhel9.2-amd64
+       | doca3.6.0-26.10-062000-0-rhel9.3-amd64
+       | doca3.6.0-26.10-062000-0-rhel9.4-amd64
+       | doca3.6.0-26.10-062000-0-rhel9.5-amd64
+       | doca3.6.0-26.10-062000-0-rhel9.6-amd64
+     - sha256:ad239c20ef297be33c520548f6ea9336d64c80e8f0089c48cf56db9075367433
    * -
-       | doca3.6.0-26.10-058000-0-rhel9.0-arm64
-       | doca3.6.0-26.10-058000-0-rhel9.2-arm64
-       | doca3.6.0-26.10-058000-0-rhel9.3-arm64
-       | doca3.6.0-26.10-058000-0-rhel9.4-arm64
-       | doca3.6.0-26.10-058000-0-rhel9.5-arm64
-       | doca3.6.0-26.10-058000-0-rhel9.6-arm64
-     - sha256:ed9cb1f990f66c58a2ae3ce1c35ad424cdc5f88d4cb3cb990b44405efaa91ed7
+       | doca3.6.0-26.10-062000-0-rhel9.0-arm64
+       | doca3.6.0-26.10-062000-0-rhel9.2-arm64
+       | doca3.6.0-26.10-062000-0-rhel9.3-arm64
+       | doca3.6.0-26.10-062000-0-rhel9.4-arm64
+       | doca3.6.0-26.10-062000-0-rhel9.5-arm64
+       | doca3.6.0-26.10-062000-0-rhel9.6-arm64
+     - sha256:cae78b2df83c589545af3489d1a4cbddb7b44b748397951428e177728a6c319f
    * -
-       | doca3.6.0-26.10-058000-0-rhel9.8-amd64
-     - sha256:fb8eb0415f406f835ab94322d6a91380ba0f3f8be46ba3906bb705ffc790ece3
+       | doca3.6.0-26.10-062000-0-rhel9.8-amd64
+     - sha256:8844551e9d0f0700f5ec8ddba0fff4bbc523469b3da15e6f7449090654225130
    * -
-       | doca3.6.0-26.10-058000-0-rhel9.8-arm64
-     - sha256:0e9feeb16da37feaeed2bf54fe616f79ef1e11873a23b62a31ff9925a835a177
+       | doca3.6.0-26.10-062000-0-rhel9.8-arm64
+     - sha256:4aa31681bde8a3432781e361d94648e4f570bab36f91461b14aa420b23ebc111
 
 ----
 SLES
@@ -319,11 +319,11 @@ SLES
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-sles15.7-amd64
-     - sha256:04c148b8c0e6f3617cb50a74f4d16615799b75f5a21cefa0a8d83c611e3be89a
+       | doca3.6.0-26.10-062000-0-sles15.7-amd64
+     - sha256:944b7b999be270945065aaef8d142965041ea26b54c7bfb2ae9a653261cffbf2
    * -
-       | doca3.6.0-26.10-058000-0-sles15.7-arm64
-     - sha256:e3a8f0142385e09952f7150127975ed9dfb346865f6bec1fcb7f16f925d19c45
+       | doca3.6.0-26.10-062000-0-sles15.7-arm64
+     - sha256:2bfb4ec4da81fb42af54f162c82360302815c0f25da27dbebcbd3c34738744c3
 
 
 =====================================================
@@ -338,7 +338,7 @@ STIG FIPS Compliant DOCA-OFED Driver Container Images
      - Version
    * - nvcr.io/nvstaging/mellanox
      - doca-driver-stig-fips
-     - doca3.6.0-26.10-058000-0
+     - doca3.6.0-26.10-062000-0
 
 The followings tags are available for the above STIG FIPS Compliant DOCA-OFED Driver container version:
 
@@ -352,8 +352,8 @@ Ubuntu
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-ubuntu24.04-amd64
-     - sha256:b8970ca46757998060f56b1065b2e7cad2d6a47432925528c0114bef84201b01
+       | doca3.6.0-26.10-062000-0-ubuntu24.04-amd64
+     - sha256:4487c1e2d17ec88a151adf8bad4ec27fcb41791804893c9235e45f828b97ee13
 
 ----
 RHEL
@@ -365,5 +365,5 @@ RHEL
    * - Tags
      - Digest
    * -
-       | doca3.6.0-26.10-058000-0-rhel9.6-amd64
-     - sha256:ec9326c520bdcd67cf08af5cb09d38bca2c97f92b2a8263d30d4066b8504d515
+       | doca3.6.0-26.10-062000-0-rhel9.6-amd64
+     - sha256:a13240f5e8c7237ba303fcc32f4664eddb0cfab7debdc871b6bba9f78c01c309
