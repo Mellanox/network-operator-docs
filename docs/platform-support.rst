@@ -200,13 +200,13 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
      - Ubuntu 24.04 (x86) 
-     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`), Ubuntu is the recommended OS for optimized performance
    * - NVIDIA DGX/HGX B300
      - x86
      - NVIDIA Blackwell
      - ConnectX-8 SuperNIC
-     - Ubuntu 24.04 (x86) 
-     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+     - Ubuntu 24.04 (x86) - DGX OS
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`), Ubuntu is the recommended OS for optimized performance
    * - NVIDIA DGX/HGX GB200 NVL72
      - Arm (NVIDIA Grace)
      - NVIDIA Blackwell
