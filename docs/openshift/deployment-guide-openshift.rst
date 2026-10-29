@@ -127,6 +127,8 @@ If you plan to use GPUDirect, follow `this <https://docs.nvidia.com/datacenter/c
 
 Make sure to enable RDMA and disable useHostMofed in the driver section in the spec of the ClusterPolicy CR.
 
+For using GDR/ NCCL in optimized manner please refer to Red Hat documentation.
+
 -----------------------------
 Network Operator Installation
 -----------------------------
