@@ -199,37 +199,37 @@ The following NVIDIA Data Center systems have been tested and validated with **N
      - x86
      - NVIDIA Blackwell
      - BlueField-3 SuperNIC (NIC mode) / ConnectX-7
-     - Ubuntu 24.04 (x86) 
-     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+     - Ubuntu 24.04 (x86) - DGX OS
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`), Ubuntu is the recommended OS for optimized performance
    * - NVIDIA DGX/HGX B300
      - x86
      - NVIDIA Blackwell
      - ConnectX-8 SuperNIC
-     - Ubuntu 24.04 (x86) 
-     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
+     - Ubuntu 24.04 (x86) - DGX OS
+     - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`), Ubuntu is the recommended OS for optimized performance
    * - NVIDIA DGX/HGX GB200 NVL72
      - Arm (NVIDIA Grace)
      - NVIDIA Blackwell
      - ConnectX-7
-     - Ubuntu 24.04 (Arm64) 
+     - Ubuntu 24.04 (Arm64) - DGX OS
      - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
    * - NVIDIA DGX/HGX GB300 NVL72
      - Arm (NVIDIA Grace)
      - NVIDIA Blackwell
      - ConnectX-8
-     - Ubuntu 24.04 (Arm64)
+     - Ubuntu 24.04 (Arm64) - DGX OS
      - GA. Firmware reset required (see :ref:`fw-reset-external-bmc`)
    * - NVIDIA DGX GB300 Workstation
      - Arm (NVIDIA Grace)
      - NVIDIA Blackwell
      - ConnectX-8 SuperNIC
-     - Ubuntu 24.04, 22.04 (Arm64)
+     - Ubuntu 24.04, 22.04 (Arm64) - DGX OS
      - GA (RoCE only, without InfiniBand)
    * - NVIDIA Vera Rubin NVL72
      - Arm (NVIDIA Vera)
      - NVIDIA Rubin
      - ConnectX-9 SuperNIC
-     - Ubuntu 24.04, 22.04 (Arm64)
+     - Ubuntu 24.04, 22.04 (Arm64) - DGX OS
      - Tech Preview — system validation is in progress. Uses ConnectX-9 SuperNIC, which is generally available for RoCE and InfiniBand workloads; see `Supported NVIDIA Network Adapters`_. Firmware reset required (see :ref:`fw-reset-external-bmc`)
 
 .. _supported-deployment-options:
