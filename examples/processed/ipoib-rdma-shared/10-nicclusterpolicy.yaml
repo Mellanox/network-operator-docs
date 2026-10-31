@@ -6,11 +6,11 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvstaging/mellanox
-    version: doca3.6.0-26.10-065000-0
+    version: doca3.6.0-26.10-067000-0
   rdmaSharedDevicePlugin:
     image: k8s-rdma-shared-dev-plugin
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.4
+    version: network-operator-v26.10.0-rc.5
     config: |
       {
         "configList": [
@@ -40,19 +40,19 @@ spec:
   nvIpam:
     image: nvidia-k8s-ipam
     repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.4
+    version: network-operator-v26.10.0-rc.5
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.4
+      version: network-operator-v26.10.0-rc.5
     multus:
       image: multus-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.4
+      version: network-operator-v26.10.0-rc.5
     ipoib:
       image: ipoib-cni
       repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.4
+      version: network-operator-v26.10.0-rc.5
