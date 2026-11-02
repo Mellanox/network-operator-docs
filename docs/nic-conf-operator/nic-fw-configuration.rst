@@ -165,7 +165,6 @@ To activate the pending configuration on an affected node:
 
 #. Ensure that workloads on the node are drained before powering it off.
 #. After the requested configuration has been written, perform a cold reboot using the platform BMC's chassis power-cycle operation. Repeating an OS-level warm reboot is insufficient for this limitation.
-#. After the node returns, verify the active configuration with ``mlxconfig -e -d <device> query``. The ``Current`` and ``Next Boot`` values for ``NUM_OF_VFS`` must match the requested value.
 #. Verify that the operator reports successful configuration and that node maintenance completes before proceeding to another node.
 
 The chassis power cycle is a manual workaround; enabling the firmware-reset settings above does not automate it.
