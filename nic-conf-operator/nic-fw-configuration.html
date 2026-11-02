@@ -64,7 +64,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#use-of-nic-configuration-operator-together-with-sr-iov-network-operator">Use of NIC Configuration Operator together with SR-IOV Network Operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8">Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hgx-rubin-nvl8-fractal-pending-configuration-requires-a-cold-reboot">HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></li>
@@ -139,25 +142,29 @@
 <li><p><a class="reference internal" href="#platforms-with-external-bmc-dgx-or-hgx-gb200-gb300-b200-b300-vera-rubin-nvl72-rubin-nvl8" id="id2">Platforms with external BMC (DGX or HGX GB200/GB300, B200/B300, Vera Rubin NVL72, Rubin NVL8)</a></p>
 <ul>
 <li><p><a class="reference internal" href="#nic-configuration-operator-fw-reset-after-config-update" id="id3">NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate" id="id4">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id5">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
-<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id6">Update NIC Firmware using the NIC Configuration Operator</a></p>
+<li><p><a class="reference internal" href="#sr-iov-network-operator-mellanoxfirmwarereset-feature-gate" id="id4">SR-IOV Network Operator (<code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate)</a></p>
 <ul>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id7">Configure and apply the NICFirmwareSource CR</a></p></li>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id8">Configure and apply the NicFirmwareTemplate CR</a></p></li>
-<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id9">NIC Firmware Mismatch Notification</a></p></li>
+<li><p><a class="reference internal" href="#hgx-rubin-nvl8-fractal-pending-configuration-requires-a-cold-reboot" id="id5">HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id10">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster" id="id6">Install the NIC Configuration Operator and observe NIC devices in the cluster</a></p></li>
+<li><p><a class="reference internal" href="#update-nic-firmware-using-the-nic-configuration-operator" id="id7">Update NIC Firmware using the NIC Configuration Operator</a></p>
 <ul>
-<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id11">Configure and apply the NicConfigurationTemplate CR</a></p></li>
-<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id12">Observe the status of the configuration update</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaresource-cr" id="id8">Configure and apply the NICFirmwareSource CR</a></p></li>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicfirmwaretemplate-cr" id="id9">Configure and apply the NicFirmwareTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#nic-firmware-mismatch-notification" id="id10">NIC Firmware Mismatch Notification</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#reset-nic-configuration-to-default" id="id13">Reset NIC Configuration to Default</a></p></li>
-<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id14">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
+<li><p><a class="reference internal" href="#configure-nic-firmware-using-the-nic-configuration-operator" id="id11">Configure NIC Firmware using the NIC Configuration Operator</a></p>
+<ul>
+<li><p><a class="reference internal" href="#configure-and-apply-the-nicconfigurationtemplate-cr" id="id12">Configure and apply the NicConfigurationTemplate CR</a></p></li>
+<li><p><a class="reference internal" href="#observe-the-status-of-the-configuration-update" id="id13">Observe the status of the configuration update</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reset-nic-configuration-to-default" id="id14">Reset NIC Configuration to Default</a></p></li>
+<li><p><a class="reference internal" href="#configure-custom-interface-names-nicinterfacenametemplate" id="id15">Configure custom interface names (NicInterfaceNameTemplate)</a></p></li>
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> provides Kubernetes API (Custom Resource Definition) to allow Firmware update and configuration on NVIDIA NICs in a coordinated manner. It deploys a configuration daemon on each of the desired nodes to configure NVIDIA NICs there. NVIDIA NIC Configuration Operator uses <a class="reference external" href="https://github.com/Mellanox/maintenance-operator">Maintenance Operator</a> to prepare a node for maintenance before the actual configuration.</p>
@@ -219,7 +226,11 @@
 <p>To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (<code class="docutils literal notranslate"><span class="pre">mlxfwreset</span></code> / <code class="docutils literal notranslate"><span class="pre">mstfwreset</span></code>) <strong>before</strong> the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> resources do not require any platform-specific changes. The firmware-reset behavior is controlled at the operator level only.</p>
+<p>HGX Rubin NVL8 (Fractal) has an additional limitation: the firmware-reset settings below may not be sufficient to activate pending NIC configuration. See <a class="reference internal" href="#fractal-nic-config-power-cycle"><span class="std std-ref">HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot</span></a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">NicConfigurationTemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> resources do not require any platform-specific changes. The firmware-reset settings described below are configured at the operator level.</p>
 </div>
 <section id="nic-configuration-operator-fw-reset-after-config-update">
 <h3>NIC Configuration Operator (<code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE</span></code>)<a class="headerlink" href="#nic-configuration-operator-fw-reset-after-config-update" title="Permalink to this headline"></a></h3>
@@ -265,6 +276,18 @@
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">mellanoxFirmwareReset</span></code> feature gate is documented as Beta in the upstream SR-IOV Network Operator project — see the <a class="reference external" href="https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/doc/api/operator-config-api.md">SR-IOV Network Operator API documentation</a> for details.</p>
+<section id="hgx-rubin-nvl8-fractal-pending-configuration-requires-a-cold-reboot">
+<span id="fractal-nic-config-power-cycle"></span><h4>HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot<a class="headerlink" href="#hgx-rubin-nvl8-fractal-pending-configuration-requires-a-cold-reboot" title="Permalink to this headline"></a></h4>
+<p>On HGX Rubin NVL8 (Fractal) systems with ConnectX-9, changes to firmware configuration can be written successfully but remain pending after a warm reboot. This limitation affects both the SR-IOV Network Operator and the NIC Configuration Operator, including when the <code class="docutils literal notranslate"><span class="pre">FW_RESET_AFTER_CONFIG_UPDATE=true</span></code> flag is enabled.</p>
+<p>The SR-IOV Network Operator can repeatedly drain and reboot the node. The NIC Configuration Operator can report <code class="docutils literal notranslate"><span class="pre">firmware</span> <span class="pre">configuration</span> <span class="pre">failed</span> <span class="pre">to</span> <span class="pre">apply</span> <span class="pre">after</span> <span class="pre">reboot</span></code> and leave the node cordoned. If the node holds the only available Maintenance Operator slot, configuration of other nodes is blocked.</p>
+<p>To activate the pending configuration on an affected node:</p>
+<ol class="arabic simple">
+<li><p>Ensure that workloads on the node are drained before powering it off.</p></li>
+<li><p>After the requested configuration has been written, perform a cold reboot using the platform BMC’s chassis power-cycle operation. Repeating an OS-level warm reboot is insufficient for this limitation.</p></li>
+<li><p>Verify that the operator reports successful configuration and that node maintenance completes before proceeding to another node.</p></li>
+</ol>
+<p>The chassis power cycle is a manual workaround; enabling the firmware-reset settings above does not automate it.</p>
+</section>
 </section>
 </section>
 <section id="install-the-nic-configuration-operator-and-observe-nic-devices-in-the-cluster">
