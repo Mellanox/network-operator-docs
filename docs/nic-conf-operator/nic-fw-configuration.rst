@@ -157,7 +157,7 @@ The ``mellanoxFirmwareReset`` feature gate is documented as Beta in the upstream
 HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot
 ----------------------------------------------------------------------------------------------------
 
-On HGX Rubin NVL8 (Fractal) systems with ConnectX-9, changes to ``NUM_OF_VFS`` can be written successfully but remain pending after a warm reboot. This limitation affects both the SR-IOV Network Operator and the NIC Configuration Operator, including when ``FW_RESET_AFTER_CONFIG_UPDATE=true``.
+On HGX Rubin NVL8 (Fractal) systems with ConnectX-9, changes to firmware configuration can be written successfully but remain pending after a warm reboot. This limitation affects both the SR-IOV Network Operator and the NIC Configuration Operator, including when the ``FW_RESET_AFTER_CONFIG_UPDATE=true`` flag is enabled.
 
 The SR-IOV Network Operator can repeatedly drain and reboot the node. The NIC Configuration Operator can report ``firmware configuration failed to apply after reboot`` and leave the node cordoned. If the node holds the only available Maintenance Operator slot, configuration of other nodes is blocked.
 

@@ -72,7 +72,7 @@ Important Limitations
 Review the following limitations before deployment:
 
 * **Firmware reset on BMC-controlled platforms** — NVIDIA DGX/HGX GB200 NVL72, B200, and B300 systems require additional configuration so that firmware updates apply without a reboot loop. See :ref:`fw-reset-external-bmc`.
-* **Cold reboot for NIC configuration on HGX Rubin NVL8 (Fractal)** — ConnectX-9 ``NUM_OF_VFS`` changes can remain pending after a warm reboot, even with explicit firmware reset enabled. A manual BMC chassis power cycle is required to activate the pending configuration on affected systems. See :ref:`fractal-nic-config-power-cycle`.
+* **Cold reboot for NIC configuration on HGX Rubin NVL8 (Fractal)** — ConnectX-9 firmware configuration changes can remain pending after a warm reboot, even with explicit firmware reset enabled. A manual BMC chassis power cycle is required to activate the pending configuration on affected systems. See :ref:`fractal-nic-config-power-cycle`.
 * **Precompiled DOCA-OFED driver containers are currently unsigned.**
 * **Precompiled DOCA-OFED kernel-flavor support** — Only the Ubuntu ``generic`` kernel flavor is GA. The ``nvidia``, ``aws``, ``azure``, and ``oracle`` flavors are Tech Preview.
 * For per-release known issues, see the :doc:`release-notes`.
