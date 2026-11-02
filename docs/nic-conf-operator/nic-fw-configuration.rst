@@ -89,7 +89,11 @@ On platforms where the NIC is controlled by an external BMC — including NVIDIA
 To avoid this, configure both the NIC Configuration Operator and the SR-IOV Network Operator to perform an explicit firmware reset (``mlxfwreset`` / ``mstfwreset``) **before** the reboot. The two settings are independent — enable both when both operators are deployed, or just the one matching the operator you are running.
 
 .. note::
-   ``NicConfigurationTemplate`` and ``SriovNetworkNodePolicy`` resources do not require any platform-specific changes. The firmware-reset behavior is controlled at the operator level only.
+
+   HGX Rubin NVL8 (Fractal) has an additional limitation: the firmware-reset settings below may not be sufficient to activate pending NIC configuration. See :ref:`fractal-nic-config-power-cycle`.
+
+.. note::
+   ``NicConfigurationTemplate`` and ``SriovNetworkNodePolicy`` resources do not require any platform-specific changes. The firmware-reset settings described below are configured at the operator level.
 
 -------------------------------------------------------------
 NIC Configuration Operator (``FW_RESET_AFTER_CONFIG_UPDATE``)
@@ -147,6 +151,24 @@ For an already-installed cluster, patch the ``SriovOperatorConfig`` directly:
      --type=merge
 
 The ``mellanoxFirmwareReset`` feature gate is documented as Beta in the upstream SR-IOV Network Operator project — see the `SR-IOV Network Operator API documentation <https://github.com/k8snetworkplumbingwg/sriov-network-operator/blob/master/doc/api/operator-config-api.md>`_ for details.
+
+.. _fractal-nic-config-power-cycle:
+
+HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot
+--------------------------------------------------------------------
+
+On HGX Rubin NVL8 (Fractal) systems with ConnectX-9 firmware ``82.48.4238``, changes to ``NUM_OF_VFS`` can be written successfully but remain pending after a warm reboot. This limitation was observed with Network Operator ``v26.10.0-rc.3`` through both the SR-IOV Network Operator and the NIC Configuration Operator, including with ``FW_RESET_AFTER_CONFIG_UPDATE=true``.
+
+The SR-IOV Network Operator can repeatedly drain and reboot the node. The NIC Configuration Operator can report ``firmware configuration failed to apply after reboot`` and leave the node cordoned. If the node holds the only available Maintenance Operator slot, configuration of other nodes is blocked.
+
+To activate the pending configuration on an affected node:
+
+#. Ensure that workloads on the node are drained before powering it off.
+#. After the requested configuration has been written, perform a cold reboot using the platform BMC's chassis power-cycle operation. Repeating an OS-level warm reboot is insufficient for this limitation.
+#. After the node returns, verify the active configuration with ``mlxconfig -e -d <device> query``. The ``Current`` and ``Next Boot`` values for ``NUM_OF_VFS`` must match the requested value.
+#. Verify that the operator reports successful configuration and that node maintenance completes before proceeding to another node.
+
+The chassis power cycle is a manual workaround; enabling the firmware-reset settings above does not automate it.
 
 =============================================================================
 Install the NIC Configuration Operator and observe NIC devices in the cluster
