@@ -155,7 +155,7 @@ The ``mellanoxFirmwareReset`` feature gate is documented as Beta in the upstream
 .. _fractal-nic-config-power-cycle:
 
 HGX Rubin NVL8 (Fractal): pending configuration requires a cold reboot
---------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 On HGX Rubin NVL8 (Fractal) systems with ConnectX-9 firmware ``82.48.4238``, changes to ``NUM_OF_VFS`` can be written successfully but remain pending after a warm reboot. This limitation was observed with Network Operator ``v26.10.0-rc.3`` through both the SR-IOV Network Operator and the NIC Configuration Operator, including with ``FW_RESET_AFTER_CONFIG_UPDATE=true``.
 
