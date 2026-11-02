@@ -284,7 +284,6 @@
 <ol class="arabic simple">
 <li><p>Ensure that workloads on the node are drained before powering it off.</p></li>
 <li><p>After the requested configuration has been written, perform a cold reboot using the platform BMC’s chassis power-cycle operation. Repeating an OS-level warm reboot is insufficient for this limitation.</p></li>
-<li><p>After the node returns, verify the active configuration with <code class="docutils literal notranslate"><span class="pre">mlxconfig</span> <span class="pre">-e</span> <span class="pre">-d</span> <span class="pre">&lt;device&gt;</span> <span class="pre">query</span></code>. The <code class="docutils literal notranslate"><span class="pre">Current</span></code> and <code class="docutils literal notranslate"><span class="pre">Next</span> <span class="pre">Boot</span></code> values for <code class="docutils literal notranslate"><span class="pre">NUM_OF_VFS</span></code> must match the requested value.</p></li>
 <li><p>Verify that the operator reports successful configuration and that node maintenance completes before proceeding to another node.</p></li>
 </ol>
 <p>The chassis power cycle is a manual workaround; enabling the firmware-reset settings above does not automate it.</p>
