@@ -32,7 +32,8 @@ Prerequisites
 
 Before using Kubernetes Launch Kit, ensure the following:
 
-- **Kubernetes cluster** with the NVIDIA Network Operator Helm chart installed, including the SR-IOV Network Operator, Maintenance Operator, and Node Feature Discovery (NFD). For installation instructions, see :doc:`Getting Started with Kubernetes <../getting-started-with-kubernetes>`.
+- **Kubernetes cluster** and credentials with permission to run the privileged discovery daemon and manage the intended networking resources. Discovery does not require a pre-installed Network Operator or NFD. On Kubernetes, ``l8k deploy`` can install the selected Network Operator Helm chart. For externally managed installations, set ``networkOperator.skipHelmChart: true`` before generation.
+- On **OpenShift**, install the certified operators and their prerequisites separately; Launch Kit does not own their Helm lifecycle. See :doc:`Getting Started with Red Hat OpenShift <../getting-started-with-openshift>`.
 - ``kubectl`` configured with access to the target cluster.
 - Docker or Podman on the machine where you will run ``l8k`` (only for the container scenario).
 
@@ -40,12 +41,12 @@ Before using Kubernetes Launch Kit, ensure the following:
 Install
 ================================================================================
 
-Choose one of the methods below. The script and Homebrew methods install a binary plus profile templates and presets to a local prefix; the container method runs ``l8k`` from a published image and writes nothing outside your working directory.
+Choose one of the methods below. The script and Homebrew methods install a binary with embedded default configuration and presets, plus matching profile templates; the container method runs ``l8k`` from a published image and writes nothing outside your working directory.
 
 Script
 -------
 
-Downloads the latest release from GitHub and installs the ``l8k`` binary, profile templates, and presets to ``/usr/local``:
+Downloads the latest release from GitHub and installs the ``l8k`` binary to ``/usr/local/bin``:
 
 .. code-block:: bash
 
@@ -54,8 +55,10 @@ Downloads the latest release from GitHub and installs the ``l8k`` binary, profil
 Pin a specific version or install to a custom directory:
 
 .. code-block:: bash
+   :substitutions:
 
-   L8K_VERSION=v1.0.0 sh scripts/install.sh
+   curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh -o install-l8k.sh
+   L8K_VERSION=|k8s-launch-kit-version| sh install-l8k.sh
    curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh | sh -s -- -d ~/local
 
 Homebrew
@@ -67,6 +70,20 @@ For macOS and Linux systems with Homebrew:
 
    brew tap nvidia/l8k https://github.com/nvidia/k8s-launch-kit
    brew install l8k
+
+Build from Source
+-----------------
+
+Build from the release tag so the binary and profile templates agree:
+
+.. code-block:: bash
+   :substitutions:
+
+   git clone --branch |k8s-launch-kit-version| https://github.com/NVIDIA/k8s-launch-kit.git
+   cd k8s-launch-kit
+   make build
+
+Run ``./build/l8k`` from that repository root, or use ``make install`` to install the binary and matching assets.
 
 Container
 ----------
@@ -80,31 +97,43 @@ Pull the image once:
 
    docker pull |k8s-launch-kit-repository|/k8s-launch-kit:|k8s-launch-kit-version|
 
-Define a shell alias so ``l8k`` invokes the container with kubeconfig + working directory mounted:
+Define a helper that preserves the image's ``/src`` working directory, where its profile templates are stored. Mount the host working directory at ``/work`` and pass explicit paths for persistent inputs and outputs:
 
 .. code-block:: bash
    :substitutions:
 
-   alias l8k='docker run --rm --net=host \
-       -v ~/.kube:/kube:ro \
-       -v $(pwd):/work -w /work \
-       |k8s-launch-kit-repository|/k8s-launch-kit:|k8s-launch-kit-version|'
+   l8k_container() {
+       docker run --rm --network host \
+           -e KUBECONFIG=/kube/config \
+           -v "$HOME/.kube:/kube:ro" \
+           -v "$PWD:/work" \
+           |k8s-launch-kit-repository|/k8s-launch-kit:|k8s-launch-kit-version| "$@"
+   }
 
-Add the line to your ``~/.bashrc`` or ``~/.zshrc`` to make it persistent. With this alias in place, every ``l8k <subcommand> ...`` invocation creates a fresh container, runs the command, and removes the container --- nothing is written outside the current working directory.
+   l8k_container discover --save-cluster-config /work/cluster-config.yaml
+   l8k_container generate --user-config /work/cluster-config.yaml \
+       --fabric ethernet --deployment-type sriov --multirail \
+       --save-deployment-files /work/deployment
+   l8k_container deploy --deployment-files /work/deployment
+   l8k_container validate --deployment-files /work/deployment --wait 10m
+
+Files explicitly written under ``/work`` remain on the host after the container exits. Use container-visible paths such as ``/work/topology.json`` and ``/work/profile.yaml`` for Spectrum-X inputs too. Do not change the working directory to ``/work``: profile discovery expects the image's bundled templates under ``/src/profiles``.
 
 .. note::
 
-   ``--net=host`` is required so the container can reach the Kubernetes API server. The ``--rm`` flag ensures no stopped containers accumulate. Mount the kubeconfig directory read-only.
+   The API server and credentials referenced by kubeconfig must be reachable inside the container. External credential files and exec plugins need corresponding mounts and tools. The ``--rm`` flag removes stopped containers; the kubeconfig directory is mounted read-only.
 
 ================================================================================
 Verify
 ================================================================================
 
-The same command works for all installation methods:
+For script or Homebrew installations:
 
 .. code-block:: bash
 
    l8k version
+
+For the container helper, use ``l8k_container version``.
 
 ================================================================================
 Uninstall
@@ -130,28 +159,32 @@ Homebrew
 Container
 ----------
 
-Drop the alias and remove the cached image:
+Remove the shell function and the cached image:
 
 .. code-block:: bash
    :substitutions:
 
-   unalias l8k
+   unset -f l8k_container
    docker image rm |k8s-launch-kit-repository|/k8s-launch-kit:|k8s-launch-kit-version|
 
-Also remove the alias line from your shell rc file if you added it.
+Also remove the function from your shell rc file if you added it.
 
 ================================================================================
 Layout (Script and Homebrew)
 ================================================================================
 
-The script and Homebrew methods install the following under the install prefix (default: ``/usr/local``):
+The installer writes ``bin/l8k``, ``share/l8k/profiles/``, and the sosreport helper under ``share/l8k/scripts/``. The binary embeds its default configuration and preset catalog. Optional filesystem overrides are selected with ``--config-dir``:
 
-- ``<prefix>/bin/l8k`` --- CLI binary
-- ``<prefix>/share/l8k/profiles/`` --- profile templates
-- ``<prefix>/share/l8k/presets/`` --- cluster topology presets
-- ``<prefix>/share/l8k/l8k-config.yaml`` --- default configuration
+.. code-block:: text
 
-The container method does not write anything outside your working directory; profiles, presets, and the default config are baked into the image.
+   /etc/l8k/
+   ├── l8k-config.yaml
+   └── presets/
+       └── <preset-name>/topology.yaml
+
+``--user-config`` takes precedence over ``--config-dir/l8k-config.yaml``. An override ``presets/`` directory replaces the embedded catalog. Existing legacy share-directory overrides are preserved by the installer; select them explicitly with ``--config-dir``.
+
+The image includes profile templates, presets, and default configuration. Persist generated inputs, manifests, and reports under the mounted ``/work`` directory.
 
 ================================================================================
 See Also

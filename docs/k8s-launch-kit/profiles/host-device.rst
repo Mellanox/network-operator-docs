@@ -36,7 +36,7 @@ Direct passthrough to host network devices, with no virtualization layer. Each p
 Prerequisites
 ================================================================================
 
-- Network Operator Helm chart installed (see :doc:`../installation`).
+- Cluster access and operator ownership configured (see :doc:`../installation`).
 - ``l8k`` binary on your PATH.
 - One or more Mellanox NICs per node not used by the host.
 
@@ -67,13 +67,17 @@ Deploy
 
 .. code-block:: bash
 
-   l8k deploy
+   l8k deploy --deployment-files ./deployments
 
 ================================================================================
 Verify
 ================================================================================
 
+Validate the generated bundle, then inspect the relevant resources:
+
 .. code-block:: bash
+
+   l8k validate --deployment-files ./deployments --wait 10m
 
    kubectl -n nvidia-network-operator get pods
    kubectl get hostdevicenetwork

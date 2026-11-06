@@ -37,7 +37,7 @@ NVIDIA Spectrum-X Ethernet Networking Platform
 
 NVIDIA Spectrum-X is an AI-optimized Ethernet networking platform that combines
 NVIDIA Spectrum switches with the BlueField-3 SuperNIC, ConnectX-7 NIC, and
-ConnectX-8 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
+ConnectX-8 and ConnectX-9 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
 GPU-to-GPU compute (east-west) network. NVIDIA Network Operator provides the
 Kubernetes side: discovering the NICs, configuring rails, and exposing them
 to pods as schedulable resources.
@@ -54,44 +54,49 @@ single-plane networks. Network Operator exposes it through the
 ``multiplaneMode`` field on ``NicConfigurationTemplate``, with
 **Hardware Multiplane** (``hwplb``) and **Software Multiplane** (``swplb``)
 variants alongside the single-plane mode (``none``). On multiplane platforms,
-Hardware Multiplane is the mode Spectrum-X RA 2.3 recommends; Software
-Multiplane is selected only for software-based multiplane deployments.
+Hardware Multiplane is recommended for new multiplane deployments; select
+Software Multiplane when the deployment requires a separate workload
+interface for each plane. Match the mode to the supplied RA2.4 or RA3.1 profile and
+switch fabric configuration.
 
-On multiplane platforms (B300, GB300), Hardware Multiplane is the recommended
-mode and **DOCA xPlane is a required component** — it manages plane failover inside
-OVS-DOCA. Single-plane deployments on BlueField-3 SuperNIC do not use it. See
+**Hardware Multiplane requires DOCA xPlane** to manage plane failover inside
+OVS-DOCA. Software Multiplane and single-plane deployments do not use
+DOCA xPlane. See
 :doc:`Architecture and Components <components>`.
 
 Spectrum-X Kubernetes deployments fall
-into three network architectures, distinguished by the number of planes per
-rail and the load-balancing mechanism:
+into the following network architectures, distinguished by the number of planes per
+rail and the load-balancing mechanism. The table describes configuration
+layouts; use the release-specific qualification guidance below when
+selecting a platform:
 
 .. list-table::
    :header-rows: 1
-   :widths: 18 20 22 22 18
+   :widths: 20 30 25 25
 
    * - Architecture
      - NICs
      - GPU platforms
      - Multiplane mode
-     - Status
    * - Single-Plane
      - BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC
      - H100/H200/B200, GB200
      - ``none`` (1 plane)
-     - GA
    * - Dual-Plane
      - ConnectX-8 SuperNIC
      - B300, GB300
      - | ``hwplb`` (2 planes)
        | ``swplb`` (2 planes)
-     - GA
    * - Quad-Plane
      - ConnectX-8 SuperNIC
      - B300, GB300
      - | ``hwplb`` (4 planes)
        | ``swplb`` (4 planes)
-     - GA
+
+   * - Eight-Plane
+     - ConnectX-9 SuperNIC
+     - Vera Rubin (VR)
+     - ``hwplb`` (8 planes, RA3.1)
 
 .. note::
 
@@ -104,8 +109,13 @@ rail and the load-balancing mechanism:
 Supported Reference Architectures
 ===================================
 
-Each Spectrum-X Reference Architecture version is
-supported by a specific Network Operator release:
+Spectrum-X **RA3.1 for Vera Rubin (VR)** and **RA2.4 for all other
+platforms** are released together. Network Operator 26.10 integrates both
+through the same configuration workflow with a matching doSPCX profile
+ConfigMap and CRDs. Select the architecture for the target platform. The
+release mapping below distinguishes this workflow from earlier releases;
+see :doc:`Platform Support <../platform-support>` for qualification
+requirements and validation of earlier releases.
 
 .. list-table::
    :header-rows: 1
@@ -113,16 +123,22 @@ supported by a specific Network Operator release:
 
    * - Spectrum-X RA Version
      - NVIDIA Network Operator Release
-     - Support Level
+     - Configuration contract
+   * - Spectrum-X RA 2.4
+     - 26.10.x
+     - All platforms other than VR; doSPCX data-bundle ConfigMap
+   * - Spectrum-X RA 3.1
+     - 26.10.x
+     - Vera Rubin (VR); same doSPCX contract with ``version: RA3.1`` and ``platformType: vr``
    * - Spectrum-X RA 2.3
      - 26.7.x
-     - GA
+     - Legacy ``data.profile`` ConfigMap; version selects the ConfigMap
    * - Spectrum-X RA 2.1
      - 26.4.x
-     - Tech Preview
+     - Earlier reference-architecture workflow
    * - Spectrum-X RA 2.1
      - 26.1.x
-     - GA
+     - Earlier reference-architecture workflow
 
 ==================
 What you configure
@@ -138,10 +154,13 @@ Each one is documented on the page that owns it:
    * - Resource
      - Purpose
      - Reference
+   * - **Network Operator Helm values**
+     - Enable SR-IOV Network Operator and Maintenance Operator and configure
+       their coordination.
+     - :doc:`Quick Start <quick-start>`
    * - ``NicClusterPolicy``
      - Cluster-wide Network Operator configuration: enables the Spectrum-X
-       Operator, SR-IOV Network Operator, NIC Configuration Operator,
-       NV-IPAM, and Multus.
+       Operator, NIC Configuration Operator, NV-IPAM, and Multus.
      - :doc:`Architecture and Components <components>`
    * - **Spectrum-X profile ConfigMap**
      - Cluster-wide Spectrum-X configuration data. Exactly one

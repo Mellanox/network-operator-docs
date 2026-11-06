@@ -26,23 +26,29 @@ Configuration Reference
    :local:
    :backlinks: none
 
-The Launch Kit configuration file (typically ``cluster-config.yaml``, produced by ``l8k discover`` and consumed by ``l8k generate``) is YAML. This page documents every top-level section.
+The Launch Kit configuration file (typically ``cluster-config.yaml``, produced by ``l8k discover`` and consumed by ``l8k generate``) is YAML. This page covers host networking settings and the generated bundle contract. Use discovery output as the editable starting point; default configuration and presets are embedded in the binary, while matching profile templates are installed alongside it.
 
 ================================================================================
-Full Schema
+Configuration Example
 ================================================================================
 
 .. code-block:: yaml
    :substitutions:
 
+   flavor: k8s
+   networkNamespaces: [default]
+
    networkOperator:
-     selectedRelease: "26.7"
+     selectedRelease: "26.10"
+     skipHelmChart: false
+     secondaryNetwork:
+       multus: auto
+       cniPlugins: auto
      version: |k8s-launch-kit-version|
      componentVersion: |k8s-launch-kit-component-version|
      repository: |k8s-launch-kit-network-operator-repository|
      namespace: nvidia-network-operator
      imagePullSecrets: []
-     docsBaseURL: |k8s-launch-kit-docs-base-url|
 
    docaDriver:
      enable: true
@@ -82,14 +88,21 @@ Full Schema
 
    nicConfigurationOperator:
      deployNicInterfaceNameTemplate: true
-     rdmaPrefix: "rdma_r%rail%"
-     netdevPrefix: "eth_r%rail%"
+     rdmaPrefix: "rdma_r%rail_id%"
+     netdevPrefix: "eth_r%rail_id%"
 
    spectrumX:
-     nicType: "1023"
-     overlay: "none"
-     rdmaPrefix: "roce_p%plane%_r%rail%"
-     netdevPrefix: "eth_p%plane%_r%rail%"
+     overlay: none
+     singlePlane:
+       netdevPrefix: "eth_r%rail_id%"
+       rdmaPrefix: "roce_r%rail_id%"
+     hwplb:
+       netdevPrefix: "eth_r%rail_id%_p%plane_id%"
+       rdmaPrefix: "roce_r%rail_id%"
+     swplb:
+       netdevPrefix: "eth_r%rail_id%_p%plane_id%"
+       rdmaPrefix: "roce_r%rail_id%_p%plane_id%"
+     ovsConfig: {}
 
    workload:
      manifest: ""
@@ -98,17 +111,28 @@ Full Schema
      fabric: ethernet
      deployment: sriov
      multirail: false
+     routing: destination-based
      spectrumX:
-       spcxVersion: "RA2.3"
-       multiplaneMode: swplb
-       numberOfPlanes: 4
-       useDRA: false
-     ai: false
+       enable: false
+
+   maintenance:
+     maxParallelOperations: 4
+     maxUnavailable: 4
+     maxNodeMaintenanceTimeSeconds: 3600
+     maxParallelUpgrades: 4
+
+   validation:
+     connectivity: true
+     mode: strict
+     checks: [icmp, rping, ib_write_bw]
+     gpuDirect:
+       enabled: false
+       gpuResourceType: nvidia.com/gpu
 
    clusterConfig:
    - identifier: "dgx-b200-nvidia-b200"
      machineType: "DGX-B200"
-     productType: "NVIDIA-B200"
+     gpuType: "NVIDIA-B200"
      capabilities:
        nodes:
          sriov: true
@@ -141,9 +165,9 @@ Network Operator version, image registry, namespace, and pull secrets.
    * - **Field**
      - **Description**
    * - ``selectedRelease``
-     - Pin to a release line. Supported: ``26.1``, ``26.4``, ``26.7``. Auto-fills ``version`` and image tags from an embedded catalog. Equivalent to the ``--network-operator-release`` flag.
+     - Pin to a release line. Supported: ``26.1``, ``26.4``, ``26.7``, ``26.10``. Auto-fills ``version`` and image tags from an embedded catalog. Equivalent to the ``--network-operator-release`` flag.
    * - ``version``
-     - Explicit Network Operator version. Overrides the catalog when set.
+     - Explicit Network Operator version when no release catalog selection is set. A nonempty ``selectedRelease`` replaces catalog-managed versions and repositories.
    * - ``componentVersion``
      - Tag for component images (CNI, device plugins, etc.).
    * - ``repository``
@@ -152,8 +176,12 @@ Network Operator version, image registry, namespace, and pull secrets.
      - Operator namespace (default: ``nvidia-network-operator``).
    * - ``imagePullSecrets``
      - List of secret names. Propagated to ``NicClusterPolicy.spec.global.imagePullSecrets`` and per-group ``NicNodePolicy`` sub-specs.
-   * - ``docsBaseURL``
-     - Documentation URL embedded in generated annotations.
+   * - ``skipHelmChart``
+     - External Helm ownership. Omits ``values.yaml`` and skips Helm management/checks; custom-resource preflight and apply remain active.
+   * - ``operatorRepository`` / ``helmRepoURL``
+     - Operator image registry and Helm chart repository, distinct from component ``repository``.
+   * - ``secondaryNetwork.multus`` / ``secondaryNetwork.cniPlugins``
+     - Independent ownership policies: ``auto``, ``managed``, or ``external``. Automatic resolution uses discovery evidence; external sections are omitted. Ownership conflicts block apply even with overwrite.
 
 ================================================================================
 docaDriver
@@ -178,7 +206,7 @@ OFED driver configuration and kernel driver dependencies validation.
    * - ``enableNFSRDMA``
      - Enable NFS-over-RDMA support.
    * - ``skipPreflightChecks``
-     - Skip the kernel driver dependencies validation. Useful for environments where it's known-good.
+     - Skip the driver init-container module dependency check. Does not skip discovery.
 
 See :doc:`../workflows/discover` for how OFED-dependent modules are detected.
 
@@ -197,13 +225,17 @@ NV-IPAM configuration. Either provide an explicit ``subnets`` list or let Launch
    * - ``poolName``
      - Pool name used in IPPool CRs.
    * - ``subnets``
-     - Explicit list of ``{subnet, gateway}`` entries. Mutually exclusive with the auto-generation fields.
+     - Explicit list of ``{subnet, gateway}`` entries. A nonempty list takes precedence over the auto-generation fields.
    * - ``startingSubnet``
      - First subnet for auto-generation (e.g., ``192.168.2.0``).
    * - ``mask``
      - Prefix length for auto-generated subnets.
    * - ``offset``
      - Increment used between auto-generated subnets.
+   * - ``perNodeBlockSize``
+     - Addresses allocated per node in standard-profile IPPools (default ``10``).
+   * - ``reserveFirstIPs`` / ``reserveLastIPs``
+     - Reserve address ranges in every standard-profile subnet. Per-subnet ``exclusions`` may specify additional ``startIP`` / ``endIP`` ranges.
 
 ================================================================================
 sriov / hostdev / rdmaShared / ipoib / macvlan
@@ -259,11 +291,11 @@ Controls when NIC interface names are templated by the NIC Configuration Operato
    * - **Field**
      - **Description**
    * - ``deployNicInterfaceNameTemplate``
-     - "Enable when needed". Templates are deployed when groups have cross-rail PCI conflicts or when names are otherwise ambiguous. See :doc:`../heterogeneous-clusters`.
+     - Enable naming templates (default ``true``). A single standard-profile source with observed interface names can use existing names without emitting a template; Spectrum-X keeps required naming. See :doc:`../heterogeneous-clusters`.
    * - ``rdmaPrefix``
-     - RDMA device naming template (default: ``rdma_r%rail%``).
+     - RDMA device naming template (default: ``rdma_r%rail_id%``).
    * - ``netdevPrefix``
-     - Netdev naming template (default: ``eth_r%rail%``).
+     - Netdev naming template (default: ``eth_r%rail_id%``).
 
 ================================================================================
 spectrumX
@@ -277,14 +309,14 @@ Spectrum-X-specific settings.
 
    * - **Field**
      - **Description**
-   * - ``nicType``
-     - NIC type device ID. ``1021`` = ConnectX-7 NIC; ``1023`` = ConnectX-8 SuperNIC; ``1025`` = ConnectX-9 SuperNIC *(tech preview)*; ``a2dc`` = BlueField-3 SuperNIC.
    * - ``overlay``
      - Overlay mode.
-   * - ``rdmaPrefix``
-     - RDMA device naming template with ``%plane%`` and ``%rail%`` substitutions.
-   * - ``netdevPrefix``
-     - Netdev naming template with ``%plane%`` and ``%rail%`` substitutions.
+   * - ``singlePlane`` / ``hwplb`` / ``swplb``
+     - Mode-specific ``rdmaPrefix`` and ``netdevPrefix`` maps. Use ``%rail_id%`` and, where appropriate, ``%plane_id%``. VR HWPLB RDMA names additionally require ``%nic_id%``.
+   * - ``ovsConfig``
+     - RA2.4/RA3.1 string map for OVS ``other_config`` overrides. Omitted keys retain operator defaults.
+
+NIC type and PCI selectors are derived from each source group's east-west PF inventory; there is no ``spectrumX.nicType`` setting.
 
 ================================================================================
 workload
@@ -316,9 +348,15 @@ Profile selection (also overridable via CLI flags).
    * - ``deployment``
      - ``sriov``, ``rdma_shared``, or ``host_device``.
    * - ``multirail``
-     - Enable multirail.
+     - Enable multirail. Explicit ``false`` is preserved in YAML and on the CLI.
+   * - ``routing``
+     - ``destination-based`` or ``source-based``; connectivity requires an explicit resolved decision.
+   * - ``ignoreARP``
+     - Standard-profile ARP tuning. OpenShift requires the relevant Multus tuning allowlist entries.
+   * - ``spectrumX.enable``
+     - Enable Spectrum-X profile selection. Set this with ``spcxVersion`` for a YAML-only selection.
    * - ``spectrumX.spcxVersion``
-     - Spectrum-X reference architecture (``RA2.3``, or ``RA2.1`` for Network Operator 26.1).
+     - Spectrum-X reference architecture; see :doc:`../profiles/spectrum-x` for the release matrix and shared RA2.4/RA3.1 contract. Use RA3.1 for VR and RA2.4 for other platforms.
    * - ``spectrumX.multiplaneMode``
      - Multiplane mode: ``hwplb``, ``swplb``, ``none``.
    * - ``spectrumX.numberOfPlanes``
@@ -330,11 +368,13 @@ Profile selection (also overridable via CLI flags).
    * - ``spectrumX.topologyFile``
      - Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. Required for Spectrum-X generation --- the profiles always render ``CIDRPool`` resources. Equivalent to ``--topology-file``.
    * - ``spectrumX.hostFirstOctet``
-     - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Defaults to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. No effect when ``ipVersion`` is ``ipv6``.
+     - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Traditional layouts default to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. VR defaults to ``240`` and requires ``240``–``255``. No effect when ``ipVersion`` is ``ipv6``.
    * - ``spectrumX.profile``
-     - Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap's ``data.profile`` key, or a full ConfigMap manifest. Required for ``RA2.3``. Equivalent to ``--spectrum-x-config``.
+     - Inline profile contents as a YAML string, not a filename. RA2.4 and RA3.1 require the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw ``data.profile``. ``--spectrum-x-config`` reads those contents from a file.
    * - ``spectrumX.configMapName``
      - Name for the generated profile ConfigMap. Required only when ``spectrumX.profile`` holds raw ``data.profile`` YAML. Equivalent to ``--spectrum-x-configmap-name``.
+   * - ``spectrumX.ipv6SiteID``
+     - VR IPv6 site nibble, ``0``–``15`` (default ``0``); config-only.
    * - ``spectrumX.useDRA``
      - Generate DRA ``ResourceClaimTemplate`` resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only --- there is no CLI flag. Defaults to ``false``. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV --- see :doc:`../profiles/spectrum-x`.
 
@@ -352,7 +392,7 @@ Discovered node groups, populated by ``l8k discover``. Each entry describes one 
      - **Description**
    * - ``identifier``
      - Sanitised ``<machineType>-<gpuType>`` (e.g. ``dgx-b200-nvidia-h100-nvl``) when both fields are resolved; ``group-0`` / ``group-1`` fallback when they aren't. Used as the NicNodePolicy / SriovNetworkNodePolicy name suffix.
-   * - ``machineType`` / ``productType``
+   * - ``machineType`` / ``gpuType``
      - Hardware type strings (e.g., ``DGX-B200`` / ``NVIDIA-B200``).
    * - ``capabilities.nodes.sriov`` / ``rdma`` / ``ib``
      - Boolean flags reflecting hardware capability.
@@ -367,11 +407,43 @@ Discovered node groups, populated by ``l8k discover``. Each entry describes one 
    * - ``presetDeviation``
      - List of field-level discrepancies between the matched preset and discovered hardware. Non-empty means the preset was applied but the cluster differs from the preset. Each entry has ``field`` (``pciAddress`` / ``deviceID``), ``expected``, ``got``, and ``detail``. See :doc:`../presets` "Validation and Deviations".
    * - ``linkType``
-     - The discovered fabric for the group: ``Ethernet`` or ``InfiniBand``. Populated by the fabric probe only when **every** east-west port produces a confirmed verdict (port ACTIVE plus, for IB, a subnet manager is present) and they agree. When omitted, discovery couldn't prove the cluster's fabric — downstream code should treat the absence as "unknown". See :doc:`../workflows/discover` "Fabric Type Detection".
+     - The discovered fabric for the group: ``Ethernet`` or ``InfiniBand``. Populated only when the configured link layers of all selected workers and east-west PF ports are readable and agree. Link state and subnet-manager presence do not gate detection. When omitted, discovery couldn't prove the cluster's fabric — downstream code should treat the absence as "unknown". See :doc:`../workflows/discover` "Fabric Type Detection".
+   * - ``spectrumX.platformType`` / ``spectrumX.interfaceNames``
+     - Derived RA platform and desired mode-specific naming. Recomputed during discovery/resolution; not user platform overrides.
+   * - ``spectrumX.swPlaneByRail``
+     - RA2.4/RA3.1 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.
+   * - ``netplanManaged`` / ``netplanManagementUnknown``
+     - Confirmed or uncertain host netplan naming ownership. A confirmed conflict blocks naming-template generation; uncertainty warns.
    * - ``pfs``
      - List of physical functions. Each entry has ``deviceID``, ``pciAddress``, ``rdmaDevice``, ``networkInterface``, ``traffic`` (``east-west`` or ``north-south``), and ``rail`` (sequential index for east-west PFs).
 
 North-south PFs are listed for visibility but filtered out of generated manifests. See :doc:`../overview` and :doc:`../workflows/discover`.
+
+================================================================================
+Platform, Maintenance, and Validation Settings
+================================================================================
+
+``flavor`` selects ``k8s`` or ``ocp``. ``networkNamespaces`` lists secondary-network and workload namespaces. OpenShift operator packages are externally installed; optional ``sriov.operatorNamespace``, ``maintenance.operatorNamespace``, and ``nfd.operatorNamespace`` / ``nfd.configurationName`` identify their resources. Use the OpenShift installation guidance before discovery and deployment.
+
+``maintenance`` controls node maintenance concurrency: ``maxParallelOperations`` (positive integer or percentage), ``maxUnavailable`` (nonnegative integer or percentage), ``maxNodeMaintenanceTimeSeconds`` (nonnegative seconds), and legacy OFED ``maxParallelUpgrades`` (nonnegative integer; zero means unlimited). Review these budgets before applying disruptive driver or NIC configuration.
+
+``validation`` selects ``connectivity``, ``mode`` (``quick``, ``full``, ``strict``), and ``checks`` (``icmp``, ``rping``, ``ib_write_bw``). ``gpuDirect.enabled`` is an explicit decision; ``gpuDirect.gpuResourceType`` defaults to ``nvidia.com/gpu``. The ``rdma`` map controls ``rpingIterations``, ``ibWriteSize``, and ``ibWriteMinBandwidthGbps``. See :doc:`../workflows/validate` for acceptance semantics.
+
+================================================================================
+Deploy and Validate Configuration Lookup
+================================================================================
+
+Standalone deploy and validate select the first existing candidate:
+
+#. Explicit ``--user-config`` (an unreadable explicit path is an error).
+#. ``<deployment-files>/.l8k/resolved-config.yaml``.
+#. ``<deployment-files>/../.l8k/resolved-config.yaml``.
+#. ``<deployment-files>/../cluster-config.yaml``.
+#. ``<deployment-files>/cluster-config.yaml``.
+#. ``./cluster-config.yaml``.
+#. With ``--config-dir``, its ``l8k-config.yaml`` only; otherwise local then installation share-directory ``l8k-config.yaml``.
+
+The sidecar records the effective generation settings and is loaded without reapplying defaults or expanding the catalog. An explicit source configuration intentionally bypasses it. Keep the complete bundle, including ``.l8k``, when moving generated artifacts between systems.
 
 ================================================================================
 See Also

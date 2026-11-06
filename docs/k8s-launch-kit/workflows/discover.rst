@@ -30,7 +30,7 @@ Discover Workflow
 
    **Use this when:** you want Launch Kit to inspect a live cluster's network hardware and produce a ``cluster-config.yaml`` describing it. Skip this workflow if you are generating manifests offline against a known machine type --- see :doc:`../presets`.
 
-The ``l8k discover`` subcommand deploys a minimal Network Operator profile with the NIC Configuration Operator, then probes each node for NIC PCI addresses, device IDs, RDMA capability, InfiniBand support, OFED-dependent kernel modules, GPU topology, and machine type.
+The ``l8k discover`` subcommand bootstraps a temporary NIC Configuration Daemon without requiring a pre-installed Network Operator or NFD, then probes eligible nodes for NIC PCI addresses, device IDs, RDMA capability, InfiniBand support, OFED-dependent kernel modules, GPU topology, and machine type.
 
 ================================================================================
 Basic Discovery
@@ -65,7 +65,7 @@ Without ``--save-cluster-config``, the file specified by ``--user-config`` is up
 Filtering Nodes
 ================================================================================
 
-Limit discovery to a subset of nodes using ``--node-selector``:
+``--node-selector`` seeds the saved deployment selection; it does not restrict discovery daemon scheduling. Discovery runs the daemon across nodes and detects eligible NICs through sysfs. It derives an exact selector per discovered worker group:
 
 .. code-block:: bash
 
@@ -73,7 +73,7 @@ Limit discovery to a subset of nodes using ``--node-selector``:
        --node-selector "feature.node.kubernetes.io/pci-15b3.present=true" \
        --save-cluster-config ./cluster-config.yaml
 
-The default selector targets nodes with Mellanox NICs.
+The default saved selector targets nodes with Mellanox NICs. Restricted BlueFields are excluded from the discoverable device set. An explicit selector override must match the saved worker membership at deployment.
 
 ================================================================================
 PF Topology and Hardware Detection
@@ -90,7 +90,7 @@ Group Labelling
 After discovery resolves ``machineType`` and ``gpuType`` for a group, every node in the group is patched with two l8k-specific labels via a strategic-merge patch:
 
 - ``nvidia.kubernetes-launch-kit.machine: <machineType>-<gpuType>`` --- per-source-group identity. Used as the source group's ``nodeSelector``.
-- ``nvidia.kubernetes-launch-kit.gpu: <gpuType>`` --- written alongside the machine label so auto-merged groups (different machineTypes sharing a GPU type) have a stable selector. Same value as ``nvidia.com/gpu.product`` by construction.
+- ``nvidia.kubernetes-launch-kit.gpu: <gpuType>`` --- written alongside the machine label so auto-merged groups (different machineTypes sharing a GPU type) have a stable selector. Uses the resolved GPU product, which may come from hardware probes when the GPU Operator label is absent.
 
 Label values keep their original case (e.g. ``DGX-B200-NVIDIA-H100-NVL``, ``NVIDIA-H100-NVL``); upstream parsing already trims whitespace and replaces spaces with hyphens. Values that would exceed Kubernetes' 63-char label limit are skipped (logged at debug).
 
@@ -107,14 +107,9 @@ Groups whose ``machineType`` or ``gpuType`` could not be resolved keep a fallbac
 Fabric Type Detection
 ================================================================================
 
-For each group's east-west PFs that have an RDMA device, Launch Kit reads ``/sys/class/infiniband/<rdmaDevice>/ports/1/{state,phys_state,link_layer,sm_lid}`` from inside the NIC Configuration Daemon pod. A port contributes to the group's fabric verdict when:
+Launch Kit checks the configured ``link_layer`` for every selected worker and east-west PF, including sibling PFs represented by a collapsed rail. It resolves each PCI-local RDMA device and enumerates its ports. Complete, unanimous observations record ``Ethernet`` or ``InfiniBand`` in the group's ``linkType``.
 
-- Port is ``ACTIVE`` and ``link_layer=Ethernet`` --- contributes ``Ethernet``.
-- Port is ``ACTIVE``, ``link_layer=InfiniBand``, and a subnet manager is present (``sm_lid`` non-zero) --- contributes ``InfiniBand``.
-
-If every contributing port agrees on a single value, that value is recorded as ``linkType`` on the group in ``cluster-config.yaml``. If no port produced a contribution (all down, IB without SM, probes failed), or different ports contribute different values, the field is **left empty** --- discovery couldn't prove the cluster is using a specific fabric, and downstream code treats the absence as "unknown".
-
-This is more reliable than reading ``link_layer`` alone: that file just reflects firmware config and may be a default rather than the cluster's actual fabric.
+Partial, unreadable, denied, or conflicting observations leave ``linkType`` unknown with a diagnostic. Link state and subnet-manager presence do not gate fabric detection. A known link layer establishes configured transport, not a working link or fabric; validate connectivity after deployment.
 
 ================================================================================
 North-South Filtering
@@ -155,7 +150,7 @@ Storage and third-party RDMA module lists are sourced from the ``doca-driver-bui
 
 After discovery, the config reflects the auto-enabled flags and the discovered modules are saved per group as ``storageModules`` and ``thirdPartyRDMAModules`` lists.
 
-To skip the kernel driver dependencies validation entirely (for environments where it's known-good), set ``docaDriver.skipPreflightChecks: true`` in your config.
+``docaDriver.skipPreflightChecks: true`` skips the driver init-container preflight checks during deployment; it does not disable hardware discovery.
 
 .. warning::
 
@@ -172,6 +167,10 @@ The output ``cluster-config.yaml`` contains all parameters needed for manifest g
 #. Run ``l8k generate --user-config ./cluster-config.yaml`` to produce manifests.
 
 You can also provide a pre-configured file directly to ``l8k generate`` without running discovery, or skip discovery entirely with ``--for <preset>``.
+
+Discovery also records host naming ownership. If ``netplanManaged: true``, generation refuses to emit a conflicting ``NicInterfaceNameTemplate``. If ``netplanManagementUnknown: true``, generation warns and continues. Review host netplan rules and repeat discovery to resolve uncertainty.
+
+For Spectrum-X RA2.4 and RA3.1, discovery derives ``spectrumX.platformType`` and desired ``spectrumX.interfaceNames`` per group. VR NetworkBay discovery groups eight east-west NICs into four dual-NIC rails; preserve this physical grouping and verify it against switch cabling. See :doc:`../profiles/spectrum-x`.
 
 For the full configuration schema, see :doc:`Configuration Reference <../reference/config>`.
 

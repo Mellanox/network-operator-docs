@@ -63,27 +63,27 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - **Trigger**
    * - ``--fabric``
      - the cluster's fabric (``ethernet`` or ``infiniband``)
-     - every group's ``linkType`` (Unit 5 fabric probe) agrees; skipped+warned otherwise
+     - every group's ``linkType`` agrees; skipped+warned otherwise
    * - ``--deployment-type``
      - ``sriov``
      - always
    * - ``--multirail``
      - ``true``
-     - always; opt out via ``--multirail=false`` (YAML cannot express explicit-false)
+     - always; opt out via ``--multirail=false`` (or set ``profile.multirail: false`` in YAML)
    * - ``--multiplane-mode``
-     - ``none`` (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200), ``swplb`` (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), ``hwplb`` (ConnectX-9 SuperNIC)
-     - only when ``--spectrum-x`` is set; from the east-west PF deviceID and GPU platform, skipped+warned when groups disagree. On ConnectX-8 SuperNIC ``hwplb`` is never defaulted --- Spectrum-X RA 2.3 recommends it on multiplane platforms, so pass it explicitly.
+     - ``none`` (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200, plus RTX with RA2.4/RA3.1), ``swplb`` (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), ``hwplb`` (ConnectX-9 SuperNIC)
+     - only when ``--spectrum-x`` is set; from the east-west PF deviceID and GPU platform, skipped+warned when groups disagree. Select ``hwplb`` explicitly when required by the validated site topology.
    * - ``--number-of-planes``
-     - 1 (single-plane platforms and NICs), 2 (ConnectX-8 SuperNIC on B300 / GB300), 4 (ConnectX-9 SuperNIC)
+     - 1 (single-plane platforms and NICs), 2 (ConnectX-8 SuperNIC on B300 / GB300), 4 (ConnectX-9 SuperNIC fallback), 8 (VR HWPLB with RA3.1)
      - only when ``--spectrum-x`` is set. Pass ``4`` explicitly for a quad-plane B300 / GB300 topology.
    * - ``--ip-version``
      - ``ipv4``
      - only when ``--spectrum-x`` is set.
    * - ``--network-operator-release``
-     - matching release for the chosen RA (RA2.3 → 26.7, RA2.1 → 26.1)
+     - matching release for the chosen RA (RA2.4/RA3.1 → 26.10, RA2.3 → 26.7, RA2.2 → 26.4, RA2.1 → 26.1)
      - only when ``--spectrum-x`` is set
 
-Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``); the full reasoning trail is at debug level (``--log-level debug``).
+Each applied default is logged at info level; use ``--log-level debug`` for the full reasoning trail. Generator defaults do not establish hardware qualification.
 
 Resolution precedence (lowest → highest): hardware default < config-file < CLI flag. The Spectrum-X cohort rules (RA-to-release pairing, ``multiplane-mode=none`` requiring ``number-of-planes=1``, etc.) are enforced after defaults run, so a partial CLI input plus defaults must still resolve to a consistent whole.
 
@@ -102,7 +102,7 @@ For Spectrum-X profiles --- and recommended for all deployments --- pin the Netw
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
 
-Supported release lines: ``26.1``, ``26.4``, and ``26.7``. The release auto-fills versions and image tags from an embedded catalog. Each Spectrum-X RA requires its matching line: RA2.3 → ``26.7``, RA2.1 → ``26.1``.
+Supported release lines: ``26.1``, ``26.4``, ``26.7``, and ``26.10``. The release fills versions and image repositories from an embedded catalog. See :doc:`../profiles/spectrum-x` for RA compatibility. Use ``l8k schema`` to inspect the installed binary's release catalog.
 
 ================================================================================
 Generation without a Live Cluster
@@ -112,7 +112,7 @@ To generate manifests for a known machine type without running discovery, use ``
 
 .. code-block:: bash
 
-   l8k generate --for ThinkSystem-SR680a-V3 \
+   l8k generate --for ThinkSystem-SR680a-V3-H200 \
        --node-selector "nvidia.com/gpu.product=NVIDIA-H200" \
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
@@ -139,12 +139,16 @@ Generated files follow a numbered naming convention that determines deployment o
      - NV-IPAM IP pools.
    * - ``30-*.yaml``
      - Network resources (``SriovNetworkNodePolicy``, ``SriovNetwork``, ``HostDeviceNetwork``, ``MacvlanNetwork``, ``IPoIBNetwork``).
-   * - ``35-nicinterfacenametemplate.yaml``
-     - NIC rename templates (only when needed --- see :doc:`../heterogeneous-clusters`).
-   * - ``40-*.yaml`` / ``50-*.yaml``
-     - Example workload DaemonSets.
-   * - ``overview.html``
-     - Human-readable deployment summary.
+   * - ``25-*`` through ``40-*.yaml``
+     - NIC naming/configuration templates and SR-IOV policies; exact numbering depends on the profile. See :doc:`../heterogeneous-clusters`.
+   * - ``40-*example*`` / ``60-*example*`` / ``90-*example*``
+     - Temporary validation workload DaemonSets.
+   * - ``values.yaml``
+     - Helm input; omitted when Network Operator Helm management is disabled.
+   * - ``.l8k/resolved-config.yaml`` (at the bundle root)
+     - Effective generation configuration, including CLI overrides. Retain this with the manifests.
+
+Generation preserves the source configuration and writes effective settings to ``<deployment-files>/.l8k/resolved-config.yaml``. Operational manifests are under ``<deployment-files>/network-operator/``. Review and retain the whole bundle; deploy and validate prefer its sidecar unless ``--user-config`` explicitly overrides it. Regeneration replaces the selected plugin output, so use a new directory to compare a proposed change.
 
 In heterogeneous clusters, per-group files include the group identifier in the filename (e.g., ``30-sriovnetworknodepolicy-group-0.yaml``).
 
