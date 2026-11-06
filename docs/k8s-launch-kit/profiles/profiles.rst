@@ -64,7 +64,8 @@ The fabric is Ethernet or InfiniBand. Spectrum-X is an explicitly selected Ether
        IBDT -->|host_device| HDI([Host Device])
        IBDT -->|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
-       SPCXRA -->|RA2.4<br/>Network Operator 26.10| SX4([Spectrum-X RA2.4])
+       SPCXRA -->|Non-VR: RA2.4<br/>Network Operator 26.10| SX4([Spectrum-X RA2.4])
+       SPCXRA -->|VR: RA3.1<br/>Network Operator 26.10| SX31([Spectrum-X RA3.1])
        SPCXRA -->|RA2.2<br/>Network Operator 26.4| SX2([Spectrum-X RA2.2])
        SPCXRA -->|RA2.3<br/>Network Operator 26.7| SX3([Spectrum-X RA2.3])
        SPCXRA -->|RA2.1<br/>Network Operator 26.1| SX1([Spectrum-X RA2.1])
@@ -72,6 +73,7 @@ The fabric is Ethernet or InfiniBand. Spectrum-X is an explicitly selected Ether
        SX1 --> MPM
        SX2 --> MPM
        SX4 --> MPM
+       SX31 --> MPM
 
        classDef profile fill:#a2efb6,stroke:#28a745,color:#000
        classDef params fill:#fff3cd,stroke:#ffc107,color:#000
@@ -111,9 +113,9 @@ Decision Matrix
      - ethernet / rdma_shared
      - MacVLAN, multi-tenant, network-segmentation
    * - :doc:`Spectrum-X <spectrum-x>`
-     - NVIDIA Spectrum-X multi-rail AI interconnect (RA2.4 on Network Operator 26.10; see the Spectrum-X version matrix for older RAs). Single-plane, SWPLB, or HWPLB.
+     - NVIDIA Spectrum-X multi-rail AI interconnect (RA3.1 for VR and RA2.4 for other platforms, released together and both integrated with Network Operator 26.10; see the version matrix for older RAs). Single-plane, SWPLB, or HWPLB.
      - ethernet / sriov / spectrum-x
-     - Spectrum-X, multiplane, RA2.4, HWPLB
+     - Spectrum-X, multiplane, RA2.4, RA3.1, HWPLB
 
 ================================================================================
 See Also

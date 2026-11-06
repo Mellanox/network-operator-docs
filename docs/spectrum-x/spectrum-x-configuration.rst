@@ -30,6 +30,8 @@ NVIDIA Spectrum-X NIC Configuration
 
 `NVIDIA NIC Configuration Operator <https://github.com/Mellanox/nic-configuration-operator>`_ in Network Operator 26.10 applies Spectrum-X settings from a **profile ConfigMap**. The ``spectrumXOptimized.version`` field selects the architecture version, and ``platformType`` selects the hardware platform. Neither field names the ConfigMap.
 
+RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms are released together. Select ``version: RA3.1`` with ``platformType: vr`` for VR; select ``version: RA2.4`` with the corresponding platform type otherwise. Both use the doSPCX ConfigMap format below.
+
 The examples on this page target the component versions shipped with Network Operator |network-operator-version|.
 
 For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see :doc:`Platform Support <../platform-support>`.
@@ -40,8 +42,8 @@ Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, Connect
 
    **ConnectX-9 SuperNIC support for Spectrum-X is Tech Preview.** The NIC
    Configuration Operator API accepts ConnectX-9 SuperNIC and applies Spectrum-X
-   settings to it. API acceptance does not establish a validated RA2.4
-   configuration. Use it for evaluation with a profile supplied for the
+   settings to it. API acceptance does not establish a validated hardware/software
+   combination. Select RA3.1 for VR. Use it for evaluation with a profile supplied for the
    requested platform and NIC combination; see :doc:`Platform Support
    <../platform-support>`.
 
@@ -59,7 +61,7 @@ To install the operator and for more information on the CRDs, see :doc:`NIC Firm
 Apply the Spectrum-X Profile ConfigMap
 ======================================
 
-Obtain the **RA2.4 doSPCX profile ConfigMap** published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.
+Obtain the **RA2.4 or RA3.1 doSPCX profile ConfigMap** published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.
 
 The following shows the required API format. Use the published ConfigMap rather than applying this placeholder example:
 
@@ -121,7 +123,7 @@ Platform configuration values
 ``spec.template.spectrumXOptimized.numberOfPlanes``.
 
 PF and VF totals describe the east-west NICs on one worker node in the
-reference platform layout, excluding north-south NICs. For HGX H100 use
+non-VR RA2.4 platform layouts below, excluding north-south NICs. For HGX H100 use
 ``h100``; for HGX H200 use ``h200``. Select the row matching your NIC and
 physical plane configuration.
 
@@ -218,7 +220,7 @@ physical plane configuration.
      - 16 (4 x 4)
      - 16
 
-In ``hwplb``, each rail exposes one VF regardless of the number of planes.
+For the RA2.4 layouts in this table, ``hwplb`` exposes one VF per rail regardless of the number of planes.
 In ``swplb``, each PF exposes a VF, so the VF count increases with the
 number of planes. The totals above are platform-wide counts, not values
 for ``template.numVfs``; the NIC configuration template still uses
@@ -269,7 +271,7 @@ Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``mu
      nodeSelector:
        feature.node.kubernetes.io/network-sriov.capable: "true"
      nicSelector:
-       nicType: "1023" # ConnectX-8 SuperNIC. Use "1025" for ConnectX-9 SuperNIC (tech preview)
+       nicType: "1023" # ConnectX-8 SuperNIC on GB300
      template:
        numVfs: 1
        linkType: Ethernet
@@ -281,7 +283,7 @@ Multiplane modes let a NIC drive multiple data planes on the same rail. Set ``mu
          multiplaneMode: "hwplb" # Hardware Plane Load Balancing
          numberOfPlanes: 2
 
-The profile must support the requested architecture, platform, mode, and NIC. ``platformType: rtx`` permits only ``multiplaneMode: none``. ``platformType: vr`` requires ``swplb`` or ``hwplb``.
+The profile must support the requested architecture, platform, mode, and NIC. ``platformType: rtx`` permits only ``multiplaneMode: none``. The API requires ``swplb`` or ``hwplb`` for ``platformType: vr``. For Vera Rubin, use ``version: RA3.1``, ``platformType: vr``, and ConnectX-9 SuperNIC (``nicType: "1025"``). The eight-plane HWPLB layout groups two NICs per logical rail, exposing a separate VF endpoint for each NIC. See :doc:`Launch Kit Spectrum-X Profile <../k8s-launch-kit/profiles/spectrum-x>` for the rail grouping and generation inputs.
 
 Multiplane modes
 ^^^^^^^^^^^^^^^^
@@ -303,7 +305,7 @@ plane count; this table is not a hardware qualification matrix:
      - BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
      - 1
    * - ``hwplb``
-     - Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. **The recommended mode on multiplane platforms.**
+     - Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees one interface per NIC endpoint: one per rail in the non-VR layouts above, or two per logical rail on VR. **The recommended mode on multiplane platforms.**
      - ConnectX-8 SuperNIC, ConnectX-9 SuperNIC
      - 2, 4, 8 (subject to platform and profile support)
    * - ``swplb``
@@ -313,7 +315,7 @@ plane count; this table is not a hardware qualification matrix:
 
 .. note::
 
-   For new multiplane deployments, select ``hwplb`` when supported by the RA2.4 profile and fabric. Use ``swplb`` when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. This is not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
+   For new multiplane deployments, select ``hwplb`` when supported by the selected RA2.4 or RA3.1 profile and fabric. Use ``swplb`` when each plane must be visible to the workload as a separate interface, or on NICs that do not support ``hwplb``. This is not an API default: the ``multiplaneMode`` field itself defaults to ``none``, so multiplane deployments must set it explicitly.
 
 NIC type constraints
 ^^^^^^^^^^^^^^^^^^^^
@@ -408,7 +410,7 @@ The following validation rules are enforced by the API:
 - Spectrum-X optimizations can only be enabled for ConnectX-7 NIC (``nicType: 1021``), ConnectX-8 SuperNIC (``nicType: 1023``), ConnectX-9 SuperNIC (``nicType: 1025``), or BlueField-3 SuperNIC (``nicType: a2dc``).
 - When Spectrum-X optimizations are enabled, ``roceOptimized`` must not be enabled (RoCE settings are included in the Spectrum-X configuration).
 - ``version`` and ``platformType`` are required for enabled Spectrum-X configuration. Their values must be supported by the supplied profile; ``version`` is not a ConfigMap reference.
-- ``multiplaneMode`` must be ``none``, ``swplb``, or ``hwplb``; ``numberOfPlanes`` must be ``1``, ``2``, ``4``, or ``8``. API acceptance of a plane count does not establish that the supplied RA2.4 profile supports it; the B300/GB300 walkthroughs use two or four planes.
+- ``multiplaneMode`` must be ``none``, ``swplb``, or ``hwplb``; ``numberOfPlanes`` must be ``1``, ``2``, ``4``, or ``8``. API acceptance of a plane count does not establish that the supplied RA2.4 or RA3.1 profile supports it; the B300/GB300 walkthroughs use two or four planes.
 - When ``multiplaneMode`` is ``none``, ``numberOfPlanes`` must be ``1``.
 - When ``multiplaneMode`` is not ``none``, ``numberOfPlanes`` must not be ``1``.
 - The ``hwplb`` multiplane mode can only be enabled for ConnectX-8 SuperNIC (``nicType: 1023``) or ConnectX-9 SuperNIC (``nicType: 1025``).

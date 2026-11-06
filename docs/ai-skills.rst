@@ -173,7 +173,7 @@ Choosing a Deployment Profile (Spectrum-X)
 **Skill-driven flow:**
 
 1. ``k8s-launch-kit-generate`` recognizes Spectrum-X intent.
-2. The skill verifies the discovered platform, east-west NICs, rails, and site plane layout. RA2.4 pairs with Network Operator 26.10 or a newer catalogued release and requires a full doSPCX bundle ConfigMap supplied for that platform. This example selects dual-plane HWPLB explicitly; generator defaults do not establish the site topology or hardware qualification.
+2. The skill verifies the discovered platform, east-west NICs, rails, and site plane layout. The paired releases are RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms. Both use Network Operator 26.10 or a newer catalogued release and require a full doSPCX bundle ConfigMap supplied for the selected architecture and platform. This ConnectX-8 example uses RA2.4 and selects dual-plane HWPLB explicitly; generator defaults do not establish the site topology or hardware qualification.
 3. Before running ``l8k generate``, the skill asks the operator to confirm the **switch-side** Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) --- because ``l8k`` does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.
 4. Once confirmed, the agent runs:
 

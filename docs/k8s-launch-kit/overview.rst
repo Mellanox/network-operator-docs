@@ -83,8 +83,8 @@ A **profile** is a named combination of fabric and deployment type that maps to 
 - ``host-device`` --- direct passthrough to host network devices
 - ``macvlan-rdma-shared`` --- Ethernet with shared RDMA device plugin and MacVLAN
 - ``ipoib-rdma-shared`` --- InfiniBand with shared RDMA device plugin and IPoIB
-- ``spectrum-x-ra2.4`` --- Spectrum-X RA2.4 for Network Operator 26.10 and newer catalogued releases
-- ``spectrum-x-ra3.1`` --- RA3.1 generation using the same doSPCX bundle contract
+- ``spectrum-x-ra2.4`` --- Spectrum-X RA2.4 for non-VR platforms on Network Operator 26.10 and newer catalogued releases
+- ``spectrum-x-ra3.1`` --- Spectrum-X RA3.1 for Vera Rubin (VR), released alongside RA2.4 and using the same doSPCX bundle contract
 - ``spectrum-x-ra2.2`` --- Spectrum-X RA2.2 for Network Operator 26.4
 - ``spectrum-x`` --- Spectrum-X multi-rail AI interconnect (RA2.3 on Network Operator 26.7)
 - ``spectrum-x-ra2.1`` --- Spectrum-X for the RA2.1 reference architecture (Network Operator 26.1)

@@ -297,7 +297,7 @@ individually here because they play distinct roles.
      - Plugs SR-IOV VFs into the rail's OVS bridge and chains with NV-IPAM
        for address allocation. The bridge itself is created by an operator
        — per-PF by the SR-IOV Network Operator for ``swplb`` / ``none``,
-       or a per-rail bridge connected to ``br-xplane`` by the
+       or a bridge for each ``railTopology`` entry connected to ``br-xplane`` by the
        Spectrum-X Operator for ``hwplb`` — on top
        of the :ref:`OVS-DOCA <host-virtual-switch>` switch from the Host
        Layer. Shipped under the SR-IOV Network Operator sub-chart.
@@ -334,8 +334,9 @@ individually here because they play distinct roles.
        fabric, programs the OpenFlow rules that divert traffic away from a
        failed plane, and exposes gRPC telemetry. Deployed by the
        Spectrum-X Operator; its image tag follows the **DOCA** release,
-       not the Network Operator version. Currently requires ConnectX-8
-       SuperNIC with firmware 40.48.1000 or later. See
+       not the Network Operator version. For the ConnectX-8 RA2.4
+       walkthrough, use firmware 40.48.1000 or later. VR requires the
+       xPlane/DOCA and firmware versions matched to the RA3.1 solution stack. See
        :ref:`when-xplane-is-deployed`.
      - With Spectrum-X Op.
      - **Required for Hardware Multiplane.**
@@ -398,7 +399,7 @@ reconciles them, and manual changes are overwritten.
      - Every Spectrum-X rail, all multiplane modes.
    * - ``esw_multiport=true``
      - devlink parameter putting the PF e-switch into multiport mode, so a
-       single e-switch spans the rail's planes.
+       single e-switch spans the NIC's planes.
      - Hardware Multiplane only.
    * - eSwitch mode ``switchdev``
      - Required for VF representors and OVS offload.
@@ -408,7 +409,9 @@ reconciles them, and manual changes are overwritten.
        Network Operator (``GroupingPolicy: perPF``, datapath ``netdev``,
        uplink type ``doca``) — this is what the ``manageSoftwareBridges``
        feature gate enables. For ``hwplb``, the Spectrum-X Operator creates
-       a per-rail bridge connected by patch ports to the shared ``br-xplane`` bridge.
+       a bridge for each ``railTopology`` entry connected by patch ports to the
+       shared ``br-xplane`` bridge. VR has two entries per logical rail, one
+       for each NIC endpoint.
      - Every Spectrum-X rail.
    * - **RDMA QoS meta-plugin**
      - The generated ``OVSNetwork`` chains the RDMA CNI with

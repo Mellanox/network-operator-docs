@@ -31,7 +31,11 @@ Spectrum-X Kubernetes Quick Start
 
    These walkthroughs use the **RA2.4 configuration workflow** on
    **Network Operator** |network-operator-version|. They require the matching
-   NIC Configuration Operator CRDs, including ``platformType``.
+   NIC Configuration Operator CRDs, including ``platformType``. RA3.1 is
+   released alongside RA2.4 for Vera Rubin (VR); these non-VR examples remain
+   RA2.4. For VR, select ``version: RA3.1`` and ``platformType: vr`` with the
+   matching profile and dual-NIC rail layout described in
+   :doc:`Launch Kit Spectrum-X Profile <../k8s-launch-kit/profiles/spectrum-x>`.
    For the RA-to-release mapping and other RAs, see
    :doc:`NVIDIA Spectrum-X <spectrum-x>`. For supported platforms (operating
    systems, Kubernetes distributions, NIC hardware), see

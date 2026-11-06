@@ -170,7 +170,7 @@ You can also provide a pre-configured file directly to ``l8k generate`` without 
 
 Discovery also records host naming ownership. If ``netplanManaged: true``, generation refuses to emit a conflicting ``NicInterfaceNameTemplate``. If ``netplanManagementUnknown: true``, generation warns and continues. Review host netplan rules and repeat discovery to resolve uncertainty.
 
-For Spectrum-X RA2.4, discovery derives ``spectrumX.platformType`` and desired ``spectrumX.interfaceNames`` per group. VR NetworkBay discovery groups eight east-west NICs into four dual-NIC rails; preserve this physical grouping and verify it against switch cabling. See :doc:`../profiles/spectrum-x`.
+For Spectrum-X RA2.4 and RA3.1, discovery derives ``spectrumX.platformType`` and desired ``spectrumX.interfaceNames`` per group. VR NetworkBay discovery groups eight east-west NICs into four dual-NIC rails; preserve this physical grouping and verify it against switch cabling. See :doc:`../profiles/spectrum-x`.
 
 For the full configuration schema, see :doc:`Configuration Reference <../reference/config>`.
 

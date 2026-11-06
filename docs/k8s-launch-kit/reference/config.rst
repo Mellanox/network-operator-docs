@@ -314,7 +314,7 @@ Spectrum-X-specific settings.
    * - ``singlePlane`` / ``hwplb`` / ``swplb``
      - Mode-specific ``rdmaPrefix`` and ``netdevPrefix`` maps. Use ``%rail_id%`` and, where appropriate, ``%plane_id%``. VR HWPLB RDMA names additionally require ``%nic_id%``.
    * - ``ovsConfig``
-     - RA2.4 string map for OVS ``other_config`` overrides. Omitted keys retain operator defaults.
+     - RA2.4/RA3.1 string map for OVS ``other_config`` overrides. Omitted keys retain operator defaults.
 
 NIC type and PCI selectors are derived from each source group's east-west PF inventory; there is no ``spectrumX.nicType`` setting.
 
@@ -356,7 +356,7 @@ Profile selection (also overridable via CLI flags).
    * - ``spectrumX.enable``
      - Enable Spectrum-X profile selection. Set this with ``spcxVersion`` for a YAML-only selection.
    * - ``spectrumX.spcxVersion``
-     - Spectrum-X reference architecture; see :doc:`../profiles/spectrum-x` for the release matrix and RA2.4 contract.
+     - Spectrum-X reference architecture; see :doc:`../profiles/spectrum-x` for the release matrix and shared RA2.4/RA3.1 contract. Use RA3.1 for VR and RA2.4 for other platforms.
    * - ``spectrumX.multiplaneMode``
      - Multiplane mode: ``hwplb``, ``swplb``, ``none``.
    * - ``spectrumX.numberOfPlanes``
@@ -370,7 +370,7 @@ Profile selection (also overridable via CLI flags).
    * - ``spectrumX.hostFirstOctet``
      - First octet used for IPv4 host allocation. Config-only --- there is no CLI flag. Traditional layouts default to ``172`` for ``2-tier`` and ``10`` for ``3-tier``. VR defaults to ``240`` and requires ``240``–``255``. No effect when ``ipVersion`` is ``ipv6``.
    * - ``spectrumX.profile``
-     - Inline profile contents as a YAML string, not a filename. RA2.4 requires the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw ``data.profile``. ``--spectrum-x-config`` reads those contents from a file.
+     - Inline profile contents as a YAML string, not a filename. RA2.4 and RA3.1 require the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw ``data.profile``. ``--spectrum-x-config`` reads those contents from a file.
    * - ``spectrumX.configMapName``
      - Name for the generated profile ConfigMap. Required only when ``spectrumX.profile`` holds raw ``data.profile`` YAML. Equivalent to ``--spectrum-x-configmap-name``.
    * - ``spectrumX.ipv6SiteID``
@@ -411,7 +411,7 @@ Discovered node groups, populated by ``l8k discover``. Each entry describes one 
    * - ``spectrumX.platformType`` / ``spectrumX.interfaceNames``
      - Derived RA platform and desired mode-specific naming. Recomputed during discovery/resolution; not user platform overrides.
    * - ``spectrumX.swPlaneByRail``
-     - RA2.4 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.
+     - RA2.4/RA3.1 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.
    * - ``netplanManaged`` / ``netplanManagementUnknown``
      - Confirmed or uncertain host netplan naming ownership. A confirmed conflict blocks naming-template generation; uncertainty warns.
    * - ``pfs``

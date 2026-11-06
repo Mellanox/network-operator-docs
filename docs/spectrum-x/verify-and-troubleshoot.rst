@@ -126,9 +126,10 @@ breakdown:
 ``Succeeded``. When it is not ``Succeeded``, ``nodeStates[]`` identifies
 which nodes are affected and carries a ``message`` for each.
 
-Confirm the operator generated one ``OVSNetwork`` per rail, or per rail-plane
-in ``swplb``. Hardware
-Multiplane additionally creates an SR-IOV policy with an ``-unused`` suffix
+Confirm the operator generated one ``OVSNetwork`` per ``railTopology``
+entry. Traditional layouts have one entry per rail, or per rail-plane in
+``swplb``. VR HWPLB has eight entries for its four dual-NIC logical rails,
+one for each NIC endpoint. Hardware Multiplane additionally creates an SR-IOV policy with an ``-unused`` suffix
 for the remaining PFs:
 
 .. code-block:: bash
@@ -142,8 +143,9 @@ for the remaining PFs:
 Step 4: Check plane health (Hardware Multiplane)
 ================================================
 
-With ``hwplb`` the planes are hidden from the workload: a Pod sees one
-interface per rail whether every plane is healthy or only one is. A
+With ``hwplb`` the planes are hidden from the workload: each NIC endpoint
+presents one interface whether every plane is healthy or only one is. VR
+has two such endpoints per logical rail. A
 degraded plane is therefore **invisible from inside the Pod**. Inspect DOCA
 xPlane telemetry on each affected worker.
 
