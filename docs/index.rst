@@ -23,6 +23,7 @@
 
    Release Notes <release-notes.rst>
    Platform Support <platform-support.rst>
+   Partner-Validated Configurations <partner-validated/index>
    Getting Started with Kubernetes <getting-started-with-kubernetes.rst>
    Getting Started with Red Hat OpenShift <getting-started-with-openshift.rst>
    NVIDIA Network Operator Government Ready <install-network-operator-gov-ready.rst>
