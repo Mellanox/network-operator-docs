@@ -496,7 +496,7 @@
 <td><p>Mode-specific <code class="docutils literal notranslate"><span class="pre">rdmaPrefix</span></code> and <code class="docutils literal notranslate"><span class="pre">netdevPrefix</span></code> maps. Use <code class="docutils literal notranslate"><span class="pre">%rail_id%</span></code> and, where appropriate, <code class="docutils literal notranslate"><span class="pre">%plane_id%</span></code>. VR HWPLB RDMA names additionally require <code class="docutils literal notranslate"><span class="pre">%nic_id%</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ovsConfig</span></code></p></td>
-<td><p>RA2.4 string map for OVS <code class="docutils literal notranslate"><span class="pre">other_config</span></code> overrides. Omitted keys retain operator defaults.</p></td>
+<td><p>RA2.4/RA3.1 string map for OVS <code class="docutils literal notranslate"><span class="pre">other_config</span></code> overrides. Omitted keys retain operator defaults.</p></td>
 </tr>
 </tbody>
 </table>
@@ -554,7 +554,7 @@
 <td><p>Enable Spectrum-X profile selection. Set this with <code class="docutils literal notranslate"><span class="pre">spcxVersion</span></code> for a YAML-only selection.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.spcxVersion</span></code></p></td>
-<td><p>Spectrum-X reference architecture; see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a> for the release matrix and RA2.4 contract.</p></td>
+<td><p>Spectrum-X reference architecture; see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a> for the release matrix and shared RA2.4/RA3.1 contract. Use RA3.1 for VR and RA2.4 for other platforms.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.multiplaneMode</span></code></p></td>
 <td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p></td>
@@ -575,7 +575,7 @@
 <td><p>First octet used for IPv4 host allocation. Config-only — there is no CLI flag. Traditional layouts default to <code class="docutils literal notranslate"><span class="pre">172</span></code> for <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> for <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. VR defaults to <code class="docutils literal notranslate"><span class="pre">240</span></code> and requires <code class="docutils literal notranslate"><span class="pre">240</span></code>–<code class="docutils literal notranslate"><span class="pre">255</span></code>. No effect when <code class="docutils literal notranslate"><span class="pre">ipVersion</span></code> is <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code></p></td>
-<td><p>Inline profile contents as a YAML string, not a filename. RA2.4 requires the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>. <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code> reads those contents from a file.</p></td>
+<td><p>Inline profile contents as a YAML string, not a filename. RA2.4 and RA3.1 require the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>. <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code> reads those contents from a file.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.configMapName</span></code></p></td>
 <td><p>Name for the generated profile ConfigMap. Required only when <code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code> holds raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-configmap-name</span></code>.</p></td>
@@ -634,7 +634,7 @@
 <td><p>Derived RA platform and desired mode-specific naming. Recomputed during discovery/resolution; not user platform overrides.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.swPlaneByRail</span></code></p></td>
-<td><p>RA2.4 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.</p></td>
+<td><p>RA2.4/RA3.1 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">netplanManaged</span></code> / <code class="docutils literal notranslate"><span class="pre">netplanManagementUnknown</span></code></p></td>
 <td><p>Confirmed or uncertain host netplan naming ownership. A confirmed conflict blocks naming-template generation; uncertainty warns.</p></td>

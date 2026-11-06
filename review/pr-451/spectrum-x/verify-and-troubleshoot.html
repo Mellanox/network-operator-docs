@@ -234,9 +234,10 @@ kubectl -n nvidia-network-operator get spectrumxrailpoolconfig &lt;name&gt; <spa
 <p><code class="docutils literal notranslate"><span class="pre">syncStatus</span></code> is one of <code class="docutils literal notranslate"><span class="pre">Unknown</span></code>, <code class="docutils literal notranslate"><span class="pre">InProgress</span></code>, <code class="docutils literal notranslate"><span class="pre">Failed</span></code>, or
 <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>. When it is not <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeStates[]</span></code> identifies
 which nodes are affected and carries a <code class="docutils literal notranslate"><span class="pre">message</span></code> for each.</p>
-<p>Confirm the operator generated one <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code> per rail, or per rail-plane
-in <code class="docutils literal notranslate"><span class="pre">swplb</span></code>. Hardware
-Multiplane additionally creates an SR-IOV policy with an <code class="docutils literal notranslate"><span class="pre">-unused</span></code> suffix
+<p>Confirm the operator generated one <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code> per <code class="docutils literal notranslate"><span class="pre">railTopology</span></code>
+entry. Traditional layouts have one entry per rail, or per rail-plane in
+<code class="docutils literal notranslate"><span class="pre">swplb</span></code>. VR HWPLB has eight entries for its four dual-NIC logical rails,
+one for each NIC endpoint. Hardware Multiplane additionally creates an SR-IOV policy with an <code class="docutils literal notranslate"><span class="pre">-unused</span></code> suffix
 for the remaining PFs:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get ovsnetwork
 kubectl -n nvidia-network-operator get sriovnetworknodepolicy
@@ -245,8 +246,9 @@ kubectl -n nvidia-network-operator get sriovnetworknodepolicy
 </section>
 <section id="step-4-check-plane-health-hardware-multiplane">
 <span id="verify-plane-health"></span><h2>Step 4: Check plane health (Hardware Multiplane)<a class="headerlink" href="#step-4-check-plane-health-hardware-multiplane" title="Permalink to this headline"></a></h2>
-<p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> the planes are hidden from the workload: a Pod sees one
-interface per rail whether every plane is healthy or only one is. A
+<p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> the planes are hidden from the workload: each NIC endpoint
+presents one interface whether every plane is healthy or only one is. VR
+has two such endpoints per logical rail. A
 degraded plane is therefore <strong>invisible from inside the Pod</strong>. Inspect DOCA
 xPlane telemetry on each affected worker.</p>
 <p>The xPlane DaemonSet runs as <code class="docutils literal notranslate"><span class="pre">xplane-ds</span></code>:</p>

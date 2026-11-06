@@ -409,7 +409,7 @@ upstream resource).</p></td>
 <section id="railtopology">
 <span id="id6"></span><h3>RailTopology<a class="headerlink" href="#railtopology" title="Permalink to this headline"></a></h3>
 <p>(<em>Appears on:</em> <a class="reference internal" href="#spectrumxrailpoolconfigspec"><span class="std std-ref">SpectrumXRailPoolConfigSpec</span></a>)</p>
-<p>RailTopology describes a single rail in the Spectrum-X pool. Only one of <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code> or <code class="docutils literal notranslate"><span class="pre">ipam</span></code> may be specified.</p>
+<p>RailTopology describes a network endpoint group in the Spectrum-X pool. Traditional Hardware Multiplane layouts use one entry per logical rail. VR Hardware Multiplane uses two entries per logical rail, one for each NIC endpoint, for eight entries across four logical rails. Only one of <code class="docutils literal notranslate"><span class="pre">cidrPoolRef</span></code> or <code class="docutils literal notranslate"><span class="pre">ipam</span></code> may be specified.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 30%" />

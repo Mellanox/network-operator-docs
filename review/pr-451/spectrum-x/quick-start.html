@@ -154,7 +154,11 @@
 <p class="admonition-title">Note</p>
 <p>These walkthroughs use the <strong>RA2.4 configuration workflow</strong> on
 <strong>Network Operator</strong> v26.10.0-rc.7. They require the matching
-NIC Configuration Operator CRDs, including <code class="docutils literal notranslate"><span class="pre">platformType</span></code>.
+NIC Configuration Operator CRDs, including <code class="docutils literal notranslate"><span class="pre">platformType</span></code>. RA3.1 is
+released alongside RA2.4 for Vera Rubin (VR); these non-VR examples remain
+RA2.4. For VR, select <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code> and <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code> with the
+matching profile and dual-NIC rail layout described in
+<a class="reference internal" href="../k8s-launch-kit/profiles/spectrum-x.html"><span class="doc">Launch Kit Spectrum-X Profile</span></a>.
 For the RA-to-release mapping and other RAs, see
 <a class="reference internal" href="spectrum-x.html"><span class="doc">NVIDIA Spectrum-X</span></a>. For supported platforms (operating
 systems, Kubernetes distributions, NIC hardware), see
@@ -230,8 +234,8 @@ requests for every east-west rail in your platform.</p>
 <p>Select your mode below. The tabs on this page are linked — choosing here
 switches every mode-specific step that follows.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="c07c8186-57bb-43d3-98cd-655926c3c42c" name="220d4993-cc46-416b-9bec-4a3c8356eab5" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="c07c8186-57bb-43d3-98cd-655926c3c42c">
+<input checked="checked" id="9b3e15b4-ad5c-4353-a82d-ef0bf31782b4" name="8ea0e7dd-81fa-4235-a8db-d80630b53100" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="9b3e15b4-ad5c-4353-a82d-ef0bf31782b4">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>This walkthrough deploys a <strong>Single-Plane</strong> Spectrum-X cluster on Kubernetes:
 one PF per rail, one <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> per rail, one network per rail. Used on
@@ -244,8 +248,8 @@ configuration uses Spectrum-X RA 2.4 with <code class="docutils literal notransl
 <code class="docutils literal notranslate"><span class="pre">nicType</span></code> for other NICs. Replace <code class="docutils literal notranslate"><span class="pre">TODO_*</span></code> values with your
 cluster-specific values before applying.</p>
 </div>
-<input id="f7f6962f-3162-4794-ba0c-479853aea7d9" name="220d4993-cc46-416b-9bec-4a3c8356eab5" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="f7f6962f-3162-4794-ba0c-479853aea7d9">
+<input id="d30b4804-0420-4dc6-aa1e-fef77f300d20" name="8ea0e7dd-81fa-4235-a8db-d80630b53100" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="d30b4804-0420-4dc6-aa1e-fef77f300d20">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>This walkthrough deploys a <strong>Hardware Multiplane</strong> Spectrum-X cluster on
 Kubernetes using <strong>ConnectX-8 SuperNICs</strong> (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>). NIC LAG and
@@ -258,8 +262,8 @@ Spectrum-X RA 2.4 with <code class="docutils literal notranslate"><span class="p
 <code class="docutils literal notranslate"><span class="pre">numberOfPlanes:</span> <span class="pre">2</span></code>. Replace <code class="docutils literal notranslate"><span class="pre">TODO_*</span></code> values with your cluster-specific
 values before applying.</p>
 </div>
-<input id="9fe8a405-0277-4e15-af76-ce9702192994" name="220d4993-cc46-416b-9bec-4a3c8356eab5" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="9fe8a405-0277-4e15-af76-ce9702192994">
+<input id="91ffe0e3-4528-4beb-b6a3-ffaac3d16119" name="8ea0e7dd-81fa-4235-a8db-d80630b53100" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="91ffe0e3-4528-4beb-b6a3-ffaac3d16119">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>This walkthrough deploys a <strong>Software Multiplane</strong> Spectrum-X cluster on
 Kubernetes using <strong>ConnectX-8 SuperNICs</strong> (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>). Each SuperNIC
@@ -425,8 +429,8 @@ and Pod attachments and resource requests in Steps 7–9.</p>
 names pod RDMA devices <code class="docutils literal notranslate"><span class="pre">rdma_&lt;railTopology.name&gt;</span></code>, for example, <code class="docutils literal notranslate"><span class="pre">rdma_rail0</span></code>.
 The examples use the <code class="docutils literal notranslate"><span class="pre">roce_r</span></code> prefix for host PFs to avoid name collisions.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="ca800173-1efd-4929-aa8b-87cab3b8417d" name="41f6d457-8dc5-4aac-9f9f-c1bdeb792cab" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="ca800173-1efd-4929-aa8b-87cab3b8417d">
+<input checked="checked" id="07129bb2-4c79-4126-808b-e68459660cdb" name="3a23998c-7f2f-4137-8b5e-c45f17511835" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="07129bb2-4c79-4126-808b-e68459660cdb">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>Map PCI addresses to rails and define interface naming. With single-plane configuration there is one PF per NIC, so <code class="docutils literal notranslate"><span class="pre">pfsPerNic</span></code> is <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">%plane_id%</span></code> is always <code class="docutils literal notranslate"><span class="pre">0</span></code>. Replace <code class="docutils literal notranslate"><span class="pre">TODO_PCI_*</span></code> with the PCI addresses of the BlueField-3 SuperNICs on your nodes.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -447,8 +451,8 @@ Single-Plane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="5bff69f0-c527-44dd-a16e-9c441754343c" name="41f6d457-8dc5-4aac-9f9f-c1bdeb792cab" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="5bff69f0-c527-44dd-a16e-9c441754343c">
+<input id="85a29f85-a360-4be6-ac99-b2d29f3df9a2" name="3a23998c-7f2f-4137-8b5e-c45f17511835" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="85a29f85-a360-4be6-ac99-b2d29f3df9a2">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>Map PCI addresses to rail/plane indices and define interface naming. List one base PCI address per physical NIC; <code class="docutils literal notranslate"><span class="pre">pfsPerNic:</span> <span class="pre">2</span></code> generates names for its two PFs. Replace <code class="docutils literal notranslate"><span class="pre">TODO_PCI_*</span></code> with the PCI addresses of the Spectrum-X NICs on your nodes.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -469,8 +473,8 @@ Hardware Multiplane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="34ff6bcc-409f-420d-bc96-786d9bd9857d" name="41f6d457-8dc5-4aac-9f9f-c1bdeb792cab" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="34ff6bcc-409f-420d-bc96-786d9bd9857d">
+<input id="766b8ad0-4abb-4e15-9680-152ac2e721e0" name="3a23998c-7f2f-4137-8b5e-c45f17511835" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="766b8ad0-4abb-4e15-9680-152ac2e721e0">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>Map PCI addresses to rail/plane indices and define interface naming. List one base PCI address per physical NIC; <code class="docutils literal notranslate"><span class="pre">pfsPerNic:</span> <span class="pre">2</span></code> generates names for its two PFs. Replace <code class="docutils literal notranslate"><span class="pre">TODO_PCI_*</span></code> with the PCI addresses of the Spectrum-X NICs on your nodes.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -516,8 +520,8 @@ platform and the profile’s supported identifiers, rather than the NIC model.
 Use <a class="reference internal" href="spectrum-x-configuration.html#spectrum-x-platform-configuration"><span class="std std-ref">Platform configuration values</span></a> to select the platform type,
 NIC ID, multiplane mode, and plane count for your worker nodes.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="34637fff-81c1-45a2-869a-7f8c58e2e048" name="7884e1ae-1038-4990-89cc-4ed043d0fd57" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="34637fff-81c1-45a2-869a-7f8c58e2e048">
+<input checked="checked" id="e03c6786-779a-41ae-b653-f1cd298ac86d" name="48eecbf9-676c-4552-bcbb-4be48dc31898" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="e03c6786-779a-41ae-b653-f1cd298ac86d">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>Configure the NICs in single-plane mode. This example uses BlueField-3 SuperNIC on H100. For H200 or B200, change <code class="docutils literal notranslate"><span class="pre">platformType</span></code> to <code class="docutils literal notranslate"><span class="pre">h200</span></code> or <code class="docutils literal notranslate"><span class="pre">b200</span></code>. For ConnectX-7 NIC on GB200, use <code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">&quot;1021&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">gb200</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -556,8 +560,8 @@ Single-Plane</label><div class="sd-tab-content docutils">
 <p>List the east-west PFs explicitly in <code class="docutils literal notranslate"><span class="pre">nicSelector.pciAddresses</span></code>. On nodes that also carry a north-south DPU with the same device ID, selecting on <code class="docutils literal notranslate"><span class="pre">nicType</span></code> alone matches the north-south device as well and applies Spectrum-X configuration to the wrong NIC.</p>
 </div>
 </div>
-<input id="55d8be4a-21d8-402f-8fbd-183d9bb89a6c" name="7884e1ae-1038-4990-89cc-4ed043d0fd57" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="55d8be4a-21d8-402f-8fbd-183d9bb89a6c">
+<input id="1f02b39d-672a-4989-a4bb-00b4e473ee07" name="48eecbf9-676c-4552-bcbb-4be48dc31898" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="1f02b39d-672a-4989-a4bb-00b4e473ee07">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>Configure the ConnectX-8 SuperNICs with <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. This example uses GB300; for B300 use <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">b300</span></code>. <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> requires ConnectX-8 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>) or ConnectX-9 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>, tech preview); it is not supported on BlueField-3 SuperNIC or ConnectX-7 NIC. For Quad-Plane, set <code class="docutils literal notranslate"><span class="pre">numberOfPlanes:</span> <span class="pre">4</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -598,8 +602,8 @@ Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>List the east-west PFs explicitly in <code class="docutils literal notranslate"><span class="pre">nicSelector.pciAddresses</span></code>. On nodes that also carry a north-south DPU with the same device ID, selecting on <code class="docutils literal notranslate"><span class="pre">nicType</span></code> alone matches the north-south device as well and applies Spectrum-X configuration to the wrong NIC.</p>
 </div>
 </div>
-<input id="66769534-315c-40a8-86be-4e0767277638" name="7884e1ae-1038-4990-89cc-4ed043d0fd57" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="66769534-315c-40a8-86be-4e0767277638">
+<input id="f1e556b7-0515-4516-99e2-e24c48e8e59e" name="48eecbf9-676c-4552-bcbb-4be48dc31898" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="f1e556b7-0515-4516-99e2-e24c48e8e59e">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>Configure the ConnectX-8 SuperNICs with <code class="docutils literal notranslate"><span class="pre">swplb</span></code>. This example uses GB300; for B300 use <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">b300</span></code>. For Quad-Plane, set <code class="docutils literal notranslate"><span class="pre">numberOfPlanes:</span> <span class="pre">4</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configuration.net.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -650,8 +654,8 @@ Pods.</p>
 is reserved for the gateway and index 1 is available for the pod. Do not exclude
 index 1, which would leave no address for pod allocation.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="25767b8f-28f3-4c55-9497-8da5d4fbecbd" name="7939d1f8-fdce-4d64-a460-cdad87caa71d" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="25767b8f-28f3-4c55-9497-8da5d4fbecbd">
+<input checked="checked" id="2ab92e1f-6e28-456d-a332-0c7e427c3fc8" name="a98ff37a-78b8-40d4-a817-16f867108ee7" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="2ab92e1f-6e28-456d-a332-0c7e427c3fc8">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>In single-plane mode each rail is a single network, so one <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> per rail is sufficient. Replace <code class="docutils literal notranslate"><span class="pre">TODO_*</span></code> with subnets that match your cluster’s east-west topology.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -685,8 +689,8 @@ Single-Plane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="16218eee-b0fd-4803-83b4-c2b14512ad22" name="7939d1f8-fdce-4d64-a460-cdad87caa71d" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="16218eee-b0fd-4803-83b4-c2b14512ad22">
+<input id="41bb8e05-6134-4531-b55c-a77dab161b15" name="a98ff37a-78b8-40d4-a817-16f867108ee7" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="41bb8e05-6134-4531-b55c-a77dab161b15">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, load balancing happens at the NIC layer, so each rail uses a single <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> covering all of its planes. Replace <code class="docutils literal notranslate"><span class="pre">TODO_*</span></code> with subnets that match your cluster’s east-west topology.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -720,8 +724,8 @@ Hardware Multiplane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="480e81d6-5a70-4bf4-bf89-ad880c59c822" name="7939d1f8-fdce-4d64-a460-cdad87caa71d" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="480e81d6-5a70-4bf4-bf89-ad880c59c822">
+<input id="0c026079-152c-4cdc-87bf-3429c88f1672" name="a98ff37a-78b8-40d4-a817-16f867108ee7" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="0c026079-152c-4cdc-87bf-3429c88f1672">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>With <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, each rail is split into multiple planes, and each plane requires its own <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>. Create one pool per (rail, plane) combination. Replace <code class="docutils literal notranslate"><span class="pre">TODO_*</span></code> with subnets that match your cluster’s east-west topology.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nv-ipam.nvidia.com/v1alpha1</span><span class="w"></span>
@@ -788,8 +792,8 @@ Software Multiplane</label><div class="sd-tab-content docutils">
 <p>Create the <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code> that describes the rail topology and
 exposes each rail as a schedulable resource.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="780a98e7-a6d1-4313-b31d-a2278f65e900" name="3076a9af-97f0-4d4d-8605-817265109316" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="780a98e7-a6d1-4313-b31d-a2278f65e900">
+<input checked="checked" id="170528fc-94c0-49e3-ba97-10dca81d8ce6" name="9c32b48b-f4ff-45c2-94dd-ec539ebcb07a" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="170528fc-94c0-49e3-ba97-10dca81d8ce6">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>One entry in <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> per rail, selecting the single PF in that rail (matching <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code>) and referencing the matching <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrumx.nvidia.com/v1alpha2</span><span class="w"></span>
@@ -818,8 +822,8 @@ Single-Plane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="adbdcdc7-a417-4386-b31f-eea9823dc4fe" name="3076a9af-97f0-4d4d-8605-817265109316" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="adbdcdc7-a417-4386-b31f-eea9823dc4fe">
+<input id="4bf40c21-2f00-48e6-ba92-c57d7da7aa98" name="9c32b48b-f4ff-45c2-94dd-ec539ebcb07a" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="4bf40c21-2f00-48e6-ba92-c57d7da7aa98">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> has one entry per rail. Each entry lists all per-plane PF netdev names belonging to that rail and references a single per-rail <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrumx.nvidia.com/v1alpha2</span><span class="w"></span>
@@ -848,8 +852,8 @@ Hardware Multiplane</label><div class="sd-tab-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="07a2e2b5-bc10-414f-b3c7-c6ad2e665c9e" name="3076a9af-97f0-4d4d-8605-817265109316" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="07a2e2b5-bc10-414f-b3c7-c6ad2e665c9e">
+<input id="d649ad3f-d946-4c2e-9b9c-614fb6f6957e" name="9c32b48b-f4ff-45c2-94dd-ec539ebcb07a" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="d649ad3f-d946-4c2e-9b9c-614fb6f6957e">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>With <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> has one entry per (rail, plane) combination. Each entry selects a single PF (netdev name from <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code>) and references the matching per-plane <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spectrumx.nvidia.com/v1alpha2</span><span class="w"></span>
@@ -893,8 +897,8 @@ Software Multiplane</label><div class="sd-tab-content docutils">
 <section id="step-9-deploy-a-test-pod">
 <h2>Step 9: Deploy a Test Pod<a class="headerlink" href="#step-9-deploy-a-test-pod" title="Permalink to this headline"></a></h2>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="726b70f4-4216-463c-8b55-5f0bd3255923" name="30f45e6d-744e-415e-9c18-17cac9909676" type="radio">
-</input><label class="sd-tab-label" data-sync-id="single-plane" for="726b70f4-4216-463c-8b55-5f0bd3255923">
+<input checked="checked" id="a93e72be-1775-4a8d-8ac1-08d83ca55089" name="7160eb5c-67e3-41ee-bcd8-5c34260c9b4b" type="radio">
+</input><label class="sd-tab-label" data-sync-id="single-plane" for="a93e72be-1775-4a8d-8ac1-08d83ca55089">
 Single-Plane</label><div class="sd-tab-content docutils">
 <p>Request one VF per rail. The network annotation references the rails created by <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
@@ -926,8 +930,8 @@ kubectl -n default <span class="nb">exec</span> -it spectrum-x-test -- rdma link
 </pre></div>
 </div>
 </div>
-<input id="2f7b653f-85a7-43b6-a159-e092e230d761" name="30f45e6d-744e-415e-9c18-17cac9909676" type="radio">
-</input><label class="sd-tab-label" data-sync-id="hwplb" for="2f7b653f-85a7-43b6-a159-e092e230d761">
+<input id="fcce96be-bbdb-434e-8c92-18f970fa9673" name="7160eb5c-67e3-41ee-bcd8-5c34260c9b4b" type="radio">
+</input><label class="sd-tab-label" data-sync-id="hwplb" for="fcce96be-bbdb-434e-8c92-18f970fa9673">
 Hardware Multiplane</label><div class="sd-tab-content docutils">
 <p>Request one VF per rail. The network annotation references the rails created by <code class="docutils literal notranslate"><span class="pre">SpectrumXRailPoolConfig</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
@@ -959,8 +963,8 @@ kubectl -n default <span class="nb">exec</span> -it spectrum-x-test -- rdma link
 </pre></div>
 </div>
 </div>
-<input id="770da3b6-c86f-44b0-88fb-da018fc1a097" name="30f45e6d-744e-415e-9c18-17cac9909676" type="radio">
-</input><label class="sd-tab-label" data-sync-id="swplb" for="770da3b6-c86f-44b0-88fb-da018fc1a097">
+<input id="1822bef8-2da8-4876-84e7-dfe058bb16f0" name="7160eb5c-67e3-41ee-bcd8-5c34260c9b4b" type="radio">
+</input><label class="sd-tab-label" data-sync-id="swplb" for="1822bef8-2da8-4876-84e7-dfe058bb16f0">
 Software Multiplane</label><div class="sd-tab-content docutils">
 <p>Request one VF per (rail, plane) combination. The network annotation lists each rail-plane and the resource request matches the SR-IOV device-plugin resource the Spectrum-X Operator creates for each rail-plane.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>

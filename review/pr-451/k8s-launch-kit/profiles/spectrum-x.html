@@ -77,7 +77,7 @@
 <li class="toctree-l4"><a class="reference internal" href="macvlan-rdma-shared.html">MacVLAN (RDMA Shared)</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Spectrum-X</a><ul>
 <li class="toctree-l5"><a class="reference internal" href="#use-case">Use Case</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#ra2-4-profile-configmap">RA2.4: Profile ConfigMap</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ra2-4-and-ra3-1-profile-configmap">RA2.4 and RA3.1: Profile ConfigMap</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#the-ra2-3-profile-configmap">The RA2.3 Profile ConfigMap</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#multiplane-modes">Multiplane Modes</a><ul>
 <li class="toctree-l6"><a class="reference internal" href="#hwplb">HWPLB</a></li>
@@ -157,7 +157,7 @@
 <p class="topic-title">On this page</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#use-case" id="id1">Use Case</a></p></li>
-<li><p><a class="reference internal" href="#ra2-4-profile-configmap" id="id2">RA2.4: Profile ConfigMap</a></p></li>
+<li><p><a class="reference internal" href="#ra2-4-and-ra3-1-profile-configmap" id="id2">RA2.4 and RA3.1: Profile ConfigMap</a></p></li>
 <li><p><a class="reference internal" href="#the-ra2-3-profile-configmap" id="id3">The RA2.3 Profile ConfigMap</a></p></li>
 <li><p><a class="reference internal" href="#multiplane-modes" id="id4">Multiplane Modes</a></p>
 <ul>
@@ -181,7 +181,7 @@
 <section id="use-case">
 <h2>Use Case<a class="headerlink" href="#use-case" title="Permalink to this headline"></a></h2>
 <p>NVIDIA Spectrum-X multi-rail AI interconnect for Ethernet fabrics. Combines SR-IOV with multiplane load balancing to scale GPU-to-GPU bandwidth across switch tiers.</p>
-<p>The RA version is the value of <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. Select the profile that matches the Network Operator release and its NIC configuration data format:</p>
+<p>The RA version is the value of <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code>. RA3.1 for Vera Rubin (VR) is released alongside RA2.4 for all other platforms. Both use Network Operator 26.10 or a newer catalogued release and the doSPCX bundle format. Select the architecture for the platform, then its matching release and profile data:</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 14%" />
@@ -200,12 +200,12 @@
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.4</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">26.10</span></code> and newer catalogued releases</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x-ra2.4</span></code></p></td>
-<td><p>Profile ConfigMap and per-group <code class="docutils literal notranslate"><span class="pre">platformType</span></code>. Requires matching NIC Configuration Operator CRDs.</p></td>
+<td><p>All platforms other than VR. doSPCX ConfigMap and per-group <code class="docutils literal notranslate"><span class="pre">platformType</span></code>; requires matching NIC Configuration Operator CRDs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RA3.1</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">26.10</span></code> and newer catalogued releases</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">spectrum-x-ra3.1</span></code></p></td>
-<td><p>Accepted by the CLI using the same doSPCX contract; this guide targets RA2.4.</p></td>
+<td><p>Vera Rubin (VR). Same doSPCX contract; selects <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code> and <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RA2.3</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">26.7</span></code></p></td>
@@ -227,11 +227,11 @@
 <p>If the release and RA version are mismatched, Launch Kit reports an error. Pass the release explicitly when using a saved configuration that selects another release. RA2.3 output cannot be deployed unchanged with the 26.10 configuration API.</p>
 <p>For deeper Spectrum-X background, see <a class="reference internal" href="../../spectrum-x/spectrum-x-configuration.html"><span class="doc">Spectrum-X Configuration</span></a>.</p>
 </section>
-<section id="ra2-4-profile-configmap">
-<h2>RA2.4: Profile ConfigMap<a class="headerlink" href="#ra2-4-profile-configmap" title="Permalink to this headline"></a></h2>
+<section id="ra2-4-and-ra3-1-profile-configmap">
+<h2>RA2.4 and RA3.1: Profile ConfigMap<a class="headerlink" href="#ra2-4-and-ra3-1-profile-configmap" title="Permalink to this headline"></a></h2>
 <p>Use the full published ConfigMap with <code class="docutils literal notranslate"><span class="pre">data.format:</span> <span class="pre">dospcx-data.tar.gz/v1</span></code>
 and <code class="docutils literal notranslate"><span class="pre">binaryData.dospcx-data.tar.gz</span></code>. Raw legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML is
-not accepted for RA2.4. Launch Kit preserves the ConfigMap contents and source
+not accepted for either RA2.4 or RA3.1. Launch Kit preserves the ConfigMap contents and source
 annotations, supplies the Network Operator namespace and discovery label,
 and renders it once for the selected groups.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml --spectrum-x RA2.4 <span class="se">\</span>
@@ -243,11 +243,20 @@ and renders it once for the selected groups.</p>
 </pre></div>
 </div>
 <p>The topology file may use reference-generator or supported NVIDIA AIR JSON. Every selected <code class="docutils literal notranslate"><span class="pre">workerNodes</span></code> name must match a host endpoint exactly, including case and FQDN form, and every required rail/plane link must be represented. Keep the topology and profile with the saved source configuration. If a saved configuration explicitly has <code class="docutils literal notranslate"><span class="pre">multirail:</span> <span class="pre">false</span></code>, select <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> when enabling Spectrum-X.</p>
-<p>The NIC template receives <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA2.4</span></code>, independently of the
+<p>For VR, use the following RA3.1 invocation with a discovered VR inventory, a matching profile, and a complete eight-plane topology:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config-vr.yaml --spectrum-x RA3.1 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.10 --multirail <span class="se">\</span>
+    --spectrum-x-config ./spectrum-x-ra31-configmap.yaml <span class="se">\</span>
+    --topology-scheme <span class="m">2</span>-tier --topology-file ./topology-vr.json <span class="se">\</span>
+    --multiplane-mode hwplb --number-of-planes <span class="m">8</span> <span class="se">\</span>
+    --save-deployment-files ./deployment-ra31 --output json
+</pre></div>
+</div>
+<p>The NIC template receives the selected <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA2.4</span></code> or <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code>, independently of the
 ConfigMap name. Launch Kit derives each group’s <code class="docutils literal notranslate"><span class="pre">platformType</span></code> from
 <code class="docutils literal notranslate"><span class="pre">clusterConfig[].gpuType</span></code> (a <code class="docutils literal notranslate"><span class="pre">machineType</span></code> containing <code class="docutils literal notranslate"><span class="pre">VR</span></code> takes precedence) using the platform identifiers <code class="docutils literal notranslate"><span class="pre">h100</span></code>,
 <code class="docutils literal notranslate"><span class="pre">h200</span></code>, <code class="docutils literal notranslate"><span class="pre">b200</span></code>, <code class="docutils literal notranslate"><span class="pre">gb200</span></code>, <code class="docutils literal notranslate"><span class="pre">b300</span></code>, <code class="docutils literal notranslate"><span class="pre">gb300</span></code>, <code class="docutils literal notranslate"><span class="pre">rtx</span></code>, and <code class="docutils literal notranslate"><span class="pre">vr</span></code>.
-Unknown or ambiguous GPU platforms prevent RA2.4 generation. The supplied
+Unknown or ambiguous GPU platforms prevent RA2.4/RA3.1 generation. The supplied
 profile must support the selected platform and hardware layout. Platform recognition and successful rendering do not establish RA hardware qualification.</p>
 <p>For the platform-to-<code class="docutils literal notranslate"><span class="pre">platformType</span></code> mapping, NIC IDs, plane counts, and
 PF/VF totals, see <a class="reference internal" href="../../spectrum-x/spectrum-x-configuration.html#spectrum-x-platform-configuration"><span class="std std-ref">Platform configuration values</span></a>.</p>
@@ -279,7 +288,7 @@ that the installed APIs are compatible.</p>
 <code class="docutils literal notranslate"><span class="pre">spec.ovsConfig</span></code>. Per-group <code class="docutils literal notranslate"><span class="pre">spectrumX.swPlaneByRail</span></code> maps existing
 east-west rail IDs to <code class="docutils literal notranslate"><span class="pre">swPlane</span></code> offsets; omitted assignments mean zero.
 Nonzero offsets require <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. See <a class="reference internal" href="../../spectrum-x/components.html"><span class="doc">Architecture and Components</span></a> for their OVS meaning.</p>
-<p>RA2.4 generation requires dense zero-based rail IDs and a uniform physical
+<p>RA2.4 and RA3.1 generation require dense zero-based rail IDs and a uniform physical
 NIC count per rail that divides the plane count. PFs of one physical NIC
 must remain on one rail. Groups merged into a rail pool must agree on
 layout and effective switch-plane assignments. Current generation permits
@@ -288,12 +297,12 @@ source selected with <code class="docutils literal notranslate"><span class="pre
 <p>Review the generated profile ConfigMap, selectors, addresses, and templates, then use
 <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--deployment-files</span> <span class="pre">./deployment-ra24</span> <span class="pre">--dry-run</span></code> before
 deployment and <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--deployment-files</span> <span class="pre">./deployment-ra24</span> <span class="pre">--wait</span> <span class="pre">10m</span></code>
-after deployment. Discovery refresh can drop switch-plane assignments when
+after deployment. For the VR invocation above, use <code class="docutils literal notranslate"><span class="pre">./deployment-ra31</span></code> for both commands. Discovery refresh can drop switch-plane assignments when
 worker membership or hardware changes; review them before regenerating.</p>
 </section>
 <section id="the-ra2-3-profile-configmap">
 <h2>The RA2.3 Profile ConfigMap<a class="headerlink" href="#the-ra2-3-profile-configmap" title="Permalink to this headline"></a></h2>
-<p>For Network Operator 26.7.x, RA2.3 uses a legacy profile ConfigMap. The following examples are for that release line, not the RA2.4 configuration workflow. Pass its contents with <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>:</p>
+<p>For Network Operator 26.7.x, RA2.3 uses a legacy profile ConfigMap. The following examples are for that release line, not the RA2.4/RA3.1 configuration workflow. Pass its contents with <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --spectrum-x RA2.3 <span class="se">\</span>
     --network-operator-release <span class="m">26</span>.7 <span class="se">\</span>
     --spectrum-x-config ./spectrum-x-profile.yaml <span class="se">\</span>
@@ -308,7 +317,7 @@ worker membership or hardware changes; review them before regenerating.</p>
 <section id="multiplane-modes">
 <h2>Multiplane Modes<a class="headerlink" href="#multiplane-modes" title="Permalink to this headline"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code> flag selects how planes are mapped onto NICs. <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> implies ethernet fabric, sriov deployment, and multirail.</p>
-<p>When omitted, mode and plane count are derived from east-west NICs and the GPU platform. ConnectX-7 and BlueField-3 default to <code class="docutils literal notranslate"><span class="pre">none</span></code> with one plane. ConnectX-8 uses <code class="docutils literal notranslate"><span class="pre">none</span></code> with one plane for H100/H200/B200/GB200/RTX, and <code class="docutils literal notranslate"><span class="pre">swplb</span></code> with two planes for B300/GB300 or an unrecognised platform. ConnectX-9 falls back to <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> with four planes; VR HWPLB with RA2.4 defaults to eight. Explicit configuration and flags override defaults. Select the mode and count required by the validated fabric and profile; generator defaults do not qualify a platform.</p>
+<p>When omitted, mode and plane count are derived from east-west NICs and the GPU platform. ConnectX-7 and BlueField-3 default to <code class="docutils literal notranslate"><span class="pre">none</span></code> with one plane. ConnectX-8 uses <code class="docutils literal notranslate"><span class="pre">none</span></code> with one plane for H100/H200/B200/GB200/RTX, and <code class="docutils literal notranslate"><span class="pre">swplb</span></code> with two planes for B300/GB300 or an unrecognised platform. ConnectX-9 falls back to <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> with four planes; VR HWPLB with RA3.1 defaults to eight. Explicit configuration and flags override defaults. Select the mode and count required by the validated fabric and profile; generator defaults do not qualify a platform.</p>
 <section id="hwplb">
 <h3>HWPLB<a class="headerlink" href="#hwplb" title="Permalink to this headline"></a></h3>
 <p>Hardware Plane Load Balancing for larger-scale clusters with 2-tier or 3-tier switch topologies. Requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC:</p>
@@ -421,9 +430,9 @@ SuperNIC. Passing a mode outside this column generates manifests the cluster
 will refuse.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Accepted generation modes and NIC IDs are software capabilities. Use the RA2.4 platform matrix and a validated doSPCX bundle for the exact hardware; do not infer support or performance qualification from successful generation. In particular, VR eight-plane generation requires four dual-NIC rails, complete topology coordinates, and matching operator/profile support. It is not a claim that VR is qualified by RA2.4.</p>
+<p>Accepted generation modes and NIC IDs are software capabilities. Select RA3.1 for VR or RA2.4 for other platforms, and use a validated doSPCX bundle for the exact hardware; do not infer support or performance qualification from successful generation. In particular, VR eight-plane generation requires four dual-NIC rails, complete topology coordinates, and matching operator/profile support. The VR workflow uses RA3.1; selecting the architecture does not establish qualification of every software and firmware combination.</p>
 </div>
-<p>RA2.4 templates select both NIC type and the source group’s east-west PCI addresses. Check that these selectors exclude north-south interfaces. Each source gets its own NIC template even when rail resources are merged.</p>
+<p>RA2.4 and RA3.1 templates select both NIC type and the source group’s east-west PCI addresses. Check that these selectors exclude north-south interfaces. Each source gets its own NIC template even when rail resources are merged.</p>
 <p>Desired interface prefixes are configured under <code class="docutils literal notranslate"><span class="pre">spectrumX.singlePlane</span></code>, <code class="docutils literal notranslate"><span class="pre">spectrumX.hwplb</span></code>, and <code class="docutils literal notranslate"><span class="pre">spectrumX.swplb</span></code> and saved per group in <code class="docutils literal notranslate"><span class="pre">spectrumX.interfaceNames</span></code>. Standard HWPLB uses <code class="docutils literal notranslate"><span class="pre">eth_r%rail_id%_p%plane_id%</span></code> and <code class="docutils literal notranslate"><span class="pre">roce_r%rail_id%</span></code>. VR HWPLB uses <code class="docutils literal notranslate"><span class="pre">roce_r%rail_id%_n%nic_id%</span></code> and emits separate endpoints and pools for both NICs on each rail. Its eight-plane topology must describe all physical PF links and explicit reference-generator host indices. Review endpoint names and addresses against actual cabling before deployment.</p>
 </section>
 <section id="dra-based-workload-allocation">
@@ -439,7 +448,7 @@ will refuse.</p>
 <span class="w">    </span><span class="nt">useDRA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
 </pre></div>
 </div>
-<p>The key is honoured by RA2.2, RA2.3, and RA2.4 profiles. On <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> it is accepted but has no effect — that profile carries no DRA templates, and Launch Kit does not report an error.</p>
+<p>The key is honoured by RA2.2, RA2.3, RA2.4, and RA3.1 profiles. On <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> it is accepted but has no effect — that profile carries no DRA templates, and Launch Kit does not report an error.</p>
 <section id="what-changes-in-the-generated-manifests">
 <h3>What changes in the generated manifests<a class="headerlink" href="#what-changes-in-the-generated-manifests" title="Permalink to this headline"></a></h3>
 <table class="colwidths-given docutils align-default">
@@ -467,7 +476,7 @@ will refuse.</p>
 </tr>
 </tbody>
 </table>
-<p>Each claim template requests a GPU from <code class="docutils literal notranslate"><span class="pre">gpu.nvidia.com</span></code> and VF resources from <code class="docutils literal notranslate"><span class="pre">sriovnetwork.k8snetworkplumbingwg.io</span></code> selected by the rail endpoint’s resource name. RA2.4 VR uses one claim per logical rail with a VF request for each of its two NIC endpoints.</p>
+<p>Each claim template requests a GPU from <code class="docutils literal notranslate"><span class="pre">gpu.nvidia.com</span></code> and VF resources from <code class="docutils literal notranslate"><span class="pre">sriovnetwork.k8snetworkplumbingwg.io</span></code> selected by the rail endpoint’s resource name. RA3.1 VR uses one claim per logical rail with a VF request for each of its two NIC endpoints.</p>
 </section>
 <section id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>

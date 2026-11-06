@@ -161,7 +161,8 @@
     IBDT --&gt;|host_device| HDI([Host Device])
     IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
-    SPCXRA --&gt;|RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|Non-VR: RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|VR: RA3.1&lt;br/&gt;Network Operator 26.10| SX31([Spectrum-X RA3.1])
     SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
     SPCXRA --&gt;|RA2.3&lt;br/&gt;Network Operator 26.7| SX3([Spectrum-X RA2.3])
     SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
@@ -169,6 +170,7 @@
     SX1 --&gt; MPM
     SX2 --&gt; MPM
     SX4 --&gt; MPM
+    SX31 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
     classDef params fill:#fff3cd,stroke:#ffc107,color:#000
@@ -188,7 +190,8 @@
     IBDT --&gt;|host_device| HDI([Host Device])
     IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
-    SPCXRA --&gt;|RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|Non-VR: RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|VR: RA3.1&lt;br/&gt;Network Operator 26.10| SX31([Spectrum-X RA3.1])
     SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
     SPCXRA --&gt;|RA2.3&lt;br/&gt;Network Operator 26.7| SX3([Spectrum-X RA2.3])
     SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
@@ -196,6 +199,7 @@
     SX1 --&gt; MPM
     SX2 --&gt; MPM
     SX4 --&gt; MPM
+    SX31 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
     classDef params fill:#fff3cd,stroke:#ffc107,color:#000
@@ -245,9 +249,9 @@
 <td><p>MacVLAN, multi-tenant, network-segmentation</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="spectrum-x.html"><span class="doc">Spectrum-X</span></a></p></td>
-<td><p>NVIDIA Spectrum-X multi-rail AI interconnect (RA2.4 on Network Operator 26.10; see the Spectrum-X version matrix for older RAs). Single-plane, SWPLB, or HWPLB.</p></td>
+<td><p>NVIDIA Spectrum-X multi-rail AI interconnect (RA3.1 for VR and RA2.4 for other platforms, released together and both integrated with Network Operator 26.10; see the version matrix for older RAs). Single-plane, SWPLB, or HWPLB.</p></td>
 <td><p>ethernet / sriov / spectrum-x</p></td>
-<td><p>Spectrum-X, multiplane, RA2.4, HWPLB</p></td>
+<td><p>Spectrum-X, multiplane, RA2.4, RA3.1, HWPLB</p></td>
 </tr>
 </tbody>
 </table>

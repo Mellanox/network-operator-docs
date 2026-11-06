@@ -497,7 +497,7 @@ rail / plane).</p></td>
 <td><p>Plugs SR-IOV VFs into the rail’s OVS bridge and chains with NV-IPAM
 for address allocation. The bridge itself is created by an operator
 — per-PF by the SR-IOV Network Operator for <code class="docutils literal notranslate"><span class="pre">swplb</span></code> / <code class="docutils literal notranslate"><span class="pre">none</span></code>,
-or a per-rail bridge connected to <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> by the
+or a bridge for each <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> entry connected to <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> by the
 Spectrum-X Operator for <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — on top
 of the <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">OVS-DOCA</span></a> switch from the Host
 Layer. Shipped under the SR-IOV Network Operator sub-chart.</p></td>
@@ -539,8 +539,9 @@ OVS-DOCA: consumes route-availability updates from the Spectrum-X
 fabric, programs the OpenFlow rules that divert traffic away from a
 failed plane, and exposes gRPC telemetry. Deployed by the
 Spectrum-X Operator; its image tag follows the <strong>DOCA</strong> release,
-not the Network Operator version. Currently requires ConnectX-8
-SuperNIC with firmware 40.48.1000 or later. See
+not the Network Operator version. For the ConnectX-8 RA2.4
+walkthrough, use firmware 40.48.1000 or later. VR requires the
+xPlane/DOCA and firmware versions matched to the RA3.1 solution stack. See
 <a class="reference internal" href="#when-xplane-is-deployed"><span class="std std-ref">When DOCA xPlane is deployed</span></a>.</p></td>
 <td><p>With Spectrum-X Op.</p></td>
 <td><p><strong>Required for Hardware Multiplane.</strong></p></td>
@@ -618,7 +619,7 @@ generates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">esw_multiport=true</span></code></p></td>
 <td><p>devlink parameter putting the PF e-switch into multiport mode, so a
-single e-switch spans the rail’s planes.</p></td>
+single e-switch spans the NIC’s planes.</p></td>
 <td><p>Hardware Multiplane only.</p></td>
 </tr>
 <tr class="row-even"><td><p>eSwitch mode <code class="docutils literal notranslate"><span class="pre">switchdev</span></code></p></td>
@@ -630,7 +631,9 @@ single e-switch spans the rail’s planes.</p></td>
 Network Operator (<code class="docutils literal notranslate"><span class="pre">GroupingPolicy:</span> <span class="pre">perPF</span></code>, datapath <code class="docutils literal notranslate"><span class="pre">netdev</span></code>,
 uplink type <code class="docutils literal notranslate"><span class="pre">doca</span></code>) — this is what the <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code>
 feature gate enables. For <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, the Spectrum-X Operator creates
-a per-rail bridge connected by patch ports to the shared <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> bridge.</p></td>
+a bridge for each <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> entry connected by patch ports to the
+shared <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> bridge. VR has two entries per logical rail, one
+for each NIC endpoint.</p></td>
 <td><p>Every Spectrum-X rail.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>RDMA QoS meta-plugin</strong></p></td>

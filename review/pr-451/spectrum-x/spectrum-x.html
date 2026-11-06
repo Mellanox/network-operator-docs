@@ -136,7 +136,7 @@ software components, and version-specific notes — refer to the
 </div>
 <p>NVIDIA Spectrum-X is an AI-optimized Ethernet networking platform that combines
 NVIDIA Spectrum switches with the BlueField-3 SuperNIC, ConnectX-7 NIC, and
-ConnectX-8 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
+ConnectX-8 and ConnectX-9 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
 GPU-to-GPU compute (east-west) network. NVIDIA Network Operator provides the
 Kubernetes side: discovering the NICs, configuring rails, and exposing them
 to pods as schedulable resources.</p>
@@ -152,14 +152,14 @@ single-plane networks. Network Operator exposes it through the
 variants alongside the single-plane mode (<code class="docutils literal notranslate"><span class="pre">none</span></code>). On multiplane platforms,
 Hardware Multiplane is recommended for new multiplane deployments; select
 Software Multiplane when the deployment requires a separate workload
-interface for each plane. Match the mode to the supplied RA2.4 profile and
+interface for each plane. Match the mode to the supplied RA2.4 or RA3.1 profile and
 switch fabric configuration.</p>
 <p><strong>Hardware Multiplane requires DOCA xPlane</strong> to manage plane failover inside
 OVS-DOCA. Software Multiplane and single-plane deployments do not use
 DOCA xPlane. See
 <a class="reference internal" href="components.html"><span class="doc">Architecture and Components</span></a>.</p>
 <p>Spectrum-X Kubernetes deployments fall
-into three network architectures, distinguished by the number of planes per
+into the following network architectures, distinguished by the number of planes per
 rail and the load-balancing mechanism. The table describes configuration
 layouts; use the release-specific qualification guidance below when
 selecting a platform:</p>
@@ -201,6 +201,11 @@ selecting a platform:</p>
 </div>
 </td>
 </tr>
+<tr class="row-odd"><td><p>Eight-Plane</p></td>
+<td><p>ConnectX-9 SuperNIC</p></td>
+<td><p>Vera Rubin (VR)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (8 planes, RA3.1)</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonition note">
@@ -213,8 +218,10 @@ NIC (GB200).</p>
 </section>
 <section id="supported-reference-architectures">
 <h2>Supported Reference Architectures<a class="headerlink" href="#supported-reference-architectures" title="Permalink to this headline"></a></h2>
-<p>This section documents the <strong>RA2.4 configuration workflow</strong> for Network
-Operator 26.10. Use the matching doSPCX profile ConfigMap and CRDs. The
+<p>Spectrum-X <strong>RA3.1 for Vera Rubin (VR)</strong> and <strong>RA2.4 for all other
+platforms</strong> are released together. Network Operator 26.10 integrates both
+through the same configuration workflow with a matching doSPCX profile
+ConfigMap and CRDs. Select the architecture for the target platform. The
 release mapping below distinguishes this workflow from earlier releases;
 see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a> for qualification
 requirements and validation of earlier releases.</p>
@@ -233,17 +240,21 @@ requirements and validation of earlier releases.</p>
 <tbody>
 <tr class="row-even"><td><p>Spectrum-X RA 2.4</p></td>
 <td><p>26.10.x</p></td>
-<td><p>doSPCX data-bundle ConfigMap; architecture version and platform type</p></td>
+<td><p>All platforms other than VR; doSPCX data-bundle ConfigMap</p></td>
 </tr>
-<tr class="row-odd"><td><p>Spectrum-X RA 2.3</p></td>
+<tr class="row-odd"><td><p>Spectrum-X RA 3.1</p></td>
+<td><p>26.10.x</p></td>
+<td><p>Vera Rubin (VR); same doSPCX contract with <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code> and <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Spectrum-X RA 2.3</p></td>
 <td><p>26.7.x</p></td>
 <td><p>Legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> ConfigMap; version selects the ConfigMap</p></td>
 </tr>
-<tr class="row-even"><td><p>Spectrum-X RA 2.1</p></td>
+<tr class="row-odd"><td><p>Spectrum-X RA 2.1</p></td>
 <td><p>26.4.x</p></td>
 <td><p>Earlier reference-architecture workflow</p></td>
 </tr>
-<tr class="row-odd"><td><p>Spectrum-X RA 2.1</p></td>
+<tr class="row-even"><td><p>Spectrum-X RA 2.1</p></td>
 <td><p>26.1.x</p></td>
 <td><p>Earlier reference-architecture workflow</p></td>
 </tr>
