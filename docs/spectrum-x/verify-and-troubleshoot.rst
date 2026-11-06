@@ -126,8 +126,10 @@ breakdown:
 ``Succeeded``. When it is not ``Succeeded``, ``nodeStates[]`` identifies
 which nodes are affected and carries a ``message`` for each.
 
-Confirm the operator generated the downstream resources — one per rail, or
-one per rail-plane in ``swplb``:
+Confirm the operator generated one ``OVSNetwork`` per rail, or per rail-plane
+in ``swplb``. Hardware
+Multiplane additionally creates an SR-IOV policy with an ``-unused`` suffix
+for the remaining PFs:
 
 .. code-block:: bash
 
@@ -142,24 +144,26 @@ Step 4: Check plane health (Hardware Multiplane)
 
 With ``hwplb`` the planes are hidden from the workload: a Pod sees one
 interface per rail whether every plane is healthy or only one is. A
-degraded plane is therefore **invisible from inside the Pod**, and DOCA
-xPlane is the only place to see it.
+degraded plane is therefore **invisible from inside the Pod**. Inspect DOCA
+xPlane telemetry on each affected worker.
 
 The xPlane DaemonSet runs as ``xplane-ds``:
 
 .. code-block:: bash
 
    kubectl -n nvidia-network-operator get ds xplane-ds
+   kubectl -n nvidia-network-operator get pods -l app=xplane -o wide
    kubectl -n nvidia-network-operator logs -l app=xplane
 
-Query plane state with the bundled client:
+Select the xPlane Pod on the affected node, then query plane state with
+the bundled client:
 
 .. code-block:: bash
 
-   kubectl -n nvidia-network-operator exec ds/xplane-ds -- \
+   kubectl -n nvidia-network-operator exec <xplane-pod> -- \
      doca-xplane-client get-status
 
-   kubectl -n nvidia-network-operator exec ds/xplane-ds -- \
+   kubectl -n nvidia-network-operator exec <xplane-pod> -- \
      doca-xplane-client get-planes-summary
 
 ``get-status`` reports an ``overallState`` and counts local versus remote
@@ -168,20 +172,24 @@ failures. When a plane is ``DEGRADED``, narrow it down:
 .. code-block:: bash
 
    # Local failures — link down on this host
-   doca-xplane-client get-plane-failures-local --plane_id 0
+   kubectl -n nvidia-network-operator exec <xplane-pod> -- \
+     doca-xplane-client get-plane-failures-local --plane_id 0
 
    # Remote failures — route withdrawn by the fabric
-   doca-xplane-client get-plane-failures-remote --plane_id 0
+   kubectl -n nvidia-network-operator exec <xplane-pod> -- \
+     doca-xplane-client get-plane-failures-remote --plane_id 0
 
-   # How much traffic was diverted away from this plane
-   doca-xplane-client get-plane-traffic-summary --plane_id 0
+   # Traffic counters, including diverted and dropped traffic
+   kubectl -n nvidia-network-operator exec <xplane-pod> -- \
+     doca-xplane-client get-plane-traffic-summary --plane_id 0
 
 .. note::
 
    ``local`` failures are host-side (a down link on this node);
    ``remote`` failures are learned from fabric route-availability updates.
-   Diverted traffic counters confirm failover is working rather than
-   traffic being dropped.
+   Compare diverted and dropped counters to assess failover. For the
+   complete command reference, see the `DOCA 3.5 XPlane Service Guide
+   <https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-xplane-service-guide>`_.
 
 =========================================
 Step 5: Check the workload sees its rails

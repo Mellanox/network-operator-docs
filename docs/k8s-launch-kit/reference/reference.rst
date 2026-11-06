@@ -37,6 +37,6 @@ Lookup-friendly references for flags and config schema.
    * - **Reference**
      - **Contents**
    * - :doc:`CLI Reference <cli>`
-     - Every flag, every subcommand, every exit code.
+     - Host workflow flags, subcommands, and exit codes; command help lists the complete installed interface.
    * - :doc:`Configuration Reference <config>`
      - The ``cluster-config.yaml`` / ``l8k-config.yaml`` schema, section by section.

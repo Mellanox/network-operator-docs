@@ -36,7 +36,7 @@ High-performance Ethernet networking with hardware acceleration. Each pod receiv
 Prerequisites
 ================================================================================
 
-- Network Operator Helm chart installed (see :doc:`../installation`).
+- Cluster access and operator ownership configured (see :doc:`../installation`).
 - ``l8k`` binary on your PATH.
 - Mellanox NICs in Ethernet mode on each node.
 
@@ -65,13 +65,17 @@ Deploy
 
 .. code-block:: bash
 
-   l8k deploy
+   l8k deploy --deployment-files ./deployments
 
 ================================================================================
 Verify
 ================================================================================
 
+Validate the generated bundle, then inspect the relevant resources:
+
 .. code-block:: bash
+
+   l8k validate --deployment-files ./deployments --wait 10m
 
    kubectl -n nvidia-network-operator get pods
    kubectl get sriovnetworknodepolicy

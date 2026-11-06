@@ -61,8 +61,8 @@ Common Failures
      - API server unreachable or RBAC missing
      - ``kubectl auth can-i`` and the kubeconfig
    * - Discovery completes with empty ``clusterConfig``
-     - Default ``--node-selector`` excludes all nodes
-     - Pass ``--node-selector`` matching a label on your nodes (see :doc:`workflows/discover`)
+     - No eligible NIC publisher, or discovery daemon/probe failure
+     - Check Ready schedulable nodes, daemon image access, and restricted BlueField state. ``--node-selector`` does not limit discovery scheduling (see :doc:`workflows/discover`).
    * - Generation fails with "RA2.1 requires --network-operator-release in [26.1]"
      - Spectrum-X version and Network Operator release mismatch
      - Set ``--network-operator-release`` to match the Spectrum-X version (see :doc:`profiles/spectrum-x`)

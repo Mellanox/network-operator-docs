@@ -32,13 +32,14 @@ This page explains the Launch Kit mental model. New users should read this once 
 Workflow Phases
 ================================================================================
 
-Launch Kit operates in three phases:
+Launch Kit operates in four phases:
 
 #. **Discover** --- Probe the cluster's network hardware (NICs, PCI addresses, RDMA capability, OFED-dependent kernel modules, GPU topology) and write a ``cluster-config.yaml`` describing what was found.
 #. **Generate** --- Take a cluster configuration plus a deployment profile selection and render a complete set of numbered Kubernetes YAML manifests to a directory.
-#. **Deploy** --- Apply the generated manifests to the cluster in dependency order. Optional: ``--dry-run`` previews what would be applied without touching the cluster.
+#. **Deploy** --- Apply the generated manifests to the cluster in dependency order. ``--dry-run`` validates proposed operations through Helm and the API server without persisting them.
+#. **Validate** --- Check the applied resources, release alignment, and selected data-plane test families; retain the validation report.
 
-Each phase has a dedicated CLI subcommand --- ``l8k discover``, ``l8k generate``, ``l8k generate --deploy`` --- and a dedicated how-to page (:doc:`workflows/discover`, :doc:`workflows/generate`, :doc:`workflows/deploy`).
+Each phase has a dedicated CLI subcommand --- ``l8k discover``, ``l8k generate``, ``l8k deploy``, and ``l8k validate`` --- and a dedicated how-to page (:doc:`workflows/discover`, :doc:`workflows/generate`, :doc:`workflows/deploy`, :doc:`workflows/validate`).
 
 The artifact pipeline:
 
@@ -75,13 +76,16 @@ The artifact pipeline:
 Profiles
 ================================================================================
 
-A **profile** is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit ships seven profiles:
+A **profile** is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit includes the following host profiles:
 
 - ``sriov-ethernet`` --- SR-IOV with Ethernet
 - ``sriov-infiniband`` --- SR-IOV with InfiniBand
 - ``host-device`` --- direct passthrough to host network devices
 - ``macvlan-rdma-shared`` --- Ethernet with shared RDMA device plugin and MacVLAN
 - ``ipoib-rdma-shared`` --- InfiniBand with shared RDMA device plugin and IPoIB
+- ``spectrum-x-ra2.4`` --- Spectrum-X RA2.4 for Network Operator 26.10 and newer catalogued releases
+- ``spectrum-x-ra3.1`` --- RA3.1 generation using the same doSPCX bundle contract
+- ``spectrum-x-ra2.2`` --- Spectrum-X RA2.2 for Network Operator 26.4
 - ``spectrum-x`` --- Spectrum-X multi-rail AI interconnect (RA2.3 on Network Operator 26.7)
 - ``spectrum-x-ra2.1`` --- Spectrum-X for the RA2.1 reference architecture (Network Operator 26.1)
 
@@ -94,8 +98,9 @@ Network Operator Releases
 Launch Kit pins to specific NVIDIA Network Operator releases. The ``--network-operator-release`` flag (and the ``networkOperator.selectedRelease`` config key) selects between supported release lines:
 
 - ``26.1`` --- required for ``spectrum-x-ra2.1`` (RA2.1).
-- ``26.4``
+- ``26.4`` --- required for RA2.2.
 - ``26.7`` --- required for ``spectrum-x`` (RA2.3).
+- ``26.10`` --- default for RA2.4 and RA3.1. Check ``l8k schema`` for the installed binary's catalog.
 
 The selected release auto-fills versions and image tags from an embedded catalog. Version mismatches (for example, requesting RA2.1 with release 26.7) error out with a specific message.
 
@@ -128,7 +133,7 @@ During discovery, Launch Kit also classifies each PF by **traffic direction**:
 - **East-west** --- GPU-to-GPU interconnect (ConnectX, BlueField-3 SuperNIC). These PFs appear in generated manifests.
 - **North-south** --- management / out-of-band (BlueField DPUs). These PFs are saved in ``cluster-config.yaml`` for visibility but **filtered out** of generated manifests.
 
-Each east-west PF is assigned a sequential ``rail`` index (``rail: 0``, ``rail: 1``, ...) used in resource and network names.
+East-west functions are assigned logical ``rail`` indices; multiple PFs can belong to one NIC/rail, and VR has two NICs per rail. Rail IDs (``rail: 0``, ``rail: 1``, ...) are used in resource and network names.
 
 ================================================================================
 Spectrum-X Multiplane Modes
@@ -170,7 +175,7 @@ Glossary
    * - **VF**
      - Virtual Function. An SR-IOV-virtualised slice of a PF.
    * - **Rail**
-     - A sequential index assigned to each east-west PF. Used in resource and network names.
+     - A logical network path identified by a zero-based index. Depending on the platform, a rail contains one or more physical NICs and their PFs.
    * - **Fabric**
      - The physical transport layer: ``ethernet`` or ``infiniband``.
    * - **Deployment type**

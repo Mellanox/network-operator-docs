@@ -49,15 +49,17 @@ Each skill is a self-contained Markdown document in the `k8s-launch-kit reposito
    * - ``k8s-launch-kit-discover``
      - Wraps ``l8k discover``: cluster hardware probing, label patching, ``cluster-config.yaml`` interpretation.
    * - ``k8s-launch-kit-config``
-     - Reads / explains / edits ``cluster-config.yaml`` and ``l8k-config.yaml`` --- profile fields, group identifiers, OFED module lists.
+     - Reads / explains / edits ``cluster-config.yaml`` and ``default-config.yaml`` --- profile fields, group identifiers, OFED module lists.
    * - ``k8s-launch-kit-generate``
      - Wraps ``l8k generate``: profile selection (fabric × deployment-type), Spectrum-X cohort flags, group filters, hardware-derived defaults.
    * - ``k8s-launch-kit-dryrun``
-     - Wraps ``l8k generate --dry-run``: previews what would land on the cluster without applying.
+     - Wraps ``l8k generate --dry-run`` for a generation preview and ``l8k deploy --dry-run`` for server-side deployment checks without applying the bundle.
    * - ``k8s-launch-kit-deploy``
-     - Wraps ``l8k deploy``: applies pre-generated manifests in four phases (NicClusterPolicy → NicNodePolicy → remaining batch → verify reconciliation). Supports ``--verify`` to chain the data-plane connectivity matrix straight after a successful apply, and ``--deploy-timeout`` to bound the whole run end-to-end.
+     - Wraps ``l8k deploy``: validates the bundle, handles the Helm release when owned by Launch Kit, then applies policies and remaining resources in dependency order and verifies reconciliation. Use ``--deploy-timeout`` to bound deployment, then run ``l8k validate`` for post-deployment validation. See :doc:`Deployment Workflow <k8s-launch-kit/workflows/deploy>` for ownership and overwrite behavior.
+   * - ``k8s-launch-kit-clean``
+     - Wraps ``l8k clean``: removes Network Operator custom resources and handles the Helm release according to the configured ownership. Requires explicit authorization for cleanup.
    * - ``k8s-launch-kit-validate``
-     - Wraps ``l8k validate``: classifies every manifest's cluster state (READY / IN-PROGRESS / ERROR / MISSING), runs a connectivity ping matrix between the example DaemonSet's pods on every rail (default ON; ``--connectivity=false`` to skip), and writes an HTML validation report to ``<deployment-files>/verify-report.html``.
+     - Wraps ``l8k validate``: classifies every manifest's cluster state (READY / IN-PROGRESS / ERROR / MISSING), runs a connectivity ping matrix between the example DaemonSet's pods on every rail (default ON; ``--connectivity=false`` to skip), and writes an HTML validation report to ``<deployment-files>/k8s-launch-kit-validation-report.html``.
    * - ``k8s-launch-kit-pipeline``
      - End-to-end orchestration (discover → generate → deploy) for greenfield clusters.
    * - ``k8s-launch-kit-troubleshoot``
@@ -100,7 +102,7 @@ Verify by typing ``/skills`` in a Claude Code session --- the ``k8s-launch-kit-*
 Cursor
 -------
 
-Cursor reads project-scoped rule files from ``.cursor/rules/``. Symlink the skill directories or copy the ``SKILL.md`` files into ``.mdc`` rules:
+Cursor reads project-scoped rule files from ``.cursor/rules/``. Copy the ``SKILL.md`` files into ``.mdc`` rules and expose their bundled reference files as project context:
 
 .. code-block:: bash
 
@@ -111,29 +113,22 @@ Cursor reads project-scoped rule files from ``.cursor/rules/``. Symlink the skil
        cp "$skill" ".cursor/rules/${name}.mdc"
    done
 
-The YAML frontmatter on each ``SKILL.md`` is compatible with Cursor's rule metadata (``description``, ``alwaysApply``-equivalent semantics handled by activation prompts). For user-wide rules, place them under ``~/.cursor/rules/`` instead.
+Configure activation using the rule settings supported by your Cursor version. Preserve access to any ``references/`` files linked from the skills.
 
 OpenAI Codex CLI
 -----------------
 
-Codex CLI loads project-level instructions from an ``AGENTS.md`` file at the repository root. Concatenate the persona skill plus its dependencies into ``AGENTS.md``:
+Expose the skill directories through Codex's project-scoped ``.agents/skills/`` directory, preserving the bundled reference files:
 
 .. code-block:: bash
 
-   # In your Kubernetes / l8k project
-   {
-       echo "# Agent Instructions"
-       echo
-       cat <path-to-k8s-launch-kit>/skills/k8s-network-engineer/SKILL.md
-       for skill in <path-to-k8s-launch-kit>/skills/k8s-launch-kit-*/SKILL.md; do
-           echo
-           echo "---"
-           echo
-           cat "$skill"
-       done
-   } > AGENTS.md
+   # From the cloned Launch Kit repository
+   mkdir -p .agents/skills
+   for skill in skills/k8s-launch-kit-* skills/k8s-network-engineer; do
+       ln -s "$PWD/$skill" ".agents/skills/$(basename "$skill")"
+   done
 
-For machine-wide instructions, write to ``~/.codex/AGENTS.md`` instead. Codex CLI will pick up the file automatically on each ``codex`` invocation.
+Use ``~/.agents/skills/`` for user-scoped skills, or create the links under the target project's ``.agents/skills/`` directory. Keep project-specific policy in ``AGENTS.md`` alongside the skills.
 
 Other Agents
 -------------
@@ -156,14 +151,14 @@ Discovery on a Heterogeneous Cluster
 
 **Operator prompt:**
 
-   *"I have a new cluster with mixed DGX-B200 and Lenovo ThinkSystem nodes, both running H100 GPUs. The GPU operator is installed. Help me discover the network topology and tell me what I'm working with."*
+   *"I have a new cluster with mixed Dell PowerEdge and Lenovo ThinkSystem nodes, both running H100 GPUs. The GPU operator is installed. Help me discover the network topology and tell me what I'm working with."*
 
 **Skill-driven flow:**
 
 1. ``k8s-network-engineer`` activates and loads the discovery skills.
 2. The agent runs ``l8k discover --output json 2>/dev/null`` and parses the result.
-3. ``k8s-launch-kit-config`` interprets the resulting ``cluster-config.yaml``: identifies two source groups (``dgx-b200-nvidia-h100-nvl`` and ``thinksystem-sr680a-v3-nvidia-h100-nvl``), confirms east-west PFs are ConnectX-7 (deviceID ``1021``), counts 8 rails per node, and notes that both groups share a ``railNumber`` --- so ``--multirail`` will auto-default to true.
-4. The agent reports back: GPU type, NIC topology, fabric verdict (``linkType: Ethernet`` confirmed via active port + ``link_layer``), discovered OFED-dependent kernel modules (any storage modules trigger an "unloadStorageModules will be enabled" warning), and any preset deviations.
+3. ``k8s-launch-kit-config`` interprets the resulting ``cluster-config.yaml``: identifies the source groups, confirms the selected east-west PFs and rail counts, and explains the fabric and multirail values persisted by discovery.
+4. The agent reports back: GPU type, NIC topology, fabric verdict from the configured port link layers across worker nodes, discovered OFED-dependent kernel modules, including the storage-module warning when the DOCA driver and ``unloadStorageModules`` are enabled, and any preset deviations.
 5. The agent suggests the next step: *"Both groups share GPU type and rail count, so a single ``l8k generate`` will produce one combined bundle covering both. Want me to render manifests for SR-IOV Ethernet?"*
 
 The operator never reads ``cluster-config.yaml`` directly --- the skill explains the contents in natural language and surfaces the decisions that matter.
@@ -173,26 +168,27 @@ Choosing a Deployment Profile (Spectrum-X)
 
 **Operator prompt:**
 
-   *"This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we're targeting Network Operator 26.7. Generate the manifests."*
+   *"This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we're targeting Network Operator 26.10 and RA2.4. Generate the manifests."*
 
 **Skill-driven flow:**
 
 1. ``k8s-launch-kit-generate`` recognizes Spectrum-X intent.
-2. The skill verifies the cohort: ConnectX-8 on a GB300 platform → ``--multiplane-mode swplb`` and ``--number-of-planes 2`` are the hardware defaults; RA2.3 pairs with Network Operator 26.7 and requires a Spectrum-X profile ConfigMap.
+2. The skill verifies the discovered platform, east-west NICs, rails, and site plane layout. RA2.4 pairs with Network Operator 26.10 or a newer catalogued release and requires a full doSPCX bundle ConfigMap supplied for that platform. This example selects dual-plane HWPLB explicitly; generator defaults do not establish the site topology or hardware qualification.
 3. Before running ``l8k generate``, the skill asks the operator to confirm the **switch-side** Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) --- because ``l8k`` does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.
 4. Once confirmed, the agent runs:
 
    .. code-block:: bash
 
-      l8k generate \
-          --spectrum-x RA2.3 \
-          --network-operator-release 26.7 \
+      l8k generate --user-config ./cluster-config.yaml \
+          --spectrum-x RA2.4 \
+          --network-operator-release 26.10 \
+          --multiplane-mode hwplb --number-of-planes 2 \
           --spectrum-x-config ./spectrum-x-profile.yaml \
           --topology-scheme 2-tier --topology-file ./topology.json \
           --save-deployment-files ./deployments-spectrum-x \
           --output json 2>/dev/null
 
-5. The agent reports the auto-defaulted flags ("``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``", "``Defaulted --number-of-planes=2``") and recommends ``l8k generate --dry-run`` before applying.
+5. The agent reviews ``deployments-spectrum-x/.l8k/resolved-config.yaml``, the generated ConfigMap, per-group NIC selectors and platform type, rail pools, and Helm values. It uses ``l8k deploy --deployment-files ./deployments-spectrum-x --dry-run`` for a server-side preview once compatible CRDs are installed. Generation and dry-run do not establish reconciliation or traffic readiness. See :doc:`Spectrum-X Profile <k8s-launch-kit/profiles/spectrum-x>` for the full RA2.4 prerequisites.
 
 The skill knows the per-platform and per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite --- the operator only needs to state intent.
 

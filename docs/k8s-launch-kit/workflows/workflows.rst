@@ -45,4 +45,4 @@ Launch Kit operates in distinct phases. Each has a dedicated CLI subcommand and 
    * - :doc:`Deploy <deploy>`
      - Apply generated manifests to the cluster, with optional dry-run.
    * - :doc:`Validate <validate>`
-     - Verify the deployment matches the selected release: Helm chart version + manifest presence.
+     - Check release/preflight alignment, resource readiness, and configured connectivity families; inspect the acceptance report.

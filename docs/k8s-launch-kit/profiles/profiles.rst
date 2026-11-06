@@ -46,7 +46,7 @@ Decision Tree
    MacVLAN (RDMA Shared) <macvlan-rdma-shared>
    Spectrum-X <spectrum-x>
 
-Fabric is determined by the underlying hardware topology (Spectrum-X clusters are detected as a distinct fabric, not as a flavour of Ethernet). Pick the deployment type for each fabric:
+The fabric is Ethernet or InfiniBand. Spectrum-X is an explicitly selected Ethernet/SR-IOV profile requiring a configured Spectrum-X fabric and a matching RA profile; discovery alone does not select or qualify it.
 
 .. mermaid::
 
@@ -54,7 +54,7 @@ Fabric is determined by the underlying hardware topology (Spectrum-X clusters ar
        Start{Fabric}
        Start -->|Ethernet| EthDT{Deployment type}
        Start -->|InfiniBand| IBDT{Deployment type}
-       Start -->|Spectrum-X<br/>HW topology| SPCXRA{RA version}
+       EthDT -->|Spectrum-X| SPCXRA{RA version}
 
        EthDT -->|sriov| SRIOVE([SR-IOV Ethernet])
        EthDT -->|host_device| HDE([Host Device])
@@ -64,14 +64,18 @@ Fabric is determined by the underlying hardware topology (Spectrum-X clusters ar
        IBDT -->|host_device| HDI([Host Device])
        IBDT -->|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
+       SPCXRA -->|RA2.4<br/>Network Operator 26.10| SX4([Spectrum-X RA2.4])
+       SPCXRA -->|RA2.2<br/>Network Operator 26.4| SX2([Spectrum-X RA2.2])
        SPCXRA -->|RA2.3<br/>Network Operator 26.7| SX3([Spectrum-X RA2.3])
        SPCXRA -->|RA2.1<br/>Network Operator 26.1| SX1([Spectrum-X RA2.1])
        SX3 --> MPM[multiplane mode<br/>none / swplb / hwplb<br/>+ number of planes]
        SX1 --> MPM
+       SX2 --> MPM
+       SX4 --> MPM
 
        classDef profile fill:#a2efb6,stroke:#28a745,color:#000
        classDef params fill:#fff3cd,stroke:#ffc107,color:#000
-       class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX3 profile
+       class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2,SX3,SX4 profile
        class MPM params
 
 ================================================================================
@@ -107,9 +111,9 @@ Decision Matrix
      - ethernet / rdma_shared
      - MacVLAN, multi-tenant, network-segmentation
    * - :doc:`Spectrum-X <spectrum-x>`
-     - NVIDIA Spectrum-X multi-rail AI interconnect (RA2.3, or RA2.1 for Network Operator 26.1). Single-plane, SWPLB, or HWPLB.
+     - NVIDIA Spectrum-X multi-rail AI interconnect (RA2.4 on Network Operator 26.10; see the Spectrum-X version matrix for older RAs). Single-plane, SWPLB, or HWPLB.
      - ethernet / sriov / spectrum-x
-     - Spectrum-X, multiplane, RA2.3, HWPLB
+     - Spectrum-X, multiplane, RA2.4, HWPLB
 
 ================================================================================
 See Also

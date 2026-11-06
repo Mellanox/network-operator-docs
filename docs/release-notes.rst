@@ -36,6 +36,9 @@ Changes and New Features
 
    * - Version
      - Description
+   * - 26.10.0
+     - | - Updated the Spectrum-X configuration workflow for RA2.4: NIC tuning uses a doSPCX bundle ConfigMap with an explicit architecture and platform type instead of the legacy RA2.3 ``data.profile`` payload
+       | - Added RA2.4 generation in NVIDIA Kubernetes Launch Kit for Network Operator 26.10, including per-group platform resolution and a deployment check for the required NIC Configuration Operator CRD fields
    * - 26.7.0
      - | - Added support for Ubuntu 26.04
        | - Added support for NVIDIA DGX GB300 Workstation systems

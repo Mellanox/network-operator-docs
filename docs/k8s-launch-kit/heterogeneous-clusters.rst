@@ -118,7 +118,7 @@ The diagram shows the per-source ``NicNodePolicy`` pairing — each NodePolicy c
 
 Same GPU + identical east-west rail count = one bucket. Per-source ``NicNodePolicy`` CRs use the ``nvidia.kubernetes-launch-kit.machine`` label; the bucket-level ``IPPool`` uses an ``In`` selector over the source labels (or the shared ``.gpu`` label when not filtered). The ``SriovNetwork`` references a single shared ``resourceName`` that all three NodePolicies register, so any pod scheduled on any of the six nodes gets a VF.
 
-Mixed Cluster (``--gpu-type`` and ``--groups`` Together)
+Mixed Cluster (Choosing ``--gpu-type`` or ``--groups``)
 ---------------------------------------------------------
 
 A real-world cluster: two GPU types, multiple server SKUs per type. Discovery produces four source groups arranged as a 2×2 grid (GPU type × machine type). The three commands below show the three common ways to scope a generation.
@@ -171,7 +171,7 @@ Discovery: Initial Grouping by PCI Topology
 ``l8k discover`` places nodes into groups by their PCI topology --- the set of PCI addresses and device IDs across each node's PFs. Nodes with identical PCI topology land in the same group. Each group carries:
 
 - ``machineType`` and ``gpuType`` (e.g., ``ThinkSystem-SR680a-V3`` / ``NVIDIA-H100-NVL``), populated from GPU operator labels or probed from hardware.
-- A machine label written to every node in the group: ``nvidia.kubernetes-launch-kit.machine: <machineType>-<gpuType>`` (sanitised — lowercase, spaces and slashes replaced with hyphens).
+- A machine label written to every node in the group: ``nvidia.kubernetes-launch-kit.machine: <machineType>-<gpuType>`` (case preserved; spaces normalised to hyphens).
 - An ``identifier`` equal to the sanitised label value (e.g., ``thinksystem-sr680a-v3-nvidia-h100-nvl``). When ``machineType`` or ``gpuType`` couldn't be resolved, a fallback ``group-N`` identifier is used and the label is **not** written.
 - A ``nodeSelector`` keyed by the same label: ``{nvidia.kubernetes-launch-kit.machine: <value>}``. This is the per-source-group selector — selecting on it picks exactly the nodes in that one group, even when several groups share a GPU type.
 - The list of east-west PFs with their ``rail`` indices.
@@ -191,7 +191,7 @@ Strategy 1 --- Automatic Combination at Generation
 The groups in ``cluster-config.yaml`` stay separate --- they're written as distinct entries with their own machine-label ``identifier``, ``nodeSelector``, and PF lists. When ``l8k generate`` runs, groups that share the same **GPU product type** *and* the same **east-west rail count** are automatically combined into a single render group at generation time:
 
 - The combined render group's ``identifier`` follows the resource-name convention (lowercase form of the gpuType, e.g., ``nvidia-h100-nvl``). Source machine-labels can differ across the merged groups, so a single per-source label can't represent the merged set.
-- Its effective ``nodeSelector`` becomes ``{nvidia.kubernetes-launch-kit.gpu: <gpuType>}`` --- targeting every node of that GPU type, regardless of source machine type. The ``.gpu`` label is also written by ``l8k discover`` (alongside the per-source ``.machine`` label), and its value matches ``nvidia.com/gpu.product`` verbatim by construction.
+- Its effective ``nodeSelector`` becomes ``{nvidia.kubernetes-launch-kit.gpu: <gpuType>}`` --- targeting every node of that GPU type, regardless of source machine type. The ``.gpu`` label is also written by ``l8k discover`` (alongside the per-source ``.machine`` label), and its value is the resolved GPU product, including hardware fallback when GPU Operator labels are absent.
 - ``workerNodes`` and OFED-dependent module lists are taken as the union of the source groups.
 - One set of manifests is produced that covers all source groups with that GPU type.
 
@@ -205,7 +205,7 @@ Combination happens automatically with no flags required. Groups with different 
 Strategy 2 --- Separate Configs per Group
 ================================================================================
 
-Use this strategy when groups need genuinely different configurations --- different Network Operator releases, different fabric, different deployment types, different DOCA driver versions, or different profile selections.
+Use separate generation runs when cohorts need different fabric, deployment type, or driver configuration. Different Network Operator releases require separate target clusters; all cohorts on one cluster must agree on shared operator settings.
 
 A single ``l8k generate`` invocation produces one set of manifests with one Network Operator version, one fabric, one deployment type, etc. To deploy different configs to different groups, run ``l8k generate`` separately for each group (or compatible subset) with ``--groups <comma-separated-identifiers>`` and a distinct output directory:
 
@@ -225,7 +225,7 @@ A single ``l8k generate`` invocation produces one set of manifests with one Netw
        --deployment-type host_device --multirail \
        --save-deployment-files ./deployments-h200
 
-Each run produces an independent manifest set scoped to its source groups' ``nodeSelector``. The two sets can be applied to the same cluster --- they target disjoint nodes.
+Each run scopes node resources to its source groups, but Helm and ``NicClusterPolicy`` remain cluster-wide. Different Network Operator releases cannot coexist as independent per-group installations. For same-cluster cohorts, align shared release and component settings and review a combined desired inventory. ``--overwrite-existing`` can delete resources from omitted groups; a group filter is not an ownership boundary. See :doc:`workflows/deploy`.
 
 ``--groups`` accepts a comma-separated list of source-group identifiers (``--groups a,b,c``); identifiers come from ``cluster-config.yaml``'s ``clusterConfig[].identifier``. Match is case-sensitive; an empty match is a validation error.
 
@@ -267,7 +267,7 @@ When ``--groups`` selects a strict subset of a compatible (gpuType, rail-count) 
    * - Per-source (``NicInterfaceNameTemplate``)
      - One CR per source group, always (regardless of merge or filter). PCI addresses are machine-specific and never aggregate.
 
-For default unfiltered runs and ``--gpu-type`` runs, every bucket selects exactly its full source set, so the Aggregate and Simple-selector CRs render once per bucket against a single flat ``nodeSelector`` keyed by the bucket's GPU label.
+For complete buckets, shared resources can use the GPU selector. NIC configuration templates remain per source and include east-west PCI selectors. RA2.4 permits only one compatible rail-pool parent (a complete cohort or one selected source); it rejects unsupported partial multi-source and multi-bucket selections. See :doc:`profiles/spectrum-x`.
 
 ================================================================================
 Per-Group Manifest Layout
@@ -291,14 +291,14 @@ The deployment ordering ensures dependency resolution: NicClusterPolicy first (w
 NIC Interface Name Templates
 ================================================================================
 
-``NicInterfaceNameTemplate`` CRs rename NIC interfaces to predictable, rail-based names using udev rules. Launch Kit deploys them by default for **every** profile and every cluster shape --- not only when PCI addresses are ambiguous. The benefit is uniform interface names across server SKUs (``rdma_r0``, ``eth_r1``, …): pod manifests, NetworkAttachmentDefinitions, and operator scripts can reference one stable name per rail regardless of which vendor chassis the pod lands on, and reboots that re-enumerate PCI no longer break selectors.
+``NicInterfaceNameTemplate`` CRs rename NIC interfaces to predictable, rail-based names using udev rules. Naming is enabled by default. For one standard-profile source whose selected PFs have observed interface names, generation suppresses the naming template and uses existing names or PCI selectors. RDMA-shared retains naming when a selected PF lacks an observed name; Spectrum-X retains required naming templates. The benefit is uniform interface names across server SKUs (``rdma_r0``, ``eth_r1``, …): pod manifests, NetworkAttachmentDefinitions, and operator scripts can reference one stable name per rail regardless of which vendor chassis the pod lands on, and reboots that re-enumerate PCI no longer break selectors.
 
 Naming conventions:
 
-- Standard profiles: ``rdma_r%rail%``, ``eth_r%rail%`` (e.g., ``rdma_r0``, ``eth_r1``).
-- Spectrum-X profiles: ``roce_p%plane%_r%rail%``, ``eth_p%plane%_r%rail%`` (e.g., ``roce_p0_r2``).
+- Standard profiles: ``rdma_r%rail_id%``, ``eth_r%rail_id%`` (e.g., ``rdma_r0``, ``eth_r1``).
+- Spectrum-X: mode-specific prefixes under ``spectrumX.singlePlane``, ``spectrumX.hwplb``, and ``spectrumX.swplb``; see :doc:`profiles/spectrum-x`.
 
-To opt out and reference interfaces by their original PCI addresses instead, set ``nicConfigurationOperator.deployNicInterfaceNameTemplate: false`` in your ``cluster-config.yaml`` (or ``l8k-config.yaml``). This is rarely needed --- the renamed names are a strict superset of what PCI selectors can express.
+To opt out and reference interfaces by their original PCI addresses instead, set ``nicConfigurationOperator.deployNicInterfaceNameTemplate: false`` in your ``cluster-config.yaml`` (or ``l8k-config.yaml``). Confirmed netplan ``set-name`` rules block generation when a naming template would be emitted. Resolve host naming ownership and repeat discovery before generating.
 
 ================================================================================
 North-South vs East-West Traffic
@@ -342,5 +342,5 @@ See Also
 
 - :doc:`Overview <overview>` --- the node-group / fabric / traffic vocabulary
 - :doc:`Discover Workflow <workflows/discover>` --- how groups are formed
-- :doc:`Generate Workflow <workflows/generate>` --- ``--group`` flag in context
+- :doc:`Generate Workflow <workflows/generate>` --- ``--groups`` flag in context
 - :doc:`Configuration Reference <reference/config>` --- ``clusterConfig`` and ``nicConfigurationOperator`` schemas

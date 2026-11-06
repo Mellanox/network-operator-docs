@@ -66,7 +66,9 @@ Spectrum-X Kubernetes Quick Start
 
 The walkthrough installs Network Operator via Helm, applies the Spectrum-X
 CRDs, and deploys a test pod, adapted to the multiplane mode and NIC family
-you choose below.
+you choose below. The examples show two rails to keep the manifests short;
+repeat the naming, NIC selection, pools, rail topology, and Pod resource
+requests for every east-west rail in your platform.
 
 =========================
 Choose a deployment mode
@@ -111,7 +113,7 @@ switches every mode-specific step that follows.
       **GB200 NVL72** platforms (ConnectX-7 NIC, ``nicType: 1021``).
       **ConnectX-8 SuperNIC** (``nicType: 1023``) also supports single-plane configuration —
       useful if you want a single-plane setup on B300/GB300 hardware. The
-      configuration uses Spectrum-X RA 2.3 with ``multiplaneMode: none`` and
+      configuration uses Spectrum-X RA 2.4 with ``multiplaneMode: none`` and
       ``numberOfPlanes: 1``. The example below uses BlueField-3 SuperNIC; change
       ``nicType`` for other NICs. Replace ``TODO_*`` values with your
       cluster-specific values before applying.
@@ -126,7 +128,7 @@ switches every mode-specific step that follows.
       exposing multiple per-plane PFs. Used on **B300**
       and **GB300** platforms — set ``numberOfPlanes: 2`` for Dual-Plane or
       ``numberOfPlanes: 4`` for Quad-Plane. The configuration uses
-      Spectrum-X RA 2.3 with ``multiplaneMode: hwplb``. The example below uses
+      Spectrum-X RA 2.4 with ``multiplaneMode: hwplb``. The example below uses
       ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your cluster-specific
       values before applying.
 
@@ -139,7 +141,7 @@ switches every mode-specific step that follows.
       software stack performs **Software Plane Load Balancing** (``swplb``) across
       them. Used on **B300** and **GB300** platforms — set ``numberOfPlanes: 2``
       for Dual-Plane or ``numberOfPlanes: 4`` for Quad-Plane. The
-      configuration uses Spectrum-X RA 2.3 with ``multiplaneMode: swplb``. The example below
+      configuration uses Spectrum-X RA 2.4 with ``multiplaneMode: swplb``. The example below
       uses ``numberOfPlanes: 2``. Replace ``TODO_*`` values with your
       cluster-specific values before applying.
 
@@ -147,7 +149,15 @@ switches every mode-specific step that follows.
 Step 1: Prepare the Worker Nodes
 ================================
 
-Spectrum-X requires two host-level settings on every worker node. Both take effect only after a reboot, so apply them before installing the Network Operator.
+Configure the switch fabric and prepare every worker node for the supplied
+RA2.4 profile before installing Network Operator. Install the matching
+DOCA-Host driver and OVS-DOCA packages, and reserve the hugepages needed by
+OVS-DOCA and, for Hardware Multiplane, DOCA xPlane. Follow
+:doc:`Architecture and Components <components>` for ownership and sizing.
+This walkthrough uses host-installed drivers and omits the containerized
+``ofedDriver`` configuration.
+
+The following host settings take effect after a reboot:
 
 **Virtualization support.** SR-IOV Virtual Functions require IOMMU and VF capability to be enabled in the platform firmware and on the kernel command line. Follow the host preparation procedure for your platform in the NVIDIA Spectrum-X deployment guide for your Reference Architecture.
 
@@ -231,7 +241,7 @@ Verify the installation:
 Step 3: Apply NicClusterPolicy
 ==============================
 
-Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane), and the secondary network components.
+Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane), and the secondary network components. Save the following as ``nicclusterpolicy.yaml``. Set ``storageClassName`` to an existing storage class that supports the firmware storage PVC; see :doc:`NIC Firmware Configuration <../nic-conf-operator/nic-fw-configuration>`.
 
 .. code-block:: yaml
    :substitutions:
@@ -266,7 +276,7 @@ Enable the NIC Configuration Operator, NV-IPAM, Spectrum-X Operator (with XPlane
        repository: |spectrumxop-repository|
        version: |spectrumxop-version|
        # xPlane is only used when multiplaneMode=hwplb (Hardware Multiplane).
-       # Including it here lets you flip multiplaneMode without re-applying NicClusterPolicy.
+       # The rail topology must also list every PF in the hardware-multiplane rail.
        xPlane:
          image: xplane
          # xPlane ships on the DOCA release cadence, so its repository and tag
@@ -292,7 +302,11 @@ Step 4: Name the Rail Interfaces
 ================================
 
 Create the ``NicInterfaceNameTemplate`` that maps PCI addresses to rails and
-gives each interface a predictable name.
+gives each interface a predictable name. For the four-plane B300/GB300
+layout, set ``pfsPerNic: 4`` here and ``numberOfPlanes: 4`` in Step 6.
+Then include all four PF names in each Hardware Multiplane rail in Step 8;
+for Software Multiplane, add the plane-2 and plane-3 pools, topology entries,
+and Pod attachments and resource requests in Steps 7–9.
 
 Host PF RDMA names must differ from pod VF RDMA names. The Spectrum-X Operator
 names pod RDMA devices ``rdma_<railTopology.name>``, for example, ``rdma_rail0``.

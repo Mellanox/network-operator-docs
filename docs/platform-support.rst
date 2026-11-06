@@ -437,7 +437,11 @@ Supported Container Runtimes
 ==============================================
 NVIDIA Spectrum-X Ethernet Networking Platform
 ==============================================
-**NVIDIA Network Operator** has been validated with the following NVIDIA Spectrum-X Reference Architecture (RA) versions:
+Network Operator 26.10 uses the **Spectrum-X RA2.4 configuration workflow**, with a doSPCX bundle ConfigMap and an explicit platform type. See :doc:`Spectrum-X NIC Configuration <spectrum-x/spectrum-x-configuration>` and :doc:`Spectrum-X Quickstart <spectrum-x/quick-start>` for the required profile and CRDs.
+
+Configuration support does not establish qualification for every platform accepted by the API. Confirm the RA2.4 solution stack, NIC firmware, operating system, Kubernetes version, and platform-specific restrictions with NVIDIA Support before deployment. The earlier RA qualification entries below do not qualify the same combinations for RA2.4.
+
+**Earlier release qualification:**
 
 .. note::
 
@@ -471,11 +475,12 @@ NVIDIA Spectrum-X Ethernet Networking Platform
 
 .. note::
 
-   NVIDIA ConnectX-9 SuperNIC is **not** part of Spectrum-X RA 2.3. Network
-   Operator accepts ConnectX-9 SuperNIC for Spectrum-X NIC configuration as a
+   Network Operator accepts ConnectX-9 SuperNIC for Spectrum-X NIC configuration as a
    **Tech Preview** — available for evaluation, but not an RA-validated or
    production-ready Spectrum-X configuration, and it requires a Spectrum-X
-   profile covering ConnectX-9 SuperNIC, available from NVIDIA Support. For
+   profile covering the selected architecture, platform, mode, and ConnectX-9
+   SuperNIC, available from NVIDIA Support. API acceptance alone does not
+   establish RA2.4 qualification. For
    general RoCE and InfiniBand workloads, ConnectX-9 SuperNIC is fully
    supported; see the NIC table above.
 
