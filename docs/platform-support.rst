@@ -525,9 +525,12 @@ Requirements:
 
 * NVIDIA GPU Operator |gpu-operator-version-min| or newer
 * NVIDIA DOCA-OFED Driver |doca-driver-version-min| or newer
-* ``nvidia_peermem`` kernel module (auto-loaded by recent NVIDIA GPU drivers)
 * Supported NVIDIA GPU (Ampere, Hopper, Blackwell, or Rubin)
 * Supported NVIDIA NICs (NVIDIA ConnectX or BlueField)
+
+NVIDIA recommends DMA-BUF for GPUDirect RDMA when supported by the platform and workload. DMA-BUF does not require the legacy ``nvidia-peermem`` kernel module. Check the GPU driver, Linux kernel, CUDA, and application requirements in the `GPU Operator GPUDirect RDMA prerequisites <https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-operator-rdma.html#gpudirect-rdma-prerequisites>`_.
+
+To use the legacy ``nvidia-peermem`` path, explicitly enable it with the GPU Operator Helm setting ``driver.rdma.enabled=true``. This setting is not required for DMA-BUF. See `Installing the GPU Operator and Enabling GPUDirect RDMA <https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/gpu-operator-rdma.html#installing-the-gpu-operator-and-enabling-gpudirect-rdma>`_ for the configuration instructions.
 
 .. list-table::
    :header-rows: 1
