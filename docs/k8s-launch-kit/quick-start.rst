@@ -60,11 +60,16 @@ Review ``deployment/.l8k/resolved-config.yaml`` and the generated manifests, esp
 Step 3 --- Deploy
 ================================================================================
 
-Preview and apply the reviewed bundle. Launch Kit manages Helm first when enabled, then policies and networking resources. Example workloads are applied only during validation:
+If the required operator CRDs are already installed, preview the reviewed bundle with a server-side dry-run:
 
 .. code-block:: bash
 
    l8k deploy --deployment-files ./deployment --dry-run
+
+Dry-run cannot bootstrap missing CRDs. On a first installation, review the generated files and proceed with deployment, or install the compatible operator APIs before using the preview. Launch Kit manages Helm first when enabled, then policies and networking resources. Example workloads are applied only during validation:
+
+.. code-block:: bash
+
    l8k deploy --deployment-files ./deployment
 
 ================================================================================

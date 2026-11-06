@@ -59,7 +59,7 @@ Download the latest presets from a Git repository:
 
 Optional flags:
 
-- ``--repo <url>`` --- override the repository URL.
+- ``--repo <owner/repo>`` --- override the GitHub repository (default ``nvidia/k8s-launch-kit``).
 - ``--branch <name>`` --- fetch from a specific branch or tag.
 - ``--dir <path>`` --- local destination directory for downloaded presets.
 

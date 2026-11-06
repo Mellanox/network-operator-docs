@@ -54,7 +54,7 @@ Deployment Ordering
 
 When enabled, Launch Kit first installs the selected Helm chart, or compares an existing release with the generated chart version and values. A mismatch stops deployment unless ``--overwrite-existing`` is explicitly set. Set ``networkOperator.skipHelmChart: true`` before generation, or pass ``--skip-network-operator-helm``, when another system owns Helm.
 
-Before any apply, preflight checks component versions and stray resources. ``--overwrite-existing`` may delete networking CRs absent from the bundle, including manually created resources and resources from omitted groups. Review the entire reported inventory; ``--groups`` is not an ownership boundary. Multus/CNI ownership conflicts remain blocking and cannot be bypassed by overwrite.
+After Helm management and before applying custom resources, general preflight checks component versions and stray resources. Helm may already have changed the cluster if this later preflight stops deployment; those changes are not rolled back. ``--overwrite-existing`` may delete networking CRs absent from the bundle, including manually created resources and resources from omitted groups. Review the entire reported inventory; ``--groups`` is not an ownership boundary. Multus/CNI ownership conflicts remain blocking and cannot be bypassed by overwrite.
 
 Launch Kit then applies manifests in four phases. The first two block on reconciliation because everything else depends on them; the last two batch the remaining manifests so controllers reconcile concurrently:
 
@@ -65,7 +65,7 @@ Launch Kit then applies manifests in four phases. The first two block on reconci
 
 .. note::
 
-   Example workload manifests (filenames matching ``*example*``) are **not** applied by ``l8k deploy``. They are fixtures consumed by the connectivity matrix in ``l8k validate --connectivity`` and are deployed only as part of that ping-matrix phase.
+   Example workload manifests (filenames matching ``*example*``) are **not** applied by ``l8k deploy``. They are validation workloads consumed by ``l8k validate --connectivity`` and are deployed only during its connectivity checks, including the selected ICMP and RDMA test families.
 
 ================================================================================
 Deploy-wide Timeout

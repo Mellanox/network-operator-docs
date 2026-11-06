@@ -71,7 +71,7 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - ``true``
      - always; opt out via ``--multirail=false`` (or set ``profile.multirail: false`` in YAML)
    * - ``--multiplane-mode``
-     - ``none`` (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200), ``swplb`` (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), ``hwplb`` (ConnectX-9 SuperNIC)
+     - ``none`` (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200, plus RTX with RA2.4/RA3.1), ``swplb`` (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), ``hwplb`` (ConnectX-9 SuperNIC)
      - only when ``--spectrum-x`` is set; from the east-west PF deviceID and GPU platform, skipped+warned when groups disagree. Select ``hwplb`` explicitly when required by the validated site topology.
    * - ``--number-of-planes``
      - 1 (single-plane platforms and NICs), 2 (ConnectX-8 SuperNIC on B300 / GB300), 4 (ConnectX-9 SuperNIC fallback), 8 (VR HWPLB with RA2.4)
@@ -83,7 +83,7 @@ When a flag is unset on both the CLI and in the configuration file, ``l8k genera
      - matching release for the chosen RA (RA2.4 → 26.10, RA2.3 → 26.7, RA2.2 → 26.4, RA2.1 → 26.1)
      - only when ``--spectrum-x`` is set
 
-Each applied default is logged at info level (``Defaulted --multiplane-mode=swplb (GB300 dual-plane platform; SWPLB is the GA default)``); the full reasoning trail is at debug level (``--log-level debug``).
+Each applied default is logged at info level; use ``--log-level debug`` for the full reasoning trail. Generator defaults do not establish hardware qualification.
 
 Resolution precedence (lowest → highest): hardware default < config-file < CLI flag. The Spectrum-X cohort rules (RA-to-release pairing, ``multiplane-mode=none`` requiring ``number-of-planes=1``, etc.) are enforced after defaults run, so a partial CLI input plus defaults must still resolve to a consistent whole.
 

@@ -265,7 +265,7 @@ When ``--groups`` selects a strict subset of a compatible (gpuType, rail-count) 
    * - Simple-selector (``NicNodePolicy``, ``SriovNetworkNodePolicy``, ``SriovNetworkPoolConfig``, ``SpectrumXRailPoolConfig``, ``NicConfigurationTemplate``)
      - One CR per filtered source group, each with its own machine-label flat ``nodeSelector``. All N CRs register the same bucket-shared kubelet resource so the Bucketed companions can reference one stable name.
    * - Per-source (``NicInterfaceNameTemplate``)
-     - One CR per source group, always (regardless of merge or filter). PCI addresses are machine-specific and never aggregate.
+     - When naming is required, one CR per selected source group, independent of merging. PCI addresses are machine-specific and never aggregate. See :ref:`nic-interface-name-templates` for cases that retain existing names.
 
 For complete buckets, shared resources can use the GPU selector. NIC configuration templates remain per source and include east-west PCI selectors. RA2.4 permits only one compatible rail-pool parent (a complete cohort or one selected source); it rejects unsupported partial multi-source and multi-bucket selections. See :doc:`profiles/spectrum-x`.
 
