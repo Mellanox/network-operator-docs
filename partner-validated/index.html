@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner-Validated Configurations &mdash; NVIDIA Network Operator v26.10.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/omni-style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/api-styles.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/mermaid-init.js"></script>
+        <script src="../_static/design-tabs.js"></script>
+        <script src="../_static/version.js"></script>
+        <script src="../_static/social-media.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NVIDIA Network Operator with Red Hat OpenShift" href="openshift.html" />
+    <link rel="prev" title="Platform Support" href="../platform-support.html" />
+ 
+
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+
+<a href="../index.html">
+  <img src="../_static/nvidia-logo-white.png" class="logo" alt="Logo"/>
+</a>
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">NVIDIA Network Operator</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../platform-support.html">Platform Support</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Partner-Validated Configurations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="openshift.html">Red Hat OpenShift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="template.html">Partner Configuration Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#before-you-start">Before You Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#discover-and-deploy">Discover and Deploy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-and-assess-validation">Run and Assess Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contribute-a-configuration">Contribute a Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-support">Getting Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-kubernetes.html">Getting Started with Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started-with-openshift.html">Getting Started with Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install-network-operator-gov-ready.html">NVIDIA Network Operator Government Ready</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../nic-conf-operator/nic-configuration-operator.html">NIC Configuration Operator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../spectrum-x/spectrum-x.html">NVIDIA Spectrum-X</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../k8s-launch-kit/k8s-launch-kit.html">Configuration Assistance with Kubernetes Launch Kit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ai-skills.html">AI Skills</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customizations/customization.html">Customization Options and CRDs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../life-cycle-management.html">Life Cycle Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/advanced.html">Advanced Configurations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting/troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Legal Notices and 3rd Party Licenses</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NVIDIA Network Operator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+<li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+  
+<li>Partner-Validated Configurations</li>
+
+      <li class="wy-breadcrumbs-aside">
+      </li>
+<li class="wy-breadcrumbs-aside">
+
+  <span>&nbsp;</span>
+</li>
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="partner-validated-configurations">
+<h1>Partner-Validated Configurations<a class="headerlink" href="#partner-validated-configurations" title="Permalink to this headline"></a></h1>
+<p>Independent software vendors (ISVs) can use NVIDIA Kubernetes Launch Kit
+(<code class="docutils literal notranslate"><span class="pre">l8k</span></code>) to validate NVIDIA Network Operator with their Kubernetes-based
+platforms. A partner configuration describes the tested software and hardware,
+how to deploy it, the checks that passed, and where users can get help.</p>
+<p>Validation applies to the versions, networking profiles, and hardware recorded
+in each configuration. See <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a> for NVIDIA Network Operator
+support; a contributed validation result does not extend that support matrix.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="openshift.html">Red Hat OpenShift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="template.html">Partner Configuration Template</a></li>
+</ul>
+</div>
+<div class="contents local topic" id="on-this-page">
+<p class="topic-title">On this page</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#before-you-start" id="id1">Before You Start</a></p></li>
+<li><p><a class="reference internal" href="#discover-and-deploy" id="id2">Discover and Deploy</a></p></li>
+<li><p><a class="reference internal" href="#run-and-assess-validation" id="id3">Run and Assess Validation</a></p></li>
+<li><p><a class="reference internal" href="#contribute-a-configuration" id="id4">Contribute a Configuration</a></p></li>
+<li><p><a class="reference internal" href="#getting-support" id="id5">Getting Support</a></p></li>
+</ul>
+</div>
+<section id="before-you-start">
+<h2>Before You Start<a class="headerlink" href="#before-you-start" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Choose the platform version, Network Operator release, NVIDIA NICs, and
+networking profile to validate. Use the
+<a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/profiles/">Launch Kit profile guide</a>
+to select a profile supported by your hardware and platform.</p></li>
+<li><p>Prepare at least two Ready, schedulable workers for inter-node testing. Confirm
+switch configuration, NIC firmware, RDMA prerequisites, available VF capacity
+for SR-IOV, and access to the required container images.</p></li>
+<li><p>Obtain a kubeconfig with permission to discover hardware, deploy networking
+resources, and run validation workloads. Discovery and deployment change the
+cluster; use a test environment or an agreed maintenance window.</p></li>
+<li><p>Select unused network addresses, MTU, routing, and a maintenance budget suitable
+for the test cluster. Establish the required bandwidth threshold and worker/rail
+coverage before testing.</p></li>
+<li><p>Follow the <a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/installation/">Launch Kit installation guide</a> to install a
+specific published version. Retain that version with your results and use its
+matching documentation when reproducing a run.</p></li>
+</ul>
+<p>The following example validates SR-IOV Ethernet RDMA on Kubernetes. For OpenShift,
+complete the <a class="reference internal" href="openshift.html"><span class="doc">OpenShift prerequisites and deployment procedure</span></a>
+first, then use the validation and submission steps below.</p>
+</section>
+<section id="discover-and-deploy">
+<h2>Discover and Deploy<a class="headerlink" href="#discover-and-deploy" title="Permalink to this headline"></a></h2>
+<ol class="arabic">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">KUBECONFIG</span></code> to your cluster’s kubeconfig file. Confirm the context and
+record the Launch Kit version:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl config current-context
+kubectl get nodes -o wide
+l8k version
+l8k schema
+</pre></div>
+</div>
+</li>
+<li><p>Select a Network Operator release recognized by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">schema</span></code> and suitable for
+your platform. Replace <code class="docutils literal notranslate"><span class="pre">&lt;release&gt;</span></code> with that release line, then discover the
+hardware:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover --kubeconfig <span class="s2">&quot;</span><span class="nv">$KUBECONFIG</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --network-operator-release &lt;release&gt; <span class="se">\</span>
+  --save-cluster-config ./cluster-config.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Review <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. Confirm the intended workers, NICs, rails,
+network namespaces, IP ranges, routing, driver settings, and maintenance
+limits. Set <code class="docutils literal notranslate"><span class="pre">validation.gpuDirect.enabled</span></code> explicitly: use <code class="docutils literal notranslate"><span class="pre">false</span></code> for
+host-memory RDMA validation; enable it only when GPU/RDMA prerequisites and
+NIC-to-GPU mappings are ready for GPUDirect testing.</p></li>
+<li><p>Generate the deployment files in a new directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+  --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
+  --save-deployment-files ./deployment
+</pre></div>
+</div>
+<p>Review the generated policies, worker selectors, addresses, VF allocations,
+and Helm values. Keep the complete <code class="docutils literal notranslate"><span class="pre">deployment</span></code> directory, including its
+hidden <code class="docutils literal notranslate"><span class="pre">.l8k</span></code> directory; deploy and validate use the saved configuration.
+If your platform already manages the Network Operator Helm release, follow
+the <a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/profiles/#choose-a-platform-and-operating-model">external ownership instructions</a>
+before generating the files.</p>
+</li>
+<li><p>Preview the changes, resolve any conflicts, and deploy the reviewed files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --kubeconfig <span class="s2">&quot;</span><span class="nv">$KUBECONFIG</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --deployment-files ./deployment --dry-run
+l8k deploy --kubeconfig <span class="s2">&quot;</span><span class="nv">$KUBECONFIG</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --deployment-files ./deployment
+</pre></div>
+</div>
+<p>A dry run checks the proposed resources; live deployment and validation are
+still required. For a complete walkthrough, see the
+<a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/quick-start/">Launch Kit SR-IOV Ethernet guide</a>.</p>
+</li>
+</ol>
+</section>
+<section id="run-and-assess-validation">
+<span id="partner-run-validation"></span><h2>Run and Assess Validation<a class="headerlink" href="#run-and-assess-validation" title="Permalink to this headline"></a></h2>
+<p>Run validation against the same deployment directory. Replace <code class="docutils literal notranslate"><span class="pre">&lt;minimum-gbps&gt;</span></code>
+with the bandwidth threshold agreed for your configuration. For OpenShift, use
+<code class="docutils literal notranslate"><span class="pre">--flavor</span> <span class="pre">ocp</span></code> and the OpenShift deployment directory.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p ./validation-results
+l8k validate --kubeconfig <span class="s2">&quot;</span><span class="nv">$KUBECONFIG</span><span class="s2">&quot;</span> <span class="se">\</span>
+  --deployment-files ./deployment <span class="se">\</span>
+  --wait 10m --connectivity --validation-mode strict <span class="se">\</span>
+  --validation-checks icmp,rping,ib_write_bw <span class="se">\</span>
+  --rdma-ib-write-min-bandwidth-gbps &lt;minimum-gbps&gt; <span class="se">\</span>
+  --report-path ./validation-results/validation.html
+</pre></div>
+</div>
+<p>This checks resource readiness, IP connectivity, RDMA communication, and
+host-memory RDMA bandwidth. GPUDirect bandwidth is also tested when enabled in
+the generated configuration. For other profiles, choose applicable checks using
+the <a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/validation/">Launch Kit validation guide</a>.</p>
+<p>Open <code class="docutils literal notranslate"><span class="pre">validation-results/validation.html</span></code> and accept a configuration only when:</p>
+<ul class="simple">
+<li><p>The intended networking resources are ready and required component/version
+checks have completed successfully.</p></li>
+<li><p>All intended workers and rails appear in the connectivity results, and every
+required test family has executed tests that contribute to the pass/fail result.</p></li>
+<li><p>Required connectivity tests meet the routing expectations and bandwidth
+threshold. In strict mode, cross-rail expectations follow the selected routing
+mode; expected isolation is not a connectivity failure.</p></li>
+<li><p>Skipped or unverified checks are explained, with separate evidence for any
+required prerequisite that Launch Kit does not check.</p></li>
+</ul>
+<p>A zero exit status alone is insufficient: Kubernetes validation can succeed
+with warnings while connectivity is skipped or resources are still reconciling.
+A dry run, static-only check, or empty test selection does not validate traffic.
+Review the <a class="reference external" href="https://nvidia.github.io/k8s-launch-kit/user/validation/#acceptance-outcomes">validation acceptance outcomes</a>
+and investigate failures before repeating the run.</p>
+<p>For automated runs, add <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> and redirect stdout and stderr to
+separate files, preserving the command’s exit status. Add <code class="docutils literal notranslate"><span class="pre">--junit-path</span></code> when
+your Launch Kit version supports JUnit output. Retain the HTML report in either
+case. Run your platform’s application tests on the validated network as well;
+Launch Kit networking tests do not establish application compatibility.</p>
+</section>
+<section id="contribute-a-configuration">
+<span id="partner-submit-results"></span><h2>Contribute a Configuration<a class="headerlink" href="#contribute-a-configuration" title="Permalink to this headline"></a></h2>
+<ol class="arabic simple">
+<li><p>Copy the <a class="reference internal" href="template.html"><span class="doc">partner configuration template</span></a> and replace its
+guidance with your tested configuration and reproducible instructions.
+Record exact versions, the validation date, hardware, profile, tested scope,
+limitations, and a partner support contact. Revalidate each additional version
+or profile before adding it to the documented results.</p></li>
+<li><p>Retain the input configuration, complete deployment directory, Launch Kit
+version, validation command and exit status, HTML report, and any JSON/JUnit
+results. Include application-test outcomes and explanations for skipped checks.
+For failures, collect diagnostics using <a class="reference internal" href="../troubleshooting/sosreport.html"><span class="doc">SOS-Report Collection Script</span></a>.</p></li>
+<li><p>Review reports and configurations before sharing: remove credentials and
+confidential cluster details. Share sanitized results or a reference to an
+agreed evidence location; do not commit kubeconfigs or secrets.</p></li>
+<li><p>Open a pull request in the <a class="reference external" href="https://github.com/Mellanox/network-operator-docs">Network Operator documentation repository</a> with the partner page and
+a link from this section. Include validation evidence and a GitHub contact for
+review questions in the PR description.</p></li>
+</ol>
+</section>
+<section id="getting-support">
+<h2>Getting Support<a class="headerlink" href="#getting-support" title="Permalink to this headline"></a></h2>
+<p>Use the support contact listed in the partner’s configuration for platform-specific
+issues. Include the tested version combination, profile, reproduction steps, and
+sanitized validation report. For Network Operator diagnostics, start with
+<a class="reference internal" href="../troubleshooting/troubleshooting.html"><span class="doc">Troubleshooting</span></a>; report reproducible operator issues in
+the <a class="reference external" href="https://github.com/Mellanox/network-operator/issues">Network Operator issue tracker</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, NVIDIA.
+      <span class="lastupdated">Last updated on Nov 08, 2026.
+      </span></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+ 
+
+
+
+</body>
+</html>
