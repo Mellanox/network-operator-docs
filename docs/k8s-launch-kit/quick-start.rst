@@ -30,7 +30,7 @@ This walkthrough takes you from a freshly prepared cluster to a running NVIDIA n
 
 .. note::
 
-   **Use this when:** you have the Network Operator Helm chart installed (per :doc:`Installation <installation>`), the ``l8k`` binary on your PATH, and ``$KUBECONFIG`` set or your default kubeconfig at ``~/.kube/config``.
+   **Use this when:** you meet the :doc:`Installation <installation>` prerequisites, have the ``l8k`` binary on your PATH, and ``$KUBECONFIG`` set or your default kubeconfig at ``~/.kube/config``.
 
 ================================================================================
 Step 1 --- Discover
@@ -42,7 +42,7 @@ Probe the cluster's network hardware. Output is written to ``./cluster-config.ya
 
    l8k discover
 
-Discovery deploys a minimal probe profile, examines NICs and OFED-dependent kernel modules on each node, and groups nodes by PCI topology.
+Discovery temporarily deploys the NIC Configuration Daemon, examines NICs and OFED-dependent kernel modules on each node, and groups nodes by PCI topology.
 
 ================================================================================
 Step 2 --- Generate
@@ -54,29 +54,35 @@ Generate Kubernetes manifests for an SR-IOV Ethernet deployment. Launch Kit auto
 
    l8k generate --fabric ethernet --deployment-type sriov --multirail
 
-See :doc:`workflows/generate` for the output file layout.
+Review ``deployment/.l8k/resolved-config.yaml`` and the generated manifests, especially node selectors, addresses, driver settings, and maintenance concurrency. See :doc:`workflows/generate` for the output file layout.
 
 ================================================================================
 Step 3 --- Deploy
 ================================================================================
 
-Apply the generated manifests in dependency order (NicClusterPolicy first, then per-group NicNodePolicy, then networks and workloads):
+If the required operator CRDs are already installed, preview the reviewed bundle with a server-side dry-run:
 
 .. code-block:: bash
 
-   l8k deploy
+   l8k deploy --deployment-files ./deployment --dry-run
+
+Dry-run cannot bootstrap missing CRDs. On a first installation, review the generated files and proceed with deployment, or install the compatible operator APIs before using the preview. Launch Kit manages Helm first when enabled, then policies and networking resources. Example workloads are applied only during validation:
+
+.. code-block:: bash
+
+   l8k deploy --deployment-files ./deployment
 
 ================================================================================
 Step 4 --- Verify
 ================================================================================
 
-Check that operator pods, OFED driver pods, and example workloads are running:
+Run validation against the same bundle and inspect its HTML report. Required checks must run on the intended workers and rails; an exit code of zero with skipped checks is incomplete evidence:
 
 .. code-block:: bash
 
-   kubectl -n nvidia-network-operator get pods
-   kubectl get nicclusterpolicy
-   kubectl get nicnodepolicy
+   l8k validate --deployment-files ./deployment --wait 10m
+
+See :doc:`workflows/validate` for acceptance criteria and ``deployment/k8s-launch-kit-validation-report.html``.
 
 ================================================================================
 Next Steps
@@ -93,5 +99,5 @@ See Also
 ================================================================================
 
 - :doc:`Overview <overview>` --- the discover/generate/deploy mental model
-- :doc:`CLI Reference <reference/cli>` --- every flag
+- :doc:`CLI Reference <reference/cli>` --- host workflow flags
 - :doc:`Configuration Reference <reference/config>` --- ``cluster-config.yaml`` schema

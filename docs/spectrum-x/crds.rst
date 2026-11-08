@@ -206,7 +206,7 @@ RailTopology
 
 (*Appears on:* :ref:`SpectrumXRailPoolConfigSpec <SpectrumXRailPoolConfigSpec>`)
 
-RailTopology describes a single rail in the Spectrum-X pool. Only one of ``cidrPoolRef`` or ``ipam`` may be specified.
+RailTopology describes a network endpoint group in the Spectrum-X pool. Traditional Hardware Multiplane layouts use one entry per logical rail. VR Hardware Multiplane uses two entries per logical rail, one for each NIC endpoint, for eight entries across four logical rails. Only one of ``cidrPoolRef`` or ``ipam`` may be specified.
 
 .. list-table::
    :header-rows: 1

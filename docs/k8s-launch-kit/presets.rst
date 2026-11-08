@@ -34,7 +34,7 @@ A **preset** is a pre-recorded hardware topology for a known machine type (e.g.,
 
 Launch Kit uses presets in two ways:
 
-- **Discovery overlay** --- when discovery detects a matching machine type, the preset's topology is overlaid for consistency.
+- **Discovery overlay** --- when discovery detects an exact matching machine and GPU type, the preset's topology is overlaid for consistency.
 - **Offline generation** --- ``l8k generate --for <preset>`` skips discovery entirely.
 
 ================================================================================
@@ -59,11 +59,11 @@ Download the latest presets from a Git repository:
 
 Optional flags:
 
-- ``--repo <url>`` --- override the repository URL.
+- ``--repo <owner/repo>`` --- override the GitHub repository (default ``nvidia/k8s-launch-kit``).
 - ``--branch <name>`` --- fetch from a specific branch or tag.
-- ``--dir <path>`` --- subdirectory within the repo containing presets.
+- ``--dir <path>`` --- local destination directory for downloaded presets.
 
-Presets are optional. Discovery and ``--for`` generation work without them; presets simply add machine-specific topology defaults.
+Discovery works without a matching preset. ``--for`` requires a preset present in the selected catalog; use the exact name from ``l8k preset list``. Presets are embedded by default; ``--config-dir`` selects an override catalog.
 
 ================================================================================
 Offline Manifest Generation
@@ -73,7 +73,7 @@ Generate manifests for a known preset without cluster access:
 
 .. code-block:: bash
 
-   l8k generate --for ThinkSystem-SR680a-V3 \
+   l8k generate --for ThinkSystem-SR680a-V3-H200 \
        --node-selector "nvidia.com/gpu.product=NVIDIA-H200" \
        --fabric ethernet --deployment-type sriov --multirail \
        --save-deployment-files ./deployments
@@ -92,13 +92,13 @@ If no preset matches, discovery proceeds with the values it derives directly fro
 Validation and Deviations
 ================================================================================
 
-When a matched preset's PFs don't exactly match the discovered hardware, Launch Kit **records the deviations** instead of refusing to apply the preset. There are no fatal validation errors --- every discrepancy is soft:
+When a matched preset's PFs don't exactly match the discovered hardware, Launch Kit **records the deviations** instead of refusing to apply the preset. Discovery retains the discrepancy so it can be reviewed before deployment:
 
 - **PF count mismatch** --- the preset and the cluster expose different numbers of PFs.
 - **PCI address drift** --- a PCI address present in the preset is missing on the cluster, or vice versa.
 - **Device-ID drift** --- the device ID at a matching PCI address differs from the preset.
 
-Whenever any of these is detected, the matched preset is still applied on a best-effort basis (so rail/NUMA/GPU-affinity fields populate for whichever PFs do line up), and the discrepancies are written to ``ClusterConfig.presetDeviation`` in ``cluster-config.yaml``. Whenever a config with non-empty ``presetDeviation`` is loaded by any l8k subcommand, a warning is re-emitted listing each deviation. The deployment proceeds, but the operator is reminded each run that the cluster differs from the matched preset.
+Whenever any of these is detected, the matched preset is still applied on a best-effort basis (so rail/NUMA/GPU-affinity fields populate for whichever PFs do line up), and the discrepancies are written to ``ClusterConfig.presetDeviation`` in ``cluster-config.yaml``. Whenever a config with non-empty ``presetDeviation`` is loaded by any l8k subcommand, a warning is re-emitted listing each deviation. Generation can proceed, but certified-preset deviations fail ``l8k validate`` with exit code 4. Resolve the mismatch or use an appropriate reviewed topology; a completed render does not qualify the hardware.
 
 Part numbers and PSIDs are not strict criteria (firmware variants are expected) so they're not checked.
 

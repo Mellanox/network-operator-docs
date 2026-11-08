@@ -30,27 +30,35 @@ Automation and CI/CD
 
    **Use this when:** you are wiring Launch Kit into a CI/CD pipeline, an automation framework, or an AI agent that needs structured output and exit-code-driven retry logic.
 
-Launch Kit is designed for both interactive use and automated pipelines. Every subcommand supports a JSON output mode, well-defined exit codes, and a programmatic capability discovery endpoint.
+Launch Kit is designed for both interactive use and automated pipelines. Lifecycle commands support structured output, process exit codes, and capability discovery. Their output contracts differ by command.
 
 ================================================================================
 JSON Output Mode
 ================================================================================
 
-Use ``--output json`` for machine-readable output. In JSON mode, structured data goes to stdout and human-readable logs go to stderr:
+Use ``--output json`` for machine-readable lifecycle output. Capture output and diagnostics separately, and preserve the command exit status before parsing:
 
 .. code-block:: bash
 
+   status=0
    l8k generate --user-config ./cluster-config.yaml \
        --fabric ethernet --deployment-type sriov --multirail \
-       --save-deployment-files ./deployments \
-       --output json --yes 2>/dev/null | jq .
+       --save-deployment-files ./deployments --output json \
+       >generation.json 2>generation.log || status=$?
+   if [ "$status" -ne 0 ]; then
+       cat generation.log >&2
+       exit "$status"
+   fi
+   jq . generation.json
+
+``discover``, ``generate``, and the root pipeline emit one result object. Standalone ``deploy`` has no finalized success JSON object; use its exit status. ``validate`` emits a stream of separate objects for static results, connectivity, and ``reportPath``: capture it as JSON Lines and use ``jq -s .`` when an array is needed. ``preset`` and ``sosreport`` retain text success output despite accepting the inherited output flag.
 
 ================================================================================
 Non-Interactive Flags
 ================================================================================
 
-- ``--yes`` / ``-y`` --- auto-confirm all prompts (implied by ``--output json``)
-- ``--quiet`` / ``-q`` --- suppress informational output
+- ``--output json`` --- auto-confirm lifecycle prompts, including deployment actions.
+- ``--yes`` / ``-y`` and ``--quiet`` / ``-q`` --- root-pipeline flags, not global subcommand flags.
 
 ================================================================================
 Exit Codes
@@ -71,7 +79,7 @@ Exit Codes
    * - 3
      - Cluster error (API unreachable, discovery failed).
    * - 4
-     - Deployment error (apply failed).
+     - Deployment or validation gate failure.
    * - 5
      - Partial success (discovery completed but deployment failed).
 

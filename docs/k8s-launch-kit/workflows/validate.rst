@@ -26,185 +26,111 @@ Validate Workflow
    :local:
    :backlinks: none
 
-.. note::
-
-   **Use this when:** you've applied a deployment and want to confirm both the control plane (operator and CRs reconciled, component versions match the requested release) and the data plane (pods on different nodes can reach each other on every rail). ``l8k validate`` runs four checks back-to-back and emits an HTML report alongside the text/JSON output.
-
-================================================================================
-Run Validation
-================================================================================
+``l8k validate`` compares generated resources with the live cluster, runs selected data-plane checks, and writes an HTML acceptance report. Validate the same complete bundle used for deployment:
 
 .. code-block:: bash
 
-   l8k validate
+   l8k validate --deployment-files ./deployment --wait 10m
 
-No flags required when defaults apply. ``l8k validate`` reads ``./cluster-config.yaml`` (or, when not in the working directory, ``<deployment-files>/../cluster-config.yaml``) for ``networkOperator.selectedRelease`` and the operator namespace, then:
-
-#. Classifies every YAML manifest under ``--deployment-files`` against the live cluster.
-#. Runs the connectivity matrix (enabled by default; pass ``--connectivity=false`` to skip).
-#. Writes an HTML validation report to ``<deployment-files>/verify-report.html``.
-
-.. code-block:: bash
-
-   l8k validate --user-config ./cluster-config.yaml \
-       --deployment-files ./deployment \
-       --kubeconfig ~/.kube/config
+Unless ``--user-config`` is supplied, validation prefers the bundle's ``.l8k/resolved-config.yaml``. This preserves the release, namespace, profile, groups, and validation decisions used during generation. See :doc:`Configuration Reference <../reference/config>` for the lookup order.
 
 ================================================================================
 What It Checks
 ================================================================================
 
-Network Operator Helm release version
---------------------------------------
+Static checks cover the operator release (Helm on Kubernetes, OLM CSV on OpenShift), Helm values when managed, component versions, stray resources, certified-preset deviations, and manifest readiness. Objects are classified as ``READY``, ``IN-PROGRESS``, ``ERROR``, or ``MISSING``; kind-specific checks inspect worker and device coverage as well as controller status.
 
-Launch Kit reads any Helm release Secret in the operator namespace whose release name contains ``network-operator`` (Secret name format ``sh.helm.release.v1.<release>.v<N>``, type ``helm.sh/release.v1``), parses the chart's ``appVersion``, and compares it against the version expected for ``networkOperator.selectedRelease`` in the user's config (looked up in the embedded release catalog).
+Files matching ``*example*`` are validation workloads, excluded from static manifest checks. When the operational resources are ready, validation applies the example DaemonSets, waits for usable pods, and runs configured source-bound tests on their secondary networks. The default families are ``icmp``, ``rping``, and ``ib_write_bw``. ``validation.mode`` (``quick``, ``full``, or ``strict``) controls coverage and cross-rail expectations. Workloads are removed afterwards unless ``--keep`` is set.
 
-The check is **skipped** (with a clear reason in the output) when:
+Connectivity requires resolved generation metadata or a user-owned configuration with explicit ``profile.routing`` and ``validation.gpuDirect.enabled`` decisions. GPUDirect also requires worker and rail topology when bandwidth testing is selected. Embedded defaults alone do not satisfy this input requirement.
 
-- ``cluster-config.yaml`` is missing or doesn't declare ``networkOperator.selectedRelease``.
-- The selected release is not in the embedded catalog.
-- No matching Helm release Secret is found in the operator namespace (e.g., the operator was installed via Argo CD or kubectl rather than Helm).
-
-Component versions in NicClusterPolicy and NicNodePolicy
---------------------------------------------------------
-
-The Helm-release check confirms the *operator* matches the requested release line. Launch Kit also reads the live ``NicClusterPolicy`` and every ``NicNodePolicy`` and verifies that each component's ``.version`` field matches the catalog. This catches drift the Helm check can miss: out-of-band ``kubectl edit`` changes, partial upgrades, hand-rolled chart values that pinned an older image tag.
-
-Sections checked:
-
-- ``NicClusterPolicy`` --- ``nicConfigurationOperator.operator``, ``nicConfigurationOperator.configurationDaemon``, ``nvIpam``, ``secondaryNetwork.cniPlugins``, ``secondaryNetwork.multus``, and ``ofedDriver`` (when the 26.1 model is used).
-- ``NicNodePolicy`` --- ``ofedDriver``, ``rdmaSharedDevicePlugin``, ``sriovDevicePlugin``.
-
-Each row is reported as ``MATCH`` or ``MISMATCH`` with the expected and actual versions side by side. A mismatch fails ``l8k validate`` with exit code 4, the same as a missing manifest or Helm-version mismatch. The check is **skipped** (no impact on exit code) when ``selectedRelease`` is empty, when the catalog doesn't carry that release line, or when the cluster has no ``NicClusterPolicy`` (``l8k deploy`` hasn't been run yet).
-
-Manifest state
---------------
-
-Every YAML document under ``--deployment-files`` is routed through a per-Kind validator that classifies it as one of four states:
-
-- ``READY`` — the controller reports the object is fully reconciled. For ``NicClusterPolicy`` and ``NicNodePolicy``, the per-component ``appliedStates[]`` are folded into a "ready: 12/12; components: …" summary so an operator sees exactly what landed.
-- ``IN-PROGRESS`` — the controller is still reconciling. For ``SriovNetworkNodePolicy`` and the ``NicConfigurationTemplate`` / ``NicInterfaceNameTemplate`` Kinds, per-node and per-device breakdowns are surfaced (the SR-IOV silent-failure case where ``syncStatus=Succeeded`` but ``pfNames`` matched zero interfaces is detected and reported as ERROR rather than READY).
-- ``ERROR`` — the controller reported an error state, or a cross-check (expected PFs vs. discovered) failed.
-- ``MISSING`` — the named object is not present in the cluster.
-
-Files matching ``*example*`` (e.g., ``50-example-daemonset.yaml``) are skipped here — those are demo workloads consumed by the connectivity matrix, not part of the network-operator surface ``l8k validate`` checks for static state.
-
-Connectivity matrix (default ON)
---------------------------------
-
-When every manifest is ``READY``, Launch Kit applies the example DaemonSet, waits for it to roll out completely (``numberReady == desiredNumberScheduled > 0`` — a single ``ContainerCreating``-stuck pod fails the wait), enumerates the test pods' rail IPs from each pod's ``k8s.v1.cni.cncf.io/network-status`` annotation, and runs a ping matrix:
-
-- **Same-rail tests** — every ordered ``(srcPod, dstPod)`` pair on every rail both pods attach to. Verifies the rail's end-to-end data path.
-- **Cross-rail canary** — one ping per ordered pod pair from rail-0 → rail-1 (when both pods have ≥2 rails). Catches routing misconfigurations that would otherwise be invisible when every rail passes independently.
-
-The DaemonSet is deleted on exit. Pass ``--keep`` to leave it running for follow-up debugging.
-
-When fewer than two schedulable test pods exist (single-node clusters, pods stuck Pending), the matrix soft-skips with a reason in the report.
-
-Preset deviations
------------------
-
-If ``cluster-config.yaml`` records preset deviations, they're surfaced under each affected node group in the HTML report's **Node groups** section. Each entry shows the field (``pfCount`` / ``pciAddress`` / ``deviceID``), the expected value, the discovered value, and a short detail. Deviations are reported for visibility — they do **not** affect the exit code, since the deployment can still run correctly while diverging from the matched preset. See :doc:`../presets` "Validation and Deviations".
+A directory containing only valid ``*example*.yaml`` DaemonSets selects connectivity-only validation. Pass ``--connectivity=false`` for static checks without test workload creation.
 
 ================================================================================
-HTML Validation Report
-================================================================================
-
-Every ``l8k validate`` run writes a self-contained HTML report to ``<deployment-files>/verify-report.html`` (override with ``--report-path <file>``, disable with ``--report-path=-``). The report is one HTML file with inline CSS — no JavaScript, no external assets — so it can be attached to a ticket, shared in chat, or opened offline.
-
-Report sections:
-
-- **Header** — Launch Kit version, generation timestamp, kubeconfig context, API-server version, operator namespace.
-- **Profile** — fabric, deployment type, multirail, and Spectrum-X (version / multiplane mode / number of planes) when enabled. When ``cluster-config.yaml`` doesn't carry an explicit ``profile:`` block, the profile is inferred from the Kinds present in the rendered deployment manifests.
-- **Node groups** — one card per ``clusterConfig[]`` entry: identifier, machine type, GPU type, link type, node selector, worker-node list, capability pills, and east-west / north-south PF tables (PCI, device ID, rail, netdev, RDMA device, PSID, part number, NUMA node, connected GPU, GPU proximity). Preset deviations are rendered as a sub-table when present.
-- **Cluster nodes** — name, ``nvidia.kubernetes-launch-kit.machine`` and ``.gpu`` labels, role.
-- **Network Operator release** — selected vs. deployed appVersion. When the component-version cross-check ran, a sub-table lists every ``NicClusterPolicy`` / ``NicNodePolicy`` section's ``MATCH`` / ``MISMATCH`` against the catalog (expected vs. actual side by side).
-- **Manifest state** — one row per CR with a state badge and the validator's reason. Two expandable rows render full-width directly below each manifest row: **Details** (the SR-IOV per-node breakdown, the NCP appliedStates components, etc.) and **Live YAML** (the cluster's current view of the object, ``managedFields`` stripped, status kept). Manifests with nothing to expand render only the data row.
-- **Connectivity matrix** — per-rail ``src × dst`` grids with pass/fail/skipped color-coded cells, plus the cross-rail canary list.
-- **Warnings** — bulleted rollup ("connectivity matrix skipped because cluster has in-progress manifests", "SriovNetworkNodePolicy/rail-0 is in-progress on 2/3 nodes", etc.).
-
-================================================================================
-Flag Reference
+Acceptance Criteria
 ================================================================================
 
 .. list-table::
    :header-rows: 1
    :widths: 30 70
 
+   * - **Mode**
+     - **Exit and coverage behavior**
+   * - Full Kubernetes validation
+     - Failed static gates or gating connectivity tests return ``4``. In-progress manifests can return ``0`` with warnings and skip connectivity. A skipped or incomplete matrix does not independently fail this mode.
+   * - Connectivity-only validation
+     - Every selected test family must produce a gating test, and every gating test must pass. Skipped, empty, or incomplete coverage returns ``4``.
+   * - OpenShift with connectivity enabled
+     - Requires the same per-family coverage; in-progress manifests preventing connectivity return ``4``.
+   * - ``--connectivity=false``
+     - Supplies static evidence only; no data-plane checks run.
+
+Missing or errored manifests, release/values/component mismatches, stray resources, and certified-preset deviations fail full validation. Malformed or missing test DaemonSets are input errors (exit ``2``) when connectivity is requested. ``validation.checks: []`` disables test families and establishes no connectivity evidence.
+
+Before accepting a deployment, inspect the report for the intended workers and rails, ready resources, completed static gates, and completed gating tests for every required family. Review skipped and unverified checks separately. On Kubernetes, exhausting ``--wait`` alone does not turn an in-progress warning into a failure.
+
+External Multus/CNI installer checks can be reported as ``UNVERIFIED`` when API evidence is absent or incomplete. This is not a successful host-networking check. On OpenShift these components are platform-owned; their installer health is not inspected, but ownership conflicts remain errors.
+
+================================================================================
+Reports and Automation
+================================================================================
+
+The default HTML report is ``<deployment-files>/k8s-launch-kit-validation-report.html``, at the bundle root even when resources are in ``network-operator/``. It contains environment/profile details, topology, release/preflight checks, live resource YAML, connectivity matrices, and warnings, and can be opened offline.
+
+.. code-block:: bash
+
+   l8k validate --report-path ./reports/validation.html
+   l8k validate --report-path=-
+   l8k validate --junit-path ./reports/validation.xml
+
+``--report-path=-`` disables HTML output; ``--junit-path`` independently requests JUnit XML. Always retain the process status as well as reports.
+
+JSON mode emits separate objects for static results, connectivity, and the report path, not a single combined document. Preserve stderr and the command's exit status before parsing:
+
+.. code-block:: bash
+
+   status=0
+   l8k validate --deployment-files ./deployment --output json \
+       >validation.jsonl 2>validation.log || status=$?
+   if [ "$status" -ne 0 ]; then
+       cat validation.log >&2
+       exit "$status"
+   fi
+   jq -s . validation.jsonl
+
+================================================================================
+Useful Flags
+================================================================================
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
    * - **Flag**
-     - **Description**
-   * - ``--connectivity``
-     - Run the data-plane ping matrix. Default ``true``. Pass ``--connectivity=false`` to limit validate to the static manifest + Helm-release-version checks.
-   * - ``--connectivity-timeout``
-     - Wall-clock budget for the connectivity phase (DaemonSet rollout + ping execs). Default ``5m``.
-   * - ``--ping-count``
-     - Number of ICMP echoes per ``src → dst`` pair (``ping -c N``). Default ``3``.
+     - **Purpose**
+   * - ``--validation-checks icmp,rping,ib_write_bw``
+     - Select test families; overrides ``validation.checks``.
+   * - ``--validation-mode quick|full|strict``
+     - Select coverage and cross-rail expectations.
+   * - ``--connectivity-timeout <duration>``
+     - Bound workload setup and execution. Default ``0`` computes the budget from the matrix plan.
+   * - ``--rdma-rping-iterations <int>``
+     - Set RDMA ping iterations.
+   * - ``--rdma-ib-write-size <int>``
+     - Set the bandwidth test message size.
+   * - ``--rdma-ib-write-min-bandwidth-gbps <number>``
+     - Set minimum peak bandwidth; ``0`` disables bandwidth gating.
+   * - ``--wait <duration>``
+     - Poll in-progress resources; default ``0`` takes one snapshot.
    * - ``--keep``
-     - Leave the test DaemonSet running after ``--connectivity`` completes. Useful for follow-up kubectl exec / iperf3 sessions.
-   * - ``--wait``
-     - Block validate up to this duration waiting for in-progress manifests to reach a terminal state. ``0`` (default) returns immediately on the first snapshot. Re-polls the cluster every 10 s.
-   * - ``--report-path``
-     - Write the HTML report to this path. Empty (default) writes to ``<deployment-files>/verify-report.html``. Pass ``-`` to skip the report entirely.
-   * - ``--user-config``
-     - Cluster config file. Lookup order: explicit path → ``./cluster-config.yaml`` → ``<deployment-files>/../cluster-config.yaml`` → ``<deployment-files>/cluster-config.yaml``.
-   * - ``--deployment-files``
-     - Directory containing the manifests to verify (default: ``./deployment``).
-   * - ``--kubeconfig``
-     - Path to kubeconfig (falls back to ``$KUBECONFIG``).
+     - Retain test DaemonSets for debugging.
+
+See ``l8k validate --help`` for the complete flag list.
 
 ================================================================================
-Exit Codes
-================================================================================
-
-- **0** — every manifest is READY (or all-READY plus IN-PROGRESS without errors) and, when run, the connectivity matrix passed.
-- **0 with warning** — at least one manifest is IN-PROGRESS but none are ERROR / MISSING. Connectivity is skipped because pinging an unready cluster would produce noise. Re-run validate later, or use ``--wait <duration>`` to block.
-- **4** — at least one manifest is MISSING or ERROR, the deployed Helm release version doesn't match the selected release, or the connectivity matrix reported failures.
-- Other codes — see :doc:`../reference/cli` "Exit Codes".
-
-================================================================================
-Sample Output
-================================================================================
-
-.. code-block:: text
-
-   Network Operator release
-     selectedRelease: 26.4
-     expected version: v26.4.0-beta.9
-     deployed: network-operator (chart=26.4.0-beta.9 app=v26.4.0-beta.9 rev=3 status=deployed)
-     result: MATCH
-
-   Manifests
-     [READY      ] NicClusterPolicy/nic-cluster-policy in (cluster-scoped) — ready — ready: 12/12; components: cni-plugins, ipoib, multus, …
-     [READY      ] NicNodePolicy/nicnodepolicy-h100 in (cluster-scoped) — ready
-     [READY      ] SriovNetworkNodePolicy/ethernet-sriov-rail-0 in network-operator — 2/2 nodes ready
-
-   Summary: 12/12 ready, 0 in-progress, 0 error, 0 missing; version: match; preset deviations: 0 group(s)
-
-   Connectivity matrix
-
-   Rail sriov-network-rail-0:
-     src \ dst          c-220-166-240-241  c-220-166-240-242
-     c-220-166-240-241  —                  ✓ 0% 0.1ms
-     c-220-166-240-242  ✓ 0% 0.1ms         —
-
-   Rail sriov-network-rail-1:
-     src \ dst          c-220-166-240-241  c-220-166-240-242
-     c-220-166-240-241  —                  ✓ 0% 0.1ms
-     c-220-166-240-242  ✓ 0% 0.3ms         —
-
-   Cross-rail canary:
-     c-220-166-240-241 [sriov-network-rail-0]  → c-220-166-240-242 [sriov-network-rail-1]  ✓ 0% 0.1ms
-     c-220-166-240-242 [sriov-network-rail-0]  → c-220-166-240-241 [sriov-network-rail-1]  ✓ 0% 0.1ms
-
-   ✓ All 6 ping test(s) passed
-   HTML report written to /home/user/deployment/verify-report.html
-
-For programmatic use, ``--output json`` emits a single object on stdout with ``versionCheck``, ``manifests``, ``presetDeviations``, ``summary``, ``connectivity``, and ``reportPath`` fields. Logs go to stderr.
-
-==========
 See Also
-==========
+================================================================================
 
-- :doc:`Deploy Workflow <deploy>` --- the writer side of the contract validate checks (also supports ``--verify`` to chain the matrix straight after a successful deploy)
-- :doc:`Troubleshooting <../troubleshooting>` --- diagnose missing or failing manifests and read the HTML report
-- :doc:`CLI Reference <../reference/cli>` --- ``l8k validate`` flag reference
+- :doc:`Deploy Workflow <deploy>` --- apply the reviewed bundle
+- :doc:`Troubleshooting <../troubleshooting>` --- inspect failed or incomplete checks
+- :doc:`Automation and CI/CD <../automation>` --- output contracts and exit status
