@@ -156,7 +156,7 @@
 <p class="admonition-title">Note</p>
 <p><strong>Use this when:</strong> you want Launch Kit to inspect a live cluster’s network hardware and produce a <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> describing it. Skip this workflow if you are generating manifests offline against a known machine type — see <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a>.</p>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> subcommand deploys a minimal Network Operator profile with the NIC Configuration Operator, then probes each node for NIC PCI addresses, device IDs, RDMA capability, InfiniBand support, OFED-dependent kernel modules, GPU topology, and machine type.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> subcommand bootstraps a temporary NIC Configuration Daemon without requiring a pre-installed Network Operator or NFD, then probes eligible nodes for NIC PCI addresses, device IDs, RDMA capability, InfiniBand support, OFED-dependent kernel modules, GPU topology, and machine type.</p>
 <section id="basic-discovery">
 <h2>Basic Discovery<a class="headerlink" href="#basic-discovery" title="Permalink to this headline"></a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover
@@ -180,13 +180,13 @@
 </section>
 <section id="filtering-nodes">
 <h2>Filtering Nodes<a class="headerlink" href="#filtering-nodes" title="Permalink to this headline"></a></h2>
-<p>Limit discovery to a subset of nodes using <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code>:</p>
+<p><code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> seeds the saved deployment selection; it does not restrict discovery daemon scheduling. Discovery runs the daemon across nodes and detects eligible NICs through sysfs. It derives an exact selector per discovered worker group:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover --kubeconfig ~/.kube/config <span class="se">\</span>
     --node-selector <span class="s2">&quot;feature.node.kubernetes.io/pci-15b3.present=true&quot;</span> <span class="se">\</span>
     --save-cluster-config ./cluster-config.yaml
 </pre></div>
 </div>
-<p>The default selector targets nodes with Mellanox NICs.</p>
+<p>The default saved selector targets nodes with Mellanox NICs. Restricted BlueFields are excluded from the discoverable device set. An explicit selector override must match the saved worker membership at deployment.</p>
 </section>
 <section id="pf-topology-and-hardware-detection">
 <h2>PF Topology and Hardware Detection<a class="headerlink" href="#pf-topology-and-hardware-detection" title="Permalink to this headline"></a></h2>
@@ -198,7 +198,7 @@
 <p>After discovery resolves <code class="docutils literal notranslate"><span class="pre">machineType</span></code> and <code class="docutils literal notranslate"><span class="pre">gpuType</span></code> for a group, every node in the group is patched with two l8k-specific labels via a strategic-merge patch:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.machine:</span> <span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> — per-source-group identity. Used as the source group’s <code class="docutils literal notranslate"><span class="pre">nodeSelector</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.gpu:</span> <span class="pre">&lt;gpuType&gt;</span></code> — written alongside the machine label so auto-merged groups (different machineTypes sharing a GPU type) have a stable selector. Same value as <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu.product</span></code> by construction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nvidia.kubernetes-launch-kit.gpu:</span> <span class="pre">&lt;gpuType&gt;</span></code> — written alongside the machine label so auto-merged groups (different machineTypes sharing a GPU type) have a stable selector. Uses the resolved GPU product, which may come from hardware probes when the GPU Operator label is absent.</p></li>
 </ul>
 <p>Label values keep their original case (e.g. <code class="docutils literal notranslate"><span class="pre">DGX-B200-NVIDIA-H100-NVL</span></code>, <code class="docutils literal notranslate"><span class="pre">NVIDIA-H100-NVL</span></code>); upstream parsing already trims whitespace and replaces spaces with hyphens. Values that would exceed Kubernetes’ 63-char label limit are skipped (logged at debug).</p>
 <p>The labels drive two pieces of downstream behaviour:</p>
@@ -211,13 +211,8 @@
 </section>
 <section id="fabric-type-detection">
 <h2>Fabric Type Detection<a class="headerlink" href="#fabric-type-detection" title="Permalink to this headline"></a></h2>
-<p>For each group’s east-west PFs that have an RDMA device, Launch Kit reads <code class="docutils literal notranslate"><span class="pre">/sys/class/infiniband/&lt;rdmaDevice&gt;/ports/1/{state,phys_state,link_layer,sm_lid}</span></code> from inside the NIC Configuration Daemon pod. A port contributes to the group’s fabric verdict when:</p>
-<ul class="simple">
-<li><p>Port is <code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code> and <code class="docutils literal notranslate"><span class="pre">link_layer=Ethernet</span></code> — contributes <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code>.</p></li>
-<li><p>Port is <code class="docutils literal notranslate"><span class="pre">ACTIVE</span></code>, <code class="docutils literal notranslate"><span class="pre">link_layer=InfiniBand</span></code>, and a subnet manager is present (<code class="docutils literal notranslate"><span class="pre">sm_lid</span></code> non-zero) — contributes <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code>.</p></li>
-</ul>
-<p>If every contributing port agrees on a single value, that value is recorded as <code class="docutils literal notranslate"><span class="pre">linkType</span></code> on the group in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. If no port produced a contribution (all down, IB without SM, probes failed), or different ports contribute different values, the field is <strong>left empty</strong> — discovery couldn’t prove the cluster is using a specific fabric, and downstream code treats the absence as “unknown”.</p>
-<p>This is more reliable than reading <code class="docutils literal notranslate"><span class="pre">link_layer</span></code> alone: that file just reflects firmware config and may be a default rather than the cluster’s actual fabric.</p>
+<p>Launch Kit checks the configured <code class="docutils literal notranslate"><span class="pre">link_layer</span></code> for every selected worker and east-west PF, including sibling PFs represented by a collapsed rail. It resolves each PCI-local RDMA device and enumerates its ports. Complete, unanimous observations record <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code> in the group’s <code class="docutils literal notranslate"><span class="pre">linkType</span></code>.</p>
+<p>Partial, unreadable, denied, or conflicting observations leave <code class="docutils literal notranslate"><span class="pre">linkType</span></code> unknown with a diagnostic. Link state and subnet-manager presence do not gate fabric detection. A known link layer establishes configured transport, not a working link or fabric; validate connectivity after deployment.</p>
 </section>
 <section id="north-south-filtering">
 <h2>North-South Filtering<a class="headerlink" href="#north-south-filtering" title="Permalink to this headline"></a></h2>
@@ -258,7 +253,7 @@
 </table>
 <p>Storage and third-party RDMA module lists are sourced from the <code class="docutils literal notranslate"><span class="pre">doca-driver-build</span></code> project to keep them in sync with the driver container itself. <code class="docutils literal notranslate"><span class="pre">mlx5</span></code>-prefixed modules (the OFED stack itself) are excluded from classification.</p>
 <p>After discovery, the config reflects the auto-enabled flags and the discovered modules are saved per group as <code class="docutils literal notranslate"><span class="pre">storageModules</span></code> and <code class="docutils literal notranslate"><span class="pre">thirdPartyRDMAModules</span></code> lists.</p>
-<p>To skip the kernel driver dependencies validation entirely (for environments where it’s known-good), set <code class="docutils literal notranslate"><span class="pre">docaDriver.skipPreflightChecks:</span> <span class="pre">true</span></code> in your config.</p>
+<p><code class="docutils literal notranslate"><span class="pre">docaDriver.skipPreflightChecks:</span> <span class="pre">true</span></code> skips the driver init-container preflight checks during deployment; it does not disable hardware discovery.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Verify that no running workloads depend on modules that will be unloaded. To disable automatic unloading, set <code class="docutils literal notranslate"><span class="pre">unloadStorageModules</span></code> and <code class="docutils literal notranslate"><span class="pre">unloadThirdPartyRDMAModules</span></code> back to <code class="docutils literal notranslate"><span class="pre">false</span></code> in your config after discovery.</p>
@@ -273,6 +268,8 @@
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--user-config</span> <span class="pre">./cluster-config.yaml</span></code> to produce manifests.</p></li>
 </ol>
 <p>You can also provide a pre-configured file directly to <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code> without running discovery, or skip discovery entirely with <code class="docutils literal notranslate"><span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code>.</p>
+<p>Discovery also records host naming ownership. If <code class="docutils literal notranslate"><span class="pre">netplanManaged:</span> <span class="pre">true</span></code>, generation refuses to emit a conflicting <code class="docutils literal notranslate"><span class="pre">NicInterfaceNameTemplate</span></code>. If <code class="docutils literal notranslate"><span class="pre">netplanManagementUnknown:</span> <span class="pre">true</span></code>, generation warns and continues. Review host netplan rules and repeat discovery to resolve uncertainty.</p>
+<p>For Spectrum-X RA2.4 and RA3.1, discovery derives <code class="docutils literal notranslate"><span class="pre">spectrumX.platformType</span></code> and desired <code class="docutils literal notranslate"><span class="pre">spectrumX.interfaceNames</span></code> per group. VR NetworkBay discovery groups eight east-west NICs into four dual-NIC rails; preserve this physical grouping and verify it against switch cabling. See <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p>
 <p>For the full configuration schema, see <a class="reference internal" href="../reference/config.html"><span class="doc">Configuration Reference</span></a>.</p>
 </section>
 <section id="debug-logging">

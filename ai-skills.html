@@ -171,24 +171,27 @@
 <td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code>: cluster hardware probing, label patching, <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> interpretation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-config</span></code></p></td>
-<td><p>Reads / explains / edits <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> — profile fields, group identifiers, OFED module lists.</p></td>
+<td><p>Reads / explains / edits <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">default-config.yaml</span></code> — profile fields, group identifiers, OFED module lists.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-generate</span></code></p></td>
 <td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>: profile selection (fabric × deployment-type), Spectrum-X cohort flags, group filters, hardware-derived defaults.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-dryrun</span></code></p></td>
-<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code>: previews what would land on the cluster without applying.</p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code> for a generation preview and <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--dry-run</span></code> for server-side deployment checks without applying the bundle.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-deploy</span></code></p></td>
-<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>: applies pre-generated manifests in four phases (NicClusterPolicy → NicNodePolicy → remaining batch → verify reconciliation). Supports <code class="docutils literal notranslate"><span class="pre">--verify</span></code> to chain the data-plane connectivity matrix straight after a successful apply, and <code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span></code> to bound the whole run end-to-end.</p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>: validates the bundle, handles the Helm release when owned by Launch Kit, then applies policies and remaining resources in dependency order and verifies reconciliation. Use <code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span></code> to bound deployment, then run <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> for post-deployment validation. See <a class="reference internal" href="k8s-launch-kit/workflows/deploy.html"><span class="doc">Deployment Workflow</span></a> for ownership and overwrite behavior.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-validate</span></code></p></td>
-<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code>: classifies every manifest’s cluster state (READY / IN-PROGRESS / ERROR / MISSING), runs a connectivity ping matrix between the example DaemonSet’s pods on every rail (default ON; <code class="docutils literal notranslate"><span class="pre">--connectivity=false</span></code> to skip), and writes an HTML validation report to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/verify-report.html</span></code>.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-clean</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">clean</span></code>: removes Network Operator custom resources and handles the Helm release according to the configured ownership. Requires explicit authorization for cleanup.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-pipeline</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-validate</span></code></p></td>
+<td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code>: classifies every manifest’s cluster state (READY / IN-PROGRESS / ERROR / MISSING), runs a connectivity ping matrix between the example DaemonSet’s pods on every rail (default ON; <code class="docutils literal notranslate"><span class="pre">--connectivity=false</span></code> to skip), and writes an HTML validation report to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/k8s-launch-kit-validation-report.html</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-pipeline</span></code></p></td>
 <td><p>End-to-end orchestration (discover → generate → deploy) for greenfield clusters.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-troubleshoot</span></code></p></td>
 <td><p>Wraps <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">sosreport</span></code> plus a triage checklist for OFED crashes, SR-IOV VF allocation failures, <code class="docutils literal notranslate"><span class="pre">ContainerCreating</span></code>-stuck pods, and NIC firmware misconfiguration.</p></td>
 </tr>
 </tbody>
@@ -221,7 +224,7 @@ ln -s <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pw
 </section>
 <section id="cursor">
 <h3>Cursor<a class="headerlink" href="#cursor" title="Permalink to this headline"></a></h3>
-<p>Cursor reads project-scoped rule files from <code class="docutils literal notranslate"><span class="pre">.cursor/rules/</span></code>. Symlink the skill directories or copy the <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> files into <code class="docutils literal notranslate"><span class="pre">.mdc</span></code> rules:</p>
+<p>Cursor reads project-scoped rule files from <code class="docutils literal notranslate"><span class="pre">.cursor/rules/</span></code>. Copy the <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> files into <code class="docutils literal notranslate"><span class="pre">.mdc</span></code> rules and expose their bundled reference files as project context:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your Kubernetes / l8k project</span>
 mkdir -p .cursor/rules
 <span class="k">for</span> skill <span class="k">in</span> &lt;path-to-k8s-launch-kit&gt;/skills/*/SKILL.md<span class="p">;</span> <span class="k">do</span>
@@ -230,26 +233,19 @@ mkdir -p .cursor/rules
 <span class="k">done</span>
 </pre></div>
 </div>
-<p>The YAML frontmatter on each <code class="docutils literal notranslate"><span class="pre">SKILL.md</span></code> is compatible with Cursor’s rule metadata (<code class="docutils literal notranslate"><span class="pre">description</span></code>, <code class="docutils literal notranslate"><span class="pre">alwaysApply</span></code>-equivalent semantics handled by activation prompts). For user-wide rules, place them under <code class="docutils literal notranslate"><span class="pre">~/.cursor/rules/</span></code> instead.</p>
+<p>Configure activation using the rule settings supported by your Cursor version. Preserve access to any <code class="docutils literal notranslate"><span class="pre">references/</span></code> files linked from the skills.</p>
 </section>
 <section id="openai-codex-cli">
 <h3>OpenAI Codex CLI<a class="headerlink" href="#openai-codex-cli" title="Permalink to this headline"></a></h3>
-<p>Codex CLI loads project-level instructions from an <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> file at the repository root. Concatenate the persona skill plus its dependencies into <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your Kubernetes / l8k project</span>
-<span class="o">{</span>
-    <span class="nb">echo</span> <span class="s2">&quot;# Agent Instructions&quot;</span>
-    <span class="nb">echo</span>
-    cat &lt;path-to-k8s-launch-kit&gt;/skills/k8s-network-engineer/SKILL.md
-    <span class="k">for</span> skill <span class="k">in</span> &lt;path-to-k8s-launch-kit&gt;/skills/k8s-launch-kit-*/SKILL.md<span class="p">;</span> <span class="k">do</span>
-        <span class="nb">echo</span>
-        <span class="nb">echo</span> <span class="s2">&quot;---&quot;</span>
-        <span class="nb">echo</span>
-        cat <span class="s2">&quot;</span><span class="nv">$skill</span><span class="s2">&quot;</span>
-    <span class="k">done</span>
-<span class="o">}</span> &gt; AGENTS.md
+<p>Expose the skill directories through Codex’s project-scoped <code class="docutils literal notranslate"><span class="pre">.agents/skills/</span></code> directory, preserving the bundled reference files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the cloned Launch Kit repository</span>
+mkdir -p .agents/skills
+<span class="k">for</span> skill <span class="k">in</span> skills/k8s-launch-kit-* skills/k8s-network-engineer<span class="p">;</span> <span class="k">do</span>
+    ln -s <span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/</span><span class="nv">$skill</span><span class="s2">&quot;</span> <span class="s2">&quot;.agents/skills/</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="nv">$skill</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="k">done</span>
 </pre></div>
 </div>
-<p>For machine-wide instructions, write to <code class="docutils literal notranslate"><span class="pre">~/.codex/AGENTS.md</span></code> instead. Codex CLI will pick up the file automatically on each <code class="docutils literal notranslate"><span class="pre">codex</span></code> invocation.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">~/.agents/skills/</span></code> for user-scoped skills, or create the links under the target project’s <code class="docutils literal notranslate"><span class="pre">.agents/skills/</span></code> directory. Keep project-specific policy in <code class="docutils literal notranslate"><span class="pre">AGENTS.md</span></code> alongside the skills.</p>
 </section>
 <section id="other-agents">
 <h3>Other Agents<a class="headerlink" href="#other-agents" title="Permalink to this headline"></a></h3>
@@ -268,14 +264,14 @@ mkdir -p .cursor/rules
 <h3>Discovery on a Heterogeneous Cluster<a class="headerlink" href="#discovery-on-a-heterogeneous-cluster" title="Permalink to this headline"></a></h3>
 <p><strong>Operator prompt:</strong></p>
 <blockquote>
-<div><p><em>“I have a new cluster with mixed DGX-B200 and Lenovo ThinkSystem nodes, both running H100 GPUs. The GPU operator is installed. Help me discover the network topology and tell me what I’m working with.”</em></p>
+<div><p><em>“I have a new cluster with mixed Dell PowerEdge and Lenovo ThinkSystem nodes, both running H100 GPUs. The GPU operator is installed. Help me discover the network topology and tell me what I’m working with.”</em></p>
 </div></blockquote>
 <p><strong>Skill-driven flow:</strong></p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">k8s-network-engineer</span></code> activates and loads the discovery skills.</p></li>
 <li><p>The agent runs <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span> <span class="pre">--output</span> <span class="pre">json</span> <span class="pre">2&gt;/dev/null</span></code> and parses the result.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-config</span></code> interprets the resulting <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>: identifies two source groups (<code class="docutils literal notranslate"><span class="pre">dgx-b200-nvidia-h100-nvl</span></code> and <code class="docutils literal notranslate"><span class="pre">thinksystem-sr680a-v3-nvidia-h100-nvl</span></code>), confirms east-west PFs are ConnectX-7 (deviceID <code class="docutils literal notranslate"><span class="pre">1021</span></code>), counts 8 rails per node, and notes that both groups share a <code class="docutils literal notranslate"><span class="pre">railNumber</span></code> — so <code class="docutils literal notranslate"><span class="pre">--multirail</span></code> will auto-default to true.</p></li>
-<li><p>The agent reports back: GPU type, NIC topology, fabric verdict (<code class="docutils literal notranslate"><span class="pre">linkType:</span> <span class="pre">Ethernet</span></code> confirmed via active port + <code class="docutils literal notranslate"><span class="pre">link_layer</span></code>), discovered OFED-dependent kernel modules (any storage modules trigger an “unloadStorageModules will be enabled” warning), and any preset deviations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-config</span></code> interprets the resulting <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>: identifies the source groups, confirms the selected east-west PFs and rail counts, and explains the fabric and multirail values persisted by discovery.</p></li>
+<li><p>The agent reports back: GPU type, NIC topology, fabric verdict from the configured port link layers across worker nodes, discovered OFED-dependent kernel modules, including the storage-module warning when the DOCA driver and <code class="docutils literal notranslate"><span class="pre">unloadStorageModules</span></code> are enabled, and any preset deviations.</p></li>
 <li><p>The agent suggests the next step: <em>“Both groups share GPU type and rail count, so a single ``l8k generate`` will produce one combined bundle covering both. Want me to render manifests for SR-IOV Ethernet?”</em></p></li>
 </ol>
 <p>The operator never reads <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> directly — the skill explains the contents in natural language and surfaces the decisions that matter.</p>
@@ -284,17 +280,18 @@ mkdir -p .cursor/rules
 <h3>Choosing a Deployment Profile (Spectrum-X)<a class="headerlink" href="#choosing-a-deployment-profile-spectrum-x" title="Permalink to this headline"></a></h3>
 <p><strong>Operator prompt:</strong></p>
 <blockquote>
-<div><p><em>“This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we’re targeting Network Operator 26.7. Generate the manifests.”</em></p>
+<div><p><em>“This cluster is going to run a Spectrum-X AI cloud. We have ConnectX-8 east-west NICs and we’re targeting Network Operator 26.10 and RA2.4. Generate the manifests.”</em></p>
 </div></blockquote>
 <p><strong>Skill-driven flow:</strong></p>
 <ol class="arabic">
 <li><p><code class="docutils literal notranslate"><span class="pre">k8s-launch-kit-generate</span></code> recognizes Spectrum-X intent.</p></li>
-<li><p>The skill verifies the cohort: ConnectX-8 on a GB300 platform → <code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span> <span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">--number-of-planes</span> <span class="pre">2</span></code> are the hardware defaults; RA2.3 pairs with Network Operator 26.7 and requires a Spectrum-X profile ConfigMap.</p></li>
+<li><p>The skill verifies the discovered platform, east-west NICs, rails, and site plane layout. The paired releases are RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms. Both use Network Operator 26.10 or a newer catalogued release and require a full doSPCX bundle ConfigMap supplied for the selected architecture and platform. This ConnectX-8 example uses RA2.4 and selects dual-plane HWPLB explicitly; generator defaults do not establish the site topology or hardware qualification.</p></li>
 <li><p>Before running <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>, the skill asks the operator to confirm the <strong>switch-side</strong> Spectrum-X fabric setup is in place (Spectrum-4 switches with the matching configuration) — because <code class="docutils literal notranslate"><span class="pre">l8k</span></code> does not handle the switch side and a misconfigured fabric is the most common Spectrum-X failure mode.</p></li>
 <li><p>Once confirmed, the agent runs:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate <span class="se">\</span>
-    --spectrum-x RA2.3 <span class="se">\</span>
-    --network-operator-release <span class="m">26</span>.7 <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+    --spectrum-x RA2.4 <span class="se">\</span>
+    --network-operator-release <span class="m">26</span>.10 <span class="se">\</span>
+    --multiplane-mode hwplb --number-of-planes <span class="m">2</span> <span class="se">\</span>
     --spectrum-x-config ./spectrum-x-profile.yaml <span class="se">\</span>
     --topology-scheme <span class="m">2</span>-tier --topology-file ./topology.json <span class="se">\</span>
     --save-deployment-files ./deployments-spectrum-x <span class="se">\</span>
@@ -302,7 +299,7 @@ mkdir -p .cursor/rules
 </pre></div>
 </div>
 </li>
-<li><p>The agent reports the auto-defaulted flags (”<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(GB300</span> <span class="pre">dual-plane</span> <span class="pre">platform;</span> <span class="pre">SWPLB</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">GA</span> <span class="pre">default)</span></code>”, “<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--number-of-planes=2</span></code>”) and recommends <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--dry-run</span></code> before applying.</p></li>
+<li><p>The agent reviews <code class="docutils literal notranslate"><span class="pre">deployments-spectrum-x/.l8k/resolved-config.yaml</span></code>, the generated ConfigMap, per-group NIC selectors and platform type, rail pools, and Helm values. It uses <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--deployment-files</span> <span class="pre">./deployments-spectrum-x</span> <span class="pre">--dry-run</span></code> for a server-side preview once compatible CRDs are installed. Generation and dry-run do not establish reconciliation or traffic readiness. See <a class="reference internal" href="k8s-launch-kit/profiles/spectrum-x.html"><span class="doc">Spectrum-X Profile</span></a> for the full RA2.4 prerequisites.</p></li>
 </ol>
 <p>The skill knows the per-platform and per-deviceID multiplane defaults, the RA-to-release pairing, and the switch-side prerequisite — the operator only needs to state intent.</p>
 </section>

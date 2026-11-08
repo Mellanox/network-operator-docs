@@ -697,7 +697,9 @@ container.</p>
 </section>
 <section id="nvidia-spectrum-x-ethernet-networking-platform">
 <h2>NVIDIA Spectrum-X Ethernet Networking Platform<a class="headerlink" href="#nvidia-spectrum-x-ethernet-networking-platform" title="Permalink to this headline"></a></h2>
-<p><strong>NVIDIA Network Operator</strong> has been validated with the following NVIDIA Spectrum-X Reference Architecture (RA) versions:</p>
+<p>Spectrum-X <strong>RA3.1 for Vera Rubin (VR)</strong> is released alongside <strong>RA2.4 for all other platforms</strong>. Network Operator 26.10 integrates both through the same configuration workflow, with a matching doSPCX bundle ConfigMap and an explicit architecture and platform type. See <a class="reference internal" href="spectrum-x/spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a> and <a class="reference internal" href="spectrum-x/quick-start.html"><span class="doc">Spectrum-X Quickstart</span></a> for the required profile and CRDs.</p>
+<p>Configuration support does not establish qualification for every platform accepted by the API. Confirm the selected RA solution stack, NIC firmware, operating system, Kubernetes version, and platform-specific restrictions with NVIDIA Support before deployment. The earlier RA qualification entries below do not qualify the same combinations for RA2.4 or RA3.1.</p>
+<p><strong>Earlier release qualification:</strong></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For details on supported topologies, NIC hardware, software components, and version-specific notes, refer to the <a class="reference external" href="https://www.nvidia.com/en-us/networking/spectrumx/">NVIDIA Spectrum-X documentation</a>.</p>
@@ -755,11 +757,11 @@ container.</p>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NVIDIA ConnectX-9 SuperNIC is <strong>not</strong> part of Spectrum-X RA 2.3. Network
-Operator accepts ConnectX-9 SuperNIC for Spectrum-X NIC configuration as a
-<strong>Tech Preview</strong> — available for evaluation, but not an RA-validated or
-production-ready Spectrum-X configuration, and it requires a Spectrum-X
-profile covering ConnectX-9 SuperNIC, available from NVIDIA Support. For
+<p>Network Operator accepts ConnectX-9 SuperNIC for Spectrum-X NIC configuration as a
+<strong>Tech Preview</strong>. For Vera Rubin, select RA3.1 and a Spectrum-X
+profile covering the selected architecture, platform, mode, and ConnectX-9
+SuperNIC, available from NVIDIA Support. API acceptance alone does not
+establish qualification of the complete hardware/software combination. For
 general RoCE and InfiniBand workloads, ConnectX-9 SuperNIC is fully
 supported; see the NIC table above.</p>
 </div>

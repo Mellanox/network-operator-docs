@@ -146,22 +146,29 @@
 <p class="admonition-title">Note</p>
 <p><strong>Use this when:</strong> you are wiring Launch Kit into a CI/CD pipeline, an automation framework, or an AI agent that needs structured output and exit-code-driven retry logic.</p>
 </div>
-<p>Launch Kit is designed for both interactive use and automated pipelines. Every subcommand supports a JSON output mode, well-defined exit codes, and a programmatic capability discovery endpoint.</p>
+<p>Launch Kit is designed for both interactive use and automated pipelines. Lifecycle commands support structured output, process exit codes, and capability discovery. Their output contracts differ by command.</p>
 <section id="json-output-mode">
 <h2>JSON Output Mode<a class="headerlink" href="#json-output-mode" title="Permalink to this headline"></a></h2>
-<p>Use <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> for machine-readable output. In JSON mode, structured data goes to stdout and human-readable logs go to stderr:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> for machine-readable lifecycle output. Capture output and diagnostics separately, and preserve the command exit status before parsing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">status</span><span class="o">=</span><span class="m">0</span>
+l8k generate --user-config ./cluster-config.yaml <span class="se">\</span>
     --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
-    --save-deployment-files ./deployments <span class="se">\</span>
-    --output json --yes <span class="m">2</span>&gt;/dev/null <span class="p">|</span> jq .
+    --save-deployment-files ./deployments --output json <span class="se">\</span>
+    &gt;generation.json <span class="m">2</span>&gt;generation.log <span class="o">||</span> <span class="nv">status</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$status</span><span class="s2">&quot;</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    cat generation.log &gt;<span class="p">&amp;</span><span class="m">2</span>
+    <span class="nb">exit</span> <span class="s2">&quot;</span><span class="nv">$status</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+jq . generation.json
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">discover</span></code>, <code class="docutils literal notranslate"><span class="pre">generate</span></code>, and the root pipeline emit one result object. Standalone <code class="docutils literal notranslate"><span class="pre">deploy</span></code> has no finalized success JSON object; use its exit status. <code class="docutils literal notranslate"><span class="pre">validate</span></code> emits a stream of separate objects for static results, connectivity, and <code class="docutils literal notranslate"><span class="pre">reportPath</span></code>: capture it as JSON Lines and use <code class="docutils literal notranslate"><span class="pre">jq</span> <span class="pre">-s</span> <span class="pre">.</span></code> when an array is needed. <code class="docutils literal notranslate"><span class="pre">preset</span></code> and <code class="docutils literal notranslate"><span class="pre">sosreport</span></code> retain text success output despite accepting the inherited output flag.</p>
 </section>
 <section id="non-interactive-flags">
 <h2>Non-Interactive Flags<a class="headerlink" href="#non-interactive-flags" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--yes</span></code> / <code class="docutils literal notranslate"><span class="pre">-y</span></code> — auto-confirm all prompts (implied by <code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--quiet</span></code> / <code class="docutils literal notranslate"><span class="pre">-q</span></code> — suppress informational output</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">json</span></code> — auto-confirm lifecycle prompts, including deployment actions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--yes</span></code> / <code class="docutils literal notranslate"><span class="pre">-y</span></code> and <code class="docutils literal notranslate"><span class="pre">--quiet</span></code> / <code class="docutils literal notranslate"><span class="pre">-q</span></code> — root-pipeline flags, not global subcommand flags.</p></li>
 </ul>
 </section>
 <section id="exit-codes">
@@ -190,7 +197,7 @@
 <td><p>Cluster error (API unreachable, discovery failed).</p></td>
 </tr>
 <tr class="row-even"><td><p>4</p></td>
-<td><p>Deployment error (apply failed).</p></td>
+<td><p>Deployment or validation gate failure.</p></td>
 </tr>
 <tr class="row-odd"><td><p>5</p></td>
 <td><p>Partial success (discovery completed but deployment failed).</p></td>

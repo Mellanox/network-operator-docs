@@ -71,7 +71,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="reference.html">Reference</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="cli.html">CLI Reference</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Configuration Reference</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#full-schema">Full Schema</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#configuration-example">Configuration Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#networkoperator">networkOperator</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#docadriver">docaDriver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nvipam">nvIpam</a></li>
@@ -81,6 +81,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#workload">workload</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#profile">profile</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#clusterconfig">clusterConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform-maintenance-and-validation-settings">Platform, Maintenance, and Validation Settings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deploy-and-validate-configuration-lookup">Deploy and Validate Configuration Lookup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
 </li>
@@ -137,7 +139,7 @@
 <div class="contents local topic" id="on-this-page">
 <p class="topic-title">On this page</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#full-schema" id="id1">Full Schema</a></p></li>
+<li><p><a class="reference internal" href="#configuration-example" id="id1">Configuration Example</a></p></li>
 <li><p><a class="reference internal" href="#networkoperator" id="id2">networkOperator</a></p></li>
 <li><p><a class="reference internal" href="#docadriver" id="id3">docaDriver</a></p></li>
 <li><p><a class="reference internal" href="#nvipam" id="id4">nvIpam</a></p></li>
@@ -147,20 +149,28 @@
 <li><p><a class="reference internal" href="#workload" id="id8">workload</a></p></li>
 <li><p><a class="reference internal" href="#profile" id="id9">profile</a></p></li>
 <li><p><a class="reference internal" href="#clusterconfig" id="id10">clusterConfig</a></p></li>
-<li><p><a class="reference internal" href="#see-also" id="id11">See Also</a></p></li>
+<li><p><a class="reference internal" href="#platform-maintenance-and-validation-settings" id="id11">Platform, Maintenance, and Validation Settings</a></p></li>
+<li><p><a class="reference internal" href="#deploy-and-validate-configuration-lookup" id="id12">Deploy and Validate Configuration Lookup</a></p></li>
+<li><p><a class="reference internal" href="#see-also" id="id13">See Also</a></p></li>
 </ul>
 </div>
-<p>The Launch Kit configuration file (typically <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, produced by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> and consumed by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>) is YAML. This page documents every top-level section.</p>
-<section id="full-schema">
-<h2>Full Schema<a class="headerlink" href="#full-schema" title="Permalink to this headline"></a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">selectedRelease</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;26.7&quot;</span><span class="w"></span>
+<p>The Launch Kit configuration file (typically <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>, produced by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">discover</span></code> and consumed by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>) is YAML. This page covers host networking settings and the generated bundle contract. Use discovery output as the editable starting point; default configuration and presets are embedded in the binary, while matching profile templates are installed alongside it.</p>
+<section id="configuration-example">
+<h2>Configuration Example<a class="headerlink" href="#configuration-example" title="Permalink to this headline"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">flavor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">k8s</span><span class="w"></span>
+<span class="nt">networkNamespaces</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">default</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="nt">networkOperator</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">selectedRelease</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;26.10&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">skipHelmChart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="nt">secondaryNetwork</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">multus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cniPlugins</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span><span class="w"></span>
 <span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v26.10.0-rc.7</span><span class="w"></span>
 <span class="w">  </span><span class="nt">componentVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">network-operator-v26.10.0-rc.7</span><span class="w"></span>
 <span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvcr.io/nvstaging/mellanox</span><span class="w"></span>
 <span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia-network-operator</span><span class="w"></span>
 <span class="w">  </span><span class="nt">imagePullSecrets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">docsBaseURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://docs.nvidia.com/networking/display/kubernetes2610</span><span class="w"></span>
 
 <span class="nt">docaDriver</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -200,14 +210,21 @@
 
 <span class="nt">nicConfigurationOperator</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">deployNicInterfaceNameTemplate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">  </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rdma_r%rail%&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_r%rail%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rdma_r%rail_id%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_r%rail_id%&quot;</span><span class="w"></span>
 
 <span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;roce_p%plane%_r%rail%&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_p%plane%_r%rail%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">overlay</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span><span class="w"></span>
+<span class="w">  </span><span class="nt">singlePlane</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_r%rail_id%&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;roce_r%rail_id%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">hwplb</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_r%rail_id%_p%plane_id%&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;roce_r%rail_id%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">swplb</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">netdevPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;eth_r%rail_id%_p%plane_id%&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">rdmaPrefix</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;roce_r%rail_id%_p%plane_id%&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ovsConfig</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span><span class="w"></span>
 
 <span class="nt">workload</span><span class="p">:</span><span class="w"></span>
 <span class="w">  </span><span class="nt">manifest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
@@ -216,17 +233,28 @@
 <span class="w">  </span><span class="nt">fabric</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ethernet</span><span class="w"></span>
 <span class="w">  </span><span class="nt">deployment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sriov</span><span class="w"></span>
 <span class="w">  </span><span class="nt">multirail</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">  </span><span class="nt">routing</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destination-based</span><span class="w"></span>
 <span class="w">  </span><span class="nt">spectrumX</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">spcxVersion</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RA2.3&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="nt">multiplaneMode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">swplb</span><span class="w"></span>
-<span class="w">    </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
-<span class="w">    </span><span class="nt">useDRA</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ai</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+
+<span class="nt">maintenance</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxParallelOperations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxUnavailable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxNodeMaintenanceTimeSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span><span class="w"></span>
+<span class="w">  </span><span class="nt">maxParallelUpgrades</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+
+<span class="nt">validation</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">connectivity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">  </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">strict</span><span class="w"></span>
+<span class="w">  </span><span class="nt">checks</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">icmp</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">rping</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">ib_write_bw</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gpuDirect</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gpuResourceType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nvidia.com/gpu</span><span class="w"></span>
 
 <span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">identifier</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dgx-b200-nvidia-b200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">machineType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DGX-B200&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">productType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-B200&quot;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gpuType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NVIDIA-B200&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">capabilities</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">nodes</span><span class="p">:</span><span class="w"></span>
 <span class="w">      </span><span class="nt">sriov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
@@ -263,10 +291,10 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">selectedRelease</span></code></p></td>
-<td><p>Pin to a release line. Supported: <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>, <code class="docutils literal notranslate"><span class="pre">26.7</span></code>. Auto-fills <code class="docutils literal notranslate"><span class="pre">version</span></code> and image tags from an embedded catalog. Equivalent to the <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> flag.</p></td>
+<td><p>Pin to a release line. Supported: <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>, <code class="docutils literal notranslate"><span class="pre">26.7</span></code>, <code class="docutils literal notranslate"><span class="pre">26.10</span></code>. Auto-fills <code class="docutils literal notranslate"><span class="pre">version</span></code> and image tags from an embedded catalog. Equivalent to the <code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code> flag.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
-<td><p>Explicit Network Operator version. Overrides the catalog when set.</p></td>
+<td><p>Explicit Network Operator version when no release catalog selection is set. A nonempty <code class="docutils literal notranslate"><span class="pre">selectedRelease</span></code> replaces catalog-managed versions and repositories.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">componentVersion</span></code></p></td>
 <td><p>Tag for component images (CNI, device plugins, etc.).</p></td>
@@ -280,8 +308,14 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">imagePullSecrets</span></code></p></td>
 <td><p>List of secret names. Propagated to <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy.spec.global.imagePullSecrets</span></code> and per-group <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> sub-specs.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">docsBaseURL</span></code></p></td>
-<td><p>Documentation URL embedded in generated annotations.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">skipHelmChart</span></code></p></td>
+<td><p>External Helm ownership. Omits <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> and skips Helm management/checks; custom-resource preflight and apply remain active.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">operatorRepository</span></code> / <code class="docutils literal notranslate"><span class="pre">helmRepoURL</span></code></p></td>
+<td><p>Operator image registry and Helm chart repository, distinct from component <code class="docutils literal notranslate"><span class="pre">repository</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">secondaryNetwork.multus</span></code> / <code class="docutils literal notranslate"><span class="pre">secondaryNetwork.cniPlugins</span></code></p></td>
+<td><p>Independent ownership policies: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">managed</span></code>, or <code class="docutils literal notranslate"><span class="pre">external</span></code>. Automatic resolution uses discovery evidence; external sections are omitted. Ownership conflicts block apply even with overwrite.</p></td>
 </tr>
 </tbody>
 </table>
@@ -316,7 +350,7 @@
 <td><p>Enable NFS-over-RDMA support.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">skipPreflightChecks</span></code></p></td>
-<td><p>Skip the kernel driver dependencies validation. Useful for environments where it’s known-good.</p></td>
+<td><p>Skip the driver init-container module dependency check. Does not skip discovery.</p></td>
 </tr>
 </tbody>
 </table>
@@ -340,7 +374,7 @@
 <td><p>Pool name used in IPPool CRs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">subnets</span></code></p></td>
-<td><p>Explicit list of <code class="docutils literal notranslate"><span class="pre">{subnet,</span> <span class="pre">gateway}</span></code> entries. Mutually exclusive with the auto-generation fields.</p></td>
+<td><p>Explicit list of <code class="docutils literal notranslate"><span class="pre">{subnet,</span> <span class="pre">gateway}</span></code> entries. A nonempty list takes precedence over the auto-generation fields.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">startingSubnet</span></code></p></td>
 <td><p>First subnet for auto-generation (e.g., <code class="docutils literal notranslate"><span class="pre">192.168.2.0</span></code>).</p></td>
@@ -350,6 +384,12 @@
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
 <td><p>Increment used between auto-generated subnets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">perNodeBlockSize</span></code></p></td>
+<td><p>Addresses allocated per node in standard-profile IPPools (default <code class="docutils literal notranslate"><span class="pre">10</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reserveFirstIPs</span></code> / <code class="docutils literal notranslate"><span class="pre">reserveLastIPs</span></code></p></td>
+<td><p>Reserve address ranges in every standard-profile subnet. Per-subnet <code class="docutils literal notranslate"><span class="pre">exclusions</span></code> may specify additional <code class="docutils literal notranslate"><span class="pre">startIP</span></code> / <code class="docutils literal notranslate"><span class="pre">endIP</span></code> ranges.</p></td>
 </tr>
 </tbody>
 </table>
@@ -424,13 +464,13 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deployNicInterfaceNameTemplate</span></code></p></td>
-<td><p>“Enable when needed”. Templates are deployed when groups have cross-rail PCI conflicts or when names are otherwise ambiguous. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
+<td><p>Enable naming templates (default <code class="docutils literal notranslate"><span class="pre">true</span></code>). A single standard-profile source with observed interface names can use existing names without emitting a template; Spectrum-X keeps required naming. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaPrefix</span></code></p></td>
-<td><p>RDMA device naming template (default: <code class="docutils literal notranslate"><span class="pre">rdma_r%rail%</span></code>).</p></td>
+<td><p>RDMA device naming template (default: <code class="docutils literal notranslate"><span class="pre">rdma_r%rail_id%</span></code>).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">netdevPrefix</span></code></p></td>
-<td><p>Netdev naming template (default: <code class="docutils literal notranslate"><span class="pre">eth_r%rail%</span></code>).</p></td>
+<td><p>Netdev naming template (default: <code class="docutils literal notranslate"><span class="pre">eth_r%rail_id%</span></code>).</p></td>
 </tr>
 </tbody>
 </table>
@@ -449,20 +489,18 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nicType</span></code></p></td>
-<td><p>NIC type device ID. <code class="docutils literal notranslate"><span class="pre">1021</span></code> = ConnectX-7 NIC; <code class="docutils literal notranslate"><span class="pre">1023</span></code> = ConnectX-8 SuperNIC; <code class="docutils literal notranslate"><span class="pre">1025</span></code> = ConnectX-9 SuperNIC <em>(tech preview)</em>; <code class="docutils literal notranslate"><span class="pre">a2dc</span></code> = BlueField-3 SuperNIC.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">overlay</span></code></p></td>
 <td><p>Overlay mode.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rdmaPrefix</span></code></p></td>
-<td><p>RDMA device naming template with <code class="docutils literal notranslate"><span class="pre">%plane%</span></code> and <code class="docutils literal notranslate"><span class="pre">%rail%</span></code> substitutions.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">singlePlane</span></code> / <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> / <code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
+<td><p>Mode-specific <code class="docutils literal notranslate"><span class="pre">rdmaPrefix</span></code> and <code class="docutils literal notranslate"><span class="pre">netdevPrefix</span></code> maps. Use <code class="docutils literal notranslate"><span class="pre">%rail_id%</span></code> and, where appropriate, <code class="docutils literal notranslate"><span class="pre">%plane_id%</span></code>. VR HWPLB RDMA names additionally require <code class="docutils literal notranslate"><span class="pre">%nic_id%</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">netdevPrefix</span></code></p></td>
-<td><p>Netdev naming template with <code class="docutils literal notranslate"><span class="pre">%plane%</span></code> and <code class="docutils literal notranslate"><span class="pre">%rail%</span></code> substitutions.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ovsConfig</span></code></p></td>
+<td><p>RA2.4/RA3.1 string map for OVS <code class="docutils literal notranslate"><span class="pre">other_config</span></code> overrides. Omitted keys retain operator defaults.</p></td>
 </tr>
 </tbody>
 </table>
+<p>NIC type and PCI selectors are derived from each source group’s east-west PF inventory; there is no <code class="docutils literal notranslate"><span class="pre">spectrumX.nicType</span></code> setting.</p>
 </section>
 <section id="workload">
 <h2>workload<a class="headerlink" href="#workload" title="Permalink to this headline"></a></h2>
@@ -504,34 +542,46 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">sriov</span></code>, <code class="docutils literal notranslate"><span class="pre">rdma_shared</span></code>, or <code class="docutils literal notranslate"><span class="pre">host_device</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">multirail</span></code></p></td>
-<td><p>Enable multirail.</p></td>
+<td><p>Enable multirail. Explicit <code class="docutils literal notranslate"><span class="pre">false</span></code> is preserved in YAML and on the CLI.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.spcxVersion</span></code></p></td>
-<td><p>Spectrum-X reference architecture (<code class="docutils literal notranslate"><span class="pre">RA2.3</span></code>, or <code class="docutils literal notranslate"><span class="pre">RA2.1</span></code> for Network Operator 26.1).</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">routing</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">destination-based</span></code> or <code class="docutils literal notranslate"><span class="pre">source-based</span></code>; connectivity requires an explicit resolved decision.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.multiplaneMode</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ignoreARP</span></code></p></td>
+<td><p>Standard-profile ARP tuning. OpenShift requires the relevant Multus tuning allowlist entries.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.enable</span></code></p></td>
+<td><p>Enable Spectrum-X profile selection. Set this with <code class="docutils literal notranslate"><span class="pre">spcxVersion</span></code> for a YAML-only selection.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.spcxVersion</span></code></p></td>
+<td><p>Spectrum-X reference architecture; see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a> for the release matrix and shared RA2.4/RA3.1 contract. Use RA3.1 for VR and RA2.4 for other platforms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.multiplaneMode</span></code></p></td>
 <td><p>Multiplane mode: <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.numberOfPlanes</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.numberOfPlanes</span></code></p></td>
 <td><p>Number of planes.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyType</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyType</span></code></p></td>
 <td><p>Topology scheme for Spectrum-X IP allocation: <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> or <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. Required for Spectrum-X. Equivalent to <code class="docutils literal notranslate"><span class="pre">--topology-scheme</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.ipVersion</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.ipVersion</span></code></p></td>
 <td><p>IP version for Spectrum-X address allocation: <code class="docutils literal notranslate"><span class="pre">ipv4</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>. Equivalent to <code class="docutils literal notranslate"><span class="pre">--ip-version</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyFile</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.topologyFile</span></code></p></td>
 <td><p>Path to a spcx-gen/reference-generator or NVIDIA AIR topology JSON. Required for Spectrum-X generation — the profiles always render <code class="docutils literal notranslate"><span class="pre">CIDRPool</span></code> resources. Equivalent to <code class="docutils literal notranslate"><span class="pre">--topology-file</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.hostFirstOctet</span></code></p></td>
-<td><p>First octet used for IPv4 host allocation. Config-only — there is no CLI flag. Defaults to <code class="docutils literal notranslate"><span class="pre">172</span></code> for <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> for <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. No effect when <code class="docutils literal notranslate"><span class="pre">ipVersion</span></code> is <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.hostFirstOctet</span></code></p></td>
+<td><p>First octet used for IPv4 host allocation. Config-only — there is no CLI flag. Traditional layouts default to <code class="docutils literal notranslate"><span class="pre">172</span></code> for <code class="docutils literal notranslate"><span class="pre">2-tier</span></code> and <code class="docutils literal notranslate"><span class="pre">10</span></code> for <code class="docutils literal notranslate"><span class="pre">3-tier</span></code>. VR defaults to <code class="docutils literal notranslate"><span class="pre">240</span></code> and requires <code class="docutils literal notranslate"><span class="pre">240</span></code>–<code class="docutils literal notranslate"><span class="pre">255</span></code>. No effect when <code class="docutils literal notranslate"><span class="pre">ipVersion</span></code> is <code class="docutils literal notranslate"><span class="pre">ipv6</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code></p></td>
-<td><p>Spectrum-X profile body. Accepts either the raw YAML that belongs under the profile ConfigMap’s <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> key, or a full ConfigMap manifest. Required for <code class="docutils literal notranslate"><span class="pre">RA2.3</span></code>. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code>.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code></p></td>
+<td><p>Inline profile contents as a YAML string, not a filename. RA2.4 and RA3.1 require the complete doSPCX ConfigMap; RA2.3 accepts a full legacy ConfigMap or raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code>. <code class="docutils literal notranslate"><span class="pre">--spectrum-x-config</span></code> reads those contents from a file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.configMapName</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.configMapName</span></code></p></td>
 <td><p>Name for the generated profile ConfigMap. Required only when <code class="docutils literal notranslate"><span class="pre">spectrumX.profile</span></code> holds raw <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> YAML. Equivalent to <code class="docutils literal notranslate"><span class="pre">--spectrum-x-configmap-name</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.ipv6SiteID</span></code></p></td>
+<td><p>VR IPv6 site nibble, <code class="docutils literal notranslate"><span class="pre">0</span></code>–<code class="docutils literal notranslate"><span class="pre">15</span></code> (default <code class="docutils literal notranslate"><span class="pre">0</span></code>); config-only.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.useDRA</span></code></p></td>
 <td><p>Generate DRA <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code> resources and a claim-based example workload instead of SR-IOV device-plugin resource requests. Config-only — there is no CLI flag. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>. Requires Kubernetes 1.34 or later and the DRA Driver for SR-IOV — see <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a>.</p></td>
@@ -556,7 +606,7 @@
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">identifier</span></code></p></td>
 <td><p>Sanitised <code class="docutils literal notranslate"><span class="pre">&lt;machineType&gt;-&lt;gpuType&gt;</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">dgx-b200-nvidia-h100-nvl</span></code>) when both fields are resolved; <code class="docutils literal notranslate"><span class="pre">group-0</span></code> / <code class="docutils literal notranslate"><span class="pre">group-1</span></code> fallback when they aren’t. Used as the NicNodePolicy / SriovNetworkNodePolicy name suffix.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> / <code class="docutils literal notranslate"><span class="pre">productType</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">machineType</span></code> / <code class="docutils literal notranslate"><span class="pre">gpuType</span></code></p></td>
 <td><p>Hardware type strings (e.g., <code class="docutils literal notranslate"><span class="pre">DGX-B200</span></code> / <code class="docutils literal notranslate"><span class="pre">NVIDIA-B200</span></code>).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">capabilities.nodes.sriov</span></code> / <code class="docutils literal notranslate"><span class="pre">rdma</span></code> / <code class="docutils literal notranslate"><span class="pre">ib</span></code></p></td>
@@ -578,14 +628,43 @@
 <td><p>List of field-level discrepancies between the matched preset and discovered hardware. Non-empty means the preset was applied but the cluster differs from the preset. Each entry has <code class="docutils literal notranslate"><span class="pre">field</span></code> (<code class="docutils literal notranslate"><span class="pre">pciAddress</span></code> / <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>), <code class="docutils literal notranslate"><span class="pre">expected</span></code>, <code class="docutils literal notranslate"><span class="pre">got</span></code>, and <code class="docutils literal notranslate"><span class="pre">detail</span></code>. See <a class="reference internal" href="../presets.html"><span class="doc">Cluster Topology Presets</span></a> “Validation and Deviations”.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">linkType</span></code></p></td>
-<td><p>The discovered fabric for the group: <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code>. Populated by the fabric probe only when <strong>every</strong> east-west port produces a confirmed verdict (port ACTIVE plus, for IB, a subnet manager is present) and they agree. When omitted, discovery couldn’t prove the cluster’s fabric — downstream code should treat the absence as “unknown”. See <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a> “Fabric Type Detection”.</p></td>
+<td><p>The discovered fabric for the group: <code class="docutils literal notranslate"><span class="pre">Ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">InfiniBand</span></code>. Populated only when the configured link layers of all selected workers and east-west PF ports are readable and agree. Link state and subnet-manager presence do not gate detection. When omitted, discovery couldn’t prove the cluster’s fabric — downstream code should treat the absence as “unknown”. See <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a> “Fabric Type Detection”.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pfs</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.platformType</span></code> / <code class="docutils literal notranslate"><span class="pre">spectrumX.interfaceNames</span></code></p></td>
+<td><p>Derived RA platform and desired mode-specific naming. Recomputed during discovery/resolution; not user platform overrides.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spectrumX.swPlaneByRail</span></code></p></td>
+<td><p>RA2.4/RA3.1 switch-plane offsets keyed by existing rail IDs. Nonzero values require HWPLB; refresh can drop assignments if hardware or membership changes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">netplanManaged</span></code> / <code class="docutils literal notranslate"><span class="pre">netplanManagementUnknown</span></code></p></td>
+<td><p>Confirmed or uncertain host netplan naming ownership. A confirmed conflict blocks naming-template generation; uncertainty warns.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pfs</span></code></p></td>
 <td><p>List of physical functions. Each entry has <code class="docutils literal notranslate"><span class="pre">deviceID</span></code>, <code class="docutils literal notranslate"><span class="pre">pciAddress</span></code>, <code class="docutils literal notranslate"><span class="pre">rdmaDevice</span></code>, <code class="docutils literal notranslate"><span class="pre">networkInterface</span></code>, <code class="docutils literal notranslate"><span class="pre">traffic</span></code> (<code class="docutils literal notranslate"><span class="pre">east-west</span></code> or <code class="docutils literal notranslate"><span class="pre">north-south</span></code>), and <code class="docutils literal notranslate"><span class="pre">rail</span></code> (sequential index for east-west PFs).</p></td>
 </tr>
 </tbody>
 </table>
 <p>North-south PFs are listed for visibility but filtered out of generated manifests. See <a class="reference internal" href="../overview.html"><span class="doc">Overview</span></a> and <a class="reference internal" href="../workflows/discover.html"><span class="doc">Discover Workflow</span></a>.</p>
+</section>
+<section id="platform-maintenance-and-validation-settings">
+<h2>Platform, Maintenance, and Validation Settings<a class="headerlink" href="#platform-maintenance-and-validation-settings" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">flavor</span></code> selects <code class="docutils literal notranslate"><span class="pre">k8s</span></code> or <code class="docutils literal notranslate"><span class="pre">ocp</span></code>. <code class="docutils literal notranslate"><span class="pre">networkNamespaces</span></code> lists secondary-network and workload namespaces. OpenShift operator packages are externally installed; optional <code class="docutils literal notranslate"><span class="pre">sriov.operatorNamespace</span></code>, <code class="docutils literal notranslate"><span class="pre">maintenance.operatorNamespace</span></code>, and <code class="docutils literal notranslate"><span class="pre">nfd.operatorNamespace</span></code> / <code class="docutils literal notranslate"><span class="pre">nfd.configurationName</span></code> identify their resources. Use the OpenShift installation guidance before discovery and deployment.</p>
+<p><code class="docutils literal notranslate"><span class="pre">maintenance</span></code> controls node maintenance concurrency: <code class="docutils literal notranslate"><span class="pre">maxParallelOperations</span></code> (positive integer or percentage), <code class="docutils literal notranslate"><span class="pre">maxUnavailable</span></code> (nonnegative integer or percentage), <code class="docutils literal notranslate"><span class="pre">maxNodeMaintenanceTimeSeconds</span></code> (nonnegative seconds), and legacy OFED <code class="docutils literal notranslate"><span class="pre">maxParallelUpgrades</span></code> (nonnegative integer; zero means unlimited). Review these budgets before applying disruptive driver or NIC configuration.</p>
+<p><code class="docutils literal notranslate"><span class="pre">validation</span></code> selects <code class="docutils literal notranslate"><span class="pre">connectivity</span></code>, <code class="docutils literal notranslate"><span class="pre">mode</span></code> (<code class="docutils literal notranslate"><span class="pre">quick</span></code>, <code class="docutils literal notranslate"><span class="pre">full</span></code>, <code class="docutils literal notranslate"><span class="pre">strict</span></code>), and <code class="docutils literal notranslate"><span class="pre">checks</span></code> (<code class="docutils literal notranslate"><span class="pre">icmp</span></code>, <code class="docutils literal notranslate"><span class="pre">rping</span></code>, <code class="docutils literal notranslate"><span class="pre">ib_write_bw</span></code>). <code class="docutils literal notranslate"><span class="pre">gpuDirect.enabled</span></code> is an explicit decision; <code class="docutils literal notranslate"><span class="pre">gpuDirect.gpuResourceType</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">nvidia.com/gpu</span></code>. The <code class="docutils literal notranslate"><span class="pre">rdma</span></code> map controls <code class="docutils literal notranslate"><span class="pre">rpingIterations</span></code>, <code class="docutils literal notranslate"><span class="pre">ibWriteSize</span></code>, and <code class="docutils literal notranslate"><span class="pre">ibWriteMinBandwidthGbps</span></code>. See <a class="reference internal" href="../workflows/validate.html"><span class="doc">Validate Workflow</span></a> for acceptance semantics.</p>
+</section>
+<section id="deploy-and-validate-configuration-lookup">
+<h2>Deploy and Validate Configuration Lookup<a class="headerlink" href="#deploy-and-validate-configuration-lookup" title="Permalink to this headline"></a></h2>
+<p>Standalone deploy and validate select the first existing candidate:</p>
+<ol class="arabic simple">
+<li><p>Explicit <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> (an unreadable explicit path is an error).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/.l8k/resolved-config.yaml</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/../.l8k/resolved-config.yaml</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/../cluster-config.yaml</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/cluster-config.yaml</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./cluster-config.yaml</span></code>.</p></li>
+<li><p>With <code class="docutils literal notranslate"><span class="pre">--config-dir</span></code>, its <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code> only; otherwise local then installation share-directory <code class="docutils literal notranslate"><span class="pre">l8k-config.yaml</span></code>.</p></li>
+</ol>
+<p>The sidecar records the effective generation settings and is loaded without reapplying defaults or expanding the catalog. An explicit source configuration intentionally bypasses it. Keep the complete bundle, including <code class="docutils literal notranslate"><span class="pre">.l8k</span></code>, when moving generated artifacts between systems.</p>
 </section>
 <section id="see-also">
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>

@@ -149,7 +149,7 @@
 <p>A <strong>preset</strong> is a pre-recorded hardware topology for a known machine type (e.g., <code class="docutils literal notranslate"><span class="pre">ThinkSystem-SR680a-V3</span></code>, <code class="docutils literal notranslate"><span class="pre">PowerEdge-XE9680</span></code>). Each preset records expected PCI addresses, traffic class, NUMA affinity, and rail assignments for a specific machine + GPU pairing.</p>
 <p>Launch Kit uses presets in two ways:</p>
 <ul class="simple">
-<li><p><strong>Discovery overlay</strong> — when discovery detects a matching machine type, the preset’s topology is overlaid for consistency.</p></li>
+<li><p><strong>Discovery overlay</strong> — when discovery detects an exact matching machine and GPU type, the preset’s topology is overlaid for consistency.</p></li>
 <li><p><strong>Offline generation</strong> — <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span> <span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code> skips discovery entirely.</p></li>
 </ul>
 <section id="listing-presets">
@@ -167,16 +167,16 @@
 </div>
 <p>Optional flags:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--repo</span> <span class="pre">&lt;url&gt;</span></code> — override the repository URL.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--repo</span> <span class="pre">&lt;owner/repo&gt;</span></code> — override the GitHub repository (default <code class="docutils literal notranslate"><span class="pre">nvidia/k8s-launch-kit</span></code>).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--branch</span> <span class="pre">&lt;name&gt;</span></code> — fetch from a specific branch or tag.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">&lt;path&gt;</span></code> — subdirectory within the repo containing presets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dir</span> <span class="pre">&lt;path&gt;</span></code> — local destination directory for downloaded presets.</p></li>
 </ul>
-<p>Presets are optional. Discovery and <code class="docutils literal notranslate"><span class="pre">--for</span></code> generation work without them; presets simply add machine-specific topology defaults.</p>
+<p>Discovery works without a matching preset. <code class="docutils literal notranslate"><span class="pre">--for</span></code> requires a preset present in the selected catalog; use the exact name from <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">preset</span> <span class="pre">list</span></code>. Presets are embedded by default; <code class="docutils literal notranslate"><span class="pre">--config-dir</span></code> selects an override catalog.</p>
 </section>
 <section id="offline-manifest-generation">
 <h2>Offline Manifest Generation<a class="headerlink" href="#offline-manifest-generation" title="Permalink to this headline"></a></h2>
 <p>Generate manifests for a known preset without cluster access:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --for ThinkSystem-SR680a-V3 <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --for ThinkSystem-SR680a-V3-H200 <span class="se">\</span>
     --node-selector <span class="s2">&quot;nvidia.com/gpu.product=NVIDIA-H200&quot;</span> <span class="se">\</span>
     --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
     --save-deployment-files ./deployments
@@ -191,13 +191,13 @@
 </section>
 <section id="validation-and-deviations">
 <h2>Validation and Deviations<a class="headerlink" href="#validation-and-deviations" title="Permalink to this headline"></a></h2>
-<p>When a matched preset’s PFs don’t exactly match the discovered hardware, Launch Kit <strong>records the deviations</strong> instead of refusing to apply the preset. There are no fatal validation errors — every discrepancy is soft:</p>
+<p>When a matched preset’s PFs don’t exactly match the discovered hardware, Launch Kit <strong>records the deviations</strong> instead of refusing to apply the preset. Discovery retains the discrepancy so it can be reviewed before deployment:</p>
 <ul class="simple">
 <li><p><strong>PF count mismatch</strong> — the preset and the cluster expose different numbers of PFs.</p></li>
 <li><p><strong>PCI address drift</strong> — a PCI address present in the preset is missing on the cluster, or vice versa.</p></li>
 <li><p><strong>Device-ID drift</strong> — the device ID at a matching PCI address differs from the preset.</p></li>
 </ul>
-<p>Whenever any of these is detected, the matched preset is still applied on a best-effort basis (so rail/NUMA/GPU-affinity fields populate for whichever PFs do line up), and the discrepancies are written to <code class="docutils literal notranslate"><span class="pre">ClusterConfig.presetDeviation</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. Whenever a config with non-empty <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> is loaded by any l8k subcommand, a warning is re-emitted listing each deviation. The deployment proceeds, but the operator is reminded each run that the cluster differs from the matched preset.</p>
+<p>Whenever any of these is detected, the matched preset is still applied on a best-effort basis (so rail/NUMA/GPU-affinity fields populate for whichever PFs do line up), and the discrepancies are written to <code class="docutils literal notranslate"><span class="pre">ClusterConfig.presetDeviation</span></code> in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>. Whenever a config with non-empty <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> is loaded by any l8k subcommand, a warning is re-emitted listing each deviation. Generation can proceed, but certified-preset deviations fail <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span></code> with exit code 4. Resolve the mismatch or use an appropriate reviewed topology; a completed render does not qualify the hardware.</p>
 <p>Part numbers and PSIDs are not strict criteria (firmware variants are expected) so they’re not checked.</p>
 <p>Example <code class="docutils literal notranslate"><span class="pre">presetDeviation</span></code> block in <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clusterConfig</span><span class="p">:</span><span class="w"></span>

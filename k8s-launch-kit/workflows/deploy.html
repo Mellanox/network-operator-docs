@@ -74,7 +74,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#deployment-ordering">Deployment Ordering</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#deploy-wide-timeout">Deploy-wide Timeout</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dry-run-mode">Dry-Run Mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#end-to-end-verification-verify">End-to-End Verification (–verify)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#end-to-end-verification">End-to-End Verification</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#manual-verification">Manual Verification</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
 </ul>
@@ -139,7 +139,7 @@
 <li><p><a class="reference internal" href="#deployment-ordering" id="id2">Deployment Ordering</a></p></li>
 <li><p><a class="reference internal" href="#deploy-wide-timeout" id="id3">Deploy-wide Timeout</a></p></li>
 <li><p><a class="reference internal" href="#dry-run-mode" id="id4">Dry-Run Mode</a></p></li>
-<li><p><a class="reference internal" href="#end-to-end-verification-verify" id="id5">End-to-End Verification (–verify)</a></p></li>
+<li><p><a class="reference internal" href="#end-to-end-verification" id="id5">End-to-End Verification</a></p></li>
 <li><p><a class="reference internal" href="#manual-verification" id="id6">Manual Verification</a></p></li>
 <li><p><a class="reference internal" href="#see-also" id="id7">See Also</a></p></li>
 </ul>
@@ -154,7 +154,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy
 </pre></div>
 </div>
-<p>By default, <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> reads the manifests in <code class="docutils literal notranslate"><span class="pre">./deployment/</span></code> (the output of <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>) and uses <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> for cluster access.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> reads the bundle in <code class="docutils literal notranslate"><span class="pre">./deployment/</span></code> and automatically selects its <code class="docutils literal notranslate"><span class="pre">network-operator/</span></code> subdirectory. It loads <code class="docutils literal notranslate"><span class="pre">.l8k/resolved-config.yaml</span></code> unless <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> explicitly selects another configuration. Cluster credentials resolve from <code class="docutils literal notranslate"><span class="pre">--kubeconfig</span></code>, <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code>, then <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>.</p>
 <p>You can also fold the deploy into the generate step by adding <code class="docutils literal notranslate"><span class="pre">--deploy</span></code> to <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">generate</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --fabric ethernet --deployment-type sriov --multirail --deploy
 </pre></div>
@@ -162,7 +162,9 @@
 </section>
 <section id="deployment-ordering">
 <h2>Deployment Ordering<a class="headerlink" href="#deployment-ordering" title="Permalink to this headline"></a></h2>
-<p>Launch Kit applies manifests in four phases. The first two block on reconciliation because everything else depends on them; the last two batch the remaining manifests so controllers reconcile concurrently:</p>
+<p>When enabled, Launch Kit first installs the selected Helm chart, or compares an existing release with the generated chart version and values. A mismatch stops deployment unless <code class="docutils literal notranslate"><span class="pre">--overwrite-existing</span></code> is explicitly set. Set <code class="docutils literal notranslate"><span class="pre">networkOperator.skipHelmChart:</span> <span class="pre">true</span></code> before generation, or pass <code class="docutils literal notranslate"><span class="pre">--skip-network-operator-helm</span></code>, when another system owns Helm.</p>
+<p>After Helm management and before applying custom resources, general preflight checks component versions and stray resources. Helm may already have changed the cluster if this later preflight stops deployment; those changes are not rolled back. <code class="docutils literal notranslate"><span class="pre">--overwrite-existing</span></code> may delete networking CRs absent from the bundle, including manually created resources and resources from omitted groups. Review the entire reported inventory; <code class="docutils literal notranslate"><span class="pre">--groups</span></code> is not an ownership boundary. Multus/CNI ownership conflicts remain blocking and cannot be bypassed by overwrite.</p>
+<p>Launch Kit then applies manifests in four phases. The first two block on reconciliation because everything else depends on them; the last two batch the remaining manifests so controllers reconcile concurrently:</p>
 <ol class="arabic simple">
 <li><p><strong>NicClusterPolicy</strong> — applied first, then awaited until the controller reports <code class="docutils literal notranslate"><span class="pre">READY</span></code>. Per-component <code class="docutils literal notranslate"><span class="pre">appliedStates[]</span></code> are surfaced in the progress output (“ready: 7/12; pending: state-OFED, state-multus-cni, …”) so an operator sees exactly which component is the laggard.</p></li>
 <li><p><strong>NicNodePolicy</strong> — applied per group, awaited per policy (OFED driver, device plugins land here).</p></li>
@@ -171,31 +173,32 @@
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Example workload manifests (filenames matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code>) are <strong>not</strong> applied by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>. They are fixtures consumed by the connectivity matrix in <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--connectivity</span></code> (or <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code>, see below) and are deployed only as part of that ping-matrix phase.</p>
+<p>Example workload manifests (filenames matching <code class="docutils literal notranslate"><span class="pre">*example*</span></code>) are <strong>not</strong> applied by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code>. They are validation workloads consumed by <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--connectivity</span></code> and are deployed only during its connectivity checks, including the selected ICMP and RDMA test families.</p>
 </div>
 </section>
 <section id="deploy-wide-timeout">
 <h2>Deploy-wide Timeout<a class="headerlink" href="#deploy-wide-timeout" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> has no per-manifest deadline. Pass <code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span> <span class="pre">&lt;duration&gt;</span></code> to bound the whole apply + reconciliation phase end-to-end (e.g., <code class="docutils literal notranslate"><span class="pre">45m</span></code>, <code class="docutils literal notranslate"><span class="pre">2h</span></code>). Without the flag, deploy polls until every manifest reaches a terminal state or the user cancels — the right default for SR-IOV configuration on large clusters where a single <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> reconciliation can outlast any small per-manifest budget.</p>
+<p><code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span></code> generally has no per-manifest deadline. Interface naming is an exception: after a name mismatch is observed, it allows five minutes for udev names to settle before failing. Pass <code class="docutils literal notranslate"><span class="pre">--deploy-timeout</span> <span class="pre">&lt;duration&gt;</span></code> to bound the whole apply + reconciliation phase end-to-end (e.g., <code class="docutils literal notranslate"><span class="pre">45m</span></code>, <code class="docutils literal notranslate"><span class="pre">2h</span></code>). Without the flag, deploy polls until every manifest reaches a terminal state or the user cancels — the right default for SR-IOV configuration on large clusters where a single <code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code> reconciliation can outlast any small per-manifest budget.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --deploy-timeout 90m
 </pre></div>
 </div>
 </section>
 <section id="dry-run-mode">
 <h2>Dry-Run Mode<a class="headerlink" href="#dry-run-mode" title="Permalink to this headline"></a></h2>
-<p>Preview what would be deployed without making changes:</p>
+<p>Validate proposed operations through Helm and server-side dry-run without persisting them. This requires cluster access and installed compatible APIs; it does not prove controller reconciliation or data-plane readiness:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --dry-run
 </pre></div>
 </div>
 <p>Dry-run mode is recommended before any first deployment and before production changes.</p>
 </section>
-<section id="end-to-end-verification-verify">
-<h2>End-to-End Verification (–verify)<a class="headerlink" href="#end-to-end-verification-verify" title="Permalink to this headline"></a></h2>
-<p>Pass <code class="docutils literal notranslate"><span class="pre">--verify</span></code> to chain a full data-plane verification right after a successful apply: <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code> applies the manifests, waits for every controller to reconcile, then runs the connectivity ping matrix from <a class="reference internal" href="validate.html"><span class="doc">l8k validate</span></a> (apply the example DaemonSet, wait for every pod to be <code class="docutils literal notranslate"><span class="pre">Ready</span></code>, ping every rail across every pod pair, clean up).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --verify
+<section id="end-to-end-verification">
+<h2>End-to-End Verification<a class="headerlink" href="#end-to-end-verification" title="Permalink to this headline"></a></h2>
+<p>After deployment, run validation explicitly against the same bundle:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --deployment-files ./deployment
+l8k validate --deployment-files ./deployment --wait 10m
 </pre></div>
 </div>
-<p>The matrix’s exit code propagates: a failed ping causes <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">deploy</span> <span class="pre">--verify</span></code> to exit non-zero even though the manifests applied successfully. Combine with <code class="docutils literal notranslate"><span class="pre">--keep</span></code> (passed to validate) when debugging.</p>
+<p>Validation checks configured ICMP and RDMA families as well as static readiness. Its exit status and coverage report are separate from apply success. Use <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">validate</span> <span class="pre">--keep</span></code> to retain test workloads for debugging.</p>
 </section>
 <section id="manual-verification">
 <h2>Manual Verification<a class="headerlink" href="#manual-verification" title="Permalink to this headline"></a></h2>

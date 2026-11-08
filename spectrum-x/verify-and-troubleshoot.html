@@ -234,8 +234,11 @@ kubectl -n nvidia-network-operator get spectrumxrailpoolconfig &lt;name&gt; <spa
 <p><code class="docutils literal notranslate"><span class="pre">syncStatus</span></code> is one of <code class="docutils literal notranslate"><span class="pre">Unknown</span></code>, <code class="docutils literal notranslate"><span class="pre">InProgress</span></code>, <code class="docutils literal notranslate"><span class="pre">Failed</span></code>, or
 <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>. When it is not <code class="docutils literal notranslate"><span class="pre">Succeeded</span></code>, <code class="docutils literal notranslate"><span class="pre">nodeStates[]</span></code> identifies
 which nodes are affected and carries a <code class="docutils literal notranslate"><span class="pre">message</span></code> for each.</p>
-<p>Confirm the operator generated the downstream resources — one per rail, or
-one per rail-plane in <code class="docutils literal notranslate"><span class="pre">swplb</span></code>:</p>
+<p>Confirm the operator generated one <code class="docutils literal notranslate"><span class="pre">OVSNetwork</span></code> per <code class="docutils literal notranslate"><span class="pre">railTopology</span></code>
+entry. Traditional layouts have one entry per rail, or per rail-plane in
+<code class="docutils literal notranslate"><span class="pre">swplb</span></code>. VR HWPLB has eight entries for its four dual-NIC logical rails,
+one for each NIC endpoint. Hardware Multiplane additionally creates an SR-IOV policy with an <code class="docutils literal notranslate"><span class="pre">-unused</span></code> suffix
+for the remaining PFs:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get ovsnetwork
 kubectl -n nvidia-network-operator get sriovnetworknodepolicy
 </pre></div>
@@ -243,41 +246,47 @@ kubectl -n nvidia-network-operator get sriovnetworknodepolicy
 </section>
 <section id="step-4-check-plane-health-hardware-multiplane">
 <span id="verify-plane-health"></span><h2>Step 4: Check plane health (Hardware Multiplane)<a class="headerlink" href="#step-4-check-plane-health-hardware-multiplane" title="Permalink to this headline"></a></h2>
-<p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> the planes are hidden from the workload: a Pod sees one
-interface per rail whether every plane is healthy or only one is. A
-degraded plane is therefore <strong>invisible from inside the Pod</strong>, and DOCA
-xPlane is the only place to see it.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> the planes are hidden from the workload: each NIC endpoint
+presents one interface whether every plane is healthy or only one is. VR
+has two such endpoints per logical rail. A
+degraded plane is therefore <strong>invisible from inside the Pod</strong>. Inspect DOCA
+xPlane telemetry on each affected worker.</p>
 <p>The xPlane DaemonSet runs as <code class="docutils literal notranslate"><span class="pre">xplane-ds</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get ds xplane-ds
+kubectl -n nvidia-network-operator get pods -l <span class="nv">app</span><span class="o">=</span>xplane -o wide
 kubectl -n nvidia-network-operator logs -l <span class="nv">app</span><span class="o">=</span>xplane
 </pre></div>
 </div>
-<p>Query plane state with the bundled client:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator <span class="nb">exec</span> ds/xplane-ds -- <span class="se">\</span>
+<p>Select the xPlane Pod on the affected node, then query plane state with
+the bundled client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator <span class="nb">exec</span> &lt;xplane-pod&gt; -- <span class="se">\</span>
   doca-xplane-client get-status
 
-kubectl -n nvidia-network-operator <span class="nb">exec</span> ds/xplane-ds -- <span class="se">\</span>
+kubectl -n nvidia-network-operator <span class="nb">exec</span> &lt;xplane-pod&gt; -- <span class="se">\</span>
   doca-xplane-client get-planes-summary
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">get-status</span></code> reports an <code class="docutils literal notranslate"><span class="pre">overallState</span></code> and counts local versus remote
 failures. When a plane is <code class="docutils literal notranslate"><span class="pre">DEGRADED</span></code>, narrow it down:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local failures — link down on this host</span>
-doca-xplane-client get-plane-failures-local --plane_id <span class="m">0</span>
+kubectl -n nvidia-network-operator <span class="nb">exec</span> &lt;xplane-pod&gt; -- <span class="se">\</span>
+  doca-xplane-client get-plane-failures-local --plane_id <span class="m">0</span>
 
 <span class="c1"># Remote failures — route withdrawn by the fabric</span>
-doca-xplane-client get-plane-failures-remote --plane_id <span class="m">0</span>
+kubectl -n nvidia-network-operator <span class="nb">exec</span> &lt;xplane-pod&gt; -- <span class="se">\</span>
+  doca-xplane-client get-plane-failures-remote --plane_id <span class="m">0</span>
 
-<span class="c1"># How much traffic was diverted away from this plane</span>
-doca-xplane-client get-plane-traffic-summary --plane_id <span class="m">0</span>
+<span class="c1"># Traffic counters, including diverted and dropped traffic</span>
+kubectl -n nvidia-network-operator <span class="nb">exec</span> &lt;xplane-pod&gt; -- <span class="se">\</span>
+  doca-xplane-client get-plane-traffic-summary --plane_id <span class="m">0</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code class="docutils literal notranslate"><span class="pre">local</span></code> failures are host-side (a down link on this node);
 <code class="docutils literal notranslate"><span class="pre">remote</span></code> failures are learned from fabric route-availability updates.
-Diverted traffic counters confirm failover is working rather than
-traffic being dropped.</p>
+Compare diverted and dropped counters to assess failover. For the
+complete command reference, see the <a class="reference external" href="https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-xplane-service-guide">DOCA 3.5 XPlane Service Guide</a>.</p>
 </div>
 </section>
 <section id="step-5-check-the-workload-sees-its-rails">

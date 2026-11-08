@@ -182,7 +182,7 @@
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--fabric</span></code></p></td>
 <td><p>the cluster’s fabric (<code class="docutils literal notranslate"><span class="pre">ethernet</span></code> or <code class="docutils literal notranslate"><span class="pre">infiniband</span></code>)</p></td>
-<td><p>every group’s <code class="docutils literal notranslate"><span class="pre">linkType</span></code> (Unit 5 fabric probe) agrees; skipped+warned otherwise</p></td>
+<td><p>every group’s <code class="docutils literal notranslate"><span class="pre">linkType</span></code> agrees; skipped+warned otherwise</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--deployment-type</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">sriov</span></code></p></td>
@@ -190,14 +190,14 @@
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--multirail</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
-<td><p>always; opt out via <code class="docutils literal notranslate"><span class="pre">--multirail=false</span></code> (YAML cannot express explicit-false)</p></td>
+<td><p>always; opt out via <code class="docutils literal notranslate"><span class="pre">--multirail=false</span></code> (or set <code class="docutils literal notranslate"><span class="pre">profile.multirail:</span> <span class="pre">false</span></code> in YAML)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--multiplane-mode</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200), <code class="docutils literal notranslate"><span class="pre">swplb</span></code> (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (ConnectX-9 SuperNIC)</p></td>
-<td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set; from the east-west PF deviceID and GPU platform, skipped+warned when groups disagree. On ConnectX-8 SuperNIC <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> is never defaulted — Spectrum-X RA 2.3 recommends it on multiplane platforms, so pass it explicitly.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">none</span></code> (ConnectX-7 NIC, BlueField-3 SuperNIC, and ConnectX-8 SuperNIC on H100 / H200 / B200 / GB200, plus RTX with RA2.4/RA3.1), <code class="docutils literal notranslate"><span class="pre">swplb</span></code> (ConnectX-8 SuperNIC on B300 / GB300 or an unrecognised platform), <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> (ConnectX-9 SuperNIC)</p></td>
+<td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set; from the east-west PF deviceID and GPU platform, skipped+warned when groups disagree. Select <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> explicitly when required by the validated site topology.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--number-of-planes</span></code></p></td>
-<td><p>1 (single-plane platforms and NICs), 2 (ConnectX-8 SuperNIC on B300 / GB300), 4 (ConnectX-9 SuperNIC)</p></td>
+<td><p>1 (single-plane platforms and NICs), 2 (ConnectX-8 SuperNIC on B300 / GB300), 4 (ConnectX-9 SuperNIC fallback), 8 (VR HWPLB with RA3.1)</p></td>
 <td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set. Pass <code class="docutils literal notranslate"><span class="pre">4</span></code> explicitly for a quad-plane B300 / GB300 topology.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--ip-version</span></code></p></td>
@@ -205,12 +205,12 @@
 <td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--network-operator-release</span></code></p></td>
-<td><p>matching release for the chosen RA (RA2.3 → 26.7, RA2.1 → 26.1)</p></td>
+<td><p>matching release for the chosen RA (RA2.4/RA3.1 → 26.10, RA2.3 → 26.7, RA2.2 → 26.4, RA2.1 → 26.1)</p></td>
 <td><p>only when <code class="docutils literal notranslate"><span class="pre">--spectrum-x</span></code> is set</p></td>
 </tr>
 </tbody>
 </table>
-<p>Each applied default is logged at info level (<code class="docutils literal notranslate"><span class="pre">Defaulted</span> <span class="pre">--multiplane-mode=swplb</span> <span class="pre">(GB300</span> <span class="pre">dual-plane</span> <span class="pre">platform;</span> <span class="pre">SWPLB</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">GA</span> <span class="pre">default)</span></code>); the full reasoning trail is at debug level (<code class="docutils literal notranslate"><span class="pre">--log-level</span> <span class="pre">debug</span></code>).</p>
+<p>Each applied default is logged at info level; use <code class="docutils literal notranslate"><span class="pre">--log-level</span> <span class="pre">debug</span></code> for the full reasoning trail. Generator defaults do not establish hardware qualification.</p>
 <p>Resolution precedence (lowest → highest): hardware default &lt; config-file &lt; CLI flag. The Spectrum-X cohort rules (RA-to-release pairing, <code class="docutils literal notranslate"><span class="pre">multiplane-mode=none</span></code> requiring <code class="docutils literal notranslate"><span class="pre">number-of-planes=1</span></code>, etc.) are enforced after defaults run, so a partial CLI input plus defaults must still resolve to a consistent whole.</p>
 <p>For the full profile decision matrix, see <a class="reference internal" href="../profiles/profiles.html"><span class="doc">Deployment Profiles</span></a>.</p>
 </section>
@@ -223,12 +223,12 @@
     --save-deployment-files ./deployments
 </pre></div>
 </div>
-<p>Supported release lines: <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>, and <code class="docutils literal notranslate"><span class="pre">26.7</span></code>. The release auto-fills versions and image tags from an embedded catalog. Each Spectrum-X RA requires its matching line: RA2.3 → <code class="docutils literal notranslate"><span class="pre">26.7</span></code>, RA2.1 → <code class="docutils literal notranslate"><span class="pre">26.1</span></code>.</p>
+<p>Supported release lines: <code class="docutils literal notranslate"><span class="pre">26.1</span></code>, <code class="docutils literal notranslate"><span class="pre">26.4</span></code>, <code class="docutils literal notranslate"><span class="pre">26.7</span></code>, and <code class="docutils literal notranslate"><span class="pre">26.10</span></code>. The release fills versions and image repositories from an embedded catalog. See <a class="reference internal" href="../profiles/spectrum-x.html"><span class="doc">Spectrum-X</span></a> for RA compatibility. Use <code class="docutils literal notranslate"><span class="pre">l8k</span> <span class="pre">schema</span></code> to inspect the installed binary’s release catalog.</p>
 </section>
 <section id="generation-without-a-live-cluster">
 <h2>Generation without a Live Cluster<a class="headerlink" href="#generation-without-a-live-cluster" title="Permalink to this headline"></a></h2>
 <p>To generate manifests for a known machine type without running discovery, use <code class="docutils literal notranslate"><span class="pre">--for</span> <span class="pre">&lt;preset&gt;</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --for ThinkSystem-SR680a-V3 <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --for ThinkSystem-SR680a-V3-H200 <span class="se">\</span>
     --node-selector <span class="s2">&quot;nvidia.com/gpu.product=NVIDIA-H200&quot;</span> <span class="se">\</span>
     --fabric ethernet --deployment-type sriov --multirail <span class="se">\</span>
     --save-deployment-files ./deployments
@@ -262,17 +262,21 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">30-*.yaml</span></code></p></td>
 <td><p>Network resources (<code class="docutils literal notranslate"><span class="pre">SriovNetworkNodePolicy</span></code>, <code class="docutils literal notranslate"><span class="pre">SriovNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">HostDeviceNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">MacvlanNetwork</span></code>, <code class="docutils literal notranslate"><span class="pre">IPoIBNetwork</span></code>).</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">35-nicinterfacenametemplate.yaml</span></code></p></td>
-<td><p>NIC rename templates (only when needed — see <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>).</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">25-*</span></code> through <code class="docutils literal notranslate"><span class="pre">40-*.yaml</span></code></p></td>
+<td><p>NIC naming/configuration templates and SR-IOV policies; exact numbering depends on the profile. See <a class="reference internal" href="../heterogeneous-clusters.html"><span class="doc">Heterogeneous Clusters</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">40-*.yaml</span></code> / <code class="docutils literal notranslate"><span class="pre">50-*.yaml</span></code></p></td>
-<td><p>Example workload DaemonSets.</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">40-*example*</span></code> / <code class="docutils literal notranslate"><span class="pre">60-*example*</span></code> / <code class="docutils literal notranslate"><span class="pre">90-*example*</span></code></p></td>
+<td><p>Temporary validation workload DaemonSets.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">overview.html</span></code></p></td>
-<td><p>Human-readable deployment summary.</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">values.yaml</span></code></p></td>
+<td><p>Helm input; omitted when Network Operator Helm management is disabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">.l8k/resolved-config.yaml</span></code> (at the bundle root)</p></td>
+<td><p>Effective generation configuration, including CLI overrides. Retain this with the manifests.</p></td>
 </tr>
 </tbody>
 </table>
+<p>Generation preserves the source configuration and writes effective settings to <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/.l8k/resolved-config.yaml</span></code>. Operational manifests are under <code class="docutils literal notranslate"><span class="pre">&lt;deployment-files&gt;/network-operator/</span></code>. Review and retain the whole bundle; deploy and validate prefer its sidecar unless <code class="docutils literal notranslate"><span class="pre">--user-config</span></code> explicitly overrides it. Regeneration replaces the selected plugin output, so use a new directory to compare a proposed change.</p>
 <p>In heterogeneous clusters, per-group files include the group identifier in the filename (e.g., <code class="docutils literal notranslate"><span class="pre">30-sriovnetworknodepolicy-group-0.yaml</span></code>).</p>
 </section>
 <section id="group-specific-generation">

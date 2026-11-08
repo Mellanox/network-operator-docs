@@ -138,7 +138,7 @@
 <p>This walkthrough takes you from a freshly prepared cluster to a running NVIDIA networking deployment using the <strong>SR-IOV Ethernet</strong> profile — the most common starting point. For other profiles, see the <a class="reference internal" href="profiles/profiles.html"><span class="doc">Deployment Profiles</span></a> decision matrix.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>Use this when:</strong> you have the Network Operator Helm chart installed (per <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a>), the <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary on your PATH, and <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> set or your default kubeconfig at <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>.</p>
+<p><strong>Use this when:</strong> you meet the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> prerequisites, have the <code class="docutils literal notranslate"><span class="pre">l8k</span></code> binary on your PATH, and <code class="docutils literal notranslate"><span class="pre">$KUBECONFIG</span></code> set or your default kubeconfig at <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code>.</p>
 </div>
 <section id="step-1-discover">
 <h2>Step 1 — Discover<a class="headerlink" href="#step-1-discover" title="Permalink to this headline"></a></h2>
@@ -146,7 +146,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k discover
 </pre></div>
 </div>
-<p>Discovery deploys a minimal probe profile, examines NICs and OFED-dependent kernel modules on each node, and groups nodes by PCI topology.</p>
+<p>Discovery temporarily deploys the NIC Configuration Daemon, examines NICs and OFED-dependent kernel modules on each node, and groups nodes by PCI topology.</p>
 </section>
 <section id="step-2-generate">
 <h2>Step 2 — Generate<a class="headerlink" href="#step-2-generate" title="Permalink to this headline"></a></h2>
@@ -154,23 +154,26 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k generate --fabric ethernet --deployment-type sriov --multirail
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a> for the output file layout.</p>
+<p>Review <code class="docutils literal notranslate"><span class="pre">deployment/.l8k/resolved-config.yaml</span></code> and the generated manifests, especially node selectors, addresses, driver settings, and maintenance concurrency. See <a class="reference internal" href="workflows/generate.html"><span class="doc">Generate Workflow</span></a> for the output file layout.</p>
 </section>
 <section id="step-3-deploy">
 <h2>Step 3 — Deploy<a class="headerlink" href="#step-3-deploy" title="Permalink to this headline"></a></h2>
-<p>Apply the generated manifests in dependency order (NicClusterPolicy first, then per-group NicNodePolicy, then networks and workloads):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy
+<p>If the required operator CRDs are already installed, preview the reviewed bundle with a server-side dry-run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --deployment-files ./deployment --dry-run
+</pre></div>
+</div>
+<p>Dry-run cannot bootstrap missing CRDs. On a first installation, review the generated files and proceed with deployment, or install the compatible operator APIs before using the preview. Launch Kit manages Helm first when enabled, then policies and networking resources. Example workloads are applied only during validation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k deploy --deployment-files ./deployment
 </pre></div>
 </div>
 </section>
 <section id="step-4-verify">
 <h2>Step 4 — Verify<a class="headerlink" href="#step-4-verify" title="Permalink to this headline"></a></h2>
-<p>Check that operator pods, OFED driver pods, and example workloads are running:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl -n nvidia-network-operator get pods
-kubectl get nicclusterpolicy
-kubectl get nicnodepolicy
+<p>Run validation against the same bundle and inspect its HTML report. Required checks must run on the intended workers and rails; an exit code of zero with skipped checks is incomplete evidence:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>l8k validate --deployment-files ./deployment --wait 10m
 </pre></div>
 </div>
+<p>See <a class="reference internal" href="workflows/validate.html"><span class="doc">Validate Workflow</span></a> for acceptance criteria and <code class="docutils literal notranslate"><span class="pre">deployment/k8s-launch-kit-validation-report.html</span></code>.</p>
 </section>
 <section id="next-steps">
 <h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline"></a></h2>
@@ -186,7 +189,7 @@ kubectl get nicnodepolicy
 <h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="overview.html"><span class="doc">Overview</span></a> — the discover/generate/deploy mental model</p></li>
-<li><p><a class="reference internal" href="reference/cli.html"><span class="doc">CLI Reference</span></a> — every flag</p></li>
+<li><p><a class="reference internal" href="reference/cli.html"><span class="doc">CLI Reference</span></a> — host workflow flags</p></li>
 <li><p><a class="reference internal" href="reference/config.html"><span class="doc">Configuration Reference</span></a> — <code class="docutils literal notranslate"><span class="pre">cluster-config.yaml</span></code> schema</p></li>
 </ul>
 </section>

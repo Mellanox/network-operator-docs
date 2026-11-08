@@ -171,8 +171,8 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">auth</span> <span class="pre">can-i</span></code> and the kubeconfig</p></td>
 </tr>
 <tr class="row-odd"><td><p>Discovery completes with empty <code class="docutils literal notranslate"><span class="pre">clusterConfig</span></code></p></td>
-<td><p>Default <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> excludes all nodes</p></td>
-<td><p>Pass <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> matching a label on your nodes (see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>)</p></td>
+<td><p>No eligible NIC publisher, or discovery daemon/probe failure</p></td>
+<td><p>Check Ready schedulable nodes, daemon image access, and restricted BlueField state. <code class="docutils literal notranslate"><span class="pre">--node-selector</span></code> does not limit discovery scheduling (see <a class="reference internal" href="workflows/discover.html"><span class="doc">Discover Workflow</span></a>).</p></td>
 </tr>
 <tr class="row-even"><td><p>Generation fails with “RA2.1 requires –network-operator-release in [26.1]”</p></td>
 <td><p>Spectrum-X version and Network Operator release mismatch</p></td>

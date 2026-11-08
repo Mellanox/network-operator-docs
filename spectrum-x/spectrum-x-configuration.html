@@ -165,6 +165,7 @@
 </ul>
 </div>
 <p><a class="reference external" href="https://github.com/Mellanox/nic-configuration-operator">NVIDIA NIC Configuration Operator</a> in Network Operator 26.10 applies Spectrum-X settings from a <strong>profile ConfigMap</strong>. The <code class="docutils literal notranslate"><span class="pre">spectrumXOptimized.version</span></code> field selects the architecture version, and <code class="docutils literal notranslate"><span class="pre">platformType</span></code> selects the hardware platform. Neither field names the ConfigMap.</p>
+<p>RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms are released together. Select <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code> with <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code> for VR; select <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA2.4</span></code> with the corresponding platform type otherwise. Both use the doSPCX ConfigMap format below.</p>
 <p>The examples on this page target the component versions shipped with Network Operator v26.10.0-rc.7.</p>
 <p>For the Network Operator Spectrum-X RA support matrix and validated hardware, operating system, and Kubernetes combinations, see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 <p>Spectrum-X configuration applies to ConnectX-7 NIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC, and BlueField-3 SuperNIC; Hardware Plane Load Balancing (<code class="docutils literal notranslate"><span class="pre">hwplb</span></code>) additionally requires ConnectX-8 SuperNIC or ConnectX-9 SuperNIC. Device IDs and the modes each NIC accepts are listed under <a class="reference internal" href="#nic-type-constraints">NIC type constraints</a>.</p>
@@ -172,9 +173,9 @@
 <p class="admonition-title">Note</p>
 <p><strong>ConnectX-9 SuperNIC support for Spectrum-X is Tech Preview.</strong> The NIC
 Configuration Operator API accepts ConnectX-9 SuperNIC and applies Spectrum-X
-settings to it, but ConnectX-9 SuperNIC is <strong>not part of Spectrum-X RA 2.3</strong>
-and is not covered by an RA-validated configuration. Use it for evaluation
-only.</p>
+settings to it. API acceptance does not establish a validated hardware/software
+combination. Select RA3.1 for VR. Use it for evaluation with a profile supplied for the
+requested platform and NIC combination; see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 <p>ConnectX-9 SuperNIC remains fully supported by Network Operator for general
 RoCE and InfiniBand workloads — see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>.</p>
 </div>
@@ -184,7 +185,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 </section>
 <section id="apply-the-spectrum-x-profile-configmap">
 <h2>Apply the Spectrum-X Profile ConfigMap<a class="headerlink" href="#apply-the-spectrum-x-profile-configmap" title="Permalink to this headline"></a></h2>
-<p>Obtain the profile ConfigMap published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.</p>
+<p>Obtain the <strong>RA2.4 or RA3.1 doSPCX profile ConfigMap</strong> published for your deployment, or contact your NVIDIA CPM. Apply the complete ConfigMap as supplied, including its labels, annotations, and contents.</p>
 <p>The following shows the required API format. Use the published ConfigMap rather than applying this placeholder example:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span><span class="w"></span>
@@ -204,6 +205,9 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>Network Operator 26.10 does not accept the legacy <code class="docutils literal notranslate"><span class="pre">data.profile</span></code> format
+used with RA2.3 on 26.7.x. Renaming a legacy ConfigMap does not convert it.
+Keep exactly one current-format profile selected cluster-wide.</p>
 <p>Admission checks the template fields, but does not establish that the profile supports the architecture, platform, and NIC combination. Check <code class="docutils literal notranslate"><span class="pre">NicDevice</span></code> conditions as described in <a class="reference internal" href="verify-and-troubleshoot.html"><span class="doc">Verify and Troubleshoot</span></a>.</p>
 </div>
 </section>
@@ -251,7 +255,7 @@ RoCE and InfiniBand workloads — see <a class="reference internal" href="../pla
 <code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.multiplaneMode</span></code>, and <code class="docutils literal notranslate"><span class="pre">NUM_PLANES</span></code> to
 <code class="docutils literal notranslate"><span class="pre">spec.template.spectrumXOptimized.numberOfPlanes</span></code>.</p>
 <p>PF and VF totals describe the east-west NICs on one worker node in the
-reference platform layout, excluding north-south NICs. For HGX H100 use
+non-VR RA2.4 platform layouts below, excluding north-south NICs. For HGX H100 use
 <code class="docutils literal notranslate"><span class="pre">h100</span></code>; for HGX H200 use <code class="docutils literal notranslate"><span class="pre">h200</span></code>. Select the row matching your NIC and
 physical plane configuration.</p>
 <table class="colwidths-given docutils align-default" id="id1">
@@ -383,7 +387,7 @@ physical plane configuration.</p>
 </tr>
 </tbody>
 </table>
-<p>In <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, each rail exposes one VF regardless of the number of planes.
+<p>For the RA2.4 layouts in this table, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> exposes one VF per rail regardless of the number of planes.
 In <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, each PF exposes a VF, so the VF count increases with the
 number of planes. The totals above are platform-wide counts, not values
 for <code class="docutils literal notranslate"><span class="pre">template.numVfs</span></code>; the NIC configuration template still uses
@@ -429,7 +433,7 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 <span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">feature.node.kubernetes.io/network-sriov.capable</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"></span>
 <span class="w">  </span><span class="nt">nicSelector</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8 SuperNIC. Use &quot;1025&quot; for ConnectX-9 SuperNIC (tech preview)</span><span class="w"></span>
+<span class="w">    </span><span class="nt">nicType</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1023&quot;</span><span class="w"> </span><span class="c1"># ConnectX-8 SuperNIC on GB300</span><span class="w"></span>
 <span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">numVfs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span><span class="w"></span>
 <span class="w">    </span><span class="nt">linkType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Ethernet</span><span class="w"></span>
@@ -442,10 +446,12 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 <span class="w">      </span><span class="nt">numberOfPlanes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w"></span>
 </pre></div>
 </div>
-<p>The profile must support the requested architecture, platform, mode, and NIC. <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">rtx</span></code> permits only <code class="docutils literal notranslate"><span class="pre">multiplaneMode:</span> <span class="pre">none</span></code>. <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code> requires <code class="docutils literal notranslate"><span class="pre">swplb</span></code> or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>.</p>
+<p>The profile must support the requested architecture, platform, mode, and NIC. <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">rtx</span></code> permits only <code class="docutils literal notranslate"><span class="pre">multiplaneMode:</span> <span class="pre">none</span></code>. The API requires <code class="docutils literal notranslate"><span class="pre">swplb</span></code> or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> for <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code>. For Vera Rubin, use <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">RA3.1</span></code>, <code class="docutils literal notranslate"><span class="pre">platformType:</span> <span class="pre">vr</span></code>, and ConnectX-9 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">&quot;1025&quot;</span></code>). The eight-plane HWPLB layout groups two NICs per logical rail, exposing a separate VF endpoint for each NIC. See <a class="reference internal" href="../k8s-launch-kit/profiles/spectrum-x.html"><span class="doc">Launch Kit Spectrum-X Profile</span></a> for the rail grouping and generation inputs.</p>
 <section id="multiplane-modes">
 <h4>Multiplane modes<a class="headerlink" href="#multiplane-modes" title="Permalink to this headline"></a></h4>
-<p>The following multiplane modes are available:</p>
+<p>The following modes are accepted by the NIC Configuration Operator API.
+The supplied profile must also support the selected platform, NIC, and
+plane count; this table is not a hardware qualification matrix:</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 15%" />
@@ -467,20 +473,20 @@ for <code class="docutils literal notranslate"><span class="pre">template.numVfs
 <td><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hwplb</span></code></p></td>
-<td><p>Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees a single interface per rail. <strong>The recommended mode on multiplane platforms.</strong></p></td>
+<td><p>Hardware Plane Load Balancing. Uses hardware LAG resource allocation and NIC-level plane configuration to distribute packets across planes in the NIC hardware. The planes are hidden from the workload, which sees one interface per NIC endpoint: one per rail in the non-VR layouts above, or two per logical rail on VR. <strong>The recommended mode on multiplane platforms.</strong></p></td>
 <td><p>ConnectX-8 SuperNIC, ConnectX-9 SuperNIC</p></td>
-<td><p>2, 4</p></td>
+<td><p>2, 4, 8 (subject to platform and profile support)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">swplb</span></code></p></td>
 <td><p>Software Plane Load Balancing. The NIC port is split into multiple PFs, each assigned to a separate data plane; the software stack distributes packets across planes. Each plane is exposed to the workload as its own interface.</p></td>
 <td><p>BlueField-3 SuperNIC, ConnectX-8 SuperNIC, ConnectX-9 SuperNIC</p></td>
-<td><p>2, 4</p></td>
+<td><p>2, 4, 8 (subject to platform and profile support)</p></td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On multiplane platforms, <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> is the mode Spectrum-X RA 2.3 recommends — select <code class="docutils literal notranslate"><span class="pre">swplb</span></code> only for a software-based multiplane deployment, for example when each plane must be visible to the workload as a separate interface, or on NICs that do not support <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. This is a Reference Architecture recommendation, not an API default: the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field itself defaults to <code class="docutils literal notranslate"><span class="pre">none</span></code>, so multiplane deployments must set it explicitly.</p>
+<p>For new multiplane deployments, select <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> when supported by the selected RA2.4 or RA3.1 profile and fabric. Use <code class="docutils literal notranslate"><span class="pre">swplb</span></code> when each plane must be visible to the workload as a separate interface, or on NICs that do not support <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>. This is not an API default: the <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> field itself defaults to <code class="docutils literal notranslate"><span class="pre">none</span></code>, so multiplane deployments must set it explicitly.</p>
 </div>
 </section>
 <section id="nic-type-constraints">
@@ -592,7 +598,7 @@ naming (for example, <code class="docutils literal notranslate"><span class="pre
 <li><p>Spectrum-X optimizations can only be enabled for ConnectX-7 NIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1021</span></code>), ConnectX-8 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>), ConnectX-9 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>), or BlueField-3 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">a2dc</span></code>).</p></li>
 <li><p>When Spectrum-X optimizations are enabled, <code class="docutils literal notranslate"><span class="pre">roceOptimized</span></code> must not be enabled (RoCE settings are included in the Spectrum-X configuration).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">version</span></code> and <code class="docutils literal notranslate"><span class="pre">platformType</span></code> are required for enabled Spectrum-X configuration. Their values must be supported by the supplied profile; <code class="docutils literal notranslate"><span class="pre">version</span></code> is not a ConfigMap reference.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> must be <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>; <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> must be <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> must be <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">swplb</span></code>, or <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>; <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> must be <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">4</span></code>, or <code class="docutils literal notranslate"><span class="pre">8</span></code>. API acceptance of a plane count does not establish that the supplied RA2.4 or RA3.1 profile supports it; the B300/GB300 walkthroughs use two or four planes.</p></li>
 <li><p>When <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> is <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> must be <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
 <li><p>When <code class="docutils literal notranslate"><span class="pre">multiplaneMode</span></code> is not <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">numberOfPlanes</span></code> must not be <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> multiplane mode can only be enabled for ConnectX-8 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1023</span></code>) or ConnectX-9 SuperNIC (<code class="docutils literal notranslate"><span class="pre">nicType:</span> <span class="pre">1025</span></code>).</p></li>

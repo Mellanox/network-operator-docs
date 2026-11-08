@@ -263,7 +263,7 @@ action, and are <strong>not</strong> managed by Network Operator.</p>
 <tbody>
 <tr class="row-even"><td><p><strong>SR-IOV enabled in BIOS/UEFI</strong></p></td>
 <td><p>Platform firmware setting that permits Virtual Function creation.
-The NIC-side nvconfig (<code class="docutils literal notranslate"><span class="pre">SRIOV_EN</span></code>, <code class="docutils literal notranslate"><span class="pre">SRIOV_NUM_OF_VFS</span></code>, and the
+The NIC-side nvconfig (<code class="docutils literal notranslate"><span class="pre">SRIOV_EN</span></code>, <code class="docutils literal notranslate"><span class="pre">NUM_OF_VFS</span></code>, and the
 multiplane parameters) is <strong>not</strong> set here — the NIC Configuration
 Operator derives it from <code class="docutils literal notranslate"><span class="pre">numVfs</span></code> and the Spectrum-X profile. See
 <a class="reference internal" href="spectrum-x-configuration.html"><span class="doc">Spectrum-X NIC Configuration</span></a>.</p></td>
@@ -298,8 +298,8 @@ devices into pod network namespaces.</p></td>
 <tbody>
 <tr class="row-even"><td><p><strong>DOCA-Host</strong></p></td>
 <td><p>Host-installed NVIDIA OFED kernel modules and DOCA tooling.
-Includes OVS-DOCA (see <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">Virtual switch</span></a> below). Default
-driver path for Spectrum-X RA 2.3 validated deployments.</p></td>
+Includes OVS-DOCA (see <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">Virtual switch</span></a> below). This is the
+driver path used by the RA2.4 walkthrough.</p></td>
 </tr>
 </tbody>
 </table>
@@ -308,8 +308,8 @@ driver path for Spectrum-X RA 2.3 validated deployments.</p></td>
 <p><strong>DOCA-Host (host-installed)</strong> and the <strong>containerized DOCA-OFED
 driver</strong> (deployed via Network Operator — see
 <a class="reference internal" href="#k8s-driver-layer"><span class="std std-ref">Driver (containerized)</span></a>) are <strong>mutually exclusive</strong>. Choose one per
-node; do not deploy both. Spectrum-X RA 2.3 validated deployments
-typically use host-installed DOCA-Host.</p>
+node; do not deploy both. The RA2.4 walkthrough uses host-installed
+DOCA-Host and therefore omits <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy.spec.ofedDriver</span></code>.</p>
 </div>
 </section>
 <section id="virtual-switch">
@@ -409,12 +409,11 @@ RoCE, InfiniBand, and Spectrum-X alike — and it owns the
 <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> and <code class="docutils literal notranslate"><span class="pre">NicNodePolicy</span></code> APIs through which everything
 else is configured. (GPU workloads additionally use NVIDIA GPU Operator,
 which is installed separately.)</p>
-<p>Everything in the table below is a <strong>sub-operator</strong>: packaged in the
-Network Operator Helm chart, switched on through <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>,
-and version-pinned and reconciled by Network Operator. None of them is
-installed, upgraded, or configured on its own — Spectrum-X is enabled by
-turning the right sub-operators on, not by adding another operator
-alongside Network Operator.</p>
+<p>The table below lists the <strong>sub-operators</strong> used by Spectrum-X. Enable
+SR-IOV Network Operator and Maintenance Operator through Helm values;
+enable NIC Configuration Operator and Spectrum-X Operator through
+<code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code>. Network Operator release metadata pins their
+versions. The Quick Start shows both configuration steps.</p>
 <table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 22%" />
@@ -498,7 +497,8 @@ rail / plane).</p></td>
 <td><p>Plugs SR-IOV VFs into the rail’s OVS bridge and chains with NV-IPAM
 for address allocation. The bridge itself is created by an operator
 — per-PF by the SR-IOV Network Operator for <code class="docutils literal notranslate"><span class="pre">swplb</span></code> / <code class="docutils literal notranslate"><span class="pre">none</span></code>,
-or <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> by the Spectrum-X Operator for <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — on top
+or a bridge for each <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> entry connected to <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> by the
+Spectrum-X Operator for <code class="docutils literal notranslate"><span class="pre">hwplb</span></code> — on top
 of the <a class="reference internal" href="#host-virtual-switch"><span class="std std-ref">OVS-DOCA</span></a> switch from the Host
 Layer. Shipped under the SR-IOV Network Operator sub-chart.</p></td>
 <td><p>With SR-IOV Op.</p></td>
@@ -539,8 +539,9 @@ OVS-DOCA: consumes route-availability updates from the Spectrum-X
 fabric, programs the OpenFlow rules that divert traffic away from a
 failed plane, and exposes gRPC telemetry. Deployed by the
 Spectrum-X Operator; its image tag follows the <strong>DOCA</strong> release,
-not the Network Operator version. Currently requires ConnectX-8
-SuperNIC with firmware 40.48.1000 or later. See
+not the Network Operator version. For the ConnectX-8 RA2.4
+walkthrough, use firmware 40.48.1000 or later. VR requires the
+xPlane/DOCA and firmware versions matched to the RA3.1 solution stack. See
 <a class="reference internal" href="#when-xplane-is-deployed"><span class="std std-ref">When DOCA xPlane is deployed</span></a>.</p></td>
 <td><p>With Spectrum-X Op.</p></td>
 <td><p><strong>Required for Hardware Multiplane.</strong></p></td>
@@ -569,8 +570,9 @@ are still tech preview.</p>
 <td><p>Dynamic Resource Allocation driver for SR-IOV. Enables fine-grained
 VF claims via <code class="docutils literal notranslate"><span class="pre">ResourceClaim</span></code> and <code class="docutils literal notranslate"><span class="pre">ResourceClaimTemplate</span></code>
 objects, and pairs a VF with the GPU behind the same PCIe root.
-Requires Kubernetes 1.34 or later (<code class="docutils literal notranslate"><span class="pre">resource.k8s.io/v1</span></code>); Spectrum-X RA 2.3 requires
-Kubernetes 1.35 or later — see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>. See <a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html"><span class="doc">DRA SR-IOV Driver</span></a>.</p></td>
+Requires Kubernetes 1.34 or later for <code class="docutils literal notranslate"><span class="pre">resource.k8s.io/v1</span></code>.
+Use a Kubernetes version qualified for your Spectrum-X deployment
+— see <a class="reference internal" href="../platform-support.html"><span class="doc">Platform Support</span></a>. See <a class="reference internal" href="../dra-sriov-driver/dra-sriov-driver.html"><span class="doc">DRA SR-IOV Driver</span></a>.</p></td>
 <td><p><strong>Tech preview</strong>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>NicNodePolicy</strong> CRD</p></td>
@@ -617,7 +619,7 @@ generates.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">esw_multiport=true</span></code></p></td>
 <td><p>devlink parameter putting the PF e-switch into multiport mode, so a
-single e-switch spans the rail’s planes.</p></td>
+single e-switch spans the NIC’s planes.</p></td>
 <td><p>Hardware Multiplane only.</p></td>
 </tr>
 <tr class="row-even"><td><p>eSwitch mode <code class="docutils literal notranslate"><span class="pre">switchdev</span></code></p></td>
@@ -628,8 +630,10 @@ single e-switch spans the rail’s planes.</p></td>
 <td><p>For <code class="docutils literal notranslate"><span class="pre">swplb</span></code> and <code class="docutils literal notranslate"><span class="pre">none</span></code>, a per-PF bridge created by the SR-IOV
 Network Operator (<code class="docutils literal notranslate"><span class="pre">GroupingPolicy:</span> <span class="pre">perPF</span></code>, datapath <code class="docutils literal notranslate"><span class="pre">netdev</span></code>,
 uplink type <code class="docutils literal notranslate"><span class="pre">doca</span></code>) — this is what the <code class="docutils literal notranslate"><span class="pre">manageSoftwareBridges</span></code>
-feature gate enables. For <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code>, created by the
-Spectrum-X Operator.</p></td>
+feature gate enables. For <code class="docutils literal notranslate"><span class="pre">hwplb</span></code>, the Spectrum-X Operator creates
+a bridge for each <code class="docutils literal notranslate"><span class="pre">railTopology</span></code> entry connected by patch ports to the
+shared <code class="docutils literal notranslate"><span class="pre">br-xplane</span></code> bridge. VR has two entries per logical rail, one
+for each NIC endpoint.</p></td>
 <td><p>Every Spectrum-X rail.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>RDMA QoS meta-plugin</strong></p></td>
@@ -707,8 +711,7 @@ page rather than the bare-metal procedure.</p>
 </section>
 <section id="dependencies-and-ordering">
 <h2>Dependencies and ordering<a class="headerlink" href="#dependencies-and-ordering" title="Permalink to this headline"></a></h2>
-<p>The following dependencies are enforced by Network Operator’s
-reconciliation loop and validated by CRD webhooks where applicable:</p>
+<p>The deployment requires the following components and ordering:</p>
 <ul class="simple">
 <li><p><strong>Spectrum-X Operator</strong> requires SR-IOV Network Operator (for OVS-CNI
 and the SR-IOV Device Plugin), NIC Configuration Operator (for firmware
@@ -717,7 +720,7 @@ Multus (for secondary network attachment). It will not function
 standalone.</p></li>
 <li><p><strong>SR-IOV Network Operator</strong> requires NFD labels on nodes and SR-IOV
 enabled in the host BIOS / firmware (Host Layer). It is off by default
-in <code class="docutils literal notranslate"><span class="pre">NicClusterPolicy</span></code> and must be explicitly enabled for Spectrum-X.</p></li>
+in Helm values and must be explicitly enabled for Spectrum-X.</p></li>
 <li><p><strong>DOCA-OFED driver container</strong> (Kubernetes Layer) and host-installed
 <strong>DOCA-Host</strong> (Host Layer) are alternatives, not additive. Choose one
 per node; do not deploy both.</p></li>

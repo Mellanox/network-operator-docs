@@ -146,12 +146,12 @@
 <h2>Decision Tree<a class="headerlink" href="#decision-tree" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
-<p>Fabric is determined by the underlying hardware topology (Spectrum-X clusters are detected as a distinct fabric, not as a flavour of Ethernet). Pick the deployment type for each fabric:</p>
+<p>The fabric is Ethernet or InfiniBand. Spectrum-X is an explicitly selected Ethernet/SR-IOV profile requiring a configured Spectrum-X fabric and a matching RA profile; discovery alone does not select or qualify it.</p>
 <div data-mermaid="flowchart TD
     Start{Fabric}
     Start --&gt;|Ethernet| EthDT{Deployment type}
     Start --&gt;|InfiniBand| IBDT{Deployment type}
-    Start --&gt;|Spectrum-X&lt;br/&gt;HW topology| SPCXRA{RA version}
+    EthDT --&gt;|Spectrum-X| SPCXRA{RA version}
 
     EthDT --&gt;|sriov| SRIOVE([SR-IOV Ethernet])
     EthDT --&gt;|host_device| HDE([Host Device])
@@ -161,20 +161,26 @@
     IBDT --&gt;|host_device| HDI([Host Device])
     IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
+    SPCXRA --&gt;|Non-VR: RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|VR: RA3.1&lt;br/&gt;Network Operator 26.10| SX31([Spectrum-X RA3.1])
+    SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
     SPCXRA --&gt;|RA2.3&lt;br/&gt;Network Operator 26.7| SX3([Spectrum-X RA2.3])
     SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
     SX3 --&gt; MPM[multiplane mode&lt;br/&gt;none / swplb / hwplb&lt;br/&gt;+ number of planes]
     SX1 --&gt; MPM
+    SX2 --&gt; MPM
+    SX4 --&gt; MPM
+    SX31 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
     classDef params fill:#fff3cd,stroke:#ffc107,color:#000
-    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX3 profile
+    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2,SX3,SX4 profile
     class MPM params"><div class="mermaid">
             flowchart TD
     Start{Fabric}
     Start --&gt;|Ethernet| EthDT{Deployment type}
     Start --&gt;|InfiniBand| IBDT{Deployment type}
-    Start --&gt;|Spectrum-X&lt;br/&gt;HW topology| SPCXRA{RA version}
+    EthDT --&gt;|Spectrum-X| SPCXRA{RA version}
 
     EthDT --&gt;|sriov| SRIOVE([SR-IOV Ethernet])
     EthDT --&gt;|host_device| HDE([Host Device])
@@ -184,14 +190,20 @@
     IBDT --&gt;|host_device| HDI([Host Device])
     IBDT --&gt;|rdma_shared + IPoIB| IPOIB([IPoIB RDMA Shared])
 
+    SPCXRA --&gt;|Non-VR: RA2.4&lt;br/&gt;Network Operator 26.10| SX4([Spectrum-X RA2.4])
+    SPCXRA --&gt;|VR: RA3.1&lt;br/&gt;Network Operator 26.10| SX31([Spectrum-X RA3.1])
+    SPCXRA --&gt;|RA2.2&lt;br/&gt;Network Operator 26.4| SX2([Spectrum-X RA2.2])
     SPCXRA --&gt;|RA2.3&lt;br/&gt;Network Operator 26.7| SX3([Spectrum-X RA2.3])
     SPCXRA --&gt;|RA2.1&lt;br/&gt;Network Operator 26.1| SX1([Spectrum-X RA2.1])
     SX3 --&gt; MPM[multiplane mode&lt;br/&gt;none / swplb / hwplb&lt;br/&gt;+ number of planes]
     SX1 --&gt; MPM
+    SX2 --&gt; MPM
+    SX4 --&gt; MPM
+    SX31 --&gt; MPM
 
     classDef profile fill:#a2efb6,stroke:#28a745,color:#000
     classDef params fill:#fff3cd,stroke:#ffc107,color:#000
-    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX3 profile
+    class SRIOVE,HDE,MV,SRIOVIB,HDI,IPOIB,SX1,SX2,SX3,SX4 profile
     class MPM params
         </div></div></section>
 <section id="decision-matrix">
@@ -237,9 +249,9 @@
 <td><p>MacVLAN, multi-tenant, network-segmentation</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="spectrum-x.html"><span class="doc">Spectrum-X</span></a></p></td>
-<td><p>NVIDIA Spectrum-X multi-rail AI interconnect (RA2.3, or RA2.1 for Network Operator 26.1). Single-plane, SWPLB, or HWPLB.</p></td>
+<td><p>NVIDIA Spectrum-X multi-rail AI interconnect (RA3.1 for VR and RA2.4 for other platforms, released together and both integrated with Network Operator 26.10; see the version matrix for older RAs). Single-plane, SWPLB, or HWPLB.</p></td>
 <td><p>ethernet / sriov / spectrum-x</p></td>
-<td><p>Spectrum-X, multiplane, RA2.3, HWPLB</p></td>
+<td><p>Spectrum-X, multiplane, RA2.4, RA3.1, HWPLB</p></td>
 </tr>
 </tbody>
 </table>
