@@ -5,20 +5,20 @@ metadata:
 spec:
   ofedDriver:
     image: doca-driver
-    repository: |doca-driver-repository|
-    version: |doca-driver-version|
+    repository: $DOCA_DRIVER_REPOSITORY
+    version: $DOCA_DRIVER_VERSION
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: |nvidia-ipam-repository|
-    version: |nvidia-ipam-version|
+    repository: $NVIDIA_IPAM_REPOSITORY
+    version: $NVIDIA_IPAM_VERSION
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: |cni-plugins-repository|
-      version: |cni-plugins-version|
+      repository: $CNI_PLUGINS_REPOSITORY
+      version: $CNI_PLUGINS_VERSION
     multus:
       image: multus-cni
-      repository: |multus-repository|
-      version: |multus-version|
+      repository: $MULTUS_REPOSITORY
+      version: $MULTUS_VERSION
