@@ -37,8 +37,15 @@ Changes and New Features
    * - Version
      - Description
    * - 26.10.0
-     - | - Added the simultaneously released Spectrum-X RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms: NIC tuning uses a doSPCX bundle ConfigMap with an explicit architecture and platform type instead of the legacy RA2.3 ``data.profile`` payload
+     - | - Added support for Kubernetes 1.37
+       | - Added support for NVIDIA Spectrum-X Reference Architectures RA3.1 for Vera Rubin (VR) and RA2.4 for all other platforms: NIC tuning uses a doSPCX bundle ConfigMap with an explicit architecture and platform type instead of the legacy RA2.3 ``data.profile`` payload
+       | - Added support for NVIDIA RTX Pro 6000 in NVIDIA Spectrum-X Reference Architecture 2.4
        | - Added RA2.4 and RA3.1 generation in NVIDIA Kubernetes Launch Kit for Network Operator 26.10, including per-group platform resolution and a deployment check for the required NIC Configuration Operator CRD fields
+       | - Added support for IPPool exclusions in k8s launch kit
+       | - Added support for uplink follow in Spectrum-X RA2.4
+       | - Added support for multus-cni thick plugin deployment
+       | - [TECH PREVIEW] Added support NVIDIA Fractal NVL16 HGX Rubin platform
+
    * - 26.7.0
      - | - Added support for Ubuntu 26.04
        | - Added support for NVIDIA DGX GB300 Workstation systems
