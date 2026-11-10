@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Build from the rendered copy (make docs-render), not from this directory:
+# pages use {{variables}} from docs/common/vars.yml that only the render step fills in.
+
+instances:
+  - url: nvidia-network-operator.docs.buildwithfern.com/networking/software/cloud-orchestration
+    custom-domain: docs.nvidia.com/networking/software/cloud-orchestration
+    multi-source: true
+
+title: NVIDIA Network Operator
+
+global-theme: nvidia
+
+navbar-links:
+  - type: github
+    value: https://github.com/Mellanox/network-operator
+
+logo:
+  right-text: Network Operator
+
+redirects: ./redirects.yml
+
+versions:
+  - display-name: "{{network-operator-version}} (Latest)"
+    path: ../docs/index.yml
+    slug: latest
+    availability: stable

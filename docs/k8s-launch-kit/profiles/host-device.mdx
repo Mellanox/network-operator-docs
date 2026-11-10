@@ -1,0 +1,54 @@
+---
+title: "Host Device"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+## Use Case
+
+Direct passthrough to host network devices, with no virtualization layer. Each pod gets exclusive access to a physical NIC. Minimal CPU overhead --- best for legacy HPC codes, specialized protocols, and DPDK applications. Works with both Ethernet and InfiniBand fabrics.
+
+## Prerequisites
+
+- Network Operator Helm chart installed (see [Installation](/k8s-launch-kit/installation)).
+- `l8k` binary on your PATH.
+- One or more Mellanox NICs per node not used by the host.
+
+## Discover
+
+```bash
+l8k discover --kubeconfig ~/.kube/config \
+    --save-cluster-config ./cluster-config.yaml
+```
+
+## Generate
+
+```bash
+l8k generate --user-config ./cluster-config.yaml \
+    --deployment-type host_device --multirail \
+    --save-deployment-files ./deployments
+```
+
+Add `--fabric ethernet` or `--fabric infiniband` if you need to constrain the fabric explicitly.
+
+## Deploy
+
+```bash
+l8k deploy
+```
+
+## Verify
+
+```bash
+kubectl -n nvidia-network-operator get pods
+kubectl get hostdevicenetwork
+```
+
+## See Also
+
+- [Deployment Profiles](/k8s-launch-kit/profiles/profiles) --- decision matrix
+- [Generate Workflow](/k8s-launch-kit/workflows/generate) --- generation details
+- [Configuration Reference](/k8s-launch-kit/reference/config) --- `hostdev` config section

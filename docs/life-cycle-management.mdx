@@ -1,0 +1,755 @@
+---
+title: "Life Cycle Management"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+## Network Operator Versioning
+
+NVIDIA Network Operator is versioned following the calendar versioning convention.
+
+The version follows the pattern `YY.MM.PP`, such as 26.7.0, 26.4.1, and 26.1.0.
+The first two fields, `YY.MM` identify a major version and indicates when the major version was initially released.
+The third field, `PP`, identifies the patch version of the major version.
+Patch releases typically include critical bug and CVE fixes.
+
+## Network Operator Life Cycle
+
+When a new major version of NVIDIA Network Operator is released, it becomes the supported release and the previous major version enters a deprecated
+(maintenance) state, receiving only patch updates for critical bug and CVE fixes. Once a subsequent major version is released, the deprecated version
+reaches End of Support (EOS) and no longer receives any updates.
+
+The product life cycle and versioning are subject to change in the future.
+
+<Note>
+Upgrades are only supported within a major release or to the next major release.`
+</Note>
+
+| Network Operator Version | Status | Comment |
+| --- | --- | --- |
+| {{current-ga-version}} | Supported | GA version (full support) |
+| {{current-maintenance-version}} | Deprecated | Maintenance version (critical bug and CVE fixes only) |
+| {{current-eol-version}} and lower | End of Support | Unsupported versions (no updates, including bug and CVE fixes) |
+
+## Ensuring Deployment Readiness
+
+Once the Network Operator is deployed, and a NicClusterPolicy resource is created, the operator will reconcile the state of the cluster until it reaches the desired state, as defined in the resource.
+
+Alignment of the cluster to the defined policy can be verified in the custom resource status.
+
+a "Ready" state indicates that the required components were deployed, and that the policy is applied on the cluster.
+
+### Status Field Example of a NICClusterPolicy Instance
+
+Get the NicClusterPolicy status:
+
+```bash
+kubectl get -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy -o yaml
+```
+
+```bash
+status:
+  appliedStates:
+  - name: state-pod-security-policy
+    state: ignore
+  - name: state-multus-cni
+    state: ready
+  - name: state-container-networking-plugins
+    state: ignore
+  - name: state-ipoib-cni
+    state: ignore
+  - name: state-OFED
+    state: ready
+  - name: state-SRIOV-device-plugin
+    state: ignore
+  - name: state-RDMA-device-plugin
+    state: ready
+  - name: state-NV-Peer
+    state: ignore
+  - name: state-ib-kubernetes
+    state: ignore
+  - name: state-nv-ipam-cni
+    state: ready
+  state: ready
+```
+
+<Note title="An &quot;Ignore&quot; state indicates that the sub-state was not defined in the custom resource, and thus, it is ignored.">
+
+</Note>
+
+### NicClusterPolicy Status Conditions
+
+`NicClusterPolicy` exposes a `status.conditions[]` array
+following the standard Kubernetes condition model (`metav1.Condition`).
+Conditions surface component health in a machine-readable way, making it straightforward
+to integrate with monitoring tools, CI/CD pipelines, and `kubectl wait`.
+
+<Note>
+The existing `status.state`, `status.reason`, and `status.appliedStates[]` fields
+are preserved unchanged. The `status.conditions[]` field is purely additive.
+Any existing tooling that reads these fields continues to work.
+</Note>
+
+<Note>
+`NicNodePolicy` exposes the same `status.conditions[]` model for the components it
+manages (DOCA-OFED driver, RDMA shared device plugin, and SR-IOV device plugin).
+</Note>
+
+#### Condition Field Model
+
+Every condition in `status.conditions[]` has the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `type` | string | Name of the condition, e.g. `OFEDDriverReady` |
+| `status` | string | `"True"` or `"False"` |
+| `reason` | string | Short machine-readable code explaining why |
+| `message` | string | Human-readable detail |
+| `lastTransitionTime` | time | When `status` last changed |
+| `observedGeneration` | int64 | Which spec version (`metadata.generation`) this reflects |
+
+#### Per-Component Conditions
+
+Each configured component gets one condition named `<ComponentName>Ready`.
+Its `status` is `"True"` when the component is ready and `"False"` otherwise.
+The `reason` field distinguishes the different cases.
+
+Components that are not configured in the spec (`ignore` state) do not produce a
+condition -- they are omitted from `status.conditions[]` entirely. When a component is
+removed from the spec, its stale condition is pruned on the next reconcile.
+
+| Condition Type | Component |
+| --- | --- |
+| `OFEDDriverReady` | DOCA-OFED driver |
+| `RDMASharedDevicePluginReady` | RDMA shared device plugin |
+| `SRIOVDevicePluginReady` | SR-IOV device plugin |
+| `IBKubernetesReady` | IB Kubernetes |
+| `MultusCNIReady` | Multus CNI |
+| `CNIPluginsReady` | CNI plugins |
+| `IPoIBCNIReady` | IPoIB CNI |
+| `NVIPAMReady` | NV-IPAM |
+| `NICFeatureDiscoveryReady` | NIC feature discovery |
+| `DOCATelemetryServiceReady` | DOCA telemetry service |
+| `NICConfigurationOperatorReady` | NIC configuration operator |
+| `SpectrumXOperatorReady` | Spectrum-X operator |
+
+**Status and Reason Mapping**
+
+| Internal State | Condition Status | Condition Reason | Meaning |
+| --- | --- | --- | --- |
+| ready | `"True"` | `ComponentReady` | Component workloads are fully available |
+| notReady | `"False"` | `ComponentNotReady` | Component is still deploying, expected to self-heal |
+| error | `"False"` | `ComponentError` | Reconcile failure, needs human intervention |
+| ignore | *(omitted)* | *(omitted)* | Component not configured in spec -- no condition is written |
+
+Both `notReady` and `error` produce `status: "False"`.
+The `reason` field is what distinguishes them:
+
+- `ComponentNotReady` -- the component is deploying and is expected to become ready.
+- `ComponentError` -- the component has failed and likely requires human intervention.
+
+This distinction drives the aggregate `Ready` condition described below.
+
+#### Aggregate Ready Condition
+
+A single `Ready` condition summarizes the overall health of the policy.
+It is computed from the per-component conditions after every reconcile.
+
+| Status | Reason | Message | When |
+| --- | --- | --- | --- |
+| `"True"` | `AllComponentsReady` | *(empty)* | Every configured component is ready (or no components are configured) |
+| `"False"` | `ComponentsNotReady` | One or more components are not yet ready | At least one component is deploying (`ComponentNotReady`) |
+| `"False"` | `ComponentError` | One or more components are in error state | At least one component is in error |
+
+<Note>
+`ComponentError` takes priority over `ComponentsNotReady`: if any component is in
+error state, the `Ready` condition reports `reason=ComponentError` regardless of
+whether other components are also still deploying.
+</Note>
+
+#### Querying Conditions
+
+View all conditions:
+
+```bash
+kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+  -o jsonpath='{.status.conditions}' | jq .
+```
+
+Filter to the aggregate condition only:
+
+```bash
+kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+  -o jsonpath='{.status.conditions}' | \
+  jq '[.[] | select(.type == "Ready")]'
+```
+
+Filter to a specific component:
+
+```bash
+kubectl get nicclusterpolicies.mellanox.com nic-cluster-policy \
+  -o jsonpath='{.status.conditions}' | \
+  jq '[.[] | select(.type == "OFEDDriverReady")]'
+```
+
+Wait for the policy to become ready:
+
+```bash
+kubectl wait nicclusterpolicies.mellanox.com nic-cluster-policy \
+  --for=condition=Ready --timeout=300s
+```
+
+#### Condition Status Examples
+
+In the following examples the spec configures two components, the DOCA-OFED driver
+and Multus CNI. All other components are in the `ignore` state and therefore do not
+appear in `status.conditions[]`.
+
+**Example 1 -- Fully Healthy (all configured components ready)**
+
+Both configured components are fully available, so each reports
+`ComponentReady` and the aggregate `Ready` condition is `"True"` with reason
+`AllComponentsReady`.
+
+```yaml
+status:
+  appliedStates:
+  - name: state-multus-cni
+    state: ready
+  - name: state-container-networking-plugins
+    state: ignore
+  - name: state-ipoib-cni
+    state: ignore
+  - name: state-OFED
+    state: ready
+  - name: state-SRIOV-device-plugin
+    state: ignore
+  - name: state-RDMA-device-plugin
+    state: ignore
+  - name: state-ib-kubernetes
+    state: ignore
+  - name: state-nv-ipam-cni
+    state: ignore
+  - name: state-nic-feature-discovery
+    state: ignore
+  - name: state-doca-telemetry-service
+    state: ignore
+  - name: state-nic-configuration-operator
+    state: ignore
+  - name: state-spectrum-x-operator
+    state: ignore
+  conditions:
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: ComponentReady
+    status: "True"
+    type: OFEDDriverReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: ComponentReady
+    status: "True"
+    type: MultusCNIReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: AllComponentsReady
+    status: "True"
+    type: Ready
+  state: ready
+```
+
+**Example 2 -- Component Deploying (OFED driver not yet ready)**
+
+OFED DaemonSet pods are not yet ready, so `OFEDDriverReady` is `"False"` with reason
+`ComponentNotReady`. The aggregate `Ready` condition is `"False"` with reason
+`ComponentsNotReady` because a deployment is still in progress.
+
+```yaml
+status:
+  appliedStates:
+  - name: state-multus-cni
+    state: ready
+  - name: state-container-networking-plugins
+    state: ignore
+  - name: state-ipoib-cni
+    state: ignore
+  - name: state-OFED
+    state: notReady
+  - name: state-SRIOV-device-plugin
+    state: ignore
+  - name: state-RDMA-device-plugin
+    state: ignore
+  - name: state-ib-kubernetes
+    state: ignore
+  - name: state-nv-ipam-cni
+    state: ignore
+  - name: state-nic-feature-discovery
+    state: ignore
+  - name: state-doca-telemetry-service
+    state: ignore
+  - name: state-nic-configuration-operator
+    state: ignore
+  - name: state-spectrum-x-operator
+    state: ignore
+  conditions:
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: ComponentNotReady
+    status: "False"
+    type: OFEDDriverReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: ComponentReady
+    status: "True"
+    type: MultusCNIReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: One or more components are not yet ready
+    observedGeneration: 1
+    reason: ComponentsNotReady
+    status: "False"
+    type: Ready
+  state: notReady
+```
+
+**Example 3 -- Component Error (OFED driver reconcile failure)**
+
+The OFED driver failed to reconcile, so `OFEDDriverReady` is `"False"` with reason
+`ComponentError` and the failure detail in `message`. The aggregate `Ready` condition
+reports `ComponentError`, which takes priority over any component that is merely deploying.
+
+```yaml
+status:
+  appliedStates:
+  - name: state-multus-cni
+    state: ready
+  - name: state-container-networking-plugins
+    state: ignore
+  - name: state-ipoib-cni
+    state: ignore
+  - name: state-OFED
+    state: error
+  - name: state-SRIOV-device-plugin
+    state: ignore
+  - name: state-RDMA-device-plugin
+    state: ignore
+  - name: state-ib-kubernetes
+    state: ignore
+  - name: state-nv-ipam-cni
+    state: ignore
+  - name: state-nic-feature-discovery
+    state: ignore
+  - name: state-doca-telemetry-service
+    state: ignore
+  - name: state-nic-configuration-operator
+    state: ignore
+  - name: state-spectrum-x-operator
+    state: ignore
+  conditions:
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: "failed to render objects: ..."
+    observedGeneration: 1
+    reason: ComponentError
+    status: "False"
+    type: OFEDDriverReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: ""
+    observedGeneration: 1
+    reason: ComponentReady
+    status: "True"
+    type: MultusCNIReady
+  - lastTransitionTime: "2026-03-23T12:45:26Z"
+    message: One or more components are in error state
+    observedGeneration: 1
+    reason: ComponentError
+    status: "False"
+    type: Ready
+  state: error
+```
+
+## Network Operator Upgrade
+
+### Downloading a New Helm Chart
+
+To obtain new releases, run:
+
+```bash
+# Download Helm chart
+$ helm fetch https://helm.ngc.nvidia.com/nvidia/charts/network-operator-{{helm-chart-version}}.tgz
+$ ls network-operator-*.tgz | xargs -n 1 tar xf
+```
+
+### Applying the Helm Chart Update
+
+Edit the `values-<VERSION>.yaml` file as required for your cluster.
+
+To apply the Helm chart update, run:
+
+```bash
+$ helm upgrade -n nvidia-network-operator network-operator nvidia/network-operator --version=<VERSION> -f values-<VERSION>.yaml --force
+```
+
+### Updating the NicClusterPolicy
+
+<Note>
+Helm upgrade does not update components version in the NicClusterPolicy. It should be done manually after the upgrade is done.
+</Note>
+
+<Note>
+The network operator has some limitations as to which updates in the NicClusterPolicy it can handle automatically. If the configuration for the new release is different from the current configuration in the deployed release, some additional manual actions may be required.
+
+Known limitations:
+
+* If the configuration for devicePlugin changed without image upgrade, manual restart of the devicePlugin may be required.
+
+These limitations will be addressed in future releases.
+</Note>
+
+Update the components version in the NicClusterPolicy. Refer to the [NicClusterPolicy Custom Resource Example](/customizations/cr-full-example) for more details and latest version of the components.
+
+### Automatic DOCA-OFED Driver Upgrade
+
+To enable automatic DOCA-OFED Driver upgrade, define the UpgradePolicy section for the ofedDriver in the NicClusterPolicy spec, and change the DOCA-OFED Driver version.
+
+<Note>
+When using NicNodePolicy for heterogeneous clusters, each NicNodePolicy with an
+`ofedDriver` section manages its own independent upgrade lifecycle with separate
+`maxParallelUpgrades` settings and upgrade state tracking.
+See [Heterogeneous Clusters with NicNodePolicy](/customizations/nic-node-policy) for details.
+</Note>
+
+`nicclusterpolicy.yaml`:
+
+```yaml
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+  namespace: nvidia-network-operator
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: {{doca-driver-repository}}
+    version: {{doca-driver-version}}
+    upgradePolicy:
+      # autoUpgrade is a global switch for automatic upgrade feature
+      # if set to false all other options are ignored
+      autoUpgrade: true
+      # maxParallelUpgrades indicates how many nodes can be upgraded in parallel
+      # 0 means no limit, all nodes will be upgraded in parallel
+      maxParallelUpgrades: 0
+      # cordon and drain (if enabled) a node before loading the driver on it
+      safeLoad: false
+      # describes the configuration for waiting on job completions
+      waitForCompletion:
+        # specifies a label selector for the pods to wait for completion
+        podSelector: "app=myapp"
+        # specify the length of time in seconds to wait before giving up for workload to finish, zero means infinite
+        # if not specified, the default is 300 seconds
+        timeoutSeconds: 300
+      # describes configuration for node drain during automatic upgrade
+      drain:
+        # allow node draining during upgrade
+        enable: true
+        # allow force draining
+        force: false
+        # specify a label selector to filter pods on the node that need to be drained
+        podSelector: ""
+        # specify the length of time in seconds to wait before giving up drain, zero means infinite
+        # if not specified, the default is 300 seconds
+        timeoutSeconds: 300
+        # specify if should continue even if there are pods using emptyDir
+        deleteEmptyDir: false
+```
+
+Apply NicClusterPolicy CR:
+
+```bash
+$ kubectl apply -f nicclusterpolicy.yaml
+```
+
+<Warning title="To be able to drain nodes, make sure to fill the PodDisruptionBudget field for all the pods that use it. On some clusters (e.g. Openshift), many pods use PodDisruptionBudget, which makes draining multiple nodes at once impossible. Since evicting several pods that are controlled by the same deployment or replica set, violates their PodDisruptionBudget, those pods are not evicted and in drain failure.">
+To perform a driver upgrade, the network-operator must evict pods that are using network resources. Therefore, in order to ensure that the network-operator is evicting only the required pods, the upgradePolicy.drain.podSelector field must be configured.
+</Warning>
+
+#### Node Upgrade States
+
+The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgrade-state label . This label can have the following values:
+
+| Name | Description |
+| --- | --- |
+| Unknown (empty) | The node has this state when the upgrade flow is disabled or the node has not been processed yet. |
+| `upgrade-done` | Set when DOCA-OFED Driver POD is up-to-date and running on the node, the node is schedulable. |
+| `upgrade-required` | Set when DOCA-OFED Driver POD on the node is not up-to-date and requires upgrade. No actions are performed at this stage. |
+| `node-maintenance-required` | Set when requestor mode upgrade is used, e.g. `MAINTENANCE_OPERATOR_ENABLED=true`, post `upgrade-required` state. Essentially it will create a matching nodeMaintenance object for dedicated node(s), utilizing maintenance operator to perform its node operations. |
+| `cordon-required` | Set when the node needs to be made unschedulable in preparation for driver upgrade. |
+| `wait-for-jobs-required` | Set on the node when waiting is required for jobs to complete until the given timeout. |
+| `drain-required` | Set when the node is scheduled for drain. After the drain, the state is changed either to pod-restart-required or upgrade-failed. |
+| `pod-restart-required` | Set when the DOCA-OFED Driver POD on the node is scheduled for restart. After the restart, the state is changed to uncordon-required. |
+| `uncordon-required` | Set when DOCA-OFED Driver POD on the node is up-to-date and has "Ready" status. After uncordone, the state is changed to upgrade-done |
+| `upgrade-failed` | Set when the upgrade on the node has failed. Manual interaction is required at this stage. See Troubleshooting section for more details. |
+
+<Warning title="Depending on your cluster workloads and pod Disruption Budget, set the following values for auto upgrade:">
+
+```yaml
+```
+
+  apiVersion: mellanox.com/v1alpha1
+  kind: NicClusterPolicy
+  metadata:
+    name: nic-cluster-policy
+    namespace: nvidia-network-operator
+  spec:
+    ofedDriver:
+      image: doca-driver
+      repository: {{doca-driver-repository}}
+      version: {{doca-driver-version}}
+      upgradePolicy:
+        autoUpgrade: true
+        maxParallelUpgrades: 1
+        drain:
+          enable: true
+          force: false
+          deleteEmptyDir: true
+          podSelector: ""
+</Warning>
+
+#### Upgrade modes
+
+DOCA-OFED Driver upgrade supports the following modes:
+
+| Mode | Description |
+| --- | --- |
+| In-place | In-place (legacy) mode is incorporates full driver upgrade lifecycle, including nodes operations e.g. cordon, pod eviction, drain, uncordon. It also maintains an internal scheduler for performing above node operations, according to provided `maxParallelUpgrades` under `UpgradePolicy`. |
+| Requestor | New `requestor` upgrade mode uses NVIDIA maintenance operator (please refer to [maintenance-operator repo](https://github.com/Mellanox/maintenance-operator)) nodeMaintenance k8s API objects, to initiate the DOCA-OFED driver upgrade process. Essentially, it will retire current upgrade controller (in-place mode) from performing the following node operations: cordon, wait for pods completion, drain, uncordon. To enable requestor mode, the following environment variable should be enabled `MAINTENANCE_OPERATOR_ENABLED=true`. |
+
+<Note title="Enabling requestor mode will require deployment of NVIDIA maintenance operator on the cluster.">
+By default, upgrade controller will use in-place mode.
+`nodeMaintenanceNamePrefix` is used to distinguish between different (operators) requestors, requesting node maintenance operations on the same node(s).
+Deploying maintenance operator, as well as enabling requestor mode, setting requestors env variables `MAINTENANCE_OPERATOR_REQUESTOR_ID`, `MAINTENANCE_OPERATOR_REQUESTOR_NAMESPACE`, `MAINTENANCE_OPERATOR_NODE_MAINTENANCE_PREFIX`,
+can be done through Network Operator helm `values.yaml`:
+</Note>
+
+```yaml
+maintenanceOperator:
+  enabled: true
+maintenance-operator-chart:
+  operatorConfig:
+    maxParallelOperations: 2
+    maxUnavailable: 2
+operator:
+  maintenanceOperator:
+    useRequestor: true
+    requestorID: "nvidia.network.operator"
+    nodeMaintenanceNamePrefix: "network-operator"
+    nodeMaintenanceNamespace: default
+```
+
+#### Safe Driver Loading
+
+<Warning title="The state of this feature can be controlled with the ofedDriver.upgradePolicy.safeLoad option.">
+
+</Warning>
+
+Upon node startup, the DOCA-OFED Driver container takes some time to compile and load the driver. During that time, workloads might get scheduled on that node. When DOCA-OFED Driver is loaded, all existing PODs that use NVIDIA NICs will lose their network interfaces. Some such PODs might silently fail or hang. To avoid this situation, before the DOCA-OFED Driver container is loaded, the node should get cordoned and drained to ensure all workloads are rescheduled. The node should be un-cordoned when the driver is ready on it.
+
+The safe driver loading feature is implemented as a part of the upgrade flow, meaning safe driver loading is a special scenario of the upgrade procedure, where we upgrade from the inbox driver to the containerized DOCA-OFED Driver.
+
+When this feature is enabled, the initial DOCA-OFED Driver driver rollout on the large cluster can take a while. To speed up the rollout, the initial deployment can be done with the safe driver loading feature disabled, and this feature can be enabled later by updating the NicClusterPolicy CRD.
+
+##### Troubleshooting
+
+| Issue | Required Action |
+| --- | --- |
+| The node is in upgrade-failed state. | • Drain the node manually by running kubectl drain \<node name> --ignore-daemonsets.<br />• Delete the NVIDIA DOCA-OFED Driver pod on the node manually, by running the following command: `` kubectl delete pod -n `kubectl get pods --A --field-selector spec.nodeName=<node name> -l nvidia.com/ofed-driver --no-headers \| awk '{print $1 " "$2}'` ``.<br />**NOTE:** If the "Safe driver loading" feature is enabled, you may also need to remove the `nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load` annotation from the node object to unblock the loading of the driver `kubectl annotate node <node_name> nvidia.com/ofed-driver-upgrade.driver-wait-for-safe-load-`<br />• Wait for the node to complete the upgrade. |
+| The updated NVIDIA DOCA-OFED Driver pod failed to start/ a new version of NVIDIA DOCA-OFED Driver cannot be installed on the node. | Manually delete the pod by using `kubectl delete -n <Network Operator Namespace> <pod name>`. If following the restart the pod still fails, change the NVIDIA DOCA-OFED Driver version in the NicClusterPolicy to the previous version or to another working version. |
+
+### DOCA-OFED Driver Manual Upgrade
+
+Automatic DOCA-OFED Driver upgrade is the preferred method for upgrading the DOCA-OFED Driver. However, if you need to manually upgrade the DOCA-OFED Driver, you can follow the steps below.
+
+#### Restarting Pods with a Containerized DOCA-OFED Driver
+
+<Warning title="This operation is required only if containerized DOCA-OFED Driver is in use.">
+
+</Warning>
+
+When a containerized DOCA-OFED Driver is reloaded on the node, all pods that use a secondary network based on NVIDIA NICs will lose network interface in their containers. To prevent outage, remove all pods that use a secondary network from the node before you reload the driver pod on it.
+
+The Helm upgrade command will only upgrade the DaemonSet spec of the DOCA-OFED Driver to point to the new driver version. The DOCA-OFED Driver's DaemonSet will not automatically restart pods with the driver on the nodes, as it uses "OnDelete" updateStrategy. The old DOCA-OFED Driver version will still run on the node until you explicitly remove the driver pod or reboot the node:
+
+```bash
+$ kubectl delete pod -l app=mofed-<OS_NAME> -n nvidia-network-operator
+```
+
+It is possible to remove all pods with secondary networks from all cluster nodes, and then restart the DOCA-OFED Driver pods on all nodes at once.
+
+The alternative option is to perform an upgrade in a rolling manner to reduce the impact of the driver upgrade on the cluster. The driver pod restart can be done on each node individually. In this case, pods with secondary networks should be removed from the single node only. There is no need to stop pods on all nodes.
+
+For each node, follow these steps to reload the driver on the node:
+
+1. Remove pods with a secondary network from the node.
+2. Restart the DOCA-OFED Driver pod.
+3. Return the pods with a secondary network to the node.
+
+When the DOCA-OFED Driver is ready, proceed with the same steps for other nodes.
+
+#### Removing Pods with a Secondary Network from the Node
+
+To remove pods with a secondary network from the node with node drain, run the following command:
+
+```bash
+$ kubectl drain <NODE_NAME> --pod-selector=<SELECTOR_FOR_PODS>
+```
+
+<Warning title="Replace `<NODE_NAME>` with -l &quot;network.nvidia.com/operator.mofed.wait=false&quot; if you wish to drain all nodes at once.">
+
+</Warning>
+
+#### Restarting the DOCA-OFED Driver Pod
+
+Find the DOCA-OFED Driver pod name for the node:
+
+```bash
+$ kubectl get pod -l app=mofed-<OS_NAME> -o wide -A
+```
+
+Example for Ubuntu 20.04:
+
+```bash
+kubectl get pod -l app=mofed-ubuntu20.04 -o wide -A
+```
+
+#### Deleting the DOCA-OFED Driver Pod from the Node
+
+To delete the DOCA-OFED Driver pod from the node, run:
+
+```bash
+$ kubectl delete pod -n <DRIVER_NAMESPACE> <DOCA_DRIVER_POD_NAME>
+```
+
+<Warning title="Replace `<DOCA_DRIVER_POD_NAME>` with -l app=mofed-ubuntu20.04 if you wish to remove DOCA-OFED Driver pods on all nodes at once.">
+
+</Warning>
+
+A new version of the DOCA-OFED Driver pod will automatically start.
+
+##### Returning Pods with a Secondary Network to the Node
+
+After the DOCA-OFED Driver pod is ready on the node, you can make the node schedulable again.
+
+The command below will uncordon (remove node.kubernetes.io/unschedulable:NoSchedule taint) the node, and return the pods to it:
+
+```bash
+$ kubectl uncordon -l "network.nvidia.com/operator.mofed.wait=false"
+```
+
+### Network Operator Upgrade on OpenShift Container Platform
+
+See instructions in the [Network Operator Upgrade](/openshift/deployment-guide-openshift#network-operator-upgrade) section.
+
+## Uninstalling the Network Operator
+
+### Uninstalling Network Operator on a Vanilla Kubernetes Cluster
+
+Delete the NicClusterPolicy:
+
+```bash
+kubectl delete -n nvidia-network-operator nicclusterpolicies.mellanox.com nic-cluster-policy
+```
+
+Uninstall the Network Operator:
+
+```bash
+helm uninstall network-operator -n nvidia-network-operator
+```
+
+You should now see all the pods being deleted:
+
+```bash
+kubectl get pods -n nvidia-network-operator
+```
+
+Make sure that the CRDs created during the operator installation have been removed:
+
+```bash
+kubectl get nicclusterpolicies.mellanox.com
+No resources found
+```
+
+### Uninstalling the Network Operator on an OpenShift Cluster
+
+From the console:
+
+In the OpenShift Container Platform web console side menu, select **Operators >Installed Operators**, search for the **NVIDIA Network Operator**, and click on it.
+
+On the right side of the **Operator Details** page, select **Uninstall Operator** from the **Actions** drop-down menu.
+
+For additional information, see the [Red Hat OpenShift Container Platform Documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-deleting-operators-from-a-cluster).
+
+From the CLI:
+
+  * Check the current version of the Network Operator in the currentCSV field:
+
+    ```bash
+    ```
+
+      oc get subscription -n nvidia-network-operator nvidia-network-operator -o yaml | grep currentCSV
+
+    Example output:
+
+    ```bash
+    ```
+
+      currentCSV: nvidia-network-operator.v24.1.0
+  * Delete the subscription:
+
+    ```bash
+    ```
+
+      oc delete subscription -n nvidia-network-operator nvidia-network-operator
+
+    Example output:
+
+    ```bash
+    ```
+
+      subscription.operators.coreos.com "nvidia-network-operator" deleted
+
+  * Delete the CSV using the currentCSV value from the previous step:
+
+    ```bash
+    ```
+
+      subscription.operators.coreos.com "nvidia-network-operator" deleted
+
+    Example output:
+
+    ```bash
+    ```
+
+      clusterserviceversion.operators.coreos.com "nvidia-network-operator.v10.0" deleted
+
+The SR-IOV Network Operator uninstallation procedure is described in this document. For additional information, see the [Red Hat OpenShift Container Platform Documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-deleting-operators-from-a-cluster).
+
+### Additional Steps
+
+<Warning title="In OCP, uninstalling an operator does not remove its managed resources, including CRDs and CRs. To remove them, you must manually delete the Operator CRDs following the operator uninstallation.">
+
+</Warning>
+
+Delete the Network Operator CRDs:
+
+```bash
+oc delete crds hostdevicenetworks.mellanox.com macvlannetworks.mellanox.com nicclusterpolicies.mellanox.com
+```
+
+## NicClusterPolicy CRD Update
+
+If the NicClusterPolicy manual update affects the device plugin configuration (e.g. NICs selectors), manual device plugin pods restart is required.

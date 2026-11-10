@@ -1,0 +1,17 @@
+---
+title: "Workflows"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+Launch Kit operates in distinct phases. Each has a dedicated CLI subcommand and a focused how-to page.
+
+| **Workflow** | **What it does** |
+| --- | --- |
+| [Discover](/k8s-launch-kit/workflows/discover) | Probe the cluster's network hardware and write `cluster-config.yaml`. |
+| [Generate](/k8s-launch-kit/workflows/generate) | Render Kubernetes manifests from a cluster config and a profile selection. |
+| [Deploy](/k8s-launch-kit/workflows/deploy) | Apply generated manifests to the cluster, with optional dry-run. |
+| [Validate](/k8s-launch-kit/workflows/validate) | Verify the deployment matches the selected release: Helm chart version + manifest presence. |

@@ -1,0 +1,62 @@
+---
+title: "Deploy IP over InfiniBand with RDMA Shared Device"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+<Note>
+You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+</Note>
+
+**Step 1**: Create NicClusterPolicy with IPoIB support and 3 RDMA shared device pools
+
+<Code src="../../examples/processed/ipoib-rdma-shared/10-nicclusterpolicy.yaml" language="yaml" />
+
+```bash
+kubectl apply -f nicclusterpolicy.yaml
+```
+
+**Step 2**: Create IPPool CRs for nv-ipam with 3 IP pools
+
+<Code src="../../examples/processed/ipoib-rdma-shared/20-ippool.yaml" language="yaml" />
+
+```bash
+kubectl apply -f ippool.yaml
+```
+
+**Step 3**: Create IPoIBNetwork CRs for 3 IPoIB networks
+
+<Code src="../../examples/processed/ipoib-rdma-shared/30-ipoibnetwork.yaml" language="yaml" />
+
+```bash
+kubectl apply -f ipoibnetwork.yaml
+```
+
+**Step 4**: Deploy test workloads for 3 IPoIB networks
+
+<Code src="../../examples/processed/ipoib-rdma-shared/40-pod.yaml" language="yaml" />
+
+```bash
+kubectl apply -f pod.yaml
+```
+
+Verify the deployment:
+
+```bash
+kubectl exec -it ipoib-test-pod-a -- ibstat
+kubectl exec -it ipoib-test-pod-a -- ip addr show
+
+kubectl exec -it ipoib-test-pod-b -- ibstat
+kubectl exec -it ipoib-test-pod-b -- ip addr show
+
+kubectl exec -it ipoib-test-pod-c -- ibstat
+kubectl exec -it ipoib-test-pod-c -- ip addr show
+```
+
+**Complete Configuration**
+
+<Code src="../../examples/processed/ipoib-rdma-shared/complete.yaml" language="yaml" />

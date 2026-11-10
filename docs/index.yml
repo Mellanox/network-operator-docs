@@ -1,0 +1,258 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+navigation:
+  - page: Overview
+    path: ./index.mdx
+    slug: /
+  - page: "Release Notes"
+    path: ./release-notes.mdx
+    slug: release-notes
+  - page: "Platform Support"
+    path: ./platform-support.mdx
+    slug: platform-support
+  - section: "Getting Started with Kubernetes"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./getting-started-with-kubernetes.mdx
+        slug: getting-started-with-kubernetes
+      - section: "Quick Start Guide"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./quick-start/quick-start-k8s.mdx
+            slug: quick-start/quick-start-k8s
+          - page: "SR-IOV Network with RDMA"
+            path: ./quick-start/sriov-network-rdma.mdx
+            slug: quick-start/sriov-network-rdma
+          - page: "Host Device Network with RDMA"
+            path: ./quick-start/host-device-rdma.mdx
+            slug: quick-start/host-device-rdma
+          - page: "IP over InfiniBand with RDMA Shared Device"
+            path: ./quick-start/ipoib-rdma-shared.mdx
+            slug: quick-start/ipoib-rdma-shared
+          - page: "MacVLAN Network with RDMA Shared Device"
+            path: ./quick-start/macvlan-rdma-shared.mdx
+            slug: quick-start/macvlan-rdma-shared
+          - page: "SR-IOV InfiniBand Network with RDMA"
+            path: ./quick-start/sriov-ib-rdma.mdx
+            slug: quick-start/sriov-ib-rdma
+      - page: "Deployment Guide with Kubernetes"
+        path: ./deployment-guide-kubernetes.mdx
+        slug: deployment-guide-kubernetes
+      - page: "KubeVirt SR-IOV Integration"
+        path: ./kubevirt.mdx
+        slug: kubevirt
+      - page: "DRA SR-IOV Driver"
+        path: ./dra-sriov-driver/dra-sriov-driver.mdx
+        slug: dra-sriov-driver/dra-sriov-driver
+  - section: "Getting Started with Red Hat OpenShift"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./getting-started-with-openshift.mdx
+        slug: getting-started-with-openshift
+      - page: "Deployment Guide with OpenShift"
+        path: ./openshift/deployment-guide-openshift.mdx
+        slug: openshift/deployment-guide-openshift
+      - page: "Deployment in Disconnected OpenShift"
+        path: ./openshift/disconnected-openshift.mdx
+        slug: openshift/disconnected-openshift
+      - page: "OpenShift Virtualization with SR-IOV"
+        path: ./openshift/ocp-kubevirt.mdx
+        slug: openshift/ocp-kubevirt
+  - page: "NVIDIA Network Operator Government Ready"
+    path: ./install-network-operator-gov-ready.mdx
+    slug: install-network-operator-gov-ready
+  - section: "NIC Configuration Operator"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./nic-conf-operator/nic-configuration-operator.mdx
+        slug: nic-conf-operator/nic-configuration-operator
+      - page: "NIC Firmware Configuration"
+        path: ./nic-conf-operator/nic-fw-configuration.mdx
+        slug: nic-conf-operator/nic-fw-configuration
+      - page: "Configuration Details"
+        path: ./nic-conf-operator/configuration-details.mdx
+        slug: nic-conf-operator/configuration-details
+      - page: "CRD API Reference"
+        path: ./nic-conf-operator/crds.mdx
+        slug: nic-conf-operator/crds
+  - section: "NVIDIA Spectrum-X"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./spectrum-x/spectrum-x.mdx
+        slug: spectrum-x/spectrum-x
+      - section: "Quick Start"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./spectrum-x/quick-start.mdx
+            slug: spectrum-x/quick-start
+          - page: "Single Plane"
+            path: ./spectrum-x/quick-start-single-plane.mdx
+            slug: spectrum-x/quick-start-single-plane
+          - page: "Hardware Multiplane"
+            path: ./spectrum-x/quick-start-hwplb.mdx
+            slug: spectrum-x/quick-start-hwplb
+          - page: "Software Multiplane"
+            path: ./spectrum-x/quick-start-swplb.mdx
+            slug: spectrum-x/quick-start-swplb
+      - page: "Architecture and Components"
+        path: ./spectrum-x/components.mdx
+        slug: spectrum-x/components
+      - page: "Spectrum-X NIC Configuration"
+        path: ./spectrum-x/spectrum-x-configuration.mdx
+        slug: spectrum-x/spectrum-x-configuration
+      - page: "Verify and Troubleshoot"
+        path: ./spectrum-x/verify-and-troubleshoot.mdx
+        slug: spectrum-x/verify-and-troubleshoot
+      - page: "CRD API Reference"
+        path: ./spectrum-x/crds.mdx
+        slug: spectrum-x/crds
+  - section: "Configuration Assistance with Kubernetes Launch Kit"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./k8s-launch-kit/k8s-launch-kit.mdx
+        slug: k8s-launch-kit/k8s-launch-kit
+      - page: "Overview"
+        path: ./k8s-launch-kit/overview.mdx
+        slug: k8s-launch-kit/overview
+      - page: "Installation"
+        path: ./k8s-launch-kit/installation.mdx
+        slug: k8s-launch-kit/installation
+      - page: "Quick Start"
+        path: ./k8s-launch-kit/quick-start.mdx
+        slug: k8s-launch-kit/quick-start
+      - section: "Deployment Profiles"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./k8s-launch-kit/profiles/profiles.mdx
+            slug: k8s-launch-kit/profiles/profiles
+          - page: "SR-IOV Ethernet"
+            path: ./k8s-launch-kit/profiles/sriov-ethernet.mdx
+            slug: k8s-launch-kit/profiles/sriov-ethernet
+          - page: "SR-IOV InfiniBand"
+            path: ./k8s-launch-kit/profiles/sriov-infiniband.mdx
+            slug: k8s-launch-kit/profiles/sriov-infiniband
+          - page: "Host Device"
+            path: ./k8s-launch-kit/profiles/host-device.mdx
+            slug: k8s-launch-kit/profiles/host-device
+          - page: "IP over InfiniBand (RDMA Shared)"
+            path: ./k8s-launch-kit/profiles/ipoib-rdma-shared.mdx
+            slug: k8s-launch-kit/profiles/ipoib-rdma-shared
+          - page: "MacVLAN (RDMA Shared)"
+            path: ./k8s-launch-kit/profiles/macvlan-rdma-shared.mdx
+            slug: k8s-launch-kit/profiles/macvlan-rdma-shared
+          - page: "Spectrum-X"
+            path: ./k8s-launch-kit/profiles/spectrum-x.mdx
+            slug: k8s-launch-kit/profiles/spectrum-x
+      - section: "Workflows"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./k8s-launch-kit/workflows/workflows.mdx
+            slug: k8s-launch-kit/workflows/workflows
+          - page: "Discover"
+            path: ./k8s-launch-kit/workflows/discover.mdx
+            slug: k8s-launch-kit/workflows/discover
+          - page: "Generate"
+            path: ./k8s-launch-kit/workflows/generate.mdx
+            slug: k8s-launch-kit/workflows/generate
+          - page: "Deploy"
+            path: ./k8s-launch-kit/workflows/deploy.mdx
+            slug: k8s-launch-kit/workflows/deploy
+          - page: "Validate"
+            path: ./k8s-launch-kit/workflows/validate.mdx
+            slug: k8s-launch-kit/workflows/validate
+      - section: "Advanced Topics"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./k8s-launch-kit/advanced-topics.mdx
+            slug: k8s-launch-kit/advanced-topics
+          - page: "Heterogeneous Clusters"
+            path: ./k8s-launch-kit/heterogeneous-clusters.mdx
+            slug: k8s-launch-kit/heterogeneous-clusters
+          - page: "Cluster Topology Presets"
+            path: ./k8s-launch-kit/presets.mdx
+            slug: k8s-launch-kit/presets
+          - page: "Automation and CI/CD"
+            path: ./k8s-launch-kit/automation.mdx
+            slug: k8s-launch-kit/automation
+          - page: "Troubleshooting"
+            path: ./k8s-launch-kit/troubleshooting.mdx
+            slug: k8s-launch-kit/troubleshooting
+      - section: "Reference"
+        skip-slug: true
+        contents:
+          - page: Overview
+            path: ./k8s-launch-kit/reference/reference.mdx
+            slug: k8s-launch-kit/reference/reference
+          - page: "CLI Reference"
+            path: ./k8s-launch-kit/reference/cli.mdx
+            slug: k8s-launch-kit/reference/cli
+          - page: "Configuration Reference"
+            path: ./k8s-launch-kit/reference/config.mdx
+            slug: k8s-launch-kit/reference/config
+  - page: "AI Skills"
+    path: ./ai-skills.mdx
+    slug: ai-skills
+  - section: "Customization Options and CRDs"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./customizations/customization.mdx
+        slug: customizations/customization
+      - page: "Helm Chart"
+        path: ./customizations/helm.mdx
+        slug: customizations/helm
+      - page: "CRDs"
+        path: ./customizations/crds.mdx
+        slug: customizations/crds
+      - page: "NicClusterPolicy Custom Resource Example"
+        path: ./customizations/cr-full-example.mdx
+        slug: customizations/cr-full-example
+      - page: "Heterogeneous Clusters with NicNodePolicy"
+        path: ./customizations/nic-node-policy.mdx
+        slug: customizations/nic-node-policy
+        hidden: true
+  - page: "Life Cycle Management"
+    path: ./life-cycle-management.mdx
+    slug: life-cycle-management
+  - section: "Advanced Configurations"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./advanced/advanced.mdx
+        slug: advanced/advanced
+      - page: "Proxy & Air-gapped"
+        path: ./advanced/proxy-airgapped.mdx
+        slug: advanced/proxy-airgapped
+      - page: "DOCA-OFED Driver Container"
+        path: ./advanced/doca-drivers.mdx
+        slug: advanced/doca-drivers
+      - page: "Other Advanced Configurations"
+        path: ./advanced/advanced-configurations.mdx
+        slug: advanced/advanced-configurations
+      - page: "NVIDIA Network Operator Container Images"
+        path: ./advanced/images-sha256.mdx
+        slug: advanced/images-sha256
+        hidden: true
+  - section: "Troubleshooting"
+    skip-slug: true
+    contents:
+      - page: Overview
+        path: ./troubleshooting/troubleshooting.mdx
+        slug: troubleshooting/troubleshooting
+      - page: "SOS-Report Collection Script"
+        path: ./troubleshooting/sosreport.mdx
+        slug: troubleshooting/sosreport
+  - page: "Legal Notices and 3rd Party Licenses"
+    path: ./licenses.mdx
+    slug: licenses

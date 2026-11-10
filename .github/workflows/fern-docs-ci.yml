@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Validates the Fern docs on pull requests.
+#
+# Runs on every pull request (no trigger-level paths filter) so that making
+# "Fern Check" a required status check never leaves PRs that do not touch docs
+# stuck pending. The job still passes when no docs-related files changed.
+
+name: Fern Docs CI
+
+on:
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fern-check:
+    name: Fern Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Depth 2 so HEAD^1 (the base side of the PR merge commit) is available.
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Detect docs changes
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ] && \
+             ! git diff --name-only --no-renames HEAD^1 HEAD \
+               | grep -qE '^(docs/|fern/|examples/|hack/fern/|Makefile$|\.github/workflows/fern-docs-ci\.yml$)'; then
+            echo "docs=false" >> "$GITHUB_OUTPUT"
+            echo "No docs-related changes; skipping Fern validation."
+          else
+            echo "docs=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.changes.outputs.docs == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Fern CLI
+        if: steps.changes.outputs.docs == 'true'
+        # Unpinned on purpose: the nvidia Fern org enforces the allowed CLI range.
+        run: npm install -g fern-api@latest
+
+      - name: Render and validate
+        if: steps.changes.outputs.docs == 'true'
+        run: make docs-check FERN=fern

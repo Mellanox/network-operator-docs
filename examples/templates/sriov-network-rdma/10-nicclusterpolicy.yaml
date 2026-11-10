@@ -5,15 +5,15 @@ metadata:
 spec:
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: |nvidia-ipam-repository|
-    version: |nvidia-ipam-version|
+    repository: {{nvidia-ipam-repository}}
+    version: {{nvidia-ipam-version}}
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: |cni-plugins-repository|
-      version: |cni-plugins-version|
+      repository: {{cni-plugins-repository}}
+      version: {{cni-plugins-version}}
     multus:
       image: multus-cni
-      repository: |multus-repository|
-      version: |multus-version|
+      repository: {{multus-repository}}
+      version: {{multus-version}}

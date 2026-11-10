@@ -1,0 +1,53 @@
+---
+title: "SR-IOV Ethernet"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+## Use Case
+
+High-performance Ethernet networking with hardware acceleration. Each pod receives a dedicated SR-IOV virtual function (VF) on a Mellanox NIC, providing low latency and isolated bandwidth. Common for distributed ML training and HPC simulations on Ethernet fabrics.
+
+## Prerequisites
+
+- Network Operator Helm chart installed (see [Installation](/k8s-launch-kit/installation)).
+- `l8k` binary on your PATH.
+- Mellanox NICs in Ethernet mode on each node.
+
+## Discover
+
+```bash
+l8k discover --kubeconfig ~/.kube/config \
+    --save-cluster-config ./cluster-config.yaml
+```
+
+## Generate
+
+```bash
+l8k generate --user-config ./cluster-config.yaml \
+    --fabric ethernet --deployment-type sriov --multirail \
+    --save-deployment-files ./deployments
+```
+
+## Deploy
+
+```bash
+l8k deploy
+```
+
+## Verify
+
+```bash
+kubectl -n nvidia-network-operator get pods
+kubectl get sriovnetworknodepolicy
+kubectl get sriovnetwork
+```
+
+## See Also
+
+- [Deployment Profiles](/k8s-launch-kit/profiles/profiles) --- decision matrix
+- [Generate Workflow](/k8s-launch-kit/workflows/generate) --- generation details
+- [Configuration Reference](/k8s-launch-kit/reference/config) --- `sriov` config section

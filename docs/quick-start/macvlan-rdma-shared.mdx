@@ -1,0 +1,56 @@
+---
+title: "Deploy MacVLAN Network with RDMA Shared Device"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+<Note>
+You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+</Note>
+
+**Step 1**: Create NicClusterPolicy with RDMA shared device
+
+<Code src="../../examples/processed/macvlan-rdma-shared/10-nicclusterpolicy.yaml" language="yaml" />
+
+```bash
+kubectl apply -f nicclusterpolicy.yaml
+```
+
+**Step 2**: Create IPPool for nv-ipam
+
+<Code src="../../examples/processed/macvlan-rdma-shared/20-ippool.yaml" language="yaml" />
+
+```bash
+kubectl apply -f ippool.yaml
+```
+
+**Step 3**: Create MacvlanNetwork
+
+<Code src="../../examples/processed/macvlan-rdma-shared/30-macvlannetwork.yaml" language="yaml" />
+
+```bash
+kubectl apply -f macvlannetwork.yaml
+```
+
+**Step 4**: Deploy test workload
+
+<Code src="../../examples/processed/macvlan-rdma-shared/40-pod.yaml" language="yaml" />
+
+```bash
+kubectl apply -f pod.yaml
+```
+
+Verify the deployment:
+
+```bash
+kubectl exec -it macvlan-test-pod -- ip addr show
+kubectl exec -it macvlan-test-pod -- ibv_devinfo
+```
+
+**Complete Configuration**
+
+<Code src="../../examples/processed/macvlan-rdma-shared/complete.yaml" language="yaml" />

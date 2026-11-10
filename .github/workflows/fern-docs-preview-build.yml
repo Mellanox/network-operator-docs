@@ -1,0 +1,62 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+# Workflow 1 of 2 for Fern doc previews.
+#
+# Renders the site (variables and <Code src> includes resolved) from the PR
+# branch and uploads it with the PR metadata as an artifact. No secrets are
+# used here.
+#
+# Only PRs from branches in this repository are collected; fork PRs are not
+# previewed. The companion workflow (fern-docs-preview-comment.yml) builds the
+# preview with FERN_TOKEN, and the Fern CLI reads any local file a page names,
+# so page content must come from authors with write access.
+
+name: "Preview Fern Docs: Build"
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'fern/**'
+      - 'examples/**'
+      - 'hack/fern/**'
+      - '.github/workflows/fern-docs-preview-build.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  collect:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Render site
+        run: make docs-render
+
+      - name: Save PR metadata
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          mkdir -p _build/fern/preview-metadata
+          echo "$PR_NUMBER" > _build/fern/preview-metadata/pr_number
+          git diff --name-only "origin/${BASE_REF}...HEAD" -- '*.mdx' > _build/fern/preview-metadata/changed_mdx_files 2>/dev/null || true
+
+      - name: Upload rendered site and metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: fern-preview
+          path: _build/fern/
+          retention-days: 1

@@ -1,0 +1,52 @@
+---
+title: "IP over InfiniBand (RDMA Shared)"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+## Use Case
+
+InfiniBand fabric with IPoIB and a shared RDMA device plugin. Multiple pods on a node can share access to the same RDMA hardware. Suited for parallel I/O workloads, distributed storage, and data analytics where dedicated VFs are not required.
+
+## Prerequisites
+
+- Network Operator Helm chart installed (see [Installation](/k8s-launch-kit/installation)).
+- `l8k` binary on your PATH.
+- Mellanox NICs in InfiniBand mode on each node.
+
+## Discover
+
+```bash
+l8k discover --kubeconfig ~/.kube/config \
+    --save-cluster-config ./cluster-config.yaml
+```
+
+## Generate
+
+```bash
+l8k generate --user-config ./cluster-config.yaml \
+    --fabric infiniband --deployment-type rdma_shared --multirail \
+    --save-deployment-files ./deployments
+```
+
+## Deploy
+
+```bash
+l8k deploy
+```
+
+## Verify
+
+```bash
+kubectl -n nvidia-network-operator get pods
+kubectl get ipoibnetwork
+```
+
+## See Also
+
+- [Deployment Profiles](/k8s-launch-kit/profiles/profiles) --- decision matrix
+- [Generate Workflow](/k8s-launch-kit/workflows/generate) --- generation details
+- [Configuration Reference](/k8s-launch-kit/reference/config) --- `ipoib` and `rdmaShared` config sections

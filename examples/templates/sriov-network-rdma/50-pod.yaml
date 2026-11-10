@@ -20,7 +20,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: rdma-test
-    image: |doca-workload-image|
+    image: {{doca-workload-image}}
     command: ["/bin/bash", "-c", "sleep infinity"]
     securityContext:
       capabilities:
@@ -56,7 +56,7 @@ spec:
   restartPolicy: Never
   containers:
   - name: rdma-test
-    image: |doca-workload-image|
+    image: {{doca-workload-image}}
     command: ["/bin/bash", "-c", "sleep infinity"]
     securityContext:
       capabilities:

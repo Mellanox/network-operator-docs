@@ -1,0 +1,111 @@
+---
+title: "NVIDIA Network Operator Container Images"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+| Repository | Image Name | Tag | Digest |
+| --- | --- | --- | --- |
+| {{ .NetworkOperator.Repository }} | {{ .NetworkOperator.Image }} | {{ .NetworkOperator.Version }} | {{ (imageSha .NetworkOperator) }} |
+| {{ .NetworkOperatorInitContainer.Repository }} | {{ .NetworkOperatorInitContainer.Image }} | {{ .NetworkOperatorInitContainer.Version }} | {{ (imageSha .NetworkOperatorInitContainer) }} |
+| {{ .RdmaSharedDevicePlugin.Repository }} | {{ .RdmaSharedDevicePlugin.Image }} | {{ .RdmaSharedDevicePlugin.Version }} | {{ (imageSha .RdmaSharedDevicePlugin) }} |
+| {{ .IbKubernetes.Repository }} | {{ .IbKubernetes.Image }} | {{ .IbKubernetes.Version }} | {{ (imageSha .IbKubernetes) }} |
+| {{ .Ipoib.Repository }} | {{ .Ipoib.Image }} | {{ .Ipoib.Version }} | {{ (imageSha .Ipoib) }} |
+| {{ .NvIPAM.Repository }} | {{ .NvIPAM.Image }} | {{ .NvIPAM.Version }} | {{ (imageSha .NvIPAM) }} |
+| {{ .NicFeatureDiscovery.Repository }} | {{ .NicFeatureDiscovery.Image }} | {{ .NicFeatureDiscovery.Version }} | {{ (imageSha .NicFeatureDiscovery) }} |
+| {{ .DOCATelemetryService.Repository }} | {{ .DOCATelemetryService.Image }} | {{ .DOCATelemetryService.Version }} | {{ (imageSha .DOCATelemetryService) }} |
+| {{ .SriovNetworkOperator.Repository }} | {{ .SriovNetworkOperator.Image }} | {{ .SriovNetworkOperator.Version }} | {{ (imageSha .SriovNetworkOperator) }} |
+| {{ .SriovNetworkOperatorWebhook.Repository }} | {{ .SriovNetworkOperatorWebhook.Image }} | {{ .SriovNetworkOperatorWebhook.Version }} | {{ (imageSha .SriovNetworkOperatorWebhook) }} |
+| {{ .SriovConfigDaemon.Repository }} | {{ .SriovConfigDaemon.Image }} | {{ .SriovConfigDaemon.Version }} | {{ (imageSha .SriovConfigDaemon) }} |
+| {{ .SriovDevicePlugin.Repository }} | {{ .SriovDevicePlugin.Image }} | {{ .SriovDevicePlugin.Version }} | {{ (imageSha .SriovDevicePlugin) }} |
+| {{ .SriovCni.Repository }} | {{ .SriovCni.Image }} | {{ .SriovCni.Version }} | {{ (imageSha .SriovCni) }} |
+| {{ .SriovIbCni.Repository }} | {{ .SriovIbCni.Image }} | {{ .SriovIbCni.Version }} | {{ (imageSha .SriovIbCni) }} |
+| {{ .DraDriverSriov.Repository }} | {{ .DraDriverSriov.Image }} | {{ .DraDriverSriov.Version }} | {{ (imageSha .DraDriverSriov) }} |
+| {{ .CniPlugins.Repository }} | {{ .CniPlugins.Image }} | {{ .CniPlugins.Version }} | {{ (imageSha .CniPlugins) }} |
+| {{ .Multus.Repository }} | {{ .Multus.Image }} | {{ .Multus.Version }} | {{ (imageSha .Multus) }} |
+| {{ .OVSCni.Repository }} | {{ .OVSCni.Image }} | {{ .OVSCni.Version }} | {{ (imageSha .OVSCni) }} |
+| {{ .RDMACni.Repository }} | {{ .RDMACni.Image }} | {{ .RDMACni.Version }} | {{ (imageSha .RDMACni) }} |
+| {{ .NicConfigurationOperator.Repository }} | {{ .NicConfigurationOperator.Image }} | {{ .NicConfigurationOperator.Version }} | {{ (imageSha .NicConfigurationOperator) }} |
+| {{ .NicConfigurationConfigDaemon.Repository }} | {{ .NicConfigurationConfigDaemon.Image }} | {{ .NicConfigurationConfigDaemon.Version }} | {{ (imageSha .NicConfigurationConfigDaemon) }} |
+| {{ .MaintenanceOperator.Repository }} | {{ .MaintenanceOperator.Image }} | {{ .MaintenanceOperator.Version }} | {{ (imageSha .MaintenanceOperator) }} |
+| {{ .SpectrumXOperator.Repository }} | {{ .SpectrumXOperator.Image }} | {{ .SpectrumXOperator.Version }} | {{ (imageSha .SpectrumXOperator) }} |
+
+## DOCA-OFED Driver Container Images
+
+| Repository | Image Name | Version |
+| --- | --- | --- |
+| {{ .Mofed.Repository }} | {{ .Mofed.Image }} | {{ .Mofed.Version }} |
+
+The followings tags are available for the above DOCA-OFED Driver container version:
+
+
+### Ubuntu
+
+| Tags | Digest |
+| --- | --- |
+{{- range .Mofed.Shas }}
+{{- if hasSubstring "ubuntu" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}
+
+### RHCOS
+
+| Tags | Digest |
+| --- | --- |
+{{- range .Mofed.Shas }}
+{{- if hasSubstring "rhcos" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}
+
+### RHEL
+
+| Tags | Digest |
+| --- | --- |
+{{- range .Mofed.Shas }}
+{{- if hasSubstring "rhel" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}
+
+### SLES
+
+| Tags | Digest |
+| --- | --- |
+{{- range .Mofed.Shas }}
+{{- if hasSubstring "sles" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}
+
+## STIG FIPS Compliant DOCA-OFED Driver Container Images
+
+| Repository | Image Name | Version |
+| --- | --- | --- |
+| {{ .MofedStigFips.Repository }} | {{ .MofedStigFips.Image }} | {{ .MofedStigFips.Version }} |
+
+The followings tags are available for the above STIG FIPS Compliant DOCA-OFED Driver container version:
+
+### Ubuntu
+
+| Tags | Digest |
+| --- | --- |
+{{- range .MofedStigFips.Shas }}
+{{- if hasSubstring "ubuntu" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}
+
+### RHEL
+
+| Tags | Digest |
+| --- | --- |
+{{- range .MofedStigFips.Shas }}
+{{- if hasSubstring "rhel" .Tags }}
+| {{ range $i, $t := .Tags }}{{ if $i }}<br />{{ end }}{{ $t }}{{ end }} | {{ .SHA256 }} |
+{{- end }}
+{{- end }}

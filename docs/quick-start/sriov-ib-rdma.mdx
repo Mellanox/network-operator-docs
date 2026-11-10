@@ -1,0 +1,64 @@
+---
+title: "Deploy SR-IOV InfiniBand Network with RDMA"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+<Note>
+You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
+For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+</Note>
+
+**Step 1**: Create NicClusterPolicy for InfiniBand
+
+<Code src="../../examples/processed/sriov-ib-rdma/10-nicclusterpolicy.yaml" language="yaml" />
+
+```bash
+kubectl apply -f nicclusterpolicy.yaml
+```
+
+**Step 2**: Create IPPool for nv-ipam
+
+<Code src="../../examples/processed/sriov-ib-rdma/20-ippool.yaml" language="yaml" />
+
+```bash
+kubectl apply -f ippool.yaml
+```
+
+**Step 3**: Configure SR-IOV for InfiniBand
+
+<Code src="../../examples/processed/sriov-ib-rdma/30-sriovnetworknodepolicy.yaml" language="yaml" />
+
+```bash
+kubectl apply -f sriovnetworknodepolicy.yaml
+```
+
+**Step 4**: Create SriovIBNetwork
+
+<Code src="../../examples/processed/sriov-ib-rdma/40-sriovibnetwork.yaml" language="yaml" />
+
+```bash
+kubectl apply -f sriovibnetwork.yaml
+```
+
+**Step 5**: Deploy test workload
+
+<Code src="../../examples/processed/sriov-ib-rdma/50-pod.yaml" language="yaml" />
+
+```bash
+kubectl apply -f pod.yaml
+```
+
+Verify the deployment:
+
+```bash
+kubectl exec -it sriov-ib-test-pod -- ibv_devices
+kubectl exec -it sriov-ib-test-pod -- ibstat
+```
+
+**Complete Configuration**
+
+<Code src="../../examples/processed/sriov-ib-rdma/complete.yaml" language="yaml" />

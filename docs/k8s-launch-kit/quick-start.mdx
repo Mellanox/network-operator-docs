@@ -1,0 +1,66 @@
+---
+title: "Quick Start"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+This walkthrough takes you from a freshly prepared cluster to a running NVIDIA networking deployment using the **SR-IOV Ethernet** profile --- the most common starting point. For other profiles, see the [Deployment Profiles](/k8s-launch-kit/profiles/profiles) decision matrix.
+
+<Note>
+**Use this when:** you have the Network Operator Helm chart installed (per [Installation](/k8s-launch-kit/installation)), the `l8k` binary on your PATH, and `$KUBECONFIG` set or your default kubeconfig at `~/.kube/config`.
+</Note>
+
+## Step 1 --- Discover
+
+Probe the cluster's network hardware. Output is written to `./cluster-config.yaml` by default.
+
+```bash
+l8k discover
+```
+
+Discovery deploys a minimal probe profile, examines NICs and OFED-dependent kernel modules on each node, and groups nodes by PCI topology.
+
+## Step 2 --- Generate
+
+Generate Kubernetes manifests for an SR-IOV Ethernet deployment. Launch Kit auto-reads `./cluster-config.yaml` and writes manifests to `./deployment/`.
+
+```bash
+l8k generate --fabric ethernet --deployment-type sriov --multirail
+```
+
+See [Generate Workflow](/k8s-launch-kit/workflows/generate) for the output file layout.
+
+## Step 3 --- Deploy
+
+Apply the generated manifests in dependency order (NicClusterPolicy first, then per-group NicNodePolicy, then networks and workloads):
+
+```bash
+l8k deploy
+```
+
+## Step 4 --- Verify
+
+Check that operator pods, OFED driver pods, and example workloads are running:
+
+```bash
+kubectl -n nvidia-network-operator get pods
+kubectl get nicclusterpolicy
+kubectl get nicnodepolicy
+```
+
+## Next Steps
+
+- Picking a different profile? [Deployment Profiles](/k8s-launch-kit/profiles/profiles)
+- Cluster has mixed GPU/NIC types? [Heterogeneous Clusters](/k8s-launch-kit/heterogeneous-clusters)
+- Generating manifests without cluster access? [Cluster Topology Presets](/k8s-launch-kit/presets)
+- Wiring l8k into CI/CD? [Automation and CI/CD](/k8s-launch-kit/automation)
+- Something didn't work? [Troubleshooting](/k8s-launch-kit/troubleshooting)
+
+## See Also
+
+- [Overview](/k8s-launch-kit/overview) --- the discover/generate/deploy mental model
+- [CLI Reference](/k8s-launch-kit/reference/cli) --- every flag
+- [Configuration Reference](/k8s-launch-kit/reference/config) --- `cluster-config.yaml` schema
