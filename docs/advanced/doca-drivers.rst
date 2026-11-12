@@ -106,10 +106,13 @@ Prerequisites
 Before you begin, ensure that you have the following prerequisites:
 
 - Docker (Ubuntu) / Podman (RH) installed on your build system.
-- Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_, for example: `https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz <https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz>`_
+- Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at `NVIDIA DOCA Downloads <https://developer.nvidia.com/doca-downloads>`_ under ``https://linux.mellanox.com/public/repo/doca/<doca>/SOURCES/mlnx_ofed/``.
 
 **NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
-For example, given a DOCA package version (e.g `3.2.0`) you can find the corresponding MLNX_OFED version at the link: `<https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/>`_ which is `25.10-1.2.8.0'`
+
+DOCA 3.6 and later publish a flat source archive. RPM archives (RHEL and SLES) are named ``DOCA_BASE_SRC-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-3.6.0-069000.tar.gz``. Debian archives (Ubuntu) insert ``debian-``: ``DOCA_BASE_SRC-debian-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-debian-3.6.0-069000.tar.gz``. The build number is the numeric suffix of ``D_OFED_VERSION`` (``26.10-069000`` selects build ``069000``). When ``D_OFED_URL_PATH`` is unset, the container build derives this name from ``D_DOCA_VERSION`` and ``D_OFED_VERSION``. Set ``D_OFED_URL_PATH`` only for a local archive or a different URL. Set ``D_OFED_BASE_URL`` if the publishing path for your DOCA release differs from the default.
+
+Releases before DOCA 3.6 keep the ``MLNX_OFED_SRC-*`` name and need no extra arguments. For example, DOCA ``3.2.0`` publishes `MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz <https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz>`_ at `<https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/>`_.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Download Docker files and scripts:
