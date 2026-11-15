@@ -110,7 +110,7 @@ Before you begin, ensure that you have the following prerequisites:
 
 **NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
 
-DOCA 3.6 and later publish a flat source archive. RPM archives (RHEL and SLES) are named ``DOCA_BASE_SRC-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-3.6.0-069000.tar.gz``. Debian archives (Ubuntu) insert ``debian-``: ``DOCA_BASE_SRC-debian-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-debian-3.6.0-069000.tar.gz``. The build number is the numeric suffix of ``D_OFED_VERSION`` (``26.10-069000`` selects build ``069000``). When ``D_OFED_URL_PATH`` is unset, the container build derives this name from ``D_DOCA_VERSION`` and ``D_OFED_VERSION``. Set ``D_OFED_URL_PATH`` only for a local archive or a different URL. Set ``D_OFED_BASE_URL`` if the publishing path for your DOCA release differs from the default.
+DOCA 3.6 and later publish a flat source archive. RPM archives (RHEL and SLES) are named ``DOCA_BASE_SRC-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-3.6.0-070000.tar.gz``. Debian archives (Ubuntu) insert ``debian-``: ``DOCA_BASE_SRC-debian-<doca>-<build>.tar.gz``, for example ``DOCA_BASE_SRC-debian-3.6.0-070000.tar.gz``. The build number is the numeric suffix of ``D_OFED_VERSION`` (``26.10-070000`` selects build ``070000``). When ``D_OFED_URL_PATH`` is unset, the container build derives this name from ``D_DOCA_VERSION`` and ``D_OFED_VERSION``. Set ``D_OFED_URL_PATH`` only for a local archive or a different URL. Set ``D_OFED_BASE_URL`` if the publishing path for your DOCA release differs from the default.
 
 Releases before DOCA 3.6 keep the ``MLNX_OFED_SRC-*`` name and need no extra arguments. For example, DOCA ``3.2.0`` publishes `MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz <https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz>`_ at `<https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/>`_.
 
@@ -150,16 +150,16 @@ Common mandatory build parameters
 
 Before building the container, you need to provide following parameters as `build-arg` for container build:
 
-1. `D_OS`: The Linux distribution (e.g., ubuntu22.04 / rhel9.2)
+1. `D_OS`: The Linux distribution (e.g., ubuntu24.04 / rhel9.6)
 2. `D_ARCH`: Compiled Architecture
-3. `D_BASE_IMAGE`: Base container image (e.g., ubuntu:22.04)
-4. `D_KERNEL_VER`: The target kernel version (e.g., 5.15.0-25-generic / 5.14.0-284.32.1.el9_2.x86_64)
-5. `D_DOCA_VERSION`: NVIDIA DOCA version (e.g., 2.9.1)
-6. `D_OFED_VERSION`: NVIDIA NIC drivers version (e.g., 24.10-1.1.4.0)
+3. `D_BASE_IMAGE`: Base container image (e.g., ubuntu:24.04)
+4. `D_KERNEL_VER`: The target kernel version (e.g., 6.8.0-147-generic / 5.14.0-570.152.1.el9_6.x86_64)
+5. `D_DOCA_VERSION`: NVIDIA DOCA version (e.g., 3.6.0)
+6. `D_OFED_VERSION`: NVIDIA NIC drivers version (e.g., 26.10-070000)
 
 **NOTE:** Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized
 
-**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **doca<doca_version>-<driver_ver>-<container_ver>-<kernel_ver-os-arch>**. For example: doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64
+**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **doca<doca_version>-<driver_ver>-<container_ver>-<kernel_ver-os-arch>**. For example: doca3.6.0-26.10-070000-0-6.8.0-147-generic-ubuntu24.04-amd64
 
 **NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
 
@@ -191,19 +191,19 @@ Specific build parameters
    oc adm release info <OCP_VERSION> --image-for=driver-toolkit
 
 
-For example, for OpenShift 4.16.0:
+For example, for OpenShift 4.18.60:
 
 .. code-block:: bash
 
-   oc adm release info 4.16.0 --image-for=driver-toolkit
-   quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+   oc adm release info 4.18.60 --image-for=driver-toolkit
+   quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
 
 
 Then pull the DTK image locally using your pull-secret:
 
 .. code-block:: bash
 
-   podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f
+   podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
 
 
 2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
@@ -216,8 +216,8 @@ Kernel version can also be found with the DTK image using the following command:
 
 .. code-block:: bash
 
-   podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:47ba8a10d5938c41f907ee7f70d74aecb9c2dfd7afae4cea2942fc8f47256612 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
-   5.14.0-427.22.1.el9_4.x86_64
+   podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
+   5.14.0-427.158.1.el9_4.x86_64
 
 ~~~~~~~~~~~~~
 RHCOS example
@@ -228,14 +228,14 @@ RHCOS example
 .. code-block:: bash
 
    podman build \
-    --build-arg D_OS=rhcos4.16 \
+    --build-arg D_OS=rhcos4.18 \
     --build-arg D_ARCH=x86_64 \
-    --build-arg D_KERNEL_VER=5.14.0-427.22.1.el9_4.x86_64 \
-    --build-arg D_DOCA_VERSION=2.9.1 \
-    --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:dde3cd6a75d865a476aa7e1cab6fa8d97742401e87e0d514f3042c3a881e301f" \
+    --build-arg D_KERNEL_VER=5.14.0-427.158.1.el9_4.x86_64 \
+    --build-arg D_DOCA_VERSION=3.6.0 \
+    --build-arg D_OFED_VERSION=26.10-070000 \
+    --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825" \
     --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.4 \
-    --tag doca2.9.1-24.10-1.1.4.0-0-5.14.0-427.22.1.el9_4.x86_64-rhcos4.16-amd64 \
+    --tag doca3.6.0-26.10-070000-0-5.14.0-427.158.1.el9_4.x86_64-rhcos4.18-amd64 \
     -f RHEL_Dockerfile \
     --target precompiled .
 
@@ -250,13 +250,13 @@ Ubuntu example
 .. code-block:: bash
 
    docker build \
-    --build-arg D_OS=ubuntu22.04 \
+    --build-arg D_OS=ubuntu24.04 \
     --build-arg D_ARCH=x86_64 \
-    --build-arg D_BASE_IMAGE=ubuntu:22.04 \
-    --build-arg D_KERNEL_VER=5.15.0-25-generic \
-    --build-arg D_DOCA_VERSION=2.9.1 \
-    --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --tag doca2.9.1-24.10-1.1.4.0-0-5.15.0-25-generic-ubuntu22.04-amd64 \
+    --build-arg D_BASE_IMAGE=ubuntu:24.04 \
+    --build-arg D_KERNEL_VER=6.8.0-147-generic \
+    --build-arg D_DOCA_VERSION=3.6.0 \
+    --build-arg D_OFED_VERSION=26.10-070000 \
+    --tag doca3.6.0-26.10-070000-0-6.8.0-147-generic-ubuntu24.04-amd64 \
     -f Ubuntu_Dockerfile \
     --target precompiled .
 
@@ -277,12 +277,12 @@ SLES example
 .. code-block:: bash
 
    docker build \
-    --build-arg D_OS=sles15.5 \
+    --build-arg D_OS=sles15.7 \
     --build-arg D_ARCH=x86_64 \
-    --build-arg D_BASE_IMAGE=registry.suse.com/suse/sle15:15.5 \
-    --build-arg D_KERNEL_VER=5.14.21-150500.55.83-default \
-    --build-arg D_DOCA_VERSION=2.9.1 \
-    --build-arg D_OFED_VERSION=24.10-1.1.4.0 \
-    --tag doca2.9.1-24.10-1.1.4.0-0-5.14.21-150500.55.83-default-sles15.5-amd64 \
+    --build-arg D_BASE_IMAGE=registry.suse.com/suse/sle15:15.7 \
+    --build-arg D_KERNEL_VER=6.4.0-150700.53.45-default \
+    --build-arg D_DOCA_VERSION=3.6.0 \
+    --build-arg D_OFED_VERSION=26.10-070000 \
+    --tag doca3.6.0-26.10-070000-0-6.4.0-150700.53.45-default-sles15.7-amd64 \
     -f SLES_Dockerfile \
     --target precompiled .
