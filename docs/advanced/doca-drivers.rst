@@ -191,51 +191,59 @@ Specific build parameters
    oc adm release info <OCP_VERSION> --image-for=driver-toolkit
 
 
-For example, for OpenShift 4.18.60:
+For example, for OpenShift 4.22.18:
 
 .. code-block:: bash
 
-   oc adm release info 4.18.60 --image-for=driver-toolkit
-   quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
+   oc adm release info 4.22.18 --image-for=driver-toolkit
+   quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
 
 
 Then pull the DTK image locally using your pull-secret:
 
 .. code-block:: bash
 
-   podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
+   podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
 
 
-2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver
+2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver. Use the UBI image whose minor version matches the RHEL version of the DTK image, for example ``registry.access.redhat.com/ubi9/ubi:9.8``.
 
 3. `D_ARCH`: Target architecture: `x86_64` or `aarch64`.
 
 4. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed `here <https://access.redhat.com/solutions/7077108>`_.
 
-Kernel version can also be found with the DTK image using the following command:
+Kernel version and RHEL version can also be found with the DTK image using the following commands:
 
 .. code-block:: bash
 
-   podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
-   5.14.0-427.158.1.el9_4.x86_64
+   podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
+   5.14.0-687.55.1.el9_8.x86_64
+
+   podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json | jq -r '.RHEL_VERSION'
+   9.8
+
+5. `D_OS`: ``rhel<RHEL_VERSION>``, where ``RHEL_VERSION`` is the value printed above, for example ``rhel9.8``.
 
 ~~~~~~~~~~~~~
 RHCOS example
 ~~~~~~~~~~~~~
 
-**NOTE:** Since OCP 4.19, RHCOS is based on RHEL 9.6, therefore the tag should include the RHEL version instead of the OCP version.
+**NOTE:** The ``D_OS`` value and the container tag must include the RHEL version of the RHCOS release (for example ``rhel9.8`` for OCP 4.22), not the OCP version (``rhcos4.x``).
+
+**NOTE:** ``RHEL_Dockerfile`` mounts the build host's RHEL subscription certificates from a build context named ``rhsm``, so ``--build-context rhsm=<dir>`` is required. Use ``/etc/pki/entitlement`` on a subscribed RHEL host. The directory must exist, but the build also succeeds when it is empty.
 
 .. code-block:: bash
 
    podman build \
-    --build-arg D_OS=rhcos4.18 \
+    --build-context rhsm=/etc/pki/entitlement \
+    --build-arg D_OS=rhel9.8 \
     --build-arg D_ARCH=x86_64 \
-    --build-arg D_KERNEL_VER=5.14.0-427.158.1.el9_4.x86_64 \
+    --build-arg D_KERNEL_VER=5.14.0-687.55.1.el9_8.x86_64 \
     --build-arg D_DOCA_VERSION=3.6.0 \
     --build-arg D_OFED_VERSION=26.10-070000 \
-    --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825" \
-    --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.4 \
-    --tag doca3.6.0-26.10-070000-0-5.14.0-427.158.1.el9_4.x86_64-rhcos4.18-amd64 \
+    --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6" \
+    --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.8 \
+    --tag doca3.6.0-26.10-070000-0-5.14.0-687.55.1.el9_8.x86_64-rhel9.8-amd64 \
     -f RHEL_Dockerfile \
     --target precompiled .
 
