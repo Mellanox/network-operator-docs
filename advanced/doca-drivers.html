@@ -330,38 +330,46 @@ In order to get the specific DTK container image for a specific OpenShift releas
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info &lt;OCP_VERSION&gt; --image-for<span class="o">=</span>driver-toolkit
 </pre></div>
 </div>
-<p>For example, for OpenShift 4.18.60:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info <span class="m">4</span>.18.60 --image-for<span class="o">=</span>driver-toolkit
-quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
+<p>For example, for OpenShift 4.22.18:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>oc adm release info <span class="m">4</span>.22.18 --image-for<span class="o">=</span>driver-toolkit
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
 </pre></div>
 </div>
 <p>Then pull the DTK image locally using your pull-secret:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman pull --authfile<span class="o">=</span>/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman pull --authfile<span class="o">=</span>/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
-<li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver</p></li>
+<li><p><cite>D_FINAL_BASE_IMAGE</cite>: Final container image, to install compiled driver. Use the UBI image whose minor version matches the RHEL version of the DTK image, for example <code class="docutils literal notranslate"><span class="pre">registry.access.redhat.com/ubi9/ubi:9.8</span></code>.</p></li>
 <li><p><cite>D_ARCH</cite>: Target architecture: <cite>x86_64</cite> or <cite>aarch64</cite>.</p></li>
 <li><p><cite>D_KERNEL_VER</cite>: CoreOS kernel versions for OpenShift are listed <a class="reference external" href="https://access.redhat.com/solutions/7077108">here</a>.</p></li>
 </ol>
-<p>Kernel version can also be found with the DTK image using the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman run --rm -ti quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825 cat /etc/driver-toolkit-release.json <span class="p">|</span> jq -r <span class="s1">&#39;.KERNEL_VERSION&#39;</span>
-<span class="m">5</span>.14.0-427.158.1.el9_4.x86_64
+<p>Kernel version and RHEL version can also be found with the DTK image using the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json <span class="p">|</span> jq -r <span class="s1">&#39;.KERNEL_VERSION&#39;</span>
+<span class="m">5</span>.14.0-687.55.1.el9_8.x86_64
+
+podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json <span class="p">|</span> jq -r <span class="s1">&#39;.RHEL_VERSION&#39;</span>
+<span class="m">9</span>.8
 </pre></div>
 </div>
+<ol class="arabic simple" start="5">
+<li><p><cite>D_OS</cite>: <code class="docutils literal notranslate"><span class="pre">rhel&lt;RHEL_VERSION&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">RHEL_VERSION</span></code> is the value printed above, for example <code class="docutils literal notranslate"><span class="pre">rhel9.8</span></code>.</p></li>
+</ol>
 </section>
 <section id="rhcos-example">
 <h4>RHCOS example<a class="headerlink" href="#rhcos-example" title="Permalink to this headline"></a></h4>
-<p><strong>NOTE:</strong> Since OCP 4.19, RHCOS is based on RHEL 9.6, therefore the tag should include the RHEL version instead of the OCP version.</p>
+<p><strong>NOTE:</strong> The <code class="docutils literal notranslate"><span class="pre">D_OS</span></code> value and the container tag must include the RHEL version of the RHCOS release (for example <code class="docutils literal notranslate"><span class="pre">rhel9.8</span></code> for OCP 4.22), not the OCP version (<code class="docutils literal notranslate"><span class="pre">rhcos4.x</span></code>).</p>
+<p><strong>NOTE:</strong> <code class="docutils literal notranslate"><span class="pre">RHEL_Dockerfile</span></code> mounts the build host’s RHEL subscription certificates from a build context named <code class="docutils literal notranslate"><span class="pre">rhsm</span></code>, so <code class="docutils literal notranslate"><span class="pre">--build-context</span> <span class="pre">rhsm=&lt;dir&gt;</span></code> is required. Use <code class="docutils literal notranslate"><span class="pre">/etc/pki/entitlement</span></code> on a subscribed RHEL host. The directory must exist, but the build also succeeds when it is empty.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>podman build <span class="se">\</span>
- --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhcos4.18 <span class="se">\</span>
+ --build-context <span class="nv">rhsm</span><span class="o">=</span>/etc/pki/entitlement <span class="se">\</span>
+ --build-arg <span class="nv">D_OS</span><span class="o">=</span>rhel9.8 <span class="se">\</span>
  --build-arg <span class="nv">D_ARCH</span><span class="o">=</span>x86_64 <span class="se">\</span>
- --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-427.158.1.el9_4.x86_64 <span class="se">\</span>
+ --build-arg <span class="nv">D_KERNEL_VER</span><span class="o">=</span><span class="m">5</span>.14.0-687.55.1.el9_8.x86_64 <span class="se">\</span>
  --build-arg <span class="nv">D_DOCA_VERSION</span><span class="o">=</span><span class="m">3</span>.6.0 <span class="se">\</span>
  --build-arg <span class="nv">D_OFED_VERSION</span><span class="o">=</span><span class="m">26</span>.10-070000 <span class="se">\</span>
- --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:3d083dee6d7e07d466d2a86acc14567bf7cdbde6a78c357306bc471e42753825&quot;</span> <span class="se">\</span>
- --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:9.4 <span class="se">\</span>
- --tag doca3.6.0-26.10-070000-0-5.14.0-427.158.1.el9_4.x86_64-rhcos4.18-amd64 <span class="se">\</span>
+ --build-arg <span class="nv">D_BASE_IMAGE</span><span class="o">=</span><span class="s2">&quot;quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6&quot;</span> <span class="se">\</span>
+ --build-arg <span class="nv">D_FINAL_BASE_IMAGE</span><span class="o">=</span>registry.access.redhat.com/ubi9/ubi:9.8 <span class="se">\</span>
+ --tag doca3.6.0-26.10-070000-0-5.14.0-687.55.1.el9_8.x86_64-rhel9.8-amd64 <span class="se">\</span>
  -f RHEL_Dockerfile <span class="se">\</span>
  --target precompiled .
 </pre></div>
