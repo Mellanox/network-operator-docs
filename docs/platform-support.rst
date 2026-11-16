@@ -331,26 +331,26 @@ Supported Operating Systems and Kubernetes Platforms
      - Container Runtime
      - Notes
    * - Ubuntu 26.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
-     - 1.32–1.36
+     - 1.33-1.37
      - 2.12–2.15
      - Containerd
      - —
    * - Ubuntu 24.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
-     - 1.32–1.36
+     - 1.33-1.37
      - 2.12–2.15
      - Containerd
      - —
    * - Ubuntu 22.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
-     - 1.32–1.36
+     - 1.33-1.37
      - 2.12–2.15
      - Containerd
      - RT kernel support
@@ -363,7 +363,7 @@ Supported Operating Systems and Kubernetes Platforms
      - CRI-O
      - RT kernel support
    * - Red Hat Enterprise Linux 10.2 / 10.0 / 9.8 / 9.6 / 9.4
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
      - —
@@ -371,7 +371,7 @@ Supported Operating Systems and Kubernetes Platforms
      - Containerd, CRI-O
      - RT kernel support
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
      - —
@@ -379,9 +379,9 @@ Supported Operating Systems and Kubernetes Platforms
      - Containerd, CRI-O
      - RT kernel support
    * - SUSE Linux Enterprise Server 15 SP7
-     - 1.32–1.36
+     - 1.33-1.37
      - —
-     - 1.32–1.36
+     - 1.33-1.37
      - —
      - —
      - Containerd
@@ -468,7 +468,7 @@ Configuration support does not establish qualification for every platform accept
      - Tech Preview on 26.4.x (GA on 26.1.x)
      - * Single-Plane (ConnectX-7 or BlueField-3 SuperNIC)
        * Dual- or Quad-plane (NVIDIA ConnectX-8 SuperNIC)
-     - Upstream Kubernetes (1.32–1.36)
+     - Upstream Kubernetes (1.33-1.37)
      - * Ubuntu 24.04 LTS
        * Ubuntu 22.04 LTS
      - Small RA, Software Multi-Plane
@@ -497,15 +497,15 @@ Support for KubeVirt SR-IOV Passthrough
      - KubeVirt
      - Red Hat OpenShift Virtualization
    * - Ubuntu 26.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - v1.8.2+
      - —
    * - Ubuntu 24.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - v1.8.2+
      - —
    * - Ubuntu 22.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
      - v1.8.2+
      - —
    * - Red Hat CoreOS
@@ -542,15 +542,15 @@ To use the legacy ``nvidia-peermem`` path, explicitly enable it with the GPU Ope
    * - Operating System
      - Kubernetes
    * - Ubuntu 26.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
    * - Ubuntu 24.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
    * - Ubuntu 22.04 LTS
-     - 1.32–1.36
+     - 1.33-1.37
    * - Red Hat Enterprise Linux 10.2 / 10.0 / 9.8 / 9.6 / 9.4
-     - 1.32–1.36
+     - 1.33-1.37
    * - Red Hat Enterprise Linux 8.10 / 8.8
-     - 1.32–1.36
+     - 1.33-1.37
    * - Red Hat CoreOS
      - OpenShift 4.17–4.22
 
