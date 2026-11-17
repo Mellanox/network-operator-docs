@@ -8,46 +8,87 @@ title: "Host Device Network with RDMA"
 */}
 
 <Note>
-You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
-For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+These manifests are the Kubernetes Launch Kit render for preset `PowerEdge-XE9680-H200` and release catalog `26.10` (`v26.10.0` component images on `nvcr.io/nvidia/mellanox`). The staging coordinates in `docs/common/vars.yml` are a separate release record. Multirail stays at the Launch Kit default, so each east-west rail is its own document in the pool and network files. Install the Network Operator chart before applying these custom resources. Helm `values.yaml` is omitted.
+
+```bash
+l8k generate \
+  --for PowerEdge-XE9680-H200 \
+  --node-selector "nvidia.com/gpu.product=NVIDIA-H200" \
+  --network-operator-release 26.10 \
+  --fabric ethernet \
+  --deployment-type host_device \
+  --skip-network-operator-helm \
+  --save-deployment-files ./deployment
+```
+
+For the Launch Kit discover, deploy, and validate flow, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
 </Note>
 
-**Step 1**: Create NicClusterPolicy with host device support
+Apply the numbered files under `deployment/network-operator/` in filename order.
+
+**Step 1**: Create NicClusterPolicy
 
 <Code src="../../examples/processed/host-device-rdma/10-nicclusterpolicy.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f nicclusterpolicy.yaml
+kubectl apply -f 10-nicclusterpolicy.yaml
 ```
 
-**Step 2**: Create IPPool for nv-ipam
+**Step 2**: Create IPPool resources for nv-ipam
 
-<Code src="../../examples/processed/host-device-rdma/20-ippool.yaml" language="yaml" />
+<Code src="../../examples/processed/host-device-rdma/20-ippool-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f ippool.yaml
+kubectl apply -f 20-ippool-PowerEdge-XE9680-H200.yaml
 ```
 
-**Step 3**: Create HostDeviceNetwork
+**Step 3**: Create HostDeviceNetwork resources
 
-<Code src="../../examples/processed/host-device-rdma/30-hostdevicenetwork.yaml" language="yaml" />
+<Code src="../../examples/processed/host-device-rdma/30-hostdevicenetwork-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f hostdevicenetwork.yaml
+kubectl apply -f 30-hostdevicenetwork-PowerEdge-XE9680-H200.yaml
 ```
 
-**Step 4**: Deploy test workload
+**Step 4**: Enable the Maintenance Operator
 
-<Code src="../../examples/processed/host-device-rdma/40-pod.yaml" language="yaml" />
+This example applies a `NicConfigurationTemplate`. The [Quick Start Helm install](/quick-start/quick-start-k8s#install-network-operator-helm-chart) leaves `maintenanceOperator.enabled` at its default `false`. Enable it before the template. NIC configuration changes that require node maintenance cannot finish without it.
 
 ```bash
-kubectl apply -f pod.yaml
+helm upgrade network-operator nvidia/network-operator \
+  -n nvidia-network-operator \
+  --reuse-values \
+  --version {{network-operator-version}} \
+  --set maintenanceOperator.enabled=true
 ```
 
-Verify the deployment:
+**Step 5**: Create the NIC configuration template
+
+<Code src="../../examples/processed/host-device-rdma/30-nicconfigurationtemplate-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl exec -it hostdev-test-pod -- lspci | grep Mellanox
+kubectl apply -f 30-nicconfigurationtemplate-PowerEdge-XE9680-H200.yaml
+```
+
+**Step 6**: Deploy the example DaemonSet
+
+<Code src="../../examples/processed/host-device-rdma/40-example-daemonset-PowerEdge-XE9680-H200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 40-example-daemonset-PowerEdge-XE9680-H200.yaml
+```
+
+**Step 7**: Verify the deployment
+
+```bash
+kubectl -n default get daemonset hostdev-test-poweredge-xe9680-h200
+kubectl -n default get pods -l app=hostdev-test-poweredge-xe9680-h200
+```
+
+Run connectivity checks with the same bundle:
+
+```bash
+l8k validate --deployment-files ./deployment
 ```
 
 **Complete Configuration**

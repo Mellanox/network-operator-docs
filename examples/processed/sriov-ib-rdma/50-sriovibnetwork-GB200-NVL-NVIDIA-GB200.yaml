@@ -1,0 +1,67 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_0
+  linkState: enable
+  networkNamespace: "default"
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_1
+  linkState: enable
+  networkNamespace: "default"
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_2
+  linkState: enable
+  networkNamespace: "default"
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_3
+  linkState: enable
+  networkNamespace: "default"

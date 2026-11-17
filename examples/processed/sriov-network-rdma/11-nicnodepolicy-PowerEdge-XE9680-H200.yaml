@@ -1,0 +1,39 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicNodePolicy
+metadata:
+  name: "poweredge-xe9680-h200"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-H200"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30

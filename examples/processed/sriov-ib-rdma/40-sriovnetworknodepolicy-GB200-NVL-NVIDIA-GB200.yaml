@@ -1,0 +1,91 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0000:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_0
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0002:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_1
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0010:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_2
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0012:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_3

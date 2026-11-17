@@ -1,0 +1,79 @@
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.0.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.0.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.4.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.4.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.8.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.8.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.12.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.12.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"

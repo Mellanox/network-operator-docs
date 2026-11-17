@@ -2,80 +2,590 @@ apiVersion: mellanox.com/v1alpha1
 kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  rdmaSharedDevicePlugin:
-    image: k8s-rdma-shared-dev-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
-    config: |
-      {
-        "configList": [
-          {
-            "resourceName": "rdma_shared_device_a",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ens1f0"]
-            }
-          }
-        ]
-      }
+  nicConfigurationOperator:
+    operator:
+      image: nic-configuration-operator
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    configurationDaemon:
+      image: nic-configuration-operator-daemon
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    logLevel: info
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+
+---
+apiVersion: mellanox.com/v1alpha1
+kind: NicNodePolicy
+metadata:
+  name: "poweredge-xe9680-h200"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-H200"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+  rdmaSharedDevicePlugin:
+    image: k8s-rdma-shared-dev-plugin
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
+    config: |
+      {
+        "configList": [
+          {
+            "resourceName": "rdma_shared_resource_rail_0",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth2"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_1",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth3"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_2",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth4"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_3",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth5"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_4",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth6"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_5",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth9"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_6",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth10"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_7",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["eth11"]
+            }
+          }
+        ]
+      }
+
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
 metadata:
-  name: macvlan-pool
-  namespace: nvidia-network-operator
+  name: nv-ipam-pool-rail-0-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  subnet: 192.168.4.0/24
-  perNodeBlockSize: 50
+  subnet: 192.168.0.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.0.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-1-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.4.0/22
+  perNodeBlockSize: 10
   gateway: 192.168.4.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-2-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.8.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.8.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-3-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.12.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.12.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-4-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.16.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.16.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-5-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.20.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.20.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-6-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.24.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.24.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-7-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"poweredge-xe9680-h200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.28.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.28.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-H200"
+
 ---
 apiVersion: mellanox.com/v1alpha1
 kind: MacvlanNetwork
 metadata:
-  name: macvlan-network
+  name: macvlan-network-rail-0-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   networkNamespace: "default"
-  master: "ens1f0"
+  master: "eth2"
   mode: "bridge"
-  mtu: 1500
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
   ipam: |
     {
       "type": "nv-ipam",
-      "poolName": "macvlan-pool"
+      "poolName": "nv-ipam-pool-rail-0-poweredge-xe9680-h200"
     }
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
 metadata:
-  name: macvlan-test-pod
+  name: macvlan-network-rail-1-poweredge-xe9680-h200
   annotations:
-    k8s.v1.cni.cncf.io/networks: macvlan-network
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  containers:
-  - name: test-container
-    image: mellanox/rping-test
-    command: ["/bin/bash", "-c", "sleep infinity"]
-    securityContext:
-      capabilities:
-        add: ["IPC_LOCK"]
-    resources:
-      requests:
-        rdma/rdma_shared_device_a: 1
-      limits:
-        rdma/rdma_shared_device_a: 1
+  networkNamespace: "default"
+  master: "eth3"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-1-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-2-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth4"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-2-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-3-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth5"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-4-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth6"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-4-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-5-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth9"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-5-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-6-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth10"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-6-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-7-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth11"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-7-poweredge-xe9680-h200"
+    }
+
+---
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicConfigurationTemplate
+metadata:
+  name: nic-configuration-poweredge-xe9680-h200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-H200"
+  nicSelector:
+    nicType: "a2dc"
+    pciAddresses: ["0000:1a:00.0", "0000:3c:00.0", "0000:4d:00.0", "0000:5e:00.0", "0000:9c:00.0", "0000:bc:00.0", "0000:cc:00.0", "0000:dc:00.0"]
+  resetToDefault: false
+  template:
+    numVfs: 8
+    linkType: Ethernet
+    pciPerformanceOptimized:
+      enabled: true
+      maxReadRequest: 4096
+    gpuDirectOptimized:
+      enabled: true
+      env: Baremetal
+    roceOptimized:
+      enabled: true
+      qos:
+        trust: dscp
+        pfc: "0,0,0,1,0,0,0,0"
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: macvlan-test-poweredge-xe9680-h200
+  namespace: "default"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  selector:
+    matchLabels:
+      app: macvlan-test-poweredge-xe9680-h200
+  template:
+    metadata:
+      labels:
+        app: macvlan-test-poweredge-xe9680-h200
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan-network-rail-0-poweredge-xe9680-h200,macvlan-network-rail-1-poweredge-xe9680-h200,macvlan-network-rail-2-poweredge-xe9680-h200,macvlan-network-rail-3-poweredge-xe9680-h200,macvlan-network-rail-4-poweredge-xe9680-h200,macvlan-network-rail-5-poweredge-xe9680-h200,macvlan-network-rail-6-poweredge-xe9680-h200,macvlan-network-rail-7-poweredge-xe9680-h200
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - "NVIDIA-H200"
+      containers:
+        - name: test-container
+          image: nvcr.io/nvidia/doca/doca:full-rt-cuda13.0.0-3.6.0-runtime-host
+          command: ["/bin/bash", "-c", "sleep infinity"]
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          resources:
+            requests:
+              rdma/rdma_shared_resource_rail_0: 1
+              rdma/rdma_shared_resource_rail_1: 1
+              rdma/rdma_shared_resource_rail_2: 1
+              rdma/rdma_shared_resource_rail_3: 1
+              rdma/rdma_shared_resource_rail_4: 1
+              rdma/rdma_shared_resource_rail_5: 1
+              rdma/rdma_shared_resource_rail_6: 1
+              rdma/rdma_shared_resource_rail_7: 1
+            limits:
+              rdma/rdma_shared_resource_rail_0: 1
+              rdma/rdma_shared_resource_rail_1: 1
+              rdma/rdma_shared_resource_rail_2: 1
+              rdma/rdma_shared_resource_rail_3: 1
+              rdma/rdma_shared_resource_rail_4: 1
+              rdma/rdma_shared_resource_rail_5: 1
+              rdma/rdma_shared_resource_rail_6: 1
+              rdma/rdma_shared_resource_rail_7: 1
+        - name: netshoot
+          image: nicolaka/netshoot:latest
+          command: ["/bin/bash", "-c", "trap 'exit 0' TERM INT; while true; do while wait -n 2>/dev/null; do :; done; sleep 1 & wait $! || true; done"]
+          securityContext:
+            capabilities:
+              add: ["NET_RAW"]

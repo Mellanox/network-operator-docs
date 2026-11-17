@@ -8,55 +8,114 @@ title: "Deploy SR-IOV InfiniBand Network with RDMA"
 */}
 
 <Note>
-You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
-For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+These manifests are the Kubernetes Launch Kit render for preset `GB200-NVL-NVIDIA-GB200` and release catalog `26.10` (`v26.10.0` component images on `nvcr.io/nvidia/mellanox`). East-west adapters on this preset are ConnectX-7 (`nicType` `1021`), which supports InfiniBand. BlueField-3 SuperNIC (`a2dc`) is Ethernet-only. The staging coordinates in `docs/common/vars.yml` are a separate release record. Multirail stays at the Launch Kit default, so each east-west rail is its own document in the pool, policy, and network files. Install the Network Operator chart before applying these custom resources. Helm `values.yaml` is omitted.
+
+```bash
+l8k generate \
+  --for GB200-NVL-NVIDIA-GB200 \
+  --node-selector "nvidia.com/gpu.product=NVIDIA-GB200" \
+  --network-operator-release 26.10 \
+  --fabric infiniband \
+  --deployment-type sriov \
+  --skip-network-operator-helm \
+  --save-deployment-files ./deployment
+```
+
+For the Launch Kit discover, deploy, and validate flow, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
 </Note>
 
-**Step 1**: Create NicClusterPolicy for InfiniBand
+Apply the numbered files under `deployment/network-operator/` in filename order.
+
+**Step 1**: Create NicClusterPolicy
 
 <Code src="../../examples/processed/sriov-ib-rdma/10-nicclusterpolicy.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f nicclusterpolicy.yaml
+kubectl apply -f 10-nicclusterpolicy.yaml
 ```
 
-**Step 2**: Create IPPool for nv-ipam
+**Step 2**: Create NicNodePolicy
 
-<Code src="../../examples/processed/sriov-ib-rdma/20-ippool.yaml" language="yaml" />
+<Code src="../../examples/processed/sriov-ib-rdma/11-nicnodepolicy-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f ippool.yaml
+kubectl apply -f 11-nicnodepolicy-GB200-NVL-NVIDIA-GB200.yaml
 ```
 
-**Step 3**: Configure SR-IOV for InfiniBand
+**Step 3**: Create IPPool resources for nv-ipam
 
-<Code src="../../examples/processed/sriov-ib-rdma/30-sriovnetworknodepolicy.yaml" language="yaml" />
+<Code src="../../examples/processed/sriov-ib-rdma/20-ippool-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f sriovnetworknodepolicy.yaml
+kubectl apply -f 20-ippool-GB200-NVL-NVIDIA-GB200.yaml
 ```
 
-**Step 4**: Create SriovIBNetwork
+**Step 4**: Prepare the SR-IOV operator for NIC configuration
 
-<Code src="../../examples/processed/sriov-ib-rdma/40-sriovibnetwork.yaml" language="yaml" />
+This example applies a `NicConfigurationTemplate` and a `SriovNetworkNodePolicy`. The [Quick Start Helm install](/quick-start/quick-start-k8s#install-network-operator-helm-chart) only enables the SR-IOV operator. Apply both settings below before the template. Otherwise the SR-IOV config daemon and the NIC Configuration Operator change the same NIC at the same time.
+
+Upgrade the chart so the config daemon waits until NIC configuration finishes, and enable the Maintenance Operator that the NIC Configuration Operator uses:
 
 ```bash
-kubectl apply -f sriovibnetwork.yaml
+helm upgrade network-operator nvidia/network-operator \
+  -n nvidia-network-operator \
+  --reuse-values \
+  --version {{network-operator-version}} \
+  --set maintenanceOperator.enabled=true \
+  --set-json 'sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector={"beta.kubernetes.io/os":"linux","network.nvidia.com/operator.mofed.wait":"false","network.nvidia.com/operator.nic-configuration.wait":"false"}'
 ```
 
-**Step 5**: Deploy test workload
-
-<Code src="../../examples/processed/sriov-ib-rdma/50-pod.yaml" language="yaml" />
+Disable the SR-IOV Network Operator `mellanox` plugin:
 
 ```bash
-kubectl apply -f pod.yaml
+kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "disablePlugins": ["mellanox"]} }' --type='merge'
 ```
 
-Verify the deployment:
+The full requirements are in [Use of NIC Configuration Operator together with SR-IOV Network Operator](/nic-conf-operator/nic-fw-configuration#use-of-nic-configuration-operator-together-with-sr-iov-network-operator).
+
+**Step 5**: Create the NIC configuration template
+
+<Code src="../../examples/processed/sriov-ib-rdma/30-nicconfigurationtemplate-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl exec -it sriov-ib-test-pod -- ibv_devices
-kubectl exec -it sriov-ib-test-pod -- ibstat
+kubectl apply -f 30-nicconfigurationtemplate-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 6**: Configure SR-IOV for InfiniBand
+
+<Code src="../../examples/processed/sriov-ib-rdma/40-sriovnetworknodepolicy-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 40-sriovnetworknodepolicy-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 7**: Create SriovIBNetwork resources
+
+<Code src="../../examples/processed/sriov-ib-rdma/50-sriovibnetwork-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 50-sriovibnetwork-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 8**: Deploy the example DaemonSet
+
+<Code src="../../examples/processed/sriov-ib-rdma/60-example-daemonset-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 60-example-daemonset-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 9**: Verify the deployment
+
+```bash
+kubectl -n default get daemonset sriov-ib-test-gb200-nvl-nvidia-gb200
+kubectl -n default get pods -l app=sriov-ib-test-gb200-nvl-nvidia-gb200
+```
+
+Run connectivity checks with the same bundle:
+
+```bash
+l8k validate --deployment-files ./deployment
 ```
 
 **Complete Configuration**

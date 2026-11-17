@@ -45,7 +45,8 @@ HELM_CHART_VERSION ?= 24.4.1
 NGC_HELM_CHART_URL ?= https://helm.ngc.nvidia.com/nvidia/charts/network-operator-${HELM_CHART_VERSION}.tgz
 HELM_CHART_PATH ?=
 
-# Examples build directory for processed YAML files
+# Quick-start YAML rendered by hack/render-quick-start-examples.sh.
+# The pages include these files with <Code src="../../examples/processed/...">.
 EXAMPLES_BUILD_DIR = examples/processed
 
 $(BUILDDIR) $(TOOLSDIR) $(HELM_CHART_DEP_ROOT) $(CRD_API_DEP_ROOT) $(NIC_CONF_CRD_API_DEP_ROOT) $(EXAMPLES_BUILD_DIR): ; $(info Creating directory $@...)
@@ -162,33 +163,8 @@ nic-conf-docs: nic-conf-api-docs-versioned fetch-config-docs
 	@echo "Generated all NIC Configuration Operator documentation"
 
 .PHONY: process-examples
-process-examples: | $(EXAMPLES_BUILD_DIR)
-	@echo "Processing YAML examples with version substitutions..."
-	@# Generate sed script from all variables in vars.yml
-	@sed -n 's/^\([a-z0-9-]*\): "\(.*\)"$$/s@{{\1}}@\2@g/p' docs/common/vars.yml > /tmp/vars.sed
-	@find examples/templates -name "*.yaml" -type f | while read -r file; do \
-		echo "Processing $$file"; \
-		relative_path=$$(echo "$$file" | sed 's|^examples/templates/||'); \
-		output_dir="$(EXAMPLES_BUILD_DIR)/$$(dirname "$$relative_path")"; \
-		mkdir -p "$$output_dir"; \
-		sed -f /tmp/vars.sed "$$file" > "$(EXAMPLES_BUILD_DIR)/$$relative_path"; \
-	done
-	@rm -f /tmp/vars.sed
-	@echo "Generating complete configuration files..."
-	@# Generate complete.yaml files by concatenating numbered files in order
-	@find $(EXAMPLES_BUILD_DIR) -mindepth 1 -maxdepth 1 -type d | while read -r dir; do \
-		echo "Creating complete.yaml for $$(basename "$$dir")"; \
-		complete_file="$$dir/complete.yaml"; \
-		> "$$complete_file"; \
-		find "$$dir" -name "[0-9]*-*.yaml" | sort | while read -r numbered_file; do \
-			cat "$$numbered_file" >> "$$complete_file"; \
-			echo "" >> "$$complete_file"; \
-			echo "---" >> "$$complete_file"; \
-		done; \
-		if [ -s "$$complete_file" ]; then \
-			sed -i '$$d' "$$complete_file"; \
-		fi; \
-	done
+process-examples:
+	hack/render-quick-start-examples.sh $(CURDIR)/$(EXAMPLES_BUILD_DIR)
 
 .PHONY: generate-docs-versions-var
 generate-docs-versions-var: | $(BUILDDIR)
@@ -202,12 +178,13 @@ release-build: api-docs helm-docs generate-docs-versions-var nic-conf-docs proce
 
 # Fern site. Pages reference docs/common/vars.yml as {{name}} and include files
 # with <Code src>; docs-render resolves both into $(FERN_BUILD_DIR), and every
-# Fern command runs from there.
+# Fern command runs from there. Quick-start manifests are generated first so
+# the <Code src> paths under examples/processed exist before the pages are rendered.
 FERN_BUILD_DIR ?= $(CURDIR)/_build/fern
 FERN ?= npx --yes fern-api
 
 .PHONY: docs-render
-docs-render:
+docs-render: process-examples
 	python3 hack/fern/render.py --out $(FERN_BUILD_DIR)
 
 .PHONY: docs-check

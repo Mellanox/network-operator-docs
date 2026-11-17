@@ -28,10 +28,9 @@ There are two requirements for the SR-IOV Network Operator to work together with
 1. [NodeSelector](https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master/deployment/sriov-network-operator-chart#sr-iov-operator-configuration-parameters) for the SR-IOV Config Daemon should include the `network.nvidia.com/operator.nic-configuration.wait: "false"` label. It's managed by the NIC Configuration Operator and ensures that the SR-IOV Config Daemon is not started before the NIC Configuration is complete and ready.
 
 <Note>
-
+When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the [Network Operator Helm chart values](/customizations/helm#sr-iov-network-operator).
 </Note>
 
-    When the SR-IOV Network Operator is deployed via the Network Operator Helm chart, the Node Selector should be configured via the [Network Operator Helm chart values](/customizations/helm#sr-iov-network-operator).
 
   `values.yaml`:
 
@@ -55,9 +54,8 @@ There are two requirements for the SR-IOV Network Operator to work together with
 2. `mellanox` plugin [should be disabled](https://github.com/k8snetworkplumbingwg/sriov-network-operator/tree/master?tab=readme-ov-file#disabling-sr-iov-config-daemon-plugins) in the `SriovOperatorConfig` CR.
 
   ```bash
+  kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "disablePlugins": ["mellanox"]} }' --type='merge'
   ```
-
-    kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '\{ "spec": \{ "disablePlugins": ["mellanox"]\} \}' --type='merge'
 
 <Warning>
 SR-IOV Network Operator can work together with the NIC Configuration Operator only in `daemon` configuration mode. `systemd` configuration mode is not supported with this scenario.

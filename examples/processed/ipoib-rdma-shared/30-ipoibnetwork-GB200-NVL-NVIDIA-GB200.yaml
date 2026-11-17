@@ -1,0 +1,59 @@
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-rail-0-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "ibp3s0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-rail-1-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "ibP2p3s0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-rail-2-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "ibP16p3s0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
+metadata:
+  name: ipoib-network-rail-3-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "ibP18p3s0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200"
+    }

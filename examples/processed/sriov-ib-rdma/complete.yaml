@@ -2,86 +2,396 @@ apiVersion: mellanox.com/v1alpha1
 kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvstaging/mellanox
-    version: doca3.6.0-26.10-069000-0
+  nicConfigurationOperator:
+    operator:
+      image: nic-configuration-operator
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    configurationDaemon:
+      image: nic-configuration-operator-daemon
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    env:
+    - name: "FW_RESET_AFTER_CONFIG_UPDATE"
+      value: "true"
+    logLevel: info
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+
+---
+apiVersion: mellanox.com/v1alpha1
+kind: NicNodePolicy
+metadata:
+  name: "gb200-nvl-nvidia-gb200"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
 metadata:
-  name: sriov-ib-pool
-  namespace: nvidia-network-operator
+  name: nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  subnet: 192.168.6.0/24
-  perNodeBlockSize: 50
-  gateway: 192.168.6.1
+  subnet: 192.168.0.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.0.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.4.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.4.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.8.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.8.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.12.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.12.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+
+---
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicConfigurationTemplate
+metadata:
+  name: nic-configuration-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    nicType: "1021"
+    pciAddresses: ["0000:03:00.0", "0002:03:00.0", "0010:03:00.0", "0012:03:00.0"]
+  resetToDefault: false
+  template:
+    numVfs: 8
+    linkType: Infiniband
+    pciPerformanceOptimized:
+      enabled: true
+      maxReadRequest: 4096
+    gpuDirectOptimized:
+      enabled: true
+      env: Baremetal
+
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovNetworkNodePolicy
 metadata:
-  name: infiniband-sriov
-  namespace: nvidia-network-operator
+  name: infiniband-sriov-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   deviceType: netdevice
-  mtu: 1500
+  mtu: 4000
   nodeSelector:
-    feature.node.kubernetes.io/pci-15b3.present: "true"
+    nvidia.com/gpu.product: "NVIDIA-GB200"
   nicSelector:
     vendor: "15b3"
+    rootDevices:
+      - "0000:03:00.0"
   linkType: IB
   isRdma: true
   numVfs: 8
   priority: 90
-  resourceName: mlnxnics
+  resourceName: sriov_resource_rail_0
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0002:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_1
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0010:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_2
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: infiniband-sriov-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  deviceType: netdevice
+  mtu: 4000
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    vendor: "15b3"
+    rootDevices:
+      - "0012:03:00.0"
+  linkType: IB
+  isRdma: true
+  numVfs: 8
+  priority: 90
+  resourceName: sriov_resource_rail_3
+
 ---
 apiVersion: sriovnetwork.openshift.io/v1
 kind: SriovIBNetwork
 metadata:
-  name: sriov-ib-network
-  namespace: nvidia-network-operator
+  name: sriov-network-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   ipam: |
     {
       "type": "nv-ipam",
-      "poolName": "sriov-ib-pool"
+      "poolName": "nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200"
     }
-  resourceName: mlnxnics
+  resourceName: sriov_resource_rail_0
   linkState: enable
-  networkNamespace: default
+  networkNamespace: "default"
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
 metadata:
-  name: sriov-ib-test-pod
+  name: sriov-network-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
   annotations:
-    k8s.v1.cni.cncf.io/networks: sriov-ib-network
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  containers:
-  - name: test-container
-    image: mellanox/rping-test
-    command: ["/bin/bash", "-c", "sleep infinity"]
-    securityContext:
-      capabilities:
-        add: ["IPC_LOCK"]
-    resources:
-      requests:
-        nvidia.com/mlnxnics: '1'
-      limits:
-        nvidia.com/mlnxnics: '1'
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_1
+  linkState: enable
+  networkNamespace: "default"
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_2
+  linkState: enable
+  networkNamespace: "default"
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovIBNetwork
+metadata:
+  name: sriov-network-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200"
+    }
+  resourceName: sriov_resource_rail_3
+  linkState: enable
+  networkNamespace: "default"
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sriov-ib-test-gb200-nvl-nvidia-gb200
+  namespace: "default"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  selector:
+    matchLabels:
+      app: sriov-ib-test-gb200-nvl-nvidia-gb200
+  template:
+    metadata:
+      labels:
+        app: sriov-ib-test-gb200-nvl-nvidia-gb200
+      annotations:
+        k8s.v1.cni.cncf.io/networks: sriov-network-rail-0-gb200-nvl-nvidia-gb200,sriov-network-rail-1-gb200-nvl-nvidia-gb200,sriov-network-rail-2-gb200-nvl-nvidia-gb200,sriov-network-rail-3-gb200-nvl-nvidia-gb200
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - "NVIDIA-GB200"
+      containers:
+        - name: test-container
+          image: nvcr.io/nvidia/doca/doca:full-rt-cuda13.0.0-3.6.0-runtime-host
+          command: ["/bin/bash", "-c", "sleep infinity"]
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          resources:
+            requests:
+              nvidia.com/sriov_resource_rail_0: '1'
+              nvidia.com/sriov_resource_rail_1: '1'
+              nvidia.com/sriov_resource_rail_2: '1'
+              nvidia.com/sriov_resource_rail_3: '1'
+            limits:
+              nvidia.com/sriov_resource_rail_0: '1'
+              nvidia.com/sriov_resource_rail_1: '1'
+              nvidia.com/sriov_resource_rail_2: '1'
+              nvidia.com/sriov_resource_rail_3: '1'
+        - name: netshoot
+          image: nicolaka/netshoot:latest
+          command: ["/bin/bash", "-c", "trap 'exit 0' TERM INT; while true; do while wait -n 2>/dev/null; do :; done; sleep 1 & wait $! || true; done"]
+          securityContext:
+            capabilities:
+              add: ["NET_RAW"]

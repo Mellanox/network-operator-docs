@@ -8,95 +8,115 @@ title: "Deploy SR-IOV Network with RDMA"
 */}
 
 <Note>
-You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
-For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+These manifests are the Kubernetes Launch Kit render for preset `PowerEdge-XE9680-H200` and release catalog `26.10` (`v26.10.0` component images on `nvcr.io/nvidia/mellanox`). The staging coordinates in `docs/common/vars.yml` are a separate release record. Multirail stays at the Launch Kit default, so each east-west rail is its own document in the pool, policy, and network files. Install the Network Operator chart before applying these custom resources. Helm `values.yaml` is omitted.
+
+```bash
+l8k generate \
+  --for PowerEdge-XE9680-H200 \
+  --node-selector "nvidia.com/gpu.product=NVIDIA-H200" \
+  --network-operator-release 26.10 \
+  --fabric ethernet \
+  --deployment-type sriov \
+  --skip-network-operator-helm \
+  --save-deployment-files ./deployment
+```
+
+For the Launch Kit discover, deploy, and validate flow, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
 </Note>
+
+Apply the numbered files under `deployment/network-operator/` in filename order.
 
 **Step 1**: Create NicClusterPolicy
 
 <Code src="../../examples/processed/sriov-network-rdma/10-nicclusterpolicy.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f nicclusterpolicy.yaml
+kubectl apply -f 10-nicclusterpolicy.yaml
 ```
 
-**Step 2**: Create IPPool for nv-ipam
+**Step 2**: Create NicNodePolicy
 
-<Code src="../../examples/processed/sriov-network-rdma/20-ippool.yaml" language="yaml" />
+<Code src="../../examples/processed/sriov-network-rdma/11-nicnodepolicy-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f ippool.yaml
+kubectl apply -f 11-nicnodepolicy-PowerEdge-XE9680-H200.yaml
 ```
 
-**Step 3**: Configure SR-IOV
+**Step 3**: Create IPPool resources for nv-ipam
 
-<Code src="../../examples/processed/sriov-network-rdma/30-sriovnetworknodepolicy.yaml" language="yaml" />
+<Code src="../../examples/processed/sriov-network-rdma/20-ippool-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f sriovnetworknodepolicy.yaml
+kubectl apply -f 20-ippool-PowerEdge-XE9680-H200.yaml
 ```
 
-**Step 4**: Create SR-IOV Network
+**Step 4**: Prepare the SR-IOV operator for NIC configuration
 
-<Code src="../../examples/processed/sriov-network-rdma/40-sriovnetwork.yaml" language="yaml" />
+This example applies a `NicConfigurationTemplate` and a `SriovNetworkNodePolicy`. The [Quick Start Helm install](/quick-start/quick-start-k8s#install-network-operator-helm-chart) only enables the SR-IOV operator. Apply both settings below before the template. Otherwise the SR-IOV config daemon and the NIC Configuration Operator change the same NIC at the same time.
+
+Upgrade the chart so the config daemon waits until NIC configuration finishes, and enable the Maintenance Operator that the NIC Configuration Operator uses:
 
 ```bash
-kubectl apply -f sriovnetwork.yaml
+helm upgrade network-operator nvidia/network-operator \
+  -n nvidia-network-operator \
+  --reuse-values \
+  --version {{network-operator-version}} \
+  --set maintenanceOperator.enabled=true \
+  --set-json 'sriov-network-operator.sriovOperatorConfig.configDaemonNodeSelector={"beta.kubernetes.io/os":"linux","network.nvidia.com/operator.mofed.wait":"false","network.nvidia.com/operator.nic-configuration.wait":"false"}'
 ```
 
-**Step 5**: Deploy test workload
-
-<Code src="../../examples/processed/sriov-network-rdma/50-pod.yaml" language="yaml" />
+Disable the SR-IOV Network Operator `mellanox` plugin:
 
 ```bash
-kubectl apply -f pod.yaml
+kubectl patch sriovoperatorconfigs.sriovnetwork.openshift.io -n nvidia-network-operator default --patch '{ "spec": { "disablePlugins": ["mellanox"]} }' --type='merge'
 ```
 
-**Step 6**: Verify the deployment
+The full requirements are in [Use of NIC Configuration Operator together with SR-IOV Network Operator](/nic-conf-operator/nic-fw-configuration#use-of-nic-configuration-operator-together-with-sr-iov-network-operator).
 
-Check that the pods are running on different nodes:
+**Step 5**: Create the NIC configuration template
+
+<Code src="../../examples/processed/sriov-network-rdma/30-nicconfigurationtemplate-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl get pods -n default -o wide
+kubectl apply -f 30-nicconfigurationtemplate-PowerEdge-XE9680-H200.yaml
 ```
 
-Verify RDMA devices are available in the pods:
+**Step 6**: Configure SR-IOV
+
+<Code src="../../examples/processed/sriov-network-rdma/40-sriovnetworknodepolicy-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl -n default exec sriov-rdma-server -- ibv_devices
-kubectl -n default exec sriov-rdma-client -- ibv_devices
+kubectl apply -f 40-sriovnetworknodepolicy-PowerEdge-XE9680-H200.yaml
 ```
 
-Capture the server IP and RDMA device names in environment variables:
+**Step 7**: Create the SR-IOV networks
+
+<Code src="../../examples/processed/sriov-network-rdma/50-sriovnetwork-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-export SERVER_IP=$(kubectl get pod sriov-rdma-server -n default -o jsonpath='{.metadata.annotations.k8s\.v1\.cni\.cncf\.io/network-status}' | jq -r '.[] | select(.name=="default/sriov-rdma-network") | .ips[0]')
-export SERVER_RDMA_DEV=$(kubectl -n default exec sriov-rdma-server -- ibv_devices | awk 'NR==3 {print $1}')
-export CLIENT_RDMA_DEV=$(kubectl -n default exec sriov-rdma-client -- ibv_devices | awk 'NR==3 {print $1}')
-
-echo "Server IP: $SERVER_IP"
-echo "Server RDMA Device: $SERVER_RDMA_DEV"
-echo "Client RDMA Device: $CLIENT_RDMA_DEV"
+kubectl apply -f 50-sriovnetwork-PowerEdge-XE9680-H200.yaml
 ```
 
-**Step 7**: Test RDMA connectivity
+**Step 8**: Deploy the example DaemonSet
 
-Start the RDMA bandwidth test server:
+<Code src="../../examples/processed/sriov-network-rdma/60-example-daemonset-PowerEdge-XE9680-H200.yaml" language="yaml" />
 
 ```bash
-kubectl -n default exec -it sriov-rdma-server -- bash -lc "ib_write_bw -d $SERVER_RDMA_DEV -R -a --report_gbits"
+kubectl apply -f 60-example-daemonset-PowerEdge-XE9680-H200.yaml
 ```
 
-In a separate terminal, run the RDMA bandwidth test client:
+**Step 9**: Verify the deployment
 
 ```bash
-kubectl -n default exec -it sriov-rdma-client -- bash -lc "ib_write_bw -d $CLIENT_RDMA_DEV -R -a --report_gbits $SERVER_IP"
+kubectl -n default get daemonset sriov-test-poweredge-xe9680-h200
+kubectl -n default get pods -l app=sriov-test-poweredge-xe9680-h200
 ```
 
-<Note>
-The commands above automatically use the first available RDMA device from each pod.
-If you need to use a different device, manually set the environment variables or replace them in the command.
-</Note>
+Run connectivity checks with the same bundle:
+
+```bash
+l8k validate --deployment-files ./deployment
+```
 
 **Complete Configuration**
 

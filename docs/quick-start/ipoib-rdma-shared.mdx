@@ -8,53 +8,95 @@ title: "Deploy IP over InfiniBand with RDMA Shared Device"
 */}
 
 <Note>
-You can automate the configuration of this use case with NVIDIA Kubernetes Launch Kit.
-For more details, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
+These manifests are the Kubernetes Launch Kit render for preset `GB200-NVL-NVIDIA-GB200` and release catalog `26.10` (`v26.10.0` component images on `nvcr.io/nvidia/mellanox`). East-west adapters on this preset are ConnectX-7 (`nicType` `1021`), which supports InfiniBand. BlueField-3 SuperNIC (`a2dc`) is Ethernet-only. The staging coordinates in `docs/common/vars.yml` are a separate release record. Multirail stays at the Launch Kit default, so each east-west rail is its own document in the pool and network files. Install the Network Operator chart before applying these custom resources. Helm `values.yaml` is omitted.
+
+```bash
+l8k generate \
+  --for GB200-NVL-NVIDIA-GB200 \
+  --node-selector "nvidia.com/gpu.product=NVIDIA-GB200" \
+  --network-operator-release 26.10 \
+  --fabric infiniband \
+  --deployment-type rdma_shared \
+  --skip-network-operator-helm \
+  --save-deployment-files ./deployment
+```
+
+For the Launch Kit discover, deploy, and validate flow, see [Configuration Assistance with Kubernetes Launch Kit](/k8s-launch-kit/k8s-launch-kit).
 </Note>
 
-**Step 1**: Create NicClusterPolicy with IPoIB support and 3 RDMA shared device pools
+Apply the numbered files under `deployment/network-operator/` in filename order.
+
+**Step 1**: Create NicClusterPolicy
 
 <Code src="../../examples/processed/ipoib-rdma-shared/10-nicclusterpolicy.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f nicclusterpolicy.yaml
+kubectl apply -f 10-nicclusterpolicy.yaml
 ```
 
-**Step 2**: Create IPPool CRs for nv-ipam with 3 IP pools
+**Step 2**: Create NicNodePolicy
 
-<Code src="../../examples/processed/ipoib-rdma-shared/20-ippool.yaml" language="yaml" />
+<Code src="../../examples/processed/ipoib-rdma-shared/11-nicnodepolicy-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f ippool.yaml
+kubectl apply -f 11-nicnodepolicy-GB200-NVL-NVIDIA-GB200.yaml
 ```
 
-**Step 3**: Create IPoIBNetwork CRs for 3 IPoIB networks
+**Step 3**: Create IPPool resources for nv-ipam
 
-<Code src="../../examples/processed/ipoib-rdma-shared/30-ipoibnetwork.yaml" language="yaml" />
+<Code src="../../examples/processed/ipoib-rdma-shared/20-ippool-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f ipoibnetwork.yaml
+kubectl apply -f 20-ippool-GB200-NVL-NVIDIA-GB200.yaml
 ```
 
-**Step 4**: Deploy test workloads for 3 IPoIB networks
+**Step 4**: Create IPoIBNetwork resources
 
-<Code src="../../examples/processed/ipoib-rdma-shared/40-pod.yaml" language="yaml" />
+<Code src="../../examples/processed/ipoib-rdma-shared/30-ipoibnetwork-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
 
 ```bash
-kubectl apply -f pod.yaml
+kubectl apply -f 30-ipoibnetwork-GB200-NVL-NVIDIA-GB200.yaml
 ```
 
-Verify the deployment:
+**Step 5**: Enable the Maintenance Operator
+
+This example applies a `NicConfigurationTemplate`. The [Quick Start Helm install](/quick-start/quick-start-k8s#install-network-operator-helm-chart) leaves `maintenanceOperator.enabled` at its default `false`. Enable it before the template. NIC configuration changes that require node maintenance cannot finish without it.
 
 ```bash
-kubectl exec -it ipoib-test-pod-a -- ibstat
-kubectl exec -it ipoib-test-pod-a -- ip addr show
+helm upgrade network-operator nvidia/network-operator \
+  -n nvidia-network-operator \
+  --reuse-values \
+  --version {{network-operator-version}} \
+  --set maintenanceOperator.enabled=true
+```
 
-kubectl exec -it ipoib-test-pod-b -- ibstat
-kubectl exec -it ipoib-test-pod-b -- ip addr show
+**Step 6**: Create the NIC configuration template
 
-kubectl exec -it ipoib-test-pod-c -- ibstat
-kubectl exec -it ipoib-test-pod-c -- ip addr show
+<Code src="../../examples/processed/ipoib-rdma-shared/30-nicconfigurationtemplate-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 30-nicconfigurationtemplate-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 7**: Deploy the example DaemonSet
+
+<Code src="../../examples/processed/ipoib-rdma-shared/40-example-daemonset-GB200-NVL-NVIDIA-GB200.yaml" language="yaml" />
+
+```bash
+kubectl apply -f 40-example-daemonset-GB200-NVL-NVIDIA-GB200.yaml
+```
+
+**Step 8**: Verify the deployment
+
+```bash
+kubectl -n default get daemonset ipoib-test-gb200-nvl-nvidia-gb200
+kubectl -n default get pods -l app=ipoib-test-gb200-nvl-nvidia-gb200
+```
+
+Run connectivity checks with the same bundle:
+
+```bash
+l8k validate --deployment-files ./deployment
 ```
 
 **Complete Configuration**

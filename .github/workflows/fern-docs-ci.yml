@@ -40,7 +40,7 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ] && \
              ! git diff --name-only --no-renames HEAD^1 HEAD \
-               | grep -qE '^(docs/|fern/|examples/|hack/fern/|Makefile$|\.github/workflows/fern-docs-ci\.yml$)'; then
+               | grep -qE '^(docs/|fern/|examples/|hack/fern/|hack/render-quick-start-examples\.sh$|Makefile$|\.github/workflows/fern-docs-ci\.yml$)'; then
             echo "docs=false" >> "$GITHUB_OUTPUT"
             echo "No docs-related changes; skipping Fern validation."
           else

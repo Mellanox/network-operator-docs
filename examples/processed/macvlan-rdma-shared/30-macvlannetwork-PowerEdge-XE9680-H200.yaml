@@ -1,0 +1,199 @@
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-0-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth2"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-0-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-1-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth3"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-1-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-2-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth4"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-2-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-3-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth5"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-4-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth6"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-4-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-5-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth9"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-5-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-6-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth10"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-6-poweredge-xe9680-h200"
+    }
+---
+apiVersion: mellanox.com/v1alpha1
+kind: MacvlanNetwork
+metadata:
+  name: macvlan-network-rail-7-poweredge-xe9680-h200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  networkNamespace: "default"
+  master: "eth11"
+  mode: "bridge"
+  # mtu: 0 → inherit master PF's MTU. The macvlan CNI enforces
+  # child.MTU <= master.MTU; pinning an explicit jumbo value here fails
+  # container-creation on hosts where the PF is still 1500. Unlike
+  # SR-IOV (SriovNetworkNodePolicy.spec.mtu drives the host PF), the
+  # rdma_shared / macvlan stack has no operator-driven hook to bump
+  # host PF MTU, so inheriting is the only safe default. To run jumbo
+  # frames, set the PF MTU on the host out-of-band (systemd-networkd,
+  # udev rule, NetworkManager) and pods inherit it automatically.
+  mtu: 0
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-7-poweredge-xe9680-h200"
+    }

@@ -1,0 +1,76 @@
+apiVersion: mellanox.com/v1alpha1
+kind: NicNodePolicy
+metadata:
+  name: "gb200-nvl-nvidia-gb200"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+  rdmaSharedDevicePlugin:
+    image: k8s-rdma-shared-dev-plugin
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
+    config: |
+      {
+        "configList": [
+          {
+            "resourceName": "rdma_shared_resource_rail_0",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibp3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_1",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP2p3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_2",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP16p3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_3",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP18p3s0"]
+            }
+          }
+        ]
+      }

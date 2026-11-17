@@ -15,8 +15,6 @@ title: "Heterogeneous Clusters"
 
 Each configuration shows a discovered cluster shape, the `l8k generate` invocation, and which manifests get rendered.
 
-Two Groups, Different GPUs (`--gpu-type`)
-
 ### Two Groups, Different GPUs (`--gpu-type`)
 
 A cluster with two GPU types --- H100 and H200, each on its own server SKU. `--gpu-type` filters generation to a single GPU type so a manifest set lands on exactly that subset.
@@ -54,8 +52,6 @@ l8k generate --user-config ./cluster-config.yaml \
 ```
 
 Drop `--gpu-type` to render manifests covering **both** GPU types: the generator emits a separate per-GPU bundle (each with its own `NicNodePolicy`, `SriovNetworkNodePolicy`, and `SriovNetwork`) keyed off the `nvidia.kubernetes-launch-kit.gpu` label. The single `NicClusterPolicy` is shared.
-
-Three Groups, Same GPU, Different Servers (`--groups`)
 
 ### Three Groups, Same GPU, Different Servers (`--groups`)
 
@@ -98,8 +94,6 @@ l8k generate --user-config ./cluster-config.yaml \
 ```
 
 Same GPU + identical east-west rail count = one bucket. Per-source `NicNodePolicy` CRs use the `nvidia.kubernetes-launch-kit.machine` label; the bucket-level `IPPool` uses an `In` selector over the source labels (or the shared `.gpu` label when not filtered). The `SriovNetwork` references a single shared `resourceName` that all three NodePolicies register, so any pod scheduled on any of the six nodes gets a VF.
-
-Mixed Cluster (`--gpu-type` and `--groups` Together)
 
 ### Mixed Cluster (`--gpu-type` and `--groups` Together)
 

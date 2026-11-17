@@ -2,57 +2,38 @@ apiVersion: mellanox.com/v1alpha1
 kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvstaging/mellanox
-    version: doca3.6.0-26.10-069000-0
-  rdmaSharedDevicePlugin:
-    image: k8s-rdma-shared-dev-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
-    config: |
-      {
-        "configList": [
-          {
-            "resourceName": "rdma_shared_device_a",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs1f0"]
-            }
-          },
-          {
-            "resourceName": "rdma_shared_device_b",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs1f1"]
-            }
-          },
-          {
-            "resourceName": "rdma_shared_device_c",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs2f0"]
-            }
-          }
-        ]
-      }
+  nicConfigurationOperator:
+    operator:
+      image: nic-configuration-operator
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    configurationDaemon:
+      image: nic-configuration-operator-daemon
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    env:
+    - name: "FW_RESET_AFTER_CONFIG_UPDATE"
+      value: "true"
+    logLevel: info
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     ipoib:
       image: ipoib-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"

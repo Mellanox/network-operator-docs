@@ -1,0 +1,23 @@
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicConfigurationTemplate
+metadata:
+  name: nic-configuration-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    nicType: "1021"
+    pciAddresses: ["0000:03:00.0", "0002:03:00.0", "0010:03:00.0", "0012:03:00.0"]
+  resetToDefault: false
+  template:
+    numVfs: 8
+    linkType: Infiniband
+    pciPerformanceOptimized:
+      enabled: true
+      maxReadRequest: 4096
+    gpuDirectOptimized:
+      enabled: true
+      env: Baremetal

@@ -498,26 +498,25 @@ The status upgrade of each node is reflected in its nvidia.com/ofed-driver-upgra
 <Warning title="Depending on your cluster workloads and pod Disruption Budget, set the following values for auto upgrade:">
 
 ```yaml
+apiVersion: mellanox.com/v1alpha1
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+  namespace: nvidia-network-operator
+spec:
+  ofedDriver:
+    image: doca-driver
+    repository: {{doca-driver-repository}}
+    version: {{doca-driver-version}}
+    upgradePolicy:
+      autoUpgrade: true
+      maxParallelUpgrades: 1
+      drain:
+        enable: true
+        force: false
+        deleteEmptyDir: true
+        podSelector: ""
 ```
-
-  apiVersion: mellanox.com/v1alpha1
-  kind: NicClusterPolicy
-  metadata:
-    name: nic-cluster-policy
-    namespace: nvidia-network-operator
-  spec:
-    ofedDriver:
-      image: doca-driver
-      repository: {{doca-driver-repository}}
-      version: {{doca-driver-version}}
-      upgradePolicy:
-        autoUpgrade: true
-        maxParallelUpgrades: 1
-        drain:
-          enable: true
-          force: false
-          deleteEmptyDir: true
-          podSelector: ""
 </Warning>
 
 #### Upgrade modes
@@ -698,43 +697,38 @@ From the CLI:
   * Check the current version of the Network Operator in the currentCSV field:
 
     ```bash
+    oc get subscription -n nvidia-network-operator nvidia-network-operator -o yaml | grep currentCSV
     ```
-
-      oc get subscription -n nvidia-network-operator nvidia-network-operator -o yaml | grep currentCSV
 
     Example output:
 
     ```bash
+    currentCSV: nvidia-network-operator.v24.1.0
     ```
 
-      currentCSV: nvidia-network-operator.v24.1.0
   * Delete the subscription:
 
     ```bash
+    oc delete subscription -n nvidia-network-operator nvidia-network-operator
     ```
-
-      oc delete subscription -n nvidia-network-operator nvidia-network-operator
 
     Example output:
 
     ```bash
+    subscription.operators.coreos.com "nvidia-network-operator" deleted
     ```
-
-      subscription.operators.coreos.com "nvidia-network-operator" deleted
 
   * Delete the CSV using the currentCSV value from the previous step:
 
     ```bash
+    subscription.operators.coreos.com "nvidia-network-operator" deleted
     ```
-
-      subscription.operators.coreos.com "nvidia-network-operator" deleted
 
     Example output:
 
     ```bash
+    clusterserviceversion.operators.coreos.com "nvidia-network-operator.v10.0" deleted
     ```
-
-      clusterserviceversion.operators.coreos.com "nvidia-network-operator.v10.0" deleted
 
 The SR-IOV Network Operator uninstallation procedure is described in this document. For additional information, see the [Red Hat OpenShift Container Platform Documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/operators/administrator-tasks#olm-deleting-operators-from-a-cluster).
 

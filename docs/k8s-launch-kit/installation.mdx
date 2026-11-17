@@ -30,7 +30,8 @@ curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/
 Pin a specific version or install to a custom directory:
 
 ```bash
-L8K_VERSION=v1.0.0 sh scripts/install.sh
+curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh -o install-l8k.sh
+L8K_VERSION={{k8s-launch-kit-version}} sh install-l8k.sh
 curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh | sh -s -- -d ~/local
 ```
 
@@ -57,6 +58,7 @@ Define a shell alias so `l8k` invokes the container with kubeconfig + working di
 
 ```bash
 alias l8k='docker run --rm --net=host \
+    -e KUBECONFIG=/kube/config \
     -v ~/.kube:/kube:ro \
     -v $(pwd):/work -w /work \
     {{k8s-launch-kit-repository}}/k8s-launch-kit:{{k8s-launch-kit-version}}'

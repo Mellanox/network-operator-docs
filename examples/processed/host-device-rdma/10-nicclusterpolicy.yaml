@@ -2,36 +2,142 @@ apiVersion: mellanox.com/v1alpha1
 kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  sriovDevicePlugin:
-    image: sriov-network-device-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
-    config: |
-      {
-        "resourceList": [
-          {
-            "resourcePrefix": "nvidia.com",
-            "resourceName": "hostdev",
-            "selectors": {
-              "vendors": ["15b3"],
-              "isRdma": true
-            }
-          }
-        ]
-      }
+  nicConfigurationOperator:
+    operator:
+      image: nic-configuration-operator
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    configurationDaemon:
+      image: nic-configuration-operator-daemon
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    logLevel: info
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+  sriovDevicePlugin:
+    image: sriov-network-device-plugin
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
+    config: |
+      {
+        "resourceList": [
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_0",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:1a:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_1",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:3c:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_2",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:4d:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_3",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:5e:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_4",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:9c:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_5",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:bc:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_6",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:cc:00.0"],
+              "isRdma": true
+            }
+          },
+          {
+            "resourcePrefix": "nvidia.com",
+            "resourceName": "hostdev_resource_rail_7",
+            "selectors": {
+              "vendors": ["15b3"],
+              "pciAddresses": ["0000:dc:00.0"],
+              "isRdma": true
+            }
+          }
+        ]
+      }

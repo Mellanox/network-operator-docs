@@ -2,186 +2,336 @@ apiVersion: mellanox.com/v1alpha1
 kind: NicClusterPolicy
 metadata:
   name: nic-cluster-policy
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  ofedDriver:
-    image: doca-driver
-    repository: nvcr.io/nvstaging/mellanox
-    version: doca3.6.0-26.10-069000-0
-  rdmaSharedDevicePlugin:
-    image: k8s-rdma-shared-dev-plugin
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
-    config: |
-      {
-        "configList": [
-          {
-            "resourceName": "rdma_shared_device_a",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs1f0"]
-            }
-          },
-          {
-            "resourceName": "rdma_shared_device_b",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs1f1"]
-            }
-          },
-          {
-            "resourceName": "rdma_shared_device_c",
-            "rdmaHcaMax": 63,
-            "selectors": {
-              "ifNames": ["ibs2f0"]
-            }
-          }
-        ]
-      }
+  nicConfigurationOperator:
+    operator:
+      image: nic-configuration-operator
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    configurationDaemon:
+      image: nic-configuration-operator-daemon
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+    env:
+    - name: "FW_RESET_AFTER_CONFIG_UPDATE"
+      value: "true"
+    logLevel: info
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: nvcr.io/nvstaging/mellanox
-    version: network-operator-v26.10.0-rc.6
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     multus:
       image: multus-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
     ipoib:
       image: ipoib-cni
-      repository: nvcr.io/nvstaging/mellanox
-      version: network-operator-v26.10.0-rc.6
+      repository: "nvcr.io/nvidia/mellanox"
+      version: "network-operator-v26.10.0"
+
+---
+apiVersion: mellanox.com/v1alpha1
+kind: NicNodePolicy
+metadata:
+  name: "gb200-nvl-nvidia-gb200"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  ofedDriver:
+    image: doca-driver
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "doca3.6.0-26.10-070000-1"
+    env:
+      - name: UNLOAD_STORAGE_MODULES
+        value: "true"
+      - name: ENABLE_NFSRDMA
+        value: "false"
+      - name: UNLOAD_THIRD_PARTY_RDMA_MODULES
+        value: "true"
+      - name: SKIP_PREFLIGHT_CHECKS
+        value: "false"
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: true
+        enable: true
+        force: true
+        timeoutSeconds: 300
+      maxParallelUpgrades: 4
+    startupProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 30
+    readinessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 30
+  rdmaSharedDevicePlugin:
+    image: k8s-rdma-shared-dev-plugin
+    repository: "nvcr.io/nvidia/mellanox"
+    version: "network-operator-v26.10.0"
+    config: |
+      {
+        "configList": [
+          {
+            "resourceName": "rdma_shared_resource_rail_0",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibp3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_1",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP2p3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_2",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP16p3s0"]
+            }
+          },
+          {
+            "resourceName": "rdma_shared_resource_rail_3",
+            "rdmaHcaMax": 63,
+            "selectors": {
+              "ifNames": ["ibP18p3s0"]
+            }
+          }
+        ]
+      }
+
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
 metadata:
-  name: ipoib-pool-a
-  namespace: nvidia-network-operator
+  name: nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  subnet: 192.168.5.0/24
-  perNodeBlockSize: 50
-  gateway: 192.168.5.1
+  subnet: 192.168.0.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.0.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
 metadata:
-  name: ipoib-pool-b
-  namespace: nvidia-network-operator
+  name: nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  subnet: 192.168.6.0/24
-  perNodeBlockSize: 50
-  gateway: 192.168.6.1
+  subnet: 192.168.4.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.4.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
 ---
 apiVersion: nv-ipam.nvidia.com/v1alpha1
 kind: IPPool
 metadata:
-  name: ipoib-pool-c
-  namespace: nvidia-network-operator
+  name: nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  subnet: 192.168.7.0/24
-  perNodeBlockSize: 50
-  gateway: 192.168.7.1
+  subnet: 192.168.8.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.8.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+---
+apiVersion: nv-ipam.nvidia.com/v1alpha1
+kind: IPPool
+metadata:
+  name: nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
+  annotations:
+    nvidia.kubernetes-launch-kit.source-groups: "[\"gb200-nvl-nvidia-gb200\"]"
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  subnet: 192.168.12.0/22
+  perNodeBlockSize: 10
+  gateway: 192.168.12.1
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: nvidia.com/gpu.product
+            operator: In
+            values:
+              - "NVIDIA-GB200"
+
 ---
 apiVersion: mellanox.com/v1alpha1
 kind: IPoIBNetwork
 metadata:
-  name: ipoib-network-a
+  name: ipoib-network-rail-0-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   networkNamespace: "default"
-  master: "ibs1f0"
+  master: "ibp3s0"
   ipam: |
     {
       "type": "nv-ipam",
-      "poolName": "ipoib-pool-a"
+      "poolName": "nv-ipam-pool-rail-0-gb200-nvl-nvidia-gb200"
     }
 ---
 apiVersion: mellanox.com/v1alpha1
 kind: IPoIBNetwork
 metadata:
-  name: ipoib-network-b
+  name: ipoib-network-rail-1-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   networkNamespace: "default"
-  master: "ibs1f1"
+  master: "ibP2p3s0"
   ipam: |
     {
       "type": "nv-ipam",
-      "poolName": "ipoib-pool-b"
+      "poolName": "nv-ipam-pool-rail-1-gb200-nvl-nvidia-gb200"
     }
 ---
 apiVersion: mellanox.com/v1alpha1
 kind: IPoIBNetwork
 metadata:
-  name: ipoib-network-c
+  name: ipoib-network-rail-2-gb200-nvl-nvidia-gb200
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
   networkNamespace: "default"
-  master: "ibs2f0"
+  master: "ibP16p3s0"
   ipam: |
     {
       "type": "nv-ipam",
-      "poolName": "ipoib-pool-c"
+      "poolName": "nv-ipam-pool-rail-2-gb200-nvl-nvidia-gb200"
     }
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: mellanox.com/v1alpha1
+kind: IPoIBNetwork
 metadata:
-  name: ipoib-test-pod-a
+  name: ipoib-network-rail-3-gb200-nvl-nvidia-gb200
   annotations:
-    k8s.v1.cni.cncf.io/networks: ipoib-network-a
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  containers:
-  - name: test-container
-    image: mellanox/rping-test
-    command: ["/bin/bash", "-c", "sleep infinity"]
-    securityContext:
-      capabilities:
-        add: ["IPC_LOCK"]
-    resources:
-      requests:
-        rdma/rdma_shared_device_a: 1
-      limits:
-        rdma/rdma_shared_device_a: 1
+  networkNamespace: "default"
+  master: "ibP18p3s0"
+  ipam: |
+    {
+      "type": "nv-ipam",
+      "poolName": "nv-ipam-pool-rail-3-gb200-nvl-nvidia-gb200"
+    }
+
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicConfigurationTemplate
 metadata:
-  name: ipoib-test-pod-b
+  name: nic-configuration-gb200-nvl-nvidia-gb200
+  namespace: "nvidia-network-operator"
   annotations:
-    k8s.v1.cni.cncf.io/networks: ipoib-network-b
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  containers:
-  - name: test-container
-    image: mellanox/rping-test
-    command: ["/bin/bash", "-c", "sleep infinity"]
-    securityContext:
-      capabilities:
-        add: ["IPC_LOCK"]
-    resources:
-      requests:
-        rdma/rdma_shared_device_b: 1
-      limits:
-        rdma/rdma_shared_device_b: 1
+  nodeSelector:
+    nvidia.com/gpu.product: "NVIDIA-GB200"
+  nicSelector:
+    nicType: "1021"
+    pciAddresses: ["0000:03:00.0", "0002:03:00.0", "0010:03:00.0", "0012:03:00.0"]
+  resetToDefault: false
+  template:
+    numVfs: 8
+    linkType: Infiniband
+    pciPerformanceOptimized:
+      enabled: true
+      maxReadRequest: 4096
+    gpuDirectOptimized:
+      enabled: true
+      env: Baremetal
+
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
-  name: ipoib-test-pod-c
+  name: ipoib-test-gb200-nvl-nvidia-gb200
+  namespace: "default"
   annotations:
-    k8s.v1.cni.cncf.io/networks: ipoib-network-c
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
 spec:
-  containers:
-  - name: test-container
-    image: mellanox/rping-test
-    command: ["/bin/bash", "-c", "sleep infinity"]
-    securityContext:
-      capabilities:
-        add: ["IPC_LOCK"]
-    resources:
-      requests:
-        rdma/rdma_shared_device_c: 1
-      limits:
-        rdma/rdma_shared_device_c: 1
+  selector:
+    matchLabels:
+      app: ipoib-test-gb200-nvl-nvidia-gb200
+  template:
+    metadata:
+      labels:
+        app: ipoib-test-gb200-nvl-nvidia-gb200
+      annotations:
+        k8s.v1.cni.cncf.io/networks: ipoib-network-rail-0-gb200-nvl-nvidia-gb200,ipoib-network-rail-1-gb200-nvl-nvidia-gb200,ipoib-network-rail-2-gb200-nvl-nvidia-gb200,ipoib-network-rail-3-gb200-nvl-nvidia-gb200
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - "NVIDIA-GB200"
+      containers:
+        - name: test-container
+          image: nvcr.io/nvidia/doca/doca:full-rt-cuda13.0.0-3.6.0-runtime-host
+          command: ["/bin/bash", "-c", "sleep infinity"]
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          resources:
+            requests:
+              rdma/rdma_shared_resource_rail_0: 1
+              rdma/rdma_shared_resource_rail_1: 1
+              rdma/rdma_shared_resource_rail_2: 1
+              rdma/rdma_shared_resource_rail_3: 1
+            limits:
+              rdma/rdma_shared_resource_rail_0: 1
+              rdma/rdma_shared_resource_rail_1: 1
+              rdma/rdma_shared_resource_rail_2: 1
+              rdma/rdma_shared_resource_rail_3: 1
+        - name: netshoot
+          image: nicolaka/netshoot:latest
+          command: ["/bin/bash", "-c", "trap 'exit 0' TERM INT; while true; do while wait -n 2>/dev/null; do :; done; sleep 1 & wait $! || true; done"]
+          securityContext:
+            capabilities:
+              add: ["NET_RAW"]

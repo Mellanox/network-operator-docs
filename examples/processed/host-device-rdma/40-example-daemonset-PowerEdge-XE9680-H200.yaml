@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hostdev-test-poweredge-xe9680-h200
+  namespace: "default"
+  annotations:
+    nvidia.kubernetes-launch-kit.version: "v26.10.0"
+spec:
+  selector:
+    matchLabels:
+      app: hostdev-test-poweredge-xe9680-h200
+  template:
+    metadata:
+      labels:
+        app: hostdev-test-poweredge-xe9680-h200
+      annotations:
+        k8s.v1.cni.cncf.io/networks: hostdev-network-rail-0-poweredge-xe9680-h200,hostdev-network-rail-1-poweredge-xe9680-h200,hostdev-network-rail-2-poweredge-xe9680-h200,hostdev-network-rail-3-poweredge-xe9680-h200,hostdev-network-rail-4-poweredge-xe9680-h200,hostdev-network-rail-5-poweredge-xe9680-h200,hostdev-network-rail-6-poweredge-xe9680-h200,hostdev-network-rail-7-poweredge-xe9680-h200
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: nvidia.com/gpu.product
+                    operator: In
+                    values:
+                      - "NVIDIA-H200"
+      containers:
+        - name: test-container
+          image: nvcr.io/nvidia/doca/doca:full-rt-cuda13.0.0-3.6.0-runtime-host
+          command: ["/bin/bash", "-c", "sleep infinity"]
+          securityContext:
+            capabilities:
+              add: ["IPC_LOCK"]
+          resources:
+            requests:
+              nvidia.com/hostdev_resource_rail_0: '1'
+              nvidia.com/hostdev_resource_rail_1: '1'
+              nvidia.com/hostdev_resource_rail_2: '1'
+              nvidia.com/hostdev_resource_rail_3: '1'
+              nvidia.com/hostdev_resource_rail_4: '1'
+              nvidia.com/hostdev_resource_rail_5: '1'
+              nvidia.com/hostdev_resource_rail_6: '1'
+              nvidia.com/hostdev_resource_rail_7: '1'
+            limits:
+              nvidia.com/hostdev_resource_rail_0: '1'
+              nvidia.com/hostdev_resource_rail_1: '1'
+              nvidia.com/hostdev_resource_rail_2: '1'
+              nvidia.com/hostdev_resource_rail_3: '1'
+              nvidia.com/hostdev_resource_rail_4: '1'
+              nvidia.com/hostdev_resource_rail_5: '1'
+              nvidia.com/hostdev_resource_rail_6: '1'
+              nvidia.com/hostdev_resource_rail_7: '1'
+        - name: netshoot
+          image: nicolaka/netshoot:latest
+          command: ["/bin/bash", "-c", "trap 'exit 0' TERM INT; while true; do while wait -n 2>/dev/null; do :; done; sleep 1 & wait $! || true; done"]
+          securityContext:
+            capabilities:
+              add: ["NET_RAW"]
