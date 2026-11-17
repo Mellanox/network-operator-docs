@@ -326,9 +326,9 @@ In case you want to use the NVIDIA DOCA OFED driver container in the disconnecte
 
 ##### Mirroring DOCA OFED Driver Container
 
-Navigate to the NVIDIA catalog and looking for the right `<os-version>`-`<architecture>` suffix tag, such as `doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64`.
+Navigate to the NVIDIA catalog and looking for the right `<os-version>`-`<architecture>` suffix tag, such as `{{doca-driver-version}}-rhel9.6-amd64`.
 
-The mirrored image must be tagged `<driver-version>-<os-version>-<architecture>`, such as `doca3.1.0-25.07-0.9.7.0-0-rhel9.6-amd64` for example.
+The mirrored image must be tagged `<driver-version>-<os-version>-<architecture>`, such as `{{doca-driver-version}}-rhel9.6-amd64` for example.
 
 Note that since OCP 4.19, the os version is now `rhel9.6` instead of `rhcos4.x`.
 
@@ -477,7 +477,7 @@ spec:
       safeLoad: false
       waitForCompletion:
         timeoutSeconds: 0
-    version: doca3.1.0-25.07-0.9.7.0-0
+    version: {{doca-driver-version}}
 ```
 
 Note: Please be sure to provide configured ConfigMaps: `repo-config` and `cert-config`.
@@ -496,11 +496,13 @@ You need to make the created image accessible in your environment (on the local 
 Working with container images is described in this [page](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/building_running_and_managing_containers/assembly_working-with-container-images_building-running-and-managing-containers#assembly_working-with-container-images_building-running-and-managing-containers).
 </Note>
 
-In order to get the sha256 of the image, you can use the following command:
+`version` must be the digest of the image in your mirror, not `{{doca-driver-version}}`. A tag and its digest are published together, so a digest copied from an older release will not match the current tag. Read it from the mirror after you push the image:
 
 ```bash
 skopeo inspect docker://mirror.air-gapped.local:5000/mellanox/doca-driver:your-tag | jq -r '.Digest'
 ```
+
+Published digests for NVIDIA's precompiled images are listed in [NVIDIA Network Operator Container Images](/advanced/images-sha256). That page is regenerated with each release.
 
 ##### Create the NIC Cluster Policy instance
 
@@ -549,7 +551,7 @@ spec:
       safeLoad: false
       waitForCompletion:
         timeoutSeconds: 0
-    version: sha256:9a831bfdf85f313b1f5749b7c9b2673bb8fff18b4ff768c9242dabaa4468e449
+    version: sha256:<digest>
 ```
 
 ### Image Pull Secrets
