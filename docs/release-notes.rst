@@ -300,6 +300,8 @@ Known Limitations
 
    * - Version
      - Description
+   * - 26.10.0
+     - | - On systems with NVLink 5 or later, GPU driver pods can prevent containerized DOCA-OFED driver updates from completing. Refer to the GPU Operator `Known Issues <https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/26.7/release-notes.html#v26-7-2-known-issues>`__ for details and the workaround
    * - 26.7.0
      - | - NVIDIA Spectrum-X Reference Architecture 2.3 requires Kubernetes 1.35 or later
        | - A Spectrum-X profile that does not include ``mlxConfig`` tuning for a given device ID applies no Spectrum-X parameters to those NICs and reports no error. Verify that the profile covers every NIC model in the cluster
