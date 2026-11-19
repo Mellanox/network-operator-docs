@@ -4,8 +4,6 @@ For official documentation, go to:
 
 https://docs.nvidia.com/networking/software/cloud-orchestration/index.html
 
-The site is built with [Fern](https://buildwithfern.com) following the
-[NVIDIA Fern guide](https://gitlab-master.nvidia.com/fern-documentation/guides/-/blob/main/README.md).
 
 ## Layout
 
