@@ -1,0 +1,230 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Adapted from the NVIDIA fern-documentation toolkit. The artifact holds the
+# site already rendered by make docs-render (fern/, docs/, preview-metadata/).
+
+# Workflow 2 of 2 for Fern doc previews.
+#
+# Triggered by workflow_run after "Preview Fern Docs: Build" completes.
+# Builds a preview with FERN_TOKEN and posts a stable :herb: comment on the PR.
+#
+# Trust model: this job runs the Fern CLI with FERN_TOKEN in its environment,
+# against fern/ content written by the PR author. Fern pages can read files
+# outside fern/ (for example a Code src path with ../), so an author who controls
+# those pages can read the runner's environment, including the token, and print
+# it on a public preview page. This job therefore runs only for pull requests
+# from branches in this repository, whose authors can already read repository
+# secrets. Pull requests from forks are not previewed.
+#
+# The artifact is still treated as untrusted data: symlinks are removed, the PR
+# number is validated as numeric and must belong to the commit and repository of
+# the triggering run, and the preview URL host is checked before use.
+#
+# Required configuration:
+# - Organization secret: FERN_TOKEN (from `fern token` for the nvidia Fern org)
+
+name: "Preview Fern Docs: Comment"
+
+on:
+  workflow_run:
+    workflows: ["Preview Fern Docs: Build"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_repository.full_name || github.repository }}-${{ github.event.workflow_run.head_branch || github.event.workflow_run.id }}
+  cancel-in-progress: true
+
+jobs:
+  # A build run can succeed without uploading an artifact (its collect job can be
+  # skipped), and a skipped job still leaves the run "success". Without this
+  # check the download step below would fail on such runs.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+    outputs:
+      has_artifact: ${{ steps.artifact.outputs.has_artifact }}
+    # head_repository is set by GitHub, not by the PR author. Fork PRs are not
+    # previewed: the Fern CLI runs with FERN_TOKEN and reads any local file a page
+    # names, so page content must come from authors with write access.
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository }}
+    steps:
+      - name: Check that the build run uploaded an artifact
+        id: artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          COUNT=$(gh api "repos/${REPO}/actions/runs/${RUN_ID}/artifacts" \
+            --jq '[.artifacts[] | select(.name == "fern-preview" and (.expired | not))] | length')
+          if [ "$COUNT" = "0" ]; then
+            echo "::notice::No fern-preview artifact on run ${RUN_ID}; skipping preview."
+            echo "has_artifact=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_artifact=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  preview:
+    needs: check
+    if: ${{ needs.check.outputs.has_artifact == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download fern sources and metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: fern-preview
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate and read PR metadata
+        id: metadata
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          RUN_HEAD_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+        run: |
+          PR_NUMBER=$(cat preview-metadata/pr_number)
+          # [[ =~ ]] matches the whole string; grep -E is per line and would let
+          # "12<newline>foo=bar" through into $GITHUB_OUTPUT.
+          if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "::error::Invalid pr_number in artifact"
+            exit 1
+          fi
+          # The artifact comes from an unprivileged run, so a number alone proves
+          # nothing. Require that the PR's head is the commit and repository that
+          # triggered this run.
+          PR_HEAD=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}" --jq '.head.sha + " " + (.head.repo.full_name // "")')
+          if [ "$PR_HEAD" != "${RUN_HEAD_SHA} ${RUN_HEAD_REPO}" ]; then
+            echo "::error::pr_number ${PR_NUMBER} does not match the run that produced the artifact"
+            exit 1
+          fi
+          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
+
+      - name: Remove symlinks from PR content
+        # A symlink in PR content could make the CLI read and upload runner files.
+        run: find fern docs -type l -delete
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Fern CLI
+        # Unpinned on purpose: the nvidia Fern org enforces the allowed CLI range.
+        run: npm install -g fern-api@latest
+
+      - name: Generate preview URL
+        id: generate-docs
+        env:
+          FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
+          PR_NUMBER: ${{ steps.metadata.outputs.pr_number }}
+        working-directory: ./fern
+        run: |
+          set -o pipefail
+          fern generate --docs --preview --id "pr-${PR_NUMBER}" 2>&1 | tee /tmp/fern-output.log
+          # Fern prints "Published docs to URL", sometimes followed by " (URL)".
+          URL=$(sed -n 's/.*Published docs to \(https:[^[:space:]]*\).*/\1/p' /tmp/fern-output.log | tail -1)
+          if [ -z "$URL" ]; then
+            echo "::error::Failed to generate preview URL. See fern output above."
+            exit 1
+          fi
+          # Compare the parsed host, not a text prefix: a prefix match accepts
+          # https://docs.buildwithfern.com:443@attacker.example/ (userinfo trick).
+          if ! python3 - "$URL" <<'PY'
+          import sys
+          from urllib.parse import urlsplit
+
+          u = urlsplit(sys.argv[1])
+          try:
+              u.port  # raises ValueError for a non-numeric or out-of-range port
+          except ValueError:
+              raise SystemExit(1)
+          ok = (
+              u.scheme == "https"
+              and u.username is None
+              and (u.hostname or "").endswith(".buildwithfern.com")
+          )
+          raise SystemExit(0 if ok else 1)
+          PY
+          then
+            echo "::error::Unexpected preview URL host (expected buildwithfern.com): ${URL}"
+            exit 1
+          fi
+          echo "preview_url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Build page links for changed MDX files
+        id: page-links
+        env:
+          PREVIEW_URL: ${{ steps.generate-docs.outputs.preview_url }}
+        run: |
+          CHANGED_FILES=""
+          if [ -f preview-metadata/changed_mdx_files ]; then
+            CHANGED_FILES=$(cat preview-metadata/changed_mdx_files)
+          fi
+
+          if [ -z "$CHANGED_FILES" ] || [ -z "$PREVIEW_URL" ]; then
+            echo "page_links=" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+
+          BASE_URL="${PREVIEW_URL%/}"
+          FILES_PARAM=$(echo "$CHANGED_FILES" | tr '\n' ',' | sed 's/,$//' \
+            | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip(), safe=',/'))")
+          RESPONSE=$(curl -sf "${PREVIEW_URL}/api/fern-docs/get-slug-for-file?files=${FILES_PARAM}" 2>/dev/null) || {
+            echo "page_links=" >> "$GITHUB_OUTPUT"; exit 0
+          }
+
+          PAGE_LINKS=$(echo "$RESPONSE" | jq -r --arg url "$BASE_URL" \
+            '.mappings[] | select(.slug != null) | "- [\(.slug)](\($url)/\(.slug))"')
+
+          if [ -n "$PAGE_LINKS" ]; then
+            { echo "page_links<<EOF"; echo "$PAGE_LINKS"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+          else
+            echo "page_links=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Post or update PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.metadata.outputs.pr_number }}
+          PREVIEW_URL: ${{ steps.generate-docs.outputs.preview_url }}
+          PAGE_LINKS: ${{ steps.page-links.outputs.page_links }}
+        run: |
+          # Build comment body
+          BODY=":herb: **Preview your docs:** <${PREVIEW_URL}>"
+          if [ -n "${PAGE_LINKS}" ]; then
+            BODY="${BODY}
+
+          Here are the markdown pages you've updated:
+          ${PAGE_LINKS}"
+          fi
+
+          # Hidden marker for upsert
+          MARKER="<!-- preview-docs -->"
+          BODY="${BODY}
+
+          ${MARKER}"
+
+          # Find existing comment with marker
+          # Match only the bot's own comment (anyone can post the marker) and page
+          # through all comments so an older one is still found.
+          COMMENT_ID=$(gh api --paginate "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | contains(\"${MARKER}\"))) | .id" | tr -d '\r' | head -1)
+
+          if [ -n "$COMMENT_ID" ]; then
+            gh api "repos/${{ github.repository }}/issues/comments/${COMMENT_ID}" \
+              -X PATCH -f body="$BODY"
+          else
+            gh api "repos/${{ github.repository }}/issues/${PR_NUMBER}/comments" \
+              -f body="$BODY"
+          fi

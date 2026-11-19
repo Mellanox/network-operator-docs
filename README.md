@@ -4,31 +4,73 @@ For official documentation, go to:
 
 https://docs.nvidia.com/networking/software/cloud-orchestration/index.html
 
+The site is built with [Fern](https://buildwithfern.com) following the
+[NVIDIA Fern guide](https://gitlab-master.nvidia.com/fern-documentation/guides/-/blob/main/README.md).
 
-Latest documentation generated from this repo:
+## Layout
 
-https://mellanox.github.io/network-operator-docs/
-
-## Build docs
-
-To generate the docs run:
-
-```bash
-./repo.sh docs
+```text
+fern/
+  fern.config.json      # Fern organization and CLI version
+  docs.yml              # Site settings, theme, versions
+  redirects.yml         # Old Sphinx *.html URLs -> Fern URLs
+  assets/               # Files the pages offer for download
+docs/
+  index.yml             # Navigation
+  common/vars.yml       # Shared variables (versions, repositories, ...)
+  images/               # Pictures referenced by the pages
+  **/*.mdx              # Pages
+hack/fern/render.py     # Resolves variables and includes into _build/fern
 ```
 
-Generated files will be under `_build/docs/nvidia_network_operator/latest/`
+## Variables
 
-## Check external links
+`docs/common/vars.yml` holds every shared value, one `name: "value"` per line.
+Reference a value from any page, including code blocks, as `{{name}}`:
 
-To check external links, run:
+```mdx
+Install Network Operator {{network-operator-version}}:
 
-```bash
-./repo.sh docs -b linkcheck
+    helm install network-operator nvidia/network-operator --version {{helm-chart-version}}
 ```
 
-Note that some links with anchors are reported as broken though they are working correctly.
+Fern does not resolve `{{name}}` itself. `make docs-render` writes the resolved
+site to `_build/fern`, and every Fern command runs from there.
+
+## Build and preview
+
+Requires Python 3 and Node.js 22.
+
+```bash
+make docs-check      # render and validate (fern check)
+make docs-preview    # render and serve on http://localhost:3000
+```
+
+While `docs-preview` is running, run `make docs-render` again to pick up edits.
+The NVIDIA theme is applied only when you are logged in (`npx fern-api login`) or
+`FERN_TOKEN` is set.
+
+## Callouts and other components
+
+| reStructuredText | Fern MDX |
+| --- | --- |
+| `.. note::` | `<Note>...</Note>` |
+| `.. warning::` | `<Warning>...</Warning>` |
+| `\|name\|` with `.. \|name\| replace::` | `{{name}}` with `docs/common/vars.yml` |
+| `.. list-table::` | a Markdown table |
+| `:doc:` / `:ref:` | `[text](/path/to/page#anchor)` |
+| `:download:` | `<Download src="../fern/assets/...">text</Download>` |
+
+## Publishing
+
+- Pull requests run `fern check` and, for branches in this repository, post a
+  preview link (`fern-docs-ci.yml`, `fern-docs-preview-*.yml`).
+- Push a `docs/v*` tag, or run the "Publish Fern Docs" workflow, to publish
+  (`publish-fern-docs.yml`).
+
+Both preview and publish need the `FERN_TOKEN` repository secret.
 
 ## Version update
 
-In order to update the doc version, update components versions in `docs/common/vars.rst` and release version in `repo.toml` under `[repo_docs]`.
+Edit the values in `docs/common/vars.yml`; every page picks them up on the next
+`make docs-render`.
