@@ -1,7 +1,6 @@
 # Package related
 TOOLSDIR=$(CURDIR)/hack/tools/bin
 BUILDDIR=$(CURDIR)/build/_output
-CACHE_DIR=$(CURDIR)/.cache/packman
 
 # If gobin not set, create one on ./build and add to path.
 ifeq (,$(shell go env GOBIN))
@@ -98,12 +97,13 @@ copy-local-helm-chart: | $(HELM_CHART_DEP_ROOT) clean-helm-chart-dep-root
 	fi
 	cp -r $(HELM_CHART_PATH) $(HELM_CHART_DEP_ROOT)
 
-# Generate helm chart documentation in a reStructuredText format.
+# Generate helm chart documentation as a Fern MDX page.
 .PHONY: gen-helm-docs
 gen-helm-docs: | $(HELM_DOCS)
-	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.rst \
+	$(HELM_DOCS) --output-file=../../../../docs/customizations/helm.mdx \
 	--ignore-file=.helmdocsignore \
-	--template-files=./templates/helm.rst.gotmpl ${HELM_CHART_DEP_ROOT}
+	--template-files=./templates/helm.mdx.gotmpl ${HELM_CHART_DEP_ROOT}
+	python3 hack/fern/md_to_mdx.py docs/customizations/helm.mdx docs/customizations/helm.mdx
 
 .PHONY: ngc-helm-docs
 ngc-helm-docs: download-ngc-helm-chart gen-helm-docs
@@ -136,49 +136,69 @@ gen-nic-conf-crd-api-docs: | $(GEN_CRD_API_REFERENCE_DOCS) download-nic-conf-api
 
 .PHONY: api-docs
 api-docs: gen-crd-api-docs
-	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
-	--columns 200 /data/build/_output/crds-api.html -o /data/docs/customizations/crds.rst
-
+	python3 hack/fern/crd_html_to_mdx.py ${BUILDDIR}/crds-api.html docs/customizations/crds.mdx
 
 .PHONY: nic-conf-api-docs
 nic-conf-api-docs: gen-nic-conf-crd-api-docs
-	docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f html -t rst --lua-filter=/data/hack/ref_links.lua \
-	--columns 200 /data/build/_output/nic-conf-crds-api.html -o /data/docs/nic-conf-operator/crds.rst
+	python3 hack/fern/crd_html_to_mdx.py ${BUILDDIR}/nic-conf-crds-api.html docs/nic-conf-operator/crds.mdx
+
+# Value of a variable from docs/common/vars.yml (names use underscores)
+docs-var = $(shell sed -n 's/^  $(1): "\(.*\)"$$/\1/p' docs/common/vars.yml)
 
 .PHONY: nic-conf-api-docs-versioned
 nic-conf-api-docs-versioned:
-	$(eval NIC_CONF_VERSION := $(shell grep "nic-configuration-operator-version" docs/common/vars.rst | sed 's/.*replace:: //'))
+	$(eval NIC_CONF_VERSION := $(call docs-var,nic_configuration_operator_version))
 	@echo "Using NIC Configuration Operator version: $(NIC_CONF_VERSION)"
 	TAG=$(NIC_CONF_VERSION) make nic-conf-api-docs
 
 .PHONY: fetch-config-docs
 fetch-config-docs:
-	$(eval NIC_CONF_VERSION := $(shell grep "nic-configuration-operator-version" docs/common/vars.rst | sed 's/.*replace:: //'))
+	$(eval NIC_CONF_VERSION := $(call docs-var,nic_configuration_operator_version))
 	@echo "Fetching configuration documentation for version: $(NIC_CONF_VERSION)"
-	./hack/fetch-config-docs.sh Mellanox/nic-configuration-operator $(NIC_CONF_VERSION) README.md docs/nic-conf-operator/configuration-details.rst
+	./hack/fetch-config-docs.sh Mellanox/nic-configuration-operator $(NIC_CONF_VERSION) README.md docs/nic-conf-operator/configuration-details.mdx
+
+# Example CRs shown in the NIC Configuration Operator and Spectrum-X pages. Fern
+# cannot put a variable in a remote <Code src>, so the files are fetched here, at
+# the tag that matches the Network Operator version, and committed under
+# examples/nic-conf-operator/. The leading comment block (license header and the
+# "change this template" note) is dropped, as the pages used to do with
+# lines="18-" (Fern's <Code> has no line range). The block is found by content,
+# not by line count, and the fetch fails if it holds no SPDX license line.
+NIC_CONF_EXAMPLES_DIR = examples/nic-conf-operator
+NIC_CONF_EXAMPLES = \
+	example-nicfwsource-connectx6dx.yaml \
+	example-nicfirmwaretemplate-connectx6-dx.yaml \
+	example-nicconfigurationtemplate-connectx6dx.yaml \
+	spectrum-x/example-nicfirmwaresource-spectrum-x-full.yaml \
+	spectrum-x/example-nicfirmwaretemplate-spectrum-x.yaml \
+	spectrum-x/example-nicinterfacenametemplate-spectrum-x.yaml
+
+.PHONY: fetch-nic-conf-examples
+fetch-nic-conf-examples:
+	$(eval NO_VERSION := $(call docs-var,network_operator_version))
+	@echo "Fetching NIC Configuration Operator examples at network-operator-$(NO_VERSION)"
+	@for f in $(NIC_CONF_EXAMPLES); do \
+		mkdir -p "$(NIC_CONF_EXAMPLES_DIR)/$$(dirname "$$f")"; \
+		tmp=$$(mktemp); \
+		curl -fsSL "https://raw.githubusercontent.com/Mellanox/nic-configuration-operator/refs/tags/network-operator-$(NO_VERSION)/docs/examples/$$f" -o "$$tmp" \
+			|| { rm -f "$$tmp"; exit 1; }; \
+		awk 'head && /^([#]|[[:space:]]*$$)/ { if (/SPDX-License-Identifier/) spdx = 1; next } \
+			{ head = 0; print } \
+			BEGIN { head = 1 } \
+			END { if (!spdx || NR == 0) { print "'"$$f"': no leading license header found" > "/dev/stderr"; exit 1 } }' \
+			"$$tmp" > "$(NIC_CONF_EXAMPLES_DIR)/$$f" || { rm -f "$$tmp"; exit 1; }; \
+		rm -f "$$tmp"; \
+	done
 
 .PHONY: nic-conf-docs
-nic-conf-docs: nic-conf-api-docs-versioned fetch-config-docs
+nic-conf-docs: nic-conf-api-docs-versioned fetch-config-docs fetch-nic-conf-examples
 	@echo "Generated all NIC Configuration Operator documentation"
-
-.PHONY: build-cache
-build-cache:
-	@if [ -d "$(CACHE_DIR)" ]; then \
-		echo "$(CACHE_DIR) exists. Skipping build-cache."; \
-	else \
-		echo "Creating $(CACHE_DIR)..."; \
-		mkdir -p $(CACHE_DIR); \
-		export PM_PACKAGES_ROOT=${CACHE_DIR}; \
-		${CURDIR}/repo.sh docs || true; \
-		${CURDIR}/tools/packman/python.sh -m pip install --no-cache-dir --no-deps -U -t ${CACHE_DIR}/chk/sphinx/4.5.0.2-py3.7-linux-x86_64/ Sphinx-Substitution-Extensions sphinxext-remoteliteralinclude; \
-	fi
 
 .PHONY: process-examples
 process-examples: | $(EXAMPLES_BUILD_DIR)
 	@echo "Processing YAML examples with version substitutions..."
-	@# Generate sed script from all variables in vars.rst
-	@grep -E '^\.\. \|.*\| replace::' docs/common/vars.rst | \
-		sed 's/\.\. |\(.*\)| replace:: \(.*\)/s@|\1|@\2@g/' > /tmp/vars.sed
+	@# Generate sed script from all variables in vars.yml
+	@sed -n 's/^  \([a-z0-9_]*\): "\(.*\)"$$/s@{{\1}}@\2@g/p' docs/common/vars.yml > /tmp/vars.sed
 	@find examples/templates -name "*.yaml" -type f | while read -r file; do \
 		echo "Processing $$file"; \
 		relative_path=$$(echo "$$file" | sed 's|^examples/templates/||'); \
@@ -203,64 +223,40 @@ process-examples: | $(EXAMPLES_BUILD_DIR)
 		fi; \
 	done
 
-.PHONY: gen-docs
-gen-docs: build-cache
-	@echo "Generating documentation..."; \
-    export PM_PACKAGES_ROOT=${CACHE_DIR}; \
-	${CURDIR}/repo.sh docs
-
-DOCKER_DOCS_IMAGE ?= network-operator-docs-builder:local
-DOCKER_DOCS_DOCKERFILE ?= hack/Dockerfile.docs
-
-# Build (or refresh) the docs-builder image. Docker's layer cache keeps this
-# fast on no-op runs; edits to the Dockerfile trigger a rebuild automatically.
-.PHONY: gen-docs-docker-image
-gen-docs-docker-image:
-	docker build --platform=linux/amd64 \
-		-t $(DOCKER_DOCS_IMAGE) \
-		-f $(DOCKER_DOCS_DOCKERFILE) hack/
-
-# Run gen-docs inside a Linux container. Required on macOS where NVIDIA's
-# Packman/repoman tooling rejects the host platform. Pinned to linux/amd64
-# because Packman ships sphinx for linux-x86_64 only (arm64 Python exists
-# but not arm64 sphinx). On Apple Silicon this runs under emulation.
-#
-# State retained between builds:
-#   - apt-installed system deps live in the docker image ($(DOCKER_DOCS_IMAGE))
-#   - Packman cache persists in $(CACHE_DIR) via the bind-mount
-#   - Sphinx output persists in _build/ via the bind-mount
-# To force a clean rebuild of the image: docker rmi $(DOCKER_DOCS_IMAGE)
-.PHONY: gen-docs-docker
-gen-docs-docker: gen-docs-docker-image
-	docker run --rm \
-		--platform=linux/amd64 \
-		--volume "$(CURDIR):/work" \
-		--workdir /work \
-		--env HOME=/tmp \
-		--env HOST_UID=$(shell id -u) \
-		--env HOST_GID=$(shell id -g) \
-		$(DOCKER_DOCS_IMAGE) \
-		bash -lc 'trap "chown -R $$HOST_UID:$$HOST_GID /work" EXIT; make gen-docs'
-
 .PHONY: generate-docs-versions-var
 generate-docs-versions-var: | $(BUILDDIR)
 	curl -sL ${RELEASE_YAML_URL} -o $(CURDIR)/build/release.yaml
-	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --releaseVersions $(CURDIR)/hack/release/versions.txt --repoToml $(CURDIR)/repo.toml --templateDir ./templates/vars --outputDir ../../docs/common/
+	cd hack/release && go run release.go --releaseDefaults $(CURDIR)/build/release.yaml --releaseVersions $(CURDIR)/hack/release/versions.txt --templateDir ./templates/vars --outputDir ../../docs/common/
 	cd hack/release && go run release.go --with-sha256 --releaseDefaults $(CURDIR)/build/release.yaml --templateDir ./templates/image-sha256  --outputDir ../../docs/advanced/
 
 .PHONY: release-build
 release-build: api-docs helm-docs generate-docs-versions-var nic-conf-docs process-examples
 	@echo "Completed release build with all documentation targets"
 
-# Build documentation inside a Docker container (works on any platform).
-# Runs the full repoman/packman pipeline in linux-x86_64 as expected by the toolchain.
-DOCS_DOCKER_IMAGE ?= network-operator-docs-builder
+# Fern site. Pages reference docs/common/vars.yml as ${name} and Fern resolves
+# them itself (profiles in fern/docs.yml), so every Fern command runs from the
+# repository root. Needs Node.js 18+ and Fern CLI 5.215.0 or newer.
+FERN ?= npx --yes fern-api
 
-.PHONY: gen-docs-docker
-gen-docs-docker:
-	docker build -t $(DOCS_DOCKER_IMAGE) -f Dockerfile.docs .
-	docker run --rm -v $(CURDIR)/_build:/out $(DOCS_DOCKER_IMAGE)
-	@echo "Build complete. Output in _build/"
+.PHONY: docs-check
+docs-check:
+	$(FERN) check
+
+# Local preview on http://localhost:3000 (NVIDIA theme needs FERN_TOKEN or 'fern login').
+# Restart it after editing docs/common/vars.yml or fern/docs.yml.
+.PHONY: docs-preview
+docs-preview:
+	$(FERN) docs dev
+
+# Preview deployment; prints the preview URL. Requires FERN_TOKEN.
+.PHONY: docs-preview-deploy
+docs-preview-deploy:
+	$(FERN) generate --docs --preview
+
+# Publish to the production site. Requires FERN_TOKEN.
+.PHONY: docs-publish
+docs-publish:
+	$(FERN) generate --docs
 
 .PHONY: clean
 clean:

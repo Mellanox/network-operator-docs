@@ -1,0 +1,16 @@
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicInterfaceNameTemplate
+metadata:
+  name: spectrum-x-interface-names
+  namespace: nvidia-network-operator
+spec:
+  # Number of PFs per NIC, used to calculate the number of planes per NIC
+  pfsPerNic: 2
+  # Template for RDMA device names. Placeholders: %nic_id%, %plane_id%, %rail_id%
+  rdmaDevicePrefix: "rdma_%nic_id%_%plane_id%_%rail_id%"
+  # Template for net device names. Placeholders: %nic_id%, %plane_id%, %rail_id%
+  netDevicePrefix: "net_%nic_id%_%plane_id%_%rail_id%"
+  # PCI address to rail mapping. First dimension is rail index, second is NIC PCI addresses in the rail
+  railPciAddresses:
+    - ["0000:1a:00.0", "0000:2a:00.0"]
+    - ["0000:3a:00.0", "0000:4a:00.0"]
