@@ -181,7 +181,7 @@
 </div>
 <p>Pin a specific version or install to a custom directory:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh -o install-l8k.sh
-<span class="nv">L8K_VERSION</span><span class="o">=</span>v26.10.0-rc.7 sh install-l8k.sh
+<span class="nv">L8K_VERSION</span><span class="o">=</span>v26.10.0 sh install-l8k.sh
 curl -fsSL https://raw.githubusercontent.com/nvidia/k8s-launch-kit/main/scripts/install.sh <span class="p">|</span> sh -s -- -d ~/local
 </pre></div>
 </div>
@@ -197,7 +197,7 @@ brew install l8k
 <section id="build-from-source">
 <h3>Build from Source<a class="headerlink" href="#build-from-source" title="Permalink to this headline"></a></h3>
 <p>Build from the release tag so the binary and profile templates agree:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone --branch v26.10.0-rc.7 https://github.com/NVIDIA/k8s-launch-kit.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone --branch v26.10.0 https://github.com/NVIDIA/k8s-launch-kit.git
 <span class="nb">cd</span> k8s-launch-kit
 make build
 </pre></div>
@@ -208,7 +208,7 @@ make build
 <h3>Container<a class="headerlink" href="#container" title="Permalink to this headline"></a></h3>
 <p>Run <code class="docutils literal notranslate"><span class="pre">l8k</span></code> directly from the published container image without copying any binary or assets to the host filesystem. The image stays in the local Docker cache; everything else (kubeconfig, output directory) is mounted at runtime.</p>
 <p>Pull the image once:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.10.0-rc.7
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker pull nvcr.io/nvidia/cloud-native/k8s-launch-kit:v26.10.0
 </pre></div>
 </div>
 <p>Define a helper that preserves the image’s <code class="docutils literal notranslate"><span class="pre">/src</span></code> working directory, where its profile templates are stored. Mount the host working directory at <code class="docutils literal notranslate"><span class="pre">/work</span></code> and pass explicit paths for persistent inputs and outputs:</p>
@@ -217,7 +217,7 @@ make build
         -e <span class="nv">KUBECONFIG</span><span class="o">=</span>/kube/config <span class="se">\</span>
         -v <span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.kube:/kube:ro&quot;</span> <span class="se">\</span>
         -v <span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">:/work&quot;</span> <span class="se">\</span>
-        nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.10.0-rc.7 <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+        nvcr.io/nvidia/cloud-native/k8s-launch-kit:v26.10.0 <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
 <span class="o">}</span>
 
 l8k_container discover --save-cluster-config /work/cluster-config.yaml
@@ -263,7 +263,7 @@ brew untap nvidia/l8k
 <h3>Container<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
 <p>Remove the shell function and the cached image:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">unset</span> -f l8k_container
-docker image rm nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.10.0-rc.7
+docker image rm nvcr.io/nvidia/cloud-native/k8s-launch-kit:v26.10.0
 </pre></div>
 </div>
 <p>Also remove the function from your shell rc file if you added it.</p>
@@ -299,7 +299,7 @@ docker image rm nvcr.io/nvstaging/mellanox/k8s-launch-kit:v26.10.0-rc.7
 
   <div role="contentinfo">
     <p>&#169; Copyright 2025-2026, NVIDIA.
-      <span class="lastupdated">Last updated on Nov 18, 2026.
+      <span class="lastupdated">Last updated on Nov 22, 2026.
       </span></p>
   </div>
 
