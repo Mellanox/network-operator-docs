@@ -40,7 +40,7 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ] && \
              ! git diff --name-only --no-renames HEAD^1 HEAD \
-               | grep -qE '^(docs/|fern/|hack/fern/|Makefile$|\.github/workflows/fern-docs-ci\.yml$)'; then
+               | grep -qE '^(docs/|fern/|Makefile$|\.github/workflows/fern-docs-ci\.yml$)'; then
             echo "docs=false" >> "$GITHUB_OUTPUT"
             echo "No docs-related changes; skipping Fern validation."
           else
@@ -58,6 +58,6 @@ jobs:
         # Unpinned on purpose: the nvidia Fern org enforces the allowed CLI range.
         run: npm install -g fern-api@latest
 
-      - name: Render and validate
+      - name: Validate
         if: steps.changes.outputs.docs == 'true'
         run: make docs-check FERN=fern

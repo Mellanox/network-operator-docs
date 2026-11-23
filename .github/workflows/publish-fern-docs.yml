@@ -43,13 +43,10 @@ jobs:
         # Unpinned on purpose: the nvidia Fern org enforces the allowed CLI range.
         run: npm install -g fern-api@latest
 
-      - name: Render site
-        run: make docs-render
-
       - name: Publish Docs
         env:
           FERN_TOKEN: ${{ secrets.FERN_TOKEN }}
-        working-directory: ./_build/fern/fern
+        working-directory: ./fern
         run: |
           set -eo pipefail
           fern generate --docs 2>&1 | tee /tmp/fern-output.log
