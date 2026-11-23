@@ -5,8 +5,8 @@ metadata:
 spec:
   sriovDevicePlugin:
     image: sriov-network-device-plugin
-    repository: |sriovnetop-sriov-device-plugin-repository|
-    version: |sriovnetop-sriov-device-plugin-version|
+    repository: $SRIOVNETOP_SRIOV_DEVICE_PLUGIN_REPOSITORY
+    version: $SRIOVNETOP_SRIOV_DEVICE_PLUGIN_VERSION
     config: |
       {
         "resourceList": [
@@ -22,16 +22,16 @@ spec:
       }
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: |nvidia-ipam-repository|
-    version: |nvidia-ipam-version|
+    repository: $NVIDIA_IPAM_REPOSITORY
+    version: $NVIDIA_IPAM_VERSION
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: |cni-plugins-repository|
-      version: |cni-plugins-version|
+      repository: $CNI_PLUGINS_REPOSITORY
+      version: $CNI_PLUGINS_VERSION
     multus:
       image: multus-cni
-      repository: |multus-repository|
-      version: |multus-version|
+      repository: $MULTUS_REPOSITORY
+      version: $MULTUS_VERSION

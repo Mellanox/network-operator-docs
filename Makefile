@@ -176,17 +176,23 @@ build-cache:
 .PHONY: process-examples
 process-examples: | $(EXAMPLES_BUILD_DIR)
 	@echo "Processing YAML examples with version substitutions..."
-	@# Generate sed script from all variables in vars.rst
-	@grep -E '^\.\. \|.*\| replace::' docs/common/vars.rst | \
-		sed 's/\.\. |\(.*\)| replace:: \(.*\)/s@|\1|@\2@g/' > /tmp/vars.sed
-	@find examples/templates -name "*.yaml" -type f | while read -r file; do \
+	@command -v envsubst >/dev/null || { echo "envsubst is required for process-examples"; exit 1; }
+	@vars_env=$$(mktemp); \
+	grep -E '^\.\. \|.*\| replace::' docs/common/vars.rst | while read -r line; do \
+		name=$$(printf '%s\n' "$$line" | sed -E 's/^\.\. \|([^|]+)\| replace:: .*/\1/' | tr '[:lower:]-' '[:upper:]_'); \
+		value=$$(printf '%s\n' "$$line" | sed -E 's/^\.\. \|[^|]+\| replace:: //'); \
+		escaped_value=$$(printf '%s\n' "$$value" | sed "s/'/'\\\\''/g"); \
+		printf "export %s='%s'\n" "$$name" "$$escaped_value"; \
+	done > "$$vars_env"; \
+	set -a; . "$$vars_env"; set +a; \
+	rm -f "$$vars_env"; \
+	find examples/templates -name "*.yaml" -type f | while read -r file; do \
 		echo "Processing $$file"; \
 		relative_path=$$(echo "$$file" | sed 's|^examples/templates/||'); \
 		output_dir="$(EXAMPLES_BUILD_DIR)/$$(dirname "$$relative_path")"; \
 		mkdir -p "$$output_dir"; \
-		sed -f /tmp/vars.sed "$$file" > "$(EXAMPLES_BUILD_DIR)/$$relative_path"; \
+		envsubst < "$$file" > "$(EXAMPLES_BUILD_DIR)/$$relative_path"; \
 	done
-	@rm -f /tmp/vars.sed
 	@echo "Generating complete configuration files..."
 	@# Generate complete.yaml files by concatenating numbered files in order
 	@find $(EXAMPLES_BUILD_DIR) -mindepth 1 -maxdepth 1 -type d | while read -r dir; do \
