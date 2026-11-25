@@ -29,15 +29,22 @@ profiles:
     vars: ../docs/common/vars.yml
   v24_4_0:
     vars: ./vars-v24.4.0.yml
+  v26_10_0:
+    vars: ./vars-v26.10.0.yml
 
 versions:
   # Fern's production generate step treats a variable reference in this file as an
   # environment variable, so the display name is written out. Update it with each release.
-  - display-name: "v26.10.0 (Latest)"
+  - display-name: "dev"
     path: ../docs/index.yml
     slug: latest
     availability: beta
     profile: default
+  - display-name: "v26.10.0"
+    ref: 0079309faed7c24ddae9e673a9416b76412e4835
+    slug: v26.10.0
+    availability: stable
+    profile: v26_10_0
   - display-name: "24.4.0"
     slug: v24.4.0
     ref: 78b7a7c3c0abce048528c27c3ff44a56d9a08bc2
