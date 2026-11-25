@@ -101,3 +101,8 @@ Both preview and publish need the `FERN_TOKEN` repository secret.
 
 `make release-build` regenerates `docs/common/vars.yml`, the container image digests,
 the Helm and CRD reference pages, and the processed examples for a release.
+
+It does not touch `fern/docs.yml`. Update the `display-name` of the latest version
+there by hand, because Fern's production publish reads a variable reference in
+that file as an environment variable and fails when it is not set. When the pinned
+`ref` of an older version changes, update its vars file (`fern/vars-v24.4.0.yml`) too.
