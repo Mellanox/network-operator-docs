@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
-# Pages reference shared values as ${name}. Fern fills them in from
+# Pages reference shared values with a dollar sign and braces. Fern fills them in from
 # docs/common/vars.yml (see `profiles` below), so this directory builds as it is:
 # run the Fern CLI from the repository root (make docs-check / docs-preview).
 
@@ -31,7 +31,9 @@ profiles:
     vars: ./vars-v24.4.0.yml
 
 versions:
-  - display-name: "${network_operator_version} (Latest)"
+  # Fern's production generate step treats a variable reference in this file as an
+  # environment variable, so the display name is written out. Update it with each release.
+  - display-name: "v26.10.0 (Latest)"
     path: ../docs/index.yml
     slug: latest
     availability: beta
