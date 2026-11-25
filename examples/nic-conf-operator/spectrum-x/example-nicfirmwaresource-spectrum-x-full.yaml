@@ -1,0 +1,12 @@
+apiVersion: configuration.net.nvidia.com/v1alpha1
+kind: NicFirmwareSource
+metadata:
+  name: spectrum-x-configuration
+  namespace: nvidia-network-operator
+spec:
+  # a list of firmware binaries zip archives from the Mellanox website, can point to any URL accessible from the cluster
+  binUrlSources:
+    - https://www.mellanox.com/downloads/firmware/fw-ConnectX8-rel-40_46_3048-900-9X85E-00NX-MC0_Ax-UEFI-14.39.14-FlexBoot-3.8.100.signed.bin.zip
+  # a URL to the BlueField Bundle (BFB) file, can point to any URL accessible from the cluster
+  bfbUrlSource:
+    - https://example.com/bf-fwbundle-3.1.0-77_25.07-prod.bfb

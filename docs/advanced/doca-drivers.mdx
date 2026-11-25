@@ -1,0 +1,228 @@
+---
+title: "NVIDIA DOCA-OFED Driver Container"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+## NVIDIA DOCA-OFED Driver Container Environment Variables
+
+The following are special environment variables supported by the NVIDIA DOCA-OFED Driver container to configure its behavior:
+
+| Name | Default | Description |
+| --- | --- | --- |
+| CREATE_IFNAMES_UDEV | • "true” for Ubuntu 20.04, RHEL v8.x and OCP \<= v4.13.<br />• "false" for newer OS. | Create an udev rule to preserve "old-style" path based netdev names e.g enp3s0f0 |
+| UNLOAD_STORAGE_MODULES | "false" | Unload host storage modules prior to loading NVIDIA DOCA-OFED Driver modules:<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ib_isert<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• nvme_rdma<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• nvmet_rdma<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• rpcrdma<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• xprtrdma<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ib_srpt |
+| ENABLE_NFSRDMA | "false" | Enable loading of NFS related storage modules from a NVIDIA DOCA-OFED Driver container |
+| RESTORE_DRIVER_ON_POD_TERMINATION | "false" | Restore host drivers when the container terminates. See the warning below. |
+
+In addition, it is possible to specify any environment variables to be exposed to the NVIDIA DOCA-OFED Driver container, such as the standard "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY".
+
+### CREATE_IFNAMES_UDEV Environment Variable
+
+<Warning>
+CREATE_IFNAMES_UDEV is set automatically by the Network Operator, depending on the Operating System of the worker nodes in the cluster (the cluster is assumed to be homogenous).
+</Warning>
+
+### ENABLE_NFSRDMA Environment Variable
+
+In context of GPU Direct Storage (GDS) feature, only GDS with NFS over RDMA is supported.
+In this case, NVME over RDMA cannot be used. It is not possible to load inbox modules since they depend on `ib_core` which does not match (symbol error). Only NVME with local drive is supported.
+
+### RESTORE_DRIVER_ON_POD_TERMINATION Environment Variable
+
+When set to `"true"`, pod termination unloads the NVIDIA DOCA-OFED Driver kernel modules and restores the host drivers.
+
+<Warning>
+Leave `RESTORE_DRIVER_ON_POD_TERMINATION` at its default value, `"false"`, when the operating system IP address is configured on an NVIDIA NIC.
+
+With `"true"`, unloading those kernel modules removes the node's management connectivity. If the unload fails because a kernel module is busy, the drivers can be left in a partial state and the node becomes unreachable. Kubernetes cannot recover the node in-band. Restore connectivity with out-of-band access, such as a BMC reboot.
+</Warning>
+
+### Example of NicClusterPolicy
+
+These variables can be set in the NicClusterPolicy. For example:
+
+```yaml
+kind: NicClusterPolicy
+metadata:
+  name: nic-cluster-policy
+spec:
+  ofedDriver:
+    env:
+    - name: RESTORE_DRIVER_ON_POD_TERMINATION
+      value: "false"
+    - name: UNLOAD_STORAGE_MODULES
+      value: "true"
+    - name: CREATE_IFNAMES_UDEV
+      value: "true"
+```
+
+## Precompiled Container Build Instructions for NVIDIA DOCA-OFED Driver Container
+
+### Prerequisites
+
+Before you begin, ensure that you have the following prerequisites:
+
+- Docker (Ubuntu) / Podman (RH) installed on your build system.
+- Web access to NVIDIA NIC drivers sources. Latest NIC drivers are published at [NVIDIA DOCA Downloads](https://developer.nvidia.com/doca-downloads) under `https://linux.mellanox.com/public/repo/doca/<doca>/SOURCES/mlnx_ofed/`.
+
+**NOTE:** NVIDIA NIC driver sources are bundled as part of NVIDIA DOCA package. Both the DOCA package version and its corresponding NIC driver (DOCA-OFED Driver) version need to be specified to fetch the correct driver sources when building the driver container.
+
+DOCA 3.6 and later publish a flat source archive. RPM archives (RHEL and SLES) are named `DOCA_BASE_SRC-<doca>-<build>.tar.gz`, for example `DOCA_BASE_SRC-3.6.0-070000.tar.gz`. Debian archives (Ubuntu) insert `debian-`: `DOCA_BASE_SRC-debian-<doca>-<build>.tar.gz`, for example `DOCA_BASE_SRC-debian-3.6.0-070000.tar.gz`. The build number is the numeric suffix of `D_OFED_VERSION` (`26.10-070000` selects build `070000`). When `D_OFED_URL_PATH` is unset, the container build derives this name from `D_DOCA_VERSION` and `D_OFED_VERSION`. Set `D_OFED_URL_PATH` only for a local archive or a different URL. Set `D_OFED_BASE_URL` if the publishing path for your DOCA release differs from the default.
+
+Releases before DOCA 3.6 keep the `MLNX_OFED_SRC-*` name and need no extra arguments. For example, DOCA `3.2.0` publishes [MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz](https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/MLNX_OFED_SRC-debian-25.10-1.2.8.0.tgz) at [https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/](https://linux.mellanox.com/public/repo/doca/3.2.0/SOURCES/mlnx_ofed/).
+
+#### Download Docker files and scripts:
+
+```bash
+git clone https://github.com/Mellanox/doca-driver-build.git
+cd doca-driver-build
+git checkout ${doca_driver_build_commit}
+```
+
+### Dockerfile Overview
+
+To build the precompiled container, the Dockerfile is constructed in a multistage fashion.
+This approach is used to optimize the resulting container image size and reduce the number of dependencies included in the final image.
+
+The Dockerfile consists of the following stages:
+
+1. **Base Image Update**: The base image is updated and common requirements are installed. This stage sets up the basic environment for the subsequent stages.
+
+2. **Download Driver Sources**: This stage downloads the NVIDIA DOCA-OFED Driver sources to the specified path. It prepares the necessary files for the driver build process.
+
+3. **Build Driver**: The driver is built using the downloaded sources and installed on the container. This stage ensures that the driver is compiled and configured correctly for the target system.
+
+4. **Install precompiled driver**: Finally, the precompiled driver is installed on clean container. This stage sets up the environment to run the NVIDIA NIC drivers on the target system.
+
+### Common mandatory build parameters
+
+Before building the container, you need to provide following parameters as `build-arg` for container build:
+
+1. `D_OS`: The Linux distribution (e.g., ubuntu24.04 / rhel9.6)
+2. `D_ARCH`: Compiled Architecture
+3. `D_BASE_IMAGE`: Base container image (e.g., ubuntu:24.04)
+4. `D_KERNEL_VER`: The target kernel version (e.g., 6.8.0-147-generic / 5.14.0-570.152.1.el9_6.x86_64)
+5. `D_DOCA_VERSION`: NVIDIA DOCA version (e.g., 3.6.0)
+6. `D_OFED_VERSION`: NVIDIA NIC drivers version (e.g., 26.10-070000)
+
+**NOTE:** Check desired NVIDIA NIC drivers sources availability for designated container OS, only versions available on download page can be utilized
+
+**NOTE:** For proper Network Operator functionality container tag name must be in following pattern: **`doca<doca_version>-<driver_ver>-<container_ver>-<kernel_ver-os-arch>`**. For example: doca3.6.0-26.10-070000-0-6.8.0-147-generic-ubuntu24.04-amd64
+
+**NOTE:** Dockerfiles contain default build parameters, which may fail build proccess on your system if not overridden.
+
+<Warning title="Modification of `D_OFED_SRC_DOWNLOAD_PATH` must be tighdly coupled with corresponding update to entrypoint.sh script.">
+
+</Warning>
+
+### RHCOS
+
+#### Prerequisites
+
+- Install [oc](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/cli_tools/openshift-cli-oc) CLI tool.
+- Download OpenShift [pull secret](https://console.redhat.com/openshift/install/pull-secret).
+
+#### Specific build parameters
+
+1. `D_BASE_IMAGE`: DriverToolKit container image
+
+   **NOTE:** DTK (DriverToolKit) is tightly coupled with specific kernel version for an OpenShift release.
+   In order to get the specific DTK container image for a specific OpenShift release, run:
+
+```bash
+oc adm release info <OCP_VERSION> --image-for=driver-toolkit
+```
+
+For example, for OpenShift 4.22.18:
+
+```bash
+oc adm release info 4.22.18 --image-for=driver-toolkit
+quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
+```
+
+Then pull the DTK image locally using your pull-secret:
+
+```bash
+podman pull --authfile=/path/to/pull-secret.txt docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6
+```
+
+2. `D_FINAL_BASE_IMAGE`: Final container image, to install compiled driver. Use the UBI image whose minor version matches the RHEL version of the DTK image, for example `registry.access.redhat.com/ubi9/ubi:9.8`.
+
+3. `D_ARCH`: Target architecture: `x86_64` or `aarch64`.
+
+4. `D_KERNEL_VER`: CoreOS kernel versions for OpenShift are listed [here](https://access.redhat.com/solutions/7077108).
+
+Kernel version and RHEL version can also be found with the DTK image using the following commands:
+
+```bash
+podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json | jq -r '.KERNEL_VERSION'
+5.14.0-687.55.1.el9_8.x86_64
+
+podman run --rm quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6 cat /etc/driver-toolkit-release.json | jq -r '.RHEL_VERSION'
+9.8
+```
+
+5. `D_OS`: `rhel<RHEL_VERSION>`, where `RHEL_VERSION` is the value printed above, for example `rhel9.8`.
+
+#### RHCOS example
+
+**NOTE:** The `D_OS` value and the container tag must include the RHEL version of the RHCOS release (for example `rhel9.8` for OCP 4.22), not the OCP version (`rhcos4.x`).
+
+**NOTE:** `RHEL_Dockerfile` mounts the build host's RHEL subscription certificates from a build context named `rhsm`, so `--build-context rhsm=<dir>` is required. Use `/etc/pki/entitlement` on a subscribed RHEL host. The directory must exist, but the build also succeeds when it is empty.
+
+```bash
+podman build \
+ --build-context rhsm=/etc/pki/entitlement \
+ --build-arg D_OS=rhel9.8 \
+ --build-arg D_ARCH=x86_64 \
+ --build-arg D_KERNEL_VER=5.14.0-687.55.1.el9_8.x86_64 \
+ --build-arg D_DOCA_VERSION=3.6.0 \
+ --build-arg D_OFED_VERSION=26.10-070000 \
+ --build-arg D_BASE_IMAGE="quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:d20c677207f6d69dc9c450cbb8abeab80f7f2f13c3a32d3d0f6f7831326c03c6" \
+ --build-arg D_FINAL_BASE_IMAGE=registry.access.redhat.com/ubi9/ubi:9.8 \
+ --tag doca3.6.0-26.10-070000-0-5.14.0-687.55.1.el9_8.x86_64-rhel9.8-amd64 \
+ -f RHEL_Dockerfile \
+ --target precompiled .
+```
+
+### Ubuntu
+
+#### Ubuntu example
+
+```bash
+docker build \
+ --build-arg D_OS=ubuntu24.04 \
+ --build-arg D_ARCH=x86_64 \
+ --build-arg D_BASE_IMAGE=ubuntu:24.04 \
+ --build-arg D_KERNEL_VER=6.8.0-147-generic \
+ --build-arg D_DOCA_VERSION=3.6.0 \
+ --build-arg D_OFED_VERSION=26.10-070000 \
+ --tag doca3.6.0-26.10-070000-0-6.8.0-147-generic-ubuntu24.04-amd64 \
+ -f Ubuntu_Dockerfile \
+ --target precompiled .
+```
+
+### SLES
+
+#### Prerequisites
+
+Active subscription. After registering, make sure to run `zypper refresh && zypper update -y`.
+
+#### SLES example
+
+```bash
+docker build \
+ --build-arg D_OS=sles15.7 \
+ --build-arg D_ARCH=x86_64 \
+ --build-arg D_BASE_IMAGE=registry.suse.com/suse/sle15:15.7 \
+ --build-arg D_KERNEL_VER=6.4.0-150700.53.45-default \
+ --build-arg D_DOCA_VERSION=3.6.0 \
+ --build-arg D_OFED_VERSION=26.10-070000 \
+ --tag doca3.6.0-26.10-070000-0-6.4.0-150700.53.45-default-sles15.7-amd64 \
+ -f SLES_Dockerfile \
+ --target precompiled .
+```

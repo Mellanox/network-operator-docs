@@ -1,0 +1,151 @@
+---
+title: "Overview"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+This page explains the Launch Kit mental model. New users should read this once before working through the [Quick Start](/k8s-launch-kit/quick-start). Returning users can skip it.
+
+## Workflow Phases
+
+Launch Kit operates in four phases:
+
+1. **Discover** — Probe the cluster's network hardware (NICs, PCI addresses, RDMA capability, OFED-dependent kernel modules, GPU topology) and write a `cluster-config.yaml` describing what was found.
+2. **Generate** — Take a cluster configuration plus a deployment profile selection and render a complete set of numbered Kubernetes YAML manifests to a directory.
+3. **Deploy** — Apply the generated manifests to the cluster in dependency order. `--dry-run` validates proposed operations through Helm and the API server without persisting them.
+4. **Validate** — Check the applied resources, release alignment, and selected data-plane test families; retain the validation report.
+
+Each phase has a dedicated CLI subcommand — `l8k discover`, `l8k generate`, `l8k deploy`, and `l8k validate` — and a dedicated how-to page ([Discover Workflow](/k8s-launch-kit/workflows/discover), [Generate Workflow](/k8s-launch-kit/workflows/generate), [Deploy Workflow](/k8s-launch-kit/workflows/deploy), [Validate Workflow](/k8s-launch-kit/workflows/validate)).
+
+The artifact pipeline:
+
+```mermaid
+flowchart LR
+    KC[kubeconfig]
+    BC[base config<br/>optional]
+    D([l8k discover])
+    CC[cluster-config.yaml]
+    FLAGS[--fabric<br/>--deployment-type<br/>--network-operator-release]
+    G([l8k generate])
+    MAN[./deployment/*.yaml]
+    APPLY([deploy])
+    CLUSTER[(running cluster)]
+
+    KC --> D
+    BC -.-> D
+    D --> CC
+    CC --> G
+    FLAGS -.-> G
+    G --> MAN
+    MAN --> APPLY
+    APPLY --> CLUSTER
+
+    classDef artifact fill:#fff,stroke:#888,stroke-dasharray: 4 3
+    classDef action fill:#79b8ff,stroke:#005cc5,color:#fff
+    classDef state fill:#a2efb6,stroke:#28a745,color:#000
+    class KC,BC,CC,MAN,FLAGS artifact
+    class D,G,APPLY action
+    class CLUSTER state
+```
+
+## Profiles
+
+A **profile** is a named combination of fabric and deployment type that maps to a complete set of Kubernetes manifests. Launch Kit includes the following host profiles:
+
+- `sriov-ethernet` — SR-IOV with Ethernet
+- `sriov-infiniband` — SR-IOV with InfiniBand
+- `host-device` — direct passthrough to host network devices
+- `macvlan-rdma-shared` — Ethernet with shared RDMA device plugin and MacVLAN
+- `ipoib-rdma-shared` — InfiniBand with shared RDMA device plugin and IPoIB
+- `spectrum-x-ra2.4` — Spectrum-X RA2.4 for non-VR platforms on Network Operator 26.10 and newer catalogued releases
+- `spectrum-x-ra3.1` — Spectrum-X RA3.1 for Vera Rubin (VR), released alongside RA2.4 and using the same doSPCX bundle contract
+- `spectrum-x-ra2.2` — Spectrum-X RA2.2 for Network Operator 26.4
+- `spectrum-x` — Spectrum-X multi-rail AI interconnect (RA2.3 on Network Operator 26.7)
+- `spectrum-x-ra2.1` — Spectrum-X for the RA2.1 reference architecture (Network Operator 26.1)
+
+Profiles are selected by flag combinations on `l8k generate`: `--fabric`, `--deployment-type`, `--multirail`, and `--spectrum-x`. See [Deployment Profiles](/k8s-launch-kit/profiles/profiles) for the decision matrix.
+
+## Network Operator Releases
+
+Launch Kit pins to specific NVIDIA Network Operator releases. The `--network-operator-release` flag (and the `networkOperator.selectedRelease` config key) selects between supported release lines:
+
+- `26.1` — required for `spectrum-x-ra2.1` (RA2.1).
+- `26.4` — required for RA2.2.
+- `26.7` — required for `spectrum-x` (RA2.3).
+- `26.10` — default for RA2.4 and RA3.1. Check `l8k schema` for the installed binary's catalog.
+
+The selected release auto-fills versions and image tags from an embedded catalog. Version mismatches (for example, requesting RA2.1 with release 26.7) error out with a specific message.
+
+<Note>
+Launch Kit is backward compatible with older Network Operator releases — a single `l8k` binary supports every release line in the catalog above. Always install the **latest** `l8k` release; pick the target Network Operator line via `--network-operator-release`. New releases of l8k add new lines to the catalog and pick up patch bumps for existing ones, so an older l8k binary will miss them.
+</Note>
+
+## Node Groups and Heterogeneity
+
+During discovery, nodes are placed into **groups** by their PCI topology (the set of PCI addresses and device IDs across each node's PFs). Each group carries a `machineType` (e.g., `DGX-B200`), a `gpuType` (e.g., `NVIDIA-H100-NVL`), and a list of physical functions (PFs). Discovery writes a label `nvidia.kubernetes-launch-kit.machine: <machineType>-<gpuType>` (sanitised) to every node in the group; the group's `identifier` and `nodeSelector` are both keyed by that label.
+
+When the cluster has multiple groups, you have two strategies:
+
+- **Automatic combination at generation** — groups stay separate in `cluster-config.yaml`, but `l8k generate` automatically combines groups sharing the same GPU type and east-west rail count into a single render group keyed by GPU type. One `l8k generate` run produces a single set of manifests covering all matching source groups.
+- **Filter by group identifiers** — run `l8k generate --groups <a,b,...>` to restrict output to a named set of source groups. Use this when groups need different Network Operator releases, fabrics, deployment types, or driver versions per cohort.
+- **Filter by GPU type** — run `l8k generate --gpu-type <X>` to restrict output to all source groups whose `gpuType` matches (case-insensitive). Best for declarative pipelines and CI/CD.
+
+See [Heterogeneous Clusters](/k8s-launch-kit/heterogeneous-clusters) for the full picture.
+
+## Fabrics and Traffic Direction
+
+The `--fabric` flag selects between `ethernet` and `infiniband`. Fabric is the physical transport; deployment type (`sriov` / `rdma_shared` / `host_device`) is the kubelet-facing networking model.
+
+During discovery, Launch Kit also classifies each PF by **traffic direction**:
+
+- **East-west** — GPU-to-GPU interconnect (ConnectX, BlueField-3 SuperNIC). These PFs appear in generated manifests.
+- **North-south** — management / out-of-band (BlueField DPUs). These PFs are saved in `cluster-config.yaml` for visibility but **filtered out** of generated manifests.
+
+East-west functions are assigned logical `rail` indices; multiple PFs can belong to one NIC/rail, and VR has two NICs per rail. Rail IDs (`rail: 0`, `rail: 1`, ...) are used in resource and network names.
+
+## Spectrum-X Multiplane Modes
+
+Spectrum-X profiles add a **multiplane mode** dimension on top of profile selection:
+
+- `hwplb` — hardware plane load balancing (large 2- or 3-tier switch topologies)
+- `swplb` — software plane load balancing (smaller-scale Spectrum-X clusters)
+- `none` — no plane separation (ConnectX-7 NIC, BlueField-3 SuperNIC; simple topologies)
+
+NIC type determines both the mode Launch Kit defaults to and the modes the cluster will accept. ConnectX-7 NIC defaults to and accepts `none`. BlueField-3 SuperNIC defaults to `none` and also accepts `swplb`. ConnectX-8 SuperNIC accepts all three, and its default depends on the GPU platform. ConnectX-9 SuperNIC (tech preview) accepts all three and defaults to `hwplb`. See [Spectrum-X](/k8s-launch-kit/profiles/spectrum-x).
+
+## Cluster Topology Presets
+
+A **preset** is a pre-recorded hardware topology for a known machine type (e.g., `ThinkSystem-SR680a-V3`, `PowerEdge-XE9680`). Presets list expected PCI addresses, traffic class, NUMA affinity, and rail assignments.
+
+Two ways presets are used:
+
+- **Discovery overlay** — if the discovered machine type matches a known preset, the preset's topology is overlaid on discovery output for consistency.
+- **Offline generation** — `l8k generate --for <preset>` skips discovery entirely and produces manifests for any cluster matching the preset's hardware.
+
+See [Cluster Topology Presets](/k8s-launch-kit/presets).
+
+## Glossary
+
+| **Term** | **Definition** |
+| --- | --- |
+| **PF** | Physical Function. A physical NIC interface, identified by PCI address. |
+| **VF** | Virtual Function. An SR-IOV-virtualised slice of a PF. |
+| **Rail** | A logical network path identified by a zero-based index. Depending on the platform, a rail contains one or more physical NICs and their PFs. |
+| **Fabric** | The physical transport layer: `ethernet` or `infiniband`. |
+| **Deployment type** | The kubelet-facing networking model: `sriov`, `rdma_shared`, or `host_device`. |
+| **Profile** | A named (fabric, deployment type, options) combination. See [Deployment Profiles](/k8s-launch-kit/profiles/profiles). |
+| **Group** | A set of nodes sharing the same PCI topology. See [Heterogeneous Clusters](/k8s-launch-kit/heterogeneous-clusters). |
+| **East-west** | GPU-to-GPU interconnect traffic. |
+| **North-south** | Management or out-of-band traffic. Filtered out of generated manifests. |
+| **Preset** | A pre-recorded hardware topology for a known machine type. See [Cluster Topology Presets](/k8s-launch-kit/presets). |
+| **Multiplane mode** | Spectrum-X load-balancing mode: `hwplb`, `swplb`, `none`. |
+
+## See Also
+
+- [Quick Start](/k8s-launch-kit/quick-start) — the canonical end-to-end walkthrough
+- [Deployment Profiles](/k8s-launch-kit/profiles/profiles) — decision matrix
+- [Heterogeneous Clusters](/k8s-launch-kit/heterogeneous-clusters) — mixed-hardware deep dive
+- [Configuration Reference](/k8s-launch-kit/reference/config) — `l8k-config.yaml` schema

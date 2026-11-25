@@ -1,0 +1,115 @@
+---
+title: "NVIDIA Spectrum-X Ethernet Networking Platform"
+---
+
+{/*
+  SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  SPDX-License-Identifier: Apache-2.0
+*/}
+
+<Note>
+This section covers **NVIDIA Network Operator configuration** to enable
+NVIDIA Spectrum-X NIC setup in Kubernetes deployments. For the full
+Spectrum-X platform documentation — supported topologies, NIC hardware,
+software components, and version-specific notes — refer to the
+[NVIDIA Spectrum-X documentation](https://www.nvidia.com/en-us/networking/spectrumx/).
+</Note>
+
+NVIDIA Spectrum-X is an AI-optimized Ethernet networking platform that combines
+NVIDIA Spectrum switches with the BlueField-3 SuperNIC, ConnectX-7 NIC, and
+ConnectX-8 and ConnectX-9 SuperNIC families to deliver high-bandwidth, lossless RoCE for the
+GPU-to-GPU compute (east-west) network. NVIDIA Network Operator provides the
+Kubernetes side: discovering the NICs, configuring rails, and exposing them
+to pods as schedulable resources.
+
+## How Spectrum-X works on Kubernetes
+
+Spectrum-X Multiplane is the Spectrum-X capability
+that splits each SuperNIC across two or more independent network planes —
+enabling Ethernet to scale from thousands to hundreds of thousands of GPUs in
+a flat, two-tier topology, with improved performance and resiliency over
+single-plane networks. Network Operator exposes it through the
+`multiplaneMode` field on `NicConfigurationTemplate`, with
+**Hardware Multiplane** (`hwplb`) and **Software Multiplane** (`swplb`)
+variants alongside the single-plane mode (`none`). On multiplane platforms,
+Hardware Multiplane is recommended for new multiplane deployments; select
+Software Multiplane when the deployment requires a separate workload
+interface for each plane. Match the mode to the supplied RA2.4 or RA3.1 profile and
+switch fabric configuration.
+
+**Hardware Multiplane requires DOCA xPlane** to manage plane failover inside
+OVS-DOCA. Software Multiplane and single-plane deployments do not use
+DOCA xPlane. See
+[Architecture and Components](/spectrum-x/components).
+
+Spectrum-X Kubernetes deployments fall
+into the following network architectures, distinguished by the number of planes per
+rail and the load-balancing mechanism. The table describes configuration
+layouts; use the release-specific qualification guidance below when
+selecting a platform:
+
+| Architecture | NICs | GPU platforms | Multiplane mode |
+| --- | --- | --- | --- |
+| Single-Plane | BlueField-3 SuperNIC, ConnectX-7 NIC, ConnectX-8 SuperNIC | H100/H200/B200, GB200 | `none` (1 plane) |
+| Dual-Plane | ConnectX-8 SuperNIC | B300, GB300 | `hwplb` (2 planes)<br />`swplb` (2 planes) |
+| Quad-Plane | ConnectX-8 SuperNIC | B300, GB300 | `hwplb` (4 planes)<br />`swplb` (4 planes) |
+| Eight-Plane | ConnectX-9 SuperNIC | Vera Rubin (VR) | `hwplb` (8 planes, RA3.1) |
+
+<Note>
+ConnectX-8 SuperNIC is listed in the Single-Plane row because it also
+supports single-plane (`none`) configuration. Typical Single-Plane
+deployments use BlueField-3 SuperNIC (HGX H100/H200/B200) or ConnectX-7
+NIC (GB200).
+</Note>
+
+## Supported Reference Architectures
+
+Spectrum-X **RA3.1 for Vera Rubin (VR)** and **RA2.4 for all other
+platforms** are released together. Network Operator 26.10 integrates both
+through the same configuration workflow with a matching doSPCX profile
+ConfigMap and CRDs. Select the architecture for the target platform. The
+release mapping below distinguishes this workflow from earlier releases;
+see [Platform Support](/platform-support) for qualification
+requirements and validation of earlier releases.
+
+| Spectrum-X RA Version | NVIDIA Network Operator Release | Configuration contract |
+| --- | --- | --- |
+| Spectrum-X RA 2.4 | 26.10.x | All platforms other than VR; doSPCX data-bundle ConfigMap |
+| Spectrum-X RA 3.1 | 26.10.x | Vera Rubin (VR); same doSPCX contract with `version: RA3.1` and `platformType: vr` |
+| Spectrum-X RA 2.3 | 26.7.x | Legacy `data.profile` ConfigMap; version selects the ConfigMap |
+| Spectrum-X RA 2.1 | 26.4.x | Earlier reference-architecture workflow |
+| Spectrum-X RA 2.1 | 26.1.x | Earlier reference-architecture workflow |
+
+## What you configure
+
+Network Operator drives Spectrum-X setup through a small set of resources.
+Each one is documented on the page that owns it:
+
+| Resource | Purpose | Reference |
+| --- | --- | --- |
+| **Network Operator Helm values** | Enable SR-IOV Network Operator and Maintenance Operator and configure their coordination. | [Quick Start](/spectrum-x/quick-start) |
+| `NicClusterPolicy` | Cluster-wide Network Operator configuration: enables the Spectrum-X Operator, NIC Configuration Operator, NV-IPAM, and Multus. | [Architecture and Components](/spectrum-x/components) |
+| **Spectrum-X profile ConfigMap** | Cluster-wide Spectrum-X configuration data. Exactly one current-format profile may be selected. | [NIC Configuration](/spectrum-x/spectrum-x-configuration) |
+| `NicConfigurationTemplate` | NIC-level firmware and PF configuration: link type, `numVfs`, multiplane mode, architecture version, and platform type. | [NIC Configuration](/spectrum-x/spectrum-x-configuration) |
+| `NicInterfaceNameTemplate` | Predictable rail and plane based interface names, applied by udev. | [NIC Configuration](/spectrum-x/spectrum-x-configuration) |
+| `SpectrumXRailPoolConfig` | Rail topology, PF selection, IPAM binding, and rail resource exposure. | [CRD API Reference](/spectrum-x/crds) |
+| `CIDRPool` | Per-rail IP allocation, or per rail-plane in `swplb`. | [CRD API Reference](/spectrum-x/crds) |
+
+For Dynamic Resource Allocation workflows, the upstream Kubernetes
+`ResourceClaimTemplate` binds Pod requests to specific GPU and VF
+combinations — see [DRA SR-IOV Driver](/dra-sriov-driver/dra-sriov-driver).
+
+## Where to start
+
+| Page | Read it when |
+| --- | --- |
+| [Quick Start](/spectrum-x/quick-start) | You are deploying. Nine steps, from node preparation to a test Pod. |
+| [Architecture and Components](/spectrum-x/components) | You want to know what gets deployed and which operator owns what. |
+| [NIC Configuration](/spectrum-x/spectrum-x-configuration) | You are applying the profile ConfigMap or writing NIC templates. |
+| [Verify and Troubleshoot](/spectrum-x/verify-and-troubleshoot) | The cluster is up and you need to confirm it, or something failed. |
+| [CRD API Reference](/spectrum-x/crds) | You need field-level detail for a Spectrum-X CRD. |
+
+For supported platforms, NICs, switches, and OS combinations, see the
+[NVIDIA Spectrum-X Solution Stack documentation](https://docs.nvidia.com/networking/software/spectrumx-solution-stack/index.html).
+For the Kubernetes and OS matrix and component versions, see
+[Platform Support](/platform-support).

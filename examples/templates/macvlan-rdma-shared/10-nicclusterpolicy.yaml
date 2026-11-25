@@ -5,8 +5,8 @@ metadata:
 spec:
   rdmaSharedDevicePlugin:
     image: k8s-rdma-shared-dev-plugin
-    repository: |k8s-rdma-shared-dev-plugin-repository|
-    version: |k8s-rdma-shared-dev-plugin-version|
+    repository: {{k8s_rdma_shared_dev_plugin_repository}}
+    version: {{k8s_rdma_shared_dev_plugin_version}}
     config: |
       {
         "configList": [
@@ -21,16 +21,16 @@ spec:
       }
   nvIpam:
     image: nvidia-k8s-ipam
-    repository: |nvidia-ipam-repository|
-    version: |nvidia-ipam-version|
+    repository: {{nvidia_ipam_repository}}
+    version: {{nvidia_ipam_version}}
     imagePullSecrets: []
     enableWebhook: false
   secondaryNetwork:
     cniPlugins:
       image: plugins
-      repository: |cni-plugins-repository|
-      version: |cni-plugins-version|
+      repository: {{cni_plugins_repository}}
+      version: {{cni_plugins_version}}
     multus:
       image: multus-cni
-      repository: |multus-repository|
-      version: |multus-version|
+      repository: {{multus_repository}}
+      version: {{multus_version}}

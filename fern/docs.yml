@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://schema.buildwithfern.dev/docs-yml.json
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Pages reference shared values as ${name}. Fern fills them in from
+# docs/common/vars.yml (see `profiles` below), so this directory builds as it is:
+# run the Fern CLI from the repository root (make docs-check / docs-preview).
+
+instances:
+  - url: nvidia-network-operator.docs.buildwithfern.com/networking/nvidia-network-operator
+    custom-domain: docs.nvidia.com/networking/nvidia-network-operator
+    multi-source: true
+
+title: NVIDIA Network Operator
+
+global-theme: nvidia
+
+navbar-links:
+  - type: github
+    value: https://github.com/Mellanox/network-operator
+
+logo:
+  right-text: Network Operator
+
+redirects: ./redirects.yml
+
+profiles:
+  default:
+    vars: ../docs/common/vars.yml
+  v24_4_0:
+    vars: ./vars-v24.4.0.yml
+
+versions:
+  - display-name: "${network_operator_version} (Latest)"
+    path: ../docs/index.yml
+    slug: latest
+    availability: beta
+    profile: default
+  - display-name: "24.4.0"
+    slug: v24.4.0
+    ref: 78b7a7c3c0abce048528c27c3ff44a56d9a08bc2
+    availability: stable
+    profile: v24_4_0

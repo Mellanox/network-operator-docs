@@ -8,7 +8,7 @@ set -e
 REPO=${1:-"Mellanox/nic-configuration-operator"}
 BRANCH=${2:-"main"}
 FILE_PATH=${3:-"README.md"}
-OUTPUT_PATH=${4:-"docs/nic-conf-operator/configuration-details.rst"}
+OUTPUT_PATH=${4:-"docs/nic-conf-operator/configuration-details.mdx"}
 
 echo "Fetching configuration documentation from ${REPO}/${BRANCH}/${FILE_PATH}"
 
@@ -16,49 +16,30 @@ echo "Fetching configuration documentation from ${REPO}/${BRANCH}/${FILE_PATH}"
 mkdir -p "$(dirname "$OUTPUT_PATH")"
 
 # Fetch the content from GitHub
-curl -s "https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}" > ./tmp_config_docs.md
+curl -fsSL "https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}" > ./tmp_config_docs.md
 
-# Convert markdown to reStructuredText and extract configuration details section
-cat > "$OUTPUT_PATH" << 'EOF'
-.. license-header
+cat > ./tmp_config_section.md << 'EOF'
+---
+title: Configuration Details
+---
+
+{/*
   SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
   SPDX-License-Identifier: Apache-2.0
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
-.. headings # #, * *, =, -, ^, "
-
-==========================================
-Configuration Details
-==========================================
+*/}
 
 EOF
 
-# Extract the configuration details section from the markdown
-awk '/#### Configuration details/,/### NicFirmwareSource/' ./tmp_config_docs.md | head -n -1 > ./tmp_config_section.md
+# Extract the configuration details section and promote its headings two levels
+awk '/#### Configuration details/,/### NicFirmwareSource/' ./tmp_config_docs.md | sed '$d' \
+  | sed -E 's/^##(#+) /\1 /' >> ./tmp_config_section.md
 
-# Convert to reStructuredText format using Docker (same as other parts of the workflow)
-docker run --rm --volume "`pwd`:/data:Z" pandoc/minimal -f markdown -t rst --wrap=none /data/tmp_config_section.md -o /data/tmp_config_section.rst
-
-# Create the final output
-cat "$OUTPUT_PATH" > ./tmp_final_output.rst
-echo "" >> ./tmp_final_output.rst
-cat ./tmp_config_section.rst >> ./tmp_final_output.rst
-
-mv ./tmp_final_output.rst "$OUTPUT_PATH"
+# Escape for MDX; relative links point into the source repository
+python3 "$(dirname "$0")/fern/md_to_mdx.py" ./tmp_config_section.md "$OUTPUT_PATH" \
+  --link-base "https://github.com/${REPO}/blob/${BRANCH}/$(dirname "${FILE_PATH}" | sed 's|^\.$||')"
 
 # Clean up temporary files
-rm -f ./tmp_config_docs.md ./tmp_config_section.md ./tmp_config_section.rst
+rm -f ./tmp_config_docs.md ./tmp_config_section.md
 
 echo "Configuration documentation saved to ${OUTPUT_PATH}"
-echo "Source: https://github.com/${REPO}/blob/${BRANCH}/${FILE_PATH}#configuration-details" 
+echo "Source: https://github.com/${REPO}/blob/${BRANCH}/${FILE_PATH}#configuration-details"
