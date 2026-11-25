@@ -2,8 +2,9 @@
 # SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
-# Build from the rendered copy (make docs-render), not from this directory:
-# pages use {{variables}} from docs/common/vars.yml that only the render step fills in.
+# Pages reference shared values as ${name}. Fern fills them in from
+# docs/common/vars.yml (see `profiles` below), so this directory builds as it is:
+# run the Fern CLI from the repository root (make docs-check / docs-preview).
 
 instances:
   - url: nvidia-network-operator.docs.buildwithfern.com/networking/nvidia-network-operator
@@ -23,8 +24,14 @@ logo:
 
 redirects: ./redirects.yml
 
+profiles:
+  default:
+    vars: ../docs/common/vars.yml
+
 versions:
-  - display-name: "{{network-operator-version}}"
+  - display-name: "${network_operator_version}"
     path: ../docs/index.yml
-    slug: "v{{network-operator-version}}"
+    # Fern does not substitute variables in slugs, so this one is written out.
+    slug: "v24.4.0"
     availability: beta
+    profile: default

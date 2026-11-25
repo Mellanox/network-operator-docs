@@ -137,7 +137,7 @@ Make sure to enable RDMA and disable useHostMofed in the driver section in the s
      name: nvidia-network-operator
      namespace: nvidia-network-operator
    spec:
-     channel: "{{ocp-channel}}"
+     channel: "${ocp_channel}"
      installPlanApproval: Manual
      name: nvidia-network-operator
      source: certified-operators
@@ -202,7 +202,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: {{mofed-version}}
+    version: ${mofed_version}
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -215,7 +215,7 @@ spec:
   sriovDevicePlugin:
       image: sriov-network-device-plugin
       repository: ghcr.io/k8snetworkplumbingwg
-      version: {{sriov-device-plugin-version}}
+      version: ${sriov_device_plugin_version}
       config: |
         {
           "resourceList": [
@@ -301,7 +301,7 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: {{mofed-version}}
+    version: ${mofed_version}
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -403,7 +403,7 @@ spec:
   ofedDriver:     
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: {{mofed-version}}
+    version: ${mofed_version}
      startupProbe:
       initialDelaySeconds: 10
       periodSeconds: 20
@@ -428,7 +428,7 @@ spec:
       }
     image: k8s-rdma-shared-dev-plugin
     repository: nvcr.io/nvidia/cloud-native
-    version: {{k8s-rdma-shared-dev-plugin-version}}
+    version: ${k8s_rdma_shared_dev_plugin_version}
 ```
 
 The `macvlan-net-ocp.yaml` configuration file for such a deployment in an OpenShift Platform:

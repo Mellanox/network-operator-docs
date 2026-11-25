@@ -51,7 +51,7 @@ Install Network Operator from the NVIDIA NGC chart using the default values:
 helm install network-operator nvidia/network-operator \
   -n nvidia-network-operator \
   --create-namespace \
-  --version {{helm-chart-version}} \
+  --version ${helm_chart_version} \
   --wait
 ```
 
@@ -66,14 +66,14 @@ Install the Network Operator from the NVIDIA NGC chart using custom values:
 </Warning>
 
 ```
-helm show values nvidia/network-operator --version {{helm-chart-version}} > values.yaml
+helm show values nvidia/network-operator --version ${helm_chart_version} > values.yaml
 ```
 
 ```
 helm install network-operator nvidia/network-operator \
   -n nvidia-network-operator \
   --create-namespace \
-  --version {{helm-chart-version}} \
+  --version ${helm_chart_version} \
   -f ./values.yaml \
   --wait
 ```
@@ -1204,11 +1204,11 @@ spec:
   ofedDriver:
     image: doca-driver
     repository: nvcr.io/nvidia/mellanox
-    version: {{mofed-version}}
+    version: ${mofed_version}
     sriovDevicePlugin:
     image: sriov-network-device-plugin
     repository: ghcr.io/k8snetworkplumbingwg
-    version: {{sriov-device-plugin-version}}
+    version: ${sriov_device_plugin_version}
      config: |
       {
         "resourceList": [
@@ -1227,15 +1227,15 @@ spec:
     cniPlugins:
       image: plugins
       repository: ghcr.io/k8snetworkplumbingwg
-      version: {{cni-plugins-version}}-amd64
+      version: ${cni_plugins_version}-amd64
     ipamPlugin:
       image: whereabouts
       repository: ghcr.io/k8snetworkplumbingwg
-      version: {{whereabouts-version}}-amd64
+      version: ${whereabouts_version}-amd64
     multus:
       image: multus-cni
       repository: ghcr.io/k8snetworkplumbingwg
-      version: {{multus-version}}
+      version: ${multus_version}
 ```
 
 `host-device-net.yaml`

@@ -3,9 +3,10 @@
 
 # Workflow 1 of 2 for Fern doc previews.
 #
-# Renders the site (variables and <Code src> includes resolved) from the PR
-# branch and uploads it with the PR metadata as an artifact. No secrets are
-# used here.
+# Collects the Fern sources (fern/, docs/) from the PR branch and uploads them
+# with the PR metadata as an artifact. Fern resolves the ${name} variables
+# itself when the companion workflow builds the preview. No secrets are used
+# here.
 #
 # Only PRs from branches in this repository are collected; fork PRs are not
 # previewed. The companion workflow (fern-docs-preview-comment.yml) builds the
@@ -19,7 +20,7 @@ on:
     paths:
       - 'docs/**'
       - 'fern/**'
-      - 'hack/fern/**'
+      - 'Makefile'
       - '.github/workflows/fern-docs-preview-build.yml'
 
 permissions:
@@ -41,21 +42,21 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Render site
-        run: make docs-render
-
       - name: Save PR metadata
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BASE_REF: ${{ github.base_ref }}
         run: |
-          mkdir -p _build/fern/preview-metadata
-          echo "$PR_NUMBER" > _build/fern/preview-metadata/pr_number
-          git diff --name-only "origin/${BASE_REF}...HEAD" -- '*.mdx' > _build/fern/preview-metadata/changed_mdx_files 2>/dev/null || true
+          mkdir -p preview-metadata
+          echo "$PR_NUMBER" > preview-metadata/pr_number
+          git diff --name-only "origin/${BASE_REF}...HEAD" -- '*.mdx' > preview-metadata/changed_mdx_files 2>/dev/null || true
 
-      - name: Upload rendered site and metadata
+      - name: Upload sources and metadata
         uses: actions/upload-artifact@v4
         with:
           name: fern-preview
-          path: _build/fern/
+          path: |
+            fern/
+            docs/
+            preview-metadata/
           retention-days: 1

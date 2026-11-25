@@ -73,12 +73,12 @@ SR-IOV Network Operator Helm chart customization options can be found [here](htt
 | Name | Type | Default in NVIDIA Network Operator | Notes |
 | --- | --- | --- | --- |
 | sriov-network-operator.operator.resourcePrefix | String | nvidia.com |  |
-| sriov-network-operator.images.operator | String | nvcr.io/nvidia/mellanox/sriov-network-operator:{{sriovnetop-image-tag}} |  |
-| sriov-network-operator.images.sriovConfigDaemon | String | nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:{{sriovnetop-image-tag}} |  |
-| sriov-network-operator.images.sriovCni | String | ghcr.io/k8snetworkplumbingwg/sriov-cni:{{sriovnetop-sriov-cni-image-tag}} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0-arm64` image |
-| sriov-network-operator.images.ibSriovCni | String | ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:{{sriovnetop-ib-sriov-cni-image-tag}} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:1.1.0-arm64` image |
-| sriov-network-operator.images.sriovDevicePlugin | String | ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:{{sriovnetop-sriov-device-plugin-image-tag}} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-arm64` image |
-| sriov-network-operator.images.webhook | String | nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:{{sriovnetop-image-tag}} |  |
+| sriov-network-operator.images.operator | String | nvcr.io/nvidia/mellanox/sriov-network-operator:${sriovnetop_image_tag} |  |
+| sriov-network-operator.images.sriovConfigDaemon | String | nvcr.io/nvidia/mellanox/sriov-network-operator-config-daemon:${sriovnetop_image_tag} |  |
+| sriov-network-operator.images.sriovCni | String | ghcr.io/k8snetworkplumbingwg/sriov-cni:${sriovnetop_sriov_cni_image_tag} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-cni:v2.8.0-arm64` image |
+| sriov-network-operator.images.ibSriovCni | String | ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:${sriovnetop_ib_sriov_cni_image_tag} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/ib-sriov-cni:1.1.0-arm64` image |
+| sriov-network-operator.images.sriovDevicePlugin | String | ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:${sriovnetop_sriov_device_plugin_image_tag} | For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-arm64` image |
+| sriov-network-operator.images.webhook | String | nvcr.io/nvidia/mellanox/sriov-network-operator-webhook:${sriovnetop_image_tag} |  |
 
 ## Container Resources
 
@@ -104,11 +104,11 @@ containerResources:
 | ofedDriver.deploy | Bool | false | Deploy the MLNX_OFED driver container |
 | ofedDriver.repository | String | nvcr.io/nvidia/mellanox | MLNX_OFED driver image repository |
 | ofedDriver.image | String | doca-driver | MLNX_OFED driver image name |
-| ofedDriver.version | String | {{mofed-version}} | MLNX_OFED driver version |
+| ofedDriver.version | String | ${mofed_version} | MLNX_OFED driver version |
 | ofedDriver.initContainer.enable | Bool | true | Deploy init container |
 | ofedDriver.initContainer.repository | string | ghcr.io/mellanox | init container image repository |
 | ofedDriver.initContainer.image | string | network-operator-init-container | init container image name |
-| ofedDriver.initContainer.version | string | {{mofed-init-container-version}} | init container image version |
+| ofedDriver.initContainer.version | string | ${mofed_init_container_version} | init container image version |
 | ofedDriver.certConfig.name | String | "" | Custom TLS key/certificate configuration configMap name |
 | ofedDriver.repoConfig.name | String | "" | Private mirror repository configuration configMap name |
 | ofedDriver.terminationGracePeriodSeconds | Int | 300 | NVIDIA OFED termination grace periods in seconds |
@@ -172,7 +172,7 @@ The variables can also be configured directly via the NicClusterPolicy CRD.
 | rdmaSharedDevicePlugin.deploy | Bool | true | Deploy RDMA shared device plugin |
 | rdmaSharedDevicePlugin.repository | String | nvcr.io/nvidia/cloud-native | RDMA shared device plugin image repository |
 | rdmaSharedDevicePlugin.image | String | k8s-rdma-shared-dev-plugin | RDMA shared device plugin image name |
-| rdmaSharedDevicePlugin.version | String | {{k8s-rdma-shared-dev-plugin-version}} | RDMA shared device plugin version |
+| rdmaSharedDevicePlugin.version | String | ${k8s_rdma_shared_dev_plugin_version} | RDMA shared device plugin version |
 | rdmaSharedDevicePlugin.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the RDMA Shared device plugin image |
 | rdmaSharedDevicePlugin.resources | List | See below | RDMA shared device plugin resources |
 | rdmaSharedDevicePlugin.useCdi | Bool | false | Enable Container Device Interface (CDI) mode.<br />**NOTE**: NVIDIA Network Operator does not configure container runtime to enable CDI |
@@ -203,7 +203,7 @@ resources:
 | sriovDevicePlugin.deploy | Bool | false | Deploy SR-IOV Network device plugin |
 | sriovDevicePlugin.repository | String | ghcr.io/k8snetworkplumbingwg | SR-IOV Network device plugin image repository |
 | sriovDevicePlugin.image | String | sriov-network-device-plugin | SR-IOV Network device plugin image name |
-| sriovDevicePlugin.version | String | {{sriov-device-plugin-version}} | SR-IOV Network device plugin version<br />For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64` image |
+| sriovDevicePlugin.version | String | ${sriov_device_plugin_version} | SR-IOV Network device plugin version<br />For ARM-based deployments, it is recommended to use the `ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:v3.6.2-amd64` image |
 | sriovDevicePlugin.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the SR-IOV Network device plugin image |
 | sriovDevicePlugin.resources | List | See below | SR-IOV Network device plugin resources |
 | sriovDevicePlugin.useCdi | Bool | false | Enable Container Device Interface (CDI) mode.<br />**NOTE**: NVIDIA Network Operator does not configure container runtime to enable CD. |
@@ -235,7 +235,7 @@ ib-kubernetes provides a daemon that works in conjunction with the [SR-IOV Netwo
 | ibKubernetes.deploy | bool | false | Deploy IB Kubernetes |
 | ibKubernetes.repository | string | ghcr.io/mellanox | IB Kubernetes image repository |
 | ibKubernetes.image | string | ib-kubernetes | IB Kubernetes image name |
-| ibKubernetes.version | string | {{ib-kubernetes-version}} | IB Kubernetes version |
+| ibKubernetes.version | string | ${ib_kubernetes_version} | IB Kubernetes version |
 | ibKubernetes.imagePullSecrets | list | [] | An optional list of references to secrets used for pulling any of the IB Kubernetes images |
 | ibKubernetes.periodicUpdateSeconds | int | 5 | Interval of periodic update in seconds |
 | ibKubernetes.pKeyGUIDPoolRangeStart | string | 02:00:00:00:00:00:00:00 | Minimal available GUID value to be allocated for the pod |
@@ -287,7 +287,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
 | secondaryNetwork.cniPlugins.deploy | Bool | true | Deploy CNI Plugins Secondary Network |
 | secondaryNetwork.cniPlugins.image | String | plugins | CNI Plugins image name |
 | secondaryNetwork.cniPlugins.repository | String | ghcr.io/k8snetworkplumbingwg | CNI Plugins image repository |
-| secondaryNetwork.cniPlugins.version | String | {{cni-plugins-version}}-amd64 | CNI Plugins image version |
+| secondaryNetwork.cniPlugins.version | String | ${cni_plugins_version}-amd64 | CNI Plugins image version |
 | secondaryNetwork.cniPlugins.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the CNI Plugins images |
 | secondaryNetwork.cniPlugins.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `cni-plugins` container |
 
@@ -298,7 +298,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
 | secondaryNetwork.multus.deploy | Bool | true | Deploy Multus Secondary Network |
 | secondaryNetwork.multus.image | String | multus-cni | Multus image name |
 | secondaryNetwork.multus.repository | String | ghcr.io/k8snetworkplumbingwg | Multus image repository |
-| secondaryNetwork.multus.version | String | {{multus-version}} | Multus image version |
+| secondaryNetwork.multus.version | String | ${multus_version} | Multus image version |
 | secondaryNetwork.multus.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the Multus images |
 | secondaryNetwork.multus.config | String | "" | Multus CNI config. If empty, the config will be automatically generated from the CNI configuration file of the master plugin (the first file in lexicographical order in the cni-confg-dir). |
 | secondaryNetwork.multus.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `kube-multus` container |
@@ -310,7 +310,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
 | secondaryNetwork.ipoib.deploy | Bool | false | Deploy IPoIB CNI |
 | secondaryNetwork.ipoib.image | String | ipoib-cni | IPoIB CNI image name |
 | secondaryNetwork.ipoib.repository | String | "" | IPoIB CNI image repository |
-| secondaryNetwork.ipoib.version | String | {{ipoib-cni-version}} | IPoIB CNI image version |
+| secondaryNetwork.ipoib.version | String | ${ipoib_cni_version} | IPoIB CNI image version |
 | secondaryNetwork.ipoib.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the IPoIB CNI images |
 | secondaryNetwork.ipoib.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `ipoib-cni` container |
 
@@ -321,7 +321,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
 | secondaryNetwork.ipamPlugin.deploy | Bool | true | Deploy IPAM CNI Plugin Secondary Network |
 | secondaryNetwork.ipamPlugin.image | String | whereabouts | IPAM CNI Plugin image name |
 | secondaryNetwork.ipamPlugin.repository | String | ghcr.io/k8snetworkplumbingwg | IPAM CNI Plugin image repository |
-| secondaryNetwork.ipamPlugin.version | String | {{whereabouts-version}}-amd64 | IPAM CNI Plugin image version |
+| secondaryNetwork.ipamPlugin.version | String | ${whereabouts_version}-amd64 | IPAM CNI Plugin image version |
 | secondaryNetwork.ipamPlugin.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the IPAM CNI Plugin images |
 | secondaryNetwork.ipamPlugin.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `whereabouts` container |
 
@@ -334,7 +334,7 @@ Specifies components to deploy in order to facilitate a secondary network in Kub
 | nvIpam.deploy | Bool | false | Deploy NVIDIA IPAM Plugin |
 | nvIpam.image | String | nvidia-k8s-ipam | NVIDIA IPAM Plugin image name |
 | nvIpam.repository | String | ghcr.io/mellanox | NVIDIA IPAM Plugin image repository |
-| nvIpam.version | String | {{nvidia-ipam-version}} | NVIDIA IPAM Plugin image version |
+| nvIpam.version | String | ${nvidia_ipam_version} | NVIDIA IPAM Plugin image version |
 | nvIpam.imagePullSecrets | List | [] | An optional list of references to secrets to use for pulling any of the Plugin images |
 | nvIpam.enableWebhook | Bool | false | Enable deployment of the validataion webhook for IPPool CRD |
 | nvIpam.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `nv-ipam-node` and `nv-ipam-controller` containers |
@@ -352,7 +352,7 @@ Supported X.509 certificate management system should be available in the cluster
 | nicFeatureDiscovery.deploy | Bool | false | Deploy NVIDIA NIC Feature Discovery |
 | nicFeatureDiscovery.image | String | nic-feature-discovery | NVIDIA NIC Feature Discovery image name |
 | nicFeatureDiscovery.repository | String | ghcr.io/mellanox | NVIDIA NIC Feature Discovery repository |
-| nicFeatureDiscovery.version | String | {{nic-feature-discovery-version}} | NVIDIA NIC Feature Discovery image version |
+| nicFeatureDiscovery.version | String | ${nic_feature_discovery_version} | NVIDIA NIC Feature Discovery image version |
 | nicFeatureDiscovery.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `nic-feature-discovery` container |
 
 ## DOCA Telemetry Service
@@ -364,7 +364,7 @@ Supported X.509 certificate management system should be available in the cluster
 | docaTelemetryService.deploy | Bool | false | Deploy DOCA Telemetry Service |
 | docaTelemetryService.image | String | doca_telemetry | DOCA Telemetry Service image name |
 | docaTelemetryService.repository | String | nvcr.io/nvidia/doca | DOCA Telemetry Service image repository |
-| docaTelemetryService.version | String | {{doca-telemetry-version}} | DOCA Telemetry Service image version |
+| docaTelemetryService.version | String | ${doca_telemetry_version} | DOCA Telemetry Service image version |
 | docaTelemetryService.containerResources | List | Not set | Optional [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the `doca-telemetry-service` container |
 
 ## Helm customization file
